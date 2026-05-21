@@ -1,0 +1,133 @@
+import { useRouter } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+
+import { ErrorMessage } from '@/components/feedback';
+import { FormField, MultiSelectWithOther } from '@/components/forms';
+import { Screen } from '@/components/layout';
+import { Button, Input, Text } from '@/components/ui';
+import { FundingPicker, OnboardingProgress } from '@/features/onboarding/components';
+import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
+import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGuard';
+import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
+import { useOnboardingStore } from '@/features/onboarding/store/onboarding.store';
+import {
+  OPPORTUNITY_TYPE_OPTIONS,
+  PREDEFINED_OPPORTUNITY_TYPES,
+} from '@/constants/onboarding-options';
+import { ONBOARDING_STEPS } from '@/constants/onboarding';
+import { ROUTES } from '@/constants/routes';
+import { spacing } from '@/constants/theme';
+import { formatListInput, parseListInput } from '@/utils/formatting';
+import type { FundingPreference } from '@/types/domain/user-preferences';
+
+export function OpportunityPreferencesScreen() {
+  const router = useRouter();
+  useOnboardingGuard();
+
+  const draft = useOnboardingStore((s) => s.draft.preferences);
+  const setPreferences = useOnboardingStore((s) => s.setPreferences);
+  const loadFromServer = useOnboardingStore((s) => s.loadFromServer);
+  const { preferences } = useProfileData();
+  const { completeOnboarding, isLoading, error, clearError } = useOnboardingActions();
+
+  const [opportunityTypes, setOpportunityTypes] = useState<string[]>(draft.opportunityTypes);
+  const [countriesText, setCountriesText] = useState(formatListInput(draft.preferredCountries));
+  const [funding, setFunding] = useState<FundingPreference>(draft.fundingPreference);
+
+  useEffect(() => {
+    if (preferences) {
+      loadFromServer({
+        preferences: {
+          opportunityTypes: preferences.opportunityTypes,
+          preferredCountries: preferences.preferredCountries,
+          fundingPreference: preferences.fundingPreference ?? 'any',
+        },
+      });
+      setOpportunityTypes(preferences.opportunityTypes);
+      setCountriesText(formatListInput(preferences.preferredCountries));
+      setFunding(preferences.fundingPreference ?? 'any');
+    }
+  }, [loadFromServer, preferences]);
+
+  const handleFinish = async () => {
+    clearError();
+
+    if (opportunityTypes.length === 0) {
+      Alert.alert('Required fields', 'Please select at least one opportunity type.');
+      return;
+    }
+
+    const preferredCountries = parseListInput(countriesText);
+    if (preferredCountries.length === 0) {
+      Alert.alert('Required fields', 'Add at least one preferred country (comma-separated).');
+      return;
+    }
+
+    const prefs = { opportunityTypes, preferredCountries, fundingPreference: funding };
+    setPreferences(prefs);
+
+    const ok = await completeOnboarding(prefs);
+    if (ok) {
+      router.replace(ROUTES.MAIN.DASHBOARD);
+    }
+  };
+
+  return (
+    <Screen>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+        style={styles.flex}
+      >
+        <OnboardingProgress currentStep={ONBOARDING_STEPS.PREFERENCES} />
+        <Text variant="title">Opportunity preferences</Text>
+        <Text muted style={styles.subtitle}>
+          We&apos;ll use this to personalize recommendations. You must complete this step.
+        </Text>
+
+        <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
+          <FormField label="Opportunity types *">
+            <MultiSelectWithOther
+              options={OPPORTUNITY_TYPE_OPTIONS}
+              predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
+              values={opportunityTypes}
+              onChange={setOpportunityTypes}
+              placeholder="Select opportunity types"
+            />
+          </FormField>
+
+          <FormField label="Preferred countries (comma-separated) *">
+            <Input
+              value={countriesText}
+              onChangeText={setCountriesText}
+              placeholder="e.g. UK, Germany, Canada"
+              multiline
+            />
+          </FormField>
+
+          <FormField label="Funding preference *">
+            <FundingPicker value={funding} onChange={setFunding} />
+          </FormField>
+
+          {error ? <ErrorMessage message={error} /> : null}
+        </ScrollView>
+
+        <View style={styles.footer}>
+          <Button variant="secondary" onPress={() => router.back()}>
+            Back
+          </Button>
+          <Button onPress={handleFinish} loading={isLoading} disabled={isLoading}>
+            Finish setup
+          </Button>
+        </View>
+      </KeyboardAvoidingView>
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  flex: { flex: 1 },
+  subtitle: { marginBottom: spacing.md },
+  scroll: { flex: 1 },
+  footer: { paddingTop: spacing.md, gap: spacing.sm },
+});

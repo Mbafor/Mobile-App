@@ -1,0 +1,48 @@
+import { StyleSheet, View } from 'react-native';
+
+import { Text } from '@/components/ui';
+import { colors, spacing } from '@/constants/theme';
+import type { TopEngagementRow } from '@/features/admin/types/analytics';
+
+type AdminTopListProps = {
+  title: string;
+  items: TopEngagementRow[];
+};
+
+export function AdminTopList({ title, items }: AdminTopListProps) {
+  return (
+    <View style={styles.wrap}>
+      <Text style={styles.title}>{title}</Text>
+      {items.length === 0 ? (
+        <Text muted>No data yet</Text>
+      ) : (
+        items.map((item, index) => (
+          <View key={item.opportunityId} style={styles.row}>
+            <Text style={styles.rank}>{index + 1}.</Text>
+            <View style={styles.body}>
+              <Text style={styles.name} numberOfLines={2}>
+                {item.title}
+              </Text>
+              <Text muted>{item.count} users</Text>
+            </View>
+          </View>
+        ))
+      )}
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: { gap: spacing.sm },
+  title: { fontWeight: '600', fontSize: 15, color: colors.text },
+  row: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingVertical: spacing.xs,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  rank: { width: 20, fontWeight: '700', color: colors.primary },
+  body: { flex: 1, gap: 2 },
+  name: { fontSize: 14, color: colors.text },
+});

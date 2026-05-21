@@ -1,0 +1,59 @@
+import { Dimensions, StyleSheet, View } from 'react-native';
+import { BarChart } from 'react-native-gifted-charts';
+
+import { Text } from '@/components/ui';
+import { colors, spacing } from '@/constants/theme';
+import type { ChartDatum } from '@/features/admin/types/analytics';
+
+type AdminBarChartProps = {
+  title: string;
+  data: ChartDatum[];
+};
+
+const CHART_WIDTH = Dimensions.get('window').width - spacing.md * 4;
+
+export function AdminBarChart({ title, data }: AdminBarChartProps) {
+  if (data.length === 0) {
+    return (
+      <View style={styles.wrap}>
+        <Text style={styles.title}>{title}</Text>
+        <Text muted>No data yet</Text>
+      </View>
+    );
+  }
+
+  const maxValue = Math.max(...data.map((d) => d.value), 1);
+  const barData = data.map((item) => ({
+    value: item.value,
+    label: item.label.length > 10 ? `${item.label.slice(0, 9)}…` : item.label,
+    frontColor: colors.primary,
+  }));
+
+  return (
+    <View style={styles.wrap}>
+      <Text style={styles.title}>{title}</Text>
+      <BarChart
+        data={barData}
+        width={CHART_WIDTH}
+        height={180}
+        barWidth={28}
+        spacing={18}
+        roundedTop
+        yAxisThickness={0}
+        xAxisThickness={1}
+        xAxisColor={colors.border}
+        noOfSections={4}
+        maxValue={maxValue}
+        isAnimated
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: {
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  title: { fontWeight: '600', fontSize: 15, color: colors.text },
+});

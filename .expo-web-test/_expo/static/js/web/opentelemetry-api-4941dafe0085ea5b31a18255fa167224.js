@@ -1,0 +1,1 @@
+__d(function(g,r,i,a,m,e,d){m.exports={propagation:{inject(){},extract:()=>({})},context:{active:()=>({}),with:(t,n)=>'function'==typeof n?n():void 0},trace:{getTracer:()=>({startSpan:()=>({end(){},setAttribute(){}})})}}},1501,[]);

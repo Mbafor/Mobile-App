@@ -1,0 +1,39 @@
+export type LocationType = 'remote' | 'onsite' | 'hybrid';
+
+export type Opportunity = {
+  id: string;
+  title: string;
+  description: string | null;
+  organization: string;
+  imageUrl: string | null;
+  applyUrl: string | null;
+  deadline: string;
+  tags: string[];
+  country: string | null;
+  category: string | null;
+  fundingType: string | null;
+  degreeLevels: string[];
+  locationType: LocationType | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type DeadlineRangeFilter = 'any' | '7d' | '14d' | '30d' | '90d';
+
+export type OpportunityFilters = {
+  countries: string[];
+  categories: string[];
+  fundingTypes: string[];
+  degreeLevels: string[];
+  locationTypes: LocationType[];
+  deadlineRange: DeadlineRangeFilter;
+};
+
+export const EMPTY_OPPORTUNITY_FILTERS: OpportunityFilters = {
+  countries: [],
+  categories: [],
+  fundingTypes: [],
+  degreeLevels: [],
+  locationTypes: [],
+  deadlineRange: 'any',
+};
