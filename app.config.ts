@@ -14,6 +14,7 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
+    'expo-font',
     'expo-asset',
     'expo-secure-store',
     'expo-apple-authentication',

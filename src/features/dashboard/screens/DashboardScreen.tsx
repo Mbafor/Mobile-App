@@ -137,9 +137,6 @@ export function DashboardScreen() {
           }
           ListHeaderComponent={
             <View style={styles.header}>
-              {profile?.displayName ? (
-                <Text muted>Hello, {profile.displayName.split(' ')[0]}</Text>
-              ) : null}
               <DashboardStatsRow savedCount={savedCount} appliedCount={appliedCount} />
               {dashboardError ? (
                 <ErrorMessage

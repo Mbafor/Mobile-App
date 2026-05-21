@@ -28,4 +28,9 @@ export const queryKeys = {
     opportunities: ['admin', 'opportunities'] as const,
     opportunity: (id: string) => ['admin', 'opportunity', id] as const,
   },
+  cv: {
+    list: (userId: string) => ['cv', 'list', userId] as const,
+    detail: (cvId: string) => ['cv', 'detail', cvId] as const,
+    payments: (userId: string) => ['cv', 'payments', userId] as const,
+  },
 } as const;

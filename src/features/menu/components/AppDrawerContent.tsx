@@ -11,6 +11,10 @@ import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import {
+  getOAuthAvatarUrl,
+  getOAuthDisplayName,
+} from '@/features/auth/utils/oauth-profile-metadata';
 import { performLogout } from '@/features/auth/utils/perform-logout';
 import { confirmAction } from '@/utils/confirm-action';
 
@@ -21,11 +25,15 @@ type DrawerItem = {
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const router = useRouter();
-  const { profile, userEmail, isAdmin } = useAuth();
+  const { profile, user, userEmail, isAdmin } = useAuth();
+  const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const avatarUrl = profile?.avatarUrl ?? getOAuthAvatarUrl(oauthMeta);
+  const displayName = profile?.displayName ?? getOAuthDisplayName(oauthMeta);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const items: DrawerItem[] = [
-    { label: 'My Profile', route: ROUTES.MAIN.DRAWER.PROFILE as Href },
+    { label: 'Home', route: ROUTES.MAIN.DASHBOARD as Href },
+    { label: 'Settings', route: ROUTES.MAIN.SETTINGS as Href },
     { label: 'Browse by Category', route: ROUTES.MAIN.DRAWER.BROWSE as Href },
     { label: 'Help & FAQ', route: ROUTES.MAIN.DRAWER.HELP as Href },
     { label: 'Privacy Policy', route: ROUTES.MAIN.DRAWER.PRIVACY as Href },
@@ -40,6 +48,10 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   const navigate = (route: Href) => {
     props.navigation.closeDrawer();
     router.push(route);
+  };
+
+  const openProfile = () => {
+    navigate(ROUTES.MAIN.SETTINGS_PROFILE as Href);
   };
 
   const handleLogout = async () => {
@@ -63,18 +75,28 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
         <Text variant="title">Olives Forum</Text>
       </View>
 
-      <View style={styles.userSection}>
+      <Pressable
+        style={styles.userSection}
+        onPress={openProfile}
+        accessibilityRole="button"
+        accessibilityLabel="Open your profile"
+      >
         <UserAvatarDisplay
-          displayName={profile?.displayName ?? null}
-          avatarUrl={profile?.avatarUrl ?? null}
+          displayName={displayName}
+          avatarUrl={avatarUrl}
           size={80}
         />
+        {displayName ? (
+          <Text style={styles.displayName} numberOfLines={1}>
+            {displayName}
+          </Text>
+        ) : null}
         {userEmail ? (
           <Text muted variant="caption" style={styles.email}>
             {userEmail}
           </Text>
         ) : null}
-      </View>
+      </Pressable>
 
       {items.map((item) => (
         <Pressable key={item.label} style={styles.item} onPress={() => navigate(item.route)}>
@@ -83,12 +105,6 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
           </Text>
         </Pressable>
       ))}
-
-      {!isAdmin ? (
-        <Text muted variant="caption" style={styles.adminHint}>
-          Admin tab: enable is_admin on your profile in Supabase, then refresh the app.
-        </Text>
-      ) : null}
 
       <Pressable
         style={[styles.item, styles.logout]}
@@ -119,11 +135,7 @@ const styles = StyleSheet.create({
   },
   itemText: { fontSize: 16, color: colors.text },
   adminItem: { color: colors.primary, fontWeight: '600' },
-  adminHint: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    lineHeight: 18,
-  },
+  displayName: { fontSize: 16, fontWeight: '600', textAlign: 'center', color: colors.text },
   logout: { marginTop: spacing.md, borderBottomWidth: 0 },
   logoutText: { fontSize: 16, color: colors.error, fontWeight: '600' },
 });

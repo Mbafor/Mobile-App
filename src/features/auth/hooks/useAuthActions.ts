@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { env } from '@/config/env';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { signInWithAppleNative, signInWithOAuthProvider } from '@/features/auth/utils/oauth';
+import { syncOAuthProfileIfNeeded } from '@/features/auth/utils/sync-oauth-profile';
 import { authApi, profilesApi } from '@/services/api';
 import { queryClient } from '@/store/query-client';
 import { parseSupabaseError } from '@/utils/errors';
@@ -92,13 +93,10 @@ export function useAuthActions() {
         const userId = session.user.id;
         const email = session.user.email ?? undefined;
         await profilesApi.ensureProfile(userId, email);
+        await syncOAuthProfileIfNeeded(session.user);
         const { data: profile } = await profilesApi.getByUserId(userId);
         if (!profile || profileNeedsOnboarding(profile)) {
           await profilesApi.markOnboardingIncomplete(userId);
-        }
-        const oauthAvatar = session.user.user_metadata?.avatar_url;
-        if (typeof oauthAvatar === 'string' && oauthAvatar && !profile?.avatarUrl) {
-          await profilesApi.updateAvatarUrl(userId, oauthAvatar);
         }
         return session;
       }),
@@ -113,6 +111,7 @@ export function useAuthActions() {
         const userId = session.user.id;
         const email = session.user.email ?? undefined;
         await profilesApi.ensureProfile(userId, email);
+        await syncOAuthProfileIfNeeded(session.user);
         const { data: profile } = await profilesApi.getByUserId(userId);
         if (!profile || profileNeedsOnboarding(profile)) {
           await profilesApi.markOnboardingIncomplete(userId);

@@ -252,6 +252,69 @@ export type Database = {
         };
         Relationships: [];
       };
+      cvs: {
+        Row: {
+          id: string;
+          user_id: string;
+          title: string;
+          template_id: string;
+          content: Json;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          title?: string;
+          template_id?: string;
+          content?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          title?: string;
+          template_id?: string;
+          content?: Json;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      cv_payments: {
+        Row: {
+          id: string;
+          user_id: string;
+          cv_id: string;
+          amount: number;
+          type: 'download' | 'template_unlock';
+          status: 'pending' | 'success' | 'failed';
+          paystack_reference: string | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          cv_id: string;
+          amount: number;
+          type: 'download' | 'template_unlock';
+          status?: 'pending' | 'success' | 'failed';
+          paystack_reference?: string | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          user_id?: string;
+          cv_id?: string;
+          amount?: number;
+          type?: 'download' | 'template_unlock';
+          status?: 'pending' | 'success' | 'failed';
+          paystack_reference?: string | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       notifications: {
         Row: {
           id: string;
@@ -301,3 +364,5 @@ export type OpportunityRow = Database['public']['Tables']['opportunities']['Row'
 export type NotificationPreferencesRow =
   Database['public']['Tables']['notification_preferences']['Row'];
 export type NotificationRow = Database['public']['Tables']['notifications']['Row'];
+export type CVRow = Database['public']['Tables']['cvs']['Row'];
+export type CVPaymentRow = Database['public']['Tables']['cv_payments']['Row'];

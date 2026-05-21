@@ -26,7 +26,6 @@ export default function MainLayout() {
           drawerLabel: 'Home',
         }}
       />
-      <Drawer.Screen name="profile" options={{ title: 'My Profile' }} />
       <Drawer.Screen name="browse-categories" options={{ title: 'Browse by Category' }} />
       <Drawer.Screen name="category/[category]" options={{ title: 'Category' }} />
       <Drawer.Screen name="help" options={{ title: 'Help & FAQ' }} />
@@ -38,6 +37,7 @@ export default function MainLayout() {
         options={{ ...hiddenDrawerItem, title: 'Opportunity' }}
       />
       <Drawer.Screen name="settings" options={{ ...hiddenDrawerItem, title: 'Settings' }} />
+      <Drawer.Screen name="profile" options={{ ...hiddenDrawerItem, title: 'Profile' }} />
     </Drawer>
   );
 }

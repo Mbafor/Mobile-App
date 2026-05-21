@@ -99,6 +99,17 @@ export const profilesApi = {
     return { data: data ? mapProfileRow(data) : null, error };
   },
 
+  updateFullName: async (userId: string, fullName: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ full_name: fullName.trim() })
+      .eq('id', userId)
+      .select('*')
+      .single();
+
+    return { data: data ? mapProfileRow(data) : null, error };
+  },
+
   markOnboardingComplete: async (userId: string) => {
     const { data, error } = await supabase
       .from('profiles')

@@ -46,12 +46,7 @@ export function SettingsHomeScreen() {
         >
           Admin dashboard
         </Button>
-      ) : (
-        <Text muted variant="caption" style={styles.adminHint}>
-          Admin access: set is_admin = true on your profile in Supabase (see docs/SUPABASE_ADMIN_SETUP.md),
-          then refresh the app. The Admin tab appears in the bottom bar when enabled.
-        </Text>
-      )}
+      ) : null}
 
       <View style={styles.section}>
         <Button
@@ -86,6 +81,5 @@ export function SettingsHomeScreen() {
 const styles = StyleSheet.create({
   email: { marginBottom: spacing.md },
   adminBtn: { marginBottom: spacing.md },
-  adminHint: { marginBottom: spacing.md, lineHeight: 18 },
   section: { gap: spacing.sm, marginBottom: spacing.lg },
 });
