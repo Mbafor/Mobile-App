@@ -10,4 +10,5 @@ export type Profile = {
   careerInterests: string[];
   onboardingComplete: boolean;
   isAdmin: boolean;
+  avatarUrl: string | null;
 };

@@ -11,13 +11,17 @@ import {
 } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { FormField, MultiSelectWithOther, SelectWithOther } from '@/components/forms';
+import { CountrySelect, FormField, MultiSelectWithOther, SelectWithOther } from '@/components/forms';
 import { Screen } from '@/components/layout';
 import { Button, Input, Text } from '@/components/ui';
 import { FundingPicker } from '@/features/onboarding/components';
 import { DegreeLevelPicker } from '@/features/onboarding/components/DegreeLevelPicker';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
+import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { mapToUserProfile } from '@/services/api/mappers/profile.mapper';
 import {
   COURSE_MAJOR_OPTIONS,
   INTEREST_OPTIONS,
@@ -32,6 +36,8 @@ import type { FundingPreference } from '@/types/domain/user-preferences';
 
 export function EditProfilePreferencesScreen() {
   const router = useRouter();
+  const { user, profile: authProfile, userEmail } = useAuth();
+  const setAuthProfile = useAuthStore((s) => s.setProfile);
   const { profile, preferences, isLoading: loadingData, refetch } = useProfileData();
   const { saveAllForEdit, isLoading, error, clearError } = useOnboardingActions();
 
@@ -45,6 +51,7 @@ export function EditProfilePreferencesScreen() {
   const [opportunityTypes, setOpportunityTypes] = useState<string[]>([]);
   const [countriesText, setCountriesText] = useState('');
   const [funding, setFunding] = useState<FundingPreference>('any');
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   useEffect(() => {
     if (profile) {
@@ -55,13 +62,17 @@ export function EditProfilePreferencesScreen() {
       setCourseMajor(profile.courseMajor ?? '');
       setInterests(profile.interests ?? []);
       setCareerText(formatListInput(profile.careerInterests));
+      setAvatarUrl(profile.avatarUrl ?? authProfile?.avatarUrl ?? null);
     }
-    if (preferences) {
-      setOpportunityTypes(preferences.opportunityTypes ?? []);
-      setCountriesText(formatListInput(preferences.preferredCountries));
-      setFunding(preferences.fundingPreference ?? 'any');
+  }, [authProfile?.avatarUrl, profile]);
+
+  const handleAvatarUpdated = (url: string) => {
+    setAvatarUrl(url);
+    if (profile && user) {
+      const next = mapToUserProfile({ ...profile, avatarUrl: url }, userEmail);
+      setAuthProfile(next);
     }
-  }, [profile, preferences]);
+  };
 
   const handleSave = async () => {
     clearError();
@@ -128,17 +139,35 @@ export function EditProfilePreferencesScreen() {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {user?.id ? (
+            <ProfileAvatar
+              userId={user.id}
+              displayName={fullName || authProfile?.displayName || null}
+              avatarUrl={avatarUrl}
+              onAvatarUpdated={handleAvatarUpdated}
+            />
+          ) : null}
+
           <View style={styles.header}>
             <Text variant="title">Profile & preferences</Text>
             <Text muted>Update your details to improve recommendations.</Text>
           </View>
+
+          {userEmail ? (
+            <View style={styles.emailBlock}>
+              <Text variant="caption" muted>
+                Email
+              </Text>
+              <Text>{userEmail}</Text>
+            </View>
+          ) : null}
 
           <Text style={styles.sectionLabel}>About you</Text>
           <FormField label="Full name *">
             <Input value={fullName} onChangeText={setFullName} placeholder="Your name" />
           </FormField>
           <FormField label="Country *">
-            <Input value={country} onChangeText={setCountry} placeholder="Your country" />
+            <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
           </FormField>
           <FormField label="University *">
             <Input value={university} onChangeText={setUniversity} placeholder="Institution" />
@@ -205,6 +234,7 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scroll: { padding: spacing.md, paddingBottom: spacing.xl, gap: spacing.sm },
   header: { gap: spacing.xs, marginBottom: spacing.sm },
+  emailBlock: { gap: spacing.xs, marginBottom: spacing.sm },
   sectionLabel: {
     fontSize: 16,
     fontWeight: '700',

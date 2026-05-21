@@ -1,6 +1,8 @@
 import { useRouter, type Href } from 'expo-router';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
+import { confirmAction } from '@/utils/confirm-action';
+
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
@@ -17,19 +19,21 @@ export function AdminOpportunitiesScreen() {
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
   const deleteMutation = useDeleteOpportunityMutation();
 
-  const confirmDelete = (id: string, title: string) => {
-    Alert.alert(
+  const confirmDelete = async (id: string, title: string) => {
+    const confirmed = await confirmAction(
       'Delete opportunity',
       `Delete "${title}"? This cannot be undone.`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Delete',
-          style: 'destructive',
-          onPress: () => deleteMutation.mutate(id),
-        },
-      ],
     );
+    if (!confirmed) return;
+
+    try {
+      await deleteMutation.mutateAsync(id);
+    } catch (e) {
+      Alert.alert(
+        'Delete failed',
+        e instanceof Error ? e.message : 'Could not delete this opportunity.',
+      );
+    }
   };
 
   if (!isReady || isLoading) {
@@ -78,7 +82,7 @@ export function AdminOpportunitiesScreen() {
                 <Pressable onPress={() => router.push(ROUTES.ADMIN.edit(item.id) as Href)}>
                   <Text style={styles.link}>Edit</Text>
                 </Pressable>
-                <Pressable onPress={() => confirmDelete(item.id, item.title)}>
+                <Pressable onPress={() => void confirmDelete(item.id, item.title)}>
                   <Text style={styles.danger}>Delete</Text>
                 </Pressable>
               </View>

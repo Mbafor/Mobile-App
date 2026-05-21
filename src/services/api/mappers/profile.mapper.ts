@@ -2,6 +2,10 @@ import type { ProfileRow, UserPreferencesRow } from '@/services/supabase/types';
 import type { Profile } from '@/types/domain/profile';
 import type { UserPreferences, FundingPreference } from '@/types/domain/user-preferences';
 import type { UserProfile } from '@/types/domain/user';
+import {
+  hasCompletedOnboardingFields,
+  profileNeedsOnboarding,
+} from '@/utils/profile/onboarding-status';
 
 export function mapProfileRow(row: ProfileRow): Profile {
   return {
@@ -16,6 +20,7 @@ export function mapProfileRow(row: ProfileRow): Profile {
     careerInterests: row.career_interests ?? [],
     onboardingComplete: row.onboarding_complete,
     isAdmin: row.is_admin ?? false,
+    avatarUrl: row.avatar_url ?? null,
   };
 }
 
@@ -35,9 +40,9 @@ export function mapToUserProfile(profile: Profile, email: string): UserProfile {
     id: profile.id,
     email: profile.email ?? email,
     displayName: profile.fullName,
-    avatarUrl: null,
+    avatarUrl: profile.avatarUrl,
     role: isAdmin ? 'admin' : 'member',
     isAdmin,
-    onboardingComplete: profile.onboardingComplete,
+    onboardingComplete: !profileNeedsOnboarding(profile),
   };
 }

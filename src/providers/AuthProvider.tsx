@@ -3,25 +3,9 @@ import type { PropsWithChildren } from 'react';
 import { useEffect, useRef } from 'react';
 
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { mapUserToProfile } from '@/features/auth/utils/map-user-to-profile';
-import { mapToUserProfile } from '@/services/api/mappers/profile.mapper';
-import { authApi, profilesApi } from '@/services/api';
-
-async function resolveUserProfile(user: User) {
-  const { data: profile, error } = await profilesApi.getByUserId(user.id);
-
-  if (!error && profile) {
-    return mapToUserProfile(profile, user.email ?? '');
-  }
-
-  await profilesApi.ensureProfile(user.id, user.email ?? undefined);
-  const retry = await profilesApi.getByUserId(user.id);
-  if (retry.data) {
-    return mapToUserProfile(retry.data, user.email ?? '');
-  }
-
-  return mapUserToProfile(user);
-}
+import { clearSupabaseAuthStorage } from '@/features/auth/utils/clear-auth-storage';
+import { resolveUserProfile } from '@/features/auth/utils/resolve-user-profile';
+import { authApi } from '@/services/api';
 
 function sessionFingerprint(session: Session | null): string | null {
   if (!session) return null;
@@ -57,6 +41,12 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
     const applySession = async (session: Session | null, event?: AuthChangeEvent) => {
       if (!mounted) return;
+
+      if (event === 'SIGNED_OUT') {
+        lastFingerprint.current = null;
+        await clearSupabaseAuthStorage();
+        useAuthStore.getState().reset();
+      }
 
       const fingerprint = sessionFingerprint(session);
       if (fingerprint === lastFingerprint.current && event !== 'SIGNED_OUT') {

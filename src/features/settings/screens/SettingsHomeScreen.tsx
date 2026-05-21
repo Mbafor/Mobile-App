@@ -5,41 +5,53 @@ import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
+import { useState } from 'react';
+
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { performLogout } from '@/features/auth/utils/perform-logout';
+import { confirmAction } from '@/utils/confirm-action';
 
 export function SettingsHomeScreen() {
   const router = useRouter();
-  const { profile } = useAuth();
-  const { signOut, isLoading, error } = useAuthActions();
+  const { userEmail, isAdmin } = useAuth();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  const handleLogout = () => {
-    Alert.alert('Log out', 'Are you sure you want to log out?', [
-      { text: 'Cancel', style: 'cancel' },
-      {
-        text: 'Log out',
-        style: 'destructive',
-        onPress: () => {
-          void (async () => {
-            const ok = await performLogout(signOut);
-            if (!ok) {
-              Alert.alert('Log out failed', error ?? 'Please try again.');
-            }
-          })();
-        },
-      },
-    ]);
+  const handleLogout = async () => {
+    const confirmed = await confirmAction('Log out', 'Are you sure you want to log out?');
+    if (!confirmed) return;
+
+    setIsLoggingOut(true);
+    const result = await performLogout();
+    setIsLoggingOut(false);
+
+    if (!result.ok) {
+      Alert.alert('Log out failed', result.error);
+    }
   };
 
   return (
     <Screen>
       <Text variant="title">Settings</Text>
-      {profile ? (
+      {userEmail ? (
         <Text muted style={styles.email}>
-          {profile.email}
+          {userEmail}
         </Text>
       ) : null}
+
+      {isAdmin ? (
+        <Button
+          variant="secondary"
+          onPress={() => router.push(ROUTES.ADMIN.HOME as Href)}
+          style={styles.adminBtn}
+        >
+          Admin dashboard
+        </Button>
+      ) : (
+        <Text muted variant="caption" style={styles.adminHint}>
+          Admin access: set is_admin = true on your profile in Supabase (see docs/SUPABASE_ADMIN_SETUP.md),
+          then refresh the app. The Admin tab appears in the bottom bar when enabled.
+        </Text>
+      )}
 
       <View style={styles.section}>
         <Button
@@ -59,7 +71,12 @@ export function SettingsHomeScreen() {
         </Button>
       </View>
 
-      <Button onPress={handleLogout} loading={isLoading} disabled={isLoading} variant="secondary">
+      <Button
+        onPress={() => void handleLogout()}
+        loading={isLoggingOut}
+        disabled={isLoggingOut}
+        variant="secondary"
+      >
         Log out
       </Button>
     </Screen>
@@ -67,6 +84,8 @@ export function SettingsHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  email: { marginBottom: spacing.lg },
+  email: { marginBottom: spacing.md },
+  adminBtn: { marginBottom: spacing.md },
+  adminHint: { marginBottom: spacing.md, lineHeight: 18 },
   section: { gap: spacing.sm, marginBottom: spacing.lg },
 });

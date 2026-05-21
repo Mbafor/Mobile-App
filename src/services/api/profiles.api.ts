@@ -15,7 +15,18 @@ export const profilesApi = {
 
   ensureProfile: async (userId: string, email: string | undefined) => {
     const existing = await profilesApi.getByUserId(userId);
-    if (existing.data) return existing;
+    if (existing.data) {
+      if (email && existing.data.email !== email) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .update({ email })
+          .eq('id', userId)
+          .select('*')
+          .single();
+        return { data: data ? mapProfileRow(data) : existing.data, error };
+      }
+      return existing;
+    }
 
     const { data, error } = await supabase
       .from('profiles')
@@ -53,6 +64,34 @@ export const profilesApi = {
         interests: info.interests,
         career_interests: info.careerInterests,
       })
+      .eq('id', userId)
+      .select('*')
+      .single();
+
+    return { data: data ? mapProfileRow(data) : null, error };
+  },
+
+  markOnboardingIncomplete: async (userId: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ onboarding_complete: false })
+      .eq('id', userId)
+      .select('*')
+      .single();
+
+    if (!error) {
+      await supabase.auth.updateUser({
+        data: { onboarding_complete: false },
+      });
+    }
+
+    return { data: data ? mapProfileRow(data) : null, error };
+  },
+
+  updateAvatarUrl: async (userId: string, avatarUrl: string) => {
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ avatar_url: avatarUrl })
       .eq('id', userId)
       .select('*')
       .single();

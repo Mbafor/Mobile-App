@@ -1,5 +1,8 @@
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
+
+import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
+import { env } from '@/config/env';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -13,6 +16,7 @@ import { isValidEmail } from '@/utils/validation';
 
 export function EmailOtpScreen() {
   const router = useRouter();
+  useAuthRedirect('guest');
   const { sendEmailOtp, signInWithGoogle, signInWithApple, isLoading, error, clearError } =
     useAuthActions();
   const [email, setEmail] = useState('');
@@ -53,6 +57,7 @@ export function EmailOtpScreen() {
           placeholder="you@university.edu"
         />
       </FormField>
+      {env.configError ? <ErrorMessage message={env.configError} /> : null}
       {error ? <ErrorMessage message={error} /> : null}
       <View style={styles.actions}>
         <Button onPress={handleNext} loading={isLoading} disabled={isLoading}>

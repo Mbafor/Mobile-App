@@ -37,6 +37,7 @@ export type Database = {
           career_interests: string[];
           onboarding_complete: boolean;
           is_admin: boolean;
+          avatar_url: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -52,6 +53,7 @@ export type Database = {
           career_interests?: string[];
           onboarding_complete?: boolean;
           is_admin?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -67,6 +69,7 @@ export type Database = {
           career_interests?: string[];
           onboarding_complete?: boolean;
           is_admin?: boolean;
+          avatar_url?: string | null;
           created_at?: string;
           updated_at?: string;
         };

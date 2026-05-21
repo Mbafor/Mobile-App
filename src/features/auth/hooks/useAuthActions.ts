@@ -1,9 +1,21 @@
 import { useCallback, useState } from 'react';
 
+import { env } from '@/config/env';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { signInWithAppleNative, signInWithOAuthProvider } from '@/features/auth/utils/oauth';
 import { authApi, profilesApi } from '@/services/api';
+import { queryClient } from '@/store/query-client';
 import { parseSupabaseError } from '@/utils/errors';
+import { profileNeedsOnboarding } from '@/utils/profile/onboarding-status';
+
+function mapAuthError(e: unknown): string {
+  const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
+  if (message.includes('Failed to fetch') || message.includes('ERR_NAME_NOT_RESOLVED')) {
+    if (env.configError) return env.configError;
+    return `${message} — Check EXPO_PUBLIC_SUPABASE_URL in .env and restart Expo with: npx expo start -c`;
+  }
+  return message;
+}
 
 export function useAuthActions() {
   const [isLoading, setIsLoading] = useState(false);
@@ -12,11 +24,15 @@ export function useAuthActions() {
   const run = useCallback(async <T>(fn: () => Promise<T>): Promise<T | null> => {
     setIsLoading(true);
     setError(null);
+    if (env.configError) {
+      setError(env.configError);
+      setIsLoading(false);
+      return null;
+    }
     try {
       return await fn();
     } catch (e) {
-      const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
-      setError(message);
+      setError(mapAuthError(e));
       return null;
     } finally {
       setIsLoading(false);
@@ -45,10 +61,10 @@ export function useAuthActions() {
         }
 
         const userId = data.session.user.id;
+        await profilesApi.ensureProfile(userId, normalized);
         const { data: profile } = await profilesApi.getByUserId(userId);
-        if (!profile) {
-          await profilesApi.ensureProfile(userId, normalized);
-          await authApi.updateUserMetadata({ onboarding_complete: false });
+        if (!profile || profileNeedsOnboarding(profile)) {
+          await profilesApi.markOnboardingIncomplete(userId);
         }
 
         return data;
@@ -61,6 +77,7 @@ export function useAuthActions() {
       run(async () => {
         const { error } = await authApi.signOut();
         if (error) throw error;
+        queryClient.clear();
         useAuthStore.getState().reset();
         return true;
       }),
@@ -72,7 +89,17 @@ export function useAuthActions() {
       run(async () => {
         const session = await signInWithOAuthProvider('google');
         if (!session?.user) throw new Error('Google sign-in did not return a session.');
-        await profilesApi.ensureProfile(session.user.id, session.user.email ?? undefined);
+        const userId = session.user.id;
+        const email = session.user.email ?? undefined;
+        await profilesApi.ensureProfile(userId, email);
+        const { data: profile } = await profilesApi.getByUserId(userId);
+        if (!profile || profileNeedsOnboarding(profile)) {
+          await profilesApi.markOnboardingIncomplete(userId);
+        }
+        const oauthAvatar = session.user.user_metadata?.avatar_url;
+        if (typeof oauthAvatar === 'string' && oauthAvatar && !profile?.avatarUrl) {
+          await profilesApi.updateAvatarUrl(userId, oauthAvatar);
+        }
         return session;
       }),
     [run],
@@ -83,7 +110,13 @@ export function useAuthActions() {
       run(async () => {
         const session = await signInWithAppleNative();
         if (!session?.user) throw new Error('Apple sign-in did not return a session.');
-        await profilesApi.ensureProfile(session.user.id, session.user.email ?? undefined);
+        const userId = session.user.id;
+        const email = session.user.email ?? undefined;
+        await profilesApi.ensureProfile(userId, email);
+        const { data: profile } = await profilesApi.getByUserId(userId);
+        if (!profile || profileNeedsOnboarding(profile)) {
+          await profilesApi.markOnboardingIncomplete(userId);
+        }
         return session;
       }),
     [run],

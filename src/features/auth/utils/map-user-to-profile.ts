@@ -15,6 +15,6 @@ export function mapUserToProfile(user: User): UserProfile {
     avatarUrl: (meta.avatar_url as string | undefined) ?? null,
     role: isAdmin ? 'admin' : role,
     isAdmin,
-    onboardingComplete: Boolean(meta.onboarding_complete),
+    onboardingComplete: meta.onboarding_complete === true,
   };
 }

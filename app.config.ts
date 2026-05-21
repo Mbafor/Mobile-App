@@ -7,7 +7,8 @@ const config: ExpoConfig = {
   scheme: 'olivesforum',
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
-  newArchEnabled: true,
+  // Disabled for Expo Go — turn on for EAS dev/production builds.
+  newArchEnabled: false,
   experiments: {
     typedRoutes: true,
   },
@@ -20,6 +21,13 @@ const config: ExpoConfig = {
       'expo-notifications',
       {
         color: '#2D5A3D',
+      },
+    ],
+    [
+      'expo-image-picker',
+      {
+        photosPermission:
+          'Allow Olives Forum to access your photos so you can set a profile picture.',
       },
     ],
   ],

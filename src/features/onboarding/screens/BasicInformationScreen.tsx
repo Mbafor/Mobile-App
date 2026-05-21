@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { FormField } from '@/components/forms';
+import { CountrySelect, FormField } from '@/components/forms';
 import { Screen } from '@/components/layout';
 import { Button, Input, Text } from '@/components/ui';
 import { OnboardingProgress } from '@/features/onboarding/components';
@@ -78,12 +78,7 @@ export function BasicInformationScreen() {
           </FormField>
 
           <FormField label="Country *">
-            <Input
-              value={country}
-              onChangeText={setCountry}
-              placeholder="e.g. United Kingdom"
-              autoComplete="country"
-            />
+            <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
           </FormField>
 
           {error ? <ErrorMessage message={error} /> : null}

@@ -6,6 +6,11 @@ import { ROUTES } from '@/constants/routes';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
 import { adminApi } from '@/services/api';
 
+async function refreshOpportunityFeeds(queryClient: ReturnType<typeof useQueryClient>) {
+  await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
+  await queryClient.refetchQueries({ queryKey: queryKeys.opportunities.all });
+}
+
 export function useCreateOpportunityMutation() {
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -20,7 +25,7 @@ export function useCreateOpportunityMutation() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
+      await refreshOpportunityFeeds(queryClient);
       router.replace(ROUTES.ADMIN.OPPORTUNITIES);
     },
   });
@@ -39,8 +44,8 @@ export function useUpdateOpportunityMutation(id: string) {
     onSuccess: async () => {
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
       await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.detail(id) });
+      await refreshOpportunityFeeds(queryClient);
       router.back();
     },
   });
@@ -58,7 +63,7 @@ export function useDeleteOpportunityMutation() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
-      await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
+      await refreshOpportunityFeeds(queryClient);
     },
   });
 }

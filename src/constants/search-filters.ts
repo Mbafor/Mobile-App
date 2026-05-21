@@ -1,45 +1,25 @@
 import type { DeadlineRangeFilter, LocationType } from '@/types/domain/opportunity';
+import {
+  BROWSE_CATEGORY_LIST,
+  OPPORTUNITY_DEGREE_VALUES,
+  OPPORTUNITY_FUNDING_OPTIONS,
+  OPPORTUNITY_LOCATION_OPTIONS,
+  PREDEFINED_OPPORTUNITY_COUNTRIES,
+} from '@/constants/opportunity-fields';
 
-export const FILTER_COUNTRIES = [
-  'United Kingdom',
-  'United States',
-  'Germany',
-  'Canada',
-  'Global',
-] as const;
+export const FILTER_COUNTRIES = PREDEFINED_OPPORTUNITY_COUNTRIES;
 
-export const FILTER_CATEGORIES = [
-  'Internship',
-  'Scholarship',
-  'Fellowship',
-  'Graduate Programme',
-  'Grant & Funding',
-  'Bootcamp & Training',
-  'Exchange Programme',
-  'Job (Full-time)',
-  'Research Opportunity',
-] as const;
+export const FILTER_CATEGORIES = BROWSE_CATEGORY_LIST;
 
 export const FILTER_FUNDING_TYPES = [
-  'fully_funded',
-  'partially_funded',
-  'self_funded',
+  ...OPPORTUNITY_FUNDING_OPTIONS.map((o) => o.value),
   'any',
 ] as const;
 
-export const FILTER_DEGREE_LEVELS = [
-  'high_school',
-  'bachelors',
-  'masters',
-  'phd',
-  'professional',
-] as const;
+export const FILTER_DEGREE_LEVELS = OPPORTUNITY_DEGREE_VALUES;
 
-export const FILTER_LOCATION_TYPES: { value: LocationType; label: string }[] = [
-  { value: 'remote', label: 'Remote' },
-  { value: 'onsite', label: 'On-site' },
-  { value: 'hybrid', label: 'Hybrid' },
-];
+export const FILTER_LOCATION_TYPES: { value: LocationType; label: string }[] =
+  OPPORTUNITY_LOCATION_OPTIONS;
 
 export const FILTER_DEADLINE_RANGES: { value: DeadlineRangeFilter; label: string }[] = [
   { value: 'any', label: 'Any deadline' },

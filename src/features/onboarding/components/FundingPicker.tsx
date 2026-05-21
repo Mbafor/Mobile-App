@@ -8,12 +8,18 @@ import type { FundingPreference } from '@/types/domain/user-preferences';
 type FundingPickerProps = {
   value: FundingPreference;
   onChange: (value: FundingPreference) => void;
+  /** Hide "Any funding" (for admin opportunity listings). */
+  excludeAny?: boolean;
 };
 
-export function FundingPicker({ value, onChange }: FundingPickerProps) {
+export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProps) {
+  const options = excludeAny
+    ? FUNDING_OPTIONS.filter((o) => o.value !== 'any')
+    : FUNDING_OPTIONS;
+
   return (
     <View style={styles.wrap}>
-      {FUNDING_OPTIONS.map((option) => {
+      {options.map((option) => {
         const selected = value === option.value;
         return (
           <Pressable

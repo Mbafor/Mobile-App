@@ -1,12 +1,35 @@
 import { router } from 'expo-router';
 
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { clearSupabaseAuthStorage } from '@/features/auth/utils/clear-auth-storage';
 import { ROUTES } from '@/constants/routes';
+import { authApi } from '@/services/api';
+import { queryClient } from '@/store/query-client';
 
-export async function performLogout(signOut: () => Promise<unknown>): Promise<boolean> {
-  const result = await signOut();
-  if (result === null) {
-    return false;
+export type LogoutResult = { ok: true } | { ok: false; error: string };
+
+export async function performLogout(): Promise<LogoutResult> {
+  try {
+    queryClient.clear();
+
+    const { error } = await authApi.signOut();
+    if (error) {
+      return { ok: false, error: error.message };
+    }
+
+    await clearSupabaseAuthStorage();
+
+    useAuthStore.getState().reset();
+
+    if (router.canDismiss()) {
+      router.dismissAll();
+    }
+
+    router.replace(ROUTES.AUTH.WELCOME);
+
+    return { ok: true };
+  } catch (e) {
+    const message = e instanceof Error ? e.message : 'Could not log out. Please try again.';
+    return { ok: false, error: message };
   }
-  router.replace(ROUTES.AUTH.WELCOME);
-  return true;
 }

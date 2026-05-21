@@ -11,6 +11,7 @@ import {
   registerExpoPushToken,
 } from '@/features/notifications/services/push-registration';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { pushTokensApi } from '@/services/api/push-tokens.api';
 import { spacing } from '@/constants/theme';
 import type { PushPermissionStatus } from '@/types/domain/notification';
 
@@ -28,11 +29,20 @@ export function NotificationPreferencesScreen() {
 
     if (!enabled) {
       await setPreference('pushEnabled', false);
+      await pushTokensApi.removeAllForUser(user.id);
       return;
     }
 
     const status = await requestPushPermission();
     setPermission(status);
+
+    if (status === 'unavailable') {
+      Alert.alert(
+        'Not available',
+        'Push notifications require a physical device with a development or production build.',
+      );
+      return;
+    }
 
     if (status !== 'granted') {
       Alert.alert(
@@ -44,7 +54,12 @@ export function NotificationPreferencesScreen() {
     }
 
     await setPreference('pushEnabled', true);
-    await registerExpoPushToken(user.id);
+    const result = await registerExpoPushToken(user.id);
+    if (result.error) {
+      Alert.alert('Push setup failed', result.error);
+      await setPreference('pushEnabled', false);
+      await pushTokensApi.removeAllForUser(user.id);
+    }
   };
 
   if (isLoading || !preferences) {
@@ -55,6 +70,8 @@ export function NotificationPreferencesScreen() {
       </Screen>
     );
   }
+
+  const pushToggleDisabled = permission === 'unavailable';
 
   return (
     <Screen>
@@ -71,6 +88,12 @@ export function NotificationPreferencesScreen() {
           </Text>
         ) : null}
 
+        {permission === 'unavailable' ? (
+          <Text muted variant="caption" style={styles.warning}>
+            Push is not available on this device or platform (use a physical phone with a dev build).
+          </Text>
+        ) : null}
+
         <View style={styles.section}>
           <PreferenceToggleRow
             label="Push notifications"
@@ -78,6 +101,7 @@ export function NotificationPreferencesScreen() {
             value={preferences.pushEnabled}
             onValueChange={handlePushToggle}
             loading={isSaving}
+            disabled={pushToggleDisabled}
           />
           <PreferenceToggleRow
             label="New matching opportunities"

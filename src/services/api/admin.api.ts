@@ -15,6 +15,13 @@ export type AdminDashboardStats = {
 };
 
 function formToRow(values: OpportunityFormValues): OpportunityInsert {
+  const category = values.category.trim();
+  const tagSet = new Set(values.tags.map((t) => t.trim()).filter(Boolean));
+  if (category) tagSet.add(category);
+
+  const funding = values.fundingType.trim();
+  const fundingType = funding && funding !== 'any' ? funding : null;
+
   return {
     title: values.title.trim(),
     organization: values.organization.trim(),
@@ -22,10 +29,10 @@ function formToRow(values: OpportunityFormValues): OpportunityInsert {
     image_url: values.imageUrl.trim() || null,
     apply_url: values.applyUrl.trim() || null,
     deadline: parseDeadlineToIso(values.deadline),
-    tags: values.tags,
+    tags: [...tagSet],
     country: values.country.trim() || null,
-    category: values.category.trim() || null,
-    funding_type: values.fundingType.trim() || null,
+    category: category || null,
+    funding_type: fundingType,
     degree_levels: values.degreeLevels,
     location_type: values.locationType || null,
   };

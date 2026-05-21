@@ -33,7 +33,27 @@ export function useNotificationPreferences() {
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onMutate: async (patch) => {
+      if (!userId) return;
+      const key = queryKeys.notifications.preferences(userId);
+      await queryClient.cancelQueries({ queryKey: key });
+      const previous = queryClient.getQueryData<NotificationPreferences>(key);
+      if (previous) {
+        queryClient.setQueryData<NotificationPreferences>(key, {
+          ...previous,
+          ...patch,
+        });
+      }
+      return { previous };
+    },
+    onError: (_err, _patch, context) => {
+      if (!userId || !context?.previous) return;
+      queryClient.setQueryData(
+        queryKeys.notifications.preferences(userId),
+        context.previous,
+      );
+    },
+    onSettled: () => {
       if (!userId) return;
       void queryClient.invalidateQueries({
         queryKey: queryKeys.notifications.preferences(userId),

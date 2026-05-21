@@ -10,10 +10,13 @@ export function useAuth() {
   /** Ready to route: hydrated and profile resolved when signed in. */
   const isAuthReady = !isHydrating && (!isAuthenticated || !isProfileLoading);
 
+  const userEmail = profile?.email || session?.user?.email || '';
+
   return {
     session,
     profile,
     user: session?.user ?? null,
+    userEmail,
     isAuthenticated,
     isHydrating,
     isProfileLoading,

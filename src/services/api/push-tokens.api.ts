@@ -30,4 +30,10 @@ export const pushTokensApi = {
 
     return { error };
   },
+
+  removeAllForUser: async (userId: string) => {
+    const { error } = await supabase.from('user_push_tokens').delete().eq('user_id', userId);
+
+    return { error };
+  },
 };

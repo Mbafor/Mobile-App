@@ -28,8 +28,9 @@ export function useOnboardingGuard() {
       return;
     }
 
-    const inOnboarding = segments[0] === '(onboarding)';
-    const currentStep = segments[1] as (typeof STEP_ORDER)[number] | undefined;
+    const segmentList = segments as string[];
+    const inOnboarding = segmentList[0] === '(onboarding)';
+    const currentStep = segmentList[1] as (typeof STEP_ORDER)[number] | undefined;
 
     if (!inOnboarding) {
       router.replace(ROUTES.ONBOARDING.BASIC_INFO);
