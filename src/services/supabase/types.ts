@@ -291,6 +291,7 @@ export type Database = {
           type: 'download' | 'template_unlock';
           status: 'pending' | 'success' | 'failed';
           paystack_reference: string | null;
+          template_id: string | null;
           created_at: string;
         };
         Insert: {
@@ -301,6 +302,7 @@ export type Database = {
           type: 'download' | 'template_unlock';
           status?: 'pending' | 'success' | 'failed';
           paystack_reference?: string | null;
+          template_id?: string | null;
           created_at?: string;
         };
         Update: {
@@ -311,6 +313,7 @@ export type Database = {
           type?: 'download' | 'template_unlock';
           status?: 'pending' | 'success' | 'failed';
           paystack_reference?: string | null;
+          template_id?: string | null;
           created_at?: string;
         };
         Relationships: [];

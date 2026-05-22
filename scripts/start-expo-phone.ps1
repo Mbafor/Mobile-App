@@ -40,4 +40,5 @@ Write-Host "If that fails, run: npm run start:tunnel" -ForegroundColor Gray
 Write-Host ""
 
 $env:REACT_NATIVE_PACKAGER_HOSTNAME = $ip
+$env:NODE_OPTIONS = "--max-old-space-size=8192"
 npx expo start --lan -c

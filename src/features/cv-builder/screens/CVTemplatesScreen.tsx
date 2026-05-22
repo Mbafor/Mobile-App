@@ -6,6 +6,8 @@ import { Button, Text } from '@/components/ui';
 import { CVPreviewModal } from '@/features/cv-builder/components/CVPreviewModal';
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
+import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
+import { isTemplateFree } from '@/features/cv-builder/constants/templates';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import {
   getTemplateDefinition,
@@ -15,7 +17,8 @@ import {
 import { colors, spacing } from '@/constants/theme';
 
 export function CVTemplatesScreen() {
-  const { content, templateId, selectTemplate, saveState } = useCVBuilderContext();
+  const { cv, content, templateId, selectTemplate, saveState } = useCVBuilderContext();
+  const payment = useCVPaymentContext();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTemplateId, setPreviewTemplateId] = useState<CVTemplateId>(
     resolveTemplateId(templateId),
@@ -25,10 +28,26 @@ export function CVTemplatesScreen() {
 
   const handleSelect = useCallback(
     (id: CVTemplateId) => {
+      if (!cv) return;
       setPreviewTemplateId(id);
+
+      const needsUnlock = !isTemplateFree(id) && !payment.isTemplateUnlocked(id);
+      if (needsUnlock) {
+        payment.promptPayment({
+          product: payment.getProductForTemplate(id),
+          cvId: cv.id,
+          templateId: id,
+          alreadyPaid: false,
+          onSuccess: async () => {
+            await selectTemplate(id, { skipFreeCheck: true });
+          },
+        });
+        return;
+      }
+
       void selectTemplate(id);
     },
-    [selectTemplate],
+    [cv, payment, selectTemplate],
   );
 
   const handlePreview = useCallback((id: CVTemplateId) => {
@@ -62,6 +81,7 @@ export function CVTemplatesScreen() {
           onSelect={handleSelect}
           onPreview={handlePreview}
           disabled={isSaving}
+          unlockedTemplateIds={payment.unlockedTemplateIds}
         />
 
         <Button

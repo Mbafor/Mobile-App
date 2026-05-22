@@ -2,6 +2,7 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 
 import { HideMainTabBar } from '@/features/cv-builder/components/hub/HideMainTabBar';
 import { CVBuilderProvider } from '@/features/cv-builder/context/CVBuilderContext';
+import { CVPaymentProvider } from '@/features/cv-builder/context/CVPaymentContext';
 
 export default function CVIdLayout() {
   const params = useLocalSearchParams<{ cvId?: string }>();
@@ -13,12 +14,14 @@ export default function CVIdLayout() {
 
   return (
     <CVBuilderProvider cvId={cvId}>
-      <HideMainTabBar>
-        <Stack screenOptions={{ headerShown: false }}>
-          <Stack.Screen name="(tabs)" />
-          <Stack.Screen name="section/[sectionId]" />
-        </Stack>
-      </HideMainTabBar>
+      <CVPaymentProvider cvId={cvId}>
+        <HideMainTabBar>
+          <Stack screenOptions={{ headerShown: false }}>
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="section/[sectionId]" />
+          </Stack>
+        </HideMainTabBar>
+      </CVPaymentProvider>
     </CVBuilderProvider>
   );
 }

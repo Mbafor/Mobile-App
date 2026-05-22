@@ -22,6 +22,7 @@ export type SavePaymentData = {
   type: CVPaymentType;
   status?: CVPaymentStatus;
   paystackReference?: string | null;
+  templateId?: string | null;
 };
 
 type ApiResult<T> = { data: T; error: null } | { data: null; error: Error };
@@ -109,6 +110,7 @@ export async function savePayment(paymentData: SavePaymentData): Promise<ApiResu
       type: paymentData.type,
       status: paymentData.status ?? 'pending',
       paystack_reference: paymentData.paystackReference ?? null,
+      template_id: paymentData.templateId ?? null,
     })
     .select('*')
     .single();

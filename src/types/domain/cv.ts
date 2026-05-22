@@ -141,5 +141,7 @@ export type CVPayment = {
   type: CVPaymentType;
   status: CVPaymentStatus;
   paystackReference: string | null;
+  /** Set for template_unlock — which layout was purchased. */
+  templateId: string | null;
   createdAt: string;
 };

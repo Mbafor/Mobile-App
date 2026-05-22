@@ -8,37 +8,37 @@ export type CVTemplateDefinition = {
 };
 
 /** Matches website CV builder templates (ATS, Modern, Tech, Executive/Jessica, Minimal/Elite). */
-/** All five layouts are available in the app; payment can gate PDF export later. */
+/** Every layout requires a one-time GHS 100 unlock per template. */
 export const CV_TEMPLATES: CVTemplateDefinition[] = [
   {
     id: 'ats',
     label: 'ATS Elite',
     description: 'Single-column, ATS-optimized layout',
-    isFree: true,
+    isFree: false,
   },
   {
     id: 'modern',
     label: 'Modern',
     description: 'Blue accents with structured sections',
-    isFree: true,
+    isFree: false,
   },
   {
     id: 'tech',
     label: 'Tech',
     description: 'Navy sidebar with timeline experience',
-    isFree: true,
+    isFree: false,
   },
   {
     id: 'executive',
     label: 'Executive',
     description: 'Top banner with left-rail section headers',
-    isFree: true,
+    isFree: false,
   },
   {
     id: 'minimal',
     label: 'Minimal',
     description: 'Swiss two-column professional layout',
-    isFree: true,
+    isFree: false,
   },
 ];
 

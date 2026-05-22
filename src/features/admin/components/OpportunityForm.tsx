@@ -1,5 +1,12 @@
-import { useState, type ReactNode } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useRef, useState, type ReactNode } from 'react';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import {
   CountrySelect,
@@ -21,6 +28,7 @@ import {
 } from '@/constants/opportunity-fields';
 import { FundingPicker } from '@/features/onboarding/components/FundingPicker';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
+import { validateOpportunityForm } from '@/features/admin/utils/validate-opportunity-form';
 import type { LocationType } from '@/types/domain/opportunity';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
@@ -45,6 +53,7 @@ export function OpportunityForm({
   loading,
   onSubmit,
 }: OpportunityFormProps) {
+  const scrollRef = useRef<ScrollView>(null);
   const [title, setTitle] = useState(initialValues.title);
   const [organization, setOrganization] = useState(initialValues.organization);
   const [description, setDescription] = useState(initialValues.description);
@@ -60,39 +69,20 @@ export function OpportunityForm({
   const [locationType, setLocationType] = useState(initialValues.locationType);
   const [applyUrl, setApplyUrl] = useState(initialValues.applyUrl);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
+
+  const isBusy = loading || submitting;
+
+  const showValidationError = (message: string) => {
+    setError(message);
+    Alert.alert('Check required fields', message);
+    scrollRef.current?.scrollToEnd({ animated: true });
+  };
 
   const handleSubmit = async () => {
-    setError(null);
-    if (!title.trim() || !organization.trim() || !deadline.trim()) {
-      setError('Title, organization, and deadline are required.');
-      return;
-    }
-    if (!category.trim()) {
-      setError('Select an opportunity category (same list as user opportunity types).');
-      return;
-    }
-    if (!country.trim()) {
-      setError('Select a country.');
-      return;
-    }
-    if (tags.length === 0) {
-      setError('Select at least one interest tag (same list as user interests).');
-      return;
-    }
-    if (degreeLevels.length === 0) {
-      setError('Select at least one degree level.');
-      return;
-    }
-    if (!locationType) {
-      setError('Select a location type.');
-      return;
-    }
-    if (!fundingType || fundingType === 'any') {
-      setError('Select a funding type for this listing.');
-      return;
-    }
+    if (isBusy) return;
 
-    await onSubmit({
+    const payload: OpportunityFormValues = {
       title,
       organization,
       description,
@@ -105,101 +95,132 @@ export function OpportunityForm({
       degreeLevels,
       locationType: locationType as LocationType,
       applyUrl,
-    });
+    };
+
+    const validation = validateOpportunityForm(payload);
+    if (!validation.ok) {
+      showValidationError(validation.message);
+      return;
+    }
+
+    setError(null);
+    setSubmitting(true);
+    try {
+      await onSubmit(payload);
+    } catch (e) {
+      const message = e instanceof Error ? e.message : 'Something went wrong';
+      setError(message);
+      Alert.alert('Could not save', message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scroll} keyboardShouldPersistTaps="handled">
-      <Field label="Title *">
-        <Input value={title} onChangeText={setTitle} placeholder="Opportunity title" />
-      </Field>
-      <Field label="Organization *">
-        <Input value={organization} onChangeText={setOrganization} placeholder="Organization name" />
-      </Field>
-      <Field label="Description">
-        <Input
-          value={description}
-          onChangeText={setDescription}
-          placeholder="Full description"
-          multiline
-          style={styles.multiline}
-        />
-      </Field>
-      <Field label="Image URL">
-        <Input value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." autoCapitalize="none" />
-      </Field>
-      <Field label="Deadline * (YYYY-MM-DD)">
-        <Input value={deadline} onChangeText={setDeadline} placeholder="2026-12-31" autoCapitalize="none" />
-      </Field>
-      <Field label="Apply URL">
-        <Input
-          value={applyUrl}
-          onChangeText={setApplyUrl}
-          placeholder="https://apply.example.com"
-          autoCapitalize="none"
-        />
-      </Field>
+    <KeyboardAvoidingView
+      style={styles.flex}
+      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 80 : 0}
+    >
+      <ScrollView
+        ref={scrollRef}
+        style={styles.flex}
+        contentContainerStyle={styles.scroll}
+        keyboardShouldPersistTaps="always"
+        showsVerticalScrollIndicator
+      >
+        <Field label="Title *">
+          <Input value={title} onChangeText={setTitle} placeholder="Opportunity title" />
+        </Field>
+        <Field label="Organization *">
+          <Input value={organization} onChangeText={setOrganization} placeholder="Organization name" />
+        </Field>
+        <Field label="Description">
+          <Input
+            value={description}
+            onChangeText={setDescription}
+            placeholder="Full description"
+            multiline
+            style={styles.multiline}
+          />
+        </Field>
+        <Field label="Image URL">
+          <Input value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." autoCapitalize="none" />
+        </Field>
+        <Field label="Deadline * (YYYY-MM-DD)">
+          <Input value={deadline} onChangeText={setDeadline} placeholder="2026-12-31" autoCapitalize="none" />
+        </Field>
+        <Field label="Apply URL">
+          <Input
+            value={applyUrl}
+            onChangeText={setApplyUrl}
+            placeholder="https://apply.example.com"
+            autoCapitalize="none"
+          />
+        </Field>
 
-      <Text style={styles.section}>Classification (matches user onboarding options)</Text>
+        <Text style={styles.section}>Classification (matches user onboarding options)</Text>
 
-      <FormField label="Category *">
-        <SelectWithOther
-          options={OPPORTUNITY_CATEGORY_OPTIONS}
-          predefinedValues={PREDEFINED_OPPORTUNITY_CATEGORIES}
-          value={category}
-          onChange={setCategory}
-          placeholder="Select opportunity type"
-        />
-      </FormField>
+        <FormField label="Category *">
+          <SelectWithOther
+            options={OPPORTUNITY_CATEGORY_OPTIONS}
+            predefinedValues={PREDEFINED_OPPORTUNITY_CATEGORIES}
+            value={category}
+            onChange={setCategory}
+            placeholder="Select opportunity type"
+          />
+        </FormField>
 
-      <FormField label="Interest tags *">
-        <MultiSelectWithOther
-          options={OPPORTUNITY_TAG_OPTIONS}
-          predefinedValues={PREDEFINED_OPPORTUNITY_TAGS}
-          values={tags}
-          onChange={setTags}
-          placeholder="Select interests (for recommendations)"
-        />
-      </FormField>
+        <FormField label="Interest tags *">
+          <MultiSelectWithOther
+            options={OPPORTUNITY_TAG_OPTIONS}
+            predefinedValues={PREDEFINED_OPPORTUNITY_TAGS}
+            values={tags}
+            onChange={setTags}
+            placeholder="Select interests (tap Apply when done)"
+          />
+        </FormField>
 
-      <FormField label="Country *">
-        <CountrySelect
-          value={country}
-          onChange={setCountry}
-          placeholder="Select country"
-          extraOptions={[{ label: 'Global', value: 'Global' }]}
-          extraPredefined={['Global']}
-        />
-      </FormField>
+        <FormField label="Country *">
+          <CountrySelect
+            value={country}
+            onChange={setCountry}
+            placeholder="Select country"
+            extraOptions={[{ label: 'Global', value: 'Global' }]}
+            extraPredefined={['Global']}
+          />
+        </FormField>
 
-      <FormField label="Funding type *">
-        <FundingPicker
-          value={fundingType === 'any' ? 'fully_funded' : fundingType}
-          onChange={setFundingType}
-          excludeAny
-        />
-      </FormField>
+        <FormField label="Funding type *">
+          <FundingPicker
+            value={fundingType === 'any' ? 'fully_funded' : fundingType}
+            onChange={setFundingType}
+            excludeAny
+          />
+        </FormField>
 
-      <FormField label="Degree levels *">
-        <MultiDegreeLevelPicker values={degreeLevels} onChange={setDegreeLevels} />
-      </FormField>
+        <FormField label="Degree levels *">
+          <MultiDegreeLevelPicker values={degreeLevels} onChange={setDegreeLevels} />
+        </FormField>
 
-      <FormField label="Location type *">
-        <SelectWithOther
-          options={OPPORTUNITY_LOCATION_SELECT_OPTIONS}
-          predefinedValues={PREDEFINED_OPPORTUNITY_LOCATIONS}
-          value={locationType}
-          onChange={(v) => setLocationType(v as LocationType | '')}
-          placeholder="Select location type"
-        />
-      </FormField>
+        <FormField label="Location type *">
+          <SelectWithOther
+            options={OPPORTUNITY_LOCATION_SELECT_OPTIONS}
+            predefinedValues={PREDEFINED_OPPORTUNITY_LOCATIONS}
+            value={locationType}
+            onChange={(v) => setLocationType(v as LocationType | '')}
+            placeholder="Select location type"
+          />
+        </FormField>
+      </ScrollView>
 
-      {error ? <Text style={styles.error}>{error}</Text> : null}
-
-      <Button onPress={() => void handleSubmit()} loading={loading}>
-        {submitLabel}
-      </Button>
-    </ScrollView>
+      <View style={styles.footer}>
+        {error ? <Text style={styles.error}>{error}</Text> : null}
+        <Button onPress={() => void handleSubmit()} loading={isBusy} disabled={isBusy}>
+          {submitLabel}
+        </Button>
+      </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -213,7 +234,16 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl * 2 },
+  flex: { flex: 1 },
+  scroll: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.md },
+  footer: {
+    padding: spacing.md,
+    paddingTop: spacing.sm,
+    gap: spacing.sm,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
   section: {
     fontWeight: '700',
     fontSize: 15,
@@ -223,6 +253,5 @@ const styles = StyleSheet.create({
   field: { gap: spacing.xs },
   label: { fontWeight: '600', color: colors.text },
   multiline: { minHeight: 100, textAlignVertical: 'top' },
-  hint: { marginTop: spacing.xs },
-  error: { color: colors.error },
+  error: { color: colors.error, fontSize: 13 },
 });

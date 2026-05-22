@@ -4,6 +4,9 @@ const { getDefaultConfig } = require('expo/metro-config');
 /** @type {import('expo/metro-config').MetroConfig} */
 const config = getDefaultConfig(__dirname);
 
+// Lower parallel workers to avoid "JavaScript heap out of memory" on Windows during large bundles
+config.maxWorkers = 2;
+
 const opentelemetryStub = path.resolve(__dirname, 'metro-stubs/opentelemetry-api.js');
 
 // Resolve optional @opentelemetry/api required by @supabase/supabase-js (web + native)

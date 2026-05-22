@@ -148,12 +148,14 @@ export function useCVBuilder(cvId: string | undefined) {
   );
 
   const selectTemplate = useCallback(
-    async (id: string) => {
+    async (id: string, options?: { skipFreeCheck?: boolean }) => {
       const resolved = resolveTemplateId(id);
-      if (!isTemplateFree(resolved)) {
-        return;
+      if (!options?.skipFreeCheck && !isTemplateFree(resolved)) {
+        return { ok: false as const, needsPayment: true, templateId: resolved };
       }
-      if (resolved === resolveTemplateId(templateIdRef.current)) return;
+      if (resolved === resolveTemplateId(templateIdRef.current)) {
+        return { ok: true as const, needsPayment: false };
+      }
 
       setTemplateId(resolved);
       templateIdRef.current = resolved;
@@ -161,10 +163,13 @@ export function useCVBuilder(cvId: string | undefined) {
         setSaveState('idle');
       }
 
-      await persist({
+      const saved = await persist({
         content: contentRef.current,
         templateId: resolved,
       });
+      return saved
+        ? { ok: true as const, needsPayment: false }
+        : { ok: false as const, needsPayment: false };
     },
     [persist, saveState],
   );

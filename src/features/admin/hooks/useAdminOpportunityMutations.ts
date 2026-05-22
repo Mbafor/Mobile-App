@@ -1,5 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'expo-router';
+import { Alert } from 'react-native';
 
 import { queryKeys } from '@/constants/query-keys';
 import { ROUTES } from '@/constants/routes';
@@ -26,6 +27,7 @@ export function useCreateOpportunityMutation() {
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
       await refreshOpportunityFeeds(queryClient);
+      Alert.alert('Posted', 'Your opportunity is live for students to browse.');
       router.replace(ROUTES.ADMIN.OPPORTUNITIES);
     },
   });
@@ -46,6 +48,7 @@ export function useUpdateOpportunityMutation(id: string) {
       await queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
       await queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.detail(id) });
       await refreshOpportunityFeeds(queryClient);
+      Alert.alert('Saved', 'Changes are live for students.');
       router.back();
     },
   });

@@ -27,6 +27,7 @@ export function mapCVPaymentRow(row: CVPaymentRow): CVPayment {
     type: row.type,
     status: row.status,
     paystackReference: row.paystack_reference,
+    templateId: row.template_id ?? null,
     createdAt: row.created_at,
   };
 }

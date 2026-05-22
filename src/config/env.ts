@@ -1,5 +1,6 @@
 const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL ?? '';
 const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
+const PAYSTACK_PUBLIC_KEY = process.env.EXPO_PUBLIC_PAYSTACK_PUBLIC_KEY ?? '';
 
 const PLACEHOLDER_URL_PATTERNS = [
   'your_project',
@@ -48,6 +49,8 @@ if (__DEV__ && envError) {
 export const env = {
   SUPABASE_URL,
   SUPABASE_ANON_KEY,
+  PAYSTACK_PUBLIC_KEY,
+  isPaystackConfigured: Boolean(PAYSTACK_PUBLIC_KEY),
   isConfigured: Boolean(SUPABASE_URL && SUPABASE_ANON_KEY) && !envError,
   configError: envError,
 } as const;

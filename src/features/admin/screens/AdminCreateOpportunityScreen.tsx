@@ -1,7 +1,8 @@
-import { Alert, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/layout';
 import { Text } from '@/components/ui';
+import { spacing } from '@/constants/theme';
 import { OpportunityForm } from '@/features/admin/components/OpportunityForm';
 import { useCreateOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
 import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
@@ -15,24 +16,22 @@ export function AdminCreateOpportunityScreen() {
 
   return (
     <Screen padded={false}>
-      <View style={{ padding: 16, paddingBottom: 0 }}>
+      <View style={styles.header}>
         <Text variant="title">Create opportunity</Text>
+        <Text muted variant="caption">
+          Fill all required fields, then tap Create. Students only see listings with a future deadline.
+        </Text>
       </View>
       <OpportunityForm
         initialValues={EMPTY_OPPORTUNITY_FORM}
         submitLabel="Create opportunity"
         loading={createMutation.isPending}
-        onSubmit={async (values) => {
-          try {
-            await createMutation.mutateAsync(values);
-          } catch (e) {
-            Alert.alert(
-              'Could not create',
-              e instanceof Error ? e.message : 'Something went wrong',
-            );
-          }
-        }}
+        onSubmit={(values) => createMutation.mutateAsync(values)}
       />
     </Screen>
   );
 }
+
+const styles = StyleSheet.create({
+  header: { padding: spacing.md, paddingBottom: spacing.sm, gap: spacing.xs },
+});

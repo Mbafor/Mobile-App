@@ -19,6 +19,8 @@ import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
+import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
+import { useCVDownload } from '@/features/cv-builder/hooks/useCVDownload';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import {
@@ -37,9 +39,12 @@ export function CVHubDashboardScreen() {
     templateId,
     setSectionOrder,
     saveLayout,
+    saveNow,
     isLoading,
     error,
   } = useCVBuilderContext();
+  const payment = useCVPaymentContext();
+  const { downloadAndShare, generating } = useCVDownload();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [reorderOpen, setReorderOpen] = useState(false);
@@ -70,6 +75,24 @@ export function CVHubDashboardScreen() {
     await saveLayout();
   };
 
+  const runPdfDownload = async () => {
+    if (!cv) return;
+    await saveNow();
+    const fileName = `${cv.title.trim() || 'My-CV'}.pdf`;
+    await downloadAndShare({ templateId, content, fileName });
+  };
+
+  const handleDownload = () => {
+    if (!cv) return;
+    const alreadyPaid = payment.hasDownloadPaid(cv.id);
+    payment.promptPayment({
+      product: payment.getProductForDownload(cv.title),
+      cvId: cv.id,
+      alreadyPaid,
+      onSuccess: runPdfDownload,
+    });
+  };
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -93,6 +116,8 @@ export function CVHubDashboardScreen() {
           title={cv.title}
           progressPercent={progress}
           onPreview={() => setPreviewOpen(true)}
+          onDownload={handleDownload}
+          downloadLoading={generating || payment.busy}
         />
 
         <View style={styles.searchStrip}>
@@ -133,9 +158,20 @@ export function CVHubDashboardScreen() {
             )}
           </View>
 
-          <Pressable style={styles.previewCta} onPress={() => setPreviewOpen(true)}>
-            <Text style={styles.previewCtaText}>Open full preview</Text>
-          </Pressable>
+          <View style={styles.footerActions}>
+            <Pressable style={styles.previewCta} onPress={() => setPreviewOpen(true)}>
+              <Text style={styles.previewCtaText}>Open full preview</Text>
+            </Pressable>
+            <Pressable
+              style={[styles.downloadCta, (generating || payment.busy) && styles.downloadCtaDisabled]}
+              onPress={handleDownload}
+              disabled={generating || payment.busy}
+            >
+              <Text style={styles.downloadCtaText}>
+                {generating ? 'Generating PDF…' : 'Download PDF (GHS 100)'}
+              </Text>
+            </Pressable>
+          </View>
         </ScrollView>
       </View>
 
@@ -205,11 +241,18 @@ const styles = StyleSheet.create({
     color: cvDocsTheme.textSecondary,
     fontSize: 13,
   },
+  footerActions: { marginTop: spacing.md, gap: spacing.sm, alignItems: 'center' },
   previewCta: {
-    marginTop: spacing.md,
-    alignSelf: 'center',
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
   },
   previewCtaText: { fontSize: 14, fontWeight: '600', color: colors.primary },
+  downloadCta: {
+    paddingVertical: spacing.sm + 2,
+    paddingHorizontal: spacing.lg,
+    borderRadius: 24,
+    backgroundColor: colors.primary,
+  },
+  downloadCtaDisabled: { opacity: 0.6 },
+  downloadCtaText: { fontSize: 14, fontWeight: '700', color: colors.background },
 });

@@ -10,9 +10,17 @@ type CVHubDocToolbarProps = {
   title: string;
   progressPercent: number;
   onPreview: () => void;
+  onDownload?: () => void;
+  downloadLoading?: boolean;
 };
 
-export function CVHubDocToolbar({ title, progressPercent, onPreview }: CVHubDocToolbarProps) {
+export function CVHubDocToolbar({
+  title,
+  progressPercent,
+  onPreview,
+  onDownload,
+  downloadLoading = false,
+}: CVHubDocToolbarProps) {
   const pct = Math.min(100, Math.max(0, progressPercent));
 
   return (
@@ -24,10 +32,24 @@ export function CVHubDocToolbar({ title, progressPercent, onPreview }: CVHubDocT
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
-        <Pressable onPress={onPreview} style={styles.previewBtn}>
-          <Ionicons name="eye-outline" size={18} color={colors.primary} />
-          <Text style={styles.previewText}>Preview</Text>
-        </Pressable>
+        <View style={styles.actions}>
+          {onDownload ? (
+            <Pressable
+              onPress={onDownload}
+              style={[styles.downloadBtn, downloadLoading && styles.btnDisabled]}
+              disabled={downloadLoading}
+            >
+              <Ionicons name="download-outline" size={18} color={colors.background} />
+              <Text style={styles.downloadText}>
+                {downloadLoading ? '…' : 'Download'}
+              </Text>
+            </Pressable>
+          ) : null}
+          <Pressable onPress={onPreview} style={styles.previewBtn}>
+            <Ionicons name="eye-outline" size={18} color={colors.primary} />
+            <Text style={styles.previewText}>Preview</Text>
+          </Pressable>
+        </View>
       </View>
       <View style={styles.progressTrack}>
         <View style={[styles.progressFill, { flex: pct }]} />
@@ -69,6 +91,18 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: colors.text,
   },
+  actions: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  downloadBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 20,
+    backgroundColor: colors.primary,
+  },
+  downloadText: { fontSize: 13, fontWeight: '600', color: colors.background },
+  btnDisabled: { opacity: 0.6 },
   previewBtn: {
     flexDirection: 'row',
     alignItems: 'center',

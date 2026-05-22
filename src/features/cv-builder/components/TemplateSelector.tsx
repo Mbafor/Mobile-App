@@ -16,6 +16,7 @@ type TemplateSelectorProps = {
   onSelect: (templateId: CVTemplateId) => void;
   onPreview?: (templateId: CVTemplateId) => void;
   disabled?: boolean;
+  unlockedTemplateIds?: string[];
   /** `gallery` — full cards (Templates tab). `compact` — horizontal strip (editor). */
   variant?: 'gallery' | 'compact';
 };
@@ -98,11 +99,18 @@ function TemplateLayoutMock({ id }: { id: CVTemplateId }) {
   );
 }
 
+function isLocked(templateId: CVTemplateId, unlockedTemplateIds: string[]): boolean {
+  const def = getTemplateDefinition(templateId);
+  if (def?.isFree) return false;
+  return !unlockedTemplateIds.includes(templateId);
+}
+
 export function TemplateSelector({
   selectedId,
   onSelect,
   onPreview,
   disabled,
+  unlockedTemplateIds = [],
   variant = 'gallery',
 }: TemplateSelectorProps) {
   const activeId = resolveTemplateId(selectedId);
@@ -119,6 +127,7 @@ export function TemplateSelector({
         >
           {CV_TEMPLATES.map((template) => {
             const isSelected = template.id === activeId;
+            const locked = isLocked(template.id, unlockedTemplateIds);
             return (
               <Pressable
                 key={template.id}
@@ -142,6 +151,9 @@ export function TemplateSelector({
                 >
                   {template.label}
                 </Text>
+                {locked ? (
+                  <Ionicons name="lock-closed" size={12} color={colors.textMuted} style={styles.lockIcon} />
+                ) : null}
                 {onPreview ? (
                   <Pressable
                     onPress={() => onPreview(template.id)}
@@ -173,6 +185,7 @@ export function TemplateSelector({
       <View style={styles.list}>
         {CV_TEMPLATES.map((template) => {
           const isSelected = template.id === activeId;
+          const locked = isLocked(template.id, unlockedTemplateIds);
 
           return (
             <Pressable
@@ -196,6 +209,12 @@ export function TemplateSelector({
                   <Text style={[styles.cardTitle, isSelected && styles.cardTitleSelected]}>
                     {template.label}
                   </Text>
+                  {locked ? (
+                    <View style={styles.lockBadge}>
+                      <Ionicons name="lock-closed" size={10} color={colors.textMuted} />
+                      <Text style={styles.lockBadgeText}>GHS 100</Text>
+                    </View>
+                  ) : null}
                   {isSelected ? (
                     <View style={styles.selectedBadge}>
                       <Text style={styles.selectedBadgeText}>In use</Text>
@@ -223,7 +242,9 @@ export function TemplateSelector({
                       disabled={disabled}
                       style={[styles.applyBtn, disabled && styles.applyBtnDisabled]}
                     >
-                      <Text style={styles.applyBtnText}>Use template</Text>
+                      <Text style={styles.applyBtnText}>
+                        {locked ? 'Unlock & use' : 'Use template'}
+                      </Text>
                     </Pressable>
                   ) : null}
                 </View>
@@ -378,4 +399,17 @@ const styles = StyleSheet.create({
   compactThumb: { width: '100%', height: 28, borderRadius: 4, opacity: 0.85 },
   compactTitle: { fontSize: 12, fontWeight: '700', color: colors.text, alignSelf: 'stretch' },
   compactEye: { position: 'absolute', top: 6, right: 6 },
+  lockIcon: { marginTop: 2 },
+  lockBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    paddingHorizontal: 6,
+    paddingVertical: 2,
+    borderRadius: 6,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  lockBadgeText: { fontSize: 10, fontWeight: '600', color: colors.textMuted },
 });

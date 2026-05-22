@@ -22,13 +22,18 @@ function formToRow(values: OpportunityFormValues): OpportunityInsert {
   const funding = values.fundingType.trim();
   const fundingType = funding && funding !== 'any' ? funding : null;
 
+  const deadline = parseDeadlineToIso(values.deadline);
+  if (new Date(deadline).getTime() <= Date.now()) {
+    throw new Error('Deadline must be in the future so students can see this listing.');
+  }
+
   return {
     title: values.title.trim(),
     organization: values.organization.trim(),
     description: values.description.trim() || null,
     image_url: values.imageUrl.trim() || null,
     apply_url: values.applyUrl.trim() || null,
-    deadline: parseDeadlineToIso(values.deadline),
+    deadline,
     tags: [...tagSet],
     country: values.country.trim() || null,
     category: category || null,
@@ -36,6 +41,20 @@ function formToRow(values: OpportunityFormValues): OpportunityInsert {
     degree_levels: values.degreeLevels,
     location_type: values.locationType || null,
   };
+}
+
+function formatAdminError(error: { message: string; code?: string }): Error {
+  const msg = error.message ?? 'Request failed';
+  if (
+    error.code === '42501' ||
+    msg.toLowerCase().includes('row-level security') ||
+    msg.toLowerCase().includes('not authorized')
+  ) {
+    return new Error(
+      'Permission denied. In Supabase, set profiles.is_admin = true for your user, then sign out and back in.',
+    );
+  }
+  return new Error(msg);
 }
 
 function mapChartData(value: unknown): ChartDatum[] {
@@ -143,24 +162,38 @@ export const adminApi = {
   },
 
   createOpportunity: async (values: OpportunityFormValues) => {
-    const { data, error } = await supabase
-      .from('opportunities')
-      .insert(formToRow(values))
-      .select('*')
-      .single();
+    try {
+      const row = formToRow(values);
+      const { data, error } = await supabase.from('opportunities').insert(row).select('*').single();
 
-    return { data: data ? mapOpportunityRow(data) : null, error };
+      if (error) return { data: null, error: formatAdminError(error) };
+      return { data: data ? mapOpportunityRow(data) : null, error: null };
+    } catch (e) {
+      return {
+        data: null,
+        error: e instanceof Error ? e : new Error('Invalid opportunity data'),
+      };
+    }
   },
 
   updateOpportunity: async (id: string, values: OpportunityFormValues) => {
-    const { data, error } = await supabase
-      .from('opportunities')
-      .update(formToRow(values))
-      .eq('id', id)
-      .select('*')
-      .single();
+    try {
+      const row = formToRow(values);
+      const { data, error } = await supabase
+        .from('opportunities')
+        .update(row)
+        .eq('id', id)
+        .select('*')
+        .single();
 
-    return { data: data ? mapOpportunityRow(data) : null, error };
+      if (error) return { data: null, error: formatAdminError(error) };
+      return { data: data ? mapOpportunityRow(data) : null, error: null };
+    } catch (e) {
+      return {
+        data: null,
+        error: e instanceof Error ? e : new Error('Invalid opportunity data'),
+      };
+    }
   },
 
   deleteOpportunity: async (id: string) => {

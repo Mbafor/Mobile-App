@@ -28,4 +28,5 @@ Sign out and sign back in (or restart the app) so the profile reloads.
 - The **Admin** tab appears only when `profiles.is_admin = true`.
 - Non-admins never see the tab; direct navigation to admin routes redirects to the dashboard.
 - Admins can create, edit, and delete opportunities with the same fields students see in search and detail views.
+- **Deadline must be in the future** — student feeds only show rows where `deadline > now()` (RLS). Past deadlines save for admins but are hidden from students.
 - The Admin tab dashboard shows user, opportunity, engagement, and notification analytics with bar/pie charts (`react-native-gifted-charts`).
