@@ -31,7 +31,7 @@ export function AuthScreenLayout({ title, subtitle, onBack, children }: Props) {
         ) : (
           <View style={styles.backSpacer} />
         )}
-        <Text style={styles.brand}>Olives Forum</Text>
+      
       </View>
 
       <KeyboardAvoidingView

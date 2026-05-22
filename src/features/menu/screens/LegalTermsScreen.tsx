@@ -1,9 +1,12 @@
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { useRouter, type Href } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import { Screen } from '@/components/layout';
-import { Text } from '@/components/ui';
+import { Accordion, Text } from '@/components/ui';
+import { Screen as LayoutScreen } from '@/components/layout';
 import { SUPPORT_EMAIL } from '@/constants/app';
-import { spacing } from '@/constants/theme';
+import { ROUTES } from '@/constants/routes';
+import { colors, spacing } from '@/constants/theme';
 
 const SECTIONS = [
   {
@@ -29,28 +32,64 @@ const SECTIONS = [
 ] as const;
 
 export function LegalTermsScreen() {
+  const router = useRouter();
+
   return (
-    <Screen padded={false}>
+    <LayoutScreen padded={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text variant="title">Terms of Service</Text>
+        <View style={styles.header}>
+          <Pressable
+            onPress={() => router.push(ROUTES.MAIN.DASHBOARD as Href)}
+            style={styles.backBtn}
+            hitSlop={12}
+            accessible={true}
+            accessibilityRole="button"
+            accessibilityLabel="Go back to dashboard"
+          >
+            <Ionicons name="arrow-back" size={20} color={colors.text} />
+          </Pressable>
+          <View style={styles.headerContent}>
+            <Text variant="title">Read the rules and responsibilities for using Olives Forum</Text>
+        
+          </View>
+        </View>
+
         <Text muted style={styles.updated}>
           Last updated: May 2026
         </Text>
-        {SECTIONS.map((section) => (
-          <View key={section.title} style={styles.block}>
-            <Text style={styles.sectionTitle}>{section.title}</Text>
-            <Text style={styles.body}>{section.body}</Text>
-          </View>
-        ))}
+
+        <View style={styles.section}>
+          {SECTIONS.map((section, index) => (
+            <Accordion key={`${section.title}-${index}`} title={section.title} defaultOpen={index === 0}>
+              <Text style={styles.body}>{section.body}</Text>
+            </Accordion>
+          ))}
+        </View>
       </ScrollView>
-    </Screen>
+    </LayoutScreen>
   );
 }
 
 const styles = StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
-  updated: { marginBottom: spacing.sm },
-  block: { gap: spacing.xs },
-  sectionTitle: { fontWeight: '700', fontSize: 16, color: '#333' },
-  body: { lineHeight: 22, color: '#333' },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.md,
+  },
+  backBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerContent: { flex: 1, gap: spacing.xs },
+  subtitle: { marginTop: spacing.xs, color: colors.textMuted },
+  updated: { marginBottom: spacing.sm, color: colors.textMuted },
+  section: { gap: spacing.sm },
+  body: { lineHeight: 22, color: colors.text },
 });

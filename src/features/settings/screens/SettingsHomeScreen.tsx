@@ -1,11 +1,12 @@
 import { useRouter, type Href } from 'expo-router';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { useState } from 'react';
 
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { spacing } from '@/constants/theme';
-import { useState } from 'react';
+import { colors, spacing } from '@/constants/theme';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { performLogout } from '@/features/auth/utils/perform-logout';
@@ -30,11 +31,26 @@ export function SettingsHomeScreen() {
   };
 
   return (
-    <Screen>
-      <Text variant="title">Settings</Text>
+    <Screen padded={false}>
+      <View style={styles.header}>
+        <Pressable
+          onPress={() => router.push(ROUTES.MAIN.DASHBOARD as Href)}
+          style={styles.backBtn}
+          hitSlop={12}
+        >
+          <Ionicons name="arrow-back" size={20} color={colors.text} />
+        </Pressable>
+        <View style={styles.headerContent}>
+          <Text variant="title">Settings</Text>
+          <Text muted style={styles.subtitle}>
+            Manage your account, privacy, and notification preferences.
+          </Text>
+        </View>
+      </View>
+
       {userEmail ? (
         <Text muted style={styles.email}>
-          {userEmail}
+          Logged in as {userEmail}
         </Text>
       ) : null}
 
@@ -48,22 +64,31 @@ export function SettingsHomeScreen() {
         </Button>
       ) : null}
 
-      <View style={styles.section}>
-        <Button
-          variant="secondary"
-          onPress={() => router.push(ROUTES.MAIN.SETTINGS_PROFILE as Href)}
-        >
-          Profile & preferences
-        </Button>
-        <Button variant="secondary" onPress={() => router.push(ROUTES.MAIN.SETTINGS_PRIVACY as Href)}>
-          Privacy
-        </Button>
-        <Button
-          variant="secondary"
-          onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
-        >
-          Notification preferences
-        </Button>
+      <View style={styles.panel}>
+        <Text style={styles.panelTitle}>Preferences</Text>
+        <View style={styles.section}>
+          <Button
+            variant="secondary"
+            style={styles.fullWidthButton}
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_PROFILE as Href)}
+          >
+            Profile & preferences
+          </Button>
+          <Button
+            variant="secondary"
+            style={styles.fullWidthButton}
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_PRIVACY as Href)}
+          >
+            Privacy
+          </Button>
+          <Button
+            variant="secondary"
+            style={styles.fullWidthButton}
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
+          >
+            Notification preferences
+          </Button>
+        </View>
       </View>
 
       <Button
@@ -71,6 +96,7 @@ export function SettingsHomeScreen() {
         loading={isLoggingOut}
         disabled={isLoggingOut}
         variant="secondary"
+        style={styles.fullWidthButton}
       >
         Log out
       </Button>
@@ -79,7 +105,38 @@ export function SettingsHomeScreen() {
 }
 
 const styles = StyleSheet.create({
-  email: { marginBottom: spacing.md },
-  adminBtn: { marginBottom: spacing.md },
-  section: { gap: spacing.sm, marginBottom: spacing.lg },
+  header: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.md,
+    padding: spacing.md,
+    paddingBottom: 0,
+  },
+  backBtn: {
+    width: 42,
+    height: 42,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  headerContent: { flex: 1, gap: spacing.xs },
+  subtitle: { color: colors.textMuted },
+  email: { marginHorizontal: spacing.md, marginBottom: spacing.md },
+  adminBtn: { marginHorizontal: spacing.md, marginBottom: spacing.md },
+  panel: {
+    gap: spacing.sm,
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.lg,
+    padding: spacing.md,
+    borderRadius: 16,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  panelTitle: { fontWeight: '700', fontSize: 15, color: colors.text },
+  section: { gap: spacing.sm },
+  fullWidthButton: { width: '100%' },
 });

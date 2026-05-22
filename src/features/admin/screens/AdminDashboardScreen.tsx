@@ -55,7 +55,7 @@ export function AdminDashboardScreen() {
       >
         <Text variant="title">Admin Analytics</Text>
         <Text muted style={styles.subtitle}>
-          Live metrics from Supabase
+          Live metrics
         </Text>
 
         {error ? (
