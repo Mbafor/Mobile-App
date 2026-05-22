@@ -13,8 +13,9 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
-import { SearchField, Text } from '@/components/ui';
+import { OptionsSheet, SearchField, Text } from '@/components/ui';
 import { CVDocumentListItem } from '@/features/cv-builder/components/CVDocumentListItem';
+import { CVRenameModal } from '@/features/cv-builder/components/CVRenameModal';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { useUserCVs } from '@/features/cv-builder/hooks/useUserCVs';
 import { ROUTES } from '@/constants/routes';
@@ -35,14 +36,16 @@ export function CVDashboardScreen() {
     createCV,
     isCreating,
     deleteCV,
-    duplicateCV,
-    isDuplicating,
+    renameCV,
+    isRenaming,
     isDeleting,
     userId,
   } = useUserCVs();
 
   const [deletingId, setDeletingId] = useState<string | null>(null);
-  const [duplicatingId, setDuplicatingId] = useState<string | null>(null);
+  const [menuCv, setMenuCv] = useState<CV | null>(null);
+  const [renamingCv, setRenamingCv] = useState<CV | null>(null);
+  const [renameValue, setRenameValue] = useState('');
 
   const filteredCvs = useMemo(() => {
     const q = searchQuery.trim().toLowerCase();
@@ -66,25 +69,38 @@ export function CVDashboardScreen() {
     }
   };
 
-  const handleOpen = useCallback(
+  const handleEdit = useCallback(
     (cv: CV) => {
       router.push(ROUTES.MAIN.CV_BUILDER.hub(cv.id) as Href);
     },
     [router],
   );
 
-  const handleDuplicate = async (cv: CV) => {
-    if (!userId) return;
-    setDuplicatingId(cv.id);
+  const openRename = useCallback((cv: CV) => {
+    setRenamingCv(cv);
+    setRenameValue(cv.title);
+  }, []);
+
+  const closeRename = useCallback(() => {
+    setRenamingCv(null);
+    setRenameValue('');
+  }, []);
+
+  const handleRenameSave = async () => {
+    if (!renamingCv) return;
+    const title = renameValue.trim();
+    if (!title) {
+      Alert.alert('Title required', 'Enter a name for your CV.');
+      return;
+    }
     try {
-      await duplicateCV({ userId, cv });
+      await renameCV({ cvId: renamingCv.id, title });
+      closeRename();
     } catch (e) {
       Alert.alert(
-        'Could not duplicate',
+        'Could not rename',
         e instanceof Error ? e.message : 'Something went wrong',
       );
-    } finally {
-      setDuplicatingId(null);
     }
   };
 
@@ -112,14 +128,13 @@ export function CVDashboardScreen() {
     ({ item }: { item: CV }) => (
       <CVDocumentListItem
         cv={item}
-        onOpen={() => handleOpen(item)}
-        onDuplicate={() => void handleDuplicate(item)}
-        onDelete={() => void handleDelete(item)}
-        isDuplicating={isDuplicating && duplicatingId === item.id}
+        onPress={() => handleEdit(item)}
+        onMenuPress={() => setMenuCv(item)}
+        isRenaming={isRenaming && renamingCv?.id === item.id}
         isDeleting={isDeleting && deletingId === item.id}
       />
     ),
-    [deletingId, duplicatingId, handleOpen, isDeleting, isDuplicating],
+    [deletingId, handleEdit, isDeleting, isRenaming, renamingCv?.id],
   );
 
   const listHeader = useMemo(
@@ -217,6 +232,44 @@ export function CVDashboardScreen() {
             )
           ) : null
         }
+      />
+
+      <OptionsSheet
+        visible={menuCv !== null}
+        title={menuCv?.title}
+        onClose={() => setMenuCv(null)}
+        options={
+          menuCv
+            ? [
+                {
+                  key: 'rename',
+                  label: 'Rename',
+                  onPress: () => openRename(menuCv),
+                },
+                {
+                  key: 'edit',
+                  label: 'Edit',
+                  onPress: () => handleEdit(menuCv),
+                },
+                {
+                  key: 'delete',
+                  label: 'Delete',
+                  destructive: true,
+                  onPress: () => void handleDelete(menuCv),
+                },
+              ]
+            : []
+        }
+      />
+
+      <CVRenameModal
+        visible={renamingCv !== null}
+        currentTitle={renamingCv?.title ?? ''}
+        value={renameValue}
+        onChangeValue={setRenameValue}
+        onClose={closeRename}
+        onSave={() => void handleRenameSave()}
+        saving={isRenaming}
       />
     </View>
   );

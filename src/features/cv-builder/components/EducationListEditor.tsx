@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 
 import { FormField } from '@/components/forms';
-import { Input } from '@/components/ui';
+import { Input, TextArea } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
@@ -83,6 +83,14 @@ export function EducationListEditor({
               value={entry.gpa}
               onChangeText={(v) => updateEntry(entry.id, { gpa: v })}
               placeholder="e.g. 3.8 / 4.0"
+            />
+          </FormField>
+          <FormField label="Description">
+            <TextArea
+              value={entry.description}
+              onChangeText={(v) => updateEntry(entry.id, { description: v })}
+              placeholder="Honours, coursework, or activities"
+              minHeight={100}
             />
           </FormField>
         </CVEntryCard>

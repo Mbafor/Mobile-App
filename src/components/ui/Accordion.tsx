@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { Text } from '@/components/ui';
+import { Text } from '@/components/ui/Text';
 import { colors, spacing } from '@/constants/theme';
 
 type AccordionProps = PropsWithChildren<{

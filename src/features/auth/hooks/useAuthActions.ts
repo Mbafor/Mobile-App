@@ -3,6 +3,7 @@ import { useCallback, useState } from 'react';
 import { env } from '@/config/env';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { signInWithAppleNative, signInWithOAuthProvider } from '@/features/auth/utils/oauth';
+import { resolveUserProfile } from '@/features/auth/utils/resolve-user-profile';
 import { syncOAuthProfileIfNeeded } from '@/features/auth/utils/sync-oauth-profile';
 import { authApi, profilesApi } from '@/services/api';
 import { queryClient } from '@/store/query-client';
@@ -62,10 +63,18 @@ export function useAuthActions() {
         }
 
         const userId = data.session.user.id;
-        await profilesApi.ensureProfile(userId, normalized);
-        const { data: profile } = await profilesApi.getByUserId(userId);
-        if (!profile || profileNeedsOnboarding(profile)) {
-          await profilesApi.markOnboardingIncomplete(userId);
+        const store = useAuthStore.getState();
+        store.setSession(data.session);
+        store.setProfileLoading(true);
+
+        try {
+          const profile = await resolveUserProfile(data.session.user);
+          store.setProfile(profile);
+          if (!profile.onboardingComplete) {
+            await profilesApi.markOnboardingIncomplete(userId);
+          }
+        } finally {
+          store.setProfileLoading(false);
         }
 
         return data;

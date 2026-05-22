@@ -2,7 +2,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { createCV, deleteCV, duplicateCV, getUserCVs } from '@/lib/cv';
+import { createCV, deleteCV, duplicateCV, getUserCVs, updateCV } from '@/lib/cv';
 
 export function useUserCVs() {
   const { user } = useAuth();
@@ -50,6 +50,18 @@ export function useUserCVs() {
     onSuccess: () => void invalidate(),
   });
 
+  const renameMutation = useMutation({
+    mutationFn: async ({ cvId, title }: { cvId: string; title: string }) => {
+      const { data, error } = await updateCV(cvId, { title });
+      if (error) throw error;
+      return data!;
+    },
+    onSuccess: (data) => {
+      void invalidate();
+      void queryClient.invalidateQueries({ queryKey: queryKeys.cv.detail(data.id) });
+    },
+  });
+
   return {
     cvs: query.data ?? [],
     isLoading: query.isLoading,
@@ -62,6 +74,8 @@ export function useUserCVs() {
     isDeleting: deleteMutation.isPending,
     duplicateCV: duplicateMutation.mutateAsync,
     isDuplicating: duplicateMutation.isPending,
+    renameCV: renameMutation.mutateAsync,
+    isRenaming: renameMutation.isPending,
     userId,
   };
 }

@@ -1,7 +1,7 @@
 import { Switch, View } from 'react-native';
 
 import { FormField } from '@/components/forms';
-import { Input, Text } from '@/components/ui';
+import { Input, Text, TextArea } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
@@ -103,12 +103,11 @@ export function ExperienceListEditor({
             </FormField>
           ) : null}
           <FormField label="Description">
-            <Input
+            <TextArea
               value={entry.description}
               onChangeText={(v) => updateEntry(entry.id, { description: v })}
-              placeholder="Key responsibilities and achievements"
-              multiline
-              style={cvUi.multiline}
+              placeholder="Key responsibilities and achievements — one bullet per line"
+              minHeight={120}
             />
           </FormField>
         </CVEntryCard>

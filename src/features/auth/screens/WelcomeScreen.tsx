@@ -123,8 +123,7 @@ export function WelcomeScreen() {
           onGooglePress={() => signInWithGoogle()}
           onApplePress={() => signInWithApple()}
           loading={isLoading}
-          layout="row"          {/* pass this prop if your component supports it, */}
-                                {/* otherwise see the inline version below */}
+          layout="row"
         />
 
         <AuthDivider />

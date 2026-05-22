@@ -2,7 +2,8 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ReactNode } from 'react';
 import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
-import { Input, Text } from '@/components/ui';
+import { Input } from '@/components/ui/Input';
+import { Text } from '@/components/ui/Text';
 import { colors, spacing } from '@/constants/theme';
 
 type SearchFieldProps = {

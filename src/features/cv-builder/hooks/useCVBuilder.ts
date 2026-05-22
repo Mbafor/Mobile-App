@@ -2,12 +2,19 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 import { queryKeys } from '@/constants/query-keys';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import {
   DEFAULT_TEMPLATE_ID,
   isTemplateFree,
+  resolveTemplateId,
 } from '@/features/cv-builder/constants/templates';
+import {
+  buildProfilePrefillSource,
+  mergeProfileIntoPersonalInfo,
+} from '@/features/cv-builder/utils/prefill-personal-from-profile';
 import { normalizeCVContent } from '@/features/cv-builder/utils/normalize-cv-content';
+import { profilesApi } from '@/services/api';
 import {
   getLayoutFromContent,
   normalizeLayout,
@@ -21,10 +28,12 @@ export type SaveIndicatorState = 'idle' | 'saving' | 'saved' | 'error';
 type PersistPatch = {
   content?: CVContent;
   templateId?: string;
+  title?: string;
 };
 
 export function useCVBuilder(cvId: string | undefined) {
   const queryClient = useQueryClient();
+  const { user, profile: authProfile, userEmail } = useAuth();
   const [content, setContent] = useState<CVContent>(EMPTY_CV_CONTENT);
   const [templateId, setTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
   const [activeSection, setActiveSection] = useState<CVSectionId>('personal');
@@ -48,18 +57,41 @@ export function useCVBuilder(cvId: string | undefined) {
   });
 
   const hydratedRef = useRef(false);
+  const userId = query.data?.userId ?? user?.id;
+
+  const profileQuery = useQuery({
+    queryKey: queryKeys.auth.profile(userId ?? ''),
+    queryFn: async () => {
+      const { data, error } = await profilesApi.getByUserId(userId!);
+      if (error) throw error;
+      return data;
+    },
+    enabled: Boolean(userId),
+    staleTime: 60_000,
+  });
 
   useEffect(() => {
     hydratedRef.current = false;
   }, [cvId]);
 
   useEffect(() => {
-    if (query.data && !hydratedRef.current) {
-      setContent(normalizeCVContent(query.data.content));
-      setTemplateId(query.data.templateId || DEFAULT_TEMPLATE_ID);
-      hydratedRef.current = true;
-    }
-  }, [query.data, cvId]);
+    if (!query.data || hydratedRef.current) return;
+    if (userId && profileQuery.isLoading) return;
+
+    let normalized = normalizeCVContent(query.data.content);
+    const prefillSource = buildProfilePrefillSource(profileQuery.data, {
+      displayName: authProfile?.displayName,
+      userEmail,
+    });
+    normalized = {
+      ...normalized,
+      personalInfo: mergeProfileIntoPersonalInfo(normalized.personalInfo, prefillSource),
+    };
+
+    setContent(normalized);
+    setTemplateId(resolveTemplateId(query.data.templateId || DEFAULT_TEMPLATE_ID));
+    hydratedRef.current = true;
+  }, [query.data, cvId, userId, profileQuery.data, profileQuery.isLoading, authProfile?.displayName, userEmail]);
 
   const persist = useCallback(
     async (patch?: PersistPatch): Promise<boolean> => {
@@ -67,10 +99,13 @@ export function useCVBuilder(cvId: string | undefined) {
       setSaveState('saving');
       setSaveError(null);
 
-      const payload = {
+      const payload: PersistPatch = {
         content: patch?.content ?? contentRef.current,
         templateId: patch?.templateId ?? templateIdRef.current,
       };
+      if (patch?.title !== undefined) {
+        payload.title = patch.title;
+      }
 
       const { data, error } = await updateCV(cvId, payload);
       if (error || !data) {
@@ -114,20 +149,21 @@ export function useCVBuilder(cvId: string | undefined) {
 
   const selectTemplate = useCallback(
     async (id: string) => {
-      if (!isTemplateFree(id)) {
+      const resolved = resolveTemplateId(id);
+      if (!isTemplateFree(resolved)) {
         return;
       }
-      if (id === templateIdRef.current) return;
+      if (resolved === resolveTemplateId(templateIdRef.current)) return;
 
-      setTemplateId(id);
-      templateIdRef.current = id;
+      setTemplateId(resolved);
+      templateIdRef.current = resolved;
       if (saveState === 'saved') {
         setSaveState('idle');
       }
 
       await persist({
         content: contentRef.current,
-        templateId: id,
+        templateId: resolved,
       });
     },
     [persist, saveState],
@@ -180,6 +216,15 @@ export function useCVBuilder(cvId: string | undefined) {
     return persist({ content: contentRef.current });
   }, [persist]);
 
+  const updateTitle = useCallback(
+    async (title: string) => {
+      const trimmed = title.trim();
+      if (!trimmed || trimmed === query.data?.title) return true;
+      return persist({ title: trimmed, content: contentRef.current });
+    },
+    [persist, query.data?.title],
+  );
+
   return {
     cv: query.data,
     content,
@@ -194,6 +239,7 @@ export function useCVBuilder(cvId: string | undefined) {
     goToSection,
     saveNow,
     saveLayout,
+    updateTitle,
     persist,
     saveState,
     saveError,

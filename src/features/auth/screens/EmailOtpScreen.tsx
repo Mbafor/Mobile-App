@@ -8,7 +8,7 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { ErrorMessage } from '@/components/feedback';
 import { FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
-import { AuthScreenLayout, SocialAuthButtons } from '@/features/auth/components';
+import { AuthDivider, AuthScreenLayout, SocialAuthButtons } from '@/features/auth/components';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
@@ -38,9 +38,15 @@ export function EmailOtpScreen() {
   return (
     <AuthScreenLayout
       title="Your email"
-      subtitle="We'll send a 6-digit code via Email. Enter it on the next screen to continue."
+      subtitle="We'll send a 6-digit code via Supabase. Enter it on the next screen to continue."
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
     >
+      <SocialAuthButtons
+        onGooglePress={() => signInWithGoogle()}
+        onApplePress={() => signInWithApple()}
+        loading={isLoading}
+      />
+      <AuthDivider />
       <FormField label="Email address">
         <Input
           value={email}

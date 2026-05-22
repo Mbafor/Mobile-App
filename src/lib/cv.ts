@@ -36,7 +36,7 @@ export async function createCV(userId: string, title: string): Promise<ApiResult
     .insert({
       user_id: userId,
       title: title.trim() || 'My CV',
-      template_id: 'classic',
+      template_id: 'ats',
       content: EMPTY_CV_CONTENT,
     })
     .select('*')

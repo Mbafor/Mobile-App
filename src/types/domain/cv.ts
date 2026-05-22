@@ -22,6 +22,7 @@ export type CVEducationEntry = {
   startDate: string;
   endDate: string;
   gpa: string;
+  description: string;
 };
 
 export type CVExperienceEntry = {
@@ -40,12 +41,39 @@ export type CVCertificationEntry = {
   name: string;
   issuer: string;
   year: string;
+  description: string;
 };
 
 export type CVLanguageEntry = {
   id: string;
   language: string;
   proficiency: string;
+};
+
+export type CVProjectEntry = {
+  id: string;
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  technologies: string;
+  link: string;
+};
+
+export type CVAchievementEntry = {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+};
+
+export type CVReferenceEntry = {
+  id: string;
+  name: string;
+  position: string;
+  company: string;
+  email: string;
+  phone: string;
 };
 
 /** Section visibility and order stored in CV JSON. */
@@ -67,6 +95,9 @@ export type CVContent = {
   hobbies: string[];
   languages: CVLanguageEntry[];
   voluntaryExperience: CVExperienceEntry[];
+  projects: CVProjectEntry[];
+  achievements: CVAchievementEntry[];
+  references: CVReferenceEntry[];
   layout?: CVLayoutConfig;
 };
 
@@ -87,6 +118,9 @@ export const EMPTY_CV_CONTENT: CVContent = {
   hobbies: [],
   languages: [],
   voluntaryExperience: [],
+  projects: [],
+  achievements: [],
+  references: [],
 };
 
 export type CV = {

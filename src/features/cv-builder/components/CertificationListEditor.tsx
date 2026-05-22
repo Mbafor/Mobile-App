@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 
 import { FormField } from '@/components/forms';
-import { Input } from '@/components/ui';
+import { Input, TextArea } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
@@ -63,6 +63,14 @@ export function CertificationListEditor({
               onChangeText={(v) => updateEntry(entry.id, { year: v })}
               placeholder="e.g. 2024"
               keyboardType="number-pad"
+            />
+          </FormField>
+          <FormField label="Description">
+            <TextArea
+              value={entry.description}
+              onChangeText={(v) => updateEntry(entry.id, { description: v })}
+              placeholder="Skills covered or credential ID (optional)"
+              minHeight={80}
             />
           </FormField>
         </CVEntryCard>

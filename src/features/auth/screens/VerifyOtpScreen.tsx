@@ -9,6 +9,7 @@ import { Button, Text } from '@/components/ui';
 import { OtpInput } from '@/features/auth/components';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
+import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
 
@@ -84,6 +85,7 @@ export function VerifyOtpScreen() {
 
   const { isAuthenticated, onboardingComplete, isAuthReady, isProfileLoading } = useAuth();
   const { verifyEmailOtp, sendEmailOtp, isLoading, error, clearError } = useAuthActions();
+  useAuthRedirect('guest');
   const [code, setCode]         = useState('');
   const [resendIn, setResendIn] = useState(RESEND_COOLDOWN_SEC);
   const [verified, setVerified] = useState(false);
@@ -127,7 +129,7 @@ export function VerifyOtpScreen() {
 
   if (!email) return null;
 
-  const waiting = verified && (!isAuthReady || isProfileLoading);
+  const waiting = verified && (!isAuthReady || !isAuthenticated || isProfileLoading);
 
   return (
     <View style={styles.root}>

@@ -1,16 +1,21 @@
+import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
 
 import { FormField } from '@/components/forms';
-import { Input } from '@/components/ui';
+import { Input, Text, TextArea } from '@/components/ui';
 import { CertificationListEditor } from '@/features/cv-builder/components/CertificationListEditor';
 import { EducationListEditor } from '@/features/cv-builder/components/EducationListEditor';
 import { ExperienceListEditor } from '@/features/cv-builder/components/ExperienceListEditor';
+import { AchievementListEditor } from '@/features/cv-builder/components/AchievementListEditor';
 import { LanguageListEditor } from '@/features/cv-builder/components/LanguageListEditor';
+import { ProjectListEditor } from '@/features/cv-builder/components/ProjectListEditor';
+import { ReferenceListEditor } from '@/features/cv-builder/components/ReferenceListEditor';
 import { TagListEditor } from '@/features/cv-builder/components/TagListEditor';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
 import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
+import { colors, spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
 
 type CVSectionContentProps = {
@@ -27,6 +32,12 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
       return (
         <View style={cvUi.sectionGap}>
           <CVSectionHeader title={meta.title} description={meta.description} />
+          <View style={styles.profileNote}>
+            <Ionicons name="person-circle-outline" size={20} color={colors.primary} />
+            <Text muted style={styles.profileNoteText}>
+              Empty name, email, and location are filled from your profile when you open this CV.
+            </Text>
+          </View>
           <View style={cvUi.surfaceCard}>
             <FormField label="Full name">
               <Input
@@ -113,15 +124,16 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
       return (
         <View style={cvUi.sectionGap}>
           <CVSectionHeader title={meta.title} description={meta.description} />
-          <FormField label="Summary">
-            <Input
-              value={content.summary}
-              onChangeText={(v) => onChange((p) => ({ ...p, summary: v }))}
-              placeholder="Write 2–4 sentences about your experience and goals"
-              multiline
-              style={styles.multiline}
-            />
-          </FormField>
+          <View style={cvUi.surfaceCard}>
+            <FormField label="Professional summary">
+              <TextArea
+                value={content.summary}
+                onChangeText={(v) => onChange((p) => ({ ...p, summary: v }))}
+                placeholder="Write your professional summary here…"
+                minHeight={160}
+              />
+            </FormField>
+          </View>
         </View>
       );
 
@@ -132,6 +144,17 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
           description={meta.description}
           entries={content.experience}
           onChange={(experience) => onChange((p) => ({ ...p, experience }))}
+          addLabel={meta.addLabel}
+        />
+      );
+
+    case 'projects':
+      return (
+        <ProjectListEditor
+          title={meta.title}
+          description={meta.description}
+          entries={content.projects}
+          onChange={(projects) => onChange((p) => ({ ...p, projects }))}
           addLabel={meta.addLabel}
         />
       );
@@ -170,6 +193,17 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
         />
       );
 
+    case 'achievements':
+      return (
+        <AchievementListEditor
+          title={meta.title}
+          description={meta.description}
+          entries={content.achievements}
+          onChange={(achievements) => onChange((p) => ({ ...p, achievements }))}
+          addLabel={meta.addLabel}
+        />
+      );
+
     case 'hobbies':
       return (
         <TagListEditor
@@ -204,11 +238,32 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
         />
       );
 
+    case 'references':
+      return (
+        <ReferenceListEditor
+          title={meta.title}
+          description={meta.description}
+          entries={content.references}
+          onChange={(references) => onChange((p) => ({ ...p, references }))}
+          addLabel={meta.addLabel}
+        />
+      );
+
     default:
       return null;
   }
 }
 
 const styles = StyleSheet.create({
-  multiline: { minHeight: 140, textAlignVertical: 'top' },
+  profileNote: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.sm,
+    padding: spacing.md,
+    borderRadius: 10,
+    backgroundColor: '#E8F0EB',
+    borderWidth: 1,
+    borderColor: colors.primary,
+  },
+  profileNoteText: { flex: 1, fontSize: 13, lineHeight: 18 },
 });

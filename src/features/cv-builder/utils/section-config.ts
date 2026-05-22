@@ -162,6 +162,30 @@ export function getSectionStatus(content: CVContent, sectionId: CVSectionId): CV
       return languagesStatus(content);
     case 'voluntary':
       return listExperienceStatus(content.voluntaryExperience, false);
+    case 'projects': {
+      const filled = content.projects.filter((p) => p.name.trim()).length;
+      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (content.projects.every((p) => p.name.trim() && p.description.trim())) {
+        return { kind: 'complete', label: 'Completed' };
+      }
+      return { kind: 'in_progress', label: `${filled}/${content.projects.length}` };
+    }
+    case 'achievements': {
+      const filled = content.achievements.filter((a) => a.title.trim()).length;
+      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (content.achievements.every((a) => a.title.trim())) {
+        return { kind: 'complete', label: 'Completed' };
+      }
+      return { kind: 'in_progress', label: `${filled}/${content.achievements.length}` };
+    }
+    case 'references': {
+      const filled = content.references.filter((r) => r.name.trim()).length;
+      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (content.references.every((r) => r.name.trim() && r.company.trim())) {
+        return { kind: 'complete', label: 'Completed' };
+      }
+      return { kind: 'in_progress', label: `${filled}/${content.references.length}` };
+    }
     default:
       return { kind: 'action_required', label: 'Add details' };
   }

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
-import { ActivityIndicator, Alert, Pressable, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
-import { Text } from '@/components/ui';
+import { Text } from '@/components/ui/Text';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
 import { colors, spacing } from '@/constants/theme';
@@ -9,10 +9,9 @@ import type { CV } from '@/types/domain/cv';
 
 type CVDocumentListItemProps = {
   cv: CV;
-  onOpen: () => void;
-  onDuplicate: () => void;
-  onDelete: () => void;
-  isDuplicating?: boolean;
+  onPress: () => void;
+  onMenuPress: () => void;
+  isRenaming?: boolean;
   isDeleting?: boolean;
 };
 
@@ -30,28 +29,18 @@ function formatUpdatedAt(iso: string): string {
 
 export function CVDocumentListItem({
   cv,
-  onOpen,
-  onDuplicate,
-  onDelete,
-  isDuplicating,
+  onPress,
+  onMenuPress,
+  isRenaming,
   isDeleting,
 }: CVDocumentListItemProps) {
-  const busy = isDuplicating || isDeleting;
+  const busy = isRenaming || isDeleting;
   const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? 'CV';
-
-  const showMenu = () => {
-    Alert.alert(cv.title, undefined, [
-      { text: 'Open', onPress: onOpen },
-      { text: 'Make a copy', onPress: onDuplicate },
-      { text: 'Delete', style: 'destructive', onPress: onDelete },
-      { text: 'Cancel', style: 'cancel' },
-    ]);
-  };
 
   return (
     <View style={styles.row}>
       <Pressable
-        onPress={onOpen}
+        onPress={onPress}
         disabled={busy}
         style={({ pressed }) => [styles.main, pressed && styles.rowPressed]}
       >
@@ -70,7 +59,16 @@ export function CVDocumentListItem({
       {busy ? (
         <ActivityIndicator size="small" color={colors.primary} style={styles.menuBtn} />
       ) : (
-        <Pressable onPress={showMenu} hitSlop={12} style={styles.menuBtn}>
+        <Pressable
+          onPress={(e) => {
+            e?.stopPropagation?.();
+            onMenuPress();
+          }}
+          hitSlop={12}
+          style={styles.menuBtn}
+          accessibilityLabel="CV options"
+          accessibilityRole="button"
+        >
           <Ionicons name="ellipsis-vertical" size={20} color={cvDocsTheme.textSecondary} />
         </Pressable>
       )}

@@ -19,12 +19,14 @@ import { SaveIndicator } from '@/features/cv-builder/components/SaveIndicator';
 import { SectionTabs } from '@/features/cv-builder/components/SectionTabs';
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
 import { useCVBuilder } from '@/features/cv-builder/hooks/useCVBuilder';
+import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import { colors, spacing } from '@/constants/theme';
 
 export function CVBuilderScreen() {
   const params = useLocalSearchParams<{ id?: string }>();
   const cvId = typeof params.id === 'string' ? params.id : params.id?.[0];
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [previewTemplateId, setPreviewTemplateId] = useState<CVTemplateId>('ats');
 
   const {
     cv,
@@ -82,7 +84,10 @@ export function CVBuilderScreen() {
             {cv.title}
           </Text>
           <Pressable
-            onPress={() => setPreviewOpen(true)}
+            onPress={() => {
+              setPreviewTemplateId(resolveTemplateId(templateId));
+              setPreviewOpen(true);
+            }}
             style={styles.previewBtn}
             accessibilityRole="button"
             accessibilityLabel="Preview CV"
@@ -95,8 +100,13 @@ export function CVBuilderScreen() {
       </View>
 
       <TemplateSelector
+        variant="compact"
         selectedId={templateId}
         onSelect={(id) => void selectTemplate(id)}
+        onPreview={(id) => {
+          setPreviewTemplateId(id);
+          setPreviewOpen(true);
+        }}
         disabled={isSaving}
       />
 
@@ -124,7 +134,7 @@ export function CVBuilderScreen() {
       <CVPreviewModal
         visible={previewOpen}
         onClose={() => setPreviewOpen(false)}
-        templateId={templateId}
+        templateId={previewTemplateId}
         content={content}
       />
     </KeyboardAvoidingView>
