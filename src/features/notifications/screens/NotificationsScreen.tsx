@@ -64,7 +64,6 @@ export function NotificationsScreen() {
   return (
     <Screen padded={false}>
       <View style={styles.header}>
-        <Text variant="title">Notifications</Text>
         {unreadCount > 0 ? (
           <Button
             variant="secondary"

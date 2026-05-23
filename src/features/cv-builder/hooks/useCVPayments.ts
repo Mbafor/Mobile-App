@@ -3,25 +3,19 @@ import { useCallback, useMemo } from 'react';
 
 import { queryKeys } from '@/constants/query-keys';
 import {
-  getDownloadProduct,
-  getTemplateUnlockProduct,
+  getTemplateDownloadProduct,
   type PaymentProduct,
 } from '@/features/cv-builder/constants/payments';
+import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import {
-  getTemplateDefinition,
-  isTemplateFree,
-  resolveTemplateId,
-  type CVTemplateId,
-} from '@/features/cv-builder/constants/templates';
-import {
-  getUnlockedTemplateIds,
-  hasSuccessfulPayment,
+  getPurchasedTemplateIds,
+  isTemplatePurchased,
 } from '@/features/cv-builder/utils/payment-checks';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { getUserPayments, savePayment } from '@/lib/cv';
 import type { CVPaymentType } from '@/types/domain/cv';
 
-export function useCVPayments(cvId: string | undefined) {
+export function useCVPayments(_cvId: string | undefined) {
   const { user, userEmail } = useAuth();
   const queryClient = useQueryClient();
   const userId = user?.id;
@@ -39,19 +33,10 @@ export function useCVPayments(cvId: string | undefined) {
   });
 
   const payments = query.data ?? [];
-  const unlockedTemplateIds = useMemo(() => getUnlockedTemplateIds(payments), [payments]);
+  const purchasedTemplateIds = useMemo(() => getPurchasedTemplateIds(payments), [payments]);
 
-  const isTemplateUnlocked = useCallback(
-    (templateId: string) => {
-      const resolved = resolveTemplateId(templateId);
-      if (isTemplateFree(resolved)) return true;
-      return unlockedTemplateIds.includes(resolved);
-    },
-    [unlockedTemplateIds],
-  );
-
-  const hasDownloadPaid = useCallback(
-    (id: string) => hasSuccessfulPayment(payments, 'download', { cvId: id }),
+  const checkTemplatePurchased = useCallback(
+    (templateId: string) => isTemplatePurchased(payments, templateId),
     [payments],
   );
 
@@ -61,7 +46,7 @@ export function useCVPayments(cvId: string | undefined) {
       amount: number;
       type: CVPaymentType;
       paystackReference: string;
-      templateId?: string;
+      templateId: string;
     }) => {
       if (!userId) return { ok: false as const, error: 'Not signed in' };
 
@@ -72,7 +57,7 @@ export function useCVPayments(cvId: string | undefined) {
         type: opts.type,
         status: 'success',
         paystackReference: opts.paystackReference,
-        templateId: opts.templateId ?? null,
+        templateId: resolveTemplateId(opts.templateId),
       });
 
       if (error || !data) {
@@ -85,23 +70,15 @@ export function useCVPayments(cvId: string | undefined) {
     [userId, queryClient],
   );
 
-  const getProductForDownload = useCallback(
-    (cvTitle: string): PaymentProduct => getDownloadProduct(cvTitle),
-    [],
-  );
-
   const getProductForTemplate = useCallback((templateId: CVTemplateId): PaymentProduct => {
-    const def = getTemplateDefinition(templateId);
-    return getTemplateUnlockProduct(def?.label ?? templateId);
+    return getTemplateDownloadProduct(resolveTemplateId(templateId));
   }, []);
 
   return {
     payments,
-    unlockedTemplateIds,
-    isTemplateUnlocked,
-    hasDownloadPaid,
+    purchasedTemplateIds,
+    isTemplatePurchased: checkTemplatePurchased,
     recordPayment,
-    getProductForDownload,
     getProductForTemplate,
     userEmail,
     isLoading: query.isLoading,

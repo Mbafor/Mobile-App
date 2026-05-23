@@ -135,22 +135,15 @@ export function VerifyOtpScreen() {
     <View style={styles.root}>
 
       {/* ── Hero ── */}
-      <View style={[styles.hero, { paddingTop: insets.top + spacing.sm }]}>
+      <View style={[styles.hero, { paddingTop: insets.top + spacing.md }]}>
 
         {/* Background illustration */}
         <View style={StyleSheet.absoluteFillObject}>
           <HeroIllustration />
         </View>
 
-        {/* Back button */}
-        <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
-          <View style={styles.backBtnInner}>
-            <Text style={styles.backArrow}>←</Text>
-          </View>
-        </Pressable>
-
         {/* Hero text */}
-        <View style={styles.heroText}>
+        <View style={[styles.heroText, { marginTop: spacing.lg }]}>
           <View style={styles.badge}>
             <Text style={styles.badgeText}>Check your email</Text>
           </View>
@@ -163,6 +156,15 @@ export function VerifyOtpScreen() {
 
       {/* ── Panel ── */}
       <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
+        <Pressable
+          onPress={() => router.back()}
+          style={styles.panelBackRow}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Back to email"
+        >
+          <Text style={styles.panelBack}>← Back to email</Text>
+        </Pressable>
 
         <Text style={styles.panelLabel}>Your code</Text>
         <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
@@ -220,27 +222,8 @@ const styles = StyleSheet.create({
   // ── Hero ──────────────────────────────────────────────────────────
   hero: {
     flex: 1,
-    justifyContent: 'space-between',
     paddingHorizontal: spacing.lg,
     paddingBottom: spacing.xl + spacing.md,
-  },
-
-  backBtn: {
-    alignSelf: 'flex-start',
-  },
-  backBtnInner: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderWidth: 0.5,
-    borderColor: 'rgba(255,255,255,0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backArrow: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: 18,
   },
 
   heroText: {
@@ -285,8 +268,19 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: PANEL_RADIUS,
     borderTopRightRadius: PANEL_RADIUS,
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.xl,
+    paddingTop: spacing.md,
     gap: spacing.sm,
+  },
+
+  panelBackRow: {
+    alignSelf: 'flex-start',
+    marginBottom: spacing.xs,
+    paddingVertical: spacing.xs,
+  },
+  panelBack: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
+    fontWeight: '500',
   },
 
   panelLabel: {

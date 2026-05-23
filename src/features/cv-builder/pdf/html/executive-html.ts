@@ -61,6 +61,9 @@ export function renderExecutiveHtml(content: CVContent): string {
   if (content.achievements.length) {
     parts.push(railSection('ACHIEVEMENTS', achievementsHtml(content.achievements)));
   }
+  if (content.voluntaryExperience.length) {
+    parts.push(railSection('VOLUNTEER', experienceStandardHtml(content.voluntaryExperience)));
+  }
   if (content.references.length) {
     parts.push(railSection('REFERENCES', referencesHtml(content.references)));
   }

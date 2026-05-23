@@ -1,8 +1,8 @@
-import { Pressable, StyleSheet, View } from 'react-native';
-
-import { Text } from '@/components/ui';
+import { SelectWithOther } from '@/components/forms';
 import { DEGREE_LEVELS } from '@/constants/onboarding';
-import { colors, spacing } from '@/constants/theme';
+
+const DEGREE_OPTIONS = DEGREE_LEVELS.map((d) => ({ value: d.value, label: d.label }));
+const DEGREE_VALUES = DEGREE_LEVELS.map((d) => d.value);
 
 type DegreeLevelPickerProps = {
   value: string;
@@ -11,34 +11,12 @@ type DegreeLevelPickerProps = {
 
 export function DegreeLevelPicker({ value, onChange }: DegreeLevelPickerProps) {
   return (
-    <View style={styles.wrap}>
-      {DEGREE_LEVELS.map((level) => {
-        const selected = value === level.value;
-        return (
-          <Pressable
-            key={level.value}
-            onPress={() => onChange(level.value)}
-            style={[styles.chip, selected && styles.chipSelected]}
-          >
-            <Text style={[styles.chipText, selected && styles.chipTextSelected]}>{level.label}</Text>
-          </Pressable>
-        );
-      })}
-    </View>
+    <SelectWithOther
+      options={DEGREE_OPTIONS}
+      predefinedValues={DEGREE_VALUES}
+      value={value}
+      onChange={onChange}
+      placeholder="Select degree level"
+    />
   );
 }
-
-const styles = StyleSheet.create({
-  wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
-  chip: {
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  chipSelected: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, color: colors.text },
-  chipTextSelected: { color: colors.background },
-});

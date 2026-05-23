@@ -1,5 +1,5 @@
 import { useRouter, type Href } from 'expo-router';
-import { StyleSheet, View, TouchableOpacity, Text as RNText } from 'react-native';
+import { StyleSheet, View, Text as RNText } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 

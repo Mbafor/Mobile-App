@@ -31,7 +31,6 @@ export function SettingsHomeScreen() {
 
   return (
     <Screen>
-      <Text variant="title">Settings</Text>
       {userEmail ? (
         <Text muted style={styles.email}>
           {userEmail}

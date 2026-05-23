@@ -14,7 +14,7 @@ export type CVTemplateRendererProps = {
   content: CVContent;
 };
 
-/** Renders the active CV using first-party mobile templates (not website PDF copies). */
+/** On-screen preview only — PDF export uses dedicated HTML templates in pdf/html/. */
 export function CVTemplateRenderer({ templateId, content }: CVTemplateRendererProps) {
   const id = resolveTemplateId(templateId || DEFAULT_TEMPLATE_ID);
 

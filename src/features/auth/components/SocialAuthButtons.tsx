@@ -7,27 +7,46 @@ type SocialAuthButtonsProps = {
   onGooglePress: () => void;
   onApplePress: () => void;
   loading?: boolean;
+  layout?: 'column' | 'row';
 };
 
 export function SocialAuthButtons({
   onGooglePress,
   onApplePress,
   loading = false,
+  layout = 'column',
 }: SocialAuthButtonsProps) {
+  const isRow = layout === 'row';
+  const showApple = Platform.OS === 'ios' || Platform.OS === 'android';
+
   return (
-    <View style={styles.container}>
-      <Button variant="secondary" onPress={onGooglePress} loading={loading} disabled={loading}>
+    <View style={[styles.container, isRow && styles.containerRow]}>
+      <Button
+        variant="secondary"
+        onPress={onGooglePress}
+        loading={loading}
+        disabled={loading}
+        style={isRow ? styles.rowButton : undefined}
+      >
         Continue with Google
       </Button>
-      {(Platform.OS === 'ios' || Platform.OS === 'android') && (
-        <Button variant="secondary" onPress={onApplePress} loading={loading} disabled={loading}>
+      {showApple ? (
+        <Button
+          variant="secondary"
+          onPress={onApplePress}
+          loading={loading}
+          disabled={loading}
+          style={isRow ? styles.rowButton : undefined}
+        >
           Continue with Apple
         </Button>
-      )}
+      ) : null}
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: { gap: spacing.sm },
+  containerRow: { flexDirection: 'row', gap: spacing.sm },
+  rowButton: { flex: 1 },
 });

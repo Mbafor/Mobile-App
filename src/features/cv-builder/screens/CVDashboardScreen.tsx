@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import {
@@ -14,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { OptionsSheet, SearchField, Text } from '@/components/ui';
+import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 import { CVDocumentListItem } from '@/features/cv-builder/components/CVDocumentListItem';
 import { CVRenameModal } from '@/features/cv-builder/components/CVRenameModal';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
@@ -163,12 +165,15 @@ export function CVDashboardScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.appBar}>
         <View style={styles.appBarBrand}>
+          <DrawerToggleButton tintColor={colors.text} />
           <View style={styles.appLogo}>
-            <Ionicons name="document-text" size={22} color={colors.primary} />
+            <Ionicons name="document-text" size={22} color={colors.background} />
           </View>
           <Text style={styles.appTitle}>CV Builder</Text>
         </View>
-        <Pressable
+        <View style={styles.appBarActions}>
+          <NotificationHeaderButton />
+          <Pressable
           onPress={() => void handleCreateNew()}
           disabled={isCreating}
           style={styles.newBtn}
@@ -182,6 +187,7 @@ export function CVDashboardScreen() {
             </>
           )}
         </Pressable>
+        </View>
       </View>
 
       <View style={styles.searchBar}>
@@ -295,12 +301,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: cvDocsTheme.divider,
   },
-  appBarBrand: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  appBarBrand: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  appBarActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   appLogo: {
     width: 36,
     height: 36,
     borderRadius: 4,
-    backgroundColor: cvDocsTheme.primaryTint,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

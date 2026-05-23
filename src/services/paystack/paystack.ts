@@ -1,6 +1,16 @@
+import { makeRedirectUri } from 'expo-auth-session';
+
 import { ghsToKobo } from '@/features/cv-builder/constants/payments';
 import { supabase } from '@/services/supabase/client';
 import type { CVPaymentType } from '@/types/domain/cv';
+
+/** Must match Paystack `callback_url` and `WebBrowser.openAuthSessionAsync` redirect. */
+export function getPaystackRedirectUri(): string {
+  return makeRedirectUri({
+    scheme: 'olivesforum',
+    path: 'paystack-callback',
+  });
+}
 
 export type InitializePaymentParams = {
   email: string;
@@ -35,7 +45,7 @@ export async function initializePaystackPayment(
       cvId: params.cvId,
       paymentType: params.paymentType,
       templateId: params.templateId ?? null,
-      callbackUrl: 'olivesforum://paystack-callback',
+      callbackUrl: getPaystackRedirectUri(),
     },
   });
 

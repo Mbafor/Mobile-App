@@ -65,7 +65,6 @@ export function NotificationPreferencesScreen() {
   if (isLoading || !preferences) {
     return (
       <Screen>
-        <Text variant="title">Notification preferences</Text>
         <Text muted>Loading…</Text>
       </Screen>
     );
@@ -76,7 +75,6 @@ export function NotificationPreferencesScreen() {
   return (
     <Screen>
       <ScrollView contentContainerStyle={styles.content}>
-        <Text variant="title">Notification preferences</Text>
         <Text muted style={styles.intro}>
           Control push alerts and reminder types. In-app history is always available in the
           Notifications tab.

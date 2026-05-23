@@ -9,8 +9,12 @@ import { useHideMainTabBar } from '@/features/cv-builder/hooks/useHideMainTabBar
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
-function TabIcon({ name, color, size }: { name: TabIconName; color: string; size: number }) {
-  return <Ionicons name={name} size={size} color={color} />;
+type TabBarIconProps = { color: string; focused: boolean; size: number };
+
+function tabBarIcon(outline: TabIconName, filled: TabIconName) {
+  return ({ color, focused, size }: TabBarIconProps) => (
+    <Ionicons name={focused ? filled : outline} size={size} color={color} />
+  );
 }
 
 export default function CVHubTabsLayout() {
@@ -25,6 +29,7 @@ export default function CVHubTabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textMuted,
+        tabBarShowLabel: true,
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600', marginBottom: 2 },
         tabBarStyle: {
           position: 'absolute',
@@ -46,36 +51,28 @@ export default function CVHubTabsLayout() {
         name="index"
         options={{
           title: 'Dashboard',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="home-outline" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="templates"
-        options={{
-          title: 'Templates',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="grid-outline" color={color} size={size} />
-          ),
+          tabBarIcon: tabBarIcon('grid-outline', 'grid'),
         }}
       />
       <Tabs.Screen
         name="tips"
         options={{
           title: 'Tips',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="bulb-outline" color={color} size={size} />
-          ),
+          tabBarIcon: tabBarIcon('bulb-outline', 'bulb'),
+        }}
+      />
+      <Tabs.Screen
+        name="templates"
+        options={{
+          title: 'Templates',
+          tabBarIcon: tabBarIcon('color-palette-outline', 'color-palette'),
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
           title: 'Sections',
-          tabBarIcon: ({ color, size }) => (
-            <TabIcon name="options-outline" color={color} size={size} />
-          ),
+          tabBarIcon: tabBarIcon('list-outline', 'list'),
         }}
       />
     </Tabs>

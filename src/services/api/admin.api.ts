@@ -163,11 +163,37 @@ export const adminApi = {
 
   createOpportunity: async (values: OpportunityFormValues) => {
     try {
+      const { data: isAdmin, error: adminCheckError } = await supabase.rpc(
+        'current_user_is_admin',
+      );
+      if (adminCheckError) {
+        return { data: null, error: formatAdminError(adminCheckError) };
+      }
+      if (!isAdmin) {
+        return {
+          data: null,
+          error: new Error(
+            'Permission denied. In Supabase, set profiles.is_admin = true for your user, then sign out and back in.',
+          ),
+        };
+      }
+
       const row = formToRow(values);
-      const { data, error } = await supabase.from('opportunities').insert(row).select('*').single();
+      const { data, error } = await supabase.from('opportunities').insert(row).select('*');
 
       if (error) return { data: null, error: formatAdminError(error) };
-      return { data: data ? mapOpportunityRow(data) : null, error: null };
+
+      const inserted = data?.[0];
+      if (!inserted) {
+        return {
+          data: null,
+          error: new Error(
+            'Insert did not return a row. Confirm migration 007_admin.sql is applied and your user is an admin.',
+          ),
+        };
+      }
+
+      return { data: mapOpportunityRow(inserted), error: null };
     } catch (e) {
       return {
         data: null,
@@ -178,16 +204,36 @@ export const adminApi = {
 
   updateOpportunity: async (id: string, values: OpportunityFormValues) => {
     try {
+      const { data: isAdmin, error: adminCheckError } = await supabase.rpc(
+        'current_user_is_admin',
+      );
+      if (adminCheckError) {
+        return { data: null, error: formatAdminError(adminCheckError) };
+      }
+      if (!isAdmin) {
+        return {
+          data: null,
+          error: new Error(
+            'Permission denied. In Supabase, set profiles.is_admin = true for your user, then sign out and back in.',
+          ),
+        };
+      }
+
       const row = formToRow(values);
       const { data, error } = await supabase
         .from('opportunities')
         .update(row)
         .eq('id', id)
-        .select('*')
-        .single();
+        .select('*');
 
       if (error) return { data: null, error: formatAdminError(error) };
-      return { data: data ? mapOpportunityRow(data) : null, error: null };
+
+      const updated = data?.[0];
+      if (!updated) {
+        return { data: null, error: new Error('Opportunity not found or could not be updated.') };
+      }
+
+      return { data: mapOpportunityRow(updated), error: null };
     } catch (e) {
       return {
         data: null,

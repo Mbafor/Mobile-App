@@ -1,34 +1,35 @@
+import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useRef, useState } from 'react';
 import { Alert } from 'react-native';
 
 import type { PaymentProduct } from '@/features/cv-builder/constants/payments';
+import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import { useCVPayments } from '@/features/cv-builder/hooks/useCVPayments';
 import {
+  extractReferenceFromUrl,
+  getPaystackRedirectUri,
   initializePaystackPayment,
   verifyPaystackPayment,
 } from '@/services/paystack/paystack';
 import type { CVPaymentType } from '@/types/domain/cv';
 
+WebBrowser.maybeCompleteAuthSession();
+
 type PendingPayment = {
   product: PaymentProduct;
   cvId: string;
-  templateId?: string;
-  alreadyPaid: boolean;
+  templateId: CVTemplateId;
   onSuccess: () => void | Promise<void>;
 };
 
 export function useCVPaymentFlow(cvId: string | undefined) {
   const payments = useCVPayments(cvId);
   const [sheetVisible, setSheetVisible] = useState(false);
-  const [checkoutVisible, setCheckoutVisible] = useState(false);
-  const [checkoutUrl, setCheckoutUrl] = useState('');
   const [busy, setBusy] = useState(false);
   const pendingRef = useRef<PendingPayment | null>(null);
 
   const closeAll = useCallback(() => {
     setSheetVisible(false);
-    setCheckoutVisible(false);
-    setCheckoutUrl('');
     pendingRef.current = null;
   }, []);
 
@@ -46,63 +47,39 @@ export function useCVPaymentFlow(cvId: string | undefined) {
     (opts: {
       product: PaymentProduct;
       cvId: string;
-      templateId?: string;
-      alreadyPaid?: boolean;
+      templateId: string;
       onSuccess: () => void | Promise<void>;
     }) => {
+      const templateId = resolveTemplateId(opts.templateId);
+
+      if (payments.isTemplatePurchased(templateId)) {
+        void opts.onSuccess();
+        return;
+      }
+
       pendingRef.current = {
         product: opts.product,
         cvId: opts.cvId,
-        templateId: opts.templateId,
-        alreadyPaid: opts.alreadyPaid ?? false,
+        templateId,
         onSuccess: opts.onSuccess,
       };
       setSheetVisible(true);
     },
-    [],
+    [payments],
   );
 
-  const handlePayPress = useCallback(async () => {
-    const pending = pendingRef.current;
-    if (!pending) return;
-
-    if (pending.alreadyPaid) {
-      await runSuccess();
-      return;
+  const handleCheckoutFailure = useCallback((message: string, cancelled?: boolean) => {
+    if (!cancelled) {
+      Alert.alert('Payment failed', message);
     }
-
-    const email = payments.userEmail;
-    if (!email) {
-      Alert.alert('Sign in required', 'Please sign in with an email address to pay.');
-      return;
-    }
-
-    setBusy(true);
-    const init = await initializePaystackPayment({
-      email,
-      amountGhs: pending.product.amountGhs,
-      cvId: pending.cvId,
-      paymentType: pending.product.type,
-      templateId: pending.templateId,
-    });
-    setBusy(false);
-
-    if (!init.ok) {
-      Alert.alert('Payment unavailable', init.error);
-      return;
-    }
-
-    setSheetVisible(false);
-    setCheckoutUrl(init.authorizationUrl);
-    setCheckoutVisible(true);
-  }, [payments.userEmail, runSuccess]);
+    setSheetVisible(true);
+  }, []);
 
   const handleCheckoutSuccess = useCallback(
     async (reference: string) => {
       const pending = pendingRef.current;
       if (!pending) return;
 
-      setCheckoutVisible(false);
       setBusy(true);
 
       const verified = await verifyPaystackPayment(reference);
@@ -116,12 +93,16 @@ export function useCVPaymentFlow(cvId: string | undefined) {
         return;
       }
 
+      const templateId = resolveTemplateId(
+        verified.templateId ?? pending.templateId,
+      );
+
       const record = await payments.recordPayment({
         cvId: pending.cvId,
         amount: verified.amount,
-        type: verified.paymentType as CVPaymentType,
+        type: 'template_unlock' as CVPaymentType,
         paystackReference: verified.reference,
-        templateId: verified.templateId ?? pending.templateId,
+        templateId,
       });
 
       setBusy(false);
@@ -138,26 +119,61 @@ export function useCVPaymentFlow(cvId: string | undefined) {
     [payments, runSuccess],
   );
 
-  const handleCheckoutFailure = useCallback((message: string, cancelled?: boolean) => {
-    setCheckoutVisible(false);
-    if (!cancelled) {
-      Alert.alert('Payment failed', message);
+  const handlePayPress = useCallback(async () => {
+    const pending = pendingRef.current;
+    if (!pending) return;
+
+    const email = payments.userEmail;
+    if (!email) {
+      Alert.alert('Sign in required', 'Please sign in with an email address to pay.');
+      return;
     }
-    setSheetVisible(true);
-  }, []);
+
+    setBusy(true);
+    const init = await initializePaystackPayment({
+      email,
+      amountGhs: pending.product.amountGhs,
+      cvId: pending.cvId,
+      paymentType: 'template_unlock',
+      templateId: pending.templateId,
+    });
+
+    if (!init.ok) {
+      setBusy(false);
+      Alert.alert('Payment unavailable', init.error);
+      return;
+    }
+
+    setSheetVisible(false);
+
+    const redirectUri = getPaystackRedirectUri();
+    const result = await WebBrowser.openAuthSessionAsync(init.authorizationUrl, redirectUri, {
+      showInRecents: true,
+    });
+
+    setBusy(false);
+
+    if (result.type === 'cancel' || result.type === 'dismiss') {
+      handleCheckoutFailure('Payment was cancelled', true);
+      return;
+    }
+
+    if (result.type === 'success' && result.url) {
+      const reference = extractReferenceFromUrl(result.url) ?? init.reference;
+      await handleCheckoutSuccess(reference);
+      return;
+    }
+
+    handleCheckoutFailure('Payment did not complete. Please try again.');
+  }, [payments.userEmail, handleCheckoutSuccess, handleCheckoutFailure]);
 
   return {
     ...payments,
     sheetVisible,
-    checkoutVisible,
-    checkoutUrl,
     busy,
     pendingProduct: pendingRef.current?.product ?? null,
-    pendingAlreadyPaid: pendingRef.current?.alreadyPaid ?? false,
     promptPayment,
     handlePayPress,
-    handleCheckoutSuccess,
-    handleCheckoutFailure,
     closePaymentSheet: () => {
       pendingRef.current = null;
       setSheetVisible(false);

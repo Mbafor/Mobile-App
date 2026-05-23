@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
@@ -7,53 +7,39 @@ import { CVPreviewModal } from '@/features/cv-builder/components/CVPreviewModal'
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
-import { isTemplateFree } from '@/features/cv-builder/constants/templates';
+import { useCVTemplateDownload } from '@/features/cv-builder/hooks/useCVTemplateDownload';
+import { useSelectCVTemplate } from '@/features/cv-builder/hooks/useSelectCVTemplate';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
-import {
-  getTemplateDefinition,
-  resolveTemplateId,
-  type CVTemplateId,
-} from '@/features/cv-builder/constants/templates';
+import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import { colors, spacing } from '@/constants/theme';
 
 export function CVTemplatesScreen() {
-  const { cv, content, templateId, selectTemplate, saveState } = useCVBuilderContext();
+  const { content, templateId, saveState } = useCVBuilderContext();
   const payment = useCVPaymentContext();
+  const { selectCVTemplate } = useSelectCVTemplate();
+  const { downloadWithTemplate, isDownloading } = useCVTemplateDownload();
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewTemplateId, setPreviewTemplateId] = useState<CVTemplateId>(
     resolveTemplateId(templateId),
   );
   const isSaving = saveState === 'saving';
-  const active = getTemplateDefinition(templateId);
 
   const handleSelect = useCallback(
     (id: CVTemplateId) => {
-      if (!cv) return;
       setPreviewTemplateId(id);
-
-      const needsUnlock = !isTemplateFree(id) && !payment.isTemplateUnlocked(id);
-      if (needsUnlock) {
-        payment.promptPayment({
-          product: payment.getProductForTemplate(id),
-          cvId: cv.id,
-          templateId: id,
-          alreadyPaid: false,
-          onSuccess: async () => {
-            await selectTemplate(id, { skipFreeCheck: true });
-          },
-        });
-        return;
-      }
-
-      void selectTemplate(id);
+      selectCVTemplate(id);
     },
-    [cv, payment, selectTemplate],
+    [selectCVTemplate],
   );
 
   const handlePreview = useCallback((id: CVTemplateId) => {
-    setPreviewTemplateId(id);
+    setPreviewTemplateId(resolveTemplateId(id));
     setPreviewOpen(true);
   }, []);
+
+  useEffect(() => {
+    setPreviewTemplateId(resolveTemplateId(templateId));
+  }, [templateId]);
 
   return (
     <View style={styles.flex}>
@@ -63,33 +49,24 @@ export function CVTemplatesScreen() {
             <Ionicons name="document-text-outline" size={28} color={colors.primary} />
           </View>
           <View style={styles.heroCopy}>
-            <Text variant="title">Choose a layout</Text>
             <Text muted style={styles.heroSubtitle}>
-              Five designs from your website — tap a card to apply, or preview before switching.
+              Preview any layout for free. Download is GHS 100 per template — unlock once, keep
+              forever.
             </Text>
           </View>
         </View>
 
-        {active ? (
-          <Text style={styles.savingHint}>
-            {isSaving ? 'Saving template…' : `Showing ${active.label} on your CV`}
-          </Text>
-        ) : null}
-
         <TemplateSelector
           selectedId={templateId}
+          purchasedTemplateIds={payment.purchasedTemplateIds}
           onSelect={handleSelect}
           onPreview={handlePreview}
           disabled={isSaving}
-          unlockedTemplateIds={payment.unlockedTemplateIds}
         />
 
         <Button
           variant="secondary"
-          onPress={() => {
-            setPreviewTemplateId(resolveTemplateId(templateId));
-            setPreviewOpen(true);
-          }}
+          onPress={() => setPreviewOpen(true)}
           style={styles.previewBtn}
         >
           Full-screen preview
@@ -101,6 +78,9 @@ export function CVTemplatesScreen() {
         onClose={() => setPreviewOpen(false)}
         templateId={previewTemplateId}
         content={content}
+        templatePurchased={payment.isTemplatePurchased(previewTemplateId)}
+        onDownload={() => downloadWithTemplate(previewTemplateId)}
+        downloadLoading={isDownloading}
       />
     </View>
   );
@@ -126,12 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  heroCopy: { flex: 1, gap: spacing.xs },
+  heroCopy: { flex: 1, gap: spacing.sm },
   heroSubtitle: { lineHeight: 20 },
-  savingHint: {
-    fontSize: 13,
-    color: cvDocsTheme.textSecondary,
-    paddingHorizontal: spacing.xs,
-  },
   previewBtn: { marginTop: spacing.sm },
 });

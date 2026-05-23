@@ -149,7 +149,6 @@ export function EditProfilePreferencesScreen() {
           ) : null}
 
           <View style={styles.header}>
-            <Text variant="title">Profile & preferences</Text>
             <Text muted>Update your details to improve recommendations.</Text>
           </View>
 

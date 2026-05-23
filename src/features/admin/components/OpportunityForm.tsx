@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from 'react';
 import {
   Alert,
+  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -11,7 +12,6 @@ import {
 import {
   CountrySelect,
   FormField,
-  MultiDegreeLevelPicker,
   MultiSelectWithOther,
   SelectWithOther,
 } from '@/components/forms';
@@ -19,6 +19,8 @@ import { Button, Input, Text } from '@/components/ui';
 import { colors, spacing } from '@/constants/theme';
 import {
   OPPORTUNITY_CATEGORY_OPTIONS,
+  OPPORTUNITY_DEGREE_OPTIONS,
+  OPPORTUNITY_DEGREE_VALUES,
   OPPORTUNITY_LOCATION_SELECT_OPTIONS,
   OPPORTUNITY_TAG_OPTIONS,
   PREDEFINED_OPPORTUNITY_CATEGORIES,
@@ -81,6 +83,7 @@ export function OpportunityForm({
 
   const handleSubmit = async () => {
     if (isBusy) return;
+    Keyboard.dismiss();
 
     const payload: OpportunityFormValues = {
       title,
@@ -110,7 +113,7 @@ export function OpportunityForm({
     } catch (e) {
       const message = e instanceof Error ? e.message : 'Something went wrong';
       setError(message);
-      Alert.alert('Could not save', message);
+      scrollRef.current?.scrollTo({ y: 0, animated: true });
     } finally {
       setSubmitting(false);
     }
@@ -177,7 +180,8 @@ export function OpportunityForm({
             predefinedValues={PREDEFINED_OPPORTUNITY_TAGS}
             values={tags}
             onChange={setTags}
-            placeholder="Select interests (tap Apply when done)"
+            syncOnChange
+            placeholder="Select at least one interest tag"
           />
         </FormField>
 
@@ -199,8 +203,15 @@ export function OpportunityForm({
           />
         </FormField>
 
-        <FormField label="Degree levels *">
-          <MultiDegreeLevelPicker values={degreeLevels} onChange={setDegreeLevels} />
+        <FormField label="Education level *">
+          <MultiSelectWithOther
+            options={[...OPPORTUNITY_DEGREE_OPTIONS]}
+            predefinedValues={OPPORTUNITY_DEGREE_VALUES}
+            values={degreeLevels}
+            onChange={setDegreeLevels}
+            syncOnChange
+            placeholder="Select education levels"
+          />
         </FormField>
 
         <FormField label="Location type *">
@@ -216,7 +227,12 @@ export function OpportunityForm({
 
       <View style={styles.footer}>
         {error ? <Text style={styles.error}>{error}</Text> : null}
-        <Button onPress={() => void handleSubmit()} loading={isBusy} disabled={isBusy}>
+        <Button
+          onPress={() => void handleSubmit()}
+          loading={isBusy}
+          disabled={isBusy}
+          fullWidth
+        >
           {submitLabel}
         </Button>
       </View>

@@ -8,7 +8,7 @@ import { Alert, StyleSheet, View } from 'react-native';
 import { ErrorMessage } from '@/components/feedback';
 import { FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
-import { AuthDivider, AuthScreenLayout, SocialAuthButtons } from '@/features/auth/components';
+import { AuthScreenLayout } from '@/features/auth/components';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
@@ -17,8 +17,7 @@ import { isValidEmail } from '@/utils/validation';
 export function EmailOtpScreen() {
   const router = useRouter();
   useAuthRedirect('guest');
-  const { sendEmailOtp, signInWithGoogle, signInWithApple, isLoading, error, clearError } =
-    useAuthActions();
+  const { sendEmailOtp, isLoading, error, clearError } = useAuthActions();
   const [email, setEmail] = useState('');
 
   const handleNext = async () => {
@@ -41,12 +40,6 @@ export function EmailOtpScreen() {
       subtitle="We'll send a 6-digit code via Supabase. Enter it on the next screen to continue."
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
     >
-      <SocialAuthButtons
-        onGooglePress={() => signInWithGoogle()}
-        onApplePress={() => signInWithApple()}
-        loading={isLoading}
-      />
-      <AuthDivider />
       <FormField label="Email address">
         <Input
           value={email}

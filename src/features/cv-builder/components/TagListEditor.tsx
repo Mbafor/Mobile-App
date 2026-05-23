@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { FormField } from '@/components/forms';
 import { Input, Text } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
@@ -41,35 +42,32 @@ export function TagListEditor({
     <View style={cvUi.sectionGap}>
       <CVSectionHeader title={title} description={description} />
 
-      <View style={cvUi.surfaceCard}>
-        {tags.length === 0 ? (
-          <Text muted variant="caption" style={styles.empty}>
-            No items yet. Add your first one below.
-          </Text>
-        ) : (
-          <View style={styles.chips}>
-            {tags.map((tag) => (
-              <Pressable
-                key={tag}
-                style={styles.chip}
-                onPress={() => removeTag(tag)}
-                accessibilityLabel={`Remove ${tag}`}
-              >
-                <Text style={styles.chipText}>{tag}</Text>
-                <Text style={styles.chipRemove}>×</Text>
-              </Pressable>
-            ))}
+      {tags.map((tag) => (
+        <View key={tag} style={cvUi.surfaceCard}>
+          <View style={styles.row}>
+            <Text style={styles.tagText}>{tag}</Text>
+            <Pressable
+              onPress={() => removeTag(tag)}
+              hitSlop={8}
+              accessibilityLabel={`Remove ${tag}`}
+            >
+              <Text style={styles.remove}>×</Text>
+            </Pressable>
           </View>
-        )}
-      </View>
+        </View>
+      ))}
 
-      <Input
-        value={draft}
-        onChangeText={setDraft}
-        placeholder={placeholder}
-        onSubmitEditing={addTag}
-        returnKeyType="done"
-      />
+      <View style={cvUi.surfaceCard}>
+        <FormField label={tags.length === 0 ? addLabel : 'Add another'}>
+          <Input
+            value={draft}
+            onChangeText={setDraft}
+            placeholder={placeholder}
+            onSubmitEditing={addTag}
+            returnKeyType="done"
+          />
+        </FormField>
+      </View>
 
       <CVAddButton label={addLabel} onPress={addTag} disabled={!draft.trim()} />
     </View>
@@ -77,19 +75,12 @@ export function TagListEditor({
 }
 
 const styles = StyleSheet.create({
-  empty: { textAlign: 'center', paddingVertical: spacing.sm },
-  chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
-  chip: {
+  row: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.xs,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 20,
-    backgroundColor: colors.background,
-    borderWidth: 1,
-    borderColor: colors.border,
+    justifyContent: 'space-between',
+    gap: spacing.sm,
   },
-  chipText: { fontSize: 14, color: colors.text, fontWeight: '500' },
-  chipRemove: { fontSize: 16, color: colors.textMuted, fontWeight: '700', lineHeight: 18 },
+  tagText: { flex: 1, fontSize: 15, color: colors.text, fontWeight: '500' },
+  remove: { fontSize: 22, color: colors.textMuted, fontWeight: '600', lineHeight: 24 },
 });

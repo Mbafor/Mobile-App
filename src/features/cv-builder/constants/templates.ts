@@ -8,7 +8,7 @@ export type CVTemplateDefinition = {
 };
 
 /** Matches website CV builder templates (ATS, Modern, Tech, Executive/Jessica, Minimal/Elite). */
-/** Every layout requires a one-time GHS 100 unlock per template. */
+/** All layouts can be selected and previewed freely; PDF download is paid separately. */
 export const CV_TEMPLATES: CVTemplateDefinition[] = [
   {
     id: 'ats',

@@ -13,8 +13,12 @@ import { NotificationHeaderButton } from '@/features/notifications/components/No
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
-function TabIcon({ name, color }: { name: TabIconName; color: string }) {
-  return <Ionicons name={name} size={22} color={color} />;
+type TabBarIconProps = { color: string; focused: boolean; size: number };
+
+function tabBarIcon(outline: TabIconName, filled: TabIconName) {
+  return ({ color, focused, size }: TabBarIconProps) => (
+    <Ionicons name={focused ? filled : outline} size={size} color={color} />
+  );
 }
 
 export default function MainTabsLayout() {
@@ -69,14 +73,14 @@ export default function MainTabsLayout() {
         name="dashboard"
         options={{
           title: 'Dashboard',
-          tabBarIcon: ({ color }) => <TabIcon name="home-outline" color={color} />,
+          tabBarIcon: tabBarIcon('home-outline', 'home'),
         }}
       />
       <Tabs.Screen
         name="saved"
         options={{
           title: 'Saved',
-          tabBarIcon: ({ color }) => <TabIcon name="bookmark-outline" color={color} />,
+          tabBarIcon: tabBarIcon('bookmark-outline', 'bookmark'),
         }}
       />
       <Tabs.Screen
@@ -84,7 +88,7 @@ export default function MainTabsLayout() {
         options={{
           title: 'CV Builder',
           headerShown: false,
-          tabBarIcon: ({ color }) => <TabIcon name="document-text-outline" color={color} />,
+          tabBarIcon: tabBarIcon('document-text-outline', 'document-text'),
         }}
       />
       <Tabs.Screen
@@ -99,7 +103,8 @@ export default function MainTabsLayout() {
         options={{
           title: 'Admin',
           href: isAdmin ? undefined : null,
-          tabBarIcon: ({ color }) => <TabIcon name="shield-outline" color={color} />,
+          headerShown: false,
+          tabBarIcon: tabBarIcon('shield-outline', 'shield'),
         }}
       />
     </Tabs>

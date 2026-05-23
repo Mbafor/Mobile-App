@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
-import { FilterChipGroup } from '@/features/opportunities/components/FilterChipGroup';
+import { FilterDropdownGroup } from '@/features/opportunities/components/FilterDropdownGroup';
 import {
   FILTER_CATEGORIES,
   FILTER_COUNTRIES,
@@ -42,47 +42,43 @@ export function OpportunityFiltersPanel({
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
-        <FilterChipGroup
+        <FilterDropdownGroup
           label="Country"
           options={FILTER_COUNTRIES}
           selected={filters.countries}
           onChange={(countries) => patch({ countries })}
         />
-        <FilterChipGroup
+        <FilterDropdownGroup
           label="Category"
           options={FILTER_CATEGORIES}
           selected={filters.categories}
           onChange={(categories) => patch({ categories })}
         />
-        <FilterChipGroup
+        <FilterDropdownGroup
           label="Funding type"
           options={FILTER_FUNDING_TYPES}
           selected={filters.fundingTypes}
           onChange={(fundingTypes) => patch({ fundingTypes })}
           formatLabel={(v) => FUNDING_TYPE_LABELS[v] ?? v}
         />
-        <FilterChipGroup
+        <FilterDropdownGroup
           label="Degree level"
           options={FILTER_DEGREE_LEVELS}
           selected={filters.degreeLevels}
           onChange={(degreeLevels) => patch({ degreeLevels })}
           formatLabel={(v) => v.replace('_', ' ')}
         />
-        <FilterChipGroup
+        <FilterDropdownGroup
           label="Remote / on-site"
           options={FILTER_LOCATION_TYPES}
           selected={filters.locationTypes}
           onChange={(locationTypes) => patch({ locationTypes })}
         />
-        <FilterChipGroup<DeadlineRangeFilter>
+        <FilterDropdownGroup<DeadlineRangeFilter>
           label="Deadline"
           options={FILTER_DEADLINE_RANGES}
-          selected={
-            filters.deadlineRange === 'any' ? [] : [filters.deadlineRange]
-          }
-          onChange={(selected) =>
-            patch({ deadlineRange: selected[0] ?? 'any' })
-          }
+          selected={filters.deadlineRange === 'any' ? [] : [filters.deadlineRange]}
+          onChange={(selected) => patch({ deadlineRange: selected[0] ?? 'any' })}
           single
         />
       </ScrollView>

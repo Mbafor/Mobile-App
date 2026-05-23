@@ -7,7 +7,8 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Text } from '@/components/ui';
+import { Button, Text } from '@/components/ui';
+import { CV_TEMPLATE_UNLOCK_FEE_GHS } from '@/features/cv-builder/constants/payments';
 import { CVPreviewView } from '@/features/cv-builder/components/preview/CVPreviewView';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
 import { colors, spacing } from '@/constants/theme';
@@ -18,6 +19,9 @@ type CVPreviewModalProps = {
   onClose: () => void;
   templateId: string;
   content: CVContent;
+  onDownload?: () => void;
+  downloadLoading?: boolean;
+  templatePurchased?: boolean;
 };
 
 export function CVPreviewModal({
@@ -25,6 +29,9 @@ export function CVPreviewModal({
   onClose,
   templateId,
   content,
+  onDownload,
+  downloadLoading = false,
+  templatePurchased = false,
 }: CVPreviewModalProps) {
   const insets = useSafeAreaInsets();
   const templateLabel = getTemplateDefinition(templateId)?.label ?? templateId;
@@ -33,10 +40,10 @@ export function CVPreviewModal({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.toolbar}>
-          <View>
+          <View style={styles.toolbarCopy}>
             <Text variant="title">Preview</Text>
             <Text muted variant="caption">
-              {templateLabel} template · live from your form
+              {templateLabel} · on-screen preview only (PDF export uses a separate print layout)
             </Text>
           </View>
           <Pressable onPress={onClose} style={styles.closeBtn} hitSlop={12}>
@@ -53,6 +60,24 @@ export function CVPreviewModal({
             <CVPreviewView templateId={templateId} content={content} />
           </View>
         </ScrollView>
+
+        {onDownload ? (
+          <View style={[styles.footer, { paddingBottom: insets.bottom + spacing.md }]}>
+            <Button
+              onPress={onDownload}
+              loading={downloadLoading}
+              disabled={downloadLoading}
+              fullWidth
+            >
+              {downloadLoading ? 'Processing…' : 'Download'}
+            </Button>
+            <Text muted variant="caption" style={styles.footerHint}>
+              {templatePurchased
+                ? 'This template is unlocked — download anytime.'
+                : `GHS ${CV_TEMPLATE_UNLOCK_FEE_GHS} unlocks ${templateLabel} downloads permanently.`}
+            </Text>
+          </View>
+        ) : null}
       </View>
     </Modal>
   );
@@ -72,7 +97,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
+    gap: spacing.sm,
   },
+  toolbarCopy: { flex: 1, minWidth: 0 },
   closeBtn: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
@@ -85,7 +112,7 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: {
     padding: spacing.md,
-    paddingBottom: spacing.xl * 2,
+    paddingBottom: spacing.lg,
     alignItems: 'center',
   },
   paper: {
@@ -100,4 +127,13 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 4,
   },
+  footer: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
+    backgroundColor: colors.background,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    gap: spacing.xs,
+  },
+  footerHint: { textAlign: 'center', lineHeight: 18 },
 });

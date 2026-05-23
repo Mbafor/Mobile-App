@@ -10,7 +10,6 @@ type CVPaymentSheetProps = {
   visible: boolean;
   product: PaymentProduct | null;
   loading?: boolean;
-  alreadyPaid?: boolean;
   onClose: () => void;
   onPay: () => void;
 };
@@ -19,7 +18,6 @@ export function CVPaymentSheet({
   visible,
   product,
   loading = false,
-  alreadyPaid = false,
   onClose,
   onPay,
 }: CVPaymentSheetProps) {
@@ -30,29 +28,21 @@ export function CVPaymentSheet({
       <Pressable style={styles.backdrop} onPress={onClose}>
         <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
           <View style={styles.iconWrap}>
-            <Ionicons
-              name={alreadyPaid ? 'checkmark-circle' : 'card-outline'}
-              size={32}
-              color={alreadyPaid ? colors.success : colors.primary}
-            />
+            <Ionicons name="card-outline" size={32} color={colors.primary} />
           </View>
 
           <Text variant="title" style={styles.title}>
-            {alreadyPaid ? 'Already paid' : product.title}
+            {product.title}
           </Text>
 
           <Text muted style={styles.description}>
-            {alreadyPaid
-              ? 'You have already completed this payment. You can proceed without paying again.'
-              : product.description}
+            {product.description}
           </Text>
 
-          {!alreadyPaid ? (
-            <View style={styles.priceRow}>
-              <Text style={styles.priceLabel}>Total</Text>
-              <Text style={styles.priceValue}>GHS {product.amountGhs}</Text>
-            </View>
-          ) : null}
+          <View style={styles.priceRow}>
+            <Text style={styles.priceLabel}>Total</Text>
+            <Text style={styles.priceValue}>GHS {product.amountGhs}</Text>
+          </View>
 
           <View style={styles.trustRow}>
             <Ionicons name="shield-checkmark-outline" size={14} color={cvDocsTheme.textSecondary} />
@@ -60,15 +50,9 @@ export function CVPaymentSheet({
           </View>
 
           <View style={styles.actions}>
-            {alreadyPaid ? (
-              <Button onPress={onPay} loading={loading}>
-                Continue
-              </Button>
-            ) : (
-              <Button onPress={onPay} loading={loading}>
-                Pay GHS {product.amountGhs}
-              </Button>
-            )}
+            <Button onPress={onPay} loading={loading}>
+              Pay GHS {product.amountGhs}
+            </Button>
             <Button variant="ghost" onPress={onClose} disabled={loading}>
               Cancel
             </Button>

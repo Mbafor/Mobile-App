@@ -1,5 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
@@ -35,6 +35,13 @@ export function PaystackCheckoutModal({
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const handledRef = useRef(false);
+
+  useEffect(() => {
+    if (visible && authorizationUrl) {
+      setLoading(true);
+      handledRef.current = false;
+    }
+  }, [visible, authorizationUrl]);
 
   const handleNavigation = useCallback(
     (nav: WebViewNavigation) => {
@@ -95,10 +102,24 @@ export function PaystackCheckoutModal({
           <WebView
             source={{ uri: authorizationUrl }}
             onLoadEnd={() => setLoading(false)}
+            onLoadProgress={({ nativeEvent }) => {
+              if (nativeEvent.progress >= 0.9) setLoading(false);
+            }}
+            onError={() => {
+              setLoading(false);
+              if (!handledRef.current) {
+                handledRef.current = true;
+                onFailure('Could not load Paystack checkout. Check your connection and try again.');
+              }
+            }}
+            onHttpError={() => setLoading(false)}
             onNavigationStateChange={handleNavigation}
+            originWhitelist={['https://*', 'http://*']}
             startInLoadingState
             javaScriptEnabled
             domStorageEnabled
+            sharedCookiesEnabled
+            thirdPartyCookiesEnabled
             style={styles.webview}
           />
         </View>

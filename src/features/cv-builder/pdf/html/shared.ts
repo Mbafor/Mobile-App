@@ -1,4 +1,5 @@
 import { formatExperienceDates } from '@/features/cv-builder/components/preview/preview-shared';
+import { escapeHtml, wrapHtmlDocument } from '@/features/cv-builder/pdf/html/document-shell';
 import type {
   CVAchievementEntry,
   CVCertificationEntry,
@@ -10,13 +11,7 @@ import type {
   CVReferenceEntry,
 } from '@/types/domain/cv';
 
-export function escapeHtml(text: string): string {
-  return text
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
+export { escapeHtml, wrapHtmlDocument };
 
 function hasText(v?: string | null): boolean {
   return Boolean(v?.trim());
@@ -200,40 +195,4 @@ export function sectionHtml(title: string, body: string, className = 'section'):
     <h2 class="section-title">${escapeHtml(title)}</h2>
     ${body}
   </div>`;
-}
-
-export function wrapHtmlDocument(title: string, styles: string, body: string): string {
-  return `<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>${escapeHtml(title)}</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; color: #1F2937; font-size: 10.5pt; line-height: 1.35; }
-    .page { padding: 24px 28px; background: #fff; }
-    .section { margin-bottom: 10px; }
-    .section-title { font-size: 12pt; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; border-bottom: 0.5px solid #1F2937; padding-bottom: 2px; }
-    .row-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 2px; }
-    .row-left { flex: 1; padding-right: 10px; }
-    .row-title { font-weight: 700; font-size: 11pt; }
-    .row-sub { font-style: italic; font-size: 11pt; }
-    .row-date { font-weight: 700; font-size: 10pt; text-align: right; min-width: 72px; }
-    .item-block { margin-bottom: 6px; }
-    .bullets { margin: 2px 0 0 14px; padding: 0; }
-    .bullets li { margin-bottom: 1px; font-size: 10.5pt; }
-    .body { font-size: 10.5pt; line-height: 1.35; }
-    .skill-row { display: flex; margin-bottom: 2px; }
-    .skill-label { width: 72px; font-weight: 700; flex-shrink: 0; }
-    .cert-line { margin-bottom: 3px; }
-    .tech-line { font-style: italic; font-size: 9.5pt; margin-top: 2px; }
-    .link { font-size: 9pt; margin-top: 2px; }
-    .ref-name { font-weight: 700; }
-    .ref-sub { font-style: italic; }
-    ${styles}
-  </style>
-</head>
-<body>${body}</body>
-</html>`;
 }

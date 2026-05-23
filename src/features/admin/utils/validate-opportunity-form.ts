@@ -21,11 +21,15 @@ export function validateOpportunityForm(
   }
 
   if (values.tags.length === 0) {
-    return { ok: false, message: 'Select at least one interest tag.' };
+    return {
+      ok: false,
+      message:
+        'Select at least one interest tag (open Interest tags, choose options, then tap Apply).',
+    };
   }
 
   if (values.degreeLevels.length === 0) {
-    return { ok: false, message: 'Select at least one degree level.' };
+    return { ok: false, message: 'Select at least one education level.' };
   }
 
   if (!values.locationType) {

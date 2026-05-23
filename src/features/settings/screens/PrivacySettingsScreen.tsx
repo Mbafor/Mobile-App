@@ -21,7 +21,6 @@ export function PrivacySettingsScreen() {
           <Ionicons name="arrow-back" size={20} color={colors.text} />
         </Pressable>
         <View style={styles.headerContent}>
-          <Text variant="title">Privacy</Text>
           <Text muted style={styles.subtitle}>
             Control how your data is used and kept safe.
           </Text>

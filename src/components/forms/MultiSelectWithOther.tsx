@@ -22,6 +22,8 @@ type MultiSelectWithOtherProps = {
   values: string[];
   onChange: (values: string[]) => void;
   placeholder?: string;
+  /** When true, each selection is saved immediately (no Apply step required). */
+  syncOnChange?: boolean;
 };
 
 export function MultiSelectWithOther({
@@ -30,6 +32,7 @@ export function MultiSelectWithOther({
   values,
   onChange,
   placeholder = 'Select options',
+  syncOnChange = false,
 }: MultiSelectWithOtherProps) {
   const [open, setOpen] = useState(false);
   const [draftSelected, setDraftSelected] = useState<string[]>([]);
@@ -43,12 +46,19 @@ export function MultiSelectWithOther({
 
   const displayValues = values;
 
+  const commitDraft = (selected: string[], otherText: string) => {
+    onChange(serializeMultiSelectValues(selected, otherText, predefinedValues));
+  };
+
   const toggleOption = (optionValue: string) => {
     setDraftSelected((prev) => {
-      if (prev.includes(optionValue)) {
-        return prev.filter((v) => v !== optionValue);
+      const next = prev.includes(optionValue)
+        ? prev.filter((v) => v !== optionValue)
+        : [...prev, optionValue];
+      if (syncOnChange) {
+        commitDraft(next, draftOtherText);
       }
-      return [...prev, optionValue];
+      return next;
     });
   };
 
@@ -133,16 +143,27 @@ export function MultiSelectWithOther({
                 </Text>
                 <Input
                   value={draftOtherText}
-                  onChangeText={setDraftOtherText}
+                  onChangeText={(text) => {
+                    setDraftOtherText(text);
+                    if (syncOnChange) {
+                      commitDraft(draftSelected, text);
+                    }
+                  }}
                   placeholder="e.g. Biotechnology"
                   multiline
                 />
               </View>
             ) : null}
 
-            <Pressable style={styles.doneBtn} onPress={apply}>
-              <Text style={styles.doneBtnText}>Apply</Text>
-            </Pressable>
+            {syncOnChange ? (
+              <Pressable style={styles.doneBtn} onPress={() => setOpen(false)}>
+                <Text style={styles.doneBtnText}>Done</Text>
+              </Pressable>
+            ) : (
+              <Pressable style={styles.doneBtn} onPress={apply}>
+                <Text style={styles.doneBtnText}>Apply</Text>
+              </Pressable>
+            )}
           </Pressable>
         </Pressable>
       </Modal>

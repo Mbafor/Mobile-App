@@ -1,6 +1,7 @@
 import type { CVContent } from '@/types/domain/cv';
 import {
   achievementsHtml,
+  experienceStandardHtml,
   experienceTechHtml,
   getContactItems,
   projectsTechHtml,
@@ -9,7 +10,6 @@ import {
   wrapHtmlDocument,
   escapeHtml,
 } from './shared';
-
 export function renderTechHtml(content: CVContent): string {
   const name = content.personalInfo.fullName.trim() || 'Your Name';
   const contacts = getContactItems(content)
@@ -53,8 +53,12 @@ export function renderTechHtml(content: CVContent): string {
   if (content.achievements.length) {
     mainParts.push(sectionHtml('ACHIEVEMENTS', achievementsHtml(content.achievements), 'main-section'));
   }
-  if (content.references.length) {
-    mainParts.push(sectionHtml('REFERENCES', referencesHtml(content.references), 'main-section'));
+  if (content.voluntaryExperience.length) {
+    mainParts.push(
+      sectionHtml('VOLUNTEER', experienceStandardHtml(content.voluntaryExperience), 'main-section'),
+    );
+  }
+  if (content.references.length) {    mainParts.push(sectionHtml('REFERENCES', referencesHtml(content.references), 'main-section'));
   }
 
   const body = `<div class="page tech">

@@ -14,7 +14,6 @@ export function CVTipsScreen() {
       style={styles.scroll}
       contentContainerStyle={[styles.content, { paddingTop: insets.top + spacing.md }]}
     >
-      <Text variant="title">CV Tips</Text>
       <Text muted style={styles.subtitle}>
         Tap a tip to expand the full explanation.
       </Text>

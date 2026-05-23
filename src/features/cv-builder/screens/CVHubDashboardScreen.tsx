@@ -20,7 +20,7 @@ import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
-import { useCVDownload } from '@/features/cv-builder/hooks/useCVDownload';
+import { useCVTemplateDownload } from '@/features/cv-builder/hooks/useCVTemplateDownload';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import {
@@ -39,12 +39,11 @@ export function CVHubDashboardScreen() {
     templateId,
     setSectionOrder,
     saveLayout,
-    saveNow,
     isLoading,
     error,
   } = useCVBuilderContext();
   const payment = useCVPaymentContext();
-  const { downloadAndShare, generating } = useCVDownload();
+  const { downloadWithTemplate, isDownloading } = useCVTemplateDownload();
 
   const [previewOpen, setPreviewOpen] = useState(false);
   const [reorderOpen, setReorderOpen] = useState(false);
@@ -75,22 +74,8 @@ export function CVHubDashboardScreen() {
     await saveLayout();
   };
 
-  const runPdfDownload = async () => {
-    if (!cv) return;
-    await saveNow();
-    const fileName = `${cv.title.trim() || 'My-CV'}.pdf`;
-    await downloadAndShare({ templateId, content, fileName });
-  };
-
   const handleDownload = () => {
-    if (!cv) return;
-    const alreadyPaid = payment.hasDownloadPaid(cv.id);
-    payment.promptPayment({
-      product: payment.getProductForDownload(cv.title),
-      cvId: cv.id,
-      alreadyPaid,
-      onSuccess: runPdfDownload,
-    });
+    downloadWithTemplate(templateId);
   };
 
   if (isLoading) {
@@ -117,7 +102,7 @@ export function CVHubDashboardScreen() {
           progressPercent={progress}
           onPreview={() => setPreviewOpen(true)}
           onDownload={handleDownload}
-          downloadLoading={generating || payment.busy}
+          downloadLoading={isDownloading}
         />
 
         <View style={styles.searchStrip}>
@@ -163,12 +148,12 @@ export function CVHubDashboardScreen() {
               <Text style={styles.previewCtaText}>Open full preview</Text>
             </Pressable>
             <Pressable
-              style={[styles.downloadCta, (generating || payment.busy) && styles.downloadCtaDisabled]}
+              style={[styles.downloadCta, isDownloading && styles.downloadCtaDisabled]}
               onPress={handleDownload}
-              disabled={generating || payment.busy}
+              disabled={isDownloading}
             >
               <Text style={styles.downloadCtaText}>
-                {generating ? 'Generating PDF…' : 'Download PDF (GHS 100)'}
+                {isDownloading ? 'Generating PDF…' : 'Download PDF'}
               </Text>
             </Pressable>
           </View>
@@ -180,6 +165,9 @@ export function CVHubDashboardScreen() {
         onClose={() => setPreviewOpen(false)}
         templateId={templateId}
         content={content}
+        templatePurchased={payment.isTemplatePurchased(templateId)}
+        onDownload={() => downloadWithTemplate(templateId)}
+        downloadLoading={isDownloading}
       />
 
       <CVReorderSectionsModal

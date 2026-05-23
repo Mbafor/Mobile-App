@@ -55,6 +55,11 @@ export function renderModernHtml(content: CVContent): string {
   if (content.references.length) {
     parts.push(sectionHtml('REFERENCES', referencesHtml(content.references)));
   }
+  if (content.hobbies.length) {
+    parts.push(
+      sectionHtml('INTERESTS', `<div class="body">${escapeHtml(content.hobbies.join(', '))}</div>`),
+    );
+  }
 
   parts.push('</div>');
 

@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
+import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import { getProgressMessage } from '@/features/cv-builder/utils/section-config';
 
@@ -21,14 +23,21 @@ export function CVHubDocToolbar({
   onDownload,
   downloadLoading = false,
 }: CVHubDocToolbarProps) {
+  const router = useRouter();
   const pct = Math.min(100, Math.max(0, progressPercent));
 
   return (
     <View style={styles.wrap}>
       <View style={styles.titleRow}>
-        <View style={styles.docIcon}>
-          <Ionicons name="document-text" size={20} color={colors.primary} />
-        </View>
+        <Pressable
+          onPress={() => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href)}
+          style={styles.docIcon}
+          accessibilityRole="button"
+          accessibilityLabel="Back to all documents"
+          hitSlop={8}
+        >
+          <Ionicons name="document-text" size={20} color={colors.background} />
+        </Pressable>
         <Text style={styles.title} numberOfLines={1}>
           {title}
         </Text>
@@ -81,7 +90,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 4,
-    backgroundColor: cvDocsTheme.primaryTint,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

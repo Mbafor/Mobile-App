@@ -55,17 +55,6 @@ function OliveBranchIllustration() {
   );
 }
 
-// ─── Animated dots ────────────────────────────────────────────────────────────
-function LoadingDots() {
-  return (
-    <View style={styles.dotsRow}>
-      {[0, 1, 2].map((i) => (
-        <View key={i} style={styles.dot} />
-      ))}
-    </View>
-  );
-}
-
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export function SplashScreen() {
   const { isAuthReady } = useAuth();
@@ -165,17 +154,5 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.45)',
     fontSize: typography.fontSize.sm,
     letterSpacing: 0.2,
-  },
-
-  dotsRow: {
-    flexDirection: 'row',
-    gap: 6,
-  },
-
-  dot: {
-    width: 5,
-    height: 5,
-    borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.35)',
   },
 });

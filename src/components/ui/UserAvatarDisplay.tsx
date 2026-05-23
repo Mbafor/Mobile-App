@@ -1,8 +1,9 @@
 import { Image, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui/Text';
+import { colors } from '@/constants/theme';
 
-const DEFAULT_BG = '#2D6A4F';
+const DEFAULT_BG = colors.primary;
 
 type UserAvatarDisplayProps = {
   displayName: string | null;
@@ -27,7 +28,12 @@ export function UserAvatarDisplay({
     return (
       <Image
         source={{ uri: avatarUrl }}
-        style={{ width: size, height: size, borderRadius: radius }}
+        style={{
+          width: size,
+          height: size,
+          borderRadius: radius,
+          backgroundColor: DEFAULT_BG,
+        }}
       />
     );
   }

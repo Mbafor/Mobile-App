@@ -47,7 +47,6 @@ export function AdminOpportunitiesScreen() {
   return (
     <Screen padded={false}>
       <View style={styles.header}>
-        <Text variant="title">Opportunities</Text>
         <Button onPress={() => router.push(ROUTES.ADMIN.CREATE as Href)}>Create</Button>
       </View>
 
@@ -99,7 +98,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     padding: spacing.md,
     gap: spacing.sm,
   },

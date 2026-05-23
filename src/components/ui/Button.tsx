@@ -6,6 +6,7 @@ import {
   Text,
   type PressableProps,
   type StyleProp,
+  type TextStyle,
   type ViewStyle,
 } from 'react-native';
 
@@ -15,6 +16,8 @@ type ButtonProps = PropsWithChildren<
   Omit<PressableProps, 'style'> & {
     variant?: 'primary' | 'secondary' | 'ghost';
     loading?: boolean;
+    fullWidth?: boolean;
+    textStyle?: StyleProp<TextStyle>;
     style?: StyleProp<ViewStyle>;
   }
 >;
@@ -24,6 +27,8 @@ export function Button({
   onPress,
   variant = 'primary',
   loading = false,
+  fullWidth = false,
+  textStyle,
   disabled,
   style,
   ...props
@@ -36,6 +41,7 @@ export function Button({
       disabled={isDisabled}
       style={[
         styles.base,
+        fullWidth && styles.fullWidth,
         variant === 'primary' && styles.primary,
         variant === 'secondary' && styles.secondary,
         variant === 'ghost' && styles.ghost,
@@ -53,6 +59,7 @@ export function Button({
             variant === 'primary' && styles.labelPrimary,
             variant === 'secondary' && styles.labelSecondary,
             variant === 'ghost' && styles.labelGhost,
+            textStyle,
           ]}
         >
           {children}
@@ -71,6 +78,7 @@ const styles = StyleSheet.create({
     minHeight: 48,
     justifyContent: 'center',
   },
+  fullWidth: { alignSelf: 'stretch', width: '100%' },
   primary: { backgroundColor: colors.primary },
   secondary: {
     backgroundColor: colors.surface,

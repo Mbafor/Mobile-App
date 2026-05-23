@@ -45,7 +45,7 @@ export function CVDocumentListItem({
         style={({ pressed }) => [styles.main, pressed && styles.rowPressed]}
       >
         <View style={styles.docIcon}>
-          <Ionicons name="document-text" size={22} color={colors.primary} />
+          <Ionicons name="document-text" size={22} color={colors.background} />
         </View>
         <View style={styles.body}>
           <Text style={styles.title} numberOfLines={1}>
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     borderRadius: 4,
-    backgroundColor: cvDocsTheme.primaryTint,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },

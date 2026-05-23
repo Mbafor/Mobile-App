@@ -12,15 +12,27 @@ export default function AdminTabLayout() {
     <Stack
       screenOptions={{
         headerShown: true,
+        headerShadowVisible: false,
+        headerStyle: { backgroundColor: colors.background },
+        headerTintColor: colors.text,
+        headerTitleStyle: { fontWeight: '600', fontSize: 17 },
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
         headerRight: () => <NotificationHeaderButton />,
-        headerTintColor: colors.text,
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Admin' }} />
-      <Stack.Screen name="opportunities" options={{ title: 'Opportunities' }} />
-      <Stack.Screen name="create" options={{ title: 'Create' }} />
-      <Stack.Screen name="[id]/edit" options={{ title: 'Edit' }} />
+      <Stack.Screen
+        name="opportunities"
+        options={{ title: 'Opportunities', headerBackTitle: 'Admin' }}
+      />
+      <Stack.Screen
+        name="create"
+        options={{ title: 'Create opportunity', headerBackTitle: 'Back' }}
+      />
+      <Stack.Screen
+        name="[id]/edit"
+        options={{ title: 'Edit opportunity', headerBackTitle: 'Back' }}
+      />
     </Stack>
   );
 }

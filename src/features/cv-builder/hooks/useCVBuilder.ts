@@ -4,11 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
-import {
-  DEFAULT_TEMPLATE_ID,
-  isTemplateFree,
-  resolveTemplateId,
-} from '@/features/cv-builder/constants/templates';
+import { DEFAULT_TEMPLATE_ID, resolveTemplateId } from '@/features/cv-builder/constants/templates';
 import {
   buildProfilePrefillSource,
   mergeProfileIntoPersonalInfo,
@@ -147,14 +143,18 @@ export function useCVBuilder(cvId: string | undefined) {
     [activeSection, persist],
   );
 
+  /** Updates the active template in the UI immediately (preview) without saving. */
+  const setActiveTemplate = useCallback((id: string) => {
+    const resolved = resolveTemplateId(id);
+    setTemplateId(resolved);
+    templateIdRef.current = resolved;
+  }, []);
+
   const selectTemplate = useCallback(
-    async (id: string, options?: { skipFreeCheck?: boolean }) => {
+    async (id: string) => {
       const resolved = resolveTemplateId(id);
-      if (!options?.skipFreeCheck && !isTemplateFree(resolved)) {
-        return { ok: false as const, needsPayment: true, templateId: resolved };
-      }
       if (resolved === resolveTemplateId(templateIdRef.current)) {
-        return { ok: true as const, needsPayment: false };
+        return { ok: true as const };
       }
 
       setTemplateId(resolved);
@@ -167,9 +167,7 @@ export function useCVBuilder(cvId: string | undefined) {
         content: contentRef.current,
         templateId: resolved,
       });
-      return saved
-        ? { ok: true as const, needsPayment: false }
-        : { ok: false as const, needsPayment: false };
+      return saved ? { ok: true as const } : { ok: false as const };
     },
     [persist, saveState],
   );
@@ -239,6 +237,7 @@ export function useCVBuilder(cvId: string | undefined) {
     updateLayout,
     setSectionOrder,
     setSectionEnabled,
+    setActiveTemplate,
     selectTemplate,
     activeSection,
     goToSection,

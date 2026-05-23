@@ -1,10 +1,9 @@
 import { useLocalSearchParams } from 'expo-router';
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
-import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { colors } from '@/constants/theme';
 import { OpportunityForm } from '@/features/admin/components/OpportunityForm';
 import { useAdminOpportunity } from '@/features/admin/hooks/useAdminOpportunities';
 import { useUpdateOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
@@ -40,20 +39,18 @@ export function AdminEditOpportunityScreen() {
 
   return (
     <Screen padded={false}>
-      <View style={styles.header}>
-        <Text variant="title">Edit opportunity</Text>
-      </View>
+      <View style={{ flex: 1 }}>
       <OpportunityForm
         key={opportunity.id}
         initialValues={opportunityToFormValues(opportunity)}
         submitLabel="Save changes"
         loading={updateMutation.isPending}
-        onSubmit={(values) => updateMutation.mutateAsync(values)}
+        onSubmit={async (values) => {
+          await updateMutation.mutateAsync(values);
+        }}
       />
+      </View>
     </Screen>
   );
 }
 
-const styles = StyleSheet.create({
-  header: { padding: spacing.md, paddingBottom: spacing.sm },
-});

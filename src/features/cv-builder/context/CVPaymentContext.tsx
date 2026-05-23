@@ -2,7 +2,6 @@ import type { PropsWithChildren } from 'react';
 import { createContext, useContext } from 'react';
 
 import { CVPaymentSheet } from '@/features/cv-builder/components/payments/CVPaymentSheet';
-import { PaystackCheckoutModal } from '@/features/cv-builder/components/payments/PaystackCheckoutModal';
 import { useCVPaymentFlow } from '@/features/cv-builder/hooks/useCVPaymentFlow';
 
 type CVPaymentContextValue = ReturnType<typeof useCVPaymentFlow>;
@@ -23,19 +22,9 @@ export function CVPaymentProvider({ cvId, children }: CVPaymentProviderProps) {
         visible={flow.sheetVisible}
         product={flow.pendingProduct}
         loading={flow.busy}
-        alreadyPaid={flow.pendingAlreadyPaid}
         onClose={flow.closePaymentSheet}
         onPay={() => void flow.handlePayPress()}
       />
-      {flow.checkoutUrl ? (
-        <PaystackCheckoutModal
-          visible={flow.checkoutVisible}
-          authorizationUrl={flow.checkoutUrl}
-          onClose={flow.closePaymentSheet}
-          onSuccess={(ref) => void flow.handleCheckoutSuccess(ref)}
-          onFailure={flow.handleCheckoutFailure}
-        />
-      ) : null}
     </CVPaymentContext.Provider>
   );
 }

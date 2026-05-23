@@ -5,7 +5,6 @@ import { Text } from '@/components/ui';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import {
   CV_TEMPLATES,
-  getTemplateDefinition,
   resolveTemplateId,
   type CVTemplateId,
 } from '@/features/cv-builder/constants/templates';
@@ -13,10 +12,10 @@ import { colors, spacing } from '@/constants/theme';
 
 type TemplateSelectorProps = {
   selectedId: string;
+  purchasedTemplateIds?: string[];
   onSelect: (templateId: CVTemplateId) => void;
   onPreview?: (templateId: CVTemplateId) => void;
   disabled?: boolean;
-  unlockedTemplateIds?: string[];
   /** `gallery` — full cards (Templates tab). `compact` — horizontal strip (editor). */
   variant?: 'gallery' | 'compact';
 };
@@ -28,6 +27,22 @@ const TEMPLATE_ACCENT: Record<CVTemplateId, string> = {
   executive: '#2563eb',
   minimal: '#111827',
 };
+
+function TemplateStatusIcon({
+  purchased,
+}: {
+  purchased: boolean;
+}) {
+  return (
+    <View style={[styles.statusIcon, purchased ? styles.statusPurchased : styles.statusLocked]}>
+      <Ionicons
+        name={purchased ? 'checkmark' : 'lock-closed'}
+        size={12}
+        color={purchased ? colors.success : colors.textMuted}
+      />
+    </View>
+  );
+}
 
 function TemplateLayoutMock({ id }: { id: CVTemplateId }) {
   const accent = TEMPLATE_ACCENT[id];
@@ -99,27 +114,20 @@ function TemplateLayoutMock({ id }: { id: CVTemplateId }) {
   );
 }
 
-function isLocked(templateId: CVTemplateId, unlockedTemplateIds: string[]): boolean {
-  const def = getTemplateDefinition(templateId);
-  if (def?.isFree) return false;
-  return !unlockedTemplateIds.includes(templateId);
-}
-
 export function TemplateSelector({
   selectedId,
+  purchasedTemplateIds = [],
   onSelect,
   onPreview,
   disabled,
-  unlockedTemplateIds = [],
   variant = 'gallery',
 }: TemplateSelectorProps) {
   const activeId = resolveTemplateId(selectedId);
-  const activeTemplate = getTemplateDefinition(activeId);
+  const purchasedSet = new Set(purchasedTemplateIds.map((id) => resolveTemplateId(id)));
 
   if (variant === 'compact') {
     return (
       <View style={styles.compactWrap}>
-        <Text style={styles.compactLabel}>Template</Text>
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -127,7 +135,7 @@ export function TemplateSelector({
         >
           {CV_TEMPLATES.map((template) => {
             const isSelected = template.id === activeId;
-            const locked = isLocked(template.id, unlockedTemplateIds);
+            const purchased = purchasedSet.has(template.id);
             return (
               <Pressable
                 key={template.id}
@@ -139,6 +147,7 @@ export function TemplateSelector({
                   disabled && styles.cardDisabled,
                 ]}
               >
+                <TemplateStatusIcon purchased={purchased} />
                 <View
                   style={[
                     styles.compactThumb,
@@ -151,16 +160,16 @@ export function TemplateSelector({
                 >
                   {template.label}
                 </Text>
-                {locked ? (
-                  <Ionicons name="lock-closed" size={12} color={colors.textMuted} style={styles.lockIcon} />
-                ) : null}
                 {onPreview ? (
                   <Pressable
-                    onPress={() => onPreview(template.id)}
+                    onPress={(e) => {
+                      e.stopPropagation?.();
+                      onPreview(template.id);
+                    }}
                     hitSlop={8}
                     style={styles.compactEye}
                   >
-                    <Ionicons name="eye-outline" size={16} color={colors.primary} />
+                    <Ionicons name="eye-outline" size={15} color={colors.primary} />
                   </Pressable>
                 ) : null}
               </Pressable>
@@ -172,87 +181,55 @@ export function TemplateSelector({
   }
 
   return (
-    <View style={styles.wrap}>
-      {activeTemplate ? (
-        <View style={styles.activePill}>
-          <Ionicons name="checkmark-circle" size={18} color={colors.primary} />
-          <Text style={styles.activePillText}>
-            Active: <Text style={styles.activePillName}>{activeTemplate.label}</Text>
-          </Text>
-        </View>
-      ) : null}
+    <View style={styles.list}>
+      {CV_TEMPLATES.map((template) => {
+        const isSelected = template.id === activeId;
+        const purchased = purchasedSet.has(template.id);
 
-      <View style={styles.list}>
-        {CV_TEMPLATES.map((template) => {
-          const isSelected = template.id === activeId;
-          const locked = isLocked(template.id, unlockedTemplateIds);
+        return (
+          <Pressable
+            key={template.id}
+            onPress={() => onSelect(template.id)}
+            disabled={disabled}
+            style={({ pressed }) => [
+              styles.card,
+              isSelected && styles.cardSelected,
+              disabled && styles.cardDisabled,
+              pressed && !disabled && styles.cardPressed,
+            ]}
+          >
+            <View style={styles.mockWrap}>
+              <TemplateLayoutMock id={template.id} />
+            </View>
 
-          return (
-            <Pressable
-              key={template.id}
-              onPress={() => onSelect(template.id)}
-              disabled={disabled}
-              style={({ pressed }) => [
-                styles.card,
-                isSelected && styles.cardSelected,
-                disabled && styles.cardDisabled,
-                pressed && !disabled && styles.cardPressed,
-              ]}
-            >
-              <View style={styles.mockWrap}>
-                <TemplateLayoutMock id={template.id} />
-              </View>
-
-              <View style={styles.cardBody}>
-                <View style={styles.cardHeader}>
-                  <View style={[styles.dot, { backgroundColor: TEMPLATE_ACCENT[template.id] }]} />
-                  <Text style={[styles.cardTitle, isSelected && styles.cardTitleSelected]}>
-                    {template.label}
-                  </Text>
-                  {locked ? (
-                    <View style={styles.lockBadge}>
-                      <Ionicons name="lock-closed" size={10} color={colors.textMuted} />
-                      <Text style={styles.lockBadgeText}>GHS 100</Text>
-                    </View>
-                  ) : null}
-                  {isSelected ? (
-                    <View style={styles.selectedBadge}>
-                      <Text style={styles.selectedBadgeText}>In use</Text>
-                    </View>
-                  ) : null}
-                </View>
-                <Text style={styles.cardDesc} numberOfLines={2}>
-                  {template.description}
+            <View style={styles.cardBody}>
+              <View style={styles.cardHeader}>
+                <View style={[styles.dot, { backgroundColor: TEMPLATE_ACCENT[template.id] }]} />
+                <Text style={[styles.cardTitle, isSelected && styles.cardTitleSelected]}>
+                  {template.label}
                 </Text>
-
-                <View style={styles.actions}>
-                  {onPreview ? (
-                    <Pressable
-                      onPress={() => onPreview(template.id)}
-                      style={styles.previewBtn}
-                      hitSlop={6}
-                    >
-                      <Ionicons name="eye-outline" size={16} color={colors.primary} />
-                      <Text style={styles.previewBtnText}>Preview</Text>
-                    </Pressable>
-                  ) : null}
-                  {!isSelected ? (
-                    <Pressable
-                      onPress={() => onSelect(template.id)}
-                      disabled={disabled}
-                      style={[styles.applyBtn, disabled && styles.applyBtnDisabled]}
-                    >
-                      <Text style={styles.applyBtnText}>
-                        {locked ? 'Unlock & use' : 'Use template'}
-                      </Text>
-                    </Pressable>
-                  ) : null}
-                </View>
+                <TemplateStatusIcon purchased={purchased} />
               </View>
-            </Pressable>
-          );
-        })}
-      </View>
+              <Text style={styles.cardDesc} numberOfLines={2}>
+                {template.description}
+              </Text>
+
+              {onPreview ? (
+                <Pressable
+                  onPress={(e) => {
+                    e.stopPropagation?.();
+                    onPreview(template.id);
+                  }}
+                  style={styles.previewBtn}
+                  hitSlop={6}
+                >
+                  <Ionicons name="eye-outline" size={16} color={colors.primary} />
+                </Pressable>
+              ) : null}
+            </View>
+          </Pressable>
+        );
+      })}
     </View>
   );
 }
@@ -274,20 +251,6 @@ const mock = StyleSheet.create({
 });
 
 const styles = StyleSheet.create({
-  wrap: { gap: spacing.md },
-  activePill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: 10,
-    backgroundColor: cvDocsTheme.primaryTint,
-    borderWidth: 1,
-    borderColor: colors.primary,
-  },
-  activePillText: { fontSize: 14, color: colors.text },
-  activePillName: { fontWeight: '700', color: colors.primary },
   list: { gap: spacing.sm },
   card: {
     flexDirection: 'row',
@@ -316,67 +279,52 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: spacing.sm,
     paddingRight: spacing.md,
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     gap: spacing.xs,
+    position: 'relative',
   },
   cardHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.xs,
-    flexWrap: 'wrap',
   },
   dot: { width: 8, height: 8, borderRadius: 4 },
   cardTitle: { fontSize: 16, fontWeight: '700', color: colors.text, flex: 1 },
   cardTitleSelected: { color: colors.primary },
-  selectedBadge: {
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 6,
-    backgroundColor: colors.primary,
-  },
-  selectedBadgeText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.background,
-    textTransform: 'uppercase',
-  },
-  cardDesc: { fontSize: 13, color: colors.textMuted, lineHeight: 18 },
-  actions: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    marginTop: spacing.xs,
-  },
+  cardDesc: { fontSize: 13, color: colors.textMuted, lineHeight: 18, paddingRight: spacing.lg },
   previewBtn: {
-    flexDirection: 'row',
+    position: 'absolute',
+    right: spacing.sm,
+    bottom: spacing.sm,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: cvDocsTheme.primaryTint,
     alignItems: 'center',
-    gap: 4,
-    paddingVertical: 4,
-    paddingHorizontal: spacing.xs,
+    justifyContent: 'center',
   },
-  previewBtnText: { fontSize: 13, fontWeight: '600', color: colors.primary },
-  applyBtn: {
-    paddingVertical: 6,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 8,
-    backgroundColor: colors.primary,
+  statusIcon: {
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  applyBtnDisabled: { opacity: 0.6 },
-  applyBtnText: { fontSize: 12, fontWeight: '700', color: colors.background },
+  statusLocked: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  statusPurchased: {
+    backgroundColor: '#ECFDF5',
+    borderWidth: 1,
+    borderColor: '#BBF7D0',
+  },
   compactWrap: {
     paddingVertical: spacing.sm,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
     backgroundColor: colors.background,
-  },
-  compactLabel: {
-    fontSize: 11,
-    fontWeight: '700',
-    color: colors.textMuted,
-    paddingHorizontal: spacing.md,
-    marginBottom: spacing.xs,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
   compactScroll: {
     paddingHorizontal: spacing.md,
@@ -391,25 +339,14 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
     alignItems: 'center',
     gap: 4,
+    position: 'relative',
   },
   compactCardSelected: {
     borderColor: colors.primary,
+    borderWidth: 2,
     backgroundColor: cvDocsTheme.primaryTint,
   },
   compactThumb: { width: '100%', height: 28, borderRadius: 4, opacity: 0.85 },
   compactTitle: { fontSize: 12, fontWeight: '700', color: colors.text, alignSelf: 'stretch' },
-  compactEye: { position: 'absolute', top: 6, right: 6 },
-  lockIcon: { marginTop: 2 },
-  lockBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 3,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 6,
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  lockBadgeText: { fontSize: 10, fontWeight: '600', color: colors.textMuted },
+  compactEye: { position: 'absolute', bottom: 6, right: 6 },
 });
