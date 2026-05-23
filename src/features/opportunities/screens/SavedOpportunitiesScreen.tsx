@@ -75,7 +75,9 @@ export function SavedOpportunitiesScreen() {
             description="Save opportunities from the dashboard or opportunity details to see them here."
           />
         }
-        contentContainerStyle={opportunities.length === 0 ? styles.emptyList : undefined}
+        contentContainerStyle={
+          opportunities.length === 0 ? styles.emptyList : styles.listContent
+        }
       />
     </View>
   );
@@ -87,4 +89,5 @@ const styles = StyleSheet.create({
   banner: { padding: spacing.md },
   meta: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
   emptyList: { flexGrow: 1 },
+  listContent: { paddingBottom: spacing.md },
 });

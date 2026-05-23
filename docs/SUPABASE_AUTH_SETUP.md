@@ -31,6 +31,9 @@ Restart Expo: `npx expo start -c`
 |----------|----------------|
 | Dev build | `olivesforum://auth/callback` |
 | Expo Go | `exp://127.0.0.1:8081/--/auth/callback` |
+| Web / desktop (`expo start --web`) | `http://localhost:8081/auth/callback` (or your dev port) |
+
+The app logs the exact redirect URI in Metro when OAuth fails — add that value to **Redirect URLs** if Google returns a redirect mismatch.
 
 Configure Google and Apple providers in Supabase dashboard.
 

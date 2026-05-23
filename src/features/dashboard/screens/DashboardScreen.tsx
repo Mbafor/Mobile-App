@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   header: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: spacing.xs },
-  list: { paddingBottom: spacing.xl },
+  list: { paddingBottom: spacing.md },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',

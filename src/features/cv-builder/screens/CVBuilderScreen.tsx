@@ -10,6 +10,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -23,6 +24,7 @@ import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/cons
 import { colors, spacing } from '@/constants/theme';
 
 export function CVBuilderScreen() {
+  const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ id?: string }>();
   const cvId = typeof params.id === 'string' ? params.id : params.id?.[0];
   const [previewOpen, setPreviewOpen] = useState(false);
@@ -72,13 +74,14 @@ export function CVBuilderScreen() {
   }
 
   const isSaving = saveState === 'saving';
+  const headerTopInset = Math.max(insets.top, spacing.md);
 
   return (
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={styles.toolbar}>
+      <View style={[styles.toolbar, { paddingTop: headerTopInset }]}>
         <View style={styles.toolbarTop}>
           <Text variant="title" style={styles.title} numberOfLines={1}>
             {cv.title}
@@ -118,7 +121,10 @@ export function CVBuilderScreen() {
 
       <ScrollView
         style={styles.scroll}
-        contentContainerStyle={styles.scrollContent}
+        contentContainerStyle={[
+          styles.scrollContent,
+          { paddingBottom: insets.bottom + spacing.xl },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
@@ -154,7 +160,6 @@ const styles = StyleSheet.create({
   loadingText: { marginTop: spacing.sm },
   toolbar: {
     paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
     paddingBottom: spacing.xs,
     gap: spacing.xs,
     backgroundColor: colors.background,
@@ -181,7 +186,7 @@ const styles = StyleSheet.create({
   },
   previewText: { fontWeight: '600', color: colors.primary, fontSize: 14 },
   scroll: { flex: 1 },
-  scrollContent: { paddingBottom: spacing.xl * 2 },
+  scrollContent: { paddingTop: spacing.md },
   formPanel: {
     margin: spacing.md,
     padding: spacing.md,

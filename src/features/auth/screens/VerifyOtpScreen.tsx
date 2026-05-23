@@ -97,7 +97,6 @@ export function VerifyOtpScreen() {
 
   const { isAuthenticated, onboardingComplete, isAuthReady, isProfileLoading } = useAuth();
   const { verifyEmailOtp, sendEmailOtp, isLoading, error, clearError } = useAuthActions();
-  useAuthRedirect('guest');
   const [code, setCode]         = useState('');
   const [resendIn, setResendIn] = useState(RESEND_COOLDOWN_SEC);
   const [verified, setVerified] = useState(false);

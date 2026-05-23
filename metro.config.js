@@ -8,6 +8,7 @@ const config = getDefaultConfig(__dirname);
 config.maxWorkers = 2;
 
 const opentelemetryStub = path.resolve(__dirname, 'metro-stubs/opentelemetry-api.js');
+const webviewStub = path.resolve(__dirname, 'metro-stubs/react-native-webview.js');
 
 // Resolve optional @opentelemetry/api required by @supabase/supabase-js (web + native)
 config.resolver.extraNodeModules = {
@@ -24,6 +25,16 @@ config.resolver.resolveRequest = (context, moduleName, platform) => {
   ) {
     return {
       filePath: opentelemetryStub,
+      type: 'sourceFile',
+    };
+  }
+
+  if (
+    platform === 'web' &&
+    (moduleName === 'react-native-webview' || moduleName.startsWith('react-native-webview/'))
+  ) {
+    return {
+      filePath: webviewStub,
       type: 'sourceFile',
     };
   }

@@ -21,7 +21,7 @@ export function OtpInput({ value, onChange, autoFocus }: Props) {
         ref={inputRef}
         value={value}
         onChangeText={(t) => onChange(t.replace(/\D/g, '').slice(0, OTP_LENGTH))}
-        keyboardType="number-pad"
+        keyboardType="numeric"
         textContentType="oneTimeCode"
         autoComplete="one-time-code"
         maxLength={OTP_LENGTH}

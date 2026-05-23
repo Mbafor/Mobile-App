@@ -66,10 +66,9 @@ export default function MainTabsLayout() {
             : {}),
         },
         tabBarItemStyle: { paddingTop: 4 },
-        // Ensure the scene container matches the tab bar background so
-        // no stray gray surface appears above/below the tab bar.
+        // Match tab bar so no stray gap appears above it (do not add scene paddingBottom —
+        // the tab navigator already reserves space for the bar).
         sceneContainerStyle: { backgroundColor: colors.background },
-        sceneStyle: { paddingBottom: tabBarHeight },
       }}
     >
       <Tabs.Screen

@@ -32,19 +32,23 @@ export default function CVHubTabsLayout() {
         tabBarShowLabel: true,
         tabBarLabelStyle: { fontSize: 11, fontWeight: '600', marginBottom: 2 },
         tabBarStyle: {
-          position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: tabBarHeight,
-          paddingBottom: Math.max(insets.bottom, spacing.xs),
-          paddingTop: spacing.xs,
           backgroundColor: cvDocsTheme.barBg,
           borderTopColor: cvDocsTheme.divider,
           borderTopWidth: 1,
-          ...(Platform.OS === 'web' ? { position: 'fixed' as const, zIndex: 100 } : {}),
+          height: tabBarHeight,
+          paddingBottom: Math.max(insets.bottom, spacing.xs),
+          paddingTop: spacing.xs,
+          ...(Platform.OS === 'web'
+            ? {
+                position: 'fixed' as const,
+                bottom: 0,
+                left: 0,
+                right: 0,
+                zIndex: 100,
+              }
+            : {}),
         },
-        sceneStyle: { paddingBottom: tabBarHeight },
+        sceneContainerStyle: { backgroundColor: cvDocsTheme.pageBg },
       }}
     >
       <Tabs.Screen

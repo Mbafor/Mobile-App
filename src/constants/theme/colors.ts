@@ -1,5 +1,7 @@
 export const colors = {
   primary: '#1A3D25',
+  /** Deep forest green — auth hero, CV builder shell */
+  forest: '#0F2018',
   background: '#FFFFFF',
   surface: '#F5F5F5',
   text: '#1A1A1A',

@@ -28,12 +28,16 @@ export const authApi = {
 
   signOut: () => supabase.auth.signOut(),
 
-  signInWithOAuth: (provider: OAuthProvider, redirectTo: string) =>
+  signInWithOAuth: (
+    provider: OAuthProvider,
+    redirectTo: string,
+    skipBrowserRedirect = true,
+  ) =>
     supabase.auth.signInWithOAuth({
       provider,
       options: {
         redirectTo,
-        skipBrowserRedirect: true,
+        skipBrowserRedirect,
       },
     }),
 

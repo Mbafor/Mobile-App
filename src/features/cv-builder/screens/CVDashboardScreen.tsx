@@ -290,7 +290,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     backgroundColor: cvDocsTheme.pageBg,
   },
-  loadingText: { color: cvDocsTheme.textSecondary, fontSize: 14 },
+  loadingText: { color: cvDocsTheme.textOnPage, fontSize: 14 },
   appBar: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
   sectionLabel: {
     fontSize: 11,
     fontWeight: '600',
-    color: cvDocsTheme.textSecondary,
+    color: cvDocsTheme.textOnPage,
     textTransform: 'uppercase',
     letterSpacing: 0.6,
   },

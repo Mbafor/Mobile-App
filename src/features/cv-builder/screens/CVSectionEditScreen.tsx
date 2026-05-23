@@ -67,12 +67,14 @@ export function CVSectionEditScreen() {
     );
   }
 
+  const headerTopInset = Math.max(insets.top, spacing.md);
+
   return (
     <KeyboardAvoidingView
       style={styles.flex}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <View style={styles.toolbar}>
+      <View style={[styles.toolbar, { paddingTop: headerTopInset }]}>
         <Pressable onPress={() => router.back()} style={styles.backBtn} hitSlop={12}>
           <Ionicons name="arrow-back" size={22} color={colors.text} />
         </Pressable>
@@ -95,9 +97,9 @@ export function CVSectionEditScreen() {
         contentContainerStyle={[
           styles.scroll,
           {
-            paddingTop: insets.top > 0 ? insets.top + 16 : 24,
-            paddingHorizontal: 16,
-            paddingBottom: insets.bottom + 24,
+            paddingTop: spacing.md,
+            paddingHorizontal: spacing.md,
+            paddingBottom: insets.bottom + spacing.lg,
           },
         ]}
         keyboardShouldPersistTaps="handled"
@@ -132,7 +134,6 @@ const styles = StyleSheet.create({
   },
   saveBtnText: { color: colors.background, fontWeight: '700', fontSize: 14 },
   scroll: {
-    padding: spacing.md,
-    paddingBottom: spacing.xl * 2,
+    flexGrow: 1,
   },
 });

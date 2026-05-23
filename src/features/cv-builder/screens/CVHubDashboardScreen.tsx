@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderBottomColor: cvDocsTheme.divider,
   },
   scroll: { flex: 1 },
-  scrollContent: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
+  scrollContent: { padding: spacing.md, paddingBottom: spacing.lg },
   canvas: {
     backgroundColor: cvDocsTheme.canvasBg,
     borderRadius: 8,

@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
+import { Platform } from 'react-native';
 
 import { env } from '@/config/env';
 import { supabaseStorage } from '@/services/supabase/storage';
@@ -10,7 +11,8 @@ export const supabase = createClient<Database>(env.SUPABASE_URL, env.SUPABASE_AN
     storage: supabaseStorage,
     autoRefreshToken: true,
     persistSession: true,
-    detectSessionInUrl: false,
+    /** Web OAuth returns ?code= to /auth/callback — must parse the URL. */
+    detectSessionInUrl: Platform.OS === 'web',
     flowType: 'pkce',
   },
 });

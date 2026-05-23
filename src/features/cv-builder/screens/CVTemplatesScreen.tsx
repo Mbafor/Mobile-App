@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useCallback, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/ui';
 import { CVPreviewModal } from '@/features/cv-builder/components/CVPreviewModal';
@@ -14,6 +15,7 @@ import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/cons
 import { colors, spacing } from '@/constants/theme';
 
 export function CVTemplatesScreen() {
+  const insets = useSafeAreaInsets();
   const { content, templateId, saveState } = useCVBuilderContext();
   const payment = useCVPaymentContext();
   const { selectCVTemplate } = useSelectCVTemplate();
@@ -43,7 +45,13 @@ export function CVTemplatesScreen() {
 
   return (
     <View style={styles.flex}>
-      <ScrollView contentContainerStyle={styles.scroll} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        contentContainerStyle={[
+          styles.scroll,
+          { paddingTop: Math.max(insets.top, spacing.md) + spacing.md },
+        ]}
+        showsVerticalScrollIndicator={false}
+      >
         <View style={styles.hero}>
           <View style={styles.heroIcon}>
             <Ionicons name="document-text-outline" size={28} color={colors.primary} />
@@ -88,7 +96,7 @@ export function CVTemplatesScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
-  scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
+  scroll: { padding: spacing.md, paddingBottom: spacing.lg, gap: spacing.md },
   hero: {
     flexDirection: 'row',
     gap: spacing.md,

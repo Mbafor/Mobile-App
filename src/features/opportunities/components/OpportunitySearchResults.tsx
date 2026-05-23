@@ -83,7 +83,7 @@ export function OpportunitySearchResults({
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
+  container: { flex: 1, backgroundColor: colors.background },
   banner: { paddingHorizontal: spacing.md },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   resultMeta: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },

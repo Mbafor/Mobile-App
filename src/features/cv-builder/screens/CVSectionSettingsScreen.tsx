@@ -36,7 +36,7 @@ export function CVSectionSettingsScreen() {
   };
 
   return (
-    <View style={[styles.flex, { paddingTop: insets.top }]}>
+    <View style={[styles.flex, { paddingTop: Math.max(insets.top, spacing.md) }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
         <Text style={styles.pageTitle}>Sections</Text>
         <Text style={styles.subtitle}>
@@ -99,13 +99,18 @@ export function CVSectionSettingsScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
-  scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
-  pageTitle: { fontSize: 20, fontWeight: '500', color: colors.text, marginBottom: spacing.xs },
+  scroll: { padding: spacing.md, paddingBottom: spacing.lg },
+  pageTitle: {
+    fontSize: 20,
+    fontWeight: '500',
+    color: colors.background,
+    marginBottom: spacing.xs,
+  },
   subtitle: {
     marginBottom: spacing.md,
     lineHeight: 20,
     fontSize: 13,
-    color: cvDocsTheme.textSecondary,
+    color: cvDocsTheme.textOnPage,
   },
   reorderBtn: { marginBottom: spacing.md },
   list: {

@@ -7,6 +7,7 @@ import { Button, Text } from '@/components/ui';
 import { AuthDivider } from '@/features/auth/components';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
+import { ErrorMessage } from '@/components/feedback';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
 
@@ -104,7 +105,7 @@ export function WelcomeScreen() {
   const insets = useSafeAreaInsets();
 
   // Removed Apple auth completely
-  const { signInWithGoogle, isLoading } = useAuthActions();
+  const { signInWithGoogle, isLoading, error, clearError } = useAuthActions();
 
   useAuthRedirect('guest');
 
@@ -150,9 +151,14 @@ export function WelcomeScreen() {
           deadline.
         </Text>
 
-        {/* Google button only */}
+        {error ? <ErrorMessage message={error} /> : null}
+
         <Button
-          onPress={() => signInWithGoogle()}
+          onPress={() => {
+            clearError();
+            void signInWithGoogle();
+          }}
+          loading={isLoading}
           disabled={isLoading}
           style={styles.googleBtn}
           textStyle={styles.googleBtnText}
