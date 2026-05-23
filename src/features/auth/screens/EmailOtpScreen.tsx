@@ -9,9 +9,9 @@ import { ErrorMessage } from '@/components/feedback';
 import { FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
 import { AuthScreenLayout } from '@/features/auth/components';
+import { colors, spacing } from '@/constants/theme';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
-import { spacing } from '@/constants/theme';
 import { isValidEmail } from '@/utils/validation';
 
 export function EmailOtpScreen() {
@@ -37,8 +37,10 @@ export function EmailOtpScreen() {
   return (
     <AuthScreenLayout
       title="Your email"
-      subtitle="We'll send a 6-digit code via Supabase. Enter it on the next screen to continue."
+      subtitle="We'll send a 6-digit code Enter it on the next screen to continue."
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
+      backgroundColor={colors.background}
+      backTextColor={colors.text}
     >
       <FormField label="Email address">
         <Input
@@ -53,7 +55,14 @@ export function EmailOtpScreen() {
       {env.configError ? <ErrorMessage message={env.configError} /> : null}
       {error ? <ErrorMessage message={error} /> : null}
       <View style={styles.actions}>
-        <Button onPress={handleNext} loading={isLoading} disabled={isLoading}>
+        <Button
+          variant="primary"
+          onPress={handleNext}
+          loading={isLoading}
+          disabled={isLoading}
+          style={styles.continueBtn}
+          textStyle={styles.continueBtnText}
+        >
           Next
         </Button>
       </View>
@@ -63,4 +72,13 @@ export function EmailOtpScreen() {
 
 const styles = StyleSheet.create({
   actions: { marginTop: spacing.md },
+  continueBtn: {
+    backgroundColor: colors.primary,
+    borderRadius: 14,
+    height: 48,
+  },
+  continueBtnText: {
+    color: colors.background,
+    fontWeight: '500',
+  },
 });

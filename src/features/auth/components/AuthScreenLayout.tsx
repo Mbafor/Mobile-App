@@ -16,17 +16,31 @@ type Props = PropsWithChildren<{
   title: string;
   subtitle?: string;
   onBack?: () => void;
+  backgroundColor?: string;
+  backTextColor?: string;
 }>;
 
-export function AuthScreenLayout({ title, subtitle, onBack, children }: Props) {
+export function AuthScreenLayout({
+  title,
+  subtitle,
+  onBack,
+  children,
+  backgroundColor,
+  backTextColor,
+}: Props) {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
+    <View
+      style={[
+        styles.root,
+        { paddingTop: insets.top, backgroundColor: backgroundColor ?? colors.primary },
+      ]}
+    >
       <View style={styles.hero}>
         {onBack ? (
           <Pressable onPress={onBack} hitSlop={12}>
-            <Text style={styles.back}>← Back</Text>
+            <Text style={[styles.back, { color: backTextColor ?? colors.background }]}>← Back</Text>
           </Pressable>
         ) : (
           <View style={styles.backSpacer} />

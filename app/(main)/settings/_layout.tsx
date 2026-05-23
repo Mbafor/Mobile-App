@@ -11,7 +11,7 @@ export default function SettingsLayout() {
         headerTintColor: colors.text,
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Settings' }} />
+      <Stack.Screen name="index" options={{ title: 'Settings', headerShown: false }} />
       <Stack.Screen name="profile" options={{ title: 'Profile & preferences' }} />
       <Stack.Screen name="privacy" options={{ title: 'Privacy' }} />
       <Stack.Screen name="notifications-prefs" options={{ title: 'Notifications' }} />

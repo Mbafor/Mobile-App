@@ -10,6 +10,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -22,6 +23,7 @@ import { colors, spacing } from '@/constants/theme';
 
 export function CVSectionEditScreen() {
   const router = useRouter();
+  const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ sectionId?: string }>();
   const sectionId = (typeof params.sectionId === 'string'
     ? params.sectionId
@@ -90,7 +92,14 @@ export function CVSectionEditScreen() {
       </View>
 
       <ScrollView
-        contentContainerStyle={styles.scroll}
+        contentContainerStyle={[
+          styles.scroll,
+          {
+            paddingTop: insets.top > 0 ? insets.top + 16 : 24,
+            paddingHorizontal: 16,
+            paddingBottom: insets.bottom + 24,
+          },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >

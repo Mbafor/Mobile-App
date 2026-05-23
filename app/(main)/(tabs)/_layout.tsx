@@ -36,7 +36,7 @@ export default function MainTabsLayout() {
   const tabBarPaddingBottom = Math.max(insets.bottom, spacing.xs);
 
   return (
-    <Tabs
+      <Tabs
       key={isAdmin ? 'tabs-admin' : 'tabs-user'}
       screenOptions={{
         headerShown: true,
@@ -66,6 +66,9 @@ export default function MainTabsLayout() {
             : {}),
         },
         tabBarItemStyle: { paddingTop: 4 },
+        // Ensure the scene container matches the tab bar background so
+        // no stray gray surface appears above/below the tab bar.
+        sceneContainerStyle: { backgroundColor: colors.background },
         sceneStyle: { paddingBottom: tabBarHeight },
       }}
     >

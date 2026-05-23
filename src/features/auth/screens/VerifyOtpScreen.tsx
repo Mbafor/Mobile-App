@@ -1,11 +1,20 @@
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import {
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  View,
+} from 'react-native';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Button, Text } from '@/components/ui';
+import { AuthScreenLayout } from '@/features/auth/components';
 import { OtpInput } from '@/features/auth/components';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
@@ -14,6 +23,9 @@ import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
 
 const RESEND_COOLDOWN_SEC = 60;
+const DARK_GREEN = '#0F2018'; //  Defined to fix the reference crash
+const BTN_GREEN  = '#1A3D25';
+const PANEL_RADIUS = 28;
 
 // ─── Hero background — envelope / olive motif ─────────────────────────────────
 function HeroIllustration() {
@@ -24,7 +36,7 @@ function HeroIllustration() {
       viewBox="0 0 390 300"
       preserveAspectRatio="xMidYMid slice"
     >
-      <Rect width="390" height="300" fill="#0F2018" />
+      <Rect width="390" height="300" fill={DARK_GREEN} />
 
       {/* Ambient glow */}
       <Circle cx="195" cy="80"  r="160" fill="#1A3D25" opacity="0.45" />
@@ -132,86 +144,44 @@ export function VerifyOtpScreen() {
   const waiting = verified && (!isAuthReady || !isAuthenticated || isProfileLoading);
 
   return (
-    <View style={styles.root}>
+    <AuthScreenLayout
+      title="Enter your 6-digit code"
+      subtitle={`Sent to ${email}`}
+      onBack={() => router.replace(ROUTES.AUTH.EMAIL as Href)}
+      backgroundColor={colors.background}
+      backTextColor={colors.text}
+    >
+      <Text style={styles.panelLabel}>Your code</Text>
+      <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
 
-      {/* ── Hero ── */}
-      <View style={[styles.hero, { paddingTop: insets.top + spacing.md }]}>
+      <View style={styles.otpWrap}>
+        <OtpInput value={code} onChange={setCode} autoFocus />
+      </View>
 
-        {/* Background illustration */}
-        <View style={StyleSheet.absoluteFillObject}>
-          <HeroIllustration />
-        </View>
+      {error ? <ErrorMessage message={error} /> : null}
 
-        {/* Hero text */}
-        <View style={[styles.heroText, { marginTop: spacing.lg }]}>
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>Check your email</Text>
-          </View>
-          <Text style={styles.heroTitle}>Enter your{'\n'}6-digit code</Text>
-          <Text style={styles.heroTagline}>
-            Sent to <Text style={styles.heroEmail}>{email}</Text>
+      <Button
+        onPress={handleVerify}
+        loading={isLoading || waiting}
+        disabled={isLoading || waiting}
+        style={styles.verifyBtn}
+        textStyle={styles.verifyBtnText}
+      >
+        {waiting ? 'Signing you in…' : 'Verify & continue'}
+      </Button>
+
+      <Pressable onPress={handleResend} disabled={resendIn > 0 || isLoading} style={styles.resend}>
+        {resendIn > 0 ? (
+          <Text style={styles.resendMuted}>
+            Resend code in <Text style={styles.resendTimer}>{resendIn}s</Text>
           </Text>
-        </View>
-      </View>
-
-      {/* ── Panel ── */}
-      <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.panelBackRow}
-          hitSlop={8}
-          accessibilityRole="button"
-          accessibilityLabel="Back to email"
-        >
-          <Text style={styles.panelBack}>← Back to email</Text>
-        </Pressable>
-
-        <Text style={styles.panelLabel}>Your code</Text>
-        <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
-
-        {/* OTP input */}
-        <View style={styles.otpWrap}>
-          <OtpInput value={code} onChange={setCode} autoFocus />
-        </View>
-
-        {/* Error */}
-        {error ? <ErrorMessage message={error} /> : null}
-
-        {/* Verify CTA */}
-        <Button
-          onPress={handleVerify}
-          loading={isLoading || waiting}
-          disabled={isLoading || waiting}
-          style={styles.verifyBtn}
-          textStyle={styles.verifyBtnText}
-        >
-          {waiting ? 'Signing you in…' : 'Verify & continue'}
-        </Button>
-
-        {/* Resend */}
-        <Pressable
-          onPress={handleResend}
-          disabled={resendIn > 0 || isLoading}
-          style={styles.resend}
-        >
-          {resendIn > 0 ? (
-            <Text style={styles.resendMuted}>
-              Resend code in <Text style={styles.resendTimer}>{resendIn}s</Text>
-            </Text>
-          ) : (
-            <Text style={styles.resendActive}>Resend code</Text>
-          )}
-        </Pressable>
-
-      </View>
-    </View>
+        ) : (
+          <Text style={styles.resendActive}>Resend code</Text>
+        )}
+      </Pressable>
+    </AuthScreenLayout>
   );
 }
-
-// ─── Styles ───────────────────────────────────────────────────────────────────
-const DARK_GREEN   = '#0F2018';
-const BTN_GREEN    = '#1A3D25';
-const PANEL_RADIUS = 28;
 
 const styles = StyleSheet.create({
   root: {
@@ -270,6 +240,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     gap: spacing.sm,
+  },
+
+  scrollContainer: {
+    flexGrow: 1,
   },
 
   panelBackRow: {
