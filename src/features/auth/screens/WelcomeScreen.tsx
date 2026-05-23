@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 
 import { Button, Text } from '@/components/ui';
-import { AuthDivider, SocialAuthButtons } from '@/features/auth/components';
+import { AuthDivider } from '@/features/auth/components';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ROUTES } from '@/constants/routes';
@@ -29,8 +29,10 @@ function OliveBranchIllustration() {
 
       {/* Stem */}
       <Line
-        x1="195" y1="40"
-        x2="195" y2="180"
+        x1="195"
+        y1="40"
+        x2="195"
+        y2="180"
         stroke="#2D6040"
         strokeWidth="1.5"
         strokeLinecap="round"
@@ -38,24 +40,48 @@ function OliveBranchIllustration() {
 
       {/* Leaves */}
       <Ellipse
-        cx="170" cy="75" rx="22" ry="10"
-        fill="#3D7A50" opacity="0.7"
-        rotation="-30" originX="170" originY="75"
+        cx="170"
+        cy="75"
+        rx="22"
+        ry="10"
+        fill="#3D7A50"
+        opacity="0.7"
+        rotation="-30"
+        originX="170"
+        originY="75"
       />
       <Ellipse
-        cx="220" cy="100" rx="22" ry="10"
-        fill="#3D7A50" opacity="0.7"
-        rotation="30" originX="220" originY="100"
+        cx="220"
+        cy="100"
+        rx="22"
+        ry="10"
+        fill="#3D7A50"
+        opacity="0.7"
+        rotation="30"
+        originX="220"
+        originY="100"
       />
       <Ellipse
-        cx="162" cy="118" rx="18" ry="8"
-        fill="#3D7A50" opacity="0.5"
-        rotation="-45" originX="162" originY="118"
+        cx="162"
+        cy="118"
+        rx="18"
+        ry="8"
+        fill="#3D7A50"
+        opacity="0.5"
+        rotation="-45"
+        originX="162"
+        originY="118"
       />
       <Ellipse
-        cx="228" cy="138" rx="18" ry="8"
-        fill="#3D7A50" opacity="0.5"
-        rotation="45" originX="228" originY="138"
+        cx="228"
+        cy="138"
+        rx="18"
+        ry="8"
+        fill="#3D7A50"
+        opacity="0.5"
+        rotation="45"
+        originX="228"
+        originY="138"
       />
 
       {/* Olives */}
@@ -76,15 +102,16 @@ function OliveBranchIllustration() {
 export function WelcomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { signInWithGoogle, signInWithApple, isLoading } = useAuthActions();
+
+  // Removed Apple auth completely
+  const { signInWithGoogle, isLoading } = useAuthActions();
+
   useAuthRedirect('guest');
 
   return (
     <View style={styles.root}>
-
       {/* ── Hero ── */}
       <View style={[styles.hero, { paddingTop: insets.top + spacing.sm }]}>
-
         {/* Background illustration */}
         <View style={StyleSheet.absoluteFillObject}>
           <OliveBranchIllustration />
@@ -100,7 +127,10 @@ export function WelcomeScreen() {
           <Text style={styles.badgeText}>Olives Forum</Text>
         </View>
 
-        <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
+        <Text style={styles.heroTitle}>
+          Find your next{'\n'}opportunity
+        </Text>
+
         <Text style={styles.heroTagline}>
           Matched to your interests and ambitions, globally.
         </Text>
@@ -114,17 +144,21 @@ export function WelcomeScreen() {
         ]}
       >
         <Text style={styles.panelTitle}>Sign in to explore</Text>
+
         <Text style={styles.panelSubtitle}>
-          Save listings, get personalised recommendations, and never miss a deadline.
+          Save listings, get personalised recommendations, and never miss a
+          deadline.
         </Text>
 
-        {/* Google + Apple side by side */}
-        <SocialAuthButtons
-          onGooglePress={() => signInWithGoogle()}
-          onApplePress={() => signInWithApple()}
-          loading={isLoading}
-          layout="row"
-        />
+        {/* Google button only */}
+        <Button
+          onPress={() => signInWithGoogle()}
+          disabled={isLoading}
+          style={styles.googleBtn}
+          textStyle={styles.googleBtnText}
+        >
+          Continue with Google
+        </Button>
 
         <AuthDivider />
 
@@ -148,7 +182,6 @@ export function WelcomeScreen() {
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const PANEL_RADIUS = 28;
 const DARK_GREEN = '#0F2018';
-const MID_GREEN = '#1A3D25';
 const BTN_GREEN = '#1A3D25';
 
 const styles = StyleSheet.create({
@@ -237,6 +270,17 @@ const styles = StyleSheet.create({
     fontSize: typography.fontSize.sm,
     lineHeight: 22,
     marginBottom: spacing.xs,
+  },
+
+  googleBtn: {
+    backgroundColor: '#fff',
+    borderRadius: 14,
+    height: 48,
+  },
+
+  googleBtnText: {
+    color: '#000',
+    fontWeight: '500',
   },
 
   emailBtn: {

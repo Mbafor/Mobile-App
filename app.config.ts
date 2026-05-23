@@ -14,6 +14,7 @@ const config: ExpoConfig = {
   },
   plugins: [
     'expo-router',
+    'expo-web-browser',
     'expo-font',
     'expo-asset',
     'expo-secure-store',
