@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { queryKeys } from '@/constants/query-keys';
-import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
+import { useCanManageOpportunities } from '@/features/admin/hooks/useCanManageOpportunities';
 import { adminApi } from '@/services/api';
 
 export function useAdminOpportunities() {
-  const { isReady } = useRequireAdmin();
+  const { isReady } = useCanManageOpportunities();
 
   return useQuery({
     queryKey: queryKeys.admin.opportunities,
@@ -19,7 +19,7 @@ export function useAdminOpportunities() {
 }
 
 export function useAdminOpportunity(id: string | undefined) {
-  const { isReady } = useRequireAdmin();
+  const { isReady } = useCanManageOpportunities();
 
   return useQuery({
     queryKey: queryKeys.admin.opportunity(id ?? ''),

@@ -11,7 +11,7 @@ function refreshOpportunityFeeds(queryClient: ReturnType<typeof useQueryClient>)
   void queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
 }
 
-export function useCreateOpportunityMutation() {
+export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME as Href) {
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -24,7 +24,7 @@ export function useCreateOpportunityMutation() {
     },
     onSuccess: (data) => {
       Alert.alert('Posted', `"${data.title}" is live for students to browse.`);
-      router.replace(ROUTES.ADMIN.OPPORTUNITIES as Href);
+      router.replace(listRoute);
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });

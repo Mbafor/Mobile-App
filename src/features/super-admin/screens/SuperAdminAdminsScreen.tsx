@@ -1,16 +1,17 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui';
 import { Input } from '@/components/ui/Input';
+import { AdminDataTable, type AdminTableColumn } from '@/features/admin/components/AdminDataTable';
 import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
 import { colors, spacing } from '@/constants/theme';
-import { superAdminApi } from '@/services/api';
+import { superAdminApi, type SuperAdminAdminRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
 
@@ -49,66 +50,150 @@ export function SuperAdminAdminsScreen() {
     onError: (e: Error) => Alert.alert('Failed', e.message),
   });
 
+  const columns = useMemo<AdminTableColumn<SuperAdminAdminRow>[]>(
+    () => [
+      {
+        key: 'name',
+        header: 'Name',
+        flex: 2,
+        minWidth: 140,
+        render: (row) => <Text style={styles.cellText}>{row.full_name ?? '—'}</Text>,
+      },
+      {
+        key: 'email',
+        header: 'Email',
+        flex: 2,
+        minWidth: 180,
+        render: (row) => (
+          <Text variant="caption" muted numberOfLines={1}>
+            {row.email ?? '—'}
+          </Text>
+        ),
+      },
+      {
+        key: 'role',
+        header: 'Role',
+        minWidth: 120,
+        render: (row) => (
+          <Text variant="caption">
+            {row.is_super_admin ? 'Super Admin' : row.is_admin ? 'Opportunity Admin' : '—'}
+          </Text>
+        ),
+      },
+      {
+        key: 'posts',
+        header: 'Posts',
+        minWidth: 72,
+        render: (row) => (
+          <Text style={styles.postCount}>{row.opportunities_posted ?? 0}</Text>
+        ),
+      },
+      {
+        key: 'actions',
+        header: 'Actions',
+        minWidth: 100,
+        render: (row) =>
+          row.is_admin && !row.is_super_admin ? (
+            <Button
+              variant="ghost"
+              onPress={() => {
+                Alert.alert('Remove admin', `Revoke admin access for ${row.email}?`, [
+                  { text: 'Cancel', style: 'cancel' },
+                  {
+                    text: 'Remove',
+                    style: 'destructive',
+                    onPress: () => revokeMutation.mutate(row.id),
+                  },
+                ]);
+              }}
+              textStyle={{ color: colors.error }}
+            >
+              Delete
+            </Button>
+          ) : (
+            <Text muted variant="caption">
+              —
+            </Text>
+          ),
+      },
+    ],
+    [revokeMutation],
+  );
+
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
+      <Text style={styles.pageTitle}>Manage admins</Text>
       <Text muted style={styles.intro}>
-        Opportunity admins can create and manage listings. Promote an existing user by email.
+        Opportunity admins can create and manage listings. Super admins retain full platform access.
       </Text>
-      <View style={styles.promoteRow}>
-        <Input
-          value={newAdminEmail}
-          onChangeText={setNewAdminEmail}
-          placeholder="user@email.com"
-          style={styles.emailInput}
-        />
-        <Button
-          onPress={() => promoteMutation.mutate(newAdminEmail.trim())}
-          loading={promoteMutation.isPending}
-          disabled={!newAdminEmail.trim()}
-        >
-          Add admin
-        </Button>
+
+      <View style={styles.addCard}>
+        <Text style={styles.cardLabel}>Add opportunity admin</Text>
+        <View style={styles.addRow}>
+          <Input
+            value={newAdminEmail}
+            onChangeText={setNewAdminEmail}
+            placeholder="existing-user@email.com"
+            style={styles.emailInput}
+            autoCapitalize="none"
+            keyboardType="email-address"
+          />
+          <Button
+            onPress={() => promoteMutation.mutate(newAdminEmail.trim())}
+            loading={promoteMutation.isPending}
+            disabled={!newAdminEmail.trim()}
+          >
+            Add
+          </Button>
+        </View>
+        <Text variant="caption" muted>
+          The user must already have signed up. Promoting grants the Admin tab and opportunity tools.
+        </Text>
       </View>
 
-      <SearchFilterBar value={search} onChangeText={(t) => { setSearch(t); setPage(0); }} placeholder="Search admins…" />
-      {isLoading ? <ActivityIndicator color={colors.primary} /> : null}
+      <SearchFilterBar
+        value={search}
+        onChangeText={(t) => {
+          setSearch(t);
+          setPage(0);
+        }}
+        placeholder="Search by name or email…"
+      />
+
+      {isLoading ? <ActivityIndicator color={colors.primary} style={styles.loader} /> : null}
       {error ? <ErrorMessage message={error instanceof Error ? error.message : 'Error'} /> : null}
 
-      {data?.items.map((a) => (
-        <View key={a.id} style={styles.card}>
-          <Text style={styles.name}>{a.full_name ?? 'Unnamed'}</Text>
-          <Text muted variant="caption">{a.email}</Text>
-          <Text variant="caption">
-            {a.is_super_admin ? 'Super Admin' : a.is_admin ? 'Opportunity Admin' : '—'} ·{' '}
-            {a.audit_actions} audit actions
-          </Text>
-          {a.is_admin && !a.is_super_admin ? (
-            <Button variant="ghost" onPress={() => revokeMutation.mutate(a.id)} textStyle={{ color: colors.error }}>
-              Revoke admin
-            </Button>
-          ) : null}
-        </View>
-      ))}
-
       {data ? (
-        <PaginationBar page={page} pageSize={PAGE_SIZE} total={data.total} onPageChange={setPage} />
+        <>
+          <AdminDataTable
+            columns={columns}
+            data={data.items}
+            keyExtractor={(row) => row.id}
+            emptyMessage="No admins match your search."
+          />
+          <PaginationBar page={page} pageSize={PAGE_SIZE} total={data.total} onPageChange={setPage} />
+        </>
       ) : null}
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
-  intro: { marginBottom: spacing.md, lineHeight: 22 },
-  promoteRow: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center', marginBottom: spacing.md },
-  emailInput: { flex: 1 },
-  card: {
+  scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
+  pageTitle: { fontSize: 22, fontWeight: '700', color: colors.text },
+  intro: { lineHeight: 22 },
+  addCard: {
     padding: spacing.md,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: colors.border,
-    borderRadius: 10,
-    marginBottom: spacing.sm,
-    gap: 4,
+    backgroundColor: colors.surface,
+    gap: spacing.sm,
   },
-  name: { fontWeight: '600', fontSize: 16 },
+  cardLabel: { fontWeight: '700', fontSize: 15 },
+  addRow: { flexDirection: 'row', gap: spacing.sm, alignItems: 'center' },
+  emailInput: { flex: 1 },
+  loader: { marginVertical: spacing.lg },
+  cellText: { fontWeight: '600' },
+  postCount: { fontWeight: '700', color: colors.primary },
 });

@@ -22,11 +22,12 @@ export default function SuperAdminLayout() {
           headerRightContainerStyle: { paddingRight: spacing.xs },
         }}
       >
-        <Stack.Screen name="index" options={{ title: 'Super Admin' }} />
-        <Stack.Screen name="mentors" options={{ title: 'Mentors' }} />
+        <Stack.Screen name="index" options={{ title: 'Overview' }} />
+        <Stack.Screen name="analytics" options={{ title: 'Analytics' }} />
+        <Stack.Screen name="admins" options={{ title: 'Manage admins' }} />
+        <Stack.Screen name="mentors" options={{ title: 'Manage mentors' }} />
         <Stack.Screen name="mentees" options={{ title: 'Mentees' }} />
-        <Stack.Screen name="admins" options={{ title: 'Admins' }} />
-        <Stack.Screen name="opportunities" options={{ title: 'Opportunities' }} />
+        <Stack.Screen name="opportunities" options={{ headerShown: false }} />
       </Stack>
     </SuperAdminShell>
   );

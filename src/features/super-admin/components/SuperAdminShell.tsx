@@ -15,10 +15,16 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
-  { href: ROUTES.SUPER_ADMIN.HOME as Href, label: 'Overview', icon: 'grid-outline', segment: 'super-admin' },
+  { href: ROUTES.SUPER_ADMIN.HOME as Href, label: 'Overview', icon: 'grid-outline', segment: 'super-admin/index' },
+  {
+    href: ROUTES.SUPER_ADMIN.ANALYTICS as Href,
+    label: 'Analytics',
+    icon: 'stats-chart-outline',
+    segment: 'analytics',
+  },
+  { href: ROUTES.SUPER_ADMIN.ADMINS as Href, label: 'Admins', icon: 'shield-outline', segment: 'admins' },
   { href: ROUTES.SUPER_ADMIN.MENTORS as Href, label: 'Mentors', icon: 'school-outline', segment: 'mentors' },
   { href: ROUTES.SUPER_ADMIN.MENTEES as Href, label: 'Mentees', icon: 'people-outline', segment: 'mentees' },
-  { href: ROUTES.SUPER_ADMIN.ADMINS as Href, label: 'Admins', icon: 'shield-outline', segment: 'admins' },
   {
     href: ROUTES.SUPER_ADMIN.OPPORTUNITIES as Href,
     label: 'Opportunities',
@@ -41,7 +47,10 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
             Super Admin
           </Text>
           {NAV.map((item) => {
-            const active = pathname.includes(item.segment);
+            const active =
+              item.segment === 'super-admin/index'
+                ? pathname.endsWith('/super-admin') || pathname.endsWith('/super-admin/index')
+                : pathname.includes(item.segment);
             return (
               <Pressable
                 key={item.label}
@@ -63,7 +72,10 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
         {!showSidebar ? (
           <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mobileNav}>
             {NAV.map((item) => {
-              const active = pathname.includes(item.segment);
+              const active =
+              item.segment === 'super-admin/index'
+                ? pathname.endsWith('/super-admin') || pathname.endsWith('/super-admin/index')
+                : pathname.includes(item.segment);
               return (
                 <Pressable
                   key={item.label}

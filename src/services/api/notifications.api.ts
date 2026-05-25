@@ -100,4 +100,14 @@ export const notificationsApi = {
 
     return { count: count ?? 0, error };
   },
+
+  delete: async (userId: string, notificationId: string) => {
+    const { error } = await supabase
+      .from('notifications')
+      .delete()
+      .eq('user_id', userId)
+      .eq('id', notificationId);
+
+    return { error };
+  },
 };

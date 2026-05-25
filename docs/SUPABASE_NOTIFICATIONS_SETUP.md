@@ -1,55 +1,78 @@
-# Phase 8: Push & in-app notifications
+# Notifications: push, in-app, and email
 
-## 1. Run migration
+## 1. Run migrations
 
-In the Supabase SQL Editor, run migrations in order. For notifications:
+Apply migrations in order through `021_notification_system_completion.sql`:
 
-`supabase/migrations/005_notifications.sql`
-
-Creates:
-
-- `notification_preferences` — per-user toggles + `last_match_sync_at`
-- `user_push_tokens` — Expo push tokens
-- `notifications` — in-app history with `dedupe_key` (prevents duplicates)
+| Migration | Purpose |
+|-----------|---------|
+| `005_notifications.sql` | Core tables, prefs auto-create, RLS |
+| `015_super_admin_notifications.sql` | Mentorship types, triggers, `create_app_notification` |
+| `018_mentorship_calendar_scheduling.sql` | `session_booked`, booking triggers, reminders |
+| `021_notification_system_completion.sql` | Email RPC, CV reminders, preference fix, delete policy |
 
 ## 2. Environment
 
-Optional for **remote** Expo push (device token registration):
-
 ```env
 EXPO_PUBLIC_EAS_PROJECT_ID=your-eas-project-uuid
+EXPO_PUBLIC_APP_WEB_URL=https://olivesforum.com
 ```
 
-Create a project at [expo.dev](https://expo.dev) and copy the project ID. Without this, in-app notifications and local alerts still work; remote push token registration is skipped.
+Supabase secrets (Dashboard → Edge Functions → Secrets):
 
-## 3. App behavior
+- `RESEND_API_KEY` — transactional email
+- `CRON_SECRET` — protects scheduled edge functions
+- `APP_WEB_URL` — optional; defaults to `https://olivesforum.com` for email CTAs
 
-| Type | When | Preference |
-|------|------|------------|
-| New match | Opportunity created after last sync, tag overlap with interests/types | `new_matches` |
-| Deadline reminder | Exactly 3 calendar days before deadline | `deadline_reminders` |
-| Saved reminder | Saved opportunity, 1 calendar day before deadline | `saved_reminders` |
+## 3. In-app + push flows
 
-- **Dedupe:** `unique (user_id, dedupe_key)` in `notifications`
-- **Sync:** On app launch and when app returns to foreground (`NotificationProvider`)
-- **Push:** Local notification when `push_enabled` and OS permission granted; token stored in `user_push_tokens`
-- **Denied permission:** Settings shows warning; enabling push requests permission again
+| Type | Source | Preference |
+|------|--------|------------|
+| New match | Client sync | `new_matches` |
+| Deadline reminder | Client sync (3 days) | `deadline_reminders` |
+| Saved reminder | Client sync (1 day, saved) | `saved_reminders` |
+| Mentor / mentee assigned | DB trigger | `mentorship_assignments` |
+| Waiting list | DB trigger | `waiting_list_updates` |
+| Session reminder / booked | DB trigger + cron RPC | `session_reminders` |
+| Mentorship message | DB trigger | `mentorship_messages` |
+| Mentor broadcast | Super admin RPC | always on |
 
-## 4. Screens
+- **In-app** respects per-type prefs only (`push_enabled` does not block in-app rows).
+- **Local push** when the app is open and `push_enabled`.
+- **Remote push** via `deliver-pending-pushes` (Expo Push API + `user_push_tokens`).
+- **Realtime** invalidates the notifications list on insert/update.
 
-- **Notifications tab** — history, mark read, open opportunity
-- **Settings → Notification preferences** — toggles stored in Supabase
+## 4. Email flows
 
-## 5. Production remote push (optional)
+| Function | Trigger | CTA |
+|----------|---------|-----|
+| `send-welcome-email` | After onboarding complete (client invoke, deduped) | Open Platform |
+| `send-deadline-reminder` | Daily cron | View Opportunity |
+| `send-cv-abandonment-reminder` | Daily cron | Continue Building CV |
+| `send-mentor-match-emails` | Cron after mentorship assign | View Profile |
 
-For alerts when the app is closed, deploy a scheduled Supabase Edge Function that:
+All cron email/push functions require:
 
-1. Evaluates the same rules as `notification-sync.ts` (or reads pending rows)
-2. Inserts into `notifications` with dedupe
-3. Sends via [Expo Push API](https://docs.expo.dev/push-notifications/sending-notifications/) using tokens from `user_push_tokens`
+```http
+POST /functions/v1/<name>
+Authorization: Bearer <CRON_SECRET>
+```
 
-Use the **service role** key only on the server, never in the client.
+Suggested schedules (Supabase Dashboard → Edge Functions → Schedules):
+
+| Function | Schedule |
+|----------|----------|
+| `deliver-pending-pushes` | Every 5–15 minutes |
+| `send-deadline-reminder` | Daily 09:00 UTC |
+| `send-cv-abandonment-reminder` | Daily 10:00 UTC |
+| `send-mentor-match-emails` | Every 15 minutes |
+| `mentorship-maintenance` | Hourly |
+
+## 5. App screens
+
+- **Notifications tab** — filters, grouping, avatars, swipe read/delete
+- **Settings → Notification preferences** — toggles in Supabase
 
 ## 6. Physical device
 
-Push notifications require a physical device (not Expo Go web). Use a development build or EAS Build for full push testing on iOS/Android.
+Push requires a physical device and EAS project ID. Web skips push registration.

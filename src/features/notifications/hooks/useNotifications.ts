@@ -61,6 +61,21 @@ export function useNotifications() {
     },
   });
 
+  const deleteMutation = useMutation({
+    mutationFn: async (notificationId: string) => {
+      if (!userId) return;
+      const { error } = await notificationsApi.delete(userId, notificationId);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      if (!userId) return;
+      void queryClient.invalidateQueries({ queryKey: queryKeys.notifications.list(userId) });
+      void queryClient.invalidateQueries({
+        queryKey: queryKeys.notifications.unreadCount(userId),
+      });
+    },
+  });
+
   return {
     notifications: listQuery.data ?? [],
     unreadCount: unreadQuery.data ?? 0,
@@ -70,6 +85,8 @@ export function useNotifications() {
     refetch: listQuery.refetch,
     markRead: markReadMutation.mutateAsync,
     markAllRead: markAllReadMutation.mutateAsync,
+    deleteNotification: deleteMutation.mutateAsync,
     isMarkingRead: markReadMutation.isPending || markAllReadMutation.isPending,
+    isDeleting: deleteMutation.isPending,
   };
 }

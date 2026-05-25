@@ -50,7 +50,7 @@ serve(async (req) => {
 
     const { data: pending, error } = await supabase
       .from('notifications')
-      .select('id, user_id, title, body, type, metadata')
+      .select('id, user_id, title, body, type, metadata, opportunity_id')
       .is('push_sent_at', null)
       .order('created_at', { ascending: true })
       .limit(100);
@@ -106,6 +106,7 @@ serve(async (req) => {
         data: {
           type: notification.type,
           notificationId: notification.id,
+          opportunityId: notification.opportunity_id ?? undefined,
           ...(notification.metadata as Record<string, unknown> | null),
         },
       }));

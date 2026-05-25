@@ -4,6 +4,7 @@ import { useCallback, useState } from 'react';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { mapToUserProfile } from '@/services/api/mappers/profile.mapper';
+import { sendWelcomeEmailIfNeeded } from '@/features/notifications/services/send-welcome-email';
 import { profilesApi, userPreferencesApi } from '@/services/api';
 import { queryKeys } from '@/constants/query-keys';
 import type {
@@ -110,6 +111,9 @@ export function useOnboardingActions() {
         if (!refreshed.onboardingComplete) {
           throw new Error('Setup could not be confirmed. Please check all required fields.');
         }
+
+        void sendWelcomeEmailIfNeeded(userId, email, currentProfile.fullName);
+
         return true;
       }),
     [invalidate, refreshAuthProfile, run, userId],

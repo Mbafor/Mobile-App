@@ -32,7 +32,7 @@ export function SuperAdminOverviewScreen() {
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => void refetch()} />}
     >
       <Text muted style={styles.subtitle}>
-        Platform-wide metrics
+        Quick snapshot. Open Analytics for full charts, users, engagement, and notifications.
       </Text>
       {error ? (
         <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load'} />

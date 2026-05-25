@@ -56,5 +56,6 @@ export const queryKeys = {
       ['mentorship', 'messagePreview', mentorshipId] as const,
     sessions: (userId: string) => ['mentorship', 'sessions', userId] as const,
     availability: (mentorId: string) => ['mentorship', 'availability', mentorId] as const,
+    availabilitySlots: (coachId: string) => ['mentorship', 'availabilitySlots', coachId] as const,
   },
 } as const;

@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -30,67 +31,46 @@ serve(async (req) => {
     }
 
     const firstName = full_name ? full_name.split(' ')[0] : 'there';
+    const webBase = appWebBase();
 
-    const res = await fetch('https://api.resend.com/emails', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${resendApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        from: 'Olives Forum <onboarding@resend.dev>',
-        to: [email],
-        subject: 'Welcome to Olives Forum',
-        html: `
-          <div style="font-family: sans-serif; max-width: 480px; margin: 0 auto; padding: 32px 24px; color: #1a1a1a;">
-            <div style="margin-bottom: 24px;">
-              <div style="width: 48px; height: 48px; background: #1A3D25; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px;">
-                <span style="color: white; font-size: 22px; font-weight: 600;">O</span>
-              </div>
-              <h1 style="font-size: 22px; font-weight: 600; margin: 0 0 8px;">
-                Welcome, ${firstName}! 👋
-              </h1>
-              <p style="color: #555; line-height: 1.6; margin: 0;">
-                You're now part of <strong>Olives Forum</strong> — your home for discovering global opportunities matched to your interests and ambitions.
-              </p>
-            </div>
-
-            <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-bottom: 24px;">
-              <p style="margin: 0 0 12px; font-weight: 600;">Here's what you can do:</p>
-              <ul style="margin: 0; padding-left: 20px; color: #555; line-height: 2;">
-                <li>Browse opportunities matched to your profile</li>
-                <li>Save listings and never miss a deadline</li>
-                <li>Get notified when new matches appear</li>
-              </ul>
-            </div>
-
-            <p style="color: #888; font-size: 13px; line-height: 1.6;">
-              If you have any questions, reply to this email or contact us at support@olivesforum.com.
-            </p>
-
-            <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-
-            <p style="color: #aaa; font-size: 12px; margin: 0;">
-              Olives Forum · Helping students find global opportunities
-            </p>
+    const result = await sendResendEmail({
+      apiKey: resendApiKey,
+      to: email,
+      subject: 'Welcome to Olives Forum',
+      html: emailShell({
+        headline: `Welcome, ${firstName}! 👋`,
+        bodyHtml: `
+          <p>
+            You're now part of <strong>Olives Forum</strong> — your home for discovering global
+            opportunities matched to your interests and ambitions.
+          </p>
+          <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-top: 16px;">
+            <p style="margin: 0 0 12px; font-weight: 600; color: #1a1a1a;">Here's what you can do:</p>
+            <ul style="margin: 0; padding-left: 20px; line-height: 2;">
+              <li>Browse opportunities matched to your profile</li>
+              <li>Save listings and never miss a deadline</li>
+              <li>Connect with mentors and book sessions</li>
+            </ul>
           </div>
+          <p style="margin-top: 16px; font-size: 14px;">
+            Questions? Reply to this email or contact support@olivesforum.com.
+          </p>
         `,
+        ctaLabel: 'Open Platform',
+        ctaHref: webBase,
       }),
     });
 
-    const data = await res.json();
-
-    if (!res.ok) {
-      return new Response(JSON.stringify({ error: data.message ?? 'Failed to send email' }), {
+    if (!result.ok) {
+      return new Response(JSON.stringify({ error: result.error ?? 'Failed to send email' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
 
-    return new Response(JSON.stringify({ success: true, id: data.id }), {
+    return new Response(JSON.stringify({ success: true, id: result.id }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Internal error';
     return new Response(JSON.stringify({ error: message }), {

@@ -110,6 +110,15 @@ export const profilesApi = {
     return { data: data ? mapProfileRow(data) : null, error };
   },
 
+  markWelcomeEmailSent: async (userId: string) => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ welcome_email_sent_at: new Date().toISOString() })
+      .eq('id', userId);
+
+    return { error };
+  },
+
   markOnboardingComplete: async (userId: string) => {
     const { data, error } = await supabase
       .from('profiles')

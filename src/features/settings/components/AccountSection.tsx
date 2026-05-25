@@ -26,7 +26,7 @@ export function AccountSection() {
           variant="secondary"
           onPress={() => router.push(ROUTES.ADMIN.HOME as Href)}
         >
-          Open admin dashboard
+          Manage opportunities
         </Button>
       ) : (
         <Text muted style={styles.hint}>

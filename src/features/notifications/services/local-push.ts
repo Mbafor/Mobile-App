@@ -16,8 +16,9 @@ export async function presentLocalPush(notification: AppNotification): Promise<b
       body: notification.body,
       data: {
         notificationId: notification.id,
-        opportunityId: notification.opportunityId,
+        opportunityId: notification.opportunityId ?? undefined,
         type: notification.type,
+        ...notification.metadata,
       },
     },
     trigger: null,

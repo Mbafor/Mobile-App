@@ -6,8 +6,18 @@ export type NotificationType =
   | 'mentee_assigned'
   | 'waiting_list_update'
   | 'session_reminder'
+  | 'session_booked'
   | 'mentorship_message'
   | 'mentor_broadcast';
+
+export type NotificationFilter =
+  | 'all'
+  | 'unread'
+  | 'mentorship'
+  | 'opportunities'
+  | 'system';
+
+export type NotificationAvatarKind = 'user' | 'opportunity' | 'system';
 
 export type NotificationPreferences = {
   userId: string;

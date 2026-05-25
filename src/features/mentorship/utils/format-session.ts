@@ -10,7 +10,7 @@ export function formatSessionDateTime(iso: string, timezone?: string): string {
   });
 }
 
-export function isSessionUpcoming(session: { status: string; scheduledStart: string }): boolean {
+export function isSessionUpcoming(session: { status: string; scheduledEnd: string }): boolean {
   if (session.status === 'cancelled' || session.status === 'completed') return false;
-  return new Date(session.scheduledStart).getTime() > Date.now();
+  return new Date(session.scheduledEnd).getTime() > Date.now();
 }

@@ -10,7 +10,8 @@ import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
-import { BookingCalendarGrid } from '@/features/mentorship/components/student/BookingCalendarGrid';
+import { StudentBookingCalendar } from '@/features/mentorship/components/calendar/StudentBookingCalendar';
+import { UpcomingSessionsPanel } from '@/features/mentorship/components/calendar/UpcomingSessionsPanel';
 import { CoachDashboardSummary } from '@/features/mentorship/components/student/CoachDashboardSummary';
 import { CoachProfileCard } from '@/features/mentorship/components/student/CoachProfileCard';
 import { SessionsTable } from '@/features/mentorship/components/student/SessionsTable';
@@ -24,7 +25,7 @@ import {
 } from '@/features/mentorship/constants/nav-items';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useMentorshipActions } from '@/features/mentorship/hooks/useMentorshipActions';
-import { useMentorAvailability } from '@/features/mentorship/hooks/useMentorAvailability';
+import { useMentorshipSchedulingRealtime } from '@/features/mentorship/hooks/useMentorshipSchedulingRealtime';
 import {
   filterSessionsForMentorship,
   useMentorshipSessions,
@@ -63,14 +64,14 @@ export function StudentMentorshipDashboard() {
   const mentorshipId = activeMentorship?.id;
   const mentorId = activeMentorship?.mentorId;
 
-  const { rules: availability } = useMentorAvailability(mentorId);
+  useMentorshipSchedulingRealtime(userId, mentorshipId);
   const { messages, isLoading: messagesLoading, sendMessage, isSending } =
     useMentorshipMessages(mentorshipId, {
       enabled: activeSection === 'messages' && Boolean(mentorshipId),
       poll: activeSection === 'messages',
     });
   const { sessions, isLoading: sessionsLoading } = useMentorshipSessions(userId);
-  const { book, update, isBooking } = useSessionMutations(userId);
+  const { book, cancel, isBooking } = useSessionMutations(userId);
 
   const mySessions = mentorshipId
     ? filterSessionsForMentorship(sessions, mentorshipId)
@@ -103,10 +104,9 @@ export function StudentMentorshipDashboard() {
         text: 'Yes',
         style: 'destructive',
         onPress: () => {
-          void update(sessionId, {
-            status: 'cancelled',
-            cancelReason: 'Cancelled by student',
-          }).catch((e: Error) => Alert.alert('Error', e.message));
+          void cancel(sessionId, 'Cancelled by student').catch((e: Error) =>
+            Alert.alert('Cannot cancel', e.message),
+          );
         },
       },
     ]);
@@ -211,20 +211,29 @@ export function StudentMentorshipDashboard() {
         );
 
       case 'book':
-        if (!hasCoach || !mentorshipId) {
+        if (!hasCoach || !mentorshipId || !mentorId) {
           return <Text muted>Match with a coach to book sessions.</Text>;
         }
         return (
-          <BookingCalendarGrid
-            mentorshipId={mentorshipId}
-            userId={userId}
-            rules={availability}
-            sessions={mySessions}
-            onBook={async (input) => {
-              await book(input);
-            }}
-            isBooking={isBooking}
-          />
+          <View style={styles.sectionBody}>
+            <StudentBookingCalendar
+              coachId={mentorId}
+              coachName={coachName}
+              mentorshipId={mentorshipId}
+              sessions={mySessions}
+              onBook={async (input) => {
+                await book(input);
+              }}
+              isBooking={isBooking}
+              isLoadingSessions={sessionsLoading}
+            />
+            <UpcomingSessionsPanel
+              sessions={mySessions}
+              role="student"
+              peerLabel={coachName}
+              onCancel={handleCancelSession}
+            />
+          </View>
         );
 
       case 'sessions':

@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import {
   ActivityIndicator,
@@ -8,7 +9,8 @@ import {
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
-import { AvailabilityManager } from '@/features/mentorship/components/coach/AvailabilityManager';
+import { CoachSchedulingCalendar } from '@/features/mentorship/components/calendar/CoachSchedulingCalendar';
+import { UpcomingSessionsPanel } from '@/features/mentorship/components/calendar/UpcomingSessionsPanel';
 import { CapacityBadge } from '@/features/mentorship/components/coach/CapacityBadge';
 import { CoachMessagesView } from '@/features/mentorship/components/coach/CoachMessagesView';
 import { CoachNotificationsPanel } from '@/features/mentorship/components/coach/CoachNotificationsPanel';
@@ -22,25 +24,28 @@ import {
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useCoachMentorship } from '@/features/mentorship/hooks/useCoachMentorship';
-import { useMentorAvailability } from '@/features/mentorship/hooks/useMentorAvailability';
+import { useMentorshipSchedulingRealtime } from '@/features/mentorship/hooks/useMentorshipSchedulingRealtime';
 import { useMentorshipActions } from '@/features/mentorship/hooks/useMentorshipActions';
 import { useCoachThreadPreviews } from '@/features/mentorship/hooks/useCoachThreadPreviews';
 import {
   useMentorshipSessions,
   useSessionMutations,
 } from '@/features/mentorship/hooks/useMentorshipSessions';
+import { queryKeys } from '@/constants/query-keys';
+import { mentorshipDataApi, mentorshipSchedulingApi } from '@/services/api';
 import { spacing } from '@/constants/theme';
 
 export function CoachMentorshipDashboard() {
   const { user } = useAuth();
   const userId = user?.id ?? '';
+  const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState('dashboard');
 
   const { mentees, capacity, isLoading, error, refetch } = useCoachMentorship();
   const { removeMentee, isRemoving } = useMentorshipActions();
-  const { rules, saveRule, deleteRule, isSaving, isDeleting } = useMentorAvailability(userId);
   const { completed, sessions, isLoading: sessionsLoading } = useMentorshipSessions(userId);
-  const { update } = useSessionMutations(userId);
+  const { update, cancel } = useSessionMutations(userId);
+  useMentorshipSchedulingRealtime(userId);
 
   const mentorshipIds = mentees.map((m) => m.mentorship.id);
   const { previewsByMentorshipId } = useCoachThreadPreviews(
@@ -54,17 +59,62 @@ export function CoachMentorshipDashboard() {
   const sectionTitle = COACH_SECTION_TITLES[activeSection] ?? 'Mentorship';
   const isFullHeightSection = activeSection === 'messages';
 
-  const handleConfirmSession = (sessionId: string) => {
-    void update(sessionId, { status: 'confirmed' }).catch((e: Error) =>
-      Alert.alert('Error', e.message),
-    );
+  const handleConfirmSession = async (sessionId: string) => {
+    const session = sessions.find((s) => s.id === sessionId);
+    if (!session) return;
+
+    const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
+    const coachProfile = await mentorshipDataApi.getParticipantProfile(userId);
+    const coachEmail = coachProfile.success ? coachProfile.data?.email : null;
+    const studentEmail = mentee?.profile.email;
+
+    if (!coachEmail || !studentEmail) {
+      Alert.alert(
+        'Missing emails',
+        'Coach and student need email addresses on their profiles for Google Calendar invites.',
+      );
+      return;
+    }
+
+    try {
+      const result = await mentorshipSchedulingApi.createGoogleCalendarEvent({
+        sessionId,
+        coachEmail,
+        studentEmail,
+        scheduledStart: session.scheduledStart,
+        scheduledEnd: session.scheduledEnd,
+        timezone: session.timezone,
+        title: session.title ?? 'Mentorship session',
+      });
+      if (!result.success) {
+        await update(sessionId, { status: 'confirmed' });
+        void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
+        Alert.alert(
+          'Session confirmed',
+          'Google Meet link could not be created. You can add a meeting URL manually.',
+        );
+        return;
+      }
+      Alert.alert('Session confirmed', 'Google Meet link has been added for this session.');
+      void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
+    } catch (e) {
+      Alert.alert('Error', e instanceof Error ? e.message : 'Could not confirm session.');
+    }
   };
 
   const handleCancelSession = (sessionId: string) => {
-    void update(sessionId, {
-      status: 'cancelled',
-      cancelReason: 'Cancelled by coach',
-    }).catch((e: Error) => Alert.alert('Error', e.message));
+    Alert.alert('Cancel session', 'Cancel this session? The student will be notified.', [
+      { text: 'No', style: 'cancel' },
+      {
+        text: 'Yes',
+        style: 'destructive',
+        onPress: () => {
+          void cancel(sessionId, 'Cancelled by coach').catch((e: Error) =>
+            Alert.alert('Error', e.message),
+          );
+        },
+      },
+    ]);
   };
 
   const handleSetMeetingUrl = async (sessionId: string, url: string) => {
@@ -111,12 +161,23 @@ export function CoachMentorshipDashboard() {
 
       case 'availability':
         return (
-          <AvailabilityManager
-            rules={rules}
-            onSave={(rule) => saveRule(rule)}
-            onDelete={deleteRule}
-            isSaving={isSaving || isDeleting}
-          />
+          <View style={styles.sectionBody}>
+            <CoachSchedulingCalendar
+              coachId={userId}
+              sessions={sessions}
+              isLoadingSessions={sessionsLoading}
+            />
+            <UpcomingSessionsPanel
+              sessions={sessions}
+              role="coach"
+              getPeerName={(session) => {
+                const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
+                return mentee?.profile.fullName?.trim() || 'Student';
+              }}
+              onConfirm={handleConfirmSession}
+              onCancel={handleCancelSession}
+            />
+          </View>
         );
 
       case 'sessions':

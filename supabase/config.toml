@@ -43,3 +43,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/deliver-pending-pushes/deno.json"
 entrypoint = "./functions/deliver-pending-pushes/index.ts"
+
+[functions.send-mentor-match-emails]
+enabled = true
+verify_jwt = false
+import_map = "./functions/send-mentor-match-emails/deno.json"
+entrypoint = "./functions/send-mentor-match-emails/index.ts"

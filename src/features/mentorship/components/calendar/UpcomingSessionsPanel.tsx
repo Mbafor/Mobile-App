@@ -1,0 +1,144 @@
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
+
+import { Text } from '@/components/ui';
+import { MentorshipMobileList } from '@/features/mentorship/components/shared/MentorshipMobileList';
+import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
+import { mentorshipColors } from '@/features/mentorship/constants/theme';
+import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
+import {
+  canJoinGoogleMeet,
+  canStudentCancelSession,
+  isActiveSessionStatus,
+  isPendingSessionStatus,
+  studentCancelBlockedMessage,
+} from '@/features/mentorship/utils/session-rules';
+import type { MentorshipSession } from '@/types/domain/mentorship';
+import { spacing } from '@/constants/theme';
+
+type UpcomingSessionsPanelProps = {
+  sessions: MentorshipSession[];
+  role: 'coach' | 'student';
+  /** Static label (student view) or use getPeerName for per-session names (coach view). */
+  peerLabel?: string;
+  getPeerName?: (session: MentorshipSession) => string;
+  onCancel?: (sessionId: string) => void;
+  onConfirm?: (sessionId: string) => void;
+};
+
+function statusColor(status: string): string {
+  if (status === 'cancelled') return calendarColors.cancelled;
+  if (status === 'completed') return calendarColors.completed;
+  if (isPendingSessionStatus(status)) return calendarColors.booked;
+  if (status === 'confirmed') return calendarColors.booked;
+  return mentorshipColors.textMuted;
+}
+
+function statusLabel(status: string): string {
+  if (status === 'pending' || status === 'proposed') return 'Pending';
+  return status;
+}
+
+export function UpcomingSessionsPanel({
+  sessions,
+  role,
+  peerLabel = 'Participant',
+  getPeerName,
+  onCancel,
+  onConfirm,
+}: UpcomingSessionsPanelProps) {
+  const upcoming = sessions
+    .filter((s) => isActiveSessionStatus(s.status))
+    .sort((a, b) => new Date(a.scheduledStart).getTime() - new Date(b.scheduledStart).getTime());
+
+  return (
+    <View style={styles.wrap}>
+      <Text style={styles.heading}>Upcoming sessions</Text>
+      <MentorshipMobileList
+        data={upcoming}
+        keyExtractor={(s) => s.id}
+        emptyMessage="No upcoming sessions."
+        renderCard={(session) => {
+          const showStudentCancel = role === 'student' && onCancel;
+          const allowCancel = showStudentCancel && canStudentCancelSession(session);
+          const canJoin = canJoinGoogleMeet(session);
+
+          return (
+            <View style={styles.card}>
+              <Text style={styles.peer}>{getPeerName ? getPeerName(session) : peerLabel}</Text>
+              <Text style={styles.datetime}>
+                {formatSessionDateTime(session.scheduledStart, session.timezone)}
+              </Text>
+              <View style={styles.statusRow}>
+                <View style={[styles.statusPill, { backgroundColor: statusColor(session.status) }]}>
+                  <Text style={styles.statusText}>{statusLabel(session.status)}</Text>
+                </View>
+              </View>
+              <View style={styles.actions}>
+                {role === 'coach' && onConfirm && isPendingSessionStatus(session.status) ? (
+                  <Pressable onPress={() => onConfirm(session.id)}>
+                    <Text style={styles.link}>Confirm session</Text>
+                  </Pressable>
+                ) : null}
+                {canJoin && session.meetingUrl ? (
+                  <Pressable
+                    style={styles.meetBtn}
+                    onPress={() => void Linking.openURL(session.meetingUrl!)}
+                  >
+                    <Text style={styles.meetBtnText}>Join on Google Meet</Text>
+                  </Pressable>
+                ) : null}
+                {session.status === 'confirmed' && !canJoin && session.meetingUrl ? (
+                  <Text variant="caption" muted>
+                    Join opens 15 minutes before the session
+                  </Text>
+                ) : null}
+                {showStudentCancel ? (
+                  allowCancel ? (
+                    <Pressable onPress={() => onCancel(session.id)}>
+                      <Text style={styles.danger}>Cancel</Text>
+                    </Pressable>
+                  ) : (
+                    <Text variant="caption" muted>
+                      {studentCancelBlockedMessage(session)}
+                    </Text>
+                  )
+                ) : null}
+                {role === 'coach' && onCancel ? (
+                  <Pressable onPress={() => onCancel(session.id)}>
+                    <Text style={styles.danger}>Cancel</Text>
+                  </Pressable>
+                ) : null}
+              </View>
+            </View>
+          );
+        }}
+      />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  wrap: { gap: spacing.sm, marginTop: spacing.md },
+  heading: { fontSize: 17, fontWeight: '700', color: mentorshipColors.text },
+  card: { padding: spacing.md, gap: spacing.xs },
+  peer: { fontSize: 15, fontWeight: '600', color: mentorshipColors.text },
+  datetime: { fontSize: 14, color: mentorshipColors.textMuted },
+  statusRow: { flexDirection: 'row', marginTop: spacing.xs },
+  statusPill: { paddingHorizontal: spacing.sm, paddingVertical: 4, borderRadius: 6 },
+  statusText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: calendarColors.textOnFill,
+    textTransform: 'capitalize',
+  },
+  actions: { marginTop: spacing.sm, gap: spacing.sm, alignItems: 'flex-start' },
+  link: { color: mentorshipColors.accent, fontWeight: '600' },
+  meetBtn: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: 8,
+    backgroundColor: mentorshipColors.accent,
+  },
+  meetBtnText: { color: mentorshipColors.textOnAccent, fontWeight: '600' },
+  danger: { color: mentorshipColors.danger, fontWeight: '600' },
+});

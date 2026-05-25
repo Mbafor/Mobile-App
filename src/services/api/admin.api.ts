@@ -163,23 +163,33 @@ export const adminApi = {
 
   createOpportunity: async (values: OpportunityFormValues) => {
     try {
-      const { data: isAdmin, error: adminCheckError } = await supabase.rpc(
-        'current_user_is_admin',
+      const { data: canManage, error: permError } = await supabase.rpc(
+        'current_user_can_manage_opportunities',
       );
-      if (adminCheckError) {
-        return { data: null, error: formatAdminError(adminCheckError) };
+      if (permError) {
+        return { data: null, error: formatAdminError(permError) };
       }
-      if (!isAdmin) {
+      if (!canManage) {
         return {
           data: null,
           error: new Error(
-            'Permission denied. In Supabase, set profiles.is_admin = true for your user, then sign out and back in.',
+            'Permission denied. You need admin or super admin access to manage opportunities.',
           ),
         };
       }
 
-      const row = formToRow(values);
-      const { data, error } = await supabase.from('opportunities').insert(row).select('*');
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      const row = {
+        ...formToRow(values),
+        ...(user?.id ? { created_by: user.id } : {}),
+      };
+      const { data, error } = await supabase
+        .from('opportunities')
+        .insert(row as OpportunityInsert)
+        .select('*');
 
       if (error) return { data: null, error: formatAdminError(error) };
 
@@ -204,17 +214,17 @@ export const adminApi = {
 
   updateOpportunity: async (id: string, values: OpportunityFormValues) => {
     try {
-      const { data: isAdmin, error: adminCheckError } = await supabase.rpc(
-        'current_user_is_admin',
+      const { data: canManage, error: permError } = await supabase.rpc(
+        'current_user_can_manage_opportunities',
       );
-      if (adminCheckError) {
-        return { data: null, error: formatAdminError(adminCheckError) };
+      if (permError) {
+        return { data: null, error: formatAdminError(permError) };
       }
-      if (!isAdmin) {
+      if (!canManage) {
         return {
           data: null,
           error: new Error(
-            'Permission denied. In Supabase, set profiles.is_admin = true for your user, then sign out and back in.',
+            'Permission denied. You need admin or super admin access to manage opportunities.',
           ),
         };
       }

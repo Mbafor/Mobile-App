@@ -56,6 +56,79 @@ export type Database = {
         Args: Record<string, never>;
         Returns: number;
       };
+      toggle_availability_slot: {
+        Args: {
+          p_day_of_week: number;
+          p_start_time: string;
+          p_end_time: string;
+          p_timezone?: string;
+        };
+        Returns: Json;
+      };
+      book_mentorship_session: {
+        Args: {
+          p_mentorship_id: string;
+          p_scheduled_start: string;
+          p_scheduled_end: string;
+          p_timezone?: string;
+          p_title?: string;
+          p_notes?: string | null;
+        };
+        Returns: Json;
+      };
+      cancel_mentorship_session: {
+        Args: { p_session_id: string; p_reason?: string };
+        Returns: Json;
+      };
+      complete_past_mentorship_sessions: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
+      current_user_can_manage_opportunities: {
+        Args: Record<string, never>;
+        Returns: boolean;
+      };
+      super_admin_create_mentor_by_email: {
+        Args: { p_email: string };
+        Returns: Json;
+      };
+      super_admin_delete_mentor: {
+        Args: { p_user_id: string };
+        Returns: Json;
+      };
+      get_super_admin_overview: { Args: Record<string, never>; Returns: Json };
+      get_super_admin_mentors: {
+        Args: {
+          p_search?: string | null;
+          p_status?: string | null;
+          p_limit?: number;
+          p_offset?: number;
+        };
+        Returns: Json;
+      };
+      get_super_admin_mentees: {
+        Args: { p_search?: string | null; p_limit?: number; p_offset?: number };
+        Returns: Json;
+      };
+      get_super_admin_admins: {
+        Args: { p_search?: string | null; p_limit?: number; p_offset?: number };
+        Returns: Json;
+      };
+      super_admin_approve_mentor: { Args: { p_user_id: string }; Returns: Json };
+      super_admin_set_mentor_status: {
+        Args: { p_user_id: string; p_status: string };
+        Returns: Json;
+      };
+      super_admin_set_admin: { Args: { p_user_id: string; p_is_admin: boolean }; Returns: Json };
+      super_admin_promote_admin_by_email: {
+        Args: { p_email: string; p_is_admin?: boolean };
+        Returns: Json;
+      };
+      super_admin_broadcast_to_mentors: {
+        Args: { p_subject: string; p_body: string; p_target_mentor_id?: string | null };
+        Returns: Json;
+      };
+      get_super_admin_opportunities_analytics: { Args: Record<string, never>; Returns: Json };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -75,6 +148,7 @@ export type Database = {
           is_admin: boolean;
           is_super_admin: boolean;
           avatar_url: string | null;
+          welcome_email_sent_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -91,6 +165,7 @@ export type Database = {
           onboarding_complete?: boolean;
           is_admin?: boolean;
           avatar_url?: string | null;
+          welcome_email_sent_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -107,6 +182,7 @@ export type Database = {
           onboarding_complete?: boolean;
           is_admin?: boolean;
           avatar_url?: string | null;
+          welcome_email_sent_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -157,6 +233,7 @@ export type Database = {
           funding_type: string | null;
           degree_levels: string[];
           location_type: string | null;
+          created_by: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -248,6 +325,10 @@ export type Database = {
           new_matches: boolean;
           deadline_reminders: boolean;
           saved_reminders: boolean;
+          mentorship_assignments: boolean;
+          waiting_list_updates: boolean;
+          session_reminders: boolean;
+          mentorship_messages: boolean;
           last_match_sync_at: string | null;
           updated_at: string;
         };
@@ -257,6 +338,10 @@ export type Database = {
           new_matches?: boolean;
           deadline_reminders?: boolean;
           saved_reminders?: boolean;
+          mentorship_assignments?: boolean;
+          waiting_list_updates?: boolean;
+          session_reminders?: boolean;
+          mentorship_messages?: boolean;
           last_match_sync_at?: string | null;
           updated_at?: string;
         };
@@ -266,6 +351,10 @@ export type Database = {
           new_matches?: boolean;
           deadline_reminders?: boolean;
           saved_reminders?: boolean;
+          mentorship_assignments?: boolean;
+          waiting_list_updates?: boolean;
+          session_reminders?: boolean;
+          mentorship_messages?: boolean;
           last_match_sync_at?: string | null;
           updated_at?: string;
         };
@@ -305,6 +394,8 @@ export type Database = {
           title: string;
           template_id: string;
           content: Json;
+          reminder_count: number;
+          last_reminder_sent_at: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -314,6 +405,8 @@ export type Database = {
           title?: string;
           template_id?: string;
           content?: Json;
+          reminder_count?: number;
+          last_reminder_sent_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -323,6 +416,8 @@ export type Database = {
           title?: string;
           template_id?: string;
           content?: Json;
+          reminder_count?: number;
+          last_reminder_sent_at?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -368,37 +463,73 @@ export type Database = {
         Row: {
           id: string;
           user_id: string;
-          type: 'new_match' | 'deadline_reminder' | 'saved_reminder';
+          type:
+            | 'new_match'
+            | 'deadline_reminder'
+            | 'saved_reminder'
+            | 'mentor_assigned'
+            | 'mentee_assigned'
+            | 'waiting_list_update'
+            | 'session_reminder'
+            | 'session_booked'
+            | 'mentorship_message'
+            | 'mentor_broadcast';
           title: string;
           body: string;
           opportunity_id: string | null;
+          metadata: Json;
           dedupe_key: string;
           read_at: string | null;
           push_sent_at: string | null;
+          email_sent_at: string | null;
           created_at: string;
         };
         Insert: {
           id?: string;
           user_id: string;
-          type: 'new_match' | 'deadline_reminder' | 'saved_reminder';
+          type:
+            | 'new_match'
+            | 'deadline_reminder'
+            | 'saved_reminder'
+            | 'mentor_assigned'
+            | 'mentee_assigned'
+            | 'waiting_list_update'
+            | 'session_reminder'
+            | 'session_booked'
+            | 'mentorship_message'
+            | 'mentor_broadcast';
           title: string;
           body: string;
           opportunity_id?: string | null;
+          metadata?: Json;
           dedupe_key: string;
           read_at?: string | null;
           push_sent_at?: string | null;
+          email_sent_at?: string | null;
           created_at?: string;
         };
         Update: {
           id?: string;
           user_id?: string;
-          type?: 'new_match' | 'deadline_reminder' | 'saved_reminder';
+          type?:
+            | 'new_match'
+            | 'deadline_reminder'
+            | 'saved_reminder'
+            | 'mentor_assigned'
+            | 'mentee_assigned'
+            | 'waiting_list_update'
+            | 'session_reminder'
+            | 'session_booked'
+            | 'mentorship_message'
+            | 'mentor_broadcast';
           title?: string;
           body?: string;
           opportunity_id?: string | null;
+          metadata?: Json;
           dedupe_key?: string;
           read_at?: string | null;
           push_sent_at?: string | null;
+          email_sent_at?: string | null;
           created_at?: string;
         };
         Relationships: [];
@@ -529,6 +660,27 @@ export type Database = {
         };
         Relationships: [];
       };
+      availability_slots: {
+        Row: {
+          id: string;
+          coach_id: string;
+          day_of_week: number;
+          start_time: string;
+          end_time: string;
+          timezone: string;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          coach_id: string;
+          day_of_week: number;
+          start_time: string;
+          end_time: string;
+          timezone?: string;
+        };
+        Update: Partial<Database['public']['Tables']['availability_slots']['Insert']>;
+        Relationships: [];
+      };
       mentor_availability_rules: {
         Row: {
           id: string;
@@ -550,6 +702,8 @@ export type Database = {
           id: string;
           mentorship_id: string;
           created_by: string;
+          student_id: string | null;
+          coach_id: string | null;
           scheduled_start: string;
           scheduled_end: string;
           timezone: string;
@@ -557,6 +711,8 @@ export type Database = {
           title: string | null;
           notes: string | null;
           meeting_url: string | null;
+          joined_at: string | null;
+          ended_at: string | null;
           cancelled_at: string | null;
           cancel_reason: string | null;
           created_at: string;

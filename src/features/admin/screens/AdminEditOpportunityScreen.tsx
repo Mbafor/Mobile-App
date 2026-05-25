@@ -7,13 +7,13 @@ import { colors } from '@/constants/theme';
 import { OpportunityForm } from '@/features/admin/components/OpportunityForm';
 import { useAdminOpportunity } from '@/features/admin/hooks/useAdminOpportunities';
 import { useUpdateOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
-import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
+import { useCanManageOpportunities } from '@/features/admin/hooks/useCanManageOpportunities';
 import { opportunityToFormValues } from '@/features/admin/types/opportunity-form';
 
 export function AdminEditOpportunityScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const opportunityId = typeof id === 'string' ? id : id?.[0];
-  const { isReady } = useRequireAdmin();
+  const { isReady } = useCanManageOpportunities();
   const { data: opportunity, isLoading, error } = useAdminOpportunity(opportunityId);
   const updateMutation = useUpdateOpportunityMutation(opportunityId ?? '');
 

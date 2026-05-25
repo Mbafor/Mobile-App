@@ -20,14 +20,14 @@ export default function AdminTabLayout() {
         headerRight: () => <NotificationHeaderButton />,
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Admin' }} />
-      <Stack.Screen
-        name="opportunities"
-        options={{ title: 'Opportunities', headerBackTitle: 'Admin' }}
-      />
+      <Stack.Screen name="index" options={{ title: 'Opportunities' }} />
       <Stack.Screen
         name="create"
         options={{ title: 'Create opportunity', headerBackTitle: 'Back' }}
+      />
+      <Stack.Screen
+        name="paste"
+        options={{ title: 'Paste opportunities', headerBackTitle: 'Back' }}
       />
       <Stack.Screen
         name="[id]/edit"

@@ -129,12 +129,29 @@ export type MentorAvailabilityRule = {
   isActive: boolean;
 };
 
-export type MentorshipSessionStatus = 'proposed' | 'confirmed' | 'completed' | 'cancelled';
+/** Granular weekly slot (maps to availability_slots.coach_id). */
+export type AvailabilitySlot = {
+  id: string;
+  coachId: string;
+  dayOfWeek: number;
+  startTime: string;
+  endTime: string;
+  timezone: string;
+};
+
+export type MentorshipSessionStatus =
+  | 'pending'
+  | 'proposed'
+  | 'confirmed'
+  | 'completed'
+  | 'cancelled';
 
 export type MentorshipSession = {
   id: string;
   mentorshipId: string;
   createdBy: string;
+  studentId: string | null;
+  coachId: string | null;
   scheduledStart: string;
   scheduledEnd: string;
   timezone: string;
@@ -142,6 +159,8 @@ export type MentorshipSession = {
   title: string | null;
   notes: string | null;
   meetingUrl: string | null;
+  joinedAt: string | null;
+  endedAt: string | null;
   cancelledAt: string | null;
   cancelReason: string | null;
 };

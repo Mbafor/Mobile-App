@@ -1,4 +1,5 @@
 import type {
+  AvailabilitySlot,
   MentorAvailabilityRule,
   MentorProfile,
   MentorshipMessage,
@@ -41,10 +42,21 @@ type AvailabilityRow = {
   is_active: boolean;
 };
 
+type AvailabilitySlotRow = {
+  id: string;
+  coach_id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  timezone: string;
+};
+
 type SessionRow = {
   id: string;
   mentorship_id: string;
   created_by: string;
+  student_id?: string | null;
+  coach_id?: string | null;
   scheduled_start: string;
   scheduled_end: string;
   timezone: string;
@@ -52,6 +64,8 @@ type SessionRow = {
   title: string | null;
   notes: string | null;
   meeting_url: string | null;
+  joined_at?: string | null;
+  ended_at?: string | null;
   cancelled_at: string | null;
   cancel_reason: string | null;
 };
@@ -95,6 +109,17 @@ export function mapParticipantProfileRow(row: ProfileRow): MentorshipParticipant
   };
 }
 
+export function mapAvailabilitySlotRow(row: AvailabilitySlotRow): AvailabilitySlot {
+  return {
+    id: row.id,
+    coachId: row.coach_id,
+    dayOfWeek: row.day_of_week,
+    startTime: row.start_time,
+    endTime: row.end_time,
+    timezone: row.timezone,
+  };
+}
+
 export function mapAvailabilityRow(row: AvailabilityRow): MentorAvailabilityRule {
   return {
     id: row.id,
@@ -112,6 +137,8 @@ export function mapSessionRow(row: SessionRow): MentorshipSession {
     id: row.id,
     mentorshipId: row.mentorship_id,
     createdBy: row.created_by,
+    studentId: row.student_id ?? null,
+    coachId: row.coach_id ?? null,
     scheduledStart: row.scheduled_start,
     scheduledEnd: row.scheduled_end,
     timezone: row.timezone,
@@ -119,6 +146,8 @@ export function mapSessionRow(row: SessionRow): MentorshipSession {
     title: row.title,
     notes: row.notes,
     meetingUrl: row.meeting_url,
+    joinedAt: row.joined_at ?? null,
+    endedAt: row.ended_at ?? null,
     cancelledAt: row.cancelled_at,
     cancelReason: row.cancel_reason,
   };

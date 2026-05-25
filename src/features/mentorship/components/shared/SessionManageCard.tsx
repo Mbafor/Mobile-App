@@ -6,6 +6,12 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
+import {
+  canJoinGoogleMeet,
+  canStudentCancelSession,
+  isPendingSessionStatus,
+  studentCancelBlockedMessage,
+} from '@/features/mentorship/utils/session-rules';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -32,15 +38,13 @@ export function SessionManageCard({
 
   const isActive =
     session.status !== 'cancelled' && session.status !== 'completed';
-  const canJoin =
-    Boolean(session.meetingUrl) &&
-    isActive &&
-    new Date(session.scheduledEnd).getTime() > Date.now();
+  const canJoin = role === 'mentee' && canJoinGoogleMeet(session);
   const awaitingLink =
     role === 'mentee' &&
     session.status === 'confirmed' &&
     !session.meetingUrl &&
     isActive;
+  const studentMayCancel = role === 'mentee' && canStudentCancelSession(session);
 
   const saveZoom = async () => {
     const url = zoomUrl.trim();
@@ -84,22 +88,29 @@ export function SessionManageCard({
       ) : null}
 
       <View style={styles.footer}>
-        <Text style={styles.status}>{session.status}</Text>
+        <Text style={styles.status}>
+          {isPendingSessionStatus(session.status) ? 'pending' : session.status}
+        </Text>
         <View style={styles.actions}>
           {canJoin ? (
             <Pressable
               style={styles.primaryBtn}
               onPress={() => void Linking.openURL(session.meetingUrl!)}
             >
-              <Text style={styles.primaryBtnText}>Join Zoom</Text>
+              <Text style={styles.primaryBtnText}>Join on Google Meet</Text>
             </Pressable>
           ) : null}
           {awaitingLink ? (
             <Text variant="caption" muted style={styles.waiting}>
-              Waiting for coach to share Zoom link
+              Waiting for coach to confirm and share Meet link
             </Text>
           ) : null}
-          {role === 'coach' && onConfirm && session.status === 'proposed' ? (
+          {role === 'mentee' && session.status === 'confirmed' && session.meetingUrl && !canJoin ? (
+            <Text variant="caption" muted style={styles.waiting}>
+              Join opens 15 minutes before the session
+            </Text>
+          ) : null}
+          {role === 'coach' && onConfirm && isPendingSessionStatus(session.status) ? (
             <Pressable onPress={() => onConfirm(session.id)}>
               <Text style={styles.confirm}>Confirm</Text>
             </Pressable>
@@ -111,10 +122,28 @@ export function SessionManageCard({
               </Text>
             </Pressable>
           ) : null}
-          {onCancel && isActive ? (
+          {role === 'mentee' && onCancel && isActive ? (
+            studentMayCancel ? (
+              <Pressable
+                onPress={() => {
+                  Alert.alert('Cancel session', 'Cancel this session?', [
+                    { text: 'No', style: 'cancel' },
+                    { text: 'Yes', style: 'destructive', onPress: () => onCancel(session.id) },
+                  ]);
+                }}
+              >
+                <Text style={styles.danger}>Cancel</Text>
+              </Pressable>
+            ) : (
+              <Text variant="caption" muted style={styles.waiting}>
+                {studentCancelBlockedMessage(session)}
+              </Text>
+            )
+          ) : null}
+          {role === 'coach' && onCancel && isActive ? (
             <Pressable
               onPress={() => {
-                Alert.alert('Cancel session', 'Cancel this session?', [
+                Alert.alert('Cancel session', 'Cancel this session? The student will be notified.', [
                   { text: 'No', style: 'cancel' },
                   { text: 'Yes', style: 'destructive', onPress: () => onCancel(session.id) },
                 ]);
@@ -129,7 +158,7 @@ export function SessionManageCard({
       <Modal visible={zoomOpen} transparent animationType="slide" onRequestClose={() => setZoomOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setZoomOpen(false)}>
           <Pressable style={styles.modalCard} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Zoom / meeting link</Text>
+            <Text style={styles.modalTitle}>Google Meet / meeting link</Text>
             <Text muted variant="caption">
               Share this with your mentee before the session starts.
             </Text>

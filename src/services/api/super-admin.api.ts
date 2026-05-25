@@ -54,7 +54,7 @@ export type SuperAdminAdminRow = {
   is_admin: boolean;
   is_super_admin: boolean;
   created_at: string;
-  audit_actions: number;
+  opportunities_posted: number;
 };
 
 export type Paginated<T> = { items: T[]; total: number };
@@ -183,6 +183,22 @@ export const superAdminApi = {
     const { data, error } = await supabase.rpc('super_admin_promote_admin_by_email', {
       p_email: email,
       p_is_admin: isAdmin,
+    });
+    if (error) return fail(error);
+    return { success: true as const, data };
+  },
+
+  createMentorByEmail: async (email: string) => {
+    const { data, error } = await supabase.rpc('super_admin_create_mentor_by_email', {
+      p_email: email,
+    });
+    if (error) return fail(error);
+    return { success: true as const, data };
+  },
+
+  deleteMentor: async (userId: string) => {
+    const { data, error } = await supabase.rpc('super_admin_delete_mentor', {
+      p_user_id: userId,
     });
     if (error) return fail(error);
     return { success: true as const, data };

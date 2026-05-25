@@ -42,15 +42,21 @@ export const ROUTES = {
   },
   SUPER_ADMIN: {
     HOME: '/(main)/(tabs)/super-admin',
+    ANALYTICS: '/(main)/(tabs)/super-admin/analytics',
     MENTORS: '/(main)/(tabs)/super-admin/mentors',
     MENTEES: '/(main)/(tabs)/super-admin/mentees',
     ADMINS: '/(main)/(tabs)/super-admin/admins',
     OPPORTUNITIES: '/(main)/(tabs)/super-admin/opportunities',
+    OPPORTUNITY_CREATE: '/(main)/(tabs)/super-admin/opportunities/create',
+    OPPORTUNITY_PASTE: '/(main)/(tabs)/super-admin/opportunities/paste',
+    opportunityEdit: (id: string) =>
+      `/(main)/(tabs)/super-admin/opportunities/${id}/edit` as const,
   },
   ADMIN: {
     HOME: '/(main)/(tabs)/admin',
-    OPPORTUNITIES: '/(main)/(tabs)/admin/opportunities',
+    OPPORTUNITIES: '/(main)/(tabs)/admin',
     CREATE: '/(main)/(tabs)/admin/create',
+    PASTE: '/(main)/(tabs)/admin/paste',
     edit: (id: string) => `/(main)/(tabs)/admin/${id}/edit` as const,
   },
 } as const;

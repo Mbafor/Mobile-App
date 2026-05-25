@@ -12,4 +12,5 @@ export type Profile = {
   isAdmin: boolean;
   isSuperAdmin: boolean;
   avatarUrl: string | null;
+  welcomeEmailSentAt: string | null;
 };

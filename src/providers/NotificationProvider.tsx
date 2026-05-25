@@ -8,11 +8,13 @@ import { AppState, type AppStateStatus } from 'react-native';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { queryKeys } from '@/constants/query-keys';
 import { useNotificationPreferences } from '@/features/notifications/hooks/useNotificationPreferences';
+import { useNotificationsRealtime } from '@/features/notifications/hooks/useNotificationsRealtime';
 import {
   configureNotificationHandler,
   registerExpoPushToken,
 } from '@/features/notifications/services/push-registration';
 import { runNotificationSync } from '@/features/notifications/services/notification-sync';
+import { navigateFromPushData } from '@/features/notifications/utils/notification-navigation';
 import { notificationsApi } from '@/services/api';
 
 configureNotificationHandler();
@@ -23,6 +25,8 @@ export function NotificationProvider({ children }: PropsWithChildren) {
   const queryClient = useQueryClient();
   const { preferences } = useNotificationPreferences();
   const syncingRef = useRef(false);
+
+  useNotificationsRealtime(userId);
 
   useEffect(() => {
     if (!userId || !preferences?.pushEnabled) return;
@@ -55,31 +59,33 @@ export function NotificationProvider({ children }: PropsWithChildren) {
 
     const sub = AppState.addEventListener('change', onAppState);
     return () => sub.remove();
-  }, [userId, preferences?.newMatches, preferences?.deadlineReminders, preferences?.savedReminders]);
+  }, [
+    userId,
+    queryClient,
+    preferences?.newMatches,
+    preferences?.deadlineReminders,
+    preferences?.savedReminders,
+  ]);
 
   useEffect(() => {
     const sub = Notifications.addNotificationResponseReceivedListener(async (response) => {
-      const data = response.notification.request.content.data as {
-        notificationId?: string;
-        opportunityId?: string;
-      };
+      const data = response.notification.request.content.data as Record<string, unknown>;
 
-      if (userId && data.notificationId) {
-        await notificationsApi.markRead(userId, data.notificationId);
-      }
+      const notificationId =
+        typeof data.notificationId === 'string' ? data.notificationId : undefined;
 
-      if (data.opportunityId) {
-        router.push({
-          pathname: '/(main)/opportunity/[id]',
-          params: { id: data.opportunityId },
+      if (userId && notificationId) {
+        await notificationsApi.markRead(userId, notificationId);
+        void queryClient.invalidateQueries({
+          queryKey: queryKeys.notifications.unreadCount(userId),
         });
-      } else {
-        router.push('/(main)/(tabs)/notifications');
       }
+
+      navigateFromPushData(router, data);
     });
 
     return () => sub.remove();
-  }, [userId]);
+  }, [userId, queryClient]);
 
   return children;
 }

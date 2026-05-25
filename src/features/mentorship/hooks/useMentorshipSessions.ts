@@ -1,9 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useEffect } from 'react';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { isSessionUpcoming } from '@/features/mentorship/utils/format-session';
-import { mentorshipDataApi } from '@/services/api';
+import { mentorshipDataApi, mentorshipSchedulingApi } from '@/services/api';
 import type { MentorshipSession, MentorshipSessionStatus } from '@/types/domain/mentorship';
 
 export function useMentorshipSessions(userId: string | undefined) {
@@ -20,6 +21,10 @@ export function useMentorshipSessions(userId: string | undefined) {
     enabled: Boolean(userId),
     refetchInterval: 60_000,
   });
+
+  useEffect(() => {
+    if (userId) void mentorshipSchedulingApi.completePastSessions();
+  }, [userId]);
 
   const sessions = sessionsQuery.data ?? [];
   const upcoming = sessions.filter(isSessionUpcoming);
@@ -48,9 +53,17 @@ export function useSessionMutations(userId: string | undefined) {
   const queryClient = useQueryClient();
 
   const bookMutation = useMutation({
-    mutationFn: mentorshipDataApi.bookSession,
-    onSuccess: () => {
+    mutationFn: mentorshipSchedulingApi.bookSession,
+    onSuccess: (result) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId ?? '') });
+      if (result.success && result.data.coachId) {
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.mentorship.sessions(result.data.coachId),
+        });
+        queryClient.invalidateQueries({
+          queryKey: queryKeys.mentorship.availabilitySlots(result.data.coachId),
+        });
+      }
     },
   });
 
@@ -67,7 +80,7 @@ export function useSessionMutations(userId: string | undefined) {
     },
   });
 
-  const book = async (input: Parameters<typeof mentorshipDataApi.bookSession>[0]) => {
+  const book = async (input: Parameters<typeof mentorshipSchedulingApi.bookSession>[0]) => {
     const result = await bookMutation.mutateAsync(input);
     if (!result.success) throw new Error(result.error.message);
     return result.data;
@@ -82,7 +95,33 @@ export function useSessionMutations(userId: string | undefined) {
     return result.data;
   };
 
-  return { book, update, isBooking: bookMutation.isPending, isUpdating: updateMutation.isPending };
+  const cancelMutation = useMutation({
+    mutationFn: ({
+      sessionId,
+      reason,
+    }: {
+      sessionId: string;
+      reason?: string;
+    }) => mentorshipSchedulingApi.cancelSession(sessionId, reason),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId ?? '') });
+    },
+  });
+
+  const cancel = async (sessionId: string, reason?: string) => {
+    const result = await cancelMutation.mutateAsync({ sessionId, reason });
+    if (!result.success) throw new Error(result.error.message);
+    return result.data;
+  };
+
+  return {
+    book,
+    update,
+    cancel,
+    isBooking: bookMutation.isPending,
+    isUpdating: updateMutation.isPending,
+    isCancelling: cancelMutation.isPending,
+  };
 }
 
 export function filterSessionsForMentorship(

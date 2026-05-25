@@ -1,6 +1,10 @@
 import { mapNotificationPreferencesRow } from '@/services/api/mappers/notification.mapper';
 import { supabase } from '@/services/supabase/client';
+import type { Database } from '@/services/supabase/types';
 import type { NotificationPreferences } from '@/types/domain/notification';
+
+type NotificationPreferencesUpdate =
+  Database['public']['Tables']['notification_preferences']['Update'];
 
 type PreferencePatch = Partial<
   Pick<
@@ -43,7 +47,7 @@ export const notificationPreferencesApi = {
   update: async (userId: string, patch: PreferencePatch) => {
     await notificationPreferencesApi.ensure(userId);
 
-    const row: Record<string, boolean> = {};
+    const row: NotificationPreferencesUpdate = {};
     if (patch.pushEnabled !== undefined) row.push_enabled = patch.pushEnabled;
     if (patch.newMatches !== undefined) row.new_matches = patch.newMatches;
     if (patch.deadlineReminders !== undefined) row.deadline_reminders = patch.deadlineReminders;
