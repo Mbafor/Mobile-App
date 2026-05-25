@@ -37,9 +37,9 @@ const styles = StyleSheet.create({
     marginTop: spacing.md,
     padding: spacing.md,
     borderRadius: 12,
-    backgroundColor: '#E8F0EB',
+    backgroundColor: '#F0F4F8',
     borderWidth: 1,
-    borderColor: '#C5D9CC',
+    borderColor: '#DADCE0',
   },
   iconWrap: {
     width: 40,

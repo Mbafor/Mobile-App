@@ -20,6 +20,42 @@ export type Database = {
         Args: Record<string, never>;
         Returns: boolean;
       };
+      current_user_is_approved_mentor: {
+        Args: Record<string, never>;
+        Returns: boolean;
+      };
+      mentor_active_mentee_count: {
+        Args: { p_mentor_id: string };
+        Returns: number;
+      };
+      mentorship_match_score: {
+        Args: { p_student_id: string; p_mentor_id: string };
+        Returns: number;
+      };
+      request_mentorship_coach: {
+        Args: { p_requested_mentor_id?: string | null };
+        Returns: Json;
+      };
+      cancel_mentorship_request: {
+        Args: { p_request_id?: string | null };
+        Returns: Json;
+      };
+      end_mentorship: {
+        Args: {
+          p_mentorship_id: string;
+          p_status: string;
+          p_reason?: string | null;
+        };
+        Returns: Json;
+      };
+      run_mentorship_maintenance: {
+        Args: Record<string, never>;
+        Returns: Json;
+      };
+      expire_due_mentorships: {
+        Args: Record<string, never>;
+        Returns: number;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -37,6 +73,7 @@ export type Database = {
           career_interests: string[];
           onboarding_complete: boolean;
           is_admin: boolean;
+          is_super_admin: boolean;
           avatar_url: string | null;
           created_at: string;
           updated_at: string;
@@ -164,16 +201,25 @@ export type Database = {
           user_id: string;
           opportunity_id: string;
           created_at: string;
+          stage: string;
+          notes: string | null;
+          updated_at: string;
         };
         Insert: {
           user_id: string;
           opportunity_id: string;
           created_at?: string;
+          stage?: string;
+          notes?: string | null;
+          updated_at?: string;
         };
         Update: {
           user_id?: string;
           opportunity_id?: string;
           created_at?: string;
+          stage?: string;
+          notes?: string | null;
+          updated_at?: string;
         };
         Relationships: [];
       };
@@ -357,11 +403,230 @@ export type Database = {
         };
         Relationships: [];
       };
+      mentor_profiles: {
+        Row: {
+          user_id: string;
+          status: string;
+          bio: string | null;
+          mentoring_majors: string[];
+          mentoring_interests: string[];
+          mentoring_career_areas: string[];
+          mentoring_degree_levels: string[];
+          max_students: number;
+          is_accepting_students: boolean;
+          applied_at: string;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          rejection_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          user_id: string;
+          status?: string;
+          bio?: string | null;
+          mentoring_majors?: string[];
+          mentoring_interests?: string[];
+          mentoring_career_areas?: string[];
+          mentoring_degree_levels?: string[];
+          max_students?: number;
+          is_accepting_students?: boolean;
+          applied_at?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          rejection_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          user_id?: string;
+          status?: string;
+          bio?: string | null;
+          mentoring_majors?: string[];
+          mentoring_interests?: string[];
+          mentoring_career_areas?: string[];
+          mentoring_degree_levels?: string[];
+          max_students?: number;
+          is_accepting_students?: boolean;
+          applied_at?: string;
+          reviewed_at?: string | null;
+          reviewed_by?: string | null;
+          rejection_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      mentorship_requests: {
+        Row: {
+          id: string;
+          student_id: string;
+          status: string;
+          requested_mentor_id: string | null;
+          match_snapshot: Json;
+          match_score: number | null;
+          matched_mentor_id: string | null;
+          matched_at: string | null;
+          mentorship_id: string | null;
+          cancelled_at: string | null;
+          cancel_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          student_id: string;
+          status?: string;
+          requested_mentor_id?: string | null;
+          match_snapshot?: Json;
+          match_score?: number | null;
+          matched_mentor_id?: string | null;
+          matched_at?: string | null;
+          mentorship_id?: string | null;
+          cancelled_at?: string | null;
+          cancel_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          student_id?: string;
+          status?: string;
+          requested_mentor_id?: string | null;
+          match_snapshot?: Json;
+          match_score?: number | null;
+          matched_mentor_id?: string | null;
+          matched_at?: string | null;
+          mentorship_id?: string | null;
+          cancelled_at?: string | null;
+          cancel_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      mentorship_waiting_list: {
+        Row: {
+          id: string;
+          request_id: string;
+          student_id: string;
+          entered_at: string;
+          priority: number;
+        };
+        Insert: {
+          id?: string;
+          request_id: string;
+          student_id: string;
+          entered_at?: string;
+          priority?: number;
+        };
+        Update: {
+          id?: string;
+          request_id?: string;
+          student_id?: string;
+          entered_at?: string;
+          priority?: number;
+        };
+        Relationships: [];
+      };
+      mentor_availability_rules: {
+        Row: {
+          id: string;
+          mentor_id: string;
+          day_of_week: number;
+          start_time: string;
+          end_time: string;
+          timezone: string;
+          is_active: boolean;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      mentorship_sessions: {
+        Row: {
+          id: string;
+          mentorship_id: string;
+          created_by: string;
+          scheduled_start: string;
+          scheduled_end: string;
+          timezone: string;
+          status: string;
+          title: string | null;
+          notes: string | null;
+          meeting_url: string | null;
+          cancelled_at: string | null;
+          cancel_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      mentorship_messages: {
+        Row: {
+          id: string;
+          mentorship_id: string;
+          sender_id: string;
+          body: string;
+          created_at: string;
+        };
+        Insert: Record<string, unknown>;
+        Update: Record<string, unknown>;
+        Relationships: [];
+      };
+      mentorships: {
+        Row: {
+          id: string;
+          mentor_id: string;
+          student_id: string;
+          request_id: string | null;
+          status: string;
+          started_at: string;
+          ends_at: string;
+          ended_at: string | null;
+          end_reason: string | null;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          mentor_id: string;
+          student_id: string;
+          request_id?: string | null;
+          status?: string;
+          started_at?: string;
+          ends_at?: string;
+          ended_at?: string | null;
+          end_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          mentor_id?: string;
+          student_id?: string;
+          request_id?: string | null;
+          status?: string;
+          started_at?: string;
+          ends_at?: string;
+          ended_at?: string | null;
+          end_reason?: string | null;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
     };
   };
 };
 
 export type ProfileRow = Database['public']['Tables']['profiles']['Row'];
+export type MentorshipRow = Database['public']['Tables']['mentorships']['Row'];
+export type MentorshipRequestRow = Database['public']['Tables']['mentorship_requests']['Row'];
 export type UserPreferencesRow = Database['public']['Tables']['user_preferences']['Row'];
 export type OpportunityRow = Database['public']['Tables']['opportunities']['Row'];
 export type NotificationPreferencesRow =

@@ -65,11 +65,27 @@ export async function createSessionFromUrl(url: string): Promise<Session | null>
 
 /** Parse callback URL, persist session, and hydrate the auth store. */
 export async function completeOAuthFromUrl(url: string): Promise<Session | null> {
-  const session = await createSessionFromUrl(url);
-  if (session) {
-    await applyAuthSession(session);
+  // Web: Supabase may already exchange the PKCE code via detectSessionInUrl before this runs.
+  const { data: existingData } = await authApi.getSession();
+  if (existingData.session) {
+    await applyAuthSession(existingData.session);
+    return existingData.session;
   }
-  return session;
+
+  try {
+    const session = await createSessionFromUrl(url);
+    if (session) {
+      await applyAuthSession(session);
+    }
+    return session;
+  } catch (e) {
+    const { data: retryData } = await authApi.getSession();
+    if (retryData.session) {
+      await applyAuthSession(retryData.session);
+      return retryData.session;
+    }
+    throw e;
+  }
 }
 
 export async function signInWithOAuthProvider(provider: OAuthProvider): Promise<Session | null> {

@@ -1,19 +1,11 @@
 import { useMemo, useState } from 'react';
-import { useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
-import { Ionicons } from '@expo/vector-icons';
-import {
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-  TextInput,
-} from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 import { Accordion, Text } from '@/components/ui';
+import { InfoDocumentLayout } from '@/features/menu/components/InfoDocumentLayout';
 import { SUPPORT_EMAIL } from '@/constants/app';
-import { colors, spacing, typography } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 
 const FAQ = [
   {
@@ -25,26 +17,27 @@ const FAQ = [
     a: 'Open an opportunity and tap Apply Now to visit the official application link. Olives Forum lists opportunities for discovery — applications are handled by the host organization.',
   },
   {
+    q: 'How do I share an opportunity?',
+    a: 'Tap Share on a card or opportunity page. We attach the listing image (when available), plus title, organisation, deadline, and one link to open the opportunity in Olives Forum. Recipients need an account to view details.',
+  },
+  {
     q: 'How do I turn off notifications?',
-    a: 'Go to Settings → Notification preferences and toggle off push or specific alert types.',
+    a: 'Open Settings → Notifications and toggle off push or specific alert types.',
   },
   {
     q: 'How do I delete my account?',
-    a: `Open Settings → Privacy and use Delete account. You can also email ${SUPPORT_EMAIL}.`,
+    a: `Open Settings → Privacy for data guidance, or email ${SUPPORT_EMAIL} to request deletion.`,
   },
 ] as const;
 
 export function HelpFaqScreen() {
-  const router = useRouter();
-  const insets = useSafeAreaInsets();
-
   const [search, setSearch] = useState('');
 
   const filteredFaq = useMemo(() => {
     if (!search.trim()) return FAQ;
-
-    return FAQ.filter((item) =>
-      item.q.toLowerCase().includes(search.toLowerCase())
+    const q = search.toLowerCase();
+    return FAQ.filter(
+      (item) => item.q.toLowerCase().includes(q) || item.a.toLowerCase().includes(q),
     );
   }, [search]);
 
@@ -52,189 +45,68 @@ export function HelpFaqScreen() {
     try {
       await Linking.openURL(`mailto:${SUPPORT_EMAIL}`);
     } catch {
-      console.log('Unable to open email');
+      // no-op
     }
   };
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => router.back()}
-          style={styles.backBtn}
-          hitSlop={12}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Go back to dashboard"
-        >
-          <Ionicons
-            name="arrow-back"
-            size={18}
-            color={colors.text}
+    <InfoDocumentLayout
+      intro="Tap a numbered question to expand the answer."
+      banner={
+        <View style={styles.searchWrap}>
+          <TextInput
+            value={search}
+            onChangeText={setSearch}
+            placeholder="Search FAQ…"
+            placeholderTextColor={colors.textMuted}
+            style={styles.search}
           />
-        </Pressable>
-
-        <View style={styles.headerText}>
-          <Text style={styles.title}>
-            Tap a question to reveal the answer
-          </Text>
         </View>
-      </View>
-
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={[
-          styles.scroll,
-          {
-            paddingBottom:
-              insets.bottom + spacing.xl * 2,
-          },
-        ]}
-      >
-        {/* Search */}
-        <TextInput
-          value={search}
-          onChangeText={setSearch}
-          placeholder="Search FAQ..."
-          placeholderTextColor={colors.textMuted}
-          style={styles.search}
-        />
-
-    
-
-        {/* FAQ */}
-        <View style={styles.section}>
-          {filteredFaq.length > 0 ? (
-            filteredFaq.map((item) => (
-              <Accordion
-                key={item.q}
-                title={item.q}
-                defaultOpen={false}
-              >
-                <Text style={styles.answer}>
-                  {item.a}
+      }
+    >
+      {filteredFaq.length > 0 ? (
+        filteredFaq.map((item, idx) => {
+          const originalIndex = FAQ.findIndex((f) => f.q === item.q) + 1;
+          return (
+            <Accordion key={item.q} index={originalIndex} title={item.q} defaultOpen={idx === 0}>
+              <Text style={styles.answer}>{item.a}</Text>
+              {item.q.includes('delete') ? (
+                <Text style={styles.link} onPress={() => void openEmail()}>
+                  Email {SUPPORT_EMAIL}
                 </Text>
-              </Accordion>
-            ))
-          ) : (
-            <Text style={styles.empty}>
-              No results found
-            </Text>
-          )}
-        </View>
-      </ScrollView>
-    </View>
+              ) : null}
+            </Accordion>
+          );
+        })
+      ) : (
+        <Text style={styles.empty} muted>
+          No results found
+        </Text>
+      )}
+    </InfoDocumentLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  root: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-
-  backBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-
-  headerText: {
-    flex: 1,
-  },
-
-  title: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: '600',
-    color: colors.text,
-  },
-
-  subtitle: {
-    marginTop: 2,
-    fontSize: typography.fontSize.sm,
-    color: colors.textMuted,
-  },
-
-  scroll: {
-    padding: spacing.md,
-    gap: spacing.md,
-  },
-
+  searchWrap: { marginBottom: spacing.xs },
   search: {
     height: 48,
-    borderRadius: 14,
+    borderRadius: 12,
     paddingHorizontal: spacing.md,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
     color: colors.text,
   },
-
-  banner: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: 14,
-    backgroundColor: '#E8F5EE',
-    borderWidth: 1,
-    borderColor: '#D7EBDD',
-  },
-
-  bannerIcon: {
-    width: 38,
-    height: 38,
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#C8E6D4',
-  },
-
-  bannerText: {
-    flex: 1,
-  },
-
-  bannerTitle: {
-    fontWeight: '600',
-    color: '#1A3D25',
-  },
-
-  bannerSub: {
-    marginTop: 2,
-    color: '#2D6040',
-    fontSize: typography.fontSize.sm,
-  },
-
-  section: {
-    gap: spacing.md,
-  },
-
   answer: {
-    fontSize: typography.fontSize.sm,
+    fontSize: 14,
     color: colors.textMuted,
     lineHeight: 22,
-    marginTop: spacing.xs,
   },
-
-  empty: {
-    textAlign: 'center',
-    color: colors.textMuted,
-    marginTop: spacing.lg,
+  link: {
+    marginTop: spacing.sm,
+    color: colors.primary,
+    fontWeight: '600',
   },
+  empty: { textAlign: 'center', marginTop: spacing.lg },
 });

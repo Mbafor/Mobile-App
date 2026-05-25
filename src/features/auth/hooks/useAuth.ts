@@ -23,5 +23,6 @@ export function useAuth() {
     isAuthReady,
     onboardingComplete: profile?.onboardingComplete ?? false,
     isAdmin: profile?.isAdmin ?? false,
+    isSuperAdmin: profile?.isSuperAdmin ?? false,
   };
 }

@@ -18,7 +18,6 @@ import { AuthScreenLayout } from '@/features/auth/components';
 import { OtpInput } from '@/features/auth/components';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
-import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
 
@@ -104,6 +103,24 @@ export function VerifyOtpScreen() {
   useEffect(() => {
     if (!email) router.replace(ROUTES.AUTH.EMAIL as Href);
   }, [email, router]);
+
+  // Already signed in (e.g. back navigation) — skip verify screen unless mid-verification.
+  useEffect(() => {
+    if (!isAuthReady || verified || isLoading) return;
+    if (isAuthenticated && !isProfileLoading) {
+      router.replace(
+        (onboardingComplete ? ROUTES.MAIN.DASHBOARD : ROUTES.ONBOARDING.BASIC_INFO) as Href,
+      );
+    }
+  }, [
+    isAuthReady,
+    isAuthenticated,
+    isLoading,
+    isProfileLoading,
+    onboardingComplete,
+    router,
+    verified,
+  ]);
 
   useEffect(() => {
     if (!verified || !isAuthReady || !isAuthenticated || isProfileLoading) return;

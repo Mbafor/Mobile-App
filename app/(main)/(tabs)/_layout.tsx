@@ -22,7 +22,7 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 }
 
 export default function MainTabsLayout() {
-  const { isAdmin } = useAuth();
+  const { isAdmin, isSuperAdmin } = useAuth();
   const refreshProfile = useRefreshProfile();
   const insets = useSafeAreaInsets();
 
@@ -37,7 +37,7 @@ export default function MainTabsLayout() {
 
   return (
       <Tabs
-      key={isAdmin ? 'tabs-admin' : 'tabs-user'}
+      key={`tabs-${isSuperAdmin ? 'sa' : ''}${isAdmin ? 'admin' : ''}`}
       screenOptions={{
         headerShown: true,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
@@ -79,10 +79,19 @@ export default function MainTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="saved"
+        name="tracker"
         options={{
-          title: 'Saved',
-          tabBarIcon: tabBarIcon('bookmark-outline', 'bookmark'),
+          title: 'Tracker',
+          headerTitle: 'My Tracker',
+          tabBarIcon: tabBarIcon('clipboard-outline', 'clipboard'),
+        }}
+      />
+      <Tabs.Screen
+        name="mentorship"
+        options={{
+          title: 'Mentorship',
+          headerTitle: 'Mentorship',
+          tabBarIcon: tabBarIcon('people-outline', 'people'),
         }}
       />
       <Tabs.Screen
@@ -107,6 +116,15 @@ export default function MainTabsLayout() {
           href: isAdmin ? undefined : null,
           headerShown: false,
           tabBarIcon: tabBarIcon('shield-outline', 'shield'),
+        }}
+      />
+      <Tabs.Screen
+        name="super-admin"
+        options={{
+          title: 'Super Admin',
+          href: isSuperAdmin ? undefined : null,
+          headerShown: false,
+          tabBarIcon: tabBarIcon('planet-outline', 'planet'),
         }}
       />
     </Tabs>

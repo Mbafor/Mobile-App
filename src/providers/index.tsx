@@ -1,4 +1,6 @@
 import type { PropsWithChildren } from 'react';
+import { StyleSheet } from 'react-native';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { AuthProvider } from '@/providers/AuthProvider';
@@ -11,12 +13,18 @@ import { QueryProvider } from '@/store/query-provider';
  */
 export function AppProviders({ children }: PropsWithChildren) {
   return (
-    <SafeAreaProvider>
-      <QueryProvider>
-        <AuthProvider>
-          <NotificationProvider>{children}</NotificationProvider>
-        </AuthProvider>
-      </QueryProvider>
-    </SafeAreaProvider>
+    <GestureHandlerRootView style={styles.root}>
+      <SafeAreaProvider>
+        <QueryProvider>
+          <AuthProvider>
+            <NotificationProvider>{children}</NotificationProvider>
+          </AuthProvider>
+        </QueryProvider>
+      </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }
+
+const styles = StyleSheet.create({
+  root: { flex: 1 },
+});

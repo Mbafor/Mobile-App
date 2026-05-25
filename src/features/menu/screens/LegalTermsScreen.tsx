@@ -1,12 +1,10 @@
-import { useRouter, type Href } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Accordion, Text } from '@/components/ui';
-import { Screen as LayoutScreen } from '@/components/layout';
+import { InfoDocumentLayout } from '@/features/menu/components/InfoDocumentLayout';
 import { SUPPORT_EMAIL } from '@/constants/app';
-import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { colors, spacing, typography } from '@/constants/theme';
 
 const SECTIONS = [
   {
@@ -32,64 +30,50 @@ const SECTIONS = [
 ] as const;
 
 export function LegalTermsScreen() {
-  const router = useRouter();
-
   return (
-    <LayoutScreen padded={false}>
-      <ScrollView contentContainerStyle={styles.scroll}>
-        <View style={styles.header}>
-          <Pressable
-            onPress={() => router.push(ROUTES.MAIN.DASHBOARD as Href)}
-            style={styles.backBtn}
-            hitSlop={12}
-            accessible={true}
-            accessibilityRole="button"
-            accessibilityLabel="Go back to dashboard"
-          >
-            <Ionicons name="arrow-back" size={20} color={colors.text} />
-          </Pressable>
-          <View style={styles.headerContent}>
-            <Text variant="title">Read the rules and responsibilities for using Olives Forum</Text>
-        
-          </View>
+    <InfoDocumentLayout
+      intro="Rules and responsibilities for using Olives Forum."
+      banner={
+        <View style={styles.banner}>
+          <Ionicons name="document-text-outline" size={18} color={colors.primary} />
+          <Text style={styles.bannerText}>Last updated: May 2026</Text>
         </View>
-
-        <Text muted style={styles.updated}>
-          Last updated: May 2026
-        </Text>
-
-        <View style={styles.section}>
-          {SECTIONS.map((section, index) => (
-            <Accordion key={`${section.title}-${index}`} title={section.title} defaultOpen={index === 0}>
-              <Text style={styles.body}>{section.body}</Text>
-            </Accordion>
-          ))}
-        </View>
-      </ScrollView>
-    </LayoutScreen>
+      }
+    >
+      {SECTIONS.map((section, index) => (
+        <Accordion
+          key={section.title}
+          index={index + 1}
+          title={section.title}
+          defaultOpen={index === 0}
+        >
+          <Text style={styles.body}>{section.body}</Text>
+        </Accordion>
+      ))}
+    </InfoDocumentLayout>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
-  header: {
+  banner: {
     flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: spacing.md,
-  },
-  backBtn: {
-    width: 42,
-    height: 42,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
     alignItems: 'center',
-    justifyContent: 'center',
+    gap: spacing.sm,
+    backgroundColor: '#E8F5EE',
+    borderRadius: 12,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderWidth: 1,
+    borderColor: '#D7EBDD',
   },
-  headerContent: { flex: 1, gap: spacing.xs },
-  subtitle: { marginTop: spacing.xs, color: colors.textMuted },
-  updated: { marginBottom: spacing.sm, color: colors.textMuted },
-  section: { gap: spacing.sm },
-  body: { lineHeight: 22, color: colors.text },
+  bannerText: {
+    fontSize: typography.fontSize.sm,
+    color: colors.primary,
+    fontWeight: '600',
+  },
+  body: {
+    lineHeight: 22,
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
+  },
 });

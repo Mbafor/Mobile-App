@@ -1,10 +1,17 @@
+import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Drawer } from 'expo-router/drawer';
 
 import { AppDrawerContent } from '@/features/menu/components/AppDrawerContent';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { colors } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 
 const hiddenDrawerItem = { drawerItemStyle: { display: 'none' as const }, headerShown: true };
+
+const drawerMenuHeader = {
+  headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
+  headerTintColor: colors.text,
+  headerRightContainerStyle: { paddingRight: spacing.xs },
+};
 
 export default function MainLayout() {
   useAuthRedirect('authenticated');
@@ -28,15 +35,27 @@ export default function MainLayout() {
       />
       <Drawer.Screen name="browse-categories" options={{ title: 'Browse by Category' }} />
       <Drawer.Screen name="category/[category]" options={{ title: 'Category' }} />
-      <Drawer.Screen name="help" options={{ title: 'Help & FAQ' }} />
-      <Drawer.Screen name="legal/privacy" options={{ title: 'Privacy Policy' }} />
-      <Drawer.Screen name="legal/terms" options={{ title: 'Terms of Service' }} />
+      <Drawer.Screen
+        name="help"
+        options={{ title: 'Help & FAQ', ...drawerMenuHeader }}
+      />
+      <Drawer.Screen
+        name="legal/privacy"
+        options={{ title: 'Privacy Policy', ...drawerMenuHeader }}
+      />
+      <Drawer.Screen
+        name="legal/terms"
+        options={{ title: 'Terms of Service', ...drawerMenuHeader }}
+      />
       <Drawer.Screen name="refer" options={{ title: 'Refer a Friend' }} />
       <Drawer.Screen
         name="opportunity/[id]"
         options={{ ...hiddenDrawerItem, title: 'Opportunity' }}
       />
-      <Drawer.Screen name="settings" options={{ ...hiddenDrawerItem, title: 'Settings' }} />
+      <Drawer.Screen
+        name="settings"
+        options={{ ...hiddenDrawerItem, title: 'Settings', headerShown: false }}
+      />
       <Drawer.Screen name="profile" options={{ ...hiddenDrawerItem, title: 'Profile' }} />
     </Drawer>
   );

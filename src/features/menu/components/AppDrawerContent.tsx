@@ -25,7 +25,7 @@ type DrawerItem = {
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const router = useRouter();
-  const { profile, user, userEmail, isAdmin } = useAuth();
+  const { profile, user, userEmail, isAdmin, isSuperAdmin } = useAuth();
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const avatarUrl = profile?.avatarUrl ?? getOAuthAvatarUrl(oauthMeta);
   const displayName = profile?.displayName ?? getOAuthDisplayName(oauthMeta);
@@ -33,6 +33,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
 
   const items: DrawerItem[] = [
     { label: 'Home', route: ROUTES.MAIN.DASHBOARD as Href },
+    { label: 'Mentorship', route: ROUTES.MAIN.MENTORSHIP as Href },
     { label: 'Settings', route: ROUTES.MAIN.SETTINGS as Href },
     { label: 'Browse by Category', route: ROUTES.MAIN.DRAWER.BROWSE as Href },
     { label: 'Help & FAQ', route: ROUTES.MAIN.DRAWER.HELP as Href },
@@ -41,6 +42,9 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
     { label: 'Refer a Friend', route: ROUTES.MAIN.DRAWER.REFER as Href },
   ];
 
+  if (isSuperAdmin) {
+    items.unshift({ label: 'Super Admin', route: ROUTES.SUPER_ADMIN.HOME as Href });
+  }
   if (isAdmin) {
     items.unshift({ label: 'Admin Dashboard', route: ROUTES.ADMIN.HOME as Href });
   }
@@ -51,7 +55,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   };
 
   const openProfile = () => {
-    navigate(ROUTES.MAIN.SETTINGS_PROFILE as Href);
+    navigate(ROUTES.MAIN.SETTINGS as Href);
   };
 
   const handleLogout = async () => {

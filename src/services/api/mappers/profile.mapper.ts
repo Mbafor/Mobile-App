@@ -20,6 +20,7 @@ export function mapProfileRow(row: ProfileRow): Profile {
     careerInterests: row.career_interests ?? [],
     onboardingComplete: row.onboarding_complete,
     isAdmin: row.is_admin ?? false,
+    isSuperAdmin: row.is_super_admin ?? false,
     avatarUrl: row.avatar_url ?? null,
   };
 }
@@ -35,14 +36,16 @@ export function mapPreferencesRow(row: UserPreferencesRow): UserPreferences {
 }
 
 export function mapToUserProfile(profile: Profile, email: string): UserProfile {
+  const isSuperAdmin = profile.isSuperAdmin;
   const isAdmin = profile.isAdmin;
   return {
     id: profile.id,
     email: profile.email ?? email,
     displayName: profile.fullName,
     avatarUrl: profile.avatarUrl,
-    role: isAdmin ? 'admin' : 'member',
+    role: isSuperAdmin ? 'super_admin' : isAdmin ? 'admin' : 'member',
     isAdmin,
+    isSuperAdmin,
     onboardingComplete: !profileNeedsOnboarding(profile),
   };
 }

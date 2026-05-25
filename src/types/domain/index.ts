@@ -1,4 +1,27 @@
 export type { UserProfile, UserRole } from '@/types/domain/user';
+export type {
+  CancelRequestResult,
+  CoachMentorshipSectionId,
+  EndMentorshipResult,
+  MentorAvailabilityRule,
+  MentorProfile,
+  MentorProfileStatus,
+  MenteeSummary,
+  Mentorship,
+  MentorshipMaintenanceResult,
+  MentorshipMatchSnapshot,
+  MentorshipMessage,
+  MentorshipParticipantProfile,
+  MentorshipRequest,
+  MentorshipRequestOutcome,
+  MentorshipRequestStatus,
+  MentorshipSectionId,
+  MentorshipSession,
+  MentorshipSessionStatus,
+  MentorshipStatus,
+  RequestCoachResult,
+  WaitingListStatus,
+} from '@/types/domain/mentorship';
 export type { Profile } from '@/types/domain/profile';
 export type { UserPreferences, FundingPreference } from '@/types/domain/user-preferences';
 export type {

@@ -12,6 +12,7 @@ import type {
   OnboardingOpportunityPrefs,
 } from '@/types/domain/onboarding';
 import { parseSupabaseError } from '@/utils/errors';
+import { hasCompletedOnboardingFields } from '@/utils/profile/onboarding-status';
 
 export function useOnboardingActions() {
   const { user, profile: authProfile } = useAuth();
@@ -31,10 +32,13 @@ export function useOnboardingActions() {
 
   const refreshAuthProfile = useCallback(
     async () => {
-      if (!userId) return;
+      if (!userId) throw new Error('Not signed in');
       const { data, error: profileError } = await profilesApi.getByUserId(userId);
-      if (profileError || !data) return;
-      setProfile(mapToUserProfile(data, email ?? ''));
+      if (profileError) throw profileError;
+      if (!data) throw new Error('Could not load your profile. Please try again.');
+      const nextProfile = mapToUserProfile(data, email ?? '');
+      setProfile(nextProfile);
+      return nextProfile;
     },
     [email, setProfile, userId],
   );
@@ -82,6 +86,16 @@ export function useOnboardingActions() {
     (prefs: OnboardingOpportunityPrefs) =>
       run(async () => {
         if (!userId) throw new Error('Not signed in');
+
+        const { data: currentProfile, error: profileFetchError } =
+          await profilesApi.getByUserId(userId);
+        if (profileFetchError) throw profileFetchError;
+        if (!currentProfile || !hasCompletedOnboardingFields(currentProfile)) {
+          throw new Error(
+            'Please complete basic and academic information before finishing setup.',
+          );
+        }
+
         const { error: prefsError } = await userPreferencesApi.saveOpportunityPreferences(
           userId,
           prefs,
@@ -92,7 +106,10 @@ export function useOnboardingActions() {
         if (completeError) throw completeError;
 
         await invalidate();
-        await refreshAuthProfile();
+        const refreshed = await refreshAuthProfile();
+        if (!refreshed.onboardingComplete) {
+          throw new Error('Setup could not be confirmed. Please check all required fields.');
+        }
         return true;
       }),
     [invalidate, refreshAuthProfile, run, userId],

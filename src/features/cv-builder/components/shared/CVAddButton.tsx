@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderStyle: 'dashed',
     borderColor: colors.primary,
-    backgroundColor: '#F4F8F5',
+    backgroundColor: '#F0F4F8',
   },
   disabled: { opacity: 0.5 },
   plus: { fontSize: 18, fontWeight: '700', color: colors.primary },

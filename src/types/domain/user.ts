@@ -1,4 +1,4 @@
-export type UserRole = 'member' | 'admin';
+export type UserRole = 'member' | 'admin' | 'super_admin';
 
 export type UserProfile = {
   id: string;
@@ -7,5 +7,6 @@ export type UserProfile = {
   avatarUrl: string | null;
   role: UserRole;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
   onboardingComplete: boolean;
 };

@@ -19,6 +19,7 @@ import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { formatListInput, parseListInput } from '@/utils/formatting';
+import { hasCompletedAcademicInfo, hasCompletedBasicInfo } from '@/utils/profile/onboarding-status';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
 export function OpportunityPreferencesScreen() {
@@ -28,7 +29,7 @@ export function OpportunityPreferencesScreen() {
   const draft = useOnboardingStore((s) => s.draft.preferences);
   const setPreferences = useOnboardingStore((s) => s.setPreferences);
   const loadFromServer = useOnboardingStore((s) => s.loadFromServer);
-  const { preferences } = useProfileData();
+  const { profile, preferences, isLoading: loadingProfile } = useProfileData();
   const { completeOnboarding, isLoading, error, clearError } = useOnboardingActions();
 
   const [opportunityTypes, setOpportunityTypes] = useState<string[]>(draft.opportunityTypes);
@@ -52,6 +53,24 @@ export function OpportunityPreferencesScreen() {
 
   const handleFinish = async () => {
     clearError();
+
+    if (!hasCompletedBasicInfo(profile)) {
+      Alert.alert(
+        'Complete earlier steps',
+        'Please fill in your basic information first.',
+        [{ text: 'Go to step 1', onPress: () => router.replace(ROUTES.ONBOARDING.BASIC_INFO) }],
+      );
+      return;
+    }
+
+    if (!hasCompletedAcademicInfo(profile)) {
+      Alert.alert(
+        'Complete earlier steps',
+        'Please fill in your academic information first.',
+        [{ text: 'Go to step 2', onPress: () => router.replace(ROUTES.ONBOARDING.ACADEMIC) }],
+      );
+      return;
+    }
 
     if (opportunityTypes.length === 0) {
       Alert.alert('Required fields', 'Please select at least one opportunity type.');
@@ -116,7 +135,11 @@ export function OpportunityPreferencesScreen() {
           <Button variant="secondary" onPress={() => router.back()}>
             Back
           </Button>
-          <Button onPress={handleFinish} loading={isLoading} disabled={isLoading}>
+          <Button
+            onPress={() => void handleFinish()}
+            loading={isLoading || loadingProfile}
+            disabled={isLoading || loadingProfile}
+          >
             Finish setup
           </Button>
         </View>

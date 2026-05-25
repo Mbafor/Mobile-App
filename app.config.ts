@@ -29,9 +29,12 @@ const config: ExpoConfig = {
       'expo-image-picker',
       {
         photosPermission:
-          'Allow Olives Forum to access your photos so you can set a profile picture.',
+          'Allow Olives Forum to access your photos so you can set a profile picture and share images in mentorship chat.',
+        cameraPermission:
+          'Allow Olives Forum to use your camera to take photos for mentorship chat.',
       },
     ],
+    'expo-document-picker',
   ],
   extra: {
     eas: {

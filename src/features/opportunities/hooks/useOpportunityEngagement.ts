@@ -9,6 +9,7 @@ import { queryKeys } from '@/constants/query-keys';
 import {
   appliedOpportunitiesApi,
   savedOpportunitiesApi,
+  trackerApi,
 } from '@/services/api';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -41,6 +42,7 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
     queryClient.invalidateQueries({
       queryKey: [...queryKeys.opportunities.saved(userId), 'count'],
     });
+    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
   };
 
   const invalidateApplied = () => {
@@ -49,6 +51,7 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
       queryKey: queryKeys.opportunities.applied(userId, opportunityId),
     });
     queryClient.invalidateQueries({ queryKey: ['opportunities', 'applied-count', userId] });
+    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
   };
 
   const toggleSaveMutation = useMutation({
@@ -90,11 +93,19 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
           opportunityId,
         );
         if (error) throw error;
+        const { saved } = await savedOpportunitiesApi.isSaved(userId, opportunityId);
+        if (saved) {
+          await trackerApi.updateStage(userId, opportunityId, 'saved');
+        }
         return false;
       }
 
       const { error } = await appliedOpportunitiesApi.markApplied(userId, opportunityId);
       if (error) throw error;
+      const { saved } = await savedOpportunitiesApi.isSaved(userId, opportunityId);
+      if (saved) {
+        await trackerApi.updateStage(userId, opportunityId, 'applied');
+      }
       return true;
     },
     onSuccess: () => invalidateApplied(),

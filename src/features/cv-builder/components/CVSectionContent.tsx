@@ -261,7 +261,7 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     padding: spacing.md,
     borderRadius: 10,
-    backgroundColor: '#E8F0EB',
+    backgroundColor: '#F0F4F8',
     borderWidth: 1,
     borderColor: colors.primary,
   },

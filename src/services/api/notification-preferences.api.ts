@@ -5,7 +5,14 @@ import type { NotificationPreferences } from '@/types/domain/notification';
 type PreferencePatch = Partial<
   Pick<
     NotificationPreferences,
-    'pushEnabled' | 'newMatches' | 'deadlineReminders' | 'savedReminders'
+    | 'pushEnabled'
+    | 'newMatches'
+    | 'deadlineReminders'
+    | 'savedReminders'
+    | 'mentorshipAssignments'
+    | 'waitingListUpdates'
+    | 'sessionReminders'
+    | 'mentorshipMessages'
   >
 >;
 
@@ -36,16 +43,21 @@ export const notificationPreferencesApi = {
   update: async (userId: string, patch: PreferencePatch) => {
     await notificationPreferencesApi.ensure(userId);
 
-    const row: {
-      push_enabled?: boolean;
-      new_matches?: boolean;
-      deadline_reminders?: boolean;
-      saved_reminders?: boolean;
-    } = {};
+    const row: Record<string, boolean> = {};
     if (patch.pushEnabled !== undefined) row.push_enabled = patch.pushEnabled;
     if (patch.newMatches !== undefined) row.new_matches = patch.newMatches;
     if (patch.deadlineReminders !== undefined) row.deadline_reminders = patch.deadlineReminders;
     if (patch.savedReminders !== undefined) row.saved_reminders = patch.savedReminders;
+    if (patch.mentorshipAssignments !== undefined) {
+      row.mentorship_assignments = patch.mentorshipAssignments;
+    }
+    if (patch.waitingListUpdates !== undefined) {
+      row.waiting_list_updates = patch.waitingListUpdates;
+    }
+    if (patch.sessionReminders !== undefined) row.session_reminders = patch.sessionReminders;
+    if (patch.mentorshipMessages !== undefined) {
+      row.mentorship_messages = patch.mentorshipMessages;
+    }
 
     const { data, error } = await supabase
       .from('notification_preferences')

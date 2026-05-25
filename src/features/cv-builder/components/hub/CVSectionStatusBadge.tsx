@@ -12,8 +12,8 @@ const BADGE_STYLES: Record<
   CVSectionStatusKind,
   { bg: string; text: string; border: string }
 > = {
-  complete: { bg: '#E8F5EC', text: '#1B7F4E', border: '#B8E0C8' },
-  in_progress: { bg: '#E8F0EB', text: '#2D5A3D', border: '#C5D9CC' },
+  complete: { bg: '#E8F0FE', text: '#1F73B7', border: '#C6DFFE' },
+  in_progress: { bg: '#F0F4F8', text: '#5F6368', border: '#DADCE0' },
   action_required: { bg: '#FFF8E6', text: '#8A6B00', border: '#F0E0A8' },
   optional: { bg: '#F3EEF8', text: '#5A4578', border: '#DDD0EB' },
 };

@@ -10,5 +10,6 @@ export type Profile = {
   careerInterests: string[];
   onboardingComplete: boolean;
   isAdmin: boolean;
+  isSuperAdmin: boolean;
   avatarUrl: string | null;
 };

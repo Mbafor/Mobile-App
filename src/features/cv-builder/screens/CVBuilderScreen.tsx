@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     borderWidth: 1,
     borderColor: colors.primary,
-    backgroundColor: '#F4F8F5',
+    backgroundColor: '#F0F4F8',
   },
   previewText: { fontWeight: '600', color: colors.primary, fontSize: 14 },
   scroll: { flex: 1 },

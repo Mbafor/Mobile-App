@@ -2,7 +2,6 @@ import type { Session } from '@supabase/supabase-js';
 
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { resolveUserProfile } from '@/features/auth/utils/resolve-user-profile';
-import { profilesApi } from '@/services/api';
 
 /**
  * Writes Supabase session + profile into the auth store so routing works immediately
@@ -16,9 +15,6 @@ export async function applyAuthSession(session: Session): Promise<void> {
   try {
     const profile = await resolveUserProfile(session.user);
     store.setProfile(profile);
-    if (!profile.onboardingComplete) {
-      await profilesApi.markOnboardingIncomplete(session.user.id);
-    }
   } finally {
     store.setProfileLoading(false);
   }

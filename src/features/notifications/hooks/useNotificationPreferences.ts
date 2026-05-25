@@ -7,7 +7,14 @@ import type { NotificationPreferences } from '@/types/domain/notification';
 
 type PreferenceKey = keyof Pick<
   NotificationPreferences,
-  'pushEnabled' | 'newMatches' | 'deadlineReminders' | 'savedReminders'
+  | 'pushEnabled'
+  | 'newMatches'
+  | 'deadlineReminders'
+  | 'savedReminders'
+  | 'mentorshipAssignments'
+  | 'waitingListUpdates'
+  | 'sessionReminders'
+  | 'mentorshipMessages'
 >;
 
 export function useNotificationPreferences() {
@@ -62,11 +69,15 @@ export function useNotificationPreferences() {
   });
 
   const setPreference = (key: PreferenceKey, value: boolean) => {
-    const map: Record<PreferenceKey, string> = {
+    const map: Record<PreferenceKey, PreferenceKey> = {
       pushEnabled: 'pushEnabled',
       newMatches: 'newMatches',
       deadlineReminders: 'deadlineReminders',
       savedReminders: 'savedReminders',
+      mentorshipAssignments: 'mentorshipAssignments',
+      waitingListUpdates: 'waitingListUpdates',
+      sessionReminders: 'sessionReminders',
+      mentorshipMessages: 'mentorshipMessages',
     };
     return updateMutation.mutateAsync({ [map[key]]: value });
   };

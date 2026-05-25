@@ -2,6 +2,7 @@ export { useActiveOpportunities } from '@/features/opportunities/hooks/useActive
 export { useHomeOpportunities } from '@/features/opportunities/hooks/useHomeOpportunities';
 export { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
 export { useSavedOpportunities } from '@/features/opportunities/hooks/useSavedOpportunities';
+export { useTrackerOpportunities } from '@/features/opportunities/hooks/useTrackerOpportunities';
 export { useOpportunityDetail } from '@/features/opportunities/hooks/useOpportunityDetail';
 export { useOpportunityEngagement } from '@/features/opportunities/hooks/useOpportunityEngagement';
 export { useSavedOpportunityIds } from '@/features/opportunities/hooks/useSavedOpportunityIds';

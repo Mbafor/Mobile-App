@@ -15,6 +15,7 @@ export const ROUTES = {
   },
   MAIN: {
     DASHBOARD: '/(main)/(tabs)/dashboard',
+    MENTORSHIP: '/(main)/(tabs)/mentorship',
     SAVED: '/(main)/(tabs)/saved',
     NOTIFICATIONS: '/(main)/(tabs)/notifications',
     SETTINGS: '/(main)/settings',
@@ -38,6 +39,13 @@ export const ROUTES = {
       TERMS: '/(main)/legal/terms',
       REFER: '/(main)/refer',
     },
+  },
+  SUPER_ADMIN: {
+    HOME: '/(main)/(tabs)/super-admin',
+    MENTORS: '/(main)/(tabs)/super-admin/mentors',
+    MENTEES: '/(main)/(tabs)/super-admin/mentees',
+    ADMINS: '/(main)/(tabs)/super-admin/admins',
+    OPPORTUNITIES: '/(main)/(tabs)/super-admin/opportunities',
   },
   ADMIN: {
     HOME: '/(main)/(tabs)/admin',

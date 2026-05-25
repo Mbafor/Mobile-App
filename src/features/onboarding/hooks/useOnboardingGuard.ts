@@ -2,18 +2,21 @@ import { useRouter, useSegments } from 'expo-router';
 import { useEffect } from 'react';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { ROUTES } from '@/constants/routes';
-
-const STEP_ORDER = [
-  'basic-information',
-  'academic-information',
-  'opportunity-preferences',
-] as const;
+import {
+  getOnboardingStepIndex,
+  getRequiredOnboardingRoute,
+  getRequiredOnboardingStep,
+  ONBOARDING_STEP_ORDER,
+  type OnboardingStep,
+} from '@/utils/profile/onboarding-status';
 
 export function useOnboardingGuard() {
   const router = useRouter();
   const segments = useSegments();
   const { isAuthenticated, isAuthReady, onboardingComplete } = useAuth();
+  const { profile, isLoading: profileLoading } = useProfileData();
 
   useEffect(() => {
     if (!isAuthReady) return;
@@ -28,17 +31,35 @@ export function useOnboardingGuard() {
       return;
     }
 
+    if (profileLoading) return;
+
     const segmentList = segments as string[];
     const inOnboarding = segmentList[0] === '(onboarding)';
-    const currentStep = segmentList[1] as (typeof STEP_ORDER)[number] | undefined;
+    const currentStep = segmentList[1] as OnboardingStep | undefined;
+    const requiredStep = getRequiredOnboardingStep(profile);
+    const requiredRoute = getRequiredOnboardingRoute(profile);
 
     if (!inOnboarding) {
-      router.replace(ROUTES.ONBOARDING.BASIC_INFO);
+      router.replace(requiredRoute as typeof ROUTES.ONBOARDING.BASIC_INFO);
       return;
     }
 
-    if (!currentStep || !STEP_ORDER.includes(currentStep)) {
-      router.replace(ROUTES.ONBOARDING.BASIC_INFO);
+    if (!currentStep || !ONBOARDING_STEP_ORDER.includes(currentStep)) {
+      router.replace(requiredRoute as typeof ROUTES.ONBOARDING.BASIC_INFO);
+      return;
     }
-  }, [isAuthenticated, isAuthReady, onboardingComplete, router, segments]);
+
+    // Prevent skipping ahead — e.g. finishing step 3 without saving steps 1–2.
+    if (getOnboardingStepIndex(currentStep) > getOnboardingStepIndex(requiredStep)) {
+      router.replace(requiredRoute as typeof ROUTES.ONBOARDING.BASIC_INFO);
+    }
+  }, [
+    isAuthenticated,
+    isAuthReady,
+    onboardingComplete,
+    profile,
+    profileLoading,
+    router,
+    segments,
+  ]);
 }
