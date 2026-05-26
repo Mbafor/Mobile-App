@@ -3,24 +3,44 @@ import type { AuthChangeEvent, AuthError, Session } from '@supabase/supabase-js'
 import type { OAuthProvider } from '@/features/auth/types';
 import { supabase } from '@/services/supabase/client';
 
-/** Supabase Auth only — OTP, OAuth, sessions. */
+export type OtpVerificationType = 'signup' | 'email';
+
+/** Supabase Auth — email/password + OTP verification, OAuth, sessions. */
 export const authApi = {
   getSession: () => supabase.auth.getSession(),
 
-  /** Supabase generates the 6-digit code and sends the email. */
+  signUpWithPassword: (email: string, password: string) =>
+    supabase.auth.signUp({
+      email: email.trim().toLowerCase(),
+      password,
+    }),
+
+  signInWithPassword: (email: string, password: string) =>
+    supabase.auth.signInWithPassword({
+      email: email.trim().toLowerCase(),
+      password,
+    }),
+
+  /** Legacy / fallback: magic OTP without password (existing accounts). */
   signInWithOtp: (email: string, options?: { shouldCreateUser?: boolean }) =>
     supabase.auth.signInWithOtp({
       email: email.trim().toLowerCase(),
       options: {
-        shouldCreateUser: options?.shouldCreateUser ?? true,
+        shouldCreateUser: options?.shouldCreateUser ?? false,
       },
     }),
 
-  verifyEmailOtp: (email: string, token: string) =>
+  resendSignupConfirmation: (email: string) =>
+    supabase.auth.resend({
+      type: 'signup',
+      email: email.trim().toLowerCase(),
+    }),
+
+  verifyEmailOtp: (email: string, token: string, type: OtpVerificationType = 'signup') =>
     supabase.auth.verifyOtp({
       email: email.trim().toLowerCase(),
       token: token.trim(),
-      type: 'email',
+      type,
     }),
 
   updateUserMetadata: (data: Record<string, unknown>) =>

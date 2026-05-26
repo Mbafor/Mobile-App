@@ -4,9 +4,15 @@ import { env } from '@/config/env';
 import { applyAuthSession } from '@/features/auth/utils/apply-auth-session';
 import { signInWithAppleNative, signInWithOAuthProvider } from '@/features/auth/utils/oauth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
-import { authApi } from '@/services/api';
+import { authApi, type OtpVerificationType } from '@/services/api';
+import { profilesApi } from '@/services/api';
 import { queryClient } from '@/store/query-client';
 import { parseSupabaseError } from '@/utils/errors';
+import { isValidPassword } from '@/utils/validation';
+
+export type EmailPasswordSignInResult =
+  | { needsOtp: false }
+  | { needsOtp: true; otpType: OtpVerificationType };
 
 function mapAuthError(e: unknown): string {
   const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
@@ -21,12 +27,27 @@ function mapAuthError(e: unknown): string {
     message.includes('Error sending confirmation email') ||
     message.includes('unexpected_failure')
   ) {
-    return 'We could not send the login code. In Supabase → Authentication → Email, enable Email OTP and configure SMTP (or the built-in mailer).';
+    return 'We could not send the login code. In Supabase → Authentication → Email, enable Email confirmations with OTP and configure SMTP.';
   }
   if (message.includes('redirect_uri_mismatch')) {
     return 'Google sign-in redirect mismatch. Add your app redirect URL in Supabase → Authentication → URL Configuration (see docs/SUPABASE_AUTH_SETUP.md).';
   }
+  if (message.toLowerCase().includes('invalid login credentials')) {
+    return 'Incorrect email or password. If you are new, we will create your account when you continue.';
+  }
+  if (message.toLowerCase().includes('user already registered')) {
+    return 'An account with this email already exists. Enter your password or use the code we sent to your email.';
+  }
   return message;
+}
+
+function isEmailNotConfirmed(message: string): boolean {
+  const lower = message.toLowerCase();
+  return (
+    lower.includes('email not confirmed') ||
+    lower.includes('email not verified') ||
+    lower.includes('confirm your email')
+  );
 }
 
 export function useAuthActions() {
@@ -51,19 +72,61 @@ export function useAuthActions() {
     }
   }, []);
 
-  const sendEmailOtp = useCallback(
-    (email: string) =>
-      run(async () => {
+  const signInWithEmailPassword = useCallback(
+    (email: string, password: string) =>
+      run(async (): Promise<EmailPasswordSignInResult | null> => {
         const normalized = email.trim().toLowerCase();
-        const { error } = await authApi.signInWithOtp(normalized, { shouldCreateUser: true });
-        if (error) throw error;
-        return true;
+        if (!isValidPassword(password)) {
+          throw new Error('Password must be at least 8 characters.');
+        }
+
+        const signIn = await authApi.signInWithPassword(normalized, password);
+
+        if (!signIn.error && signIn.data.session) {
+          await applyAuthSession(signIn.data.session);
+          await profilesApi.syncEmailFromAuth(normalized);
+          return { needsOtp: false };
+        }
+
+        if (signIn.error && isEmailNotConfirmed(signIn.error.message)) {
+          const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
+          if (resendError) throw resendError;
+          return { needsOtp: true, otpType: 'signup' };
+        }
+
+        const signUp = await authApi.signUpWithPassword(normalized, password);
+
+        if (!signUp.error && signUp.data.session) {
+          await applyAuthSession(signUp.data.session);
+          await profilesApi.syncEmailFromAuth(normalized);
+          return { needsOtp: false };
+        }
+
+        if (signUp.error) {
+          const msg = signUp.error.message.toLowerCase();
+          if (msg.includes('already registered') || msg.includes('already been registered')) {
+            const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
+            if (resendError) {
+              const otpFallback = await authApi.signInWithOtp(normalized, {
+                shouldCreateUser: false,
+              });
+              if (otpFallback.error) throw otpFallback.error;
+              return { needsOtp: true, otpType: 'email' };
+            }
+            return { needsOtp: true, otpType: 'signup' };
+          }
+          throw signUp.error;
+        }
+
+        const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
+        if (resendError) throw resendError;
+        return { needsOtp: true, otpType: 'signup' };
       }),
     [run],
   );
 
   const verifyEmailOtp = useCallback(
-    (email: string, code: string) =>
+    (email: string, code: string, otpType: OtpVerificationType = 'signup') =>
       run(async () => {
         const normalized = email.trim().toLowerCase();
         const token = code.replace(/\D/g, '').trim();
@@ -71,14 +134,37 @@ export function useAuthActions() {
           throw new Error('Enter the 6-digit code from your email.');
         }
 
-        const { data, error } = await authApi.verifyEmailOtp(normalized, token);
-        if (error) throw error;
-        if (!data.session) {
-          throw new Error('Verification succeeded but no session was returned.');
+        const types: OtpVerificationType[] =
+          otpType === 'signup' ? ['signup', 'email'] : ['email', 'signup'];
+
+        let lastError: Error | null = null;
+        for (const type of types) {
+          const { data, error } = await authApi.verifyEmailOtp(normalized, token, type);
+          if (!error && data.session) {
+            await applyAuthSession(data.session);
+            await profilesApi.syncEmailFromAuth(normalized);
+            return data;
+          }
+          lastError = error ?? new Error('Verification failed.');
         }
 
-        await applyAuthSession(data.session);
-        return data;
+        throw lastError ?? new Error('Invalid or expired code.');
+      }),
+    [run],
+  );
+
+  const resendEmailOtp = useCallback(
+    (email: string, otpType: OtpVerificationType = 'signup') =>
+      run(async () => {
+        const normalized = email.trim().toLowerCase();
+        if (otpType === 'signup') {
+          const { error } = await authApi.resendSignupConfirmation(normalized);
+          if (error) throw error;
+        } else {
+          const { error } = await authApi.signInWithOtp(normalized, { shouldCreateUser: false });
+          if (error) throw error;
+        }
+        return true;
       }),
     [run],
   );
@@ -99,7 +185,6 @@ export function useAuthActions() {
     () =>
       run(async () => {
         const session = await signInWithOAuthProvider('google');
-        // Web: browser navigates away; /auth/callback completes sign-in.
         if (session === null) return true;
         if (!session.user) throw new Error('Google sign-in did not return a session.');
         return true;
@@ -124,8 +209,9 @@ export function useAuthActions() {
     isLoading,
     error,
     clearError,
-    sendEmailOtp,
+    signInWithEmailPassword,
     verifyEmailOtp,
+    resendEmailOtp,
     signOut,
     signInWithGoogle,
     signInWithApple,

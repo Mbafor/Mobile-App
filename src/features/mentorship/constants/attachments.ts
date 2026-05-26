@@ -1,9 +1,9 @@
 /** Recommended chat attachment limits (mobile-friendly, Supabase-compatible). */
 export const MENTORSHIP_ATTACHMENT_LIMITS = {
   /** Photos from camera or library */
-  imageMaxBytes: 10 * 1024 * 1024, // 10 MB
+  imageMaxBytes: 5 * 1024 * 1024, // 5 MB
   /** PDF, Excel, Word, and other documents */
-  fileMaxBytes: 25 * 1024 * 1024, // 25 MB
+  fileMaxBytes: 10 * 1024 * 1024, // 10 MB
 } as const;
 
 export function formatMaxAttachmentSize(bytes: number): string {

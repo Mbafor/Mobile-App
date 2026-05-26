@@ -1,24 +1,26 @@
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
-
-import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { env } from '@/config/env';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
 import { AuthScreenLayout } from '@/features/auth/components';
+import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { colors, spacing } from '@/constants/theme';
+import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
+import { env } from '@/config/env';
 import { isValidEmail } from '@/utils/validation';
+import { isValidPassword } from '@/utils/validation/password';
 
 export function EmailOtpScreen() {
   const router = useRouter();
   useAuthRedirect('guest');
-  const { sendEmailOtp, isLoading, error, clearError } = useAuthActions();
+  const { signInWithEmailPassword, isLoading, error, clearError } = useAuthActions();
   const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const handleNext = async () => {
     clearError();
@@ -27,17 +29,31 @@ export function EmailOtpScreen() {
       Alert.alert('Invalid email', 'Enter a valid email address.');
       return;
     }
-
-    const ok = await sendEmailOtp(normalized);
-    if (ok) {
-      router.push(`/(auth)/verify-otp?email=${encodeURIComponent(normalized)}` as Href);
+    if (!isValidPassword(password)) {
+      Alert.alert('Password too short', 'Use at least 8 characters.');
+      return;
     }
+
+    const result = await signInWithEmailPassword(normalized, password);
+    if (!result) return;
+
+    if (result.needsOtp) {
+      router.push(
+        `/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}` as Href,
+      );
+      return;
+    }
+
+    const onboardingComplete = useAuthStore.getState().profile?.onboardingComplete ?? false;
+    router.replace(
+      (onboardingComplete ? ROUTES.MAIN.DASHBOARD : ROUTES.ONBOARDING.BASIC_INFO) as Href,
+    );
   };
 
   return (
     <AuthScreenLayout
-      title="Your email"
-      subtitle="We'll send a 6-digit code Enter it on the next screen to continue."
+      title="Sign in"
+      subtitle="Enter your email and password. We will send a 6-digit code to confirm your email when needed."
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
       backgroundColor={colors.background}
       backTextColor={colors.text}
@@ -52,8 +68,21 @@ export function EmailOtpScreen() {
           placeholder="you@university.edu"
         />
       </FormField>
+
+      <FormField label="Password">
+        <Input
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          autoCapitalize="none"
+          autoComplete="password"
+          placeholder="At least 8 characters"
+        />
+      </FormField>
+
       {env.configError ? <ErrorMessage message={env.configError} /> : null}
       {error ? <ErrorMessage message={error} /> : null}
+
       <View style={styles.actions}>
         <Button
           variant="primary"
@@ -63,7 +92,7 @@ export function EmailOtpScreen() {
           style={styles.continueBtn}
           textStyle={styles.continueBtnText}
         >
-          Next
+          Continue
         </Button>
       </View>
     </AuthScreenLayout>

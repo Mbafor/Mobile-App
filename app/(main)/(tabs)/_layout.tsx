@@ -9,7 +9,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
-import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
+import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
@@ -41,7 +41,7 @@ export default function MainTabsLayout() {
       screenOptions={{
         headerShown: true,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
-        headerRight: () => <NotificationHeaderButton />,
+        headerRight: () => <AppHeaderActions />,
         headerTintColor: colors.text,
         headerRightContainerStyle: { paddingRight: spacing.xs },
         tabBarActiveTintColor: colors.primary,

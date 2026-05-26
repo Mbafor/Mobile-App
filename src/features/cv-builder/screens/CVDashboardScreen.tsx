@@ -15,7 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { OptionsSheet, SearchField, Text } from '@/components/ui';
-import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
+import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { CVDocumentListItem } from '@/features/cv-builder/components/CVDocumentListItem';
 import { CVRenameModal } from '@/features/cv-builder/components/CVRenameModal';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
@@ -172,7 +172,7 @@ export function CVDashboardScreen() {
           <Text style={styles.appTitle}>CV Builder</Text>
         </View>
         <View style={styles.appBarActions}>
-          <NotificationHeaderButton />
+          <AppHeaderActions />
           <Pressable
           onPress={() => void handleCreateNew()}
           disabled={isCreating}

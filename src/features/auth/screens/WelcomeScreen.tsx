@@ -178,7 +178,7 @@ export function WelcomeScreen() {
         </Button>
 
         <Text style={styles.hint}>
-          A 6-digit code will be sent to your email — no password needed.
+          Sign in with your email, password, and a one-time code to confirm your account.
         </Text>
       </View>
     </View>

@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 
 import { SuperAdminShell } from '@/features/super-admin/components/SuperAdminShell';
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
-import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
+import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { colors, spacing } from '@/constants/theme';
 
 export default function SuperAdminLayout() {
@@ -18,7 +18,7 @@ export default function SuperAdminLayout() {
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,
           headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
-          headerRight: () => <NotificationHeaderButton />,
+          headerRight: () => <AppHeaderActions />,
           headerRightContainerStyle: { paddingRight: spacing.xs },
         }}
       >

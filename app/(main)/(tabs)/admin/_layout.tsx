@@ -3,7 +3,7 @@ import { Stack } from 'expo-router';
 
 import { colors } from '@/constants/theme';
 import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
-import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
+import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 
 export default function AdminTabLayout() {
   useRequireAdmin();
@@ -17,7 +17,7 @@ export default function AdminTabLayout() {
         headerTintColor: colors.text,
         headerTitleStyle: { fontWeight: '600', fontSize: 17 },
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
-        headerRight: () => <NotificationHeaderButton />,
+        headerRight: () => <AppHeaderActions />,
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Opportunities' }} />

@@ -13,7 +13,26 @@ export const profilesApi = {
     return { data: data ? mapProfileRow(data) : null, error };
   },
 
+  syncEmailFromAuth: async (email: string, userId?: string) => {
+    const id = userId ?? (await supabase.auth.getUser()).data.user?.id;
+    if (!id || !email.trim()) return { error: new Error('Missing user or email') };
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ email: email.trim().toLowerCase() })
+      .eq('id', id);
+
+    return { error };
+  },
+
   ensureProfile: async (userId: string, email: string | undefined) => {
+    if (!email?.trim()) {
+      return {
+        data: null,
+        error: new Error('Email is required. Use a valid email address to sign in.'),
+      };
+    }
+
     const existing = await profilesApi.getByUserId(userId);
     if (existing.data) {
       if (email && existing.data.email !== email) {
@@ -30,7 +49,11 @@ export const profilesApi = {
 
     const { data, error } = await supabase
       .from('profiles')
-      .insert({ id: userId, email: email ?? null, onboarding_complete: false })
+      .insert({
+        id: userId,
+        email: email.trim().toLowerCase(),
+        onboarding_complete: false,
+      })
       .select('*')
       .single();
 

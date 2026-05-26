@@ -136,7 +136,7 @@ export type Database = {
       profiles: {
         Row: {
           id: string;
-          email: string | null;
+          email: string;
           full_name: string | null;
           country: string | null;
           university: string | null;
@@ -154,7 +154,7 @@ export type Database = {
         };
         Insert: {
           id: string;
-          email?: string | null;
+          email: string;
           full_name?: string | null;
           country?: string | null;
           university?: string | null;
