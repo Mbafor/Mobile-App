@@ -25,7 +25,10 @@ export function prepareContentForPdfExport(raw: CVContent): CVContent {
   };
 }
 
-export function isSectionEnabledForExport(enabled: Set<CVSectionId>, sectionId: CVSectionId): boolean {
+export function isSectionEnabledForExport(
+  enabled: Set<CVSectionId>,
+  sectionId: CVSectionId,
+): boolean {
   return enabled.has(sectionId);
 }
 
@@ -33,3 +36,4 @@ export function getEnabledSectionSet(content: CVContent): Set<CVSectionId> {
   const layout = getLayoutFromContent(content);
   return new Set(getEnabledSections(layout));
 }
+

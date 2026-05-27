@@ -11,8 +11,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorMessage } from '@/components/feedback';
 import { SearchField, Text } from '@/components/ui';
-import { CVPreviewModal } from '@/features/cv-builder/components/CVPreviewModal';
 import { CVHubDocToolbar } from '@/features/cv-builder/components/hub/CVHubDocToolbar';
+import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
 import { CVReorderSectionsModal } from '@/features/cv-builder/components/hub/CVReorderSectionsModal';
 import { CVSectionRow } from '@/features/cv-builder/components/hub/CVSectionRow';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
@@ -45,12 +45,15 @@ export function CVHubDashboardScreen() {
   const payment = useCVPaymentContext();
   const { downloadWithTemplate, isDownloading } = useCVTemplateDownload();
 
-  const [previewOpen, setPreviewOpen] = useState(false);
   const [reorderOpen, setReorderOpen] = useState(false);
   const [sectionQuery, setSectionQuery] = useState('');
 
   const enabledSections = useMemo(() => getEnabledSections(layout), [layout]);
   const progress = useMemo(() => calculateCVProgress(content), [content]);
+  const fileName = useMemo(
+    () => `${cv?.title.trim() || 'My-CV'}.pdf`,
+    [cv?.title],
+  );
 
   const filteredSections = useMemo(() => {
     const q = sectionQuery.trim().toLowerCase();
@@ -68,13 +71,18 @@ export function CVHubDashboardScreen() {
     router.push(ROUTES.MAIN.CV_BUILDER.section(cv.id, sectionId) as Href);
   };
 
+  const openPreview = () => {
+    if (!cv) return;
+    router.push(ROUTES.MAIN.CV_BUILDER.preview(cv.id) as Href);
+  };
+
   const handleReorderSave = async (order: CVSectionId[]) => {
     const personalFirst = ['personal', ...order.filter((id) => id !== 'personal')] as CVSectionId[];
     setSectionOrder(personalFirst);
     await saveLayout();
   };
 
-  const handleDownload = () => {
+  const handleDownloadRequest = () => {
     downloadWithTemplate(templateId);
   };
 
@@ -100,9 +108,15 @@ export function CVHubDashboardScreen() {
         <CVHubDocToolbar
           title={cv.title}
           progressPercent={progress}
-          onPreview={() => setPreviewOpen(true)}
-          onDownload={handleDownload}
-          downloadLoading={isDownloading}
+          onPreview={openPreview}
+          downloadProps={{
+            data: content,
+            templateId,
+            fileName,
+            purchased: payment.isTemplatePurchased(templateId),
+            onDownloadRequest: handleDownloadRequest,
+            loading: isDownloading,
+          }}
         />
 
         <View style={styles.searchStrip}>
@@ -144,31 +158,22 @@ export function CVHubDashboardScreen() {
           </View>
 
           <View style={styles.footerActions}>
-            <Pressable style={styles.previewCta} onPress={() => setPreviewOpen(true)}>
-              <Text style={styles.previewCtaText}>Open full preview</Text>
+            <Pressable style={styles.previewCta} onPress={openPreview}>
+              <Text style={styles.previewCtaText}>Open live PDF preview</Text>
             </Pressable>
-            <Pressable
-              style={[styles.downloadCta, isDownloading && styles.downloadCtaDisabled]}
-              onPress={handleDownload}
+            <CVPdfDownloadButton
+              data={content}
+              templateId={templateId}
+              fileName={fileName}
+              purchased={payment.isTemplatePurchased(templateId)}
+              onPress={handleDownloadRequest}
+              loading={isDownloading}
               disabled={isDownloading}
-            >
-              <Text style={styles.downloadCtaText}>
-                {isDownloading ? 'Generating PDF…' : 'Download PDF'}
-              </Text>
-            </Pressable>
+              label="Download PDF"
+            />
           </View>
         </ScrollView>
       </View>
-
-      <CVPreviewModal
-        visible={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        templateId={templateId}
-        content={content}
-        templatePurchased={payment.isTemplatePurchased(templateId)}
-        onDownload={() => downloadWithTemplate(templateId)}
-        downloadLoading={isDownloading}
-      />
 
       <CVReorderSectionsModal
         visible={reorderOpen}
@@ -235,12 +240,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
   },
   previewCtaText: { fontSize: 14, fontWeight: '600', color: colors.primary },
-  downloadCta: {
-    paddingVertical: spacing.sm + 2,
-    paddingHorizontal: spacing.lg,
-    borderRadius: 24,
-    backgroundColor: colors.primary,
-  },
-  downloadCtaDisabled: { opacity: 0.6 },
-  downloadCtaText: { fontSize: 14, fontWeight: '700', color: colors.background },
 });

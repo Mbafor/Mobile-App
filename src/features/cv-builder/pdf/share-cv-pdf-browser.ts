@@ -27,3 +27,4 @@ export async function shareCvPdfInBrowser(
     return { ok: false, error: message };
   }
 }
+

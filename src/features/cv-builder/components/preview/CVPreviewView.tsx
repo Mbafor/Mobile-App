@@ -1,1 +1,2 @@
-export { CVTemplateRenderer as CVPreviewView } from '@/features/cv-builder/templates/CVTemplateRenderer';
+export { ResumeDocument, createResumeDocumentElement } from '@/features/cv-builder/pdf/resume/ResumeDocument';
+export type { ResumeDocumentProps } from '@/features/cv-builder/pdf/resume/ResumeDocument';

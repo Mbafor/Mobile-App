@@ -73,6 +73,14 @@ export default function CVHubTabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="preview"
+        options={{
+          title: 'Preview',
+          href: null,
+          tabBarButton: () => null,
+        }}
+      />
+      <Tabs.Screen
         name="settings"
         options={{
           title: 'Sections',

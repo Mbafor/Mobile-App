@@ -142,6 +142,7 @@ export function CVBuilderScreen() {
         onClose={() => setPreviewOpen(false)}
         templateId={previewTemplateId}
         content={content}
+        fileName={`${cv.title.trim() || 'My-CV'}.pdf`}
       />
     </KeyboardAvoidingView>
   );

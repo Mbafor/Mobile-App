@@ -5,8 +5,7 @@ import { exportAndShareCvPdf } from '@/features/cv-builder/pdf/export-cv-pdf';
 import type { CVContent } from '@/types/domain/cv';
 
 /**
- * PDF download hook — uses HTML template export only.
- * Preview UI (CVPreviewModal / CVTemplateRenderer) is never captured.
+ * PDF download hook — uses the shared react-pdf ResumeDocument export path.
  */
 export function useCVDownload() {
   const [generating, setGenerating] = useState(false);

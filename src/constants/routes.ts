@@ -26,6 +26,7 @@ export const ROUTES = {
     CV_BUILDER: {
       DASHBOARD: '/(main)/(tabs)/cv-builder',
       hub: (id: string) => `/(main)/(tabs)/cv-builder/${id}` as const,
+      preview: (id: string) => `/(main)/(tabs)/cv-builder/${id}/preview` as const,
       tips: (id: string) => `/(main)/(tabs)/cv-builder/${id}/tips` as const,
       section: (cvId: string, sectionId: string) =>
         `/(main)/(tabs)/cv-builder/${cvId}/section/${sectionId}` as const,

@@ -3,25 +3,32 @@ import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
+import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import { getProgressMessage } from '@/features/cv-builder/utils/section-config';
+import type { CVContent } from '@/types/domain/cv';
 
 type CVHubDocToolbarProps = {
   title: string;
   progressPercent: number;
   onPreview: () => void;
-  onDownload?: () => void;
-  downloadLoading?: boolean;
+  downloadProps?: {
+    data: CVContent;
+    templateId: string;
+    fileName: string;
+    purchased: boolean;
+    onDownloadRequest: () => void;
+    loading?: boolean;
+  };
 };
 
 export function CVHubDocToolbar({
   title,
   progressPercent,
   onPreview,
-  onDownload,
-  downloadLoading = false,
+  downloadProps,
 }: CVHubDocToolbarProps) {
   const router = useRouter();
   const pct = Math.min(100, Math.max(0, progressPercent));
@@ -42,17 +49,18 @@ export function CVHubDocToolbar({
           {title}
         </Text>
         <View style={styles.actions}>
-          {onDownload ? (
-            <Pressable
-              onPress={onDownload}
-              style={[styles.downloadBtn, downloadLoading && styles.btnDisabled]}
-              disabled={downloadLoading}
-            >
-              <Ionicons name="download-outline" size={18} color={colors.background} />
-              <Text style={styles.downloadText}>
-                {downloadLoading ? '…' : 'Download'}
-              </Text>
-            </Pressable>
+          {downloadProps ? (
+            <CVPdfDownloadButton
+              data={downloadProps.data}
+              templateId={downloadProps.templateId}
+              fileName={downloadProps.fileName}
+              purchased={downloadProps.purchased}
+              onPress={downloadProps.onDownloadRequest}
+              loading={downloadProps.loading}
+              disabled={downloadProps.loading}
+              compact
+              label="Download PDF"
+            />
           ) : null}
           <Pressable onPress={onPreview} style={styles.previewBtn}>
             <Ionicons name="eye-outline" size={18} color={colors.primary} />
@@ -101,17 +109,6 @@ const styles = StyleSheet.create({
     color: colors.text,
   },
   actions: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  downloadBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    paddingVertical: spacing.xs,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 20,
-    backgroundColor: colors.primary,
-  },
-  downloadText: { fontSize: 13, fontWeight: '600', color: colors.background },
-  btnDisabled: { opacity: 0.6 },
   previewBtn: {
     flexDirection: 'row',
     alignItems: 'center',

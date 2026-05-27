@@ -1,15 +1,15 @@
 import {
   Modal,
   Pressable,
-  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, Text } from '@/components/ui';
+import { Text } from '@/components/ui';
+import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
+import { CVPdfPreviewPanel } from '@/features/cv-builder/components/preview/CVPdfPreviewPanel';
 import { CV_TEMPLATE_UNLOCK_FEE_GHS } from '@/features/cv-builder/constants/payments';
-import { CVPreviewView } from '@/features/cv-builder/components/preview/CVPreviewView';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
 import { colors, spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
@@ -19,6 +19,7 @@ type CVPreviewModalProps = {
   onClose: () => void;
   templateId: string;
   content: CVContent;
+  fileName: string;
   onDownload?: () => void;
   downloadLoading?: boolean;
   templatePurchased?: boolean;
@@ -29,6 +30,7 @@ export function CVPreviewModal({
   onClose,
   templateId,
   content,
+  fileName,
   onDownload,
   downloadLoading = false,
   templatePurchased = false,
@@ -43,7 +45,7 @@ export function CVPreviewModal({
           <View style={styles.toolbarCopy}>
             <Text variant="title">Preview</Text>
             <Text muted variant="caption">
-              {templateLabel} · on-screen preview only (PDF export uses a separate print layout)
+              {templateLabel} · same PDF layout as download
             </Text>
           </View>
           <Pressable onPress={onClose} style={styles.closeBtn} hitSlop={12}>
@@ -51,26 +53,22 @@ export function CVPreviewModal({
           </Pressable>
         </View>
 
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          showsVerticalScrollIndicator
-        >
-          <View style={styles.paper}>
-            <CVPreviewView templateId={templateId} content={content} />
-          </View>
-        </ScrollView>
+        <View style={styles.previewWrap}>
+          <CVPdfPreviewPanel data={content} templateId={templateId} />
+        </View>
 
         {onDownload ? (
           <View style={[styles.footer, { paddingBottom: insets.bottom + spacing.md }]}>
-            <Button
+            <CVPdfDownloadButton
+              data={content}
+              templateId={templateId}
+              fileName={fileName}
+              purchased={templatePurchased}
               onPress={onDownload}
               loading={downloadLoading}
               disabled={downloadLoading}
-              fullWidth
-            >
-              {downloadLoading ? 'Processing…' : 'Download'}
-            </Button>
+              label="Download PDF"
+            />
             <Text muted variant="caption" style={styles.footerHint}>
               {templatePurchased
                 ? 'This template is unlocked — download anytime.'
@@ -86,7 +84,7 @@ export function CVPreviewModal({
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E8E8E8',
+    backgroundColor: '#525659',
   },
   toolbar: {
     flexDirection: 'row',
@@ -109,23 +107,10 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
   closeText: { fontWeight: '600', color: colors.primary },
-  scroll: { flex: 1 },
-  scrollContent: {
+  previewWrap: {
+    flex: 1,
     padding: spacing.md,
-    paddingBottom: spacing.lg,
-    alignItems: 'center',
-  },
-  paper: {
-    width: '100%',
-    maxWidth: 520,
-    backgroundColor: '#FFF',
-    borderRadius: 4,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.15,
-    shadowRadius: 8,
-    elevation: 4,
+    minHeight: 480,
   },
   footer: {
     paddingHorizontal: spacing.md,

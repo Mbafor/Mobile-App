@@ -1,47 +1,55 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useCallback, useEffect, useState } from 'react';
+import { useRouter, type Href } from 'expo-router';
+import { useCallback, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, Text } from '@/components/ui';
-import { CVPreviewModal } from '@/features/cv-builder/components/CVPreviewModal';
+import { Text } from '@/components/ui';
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
-import { useCVTemplateDownload } from '@/features/cv-builder/hooks/useCVTemplateDownload';
 import { useSelectCVTemplate } from '@/features/cv-builder/hooks/useSelectCVTemplate';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
+import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
+import { Ionicons } from '@expo/vector-icons';
 
 export function CVTemplatesScreen() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { content, templateId, saveState } = useCVBuilderContext();
+  const { cv, templateId, saveState } = useCVBuilderContext();
   const payment = useCVPaymentContext();
   const { selectCVTemplate } = useSelectCVTemplate();
-  const { downloadWithTemplate, isDownloading } = useCVTemplateDownload();
-  const [previewOpen, setPreviewOpen] = useState(false);
-  const [previewTemplateId, setPreviewTemplateId] = useState<CVTemplateId>(
-    resolveTemplateId(templateId),
-  );
   const isSaving = saveState === 'saving';
+
+  const openPreview = useCallback(
+    (id?: CVTemplateId) => {
+      if (!cv) return;
+      if (id) {
+        selectCVTemplate(id);
+      }
+      router.push(ROUTES.MAIN.CV_BUILDER.preview(cv.id) as Href);
+    },
+    [cv, router, selectCVTemplate],
+  );
 
   const handleSelect = useCallback(
     (id: CVTemplateId) => {
-      setPreviewTemplateId(id);
-      selectCVTemplate(id);
+      openPreview(id);
     },
-    [selectCVTemplate],
+    [openPreview],
   );
 
-  const handlePreview = useCallback((id: CVTemplateId) => {
-    setPreviewTemplateId(resolveTemplateId(id));
-    setPreviewOpen(true);
-  }, []);
+  const handlePreview = useCallback(
+    (id: CVTemplateId) => {
+      openPreview(resolveTemplateId(id));
+    },
+    [openPreview],
+  );
 
   useEffect(() => {
-    setPreviewTemplateId(resolveTemplateId(templateId));
-  }, [templateId]);
+    if (!cv) return;
+  }, [templateId, cv]);
 
   return (
     <View style={styles.flex}>
@@ -58,8 +66,8 @@ export function CVTemplatesScreen() {
           </View>
           <View style={styles.heroCopy}>
             <Text muted style={styles.heroSubtitle}>
-              Preview any layout for free. Download is GHS 100 per template — unlock once, keep
-              forever.
+              Choose a layout to open the live PDF editor preview. Download is GHS 100 per template
+              — unlock once, keep forever.
             </Text>
           </View>
         </View>
@@ -71,25 +79,7 @@ export function CVTemplatesScreen() {
           onPreview={handlePreview}
           disabled={isSaving}
         />
-
-        <Button
-          variant="secondary"
-          onPress={() => setPreviewOpen(true)}
-          style={styles.previewBtn}
-        >
-          Full-screen preview
-        </Button>
       </ScrollView>
-
-      <CVPreviewModal
-        visible={previewOpen}
-        onClose={() => setPreviewOpen(false)}
-        templateId={previewTemplateId}
-        content={content}
-        templatePurchased={payment.isTemplatePurchased(previewTemplateId)}
-        onDownload={() => downloadWithTemplate(previewTemplateId)}
-        downloadLoading={isDownloading}
-      />
     </View>
   );
 }
@@ -116,5 +106,4 @@ const styles = StyleSheet.create({
   },
   heroCopy: { flex: 1, gap: spacing.sm },
   heroSubtitle: { lineHeight: 20 },
-  previewBtn: { marginTop: spacing.sm },
 });
