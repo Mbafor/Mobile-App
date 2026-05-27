@@ -13,7 +13,7 @@ import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { DesktopWebNavigation } from '@/features/navigation/components';
 import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
-import { useIsWeb, useWebMobile } from '@/hooks/useWebDesktop';
+import { useIsWeb, useWebDesktop, useWebMobile } from '@/hooks/useWebDesktop';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 

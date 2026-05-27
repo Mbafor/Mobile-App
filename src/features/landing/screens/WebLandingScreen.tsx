@@ -21,6 +21,10 @@ import {
   LANDING_FEATURES,
   LANDING_MENTORSHIP_POINTS,
   LANDING_OPPORTUNITY_POINTS,
+  LANDING_HOW_IT_WORKS,
+  LANDING_TRUST_STATS,
+  LANDING_PARTNERS,
+  LANDING_TESTIMONIALS,
 } from '@/features/landing/constants/content';
 
 const FOREST = colors.forest;
@@ -139,6 +143,9 @@ function HeroSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onS
                 <Text style={styles.statLabel}>Builder included</Text>
               </View>
             </View>
+            <Text variant="bodySm" style={styles.heroTrustLine}>
+              Trusted by ambitious students, university programs, and career partners across Africa.
+            </Text>
           </View>
 
           {!isNarrow ? (
@@ -160,6 +167,42 @@ function HeroSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onS
             </View>
           </WebCard>
           ) : null}
+        </View>
+      </ResponsiveContainer>
+    </View>
+  );
+}
+
+function TrustSection() {
+  const { width } = useWindowDimensions();
+  const isWide = width >= 900;
+
+  return (
+    <View style={[styles.sectionMuted, styles.trustSection]}> 
+      <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
+        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Trusted by learners</Text>
+        <Text variant="h2" style={styles.sectionTitle}>
+          Real impact for students and early-career professionals.
+        </Text>
+        <Text variant="bodyLg" style={styles.sectionSubtitle}>
+          Olives connects talent to opportunities, mentorship, and the tools needed to build a stronger career.
+        </Text>
+
+        <View style={[styles.trustGrid, isWide && styles.trustGridWide]}>
+          {LANDING_TRUST_STATS.map((stat) => (
+            <WebCard key={stat.label} hoverable style={styles.trustStatCard}>
+              <Text style={styles.trustStatValue}>{stat.value}</Text>
+              <Text style={styles.trustStatLabel}>{stat.label}</Text>
+            </WebCard>
+          ))}
+        </View>
+
+        <View style={styles.partnerRow}>
+          {LANDING_PARTNERS.map((partner) => (
+            <View key={partner} style={styles.partnerChip}>
+              <Text style={styles.partnerText}>{partner}</Text>
+            </View>
+          ))}
         </View>
       </ResponsiveContainer>
     </View>
@@ -197,6 +240,33 @@ function FeaturesSection() {
               <Text variant="bodySm" muted style={styles.featureBody}>
                 {feature.description}
               </Text>
+            </WebCard>
+          ))}
+        </View>
+      </ResponsiveContainer>
+    </View>
+  );
+}
+
+function HowItWorksSection() {
+  const { width } = useWindowDimensions();
+  const isWide = width >= 900;
+
+  return (
+    <View style={styles.sectionLight}>
+      <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
+        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>How it works</Text>
+        <Text variant="h2" style={styles.sectionTitle}>
+          Get matched in three simple steps.
+        </Text>
+        <View style={[styles.stepsGrid, isWide && styles.stepsGridWide]}>
+          {LANDING_HOW_IT_WORKS.map((step) => (
+            <WebCard key={step.title} hoverable style={styles.stepCard}>
+              <View style={styles.stepBadge}>
+                <Text style={styles.stepNumber}>{step.step}</Text>
+              </View>
+              <Text variant="h3" style={styles.stepTitle}>{step.title}</Text>
+              <Text variant="bodySm" muted style={styles.stepDescription}>{step.description}</Text>
             </WebCard>
           ))}
         </View>
@@ -290,6 +360,35 @@ function OpportunitiesSection({ onCta }: { onCta: () => void }) {
   );
 }
 
+function TestimonialsSection() {
+  const { width } = useWindowDimensions();
+  const columns = width >= 1024 ? 3 : width >= 720 ? 2 : 1;
+
+  return (
+    <View style={[styles.sectionMuted, styles.sectionNarrow]}> 
+      <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
+        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Stories</Text>
+        <Text variant="h2" style={styles.sectionTitle}>
+          Students and mentors finding momentum together.
+        </Text>
+        <View style={[styles.testimonialGrid, { gap: spacing.md, flexDirection: columns === 1 ? 'column' : 'row' }]}> 
+          {LANDING_TESTIMONIALS.map((testimonial) => (
+            <WebCard key={testimonial.name} hoverable style={styles.testimonialCard}>
+              <Text variant="bodyLg" style={styles.testimonialQuote}>
+                {testimonial.quote}
+              </Text>
+              <View style={styles.testimonialMeta}>
+                <Text style={styles.testimonialName}>{testimonial.name}</Text>
+                <Text style={styles.testimonialRole}>{testimonial.role}</Text>
+              </View>
+            </WebCard>
+          ))}
+        </View>
+      </ResponsiveContainer>
+    </View>
+  );
+}
+
 function CtaSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onSignIn: () => void }) {
   return (
     <View style={styles.ctaBand}>
@@ -322,7 +421,27 @@ function LandingFooter() {
   return (
     <View style={styles.footer}>
       <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.lg}>
-        <Text style={styles.footerText}>© {new Date().getFullYear()} Olives Forum. All rights reserved.</Text>
+        <View style={styles.footerGrid}>
+          <View style={styles.footerColumn}>
+            <Text style={styles.footerBrand}>Olives Forum</Text>
+            <Text style={styles.footerText}>Building career confidence for African students and young professionals.</Text>
+          </View>
+          <View style={styles.footerColumn}>
+            <Text style={styles.footerHeading}>Product</Text>
+            <Text style={styles.footerLink}>Opportunities</Text>
+            <Text style={styles.footerLink}>Mentorship</Text>
+            <Text style={styles.footerLink}>CV Builder</Text>
+          </View>
+          <View style={styles.footerColumn}>
+            <Text style={styles.footerHeading}>Company</Text>
+            <Text style={styles.footerLink}>About</Text>
+            <Text style={styles.footerLink}>Contact</Text>
+            <Text style={styles.footerLink}>Terms</Text>
+          </View>
+        </View>
+        <View style={styles.footerBottom}>
+          <Text style={styles.footerText}>© {new Date().getFullYear()} Olives Forum. All rights reserved.</Text>
+        </View>
       </ResponsiveContainer>
     </View>
   );
@@ -358,9 +477,12 @@ export function WebLandingScreen() {
         showsVerticalScrollIndicator={false}
       >
         <HeroSection onGetStarted={goWelcome} onSignIn={goSignIn} />
+        <TrustSection />
         <FeaturesSection />
+        <HowItWorksSection />
         <MentorshipSection onCta={goWelcome} />
         <OpportunitiesSection onCta={goWelcome} />
+        <TestimonialsSection />
         <CtaSection onGetStarted={goWelcome} onSignIn={goSignIn} />
         <LandingFooter />
       </ScrollView>
@@ -464,6 +586,117 @@ const styles = StyleSheet.create({
   },
   sectionNarrow: {
     paddingVertical: spacing.xl,
+  },
+  trustSection: {
+    paddingTop: spacing.xl * 1.5,
+    paddingBottom: spacing.xl * 2,
+  },
+  trustGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+    marginTop: spacing.lg,
+  },
+  trustGridWide: {
+    justifyContent: 'space-between',
+  },
+  trustStatCard: {
+    flex: 1,
+    minWidth: 220,
+    padding: spacing.lg,
+    backgroundColor: colors.background,
+  },
+  trustStatValue: {
+    fontSize: typography.fontSize.xl * 1.25,
+    lineHeight: 38,
+    fontWeight: '700',
+    color: colors.text,
+  },
+  trustStatLabel: {
+    marginTop: spacing.xs,
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
+  },
+  partnerRow: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginTop: spacing.lg,
+  },
+  partnerChip: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.xs,
+    borderRadius: 999,
+    backgroundColor: colors.surface,
+  },
+  partnerText: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.xs,
+    fontWeight: '600',
+  },
+  stepsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.md,
+    marginTop: spacing.lg,
+  },
+  stepsGridWide: {
+    justifyContent: 'space-between',
+  },
+  stepCard: {
+    flex: 1,
+    minWidth: 260,
+    padding: spacing.lg,
+    gap: spacing.sm,
+    backgroundColor: colors.background,
+  },
+  stepBadge: {
+    width: 44,
+    height: 44,
+    borderRadius: 999,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  stepNumber: {
+    color: '#fff',
+    fontSize: typography.fontSize.sm,
+    fontWeight: '700',
+  },
+  stepTitle: {
+    marginTop: spacing.sm,
+    color: colors.text,
+  },
+  stepDescription: {
+    color: colors.textMuted,
+    marginTop: spacing.xs,
+  },
+  testimonialGrid: {
+    marginTop: spacing.lg,
+  },
+  testimonialCard: {
+    flex: 1,
+    minWidth: 260,
+    padding: spacing.lg,
+    gap: spacing.sm,
+    backgroundColor: colors.background,
+  },
+  testimonialQuote: {
+    color: colors.text,
+    fontSize: typography.fontSize.lg,
+    lineHeight: 28,
+  },
+  testimonialMeta: {
+    marginTop: spacing.sm,
+    gap: 2,
+  },
+  testimonialName: {
+    fontWeight: '700',
+    color: colors.text,
+  },
+  testimonialRole: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
   },
   heroGlowA: {
     position: 'absolute',
@@ -622,6 +855,11 @@ const styles = StyleSheet.create({
     color: 'rgba(255,255,255,0.5)',
     fontSize: typography.fontSize.xs,
   },
+  heroTrustLine: {
+    color: 'rgba(255,255,255,0.75)',
+    marginTop: spacing.sm,
+    maxWidth: 500,
+  },
   sectionLight: {
     backgroundColor: colors.background,
     paddingVertical: spacing.xl * 1.75,
@@ -773,6 +1011,37 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.lg,
     borderTopWidth: 1,
     borderTopColor: colors.border,
+  },
+  footerGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.lg,
+    justifyContent: 'space-between',
+    marginBottom: spacing.lg,
+  },
+  footerColumn: {
+    flex: 1,
+    minWidth: 180,
+    gap: spacing.xs,
+  },
+  footerBrand: {
+    fontSize: typography.fontSize.lg,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.xs,
+  },
+  footerHeading: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.xs,
+  },
+  footerLink: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textMuted,
+  },
+  footerBottom: {
+    alignItems: 'center',
   },
   footerText: {
     color: colors.textMuted,
