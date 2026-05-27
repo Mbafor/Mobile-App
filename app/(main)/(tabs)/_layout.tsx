@@ -1,15 +1,19 @@
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerToggleButton } from '@react-navigation/drawer';
-import { useFocusEffect } from '@react-navigation/native';
-import { Tabs } from 'expo-router';
+import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
+import { Tabs, useRouter, type Href } from 'expo-router';
 import { useCallback } from 'react';
-import { Platform } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, spacing } from '@/constants/theme';
+import { ROUTES } from '@/constants/routes';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
+import { DesktopWebNavigation } from '@/features/navigation/components';
+import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
+import { useIsWeb, useWebMobile } from '@/hooks/useWebDesktop';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
@@ -25,6 +29,12 @@ export default function MainTabsLayout() {
   const { isAdmin, isSuperAdmin } = useAuth();
   const refreshProfile = useRefreshProfile();
   const insets = useSafeAreaInsets();
+  const router = useRouter();
+  const navigation = useNavigation();
+  const isWeb = useIsWeb();
+  const isWebDesktop = useWebDesktop();
+  const isWebMobile = useWebMobile();
+  const webNavItems = useMainTabNavItems();
 
   useFocusEffect(
     useCallback(() => {
@@ -35,11 +45,11 @@ export default function MainTabsLayout() {
   const tabBarHeight = 56 + insets.bottom;
   const tabBarPaddingBottom = Math.max(insets.bottom, spacing.xs);
 
-  return (
-      <Tabs
+  const tabs = (
+    <Tabs
       key={`tabs-${isSuperAdmin ? 'sa' : ''}${isAdmin ? 'admin' : ''}`}
       screenOptions={{
-        headerShown: true,
+        headerShown: !isWeb,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
         headerRight: () => <AppHeaderActions />,
         headerTintColor: colors.text,
@@ -55,19 +65,9 @@ export default function MainTabsLayout() {
           height: tabBarHeight,
           paddingBottom: tabBarPaddingBottom,
           paddingTop: spacing.xs,
-          ...(Platform.OS === 'web'
-            ? {
-                position: 'fixed' as const,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 100,
-              }
-            : {}),
+          ...(isWeb ? { display: 'none' as const } : {}),
         },
         tabBarItemStyle: { paddingTop: 4 },
-        // Match tab bar so no stray gap appears above it (do not add scene paddingBottom —
-        // the tab navigator already reserves space for the bar).
         sceneContainerStyle: { backgroundColor: colors.background },
       }}
     >
@@ -106,7 +106,7 @@ export default function MainTabsLayout() {
         name="notifications"
         options={{
           title: 'Notifications',
-          href: null,
+          href: isWeb ? '/(main)/(tabs)/notifications' : null,
         }}
       />
       <Tabs.Screen
@@ -129,4 +129,32 @@ export default function MainTabsLayout() {
       />
     </Tabs>
   );
+
+  if (isWeb) {
+    return (
+      <View style={styles.webRoot}>
+        <DesktopWebNavigation
+          brand="Olives Forum"
+          items={webNavItems}
+          compact={isWebMobile}
+          onMenuToggle={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+          onGoHome={() => router.push(ROUTES.LANDING as Href)}
+          rightSlot={<AppHeaderActions />}
+        />
+        <View style={styles.webContent}>{tabs}</View>
+      </View>
+    );
+  }
+
+  return tabs;
 }
+
+const styles = StyleSheet.create({
+  webRoot: {
+    flex: 1,
+    backgroundColor: colors.background,
+  },
+  webContent: {
+    flex: 1,
+  },
+});

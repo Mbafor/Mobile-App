@@ -1,10 +1,13 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack } from 'expo-router';
+import { Platform } from 'react-native';
 
 import { SuperAdminShell } from '@/features/super-admin/components/SuperAdminShell';
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { colors, spacing } from '@/constants/theme';
+
+const isWeb = Platform.OS === 'web';
 
 export default function SuperAdminLayout() {
   useRequireSuperAdmin();
@@ -13,7 +16,7 @@ export default function SuperAdminLayout() {
     <SuperAdminShell>
       <Stack
         screenOptions={{
-          headerShown: true,
+          headerShown: !isWeb,
           headerShadowVisible: false,
           headerStyle: { backgroundColor: colors.background },
           headerTintColor: colors.text,

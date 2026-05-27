@@ -1,6 +1,7 @@
 export { Accordion } from '@/components/ui/Accordion';
 export { Button } from '@/components/ui/Button';
 export { Text } from '@/components/ui/Text';
+export { WebCard } from '@/components/ui/WebCard';
 export { Input } from '@/components/ui/Input';
 export { TextArea } from '@/components/ui/TextArea';
 export { FilterChipButton, SearchField } from '@/components/ui/SearchField';

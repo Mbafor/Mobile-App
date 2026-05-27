@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { colors, spacing, typography } from '@/constants/theme';
 
@@ -37,7 +38,7 @@ export function AuthScreenLayout({
         { paddingTop: insets.top, backgroundColor: backgroundColor ?? colors.primary },
       ]}
     >
-      <View style={styles.hero}>
+      <ResponsiveContainer style={styles.hero} maxWidth={960} minHorizontalPadding={spacing.lg}>
         {onBack ? (
           <Pressable onPress={onBack} hitSlop={12}>
             <Text style={[styles.back, { color: backTextColor ?? colors.background }]}>← Back</Text>
@@ -45,8 +46,7 @@ export function AuthScreenLayout({
         ) : (
           <View style={styles.backSpacer} />
         )}
-      
-      </View>
+      </ResponsiveContainer>
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -56,11 +56,13 @@ export function AuthScreenLayout({
           keyboardShouldPersistTaps="handled"
           contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.lg }]}
         >
-          <View style={styles.card}>
-            <Text variant="title">{title}</Text>
-            {subtitle ? <Text muted style={styles.subtitle}>{subtitle}</Text> : null}
-            {children}
-          </View>
+          <ResponsiveContainer maxWidth={960} minHorizontalPadding={spacing.md}>
+            <View style={styles.card}>
+              <Text variant="title">{title}</Text>
+              {subtitle ? <Text muted style={styles.subtitle}>{subtitle}</Text> : null}
+              {children}
+            </View>
+          </ResponsiveContainer>
         </ScrollView>
       </KeyboardAvoidingView>
     </View>
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
     opacity: 0.9,
   },
-  scroll: { paddingHorizontal: spacing.md, flexGrow: 1 },
+  scroll: { flexGrow: 1 },
   card: {
     backgroundColor: colors.background,
     borderTopLeftRadius: 20,

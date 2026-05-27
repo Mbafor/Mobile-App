@@ -1,6 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
+import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { MentorshipDrawerNav, type MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
@@ -28,21 +29,27 @@ export function MentorshipShell({
   scrollable = true,
   children,
 }: MentorshipShellProps) {
-  const content = <View style={styles.content}>{children}</View>;
+  const content = (
+    <ResponsiveContainer minHorizontalPadding={spacing.md}>
+      <View style={styles.content}>{children}</View>
+    </ResponsiveContainer>
+  );
 
   return (
     <View style={styles.root}>
-      <View style={styles.toolbar}>
-        <MentorshipDrawerNav
-          items={navItems}
-          activeId={activeSection}
-          onSelect={onSelectSection}
-        />
-        <View style={styles.titleBlock}>
-          <Text style={styles.sectionTitle}>{sectionTitle}</Text>
-          {headerExtra}
+      <ResponsiveContainer minHorizontalPadding={spacing.md}>
+        <View style={styles.toolbar}>
+          <MentorshipDrawerNav
+            items={navItems}
+            activeId={activeSection}
+            onSelect={onSelectSection}
+          />
+          <View style={styles.titleBlock}>
+            <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+            {headerExtra}
+          </View>
         </View>
-      </View>
+      </ResponsiveContainer>
 
       {scrollable ? (
         <ScrollView
@@ -76,7 +83,6 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   toolbar: {
-    paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     paddingBottom: spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -94,14 +100,13 @@ const styles = StyleSheet.create({
   scroll: { flex: 1 },
   scrollContent: {
     flexGrow: 1,
-    padding: spacing.md,
+    paddingVertical: spacing.md,
     paddingBottom: spacing.xl * 2,
   },
   flexContent: {
     flex: 1,
     minHeight: 0,
     overflow: 'hidden',
-    paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
   },
   content: {

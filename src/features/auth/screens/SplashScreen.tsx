@@ -55,7 +55,7 @@ function OliveBranchIllustration() {
   );
 }
 
-// ─── Screen ───────────────────────────────────────────────────────────────────
+// ─── Screen (mobile/native bootstrap via app/index.tsx; web uses app/index.web.tsx) ─
 export function SplashScreen() {
   const { isAuthReady } = useAuth();
   useAuthRedirect('bootstrap');

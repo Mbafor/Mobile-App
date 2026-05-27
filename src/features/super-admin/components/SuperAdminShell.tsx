@@ -3,6 +3,7 @@ import { usePathname, useRouter, type Href } from 'expo-router';
 import type { PropsWithChildren } from 'react';
 import { Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 
+import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
@@ -88,7 +89,11 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
             })}
           </ScrollView>
         ) : null}
-        <View style={styles.content}>{children}</View>
+        <View style={styles.content}>
+          <ResponsiveContainer style={styles.contentInner} maxWidth={1280}>
+            {children}
+          </ResponsiveContainer>
+        </View>
       </View>
     </View>
   );
@@ -137,4 +142,5 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 13, fontWeight: '500' },
   chipTextActive: { color: colors.background },
   content: { flex: 1 },
+  contentInner: { flex: 1 },
 });

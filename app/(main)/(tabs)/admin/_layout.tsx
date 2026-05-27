@@ -1,9 +1,12 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack } from 'expo-router';
+import { Platform } from 'react-native';
 
 import { colors } from '@/constants/theme';
 import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
+
+const isWeb = Platform.OS === 'web';
 
 export default function AdminTabLayout() {
   useRequireAdmin();
@@ -11,7 +14,7 @@ export default function AdminTabLayout() {
   return (
     <Stack
       screenOptions={{
-        headerShown: true,
+        headerShown: !isWeb,
         headerShadowVisible: false,
         headerStyle: { backgroundColor: colors.background },
         headerTintColor: colors.text,

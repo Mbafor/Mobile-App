@@ -3,6 +3,7 @@ import { StyleSheet, View, Text as RNText } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 
+import { ResponsiveContainer } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { AuthDivider } from '@/features/auth/components';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
@@ -117,69 +118,73 @@ export function WelcomeScreen() {
         <View style={StyleSheet.absoluteFillObject}>
           <OliveBranchIllustration />
         </View>
+        <ResponsiveContainer
+          maxWidth={980}
+          minHorizontalPadding={spacing.lg}
+          style={styles.heroContent}
+        >
+          {/* Logo mark */}
+          <View style={styles.logoMark}>
+            <RNText style={styles.logoText}>O</RNText>
+          </View>
 
-        {/* Logo mark */}
-        <View style={styles.logoMark}>
-          <RNText style={styles.logoText}>O</RNText>
-        </View>
+          {/* App name badge */}
+          <View style={styles.badge}>
+            <Text style={styles.badgeText}>Olives Forum</Text>
+          </View>
 
-        {/* App name badge */}
-        <View style={styles.badge}>
-          <Text style={styles.badgeText}>Olives Forum</Text>
-        </View>
+          <Text style={styles.heroTitle}>
+            Find your next{'\n'}opportunity
+          </Text>
 
-        <Text style={styles.heroTitle}>
-          Find your next{'\n'}opportunity
-        </Text>
-
-        <Text style={styles.heroTagline}>
-          Matched to your interests and ambitions, globally.
-        </Text>
+          <Text style={styles.heroTagline}>
+            Matched to your interests and ambitions, globally.
+          </Text>
+        </ResponsiveContainer>
       </View>
 
       {/* ── Auth panel ── */}
-      <View
-        style={[
-          styles.panel,
-          { paddingBottom: insets.bottom + spacing.xl },
-        ]}
-      >
-        <Text style={styles.panelTitle}>Sign in to explore</Text>
+      <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
+        <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
+          <View style={styles.panelContent}>
+            <Text style={styles.panelTitle}>Sign in to explore</Text>
 
-        <Text style={styles.panelSubtitle}>
-          Save listings, get personalised recommendations, and never miss a
-          deadline.
-        </Text>
+            <Text style={styles.panelSubtitle}>
+              Save listings, get personalised recommendations, and never miss a
+              deadline.
+            </Text>
 
-        {error ? <ErrorMessage message={error} /> : null}
+            {error ? <ErrorMessage message={error} /> : null}
 
-        <Button
-          onPress={() => {
-            clearError();
-            void signInWithGoogle();
-          }}
-          loading={isLoading}
-          disabled={isLoading}
-          style={styles.googleBtn}
-          textStyle={styles.googleBtnText}
-        >
-          Continue with Google
-        </Button>
+            <Button
+              onPress={() => {
+                clearError();
+                void signInWithGoogle();
+              }}
+              loading={isLoading}
+              disabled={isLoading}
+              style={styles.googleBtn}
+              textStyle={styles.googleBtnText}
+            >
+              Continue with Google
+            </Button>
 
-        <AuthDivider />
+            <AuthDivider />
 
-        <Button
-          onPress={() => router.push(ROUTES.AUTH.EMAIL as Href)}
-          disabled={isLoading}
-          style={styles.emailBtn}
-          textStyle={styles.emailBtnText}
-        >
-          Continue with email
-        </Button>
+            <Button
+              onPress={() => router.push(ROUTES.AUTH.EMAIL as Href)}
+              disabled={isLoading}
+              style={styles.emailBtn}
+              textStyle={styles.emailBtnText}
+            >
+              Continue with email
+            </Button>
 
-        <Text style={styles.hint}>
-          Sign in with your email, password, and a one-time code to confirm your account.
-        </Text>
+            <Text style={styles.hint}>
+              Sign in with your email, password, and a one-time code to confirm your account.
+            </Text>
+          </View>
+        </ResponsiveContainer>
       </View>
     </View>
   );
@@ -199,9 +204,11 @@ const styles = StyleSheet.create({
   // ── Hero ──────────────────────────────────────────────────────────
   hero: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'flex-end',
     paddingBottom: spacing.xl + spacing.md,
+  },
+  heroContent: {
+    alignItems: 'center',
     gap: spacing.sm,
   },
 
@@ -260,8 +267,10 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderTopLeftRadius: PANEL_RADIUS,
     borderTopRightRadius: PANEL_RADIUS,
-    paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
+  },
+
+  panelContent: {
     gap: spacing.sm,
   },
 

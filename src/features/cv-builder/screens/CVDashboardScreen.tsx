@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Platform,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -15,7 +16,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { OptionsSheet, SearchField, Text } from '@/components/ui';
-import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { CVDocumentListItem } from '@/features/cv-builder/components/CVDocumentListItem';
 import { CVRenameModal } from '@/features/cv-builder/components/CVRenameModal';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
@@ -165,14 +165,13 @@ export function CVDashboardScreen() {
     <View style={[styles.container, { paddingTop: insets.top }]}>
       <View style={styles.appBar}>
         <View style={styles.appBarBrand}>
-          <DrawerToggleButton tintColor={colors.text} />
+          {Platform.OS !== 'web' ? <DrawerToggleButton tintColor={colors.text} /> : null}
           <View style={styles.appLogo}>
             <Ionicons name="document-text" size={22} color={colors.background} />
           </View>
           <Text style={styles.appTitle}>CV Builder</Text>
         </View>
         <View style={styles.appBarActions}>
-          <AppHeaderActions />
           <Pressable
           onPress={() => void handleCreateNew()}
           disabled={isCreating}
