@@ -108,7 +108,7 @@ export function CVEditorPreviewScreen() {
                   onPress={() => openSection(sectionId)}
                 >
                   <Text style={styles.outlineRowTitle}>{meta.title}</Text>
-                  <Text style={styles.outlineRowMeta}>{String(status)}</Text>
+                  <Text style={styles.outlineRowMeta}>{status.label}</Text>
                 </Pressable>
               );
             })}

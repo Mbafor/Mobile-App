@@ -6,6 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
+  Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -130,7 +131,10 @@ export function CVHubDashboardScreen() {
 
         <ScrollView
           style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
+          contentContainerStyle={[
+            styles.scrollContent,
+            Platform.OS === 'web' ? { paddingBottom: insets.bottom + 56 + spacing.lg } : undefined,
+          ]}
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >

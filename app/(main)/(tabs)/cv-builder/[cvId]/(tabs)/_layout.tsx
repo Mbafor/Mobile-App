@@ -76,7 +76,6 @@ export default function CVHubTabsLayout() {
         name="preview"
         options={{
           title: 'Preview',
-          href: null,
           tabBarButton: () => null,
         }}
       />

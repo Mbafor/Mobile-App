@@ -177,19 +177,32 @@ export function PdfEducationAtsBlocks({
   bodyStyle?: any;
 }) {
   if (!entries.length) return null;
+
   return (
     <>
       {entries.map((entry) => {
-        const body = [entry.gpa ? `GPA: ${entry.gpa}` : '', entry.description].filter(hasText).join('\n');
+        const schoolLine = [
+          entry.school,
+          entry.gpa ? `• GPA: ${entry.gpa}` : '',
+        ]
+          .filter(hasText)
+          .join(' ');
+
         return (
           <View key={entry.id} style={sectionStyles.itemBlock}>
             <PdfRowHeader
               title={formatEducationTitle(entry)}
-              subtitle={entry.school}
+              subtitle={schoolLine}
               date={entry.endDate}
               titleStyle={titleStyle}
             />
-            <PdfBulletList text={body} style={bodyStyle} />
+
+            {hasText(entry.description) ? (
+              <PdfBulletList
+                text={entry.description}
+                style={bodyStyle}
+              />
+            ) : null}
           </View>
         );
       })}
