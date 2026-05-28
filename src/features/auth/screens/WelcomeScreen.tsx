@@ -1,16 +1,23 @@
 import { useRouter, type Href } from 'expo-router';
-import { StyleSheet, View, Text as RNText } from 'react-native';
+import { Platform, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
+import { useState } from 'react';
+import { Ionicons } from '@expo/vector-icons';
 
 import { ResponsiveContainer } from '@/components/layout';
-import { Button, Text } from '@/components/ui';
+import { Button, Text, Input } from '@/components/ui';
 import { AuthDivider } from '@/features/auth/components';
+import { FormField } from '@/components/forms';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ErrorMessage } from '@/components/feedback';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
+import { useAuthStore } from '@/features/auth/store/auth.store';
+import { isValidEmail } from '@/utils/validation';
+import { isValidPassword } from '@/utils/validation/password';
+import { useWebMobile, useWebDesktop } from '@/hooks/useWebDesktop';
 
 // ─── Olive branch illustration ───────────────────────────────────────────────
 function OliveBranchIllustration() {
@@ -104,87 +111,308 @@ function OliveBranchIllustration() {
 export function WelcomeScreen() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
+  const isWeb = Platform.OS === 'web';
+  const isWebMobile = useWebMobile();
+  const isDesktopWeb = useWebDesktop();
+  
+  // For web split layout (desktop and tablet, not mobile web)
+  const isSplitLayout = isWeb && !isWebMobile;
 
-  // Removed Apple auth completely
-  const { signInWithGoogle, isLoading, error, clearError } = useAuthActions();
+  // Form state for email/password auth
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [formError, setFormError] = useState('');
+
+  const { signInWithGoogle, signInWithEmailPassword, isLoading, error, clearError } = useAuthActions();
 
   useAuthRedirect('guest');
 
+  const handleEmailSignIn = async () => {
+    setFormError('');
+    clearError();
+    
+    const normalized = email.trim().toLowerCase();
+    if (!isValidEmail(normalized)) {
+      setFormError('Enter a valid email address.');
+      return;
+    }
+    if (!isValidPassword(password)) {
+      setFormError('Password must be at least 8 characters.');
+      return;
+    }
+
+    const result = await signInWithEmailPassword(normalized, password);
+    if (!result) return;
+
+    if (result.needsOtp) {
+      router.push(
+        `/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}` as Href,
+      );
+      return;
+    }
+
+    const onboardingComplete = useAuthStore.getState().profile?.onboardingComplete ?? false;
+    router.replace(
+      (onboardingComplete ? ROUTES.MAIN.DASHBOARD : ROUTES.ONBOARDING.BASIC_INFO) as Href,
+    );
+  };
+
+  // For mobile app users, show the traditional stacked layout
+  if (!isWeb) {
+    return (
+      <View style={[styles.root, { paddingTop: insets.top }]}>
+        <ScrollView contentContainerStyle={styles.mobileContainer}>
+          <View style={styles.mobileHero}>
+            <View style={StyleSheet.absoluteFillObject}>
+              <OliveBranchIllustration />
+            </View>
+            <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
+              <View style={styles.heroContent}>
+                <View style={styles.logoMark}>
+                  <RNText style={styles.logoText}>O</RNText>
+                </View>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>Olives Forum</Text>
+                </View>
+                <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
+                <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+              </View>
+            </ResponsiveContainer>
+          </View>
+
+          <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
+            <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
+              <View style={styles.panelContent}>
+                <Text style={styles.panelTitle}>Sign in to explore</Text>
+                <Text style={styles.panelSubtitle}>
+                  Save listings, get personalised recommendations, and never miss a deadline.
+                </Text>
+                {error ? <ErrorMessage message={error} /> : null}
+                <Button
+                  onPress={() => {
+                    clearError();
+                    void signInWithGoogle();
+                  }}
+                  loading={isLoading}
+                  disabled={isLoading}
+                  style={styles.googleBtn}
+                  textStyle={styles.googleBtnText}
+                >
+                  Continue with Google
+                </Button>
+                <AuthDivider />
+                <Button
+                  onPress={() => router.push(ROUTES.AUTH.EMAIL as Href)}
+                  disabled={isLoading}
+                  style={styles.emailBtn}
+                  textStyle={styles.emailBtnText}
+                >
+                  Continue with email
+                </Button>
+                <Text style={styles.hint}>
+                  Sign in with your email, password, and a one-time code to confirm your account.
+                </Text>
+              </View>
+            </ResponsiveContainer>
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
+  // For web mobile users, show stacked layout
+  if (isWebMobile) {
+    return (
+      <ScrollView style={[styles.root, { paddingTop: insets.top }]} contentContainerStyle={{ flexGrow: 1 }}>
+        <View style={styles.webMobileHero}>
+          <View style={StyleSheet.absoluteFillObject}>
+            <OliveBranchIllustration />
+          </View>
+          <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
+            <View style={styles.heroContent}>
+              <View style={styles.logoMark}>
+                <RNText style={styles.logoText}>O</RNText>
+              </View>
+              <View style={styles.badge}>
+                <Text style={styles.badgeText}>Olives Forum</Text>
+              </View>
+              <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
+              <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+            </View>
+          </ResponsiveContainer>
+        </View>
+
+        <View style={[styles.panel, { paddingBottom: spacing.xl }]}>
+          <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
+            <View style={styles.panelContent}>
+              <Text style={styles.panelTitle}>Sign in to explore</Text>
+              <Text style={styles.panelSubtitle}>
+                Save listings, get personalised recommendations, and never miss a deadline.
+              </Text>
+
+              {error || formError ? <ErrorMessage message={error || formError} /> : null}
+
+              <Button
+                onPress={() => {
+                  clearError();
+                  void signInWithGoogle();
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                style={styles.googleBtn}
+                textStyle={styles.googleBtnText}
+              >
+                <View style={styles.googleBtnContent}>
+                  <Ionicons name="logo-google" size={18} color="#000" style={{ marginRight: spacing.xs }} />
+                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                </View>
+              </Button>
+
+              <View style={styles.dividerContainer}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <FormField label="Email address">
+                <Input
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  autoComplete="email"
+                  placeholder="you@university.edu"
+                  editable={!isLoading}
+                />
+              </FormField>
+
+              <FormField label="Password">
+                <Input
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                  autoComplete="password"
+                  placeholder="At least 8 characters"
+                  editable={!isLoading}
+                />
+              </FormField>
+
+              <Button
+                onPress={handleEmailSignIn}
+                loading={isLoading}
+                disabled={isLoading}
+                style={styles.emailBtn}
+                textStyle={styles.emailBtnText}
+              >
+                Continue
+              </Button>
+
+              <Text style={styles.hint}>
+                Sign in with your email, password, and a one-time code to confirm your account.
+              </Text>
+            </View>
+          </ResponsiveContainer>
+        </View>
+      </ScrollView>
+    );
+  }
+
+  // For web desktop users, show split-screen layout
   return (
     <View style={styles.root}>
-      {/* ── Hero ── */}
-      <View style={[styles.hero, { paddingTop: insets.top + spacing.sm }]}>
-        {/* Background illustration */}
-        <View style={StyleSheet.absoluteFillObject}>
-          <OliveBranchIllustration />
+      <View style={styles.splitContainer}>
+        {/* Left Column - Dark Green Hero (45%) */}
+        <View style={styles.leftColumn}>
+          <View style={StyleSheet.absoluteFillObject}>
+            <OliveBranchIllustration />
+          </View>
+          <View style={[styles.heroContent, { paddingTop: insets.top + spacing.lg, paddingHorizontal: spacing.lg }]}>
+            <View style={styles.logoMark}>
+              <RNText style={styles.logoText}>O</RNText>
+            </View>
+            <View style={styles.badge}>
+              <Text style={styles.badgeText}>Olives Forum</Text>
+            </View>
+            <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
+            <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+          </View>
         </View>
-        <ResponsiveContainer
-          maxWidth={980}
-          minHorizontalPadding={spacing.lg}
-          style={styles.heroContent}
-        >
-          {/* Logo mark */}
-          <View style={styles.logoMark}>
-            <RNText style={styles.logoText}>O</RNText>
+
+        {/* Right Column - White Auth Form (55%) */}
+        <ScrollView style={styles.rightColumn} contentContainerStyle={{ flexGrow: 1 }}>
+          <View style={[styles.authFormContainer, { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xl }]}>
+            <View style={styles.authFormContent}>
+              <Text style={styles.authTitle}>Sign in to explore</Text>
+              <Text style={styles.authSubtitle}>
+                Save listings, get personalised recommendations, and never miss a deadline.
+              </Text>
+
+              {error || formError ? <ErrorMessage message={error || formError} /> : null}
+
+              <Button
+                onPress={() => {
+                  clearError();
+                  void signInWithGoogle();
+                }}
+                loading={isLoading}
+                disabled={isLoading}
+                style={styles.googleBtn}
+                textStyle={styles.googleBtnText}
+              >
+                <View style={styles.googleBtnContent}>
+                  <Ionicons name="logo-google" size={18} color="#000" style={{ marginRight: spacing.xs }} />
+                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                </View>
+              </Button>
+
+              <View style={styles.dividerContainer}>
+                <View style={styles.dividerLine} />
+                <Text style={styles.dividerText}>or</Text>
+                <View style={styles.dividerLine} />
+              </View>
+
+              <FormField label="Email address">
+                <Input
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
+                  keyboardType="email-address"
+                  autoComplete="email"
+                  placeholder="you@university.edu"
+                  editable={!isLoading}
+                />
+              </FormField>
+
+              <FormField label="Password">
+                <Input
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  autoCapitalize="none"
+                  autoComplete="password"
+                  placeholder="At least 8 characters"
+                  editable={!isLoading}
+                />
+              </FormField>
+
+              <Button
+                onPress={handleEmailSignIn}
+                loading={isLoading}
+                disabled={isLoading}
+                style={styles.emailBtn}
+                textStyle={styles.emailBtnText}
+              >
+                Continue
+              </Button>
+
+              <Text style={styles.hint}>
+                Sign in with your email, password, and a one-time code to confirm your account.
+              </Text>
+            </View>
           </View>
-
-          {/* App name badge */}
-          <View style={styles.badge}>
-            <Text style={styles.badgeText}>Olives Forum</Text>
-          </View>
-
-          <Text style={styles.heroTitle}>
-            Find your next{'\n'}opportunity
-          </Text>
-
-          <Text style={styles.heroTagline}>
-            Matched to your interests and ambitions, globally.
-          </Text>
-        </ResponsiveContainer>
-      </View>
-
-      {/* ── Auth panel ── */}
-      <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
-        <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
-          <View style={styles.panelContent}>
-            <Text style={styles.panelTitle}>Sign in to explore</Text>
-
-            <Text style={styles.panelSubtitle}>
-              Save listings, get personalised recommendations, and never miss a
-              deadline.
-            </Text>
-
-            {error ? <ErrorMessage message={error} /> : null}
-
-            <Button
-              onPress={() => {
-                clearError();
-                void signInWithGoogle();
-              }}
-              loading={isLoading}
-              disabled={isLoading}
-              style={styles.googleBtn}
-              textStyle={styles.googleBtnText}
-            >
-              Continue with Google
-            </Button>
-
-            <AuthDivider />
-
-            <Button
-              onPress={() => router.push(ROUTES.AUTH.EMAIL as Href)}
-              disabled={isLoading}
-              style={styles.emailBtn}
-              textStyle={styles.emailBtnText}
-            >
-              Continue with email
-            </Button>
-
-            <Text style={styles.hint}>
-              Sign in with your email, password, and a one-time code to confirm your account.
-            </Text>
-          </View>
-        </ResponsiveContainer>
+        </ScrollView>
       </View>
     </View>
   );
@@ -201,12 +429,66 @@ const styles = StyleSheet.create({
     backgroundColor: DARK_GREEN,
   },
 
-  // ── Hero ──────────────────────────────────────────────────────────
-  hero: {
+  // ── Mobile App Layout ──────────────────────────────────────────
+  mobileContainer: {
+    flexGrow: 1,
+  },
+  mobileHero: {
     flex: 1,
     justifyContent: 'flex-end',
     paddingBottom: spacing.xl + spacing.md,
+    backgroundColor: DARK_GREEN,
   },
+
+  // ── Web Mobile Layout ──────────────────────────────────────────
+  webMobileHero: {
+    minHeight: 360,
+    justifyContent: 'flex-end',
+    paddingBottom: spacing.xl + spacing.md,
+    backgroundColor: DARK_GREEN,
+  },
+
+  // ── Split Layout (Web Desktop/Tablet) ──────────────────────────
+  splitContainer: {
+    flex: 1,
+    flexDirection: 'row',
+  },
+  leftColumn: {
+    flex: 0.5,
+    backgroundColor: DARK_GREEN,
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  rightColumn: {
+    flex: 0.5,
+    backgroundColor: colors.background,
+  },
+
+  authFormContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingHorizontal: spacing.xl,
+  },
+  authFormContent: {
+    width: '100%',
+    maxWidth: 440,
+  },
+
+  authTitle: {
+    color: colors.text,
+    fontSize: typography.fontSize.xl,
+    fontWeight: '600',
+    marginBottom: spacing.sm,
+  },
+  authSubtitle: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
+    lineHeight: 22,
+    marginBottom: spacing.lg,
+  },
+
+  // ── Shared Elements ────────────────────────────────────────────
   heroContent: {
     alignItems: 'center',
     gap: spacing.sm,
@@ -262,7 +544,7 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
 
-  // ── Panel ─────────────────────────────────────────────────────────
+  // ── Auth Panel (Mobile/Web Mobile) ─────────────────────────────
   panel: {
     backgroundColor: colors.background,
     borderTopLeftRadius: PANEL_RADIUS,
@@ -287,10 +569,21 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
 
+  // ── Buttons ────────────────────────────────────────────────────
   googleBtn: {
     backgroundColor: '#fff',
     borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
     height: 48,
+    justifyContent: 'center',
+    marginBottom: spacing.md,
+  },
+
+  googleBtnContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   googleBtnText: {
@@ -309,6 +602,27 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
+  // ── Divider ────────────────────────────────────────────────────
+  dividerContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    marginVertical: spacing.md,
+  },
+
+  dividerLine: {
+    flex: 1,
+    height: 1,
+    backgroundColor: colors.border,
+  },
+
+  dividerText: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.sm,
+    fontWeight: '500',
+  },
+
+  // ── Hints ──────────────────────────────────────────────────────
   hint: {
     color: colors.textMuted,
     fontSize: typography.fontSize.xs,

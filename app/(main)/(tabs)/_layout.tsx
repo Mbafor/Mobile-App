@@ -138,7 +138,7 @@ export default function MainTabsLayout() {
           items={webNavItems}
           compact={isWebMobile}
           onMenuToggle={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-          onGoHome={() => router.push(ROUTES.LANDING as Href)}
+          onGoHome={!isWebMobile ? () => router.push(ROUTES.LANDING as Href) : undefined}
           rightSlot={<AppHeaderActions />}
         />
         <View style={styles.webContent}>{tabs}</View>

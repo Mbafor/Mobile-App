@@ -91,13 +91,7 @@ export function DesktopWebNavigation({
               </Pressable>
             ))}
           </ScrollView>
-        ) : (
-          <View style={styles.compactHint}>
-            <Text style={styles.compactHintText} muted>
-              Menu
-            </Text>
-          </View>
-        )}
+        ) : null}
 
         <View style={styles.right}>{rightSlot}</View>
       </View>
@@ -166,15 +160,6 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     justifyContent: 'center',
     gap: spacing.xs,
-  },
-  compactHint: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    minWidth: 48,
-  },
-  compactHintText: {
-    fontSize: 12,
   },
   item: {
     height: 40,

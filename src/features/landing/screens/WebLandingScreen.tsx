@@ -8,6 +8,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { useEffect, useMemo, useState } from 'react';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Button, Text, WebCard } from '@/components/ui';
@@ -30,17 +31,71 @@ import {
 const FOREST = colors.forest;
 const ACCENT = '#8BC99A';
 
+function parseStatValue(value: string) {
+  const match = value.match(/^([\d.]+)(.*)$/);
+  return {
+    numeric: match ? parseFloat(match[1]) : 0,
+    suffix: match ? match[2] : '',
+  };
+}
+
+function useCountUp(target: number, duration = 1000) {
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    let frame = 0;
+    let start: number | null = null;
+    const precision = Number.isInteger(target) ? 1 : 10;
+
+    function step(timestamp: number) {
+      if (start === null) start = timestamp;
+      const progress = Math.min((timestamp - start) / duration, 1);
+      const value = Math.round(target * progress * precision) / precision;
+      setDisplayValue(value);
+
+      if (progress < 1) {
+        frame = requestAnimationFrame(step);
+      }
+    }
+
+    if (target <= 0) {
+      setDisplayValue(0);
+      return undefined;
+    }
+
+    frame = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(frame);
+  }, [target, duration]);
+
+  return displayValue;
+}
+
+function formatStatValue(value: number, suffix: string) {
+  const display = Number.isInteger(value) ? value.toString() : value.toFixed(1);
+  return `${display}${suffix}`;
+}
+
+function AnimatedTrustStat({ value, label }: { value: string; label: string }) {
+  const { numeric, suffix } = useMemo(() => parseStatValue(value), [value]);
+  const count = useCountUp(numeric, 1100);
+
+  return (
+    <WebCard hoverable style={styles.trustStatCard}>
+      <Text style={styles.trustStatValue}>{formatStatValue(count, suffix)}</Text>
+      <Text style={styles.trustStatLabel}>{label}</Text>
+    </WebCard>
+  );
+}
+
 function postAuthRoute(onboardingComplete: boolean): Href {
   return (onboardingComplete ? ROUTES.MAIN.DASHBOARD : ROUTES.ONBOARDING.BASIC_INFO) as Href;
 }
 
 function LandingNav({
-  onSignIn,
   onGetStarted,
   onOpenDashboard,
   isAuthenticated,
 }: {
-  onSignIn: () => void;
   onGetStarted: () => void;
   onOpenDashboard: () => void;
   isAuthenticated: boolean;
@@ -66,17 +121,9 @@ function LandingNav({
                 Open dashboard
               </Button>
             ) : (
-              <>
-                <Pressable
-                  onPress={onSignIn}
-                  style={webPressableStyle(styles.navLink, styles.navLinkHover)}
-                >
-                  <Text style={[styles.navLinkText, getWebFontStyle('medium')]}>Sign in</Text>
-                </Pressable>
-                <Button onPress={onGetStarted} style={styles.navCta} fullWidth={isNarrow}>
-                  Get started
-                </Button>
-              </>
+              <Button onPress={onGetStarted} style={styles.navCta} fullWidth={isNarrow}>
+                Get started
+              </Button>
             )}
           </View>
         </View>
@@ -85,7 +132,7 @@ function LandingNav({
   );
 }
 
-function HeroSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onSignIn: () => void }) {
+function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   const { width } = useWindowDimensions();
   const isWide = width >= 900;
   const isNarrow = width < 640;
@@ -116,15 +163,6 @@ function HeroSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onS
                 fullWidth={!isWide}
               >
                 Get started free
-              </Button>
-              <Button
-                onPress={onSignIn}
-                variant="secondary"
-                style={styles.heroSecondaryBtn}
-                textStyle={styles.heroSecondaryBtnText}
-                fullWidth={!isWide}
-              >
-                Sign in
               </Button>
             </View>
             <View style={styles.heroStats}>
@@ -190,10 +228,7 @@ function TrustSection() {
 
         <View style={[styles.trustGrid, isWide && styles.trustGridWide]}>
           {LANDING_TRUST_STATS.map((stat) => (
-            <WebCard key={stat.label} hoverable style={styles.trustStatCard}>
-              <Text style={styles.trustStatValue}>{stat.value}</Text>
-              <Text style={styles.trustStatLabel}>{stat.label}</Text>
-            </WebCard>
+            <AnimatedTrustStat key={stat.label} value={stat.value} label={stat.label} />
           ))}
         </View>
 
@@ -389,7 +424,7 @@ function TestimonialsSection() {
   );
 }
 
-function CtaSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onSignIn: () => void }) {
+function CtaSection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
     <View style={styles.ctaBand}>
       <ResponsiveContainer maxWidth={900} minHorizontalPadding={spacing.lg}>
@@ -402,14 +437,6 @@ function CtaSection({ onGetStarted, onSignIn }: { onGetStarted: () => void; onSi
         <View style={styles.ctaButtons}>
           <Button onPress={onGetStarted} style={styles.ctaPrimary} textStyle={styles.ctaPrimaryText}>
             Get started
-          </Button>
-          <Button
-            onPress={onSignIn}
-            variant="ghost"
-            style={styles.ctaGhost}
-            textStyle={styles.ctaGhostText}
-          >
-            Sign in
           </Button>
         </View>
       </ResponsiveContainer>
@@ -453,7 +480,6 @@ export function WebLandingScreen() {
   const isDesktopWeb = useWebDesktop();
 
   const goWelcome = () => router.push(ROUTES.AUTH.WELCOME as Href);
-  const goSignIn = () => router.push(ROUTES.AUTH.EMAIL as Href);
   const goDashboard = () => router.push(postAuthRoute(onboardingComplete));
 
   if (!isAuthReady) {
@@ -467,7 +493,6 @@ export function WebLandingScreen() {
   return (
     <View style={styles.page}>
       <LandingNav
-        onSignIn={goSignIn}
         onGetStarted={goWelcome}
         onOpenDashboard={goDashboard}
         isAuthenticated={isAuthenticated}
@@ -476,14 +501,14 @@ export function WebLandingScreen() {
         contentContainerStyle={[styles.scroll, isDesktopWeb && styles.scrollDesktop]}
         showsVerticalScrollIndicator={false}
       >
-        <HeroSection onGetStarted={goWelcome} onSignIn={goSignIn} />
+        <HeroSection onGetStarted={goWelcome} />
         <TrustSection />
         <FeaturesSection />
         <HowItWorksSection />
         <MentorshipSection onCta={goWelcome} />
         <OpportunitiesSection onCta={goWelcome} />
         <TestimonialsSection />
-        <CtaSection onGetStarted={goWelcome} onSignIn={goSignIn} />
+        <CtaSection onGetStarted={goWelcome} />
         <LandingFooter />
       </ScrollView>
     </View>
