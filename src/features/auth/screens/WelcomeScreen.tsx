@@ -1,5 +1,5 @@
 import { useRouter, type Href } from 'expo-router';
-import { Platform, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 import { useState } from 'react';
@@ -123,6 +123,7 @@ export function WelcomeScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [formError, setFormError] = useState('');
+  const [googleButtonHover, setGoogleButtonHover] = useState(false);
 
   const { signInWithGoogle, signInWithEmailPassword, isLoading, error, clearError } = useAuthActions();
 
@@ -189,18 +190,25 @@ export function WelcomeScreen() {
                   Save listings, get personalised recommendations, and never miss a deadline.
                 </Text>
                 {error ? <ErrorMessage message={error} /> : null}
-                <Button
+                <Pressable
                   onPress={() => {
                     clearError();
                     void signInWithGoogle();
                   }}
-                  loading={isLoading}
                   disabled={isLoading}
-                  style={styles.googleBtn}
-                  textStyle={styles.googleBtnText}
+                  style={[
+                    styles.googleBtn,
+                    googleButtonHover && styles.googleBtnHover,
+                  ]}
+                  {...(Platform.OS === 'web' && {
+                    onMouseEnter: () => setGoogleButtonHover(true),
+                    onMouseLeave: () => setGoogleButtonHover(false),
+                  } as any)}
                 >
-                  Continue with Google
-                </Button>
+                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>
+                    Continue with Google
+                  </Text>
+                </Pressable>
                 <AuthDivider />
                 <Button
                   onPress={() => router.push(ROUTES.AUTH.EMAIL as Href)}
@@ -253,21 +261,26 @@ export function WelcomeScreen() {
 
               {error || formError ? <ErrorMessage message={error || formError} /> : null}
 
-              <Button
+              <Pressable
                 onPress={() => {
                   clearError();
                   void signInWithGoogle();
                 }}
-                loading={isLoading}
                 disabled={isLoading}
-                style={styles.googleBtn}
-                textStyle={styles.googleBtnText}
+                style={[
+                  styles.googleBtn,
+                  googleButtonHover && styles.googleBtnHover,
+                ]}
+                {...(Platform.OS === 'web' && {
+                  onMouseEnter: () => setGoogleButtonHover(true),
+                  onMouseLeave: () => setGoogleButtonHover(false),
+                } as any)}
               >
                 <View style={styles.googleBtnContent}>
-                  <Ionicons name="logo-google" size={18} color="#000" style={{ marginRight: spacing.xs }} />
-                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
+                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
                 </View>
-              </Button>
+              </Pressable>
 
               <View style={styles.dividerContainer}>
                 <View style={styles.dividerLine} />
@@ -351,21 +364,26 @@ export function WelcomeScreen() {
 
               {error || formError ? <ErrorMessage message={error || formError} /> : null}
 
-              <Button
+              <Pressable
                 onPress={() => {
                   clearError();
                   void signInWithGoogle();
                 }}
-                loading={isLoading}
                 disabled={isLoading}
-                style={styles.googleBtn}
-                textStyle={styles.googleBtnText}
+                style={[
+                  styles.googleBtn,
+                  googleButtonHover && styles.googleBtnHover,
+                ]}
+                {...(Platform.OS === 'web' && {
+                  onMouseEnter: () => setGoogleButtonHover(true),
+                  onMouseLeave: () => setGoogleButtonHover(false),
+                } as any)}
               >
                 <View style={styles.googleBtnContent}>
-                  <Ionicons name="logo-google" size={18} color="#000" style={{ marginRight: spacing.xs }} />
-                  <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
+                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
                 </View>
-              </Button>
+              </Pressable>
 
               <View style={styles.dividerContainer}>
                 <View style={styles.dividerLine} />
@@ -589,6 +607,14 @@ const styles = StyleSheet.create({
   googleBtnText: {
     color: '#000',
     fontWeight: '500',
+  },
+
+  googleBtnHover: {
+    backgroundColor: colors.primary,
+  },
+
+  googleBtnTextHover: {
+    color: '#fff',
   },
 
   emailBtn: {

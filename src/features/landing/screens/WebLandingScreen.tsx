@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, type Href } from 'expo-router';
 import {
   ActivityIndicator,
+  Image,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -103,33 +104,33 @@ function LandingNav({
   const { width } = useWindowDimensions();
   const isNarrow = width < 640;
 
-  return (
-    <View style={styles.nav}>
-      <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
-        <View style={[styles.navRow, isNarrow && styles.navRowNarrow]}>
-          <View style={styles.navBrand}>
-            <View style={styles.navLogo}>
-              <Text style={styles.navLogoText}>O</Text>
-            </View>
-            <Text style={styles.navBrandName} numberOfLines={1}>
-              Olives Forum
-            </Text>
+ return (
+  <View style={styles.nav}>
+    <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
+      <View style={styles.navRow}>
+        <View style={styles.navBrand}>
+          <View style={styles.navLogo}>
+            <Text style={styles.navLogoText}>O</Text>
           </View>
-          <View style={[styles.navActions, isNarrow && styles.navActionsNarrow]}>
-            {isAuthenticated ? (
-              <Button onPress={onOpenDashboard} style={styles.navCta} fullWidth={isNarrow}>
-                Open dashboard
-              </Button>
-            ) : (
-              <Button onPress={onGetStarted} style={styles.navCta} fullWidth={isNarrow}>
-                Get started
-              </Button>
-            )}
-          </View>
+          <Text style={styles.navBrandName} numberOfLines={1}>
+            Olives Forum
+          </Text>
         </View>
-      </ResponsiveContainer>
-    </View>
-  );
+        <View style={styles.navActions}>
+          {isAuthenticated ? (
+            <Button onPress={onOpenDashboard} style={styles.navCta} textStyle={styles.navCtaText}>
+              Open dashboard
+            </Button>
+          ) : (
+            <Button onPress={onGetStarted} style={styles.navCta} textStyle={styles.navCtaText}>
+              Get started
+            </Button>
+          )}
+        </View>
+      </View>
+    </ResponsiveContainer>
+  </View>
+);
 }
 
 function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
@@ -187,23 +188,13 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
           </View>
 
           {!isNarrow ? (
-          <WebCard style={styles.heroCard} hoverable>
-            <View style={styles.heroCardHeader}>
-              <Ionicons name="sparkles-outline" size={18} color={ACCENT} />
-              <Text style={styles.heroCardTitle}>Your next match</Text>
-            </View>
-            <View style={styles.heroCardBody}>
-              <Text style={styles.heroCardOpportunity}>Climate Innovation Fellowship</Text>
-              <Text style={styles.heroCardMeta}>Deadline in 12 days · Remote</Text>
-              <View style={styles.heroCardTags}>
-                <Text style={styles.heroCardTag}>STEM</Text>
-                <Text style={styles.heroCardTag}>Graduate</Text>
-              </View>
-            </View>
-            <View style={styles.heroCardFooter}>
-              <Text style={styles.heroCardFooterText}>Personalised to your interests</Text>
-            </View>
-          </WebCard>
+          <View style={styles.heroImage}>
+            <Image
+              source={require('../Images/product.png')}
+              style={styles.heroImageContent}
+              resizeMode="contain"
+            />
+          </View>
           ) : null}
         </View>
       </ResponsiveContainer>
@@ -452,6 +443,22 @@ function LandingFooter() {
           <View style={styles.footerColumn}>
             <Text style={styles.footerBrand}>Olives Forum</Text>
             <Text style={styles.footerText}>Building career confidence for African students and young professionals.</Text>
+            <View style={styles.downloadLinks}>
+              <Pressable style={styles.downloadButton}>
+                <Ionicons name="logo-google-playstore" size={20} color={colors.primary} />
+                <View>
+                  <Text style={styles.downloadSmall}>Get it on</Text>
+                  <Text style={styles.downloadStore}>Google Play</Text>
+                </View>
+              </Pressable>
+              <Pressable style={styles.downloadButton}>
+                <Ionicons name="logo-apple" size={20} color={colors.text} />
+                <View>
+                  <Text style={styles.downloadSmall}>Download on</Text>
+                  <Text style={styles.downloadStore}>App Store</Text>
+                </View>
+              </Pressable>
+            </View>
           </View>
           <View style={styles.footerColumn}>
             <Text style={styles.footerHeading}>Product</Text>
@@ -533,9 +540,6 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xl,
   },
   nav: {
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    backgroundColor: 'rgba(255,255,255,0.92)',
     paddingVertical: spacing.sm,
     zIndex: 10,
   },
@@ -544,10 +548,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     gap: spacing.md,
-  },
-  navRowNarrow: {
-    flexDirection: 'column',
-    alignItems: 'stretch',
   },
   navBrand: {
     flexDirection: 'row',
@@ -558,7 +558,7 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: FOREST,
+    backgroundColor: 'rgba(255,255,255,0.15)',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -570,17 +570,12 @@ const styles = StyleSheet.create({
   navBrandName: {
     fontSize: typography.fontSize.md,
     fontWeight: '700',
-    color: colors.text,
+    color: '#fff',
   },
   navActions: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-  },
-  navActionsNarrow: {
-    width: '100%',
-    flexDirection: 'column',
-    alignItems: 'stretch',
   },
   navLink: {
     paddingHorizontal: spacing.sm,
@@ -598,15 +593,17 @@ const styles = StyleSheet.create({
   navCta: {
     paddingHorizontal: spacing.md,
     minHeight: 40,
+    backgroundColor: '#fff',
+  },
+  navCtaText: {
+    color: colors.primary,
   },
   hero: {
     backgroundColor: FOREST,
-    paddingTop: spacing.xl * 2,
     paddingBottom: spacing.xl * 2,
     overflow: 'hidden',
   },
   heroNarrow: {
-    paddingTop: spacing.xl,
     paddingBottom: spacing.xl,
   },
   sectionNarrow: {
@@ -745,6 +742,11 @@ const styles = StyleSheet.create({
   },
   heroGrid: {
     gap: spacing.xl,
+    paddingTop: spacing.xl * 2,
+    paddingHorizontal: spacing.lg,
+  },
+  heroGridNarrow: {
+    paddingTop: spacing.xl,
   },
   heroGridWide: {
     flexDirection: 'row',
@@ -791,6 +793,12 @@ const styles = StyleSheet.create({
   heroPrimaryBtnText: {
     color: colors.primary,
   },
+  heroPrimaryBtnHovered: {
+    backgroundColor: colors.primary,
+  },
+  heroPrimaryBtnTextHovered: {
+    color: '#fff',
+  },
   heroSecondaryBtn: {
     backgroundColor: 'transparent',
     borderWidth: 1,
@@ -824,61 +832,15 @@ const styles = StyleSheet.create({
     height: 28,
     backgroundColor: 'rgba(255,255,255,0.2)',
   },
-  heroCard: {
+  heroImage: {
     flex: 1,
-    maxWidth: 420,
-    backgroundColor: 'rgba(255,255,255,0.08)',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.14)',
-    padding: spacing.lg,
-    gap: spacing.md,
-  },
-  heroCardHeader: {
-    flexDirection: 'row',
+    maxWidth: 480,
     alignItems: 'center',
-    gap: spacing.xs,
+    justifyContent: 'center',
   },
-  heroCardTitle: {
-    color: ACCENT,
-    fontSize: typography.fontSize.sm,
-    fontWeight: '600',
-  },
-  heroCardBody: {
-    gap: spacing.xs,
-  },
-  heroCardOpportunity: {
-    color: '#fff',
-    fontSize: typography.fontSize.lg,
-    fontWeight: '600',
-    lineHeight: 28,
-  },
-  heroCardMeta: {
-    color: 'rgba(255,255,255,0.55)',
-    fontSize: typography.fontSize.sm,
-  },
-  heroCardTags: {
-    flexDirection: 'row',
-    gap: spacing.xs,
-    marginTop: spacing.xs,
-  },
-  heroCardTag: {
-    color: 'rgba(255,255,255,0.8)',
-    fontSize: typography.fontSize.xs,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 4,
-    borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    overflow: 'hidden',
-  },
-  heroCardFooter: {
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(255,255,255,0.12)',
-    paddingTop: spacing.sm,
-  },
-  heroCardFooterText: {
-    color: 'rgba(255,255,255,0.5)',
-    fontSize: typography.fontSize.xs,
+  heroImageContent: {
+    width: '100%',
+    height: 560,
   },
   heroTrustLine: {
     color: 'rgba(255,255,255,0.75)',
@@ -1026,6 +988,12 @@ const styles = StyleSheet.create({
   ctaPrimaryText: {
     color: colors.primary,
   },
+  ctaPrimaryHovered: {
+    backgroundColor: colors.primary,
+  },
+  ctaPrimaryTextHovered: {
+    color: '#fff',
+  },
   ctaGhost: {
     minWidth: 120,
   },
@@ -1072,5 +1040,30 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     fontSize: typography.fontSize.sm,
     textAlign: 'center',
+  },
+  downloadLinks: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    marginTop: spacing.md,
+  },
+  downloadButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: colors.border,
+    backgroundColor: colors.surface,
+  },
+  downloadSmall: {
+    fontSize: typography.fontSize.xs,
+    color: colors.textMuted,
+  },
+  downloadStore: {
+    fontSize: typography.fontSize.sm,
+    fontWeight: '600',
+    color: colors.text,
   },
 });
