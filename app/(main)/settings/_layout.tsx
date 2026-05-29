@@ -10,7 +10,6 @@ export default function SettingsLayout() {
         headerShown: true,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
         headerTintColor: colors.text,
-        headerRightContainerStyle: { paddingRight: spacing.xs },
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Settings' }} />

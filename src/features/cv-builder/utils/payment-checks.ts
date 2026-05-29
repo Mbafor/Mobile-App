@@ -1,8 +1,10 @@
-import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
+import { isTemplateFree, resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import type { CVPayment } from '@/types/domain/cv';
 
 /** True when this user has permanently purchased download access for one template. */
 export function isTemplatePurchased(payments: CVPayment[], templateId: string): boolean {
+  if (isTemplateFree(templateId)) return true;
+
   const resolved = resolveTemplateId(templateId);
   return payments.some(
     (p) =>

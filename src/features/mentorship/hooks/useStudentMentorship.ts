@@ -11,7 +11,7 @@ export function useStudentMentorship() {
   const activeQuery = useQuery({
     queryKey: queryKeys.mentorship.active(userId),
     queryFn: async () => {
-      const result = await mentorshipApi.getActiveMentorship(userId);
+      const result = await mentorshipApi.getActiveMentorship(userId, 'student');
       if (!result.success) throw new Error(result.error.message);
       return result.data;
     },

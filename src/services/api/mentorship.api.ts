@@ -152,13 +152,17 @@ export const mentorshipApi = {
     }
   },
 
-  getActiveMentorship: async (userId: string): Promise<ApiResult<Mentorship | null>> => {
+  getActiveMentorship: async (
+    userId: string,
+    role: 'student' | 'coach' = 'student',
+  ): Promise<ApiResult<Mentorship | null>> => {
     try {
+      const field = role === 'student' ? 'student_id' : 'mentor_id';
       const { data, error } = await supabase
         .from('mentorships')
         .select('*')
         .eq('status', 'active')
-        .or(`student_id.eq.${userId},mentor_id.eq.${userId}`)
+        .eq(field, userId)
         .maybeSingle();
 
       if (error) return fail(error);

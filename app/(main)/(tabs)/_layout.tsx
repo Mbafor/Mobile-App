@@ -42,7 +42,7 @@ export default function MainTabsLayout() {
     }, [refreshProfile]),
   );
 
-  const tabBarHeight = 56 + insets.bottom;
+  const tabBarHeight = 65 + insets.bottom;
   const tabBarPaddingBottom = Math.max(insets.bottom, spacing.xs);
 
   const tabs = (
@@ -68,7 +68,9 @@ export default function MainTabsLayout() {
           ...(isWeb ? { display: 'none' as const } : {}),
         },
         tabBarItemStyle: { paddingTop: 4 },
-        sceneContainerStyle: { backgroundColor: colors.background },
+        sceneStyle: {
+          backgroundColor: colors.background,
+        },
       }}
     >
       <Tabs.Screen

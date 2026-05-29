@@ -10,7 +10,6 @@ export default function SuperAdminOpportunitiesLayout() {
         headerShadowVisible: false,
         headerStyle: { backgroundColor: colors.background },
         headerTintColor: colors.text,
-        headerRightContainerStyle: { paddingRight: spacing.xs },
       }}
     >
       <Stack.Screen name="index" options={{ title: 'Opportunities' }} />

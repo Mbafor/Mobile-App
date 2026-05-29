@@ -44,7 +44,7 @@ export function CoachMentorshipDashboard() {
   const { mentees, capacity, isLoading, error, refetch } = useCoachMentorship();
   const { removeMentee, isRemoving } = useMentorshipActions();
   const { completed, sessions, isLoading: sessionsLoading } = useMentorshipSessions(userId);
-  const { update, cancel } = useSessionMutations(userId);
+  const { update, cancel, confirm } = useSessionMutations(userId);
   useMentorshipSchedulingRealtime(userId);
 
   const mentorshipIds = mentees.map((m) => m.mentorship.id);
@@ -87,14 +87,15 @@ export function CoachMentorshipDashboard() {
         title: session.title ?? 'Mentorship session',
       });
       if (!result.success) {
-        await update(sessionId, { status: 'confirmed' });
+        await confirm(sessionId);
         void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
         Alert.alert(
           'Session confirmed',
-          'Google Meet link could not be created. You can add a meeting URL manually.',
+          `Google Meet link could not be created: ${result.error.message}\n\nYou can add a meeting URL manually.`,
         );
         return;
       }
+      await confirm(sessionId, result.data.meetingUrl);
       Alert.alert('Session confirmed', 'Google Meet link has been added for this session.');
       void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
     } catch (e) {

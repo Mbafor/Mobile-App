@@ -80,6 +80,10 @@ export type Database = {
         Args: { p_session_id: string; p_reason?: string };
         Returns: Json;
       };
+      confirm_mentorship_session: {
+        Args: { p_session_id: string; p_meeting_url?: string | null };
+        Returns: Json;
+      };
       complete_past_mentorship_sessions: {
         Args: Record<string, never>;
         Returns: number;
@@ -728,6 +732,8 @@ export type Database = {
           mentorship_id: string;
           sender_id: string;
           body: string;
+          attachment_url: string | null;
+          attachment_type: 'image' | 'file' | null;
           created_at: string;
         };
         Insert: Record<string, unknown>;

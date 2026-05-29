@@ -131,3 +131,22 @@ export const LANDING_TESTIMONIALS = [
     role: 'Career mentor',
   },
 ];
+
+export const LANDING_FAQS = [
+  {
+    question: 'Is Olives Forum free to use?',
+    answer: 'Yes! Creating an account, browsing opportunities, and matching with mentors is completely free for students.',
+  },
+  {
+    question: 'How does mentor matching work?',
+    answer: 'We use the profile details you provide (like your field of study and career goals) to suggest mentors who have relevant experience. You can browse suggested coaches and request to connect.',
+  },
+  {
+    question: 'Can I track my applications here?',
+    answer: 'Yes, our built-in tracker lets you save opportunities you discover on the platform and monitor their deadlines and statuses all in one place.',
+  },
+  {
+    question: 'Are the CV templates free?',
+    answer: 'Yes! You can use our CV builder and export your resume using any of our professional templates at no cost.',
+  },
+];

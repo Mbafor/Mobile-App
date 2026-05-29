@@ -16,6 +16,8 @@ const MENTORSHIP_ERROR_MESSAGES: Record<string, string> = {
   P0013: 'Invalid mentorship end status.',
   '42501': 'You must be signed in.',
   '23514': 'This coach has reached their maximum number of students.',
+  '23505': 'You already have a pending session this week, or this time slot is already booked.',
+  '22023': "The selected time is not within your coach's available hours.",
 };
 
 export function mapMentorshipError(error: { message: string; code?: string }): ApiError {

@@ -3,6 +3,7 @@ import { useRouter, type Href } from 'expo-router';
 import {
   ActivityIndicator,
   Image,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -27,6 +28,7 @@ import {
   LANDING_TRUST_STATS,
   LANDING_PARTNERS,
   LANDING_TESTIMONIALS,
+  LANDING_FAQS,
 } from '@/features/landing/constants/content';
 
 const FOREST = colors.forest;
@@ -104,33 +106,43 @@ function LandingNav({
   const { width } = useWindowDimensions();
   const isNarrow = width < 640;
 
- return (
-  <View style={styles.nav}>
-    <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
-      <View style={styles.navRow}>
-        <View style={styles.navBrand}>
-          <View style={styles.navLogo}>
-            <Text style={styles.navLogoText}>O</Text>
+  const btnStyle = webPressableStyle(styles.navCta, styles.navCtaHover);
+
+  return (
+    <View style={styles.nav}>
+      <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
+        <View style={styles.navRow}>
+          <View style={styles.navBrand}>
+            <View style={styles.navLogo}>
+              <Text style={styles.navLogoText}>O</Text>
+            </View>
+            <Text style={styles.navBrandName} numberOfLines={1}>
+              Olives Forum
+            </Text>
           </View>
-          <Text style={styles.navBrandName} numberOfLines={1}>
-            Olives Forum
-          </Text>
+          <View style={styles.navActions}>
+            {isAuthenticated ? (
+              <Pressable onPress={onOpenDashboard} style={btnStyle}>
+                {({ hovered }) => (
+                  <Text style={hovered ? styles.navCtaTextHover : styles.navCtaText}>
+                    Open dashboard
+                  </Text>
+                )}
+              </Pressable>
+            ) : (
+              <Pressable onPress={onGetStarted} style={btnStyle}>
+                {({ hovered }) => (
+                  <Text style={hovered ? styles.navCtaTextHover : styles.navCtaText}>
+                    Get started
+                  </Text>
+                )}
+              </Pressable>
+            )}
+          </View>
         </View>
-        <View style={styles.navActions}>
-          {isAuthenticated ? (
-            <Button onPress={onOpenDashboard} style={styles.navCta} textStyle={styles.navCtaText}>
-              Open dashboard
-            </Button>
-          ) : (
-            <Button onPress={onGetStarted} style={styles.navCta} textStyle={styles.navCtaText}>
-              Get started
-            </Button>
-          )}
-        </View>
-      </View>
-    </ResponsiveContainer>
-  </View>
-);
+      </ResponsiveContainer>
+    </View>
+  );
 }
 
 function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
@@ -138,6 +150,11 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
   const isWide = width >= 900;
   const isNarrow = width < 640;
   const isDesktopWeb = useWebDesktop();
+
+  const primaryBtnStyle = webPressableStyle(
+    [styles.heroPrimaryBtn, !isWide && { alignSelf: 'stretch', width: '100%' }],
+    styles.heroPrimaryBtnHovered
+  );
 
   return (
     <View style={[styles.hero, isNarrow && styles.heroNarrow]}>
@@ -157,14 +174,13 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
               with mentorship and CV tools in one place.
             </Text>
             <View style={[styles.heroCtas, isWide && styles.heroCtasWide]}>
-              <Button
-                onPress={onGetStarted}
-                style={styles.heroPrimaryBtn}
-                textStyle={styles.heroPrimaryBtnText}
-                fullWidth={!isWide}
-              >
-                Get started free
-              </Button>
+              <Pressable onPress={onGetStarted} style={primaryBtnStyle}>
+                {({ hovered }) => (
+                  <Text style={hovered ? styles.heroPrimaryBtnTextHovered : styles.heroPrimaryBtnText}>
+                    Get started free
+                  </Text>
+                )}
+              </Pressable>
             </View>
             <View style={styles.heroStats}>
               <View style={styles.stat}>
@@ -188,13 +204,13 @@ function HeroSection({ onGetStarted }: { onGetStarted: () => void }) {
           </View>
 
           {!isNarrow ? (
-          <View style={styles.heroImage}>
-            <Image
-              source={require('../Images/product.png')}
-              style={styles.heroImageContent}
-              resizeMode="contain"
-            />
-          </View>
+            <View style={styles.heroImage}>
+              <Image
+                source={require('../Images/product.png')}
+                style={styles.heroImageContent}
+                resizeMode="contain"
+              />
+            </View>
           ) : null}
         </View>
       </ResponsiveContainer>
@@ -207,7 +223,7 @@ function TrustSection() {
   const isWide = width >= 900;
 
   return (
-    <View style={[styles.sectionMuted, styles.trustSection]}> 
+    <View style={[styles.sectionMuted, styles.trustSection]}>
       <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
         <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Trusted by learners</Text>
         <Text variant="h2" style={styles.sectionTitle}>
@@ -342,44 +358,40 @@ function MentorshipSection({ onCta }: { onCta: () => void }) {
   );
 }
 
-function OpportunitiesSection({ onCta }: { onCta: () => void }) {
+function FaqItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const hoverStyle = webPressableStyle(styles.faqHeader, styles.faqHeaderHover);
+
+  return (
+    <View style={styles.faqItem}>
+      <Pressable style={hoverStyle} onPress={() => setIsOpen(!isOpen)}>
+        <Text variant="h3" style={styles.faqQuestion}>{question}</Text>
+        <Ionicons name={isOpen ? 'chevron-up' : 'chevron-down'} size={20} color={colors.textMuted} />
+      </Pressable>
+      {isOpen && (
+        <View style={styles.faqBody}>
+          <Text variant="bodyLg" muted style={styles.faqAnswer}>{answer}</Text>
+        </View>
+      )}
+    </View>
+  );
+}
+
+function FaqSection() {
   const { width } = useWindowDimensions();
-  const isWide = width >= 900;
   const isNarrow = width < 640;
 
   return (
     <View style={[styles.sectionLight, isNarrow && styles.sectionNarrow]}>
       <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
-        <View style={[styles.splitSection, isWide && styles.splitSectionWide]}>
-          <View style={styles.oppPreview}>
-            {LANDING_OPPORTUNITY_POINTS.map((item, index) => (
-              <WebCard
-                key={item.title}
-                hoverable
-                style={[styles.oppCard, index > 0 && !isNarrow && styles.oppCardOffset]}
-              >
-                <Text variant="h3" style={styles.oppCardTitle}>
-                  {item.title}
-                </Text>
-                <Text variant="bodySm" muted style={styles.oppCardBody}>
-                  {item.description}
-                </Text>
-              </WebCard>
-            ))}
-          </View>
-          <View style={styles.splitCopy}>
-            <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Opportunities</Text>
-            <Text variant="h2" style={styles.sectionTitle}>
-              Never miss a deadline that matters
-            </Text>
-            <Text variant="bodyLg" style={styles.sectionSubtitle}>
-              Browse categories, save listings, and track applications in one tracker built for
-              busy students.
-            </Text>
-            <Button onPress={onCta} style={styles.inlineCta}>
-              Browse opportunities
-            </Button>
-          </View>
+        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>FAQ</Text>
+        <Text variant="h2" style={styles.sectionTitle}>
+          Got questions? We've got answers.
+        </Text>
+        <View style={styles.faqList}>
+          {LANDING_FAQS.map((faq) => (
+            <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
+          ))}
         </View>
       </ResponsiveContainer>
     </View>
@@ -391,21 +403,29 @@ function TestimonialsSection() {
   const columns = width >= 1024 ? 3 : width >= 720 ? 2 : 1;
 
   return (
-    <View style={[styles.sectionMuted, styles.sectionNarrow]}> 
+    <View style={[styles.sectionMuted, styles.sectionNarrow]}>
       <ResponsiveContainer maxWidth={1200} minHorizontalPadding={spacing.md}>
-        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Stories</Text>
+        <Text style={[styles.sectionEyebrow, getWebFontStyle('semibold')]}>Success Stories</Text>
         <Text variant="h2" style={styles.sectionTitle}>
           Students and mentors finding momentum together.
         </Text>
-        <View style={[styles.testimonialGrid, { gap: spacing.md, flexDirection: columns === 1 ? 'column' : 'row' }]}> 
+        <View style={[styles.testimonialGrid, { gap: spacing.xl, flexDirection: columns === 1 ? 'column' : 'row' }]}>
           {LANDING_TESTIMONIALS.map((testimonial) => (
             <WebCard key={testimonial.name} hoverable style={styles.testimonialCard}>
+              <View style={styles.quoteIconWrap}>
+                <Ionicons name="chatbubbles" size={24} color={colors.primary} />
+              </View>
               <Text variant="bodyLg" style={styles.testimonialQuote}>
                 {testimonial.quote}
               </Text>
-              <View style={styles.testimonialMeta}>
-                <Text style={styles.testimonialName}>{testimonial.name}</Text>
-                <Text style={styles.testimonialRole}>{testimonial.role}</Text>
+              <View style={styles.testimonialAuthorRow}>
+                <View style={styles.testimonialAvatar}>
+                  <Text style={styles.testimonialAvatarText}>{testimonial.name.charAt(0)}</Text>
+                </View>
+                <View style={styles.testimonialMeta}>
+                  <Text style={styles.testimonialName}>{testimonial.name}</Text>
+                  <Text style={styles.testimonialRole}>{testimonial.role}</Text>
+                </View>
               </View>
             </WebCard>
           ))}
@@ -416,6 +436,7 @@ function TestimonialsSection() {
 }
 
 function CtaSection({ onGetStarted }: { onGetStarted: () => void }) {
+  const ctaBtnStyle = webPressableStyle(styles.ctaPrimary);
   return (
     <View style={styles.ctaBand}>
       <ResponsiveContainer maxWidth={900} minHorizontalPadding={spacing.lg}>
@@ -426,9 +447,9 @@ function CtaSection({ onGetStarted }: { onGetStarted: () => void }) {
           Join Olives Forum and start with a personalised feed in minutes.
         </Text>
         <View style={styles.ctaButtons}>
-          <Button onPress={onGetStarted} style={styles.ctaPrimary} textStyle={styles.ctaPrimaryText}>
-            Get started
-          </Button>
+          <Pressable onPress={onGetStarted} style={ctaBtnStyle}>
+            <Text style={styles.ctaPrimaryText}>Get started</Text>
+          </Pressable>
         </View>
       </ResponsiveContainer>
     </View>
@@ -513,8 +534,8 @@ export function WebLandingScreen() {
         <FeaturesSection />
         <HowItWorksSection />
         <MentorshipSection onCta={goWelcome} />
-        <OpportunitiesSection onCta={goWelcome} />
         <TestimonialsSection />
+        <FaqSection />
         <CtaSection onGetStarted={goWelcome} />
         <LandingFooter />
       </ScrollView>
@@ -542,6 +563,7 @@ const styles = StyleSheet.create({
   nav: {
     paddingVertical: spacing.sm,
     zIndex: 10,
+    backgroundColor: FOREST,
   },
   navRow: {
     flexDirection: 'row',
@@ -592,11 +614,26 @@ const styles = StyleSheet.create({
   },
   navCta: {
     paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
     minHeight: 40,
     backgroundColor: '#fff',
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-end',
   },
+  navCtaHover: Platform.OS === 'web' ? {
+    backgroundColor: colors.primary,
+  } : {},
   navCtaText: {
     color: colors.primary,
+    fontWeight: '600',
+    fontSize: typography.fontSize.sm,
+  },
+  navCtaTextHover: {
+    color: '#fff',
+    fontWeight: '600',
+    fontSize: typography.fontSize.sm,
   },
   hero: {
     backgroundColor: FOREST,
@@ -694,31 +731,99 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
   testimonialGrid: {
-    marginTop: spacing.lg,
+    marginTop: spacing.xl,
   },
   testimonialCard: {
     flex: 1,
-    minWidth: 260,
-    padding: spacing.lg,
-    gap: spacing.sm,
+    minWidth: 280,
+    padding: spacing.xl,
+    gap: spacing.md,
     backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 16,
+  },
+  quoteIconWrap: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: `${colors.primary}15`,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: spacing.xs,
   },
   testimonialQuote: {
     color: colors.text,
     fontSize: typography.fontSize.lg,
     lineHeight: 28,
+    fontStyle: 'italic',
+  },
+  testimonialAuthorRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: spacing.md,
+    gap: spacing.sm,
+  },
+  testimonialAvatar: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  testimonialAvatarText: {
+    color: '#fff',
+    fontWeight: '700',
+    fontSize: typography.fontSize.md,
   },
   testimonialMeta: {
-    marginTop: spacing.sm,
     gap: 2,
   },
   testimonialName: {
     fontWeight: '700',
     color: colors.text,
+    fontSize: typography.fontSize.md,
   },
   testimonialRole: {
     color: colors.textMuted,
     fontSize: typography.fontSize.sm,
+  },
+  faqList: {
+    marginTop: spacing.xl,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    maxWidth: 800,
+    width: '100%',
+  },
+  faqItem: {
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  faqHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: spacing.lg,
+    paddingHorizontal: spacing.sm,
+  },
+  faqHeaderHover: Platform.OS === 'web' ? {
+    backgroundColor: colors.surface,
+  } : {},
+  faqQuestion: {
+    color: colors.text,
+    fontSize: typography.fontSize.lg,
+    fontWeight: '600',
+    flex: 1,
+    paddingRight: spacing.md,
+  },
+  faqBody: {
+    paddingHorizontal: spacing.sm,
+    paddingBottom: spacing.lg,
+  },
+  faqAnswer: {
+    color: colors.textMuted,
+    lineHeight: 26,
   },
   heroGlowA: {
     position: 'absolute',
@@ -789,15 +894,24 @@ const styles = StyleSheet.create({
   heroPrimaryBtn: {
     backgroundColor: '#fff',
     minWidth: 180,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   heroPrimaryBtnText: {
     color: colors.primary,
+    fontWeight: '600',
+    fontSize: typography.fontSize.md,
   },
   heroPrimaryBtnHovered: {
     backgroundColor: colors.primary,
   },
   heroPrimaryBtnTextHovered: {
     color: '#fff',
+    fontWeight: '600',
+    fontSize: typography.fontSize.md,
   },
   heroSecondaryBtn: {
     backgroundColor: 'transparent',
@@ -841,6 +955,7 @@ const styles = StyleSheet.create({
   heroImageContent: {
     width: '100%',
     height: 560,
+    transform: [{ scale: 1.15 }],
   },
   heroTrustLine: {
     color: 'rgba(255,255,255,0.75)',
@@ -984,9 +1099,16 @@ const styles = StyleSheet.create({
   ctaPrimary: {
     backgroundColor: '#fff',
     minWidth: 160,
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm + 2,
+    borderRadius: 8,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   ctaPrimaryText: {
     color: colors.primary,
+    fontWeight: '600',
+    fontSize: typography.fontSize.md,
   },
   ctaPrimaryHovered: {
     backgroundColor: colors.primary,

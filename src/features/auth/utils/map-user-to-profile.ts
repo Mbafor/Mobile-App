@@ -19,6 +19,7 @@ export function mapUserToProfile(user: User): UserProfile {
     avatarUrl: getOAuthAvatarUrl(meta),
     role: isAdmin ? 'admin' : role,
     isAdmin,
+    isSuperAdmin: role === 'super_admin' || Boolean(meta.is_super_admin),
     onboardingComplete: meta.onboarding_complete === true,
   };
 }

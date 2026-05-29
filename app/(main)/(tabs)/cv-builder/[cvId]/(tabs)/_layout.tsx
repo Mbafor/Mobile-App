@@ -21,7 +21,7 @@ export default function CVHubTabsLayout() {
   const insets = useSafeAreaInsets();
   useHideMainTabBar();
 
-  const tabBarHeight = 56 + insets.bottom;
+  const tabBarHeight = 65 + insets.bottom;
 
   return (
     <Tabs
@@ -48,7 +48,7 @@ export default function CVHubTabsLayout() {
               }
             : {}),
         },
-        sceneContainerStyle: { backgroundColor: cvDocsTheme.pageBg },
+        sceneStyle: { backgroundColor: colors.background },
       }}
     >
       <Tabs.Screen
@@ -76,7 +76,7 @@ export default function CVHubTabsLayout() {
         name="preview"
         options={{
           title: 'Preview',
-          tabBarButton: () => null,
+          href: null,
         }}
       />
       <Tabs.Screen

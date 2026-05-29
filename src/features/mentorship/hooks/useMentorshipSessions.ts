@@ -80,6 +80,19 @@ export function useSessionMutations(userId: string | undefined) {
     },
   });
 
+  const confirmMutation = useMutation({
+    mutationFn: ({
+      sessionId,
+      meetingUrl,
+    }: {
+      sessionId: string;
+      meetingUrl?: string | null;
+    }) => mentorshipSchedulingApi.confirmSession(sessionId, meetingUrl),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId ?? '') });
+    },
+  });
+
   const book = async (input: Parameters<typeof mentorshipSchedulingApi.bookSession>[0]) => {
     const result = await bookMutation.mutateAsync(input);
     if (!result.success) throw new Error(result.error.message);
@@ -91,6 +104,12 @@ export function useSessionMutations(userId: string | undefined) {
     updates: Parameters<typeof mentorshipDataApi.updateSession>[1],
   ) => {
     const result = await updateMutation.mutateAsync({ sessionId, updates });
+    if (!result.success) throw new Error(result.error.message);
+    return result.data;
+  };
+
+  const confirm = async (sessionId: string, meetingUrl?: string | null) => {
+    const result = await confirmMutation.mutateAsync({ sessionId, meetingUrl });
     if (!result.success) throw new Error(result.error.message);
     return result.data;
   };
@@ -117,9 +136,11 @@ export function useSessionMutations(userId: string | undefined) {
   return {
     book,
     update,
+    confirm,
     cancel,
     isBooking: bookMutation.isPending,
     isUpdating: updateMutation.isPending,
+    isConfirming: confirmMutation.isPending,
     isCancelling: cancelMutation.isPending,
   };
 }

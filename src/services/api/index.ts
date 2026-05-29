@@ -1,4 +1,4 @@
-export { authApi } from '@/services/api/auth.api';
+export { authApi, type OtpVerificationType } from '@/services/api/auth.api';
 export { profilesApi } from '@/services/api/profiles.api';
 export { userPreferencesApi } from '@/services/api/user-preferences.api';
 export { opportunitiesApi } from '@/services/api/opportunities.api';

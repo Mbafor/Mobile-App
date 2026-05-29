@@ -22,7 +22,6 @@ export default function SuperAdminLayout() {
           headerTintColor: colors.text,
           headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
           headerRight: () => <AppHeaderActions />,
-          headerRightContainerStyle: { paddingRight: spacing.xs },
         }}
       >
         <Stack.Screen name="index" options={{ title: 'Overview' }} />

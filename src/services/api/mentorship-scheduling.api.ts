@@ -109,6 +109,23 @@ export const mentorshipSchedulingApi = {
     }
   },
 
+  confirmSession: async (
+    sessionId: string,
+    meetingUrl?: string | null,
+  ): Promise<ApiResult<MentorshipSession>> => {
+    try {
+      const { data, error } = await supabase.rpc('confirm_mentorship_session', {
+        p_session_id: sessionId,
+        p_meeting_url: meetingUrl ?? null,
+      });
+
+      if (error) return fail(error);
+      return { success: true, data: mapSessionRow(data as Parameters<typeof mapSessionRow>[0]) };
+    } catch (e) {
+      return failUnknown(e);
+    }
+  },
+
   createGoogleCalendarEvent: async (input: {
     sessionId: string;
     coachEmail: string;
