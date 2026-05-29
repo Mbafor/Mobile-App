@@ -38,6 +38,7 @@ export function useMentorshipTyping(
     channelRef.current = channel;
 
     return () => {
+      if (stopTimerRef.current) clearTimeout(stopTimerRef.current);
       setPeerTyping(false);
       channelRef.current = null;
       void supabase.removeChannel(channel);

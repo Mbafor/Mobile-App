@@ -88,7 +88,7 @@ export function CoachMentorshipDashboard() {
       });
       if (!result.success) {
         await confirm(sessionId);
-        void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
+        void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
         Alert.alert(
           'Session confirmed',
           `Google Meet link could not be created: ${result.error.message}\n\nYou can add a meeting URL manually.`,
@@ -97,7 +97,7 @@ export function CoachMentorshipDashboard() {
       }
       await confirm(sessionId, result.data.meetingUrl);
       Alert.alert('Session confirmed', 'Google Meet link has been added for this session.');
-      void queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId) });
+      void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
     } catch (e) {
       Alert.alert('Error', e instanceof Error ? e.message : 'Could not confirm session.');
     }

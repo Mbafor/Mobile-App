@@ -69,11 +69,12 @@ export const mentorshipApi = {
   },
 
   cancelRequest: async (requestId?: string): Promise<ApiResult<CancelRequestResult>> => {
-    if (requestId) {
-      const validation = validateRequestId(requestId);
-      if (validation) {
-        return { success: false, error: { code: 'validation', message: validation } };
-      }
+    if (!requestId) {
+      return { success: false, error: { code: 'validation', message: 'No request ID provided.' } };
+    }
+    const validation = validateRequestId(requestId);
+    if (validation) {
+      return { success: false, error: { code: 'validation', message: validation } };
     }
 
     try {

@@ -115,7 +115,7 @@ export function WelcomeScreen() {
   const isWeb = Platform.OS === 'web';
   const isWebMobile = useWebMobile();
   const isDesktopWeb = useWebDesktop();
-  
+
   // For web split layout (desktop and tablet, not mobile web)
   const isSplitLayout = isWeb && !isWebMobile;
 
@@ -132,7 +132,7 @@ export function WelcomeScreen() {
   const handleEmailSignIn = async () => {
     setFormError('');
     clearError();
-    
+
     const normalized = email.trim().toLowerCase();
     if (!isValidEmail(normalized)) {
       setFormError('Enter a valid email address.');
@@ -158,6 +158,78 @@ export function WelcomeScreen() {
       (onboardingComplete ? ROUTES.MAIN.DASHBOARD : ROUTES.ONBOARDING.BASIC_INFO) as Href,
     );
   };
+
+  // Shared web auth form body — used in both web-mobile and desktop layouts
+  const webAuthFormBody = (
+    <>
+      {error || formError ? <ErrorMessage message={error || formError} /> : null}
+
+      <Pressable
+        onPress={() => {
+          clearError();
+          void signInWithGoogle();
+        }}
+        disabled={isLoading}
+        style={[
+          styles.googleBtn,
+          googleButtonHover && styles.googleBtnHover,
+        ]}
+        {...(Platform.OS === 'web' && {
+          onMouseEnter: () => setGoogleButtonHover(true),
+          onMouseLeave: () => setGoogleButtonHover(false),
+        } as any)}
+      >
+        <View style={styles.googleBtnContent}>
+          <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
+          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
+        </View>
+      </Pressable>
+
+      <View style={styles.dividerContainer}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>or</Text>
+        <View style={styles.dividerLine} />
+      </View>
+
+      <FormField label="Email address">
+        <Input
+          value={email}
+          onChangeText={setEmail}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          autoComplete="email"
+          placeholder="you@university.edu"
+          editable={!isLoading}
+        />
+      </FormField>
+
+      <FormField label="Password">
+        <Input
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          autoCapitalize="none"
+          autoComplete="password"
+          placeholder="At least 8 characters"
+          editable={!isLoading}
+        />
+      </FormField>
+
+      <Button
+        onPress={handleEmailSignIn}
+        loading={isLoading}
+        disabled={isLoading}
+        style={styles.emailBtn}
+        textStyle={styles.emailBtnText}
+      >
+        Continue
+      </Button>
+
+      <Text style={styles.hint}>
+        Sign in with your email, password, and a one-time code to confirm your account.
+      </Text>
+    </>
+  );
 
   // For mobile app users, show the traditional stacked layout
   if (!isWeb) {
@@ -196,18 +268,12 @@ export function WelcomeScreen() {
                     void signInWithGoogle();
                   }}
                   disabled={isLoading}
-                  style={[
-                    styles.googleBtn,
-                    googleButtonHover && styles.googleBtnHover,
-                  ]}
-                  {...(Platform.OS === 'web' && {
-                    onMouseEnter: () => setGoogleButtonHover(true),
-                    onMouseLeave: () => setGoogleButtonHover(false),
-                  } as any)}
+                  style={styles.googleBtn}
                 >
-                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>
-                    Continue with Google
-                  </Text>
+                  <View style={styles.googleBtnContent}>
+                    <Ionicons name="logo-google" size={18} color="#000" style={{ marginRight: spacing.xs }} />
+                    <Text style={styles.googleBtnText}>Continue with Google</Text>
+                  </View>
                 </Pressable>
                 <AuthDivider />
                 <Button
@@ -259,72 +325,7 @@ export function WelcomeScreen() {
                 Save listings, get personalised recommendations, and never miss a deadline.
               </Text>
 
-              {error || formError ? <ErrorMessage message={error || formError} /> : null}
-
-              <Pressable
-                onPress={() => {
-                  clearError();
-                  void signInWithGoogle();
-                }}
-                disabled={isLoading}
-                style={[
-                  styles.googleBtn,
-                  googleButtonHover && styles.googleBtnHover,
-                ]}
-                {...(Platform.OS === 'web' && {
-                  onMouseEnter: () => setGoogleButtonHover(true),
-                  onMouseLeave: () => setGoogleButtonHover(false),
-                } as any)}
-              >
-                <View style={styles.googleBtnContent}>
-                  <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
-                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
-                </View>
-              </Pressable>
-
-              <View style={styles.dividerContainer}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
-              <FormField label="Email address">
-                <Input
-                  value={email}
-                  onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  autoComplete="email"
-                  placeholder="you@university.edu"
-                  editable={!isLoading}
-                />
-              </FormField>
-
-              <FormField label="Password">
-                <Input
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                  autoCapitalize="none"
-                  autoComplete="password"
-                  placeholder="At least 8 characters"
-                  editable={!isLoading}
-                />
-              </FormField>
-
-              <Button
-                onPress={handleEmailSignIn}
-                loading={isLoading}
-                disabled={isLoading}
-                style={styles.emailBtn}
-                textStyle={styles.emailBtnText}
-              >
-                Continue
-              </Button>
-
-              <Text style={styles.hint}>
-                Sign in with your email, password, and a one-time code to confirm your account.
-              </Text>
+              {webAuthFormBody}
             </View>
           </ResponsiveContainer>
         </View>
@@ -362,72 +363,7 @@ export function WelcomeScreen() {
                 Save listings, get personalised recommendations, and never miss a deadline.
               </Text>
 
-              {error || formError ? <ErrorMessage message={error || formError} /> : null}
-
-              <Pressable
-                onPress={() => {
-                  clearError();
-                  void signInWithGoogle();
-                }}
-                disabled={isLoading}
-                style={[
-                  styles.googleBtn,
-                  googleButtonHover && styles.googleBtnHover,
-                ]}
-                {...(Platform.OS === 'web' && {
-                  onMouseEnter: () => setGoogleButtonHover(true),
-                  onMouseLeave: () => setGoogleButtonHover(false),
-                } as any)}
-              >
-                <View style={styles.googleBtnContent}>
-                  <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
-                  <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
-                </View>
-              </Pressable>
-
-              <View style={styles.dividerContainer}>
-                <View style={styles.dividerLine} />
-                <Text style={styles.dividerText}>or</Text>
-                <View style={styles.dividerLine} />
-              </View>
-
-              <FormField label="Email address">
-                <Input
-                  value={email}
-                  onChangeText={setEmail}
-                  autoCapitalize="none"
-                  keyboardType="email-address"
-                  autoComplete="email"
-                  placeholder="you@university.edu"
-                  editable={!isLoading}
-                />
-              </FormField>
-
-              <FormField label="Password">
-                <Input
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                  autoCapitalize="none"
-                  autoComplete="password"
-                  placeholder="At least 8 characters"
-                  editable={!isLoading}
-                />
-              </FormField>
-
-              <Button
-                onPress={handleEmailSignIn}
-                loading={isLoading}
-                disabled={isLoading}
-                style={styles.emailBtn}
-                textStyle={styles.emailBtnText}
-              >
-                Continue
-              </Button>
-
-              <Text style={styles.hint}>
-                Sign in with your email, password, and a one-time code to confirm your account.
-              </Text>
+              {webAuthFormBody}
             </View>
           </View>
         </ScrollView>
@@ -438,13 +374,11 @@ export function WelcomeScreen() {
 
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const PANEL_RADIUS = 28;
-const DARK_GREEN = '#0F2018';
-const BTN_GREEN = '#1A3D25';
 
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: DARK_GREEN,
+    backgroundColor: colors.forest,
   },
 
   // ── Mobile App Layout ──────────────────────────────────────────
@@ -455,7 +389,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-end',
     paddingBottom: spacing.xl + spacing.md,
-    backgroundColor: DARK_GREEN,
+    backgroundColor: colors.forest,
   },
 
   // ── Web Mobile Layout ──────────────────────────────────────────
@@ -463,7 +397,7 @@ const styles = StyleSheet.create({
     minHeight: 360,
     justifyContent: 'flex-end',
     paddingBottom: spacing.xl + spacing.md,
-    backgroundColor: DARK_GREEN,
+    backgroundColor: colors.forest,
   },
 
   // ── Split Layout (Web Desktop/Tablet) ──────────────────────────
@@ -473,7 +407,7 @@ const styles = StyleSheet.create({
   },
   leftColumn: {
     flex: 0.5,
-    backgroundColor: DARK_GREEN,
+    backgroundColor: colors.forest,
     justifyContent: 'center',
     overflow: 'hidden',
   },
@@ -618,7 +552,7 @@ const styles = StyleSheet.create({
   },
 
   emailBtn: {
-    backgroundColor: BTN_GREEN,
+    backgroundColor: colors.primary,
     borderRadius: 14,
     height: 48,
   },

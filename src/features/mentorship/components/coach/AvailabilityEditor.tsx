@@ -30,7 +30,9 @@ export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: Availa
   const [dayOfWeek, setDayOfWeek] = useState('1');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
-  const [timezone, setTimezone] = useState('UTC');
+  const [timezone, setTimezone] = useState(
+    Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC',
+  );
   const [daySheetOpen, setDaySheetOpen] = useState(false);
 
   const addRule = () => {

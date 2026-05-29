@@ -89,7 +89,8 @@ export function useSessionMutations(userId: string | undefined) {
       meetingUrl?: string | null;
     }) => mentorshipSchedulingApi.confirmSession(sessionId, meetingUrl),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.mentorship.sessions(userId ?? '') });
+      // Invalidate all participants' session caches (coach + student).
+      queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
     },
   });
 

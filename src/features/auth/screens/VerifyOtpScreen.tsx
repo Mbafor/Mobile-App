@@ -13,7 +13,6 @@ import { colors, spacing, typography } from '@/constants/theme';
 import type { OtpVerificationType } from '@/services/api/auth.api';
 
 const RESEND_COOLDOWN_SEC = 60;
-const BTN_GREEN = '#1A3D25';
 
 function parseOtpType(value: string | string[] | undefined): OtpVerificationType {
   const raw = Array.isArray(value) ? value[0] : value;
@@ -142,7 +141,7 @@ const styles = StyleSheet.create({
     marginBottom: spacing.sm,
   },
   verifyBtn: {
-    backgroundColor: BTN_GREEN,
+    backgroundColor: colors.primary,
     borderRadius: 14,
     height: 50,
   },
@@ -164,7 +163,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   resendActive: {
-    color: BTN_GREEN,
+    color: colors.primary,
     fontSize: typography.fontSize.sm,
     fontWeight: '500',
   },

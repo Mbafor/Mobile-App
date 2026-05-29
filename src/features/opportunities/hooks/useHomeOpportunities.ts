@@ -15,7 +15,7 @@ export function useHomeOpportunities() {
 
   const sections = useMemo(() => {
     const all = query.data ?? [];
-    const interests = profile?.interests ?? [];
+    const interests = [...(profile?.interests ?? []), ...(profile?.careerInterests ?? [])];
     const opportunityTypes = preferences?.opportunityTypes ?? [];
 
     return {
@@ -23,7 +23,7 @@ export function useHomeOpportunities() {
       recent: buildRecentlyUploaded(all),
       closingSoon: buildClosingSoon(all),
     };
-  }, [preferences?.opportunityTypes, profile?.interests, query.data]);
+  }, [preferences?.opportunityTypes, profile?.interests, profile?.careerInterests, query.data]);
 
   return {
     ...sections,

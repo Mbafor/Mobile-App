@@ -37,9 +37,9 @@ function occurrenceForWeekOffset(
   let daysAhead = rule.dayOfWeek - currentDow + weekOffset * 7;
   if (daysAhead < 0) daysAhead += 7;
   if (weekOffset === 0 && daysAhead === 0) {
-    const [startH] = rule.startTime.split(':').map(Number);
+    const [startH, startMins] = rule.startTime.split(':').map(Number);
     const slotEndToday = new Date(now);
-    slotEndToday.setHours(startH, 0, 0, 0);
+    slotEndToday.setHours(startH, startMins ?? 0, 0, 0);
     if (slotEndToday.getTime() <= now.getTime()) daysAhead += 7;
   }
 

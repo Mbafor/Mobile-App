@@ -1,5 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
+
+import { supabase } from '@/services/supabase/client';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -37,6 +39,36 @@ export function useMentorshipMessages(
     enabled,
     refetchInterval: poll && enabled ? 4000 : false,
   });
+
+  // Realtime: invalidate messages whenever a new row lands in this mentorship thread,
+  // regardless of which tab the user is on.
+  useEffect(() => {
+    if (!mentorshipId) return;
+    const channel = supabase
+      .channel(`mentorship-messages:${mentorshipId}`)
+      .on(
+        'postgres_changes',
+        {
+          event: 'INSERT',
+          schema: 'public',
+          table: 'mentorship_messages',
+          filter: `mentorship_id=eq.${mentorshipId}`,
+        },
+        () => {
+          void queryClient.invalidateQueries({
+            queryKey: queryKeys.mentorship.messages(mentorshipId),
+          });
+          void queryClient.invalidateQueries({
+            queryKey: queryKeys.mentorship.messagePreview(mentorshipId),
+          });
+        },
+      )
+      .subscribe();
+
+    return () => {
+      void supabase.removeChannel(channel);
+    };
+  }, [mentorshipId, queryClient]);
 
   const sendMutation = useMutation({
     mutationFn: async (input: SendMessageInput | string) => {

@@ -12,13 +12,20 @@ export function filterActive(opportunities: Opportunity[]): Opportunity[] {
   return opportunities.filter(isActive);
 }
 
-/** Recommended: match interests + opportunity_types to tags; rank by match count (min 1). */
+/** Recommended: match interests + opportunity_types to tags; rank by match count (min 1).
+ *  Falls back to most-recent when the user has not configured any interests yet. */
 export function buildRecommendedForYou(
   opportunities: Opportunity[],
   interests: string[],
   opportunityTypes: string[],
 ): Opportunity[] {
   const active = filterActive(opportunities);
+
+  if (interests.length === 0 && opportunityTypes.length === 0) {
+    return [...active]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, SECTION_LIMIT);
+  }
 
   return rankOpportunitiesByTagMatch(active, interests, opportunityTypes)
     .map((row) => row.opportunity)
