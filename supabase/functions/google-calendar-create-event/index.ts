@@ -1,3 +1,4 @@
+// @ts-nocheck — Deno runtime file; type-checked by Deno, not the Node.js TS compiler.
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
@@ -16,37 +17,100 @@ type RequestBody = {
   title: string;
 };
 
-/** Exchange the stored refresh token for a short-lived access token. */
-async function getAccessToken(): Promise<string> {
-  const clientId = Deno.env.get('GOOGLE_CLIENT_ID');
-  const clientSecret = Deno.env.get('GOOGLE_CLIENT_SECRET');
-  const refreshToken = Deno.env.get('GOOGLE_REFRESH_TOKEN');
+/**
+ * Build a signed JWT assertion for a Google Service Account and exchange it for
+ * a short-lived Google access token.
+ *
+ * The `sub` claim performs Domain-Wide Delegation (DWD): the access token will
+ * act on behalf of the Google Workspace user named in
+ * GOOGLE_SERVICE_ACCOUNT_IMPERSONATE_EMAIL, not the service account itself.
+ * This is required to create Calendar events with Meet links under your domain.
+ */
+async function getServiceAccountAccessToken(): Promise<string> {
+  const serviceAccountEmail = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_EMAIL');
+  const rawPrivateKey = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY');
+  const impersonateEmail = Deno.env.get('GOOGLE_SERVICE_ACCOUNT_IMPERSONATE_EMAIL');
 
-  if (!clientId || !clientSecret || !refreshToken) {
+  if (!serviceAccountEmail || !rawPrivateKey || !impersonateEmail) {
     throw new Error(
-      'Missing Google credentials. Set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN as Supabase Edge Function secrets.',
+      'Missing Service Account credentials. ' +
+        'Set GOOGLE_SERVICE_ACCOUNT_EMAIL, GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY, ' +
+        'and GOOGLE_SERVICE_ACCOUNT_IMPERSONATE_EMAIL as Supabase Edge Function secrets.',
     );
   }
 
-  const res = await fetch('https://oauth2.googleapis.com/token', {
+  // Supabase secrets store newlines as literal \n — normalise before parsing.
+  const pem = rawPrivateKey.replace(/\\n/g, '\n');
+
+  // Strip the PEM armour and decode the base64 DER bytes.
+  const b64 = pem
+    .replace(/-----BEGIN PRIVATE KEY-----/, '')
+    .replace(/-----END PRIVATE KEY-----/, '')
+    .replace(/\s+/g, '');
+
+  const der = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+  const cryptoKey = await crypto.subtle.importKey(
+    'pkcs8',
+    der.buffer,
+    { name: 'RSASSA-PKCS1-v1_5', hash: 'SHA-256' },
+    false,
+    ['sign'],
+  );
+
+  // Base64url-encode a plain string (no padding, URL-safe chars).
+  const toB64Url = (s: string): string =>
+    btoa(s).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+
+  const now = Math.floor(Date.now() / 1000);
+
+  const header = toB64Url(JSON.stringify({ alg: 'RS256', typ: 'JWT' }));
+  const payload = toB64Url(
+    JSON.stringify({
+      iss: serviceAccountEmail,
+      // DWD: impersonate the designated Workspace user so we can write to their calendar.
+      sub: impersonateEmail,
+      scope: 'https://www.googleapis.com/auth/calendar',
+      aud: 'https://oauth2.googleapis.com/token',
+      iat: now,
+      exp: now + 3600,
+    }),
+  );
+
+  const signingInput = `${header}.${payload}`;
+
+  const signatureBuffer = await crypto.subtle.sign(
+    'RSASSA-PKCS1-v1_5',
+    cryptoKey,
+    new TextEncoder().encode(signingInput),
+  );
+
+  const signature = btoa(String.fromCharCode(...new Uint8Array(signatureBuffer)))
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+
+  const jwt = `${signingInput}.${signature}`;
+
+  // Exchange the signed JWT assertion for a short-lived OAuth 2.0 access token.
+  const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: new URLSearchParams({
-      client_id: clientId,
-      client_secret: clientSecret,
-      refresh_token: refreshToken,
-      grant_type: 'refresh_token',
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: jwt,
     }),
   });
 
-  const data = await res.json();
-  if (!res.ok) {
+  const tokenData = await tokenRes.json();
+
+  if (!tokenRes.ok) {
     throw new Error(
-      `Google token refresh failed: ${data.error_description ?? data.error ?? 'Unknown error'}`,
+      `Service Account token exchange failed: ${tokenData.error_description ?? tokenData.error ?? 'Unknown error'}`,
     );
   }
 
-  return data.access_token as string;
+  return tokenData.access_token as string;
 }
 
 serve(async (req) => {
@@ -55,7 +119,7 @@ serve(async (req) => {
   }
 
   try {
-    // Verify the caller is a signed-in Supabase user.
+    // Verify the caller is an authenticated Supabase user.
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
@@ -70,7 +134,11 @@ serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } },
     );
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const {
+      data: { user },
+      error: userError,
+    } = await supabase.auth.getUser();
+
     if (userError || !user) {
       return new Response(JSON.stringify({ error: 'Unauthorized' }), {
         status: 401,
@@ -80,10 +148,12 @@ serve(async (req) => {
 
     const body = (await req.json()) as RequestBody;
 
-    // Get a fresh Google access token using the stored refresh token.
-    const accessToken = await getAccessToken();
+    // Obtain a Google access token via Service Account + Domain-Wide Delegation.
+    // No user OAuth token is needed — the service account handles everything.
+    const accessToken = await getServiceAccountAccessToken();
 
-    // The calendar to create the event on — 'primary' means the account that owns the refresh token.
+    // The calendar to host the event. When using DWD this is relative to the
+    // impersonated user — 'primary' means their primary calendar.
     const calendarId = Deno.env.get('GOOGLE_CALENDAR_ID') ?? 'primary';
 
     const eventRes = await fetch(
@@ -99,10 +169,7 @@ serve(async (req) => {
           description: 'Olives Forum mentorship session',
           start: { dateTime: body.scheduledStart, timeZone: body.timezone },
           end: { dateTime: body.scheduledEnd, timeZone: body.timezone },
-          attendees: [
-            { email: body.coachEmail },
-            { email: body.studentEmail },
-          ],
+          attendees: [{ email: body.coachEmail }, { email: body.studentEmail }],
           conferenceData: {
             createRequest: {
               requestId: `olf-${body.sessionId}`,
@@ -125,7 +192,7 @@ serve(async (req) => {
       );
     }
 
-    // Extract the Meet link from either location Google returns it.
+    // Google returns the Meet link in one of two places depending on the account type.
     const meetingUrl: string | null =
       eventJson.hangoutLink ??
       eventJson.conferenceData?.entryPoints?.find(
@@ -136,18 +203,23 @@ serve(async (req) => {
     if (!meetingUrl) {
       console.error('No Meet link in response:', JSON.stringify(eventJson?.conferenceData));
       return new Response(
-        JSON.stringify({ error: 'Google returned no Meet link. Ensure the Google account has Google Meet enabled.' }),
+        JSON.stringify({
+          error:
+            'Google returned no Meet link. ' +
+            'Ensure the impersonated Workspace account has Google Meet enabled ' +
+            'and that the service account has DWD granted for the calendar scope.',
+        }),
         { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
       );
     }
 
-    // Persist the Meet URL directly on the session row using the service role.
-    const service = createClient(
+    // Write the Meet URL to the session row using the service role key.
+    const serviceClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
 
-    const { error: updateError } = await service
+    const { error: updateError } = await serviceClient
       .from('mentorship_sessions')
       .update({ meeting_url: meetingUrl, status: 'confirmed' })
       .eq('id', body.sessionId);
@@ -156,10 +228,9 @@ serve(async (req) => {
       console.error('Failed to persist meeting URL:', updateError.message);
     }
 
-    return new Response(
-      JSON.stringify({ meetingUrl, eventId: eventJson.id }),
-      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } },
-    );
+    return new Response(JSON.stringify({ meetingUrl, eventId: eventJson.id }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   } catch (e) {
     console.error('google-calendar-create-event error:', e);
     return new Response(

@@ -52,23 +52,11 @@ export const authApi = {
     provider: OAuthProvider,
     redirectTo: string,
     skipBrowserRedirect = true,
-  ) => {
-    const isGoogle = provider === 'google';
-    return supabase.auth.signInWithOAuth({
+  ) =>
+    supabase.auth.signInWithOAuth({
       provider,
-      options: {
-        redirectTo,
-        skipBrowserRedirect,
-        scopes: isGoogle ? 'https://www.googleapis.com/auth/calendar.events' : undefined,
-        queryParams: isGoogle
-          ? {
-              access_type: 'offline',
-              prompt: 'consent',
-            }
-          : undefined,
-      },
-    });
-  },
+      options: { redirectTo, skipBrowserRedirect },
+    }),
 
   signInWithAppleIdToken: (identityToken: string) =>
     supabase.auth.signInWithIdToken({

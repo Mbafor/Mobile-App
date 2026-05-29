@@ -1,5 +1,9 @@
 {
   "typescript.tsdk": "node_modules/typescript/lib",
   "typescript.enablePromptUseWorkspaceTsconfig": true,
-  "javascript.validate.enable": false
+  "javascript.validate.enable": false,
+  "deno.enable": false,
+  "deno.enablePaths": ["supabase/functions"],
+  "deno.lint": true,
+  "deno.unstable": []
 }
