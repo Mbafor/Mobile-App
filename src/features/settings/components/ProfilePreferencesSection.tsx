@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -23,6 +23,35 @@ import {
 import { colors, spacing } from '@/constants/theme';
 import { formatListInput, parseListInput } from '@/utils/formatting';
 import type { FundingPreference } from '@/types/domain/user-preferences';
+
+function SectionGroup({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <View style={groupStyles.wrap}>
+      <Text style={groupStyles.heading}>{title}</Text>
+      <View style={groupStyles.card}>{children}</View>
+    </View>
+  );
+}
+
+const groupStyles = StyleSheet.create({
+  wrap: { gap: spacing.xs },
+  heading: {
+    fontSize: 12,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    color: colors.textMuted,
+    paddingHorizontal: spacing.xs,
+  },
+  card: {
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    padding: spacing.md,
+    gap: spacing.sm,
+  },
+});
 
 export function ProfilePreferencesSection() {
   const { user, profile: authProfile, userEmail } = useAuth();
@@ -123,72 +152,76 @@ export function ProfilePreferencesSection() {
 
   return (
     <View style={styles.wrap}>
-      <Text muted style={styles.intro}>
-        Update your details to improve recommendations.
-      </Text>
-
+      {/* Avatar */}
       {user?.id ? (
-        <ProfileAvatar
-          userId={user.id}
-          displayName={fullName || authProfile?.displayName || null}
-          avatarUrl={avatarUrl}
-          onAvatarUpdated={handleAvatarUpdated}
-        />
+        <View style={styles.avatarWrap}>
+          <ProfileAvatar
+            userId={user.id}
+            displayName={fullName || authProfile?.displayName || null}
+            avatarUrl={avatarUrl}
+            onAvatarUpdated={handleAvatarUpdated}
+          />
+        </View>
       ) : null}
 
-      <Text style={styles.subheading}>About you</Text>
-      <FormField label="Full name *">
-        <Input value={fullName} onChangeText={setFullName} placeholder="Your name" />
-      </FormField>
-      <FormField label="Country *">
-        <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
-      </FormField>
-      <FormField label="University *">
-        <Input value={university} onChangeText={setUniversity} placeholder="Institution" />
-      </FormField>
-      <FormField label="Degree level *">
-        <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
-      </FormField>
-      <FormField label="Course / major *">
-        <SelectWithOther
-          options={COURSE_MAJOR_OPTIONS}
-          predefinedValues={PREDEFINED_COURSE_MAJORS}
-          value={courseMajor}
-          onChange={setCourseMajor}
-          placeholder="Select course or major"
-        />
-      </FormField>
-      <FormField label="Interests *">
-        <MultiSelectWithOther
-          options={INTEREST_OPTIONS}
-          predefinedValues={PREDEFINED_INTERESTS}
-          values={interests}
-          onChange={setInterests}
-          placeholder="Select interests"
-        />
-      </FormField>
+      <SectionGroup title="Personal info">
+        <FormField label="Full name *">
+          <Input value={fullName} onChangeText={setFullName} placeholder="Your name" />
+        </FormField>
+        <FormField label="Country *">
+          <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
+        </FormField>
+      </SectionGroup>
 
-      <Text style={styles.subheading}>Opportunity preferences</Text>
-      <FormField label="Opportunity types *">
-        <MultiSelectWithOther
-          options={OPPORTUNITY_TYPE_OPTIONS}
-          predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
-          values={opportunityTypes}
-          onChange={setOpportunityTypes}
-          placeholder="Types you are looking for"
-        />
-      </FormField>
-      <FormField label="Preferred countries (comma-separated) *">
-        <Input
-          value={countriesText}
-          onChangeText={setCountriesText}
-          placeholder="e.g. UK, Germany, Canada"
-          multiline
-        />
-      </FormField>
-      <FormField label="Funding preference *">
-        <FundingPicker value={funding} onChange={setFunding} />
-      </FormField>
+      <SectionGroup title="Academic info">
+        <FormField label="University *">
+          <Input value={university} onChangeText={setUniversity} placeholder="Institution" />
+        </FormField>
+        <FormField label="Degree level *">
+          <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
+        </FormField>
+        <FormField label="Course / major *">
+          <SelectWithOther
+            options={COURSE_MAJOR_OPTIONS}
+            predefinedValues={PREDEFINED_COURSE_MAJORS}
+            value={courseMajor}
+            onChange={setCourseMajor}
+            placeholder="Select course or major"
+          />
+        </FormField>
+        <FormField label="Interests *">
+          <MultiSelectWithOther
+            options={INTEREST_OPTIONS}
+            predefinedValues={PREDEFINED_INTERESTS}
+            values={interests}
+            onChange={setInterests}
+            placeholder="Select interests"
+          />
+        </FormField>
+      </SectionGroup>
+
+      <SectionGroup title="Opportunity preferences">
+        <FormField label="Opportunity types *">
+          <MultiSelectWithOther
+            options={OPPORTUNITY_TYPE_OPTIONS}
+            predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
+            values={opportunityTypes}
+            onChange={setOpportunityTypes}
+            placeholder="Types you are looking for"
+          />
+        </FormField>
+        <FormField label="Preferred countries (comma-separated) *">
+          <Input
+            value={countriesText}
+            onChangeText={setCountriesText}
+            placeholder="e.g. UK, Germany, Canada"
+            multiline
+          />
+        </FormField>
+        <FormField label="Funding preference *">
+          <FundingPicker value={funding} onChange={setFunding} />
+        </FormField>
+      </SectionGroup>
 
       {error ? <ErrorMessage message={error} /> : null}
 
@@ -200,16 +233,15 @@ export function ProfilePreferencesSection() {
 }
 
 const styles = StyleSheet.create({
-  wrap: { gap: spacing.sm },
+  wrap: { gap: spacing.md },
   centered: { paddingVertical: spacing.xl, alignItems: 'center' },
-  intro: { lineHeight: 22, marginBottom: spacing.xs },
-  subheading: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: colors.primary,
-    marginTop: spacing.md,
+  avatarWrap: {
+    alignItems: 'center',
+    paddingVertical: spacing.sm,
+    backgroundColor: colors.surface,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
     marginBottom: spacing.xs,
-    textTransform: 'uppercase',
-    letterSpacing: 0.4,
   },
 });

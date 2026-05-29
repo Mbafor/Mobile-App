@@ -1,5 +1,1 @@
-import { Redirect } from 'expo-router';
-
-export default function SettingsProfileRedirect() {
-  return <Redirect href="/(main)/settings" />;
-}
+export { ProfileScreen as default } from '@features/settings';

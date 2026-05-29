@@ -22,6 +22,8 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   const tabNavItems = useMainTabNavItems();
 
   const moreItems: DrawerLink[] = [
+    { label: 'Profile & Preferences', route: ROUTES.MAIN.SETTINGS_PROFILE as Href, icon: 'person-outline' },
+    { label: 'Settings', route: ROUTES.MAIN.SETTINGS as Href, icon: 'settings-outline' },
     { label: 'Browse by Category', route: ROUTES.MAIN.DRAWER.BROWSE as Href, icon: 'grid-outline' },
     { label: 'Help & FAQ', route: ROUTES.MAIN.DRAWER.HELP as Href, icon: 'help-circle-outline' },
     { label: 'Privacy Policy', route: ROUTES.MAIN.DRAWER.PRIVACY as Href, icon: 'lock-closed-outline' },

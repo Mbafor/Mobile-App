@@ -62,12 +62,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   chip: {
+    height: 34,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs + 2,
-    borderRadius: 20,
+    borderRadius: 17,
     backgroundColor: colors.surface,
     borderWidth: 1,
     borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   chipActive: {
     backgroundColor: colors.primary,
@@ -75,11 +77,13 @@ const styles = StyleSheet.create({
   },
   chipText: {
     color: colors.textMuted,
-    fontWeight: '500',
+    fontWeight: '600',
+    lineHeight: 18,
   },
   chipTextActive: {
     color: '#FFFFFF',
     fontWeight: '600',
+    lineHeight: 18,
   },
   trailing: { width: spacing.xs },
 });
