@@ -22,6 +22,8 @@ import { formatListInput, parseListInput } from '@/utils/formatting';
 import { hasCompletedAcademicInfo, hasCompletedBasicInfo } from '@/utils/profile/onboarding-status';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
+const isWeb = Platform.OS === 'web';
+
 export function OpportunityPreferencesScreen() {
   const router = useRouter();
   useOnboardingGuard();
@@ -53,43 +55,31 @@ export function OpportunityPreferencesScreen() {
 
   const handleFinish = async () => {
     clearError();
-
     if (!hasCompletedBasicInfo(profile)) {
-      Alert.alert(
-        'Complete earlier steps',
-        'Please fill in your basic information first.',
-        [{ text: 'Go to step 1', onPress: () => router.replace(ROUTES.ONBOARDING.BASIC_INFO) }],
-      );
+      Alert.alert('Complete earlier steps', 'Please fill in your basic information first.', [
+        { text: 'Go to step 1', onPress: () => router.replace(ROUTES.ONBOARDING.BASIC_INFO) },
+      ]);
       return;
     }
-
     if (!hasCompletedAcademicInfo(profile)) {
-      Alert.alert(
-        'Complete earlier steps',
-        'Please fill in your academic information first.',
-        [{ text: 'Go to step 2', onPress: () => router.replace(ROUTES.ONBOARDING.ACADEMIC) }],
-      );
+      Alert.alert('Complete earlier steps', 'Please fill in your academic information first.', [
+        { text: 'Go to step 2', onPress: () => router.replace(ROUTES.ONBOARDING.ACADEMIC) },
+      ]);
       return;
     }
-
     if (opportunityTypes.length === 0) {
       Alert.alert('Required fields', 'Please select at least one opportunity type.');
       return;
     }
-
     const preferredCountries = parseListInput(countriesText);
     if (preferredCountries.length === 0) {
       Alert.alert('Required fields', 'Add at least one preferred country (comma-separated).');
       return;
     }
-
     const prefs = { opportunityTypes, preferredCountries, fundingPreference: funding };
     setPreferences(prefs);
-
     const ok = await completeOnboarding(prefs);
-    if (ok) {
-      router.replace(ROUTES.MAIN.DASHBOARD);
-    }
+    if (ok) router.replace(ROUTES.MAIN.DASHBOARD);
   };
 
   return (
@@ -101,10 +91,15 @@ export function OpportunityPreferencesScreen() {
         <OnboardingProgress currentStep={ONBOARDING_STEPS.PREFERENCES} />
         <Text variant="title">Opportunity preferences</Text>
         <Text muted style={styles.subtitle}>
-          We&apos;ll use this to personalize recommendations. You must complete this step.
+          We&apos;ll use this to personalise your recommendations.
         </Text>
 
-        <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <FormField label="Opportunity types *">
             <MultiSelectWithOther
               options={OPPORTUNITY_TYPE_OPTIONS}
@@ -114,7 +109,6 @@ export function OpportunityPreferencesScreen() {
               placeholder="Select opportunity types"
             />
           </FormField>
-
           <FormField label="Preferred countries (comma-separated) *">
             <Input
               value={countriesText}
@@ -123,22 +117,25 @@ export function OpportunityPreferencesScreen() {
               multiline
             />
           </FormField>
-
           <FormField label="Funding preference *">
             <FundingPicker value={funding} onChange={setFunding} />
           </FormField>
-
           {error ? <ErrorMessage message={error} /> : null}
         </ScrollView>
 
-        <View style={styles.footer}>
-          <Button variant="secondary" onPress={() => router.back()}>
+        <View style={[styles.footer, isWeb && styles.footerWeb]}>
+          <Button
+            variant="secondary"
+            onPress={() => router.back()}
+            style={isWeb ? styles.backBtn : styles.mobileBtn}
+          >
             Back
           </Button>
           <Button
             onPress={() => void handleFinish()}
             loading={isLoading || loadingProfile}
             disabled={isLoading || loadingProfile}
+            style={isWeb ? styles.ctaBtn : styles.mobileBtn}
           >
             Finish setup
           </Button>
@@ -149,8 +146,18 @@ export function OpportunityPreferencesScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
+  flex: { flex: 1, paddingTop: spacing.lg },
   subtitle: { marginBottom: spacing.md },
   scroll: { flex: 1 },
-  footer: { paddingTop: spacing.md, gap: spacing.sm },
+  scrollContent: { paddingBottom: spacing.md },
+  footer: {
+    paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  footerWeb: { justifyContent: 'flex-end' },
+  mobileBtn: { flex: 1 },
+  backBtn: { minWidth: 120 },
+  ctaBtn: { minWidth: 160 },
 });

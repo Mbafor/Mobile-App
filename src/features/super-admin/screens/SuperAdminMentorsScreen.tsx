@@ -30,6 +30,8 @@ export function SuperAdminMentorsScreen() {
   const [newMentorEmail, setNewMentorEmail] = useState('');
   const queryClient = useQueryClient();
 
+  const invalidate = () => void queryClient.invalidateQueries({ queryKey: ['superAdmin'] });
+
   const { data, isLoading, error } = useQuery({
     queryKey: queryKeys.superAdmin.mentors(search, status, page),
     queryFn: async () => {
@@ -45,25 +47,43 @@ export function SuperAdminMentorsScreen() {
   });
 
   const createMutation = useMutation({
-    mutationFn: (email: string) => superAdminApi.createMentorByEmail(email),
+    mutationFn: async (email: string) => {
+      const result = await superAdminApi.createMentorByEmail(email);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['superAdmin'] });
+      invalidate();
       setNewMentorEmail('');
       Alert.alert('Mentor created', 'Coach profile is approved and ready.');
     },
-    onError: (e: Error) => Alert.alert('Failed', e.message),
+    onError: (e: Error) => Alert.alert('Failed to create mentor', e.message),
   });
 
   const approveMutation = useMutation({
-    mutationFn: (userId: string) => superAdminApi.approveMentor(userId),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['superAdmin'] }),
-    onError: (e: Error) => Alert.alert('Failed', e.message),
+    mutationFn: async (userId: string) => {
+      const result = await superAdminApi.approveMentor(userId);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: () => {
+      invalidate();
+      Alert.alert('Approved', 'Mentor has been approved.');
+    },
+    onError: (e: Error) => Alert.alert('Failed to approve mentor', e.message),
   });
 
   const deleteMutation = useMutation({
-    mutationFn: (userId: string) => superAdminApi.deleteMentor(userId),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['superAdmin'] }),
-    onError: (e: Error) => Alert.alert('Failed', e.message),
+    mutationFn: async (userId: string) => {
+      const result = await superAdminApi.deleteMentor(userId);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: () => {
+      invalidate();
+      Alert.alert('Deleted', 'Mentor profile has been removed.');
+    },
+    onError: (e: Error) => Alert.alert('Failed to delete mentor', e.message),
   });
 
   const columns = useMemo<AdminTableColumn<SuperAdminMentorRow>[]>(
@@ -101,35 +121,45 @@ export function SuperAdminMentorsScreen() {
         header: 'Mentees',
         minWidth: 80,
         render: (row) => (
-          <Text variant="caption">
-            {row.active_mentees}/{row.max_students}
-          </Text>
+          <Text variant="caption">{row.active_mentees}/{row.max_students}</Text>
         ),
       },
       {
         key: 'actions',
         header: 'Actions',
-        minWidth: 140,
+        minWidth: 160,
         render: (row) => (
           <View style={styles.rowActions}>
             {row.status === 'pending' ? (
-              <Pressable onPress={() => approveMutation.mutate(row.user_id)}>
-                <Text style={styles.link}>Approve</Text>
+              <Pressable
+                disabled={approveMutation.isPending}
+                onPress={() => approveMutation.mutate(row.user_id)}
+              >
+                <Text style={styles.link}>
+                  {approveMutation.isPending ? 'Approving…' : 'Approve'}
+                </Text>
               </Pressable>
             ) : null}
             <Pressable
+              disabled={deleteMutation.isPending}
               onPress={() => {
-                Alert.alert('Delete mentor', `Remove coach profile for ${row.email}?`, [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => deleteMutation.mutate(row.user_id),
-                  },
-                ]);
+                Alert.alert(
+                  'Delete mentor',
+                  `Remove coach profile for ${row.email ?? 'this user'}?`,
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                      text: 'Delete',
+                      style: 'destructive',
+                      onPress: () => deleteMutation.mutate(row.user_id),
+                    },
+                  ],
+                );
               }}
             >
-              <Text style={styles.danger}>Delete</Text>
+              <Text style={[styles.danger, deleteMutation.isPending && styles.dimmed]}>
+                {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
+              </Text>
             </Pressable>
           </View>
         ),
@@ -142,8 +172,7 @@ export function SuperAdminMentorsScreen() {
     <ScrollView contentContainerStyle={styles.scroll}>
       <Text style={styles.pageTitle}>Manage mentors</Text>
       <Text muted style={styles.intro}>
-        View coaches, create approved mentor profiles by email, approve pending applications, or remove
-        mentors.
+        Create approved mentor profiles by email, approve pending applications, or remove mentors.
       </Text>
 
       <View style={styles.addCard}>
@@ -160,32 +189,32 @@ export function SuperAdminMentorsScreen() {
           <Button
             onPress={() => createMutation.mutate(newMentorEmail.trim())}
             loading={createMutation.isPending}
-            disabled={!newMentorEmail.trim()}
+            disabled={!newMentorEmail.trim() || createMutation.isPending}
           >
             Add
           </Button>
         </View>
+        <Text variant="caption" muted>
+          The user must already have an account. They'll be immediately approved as a mentor.
+        </Text>
       </View>
 
       <SearchFilterBar
         value={search}
-        onChangeText={(t) => {
-          setSearch(t);
-          setPage(0);
-        }}
+        onChangeText={(t) => { setSearch(t); setPage(0); }}
         placeholder="Search mentors…"
       />
+
       <View style={styles.filters}>
-        {['pending', 'approved', 'suspended', null].map((s) => (
+        {(['pending', 'approved', 'suspended', null] as const).map((s) => (
           <Pressable
             key={String(s)}
             style={[styles.filterChip, status === s && styles.filterChipActive]}
-            onPress={() => {
-              setStatus(s);
-              setPage(0);
-            }}
+            onPress={() => { setStatus(s); setPage(0); }}
           >
-            <Text style={status === s ? styles.filterActiveText : undefined}>{s ?? 'All'}</Text>
+            <Text style={status === s ? styles.filterActiveText : undefined}>
+              {s ?? 'All'}
+            </Text>
           </Pressable>
         ))}
       </View>
@@ -248,4 +277,5 @@ const styles = StyleSheet.create({
   rowActions: { flexDirection: 'row', gap: spacing.md },
   link: { color: colors.primary, fontWeight: '600' },
   danger: { color: colors.error, fontWeight: '600' },
+  dimmed: { opacity: 0.5 },
 });

@@ -21,6 +21,8 @@ export function SuperAdminAdminsScreen() {
   const [newAdminEmail, setNewAdminEmail] = useState('');
   const queryClient = useQueryClient();
 
+  const invalidate = () => void queryClient.invalidateQueries({ queryKey: ['superAdmin'] });
+
   const { data, isLoading, error } = useQuery({
     queryKey: queryKeys.superAdmin.admins(search, page),
     queryFn: async () => {
@@ -35,19 +37,30 @@ export function SuperAdminAdminsScreen() {
   });
 
   const promoteMutation = useMutation({
-    mutationFn: (email: string) => superAdminApi.promoteAdminByEmail(email, true),
+    mutationFn: async (email: string) => {
+      const result = await superAdminApi.promoteAdminByEmail(email, true);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
     onSuccess: () => {
-      void queryClient.invalidateQueries({ queryKey: ['superAdmin'] });
+      invalidate();
       setNewAdminEmail('');
       Alert.alert('Success', 'User promoted to opportunity admin.');
     },
-    onError: (e: Error) => Alert.alert('Failed', e.message),
+    onError: (e: Error) => Alert.alert('Failed to add admin', e.message),
   });
 
   const revokeMutation = useMutation({
-    mutationFn: (userId: string) => superAdminApi.setAdmin(userId, false),
-    onSuccess: () => void queryClient.invalidateQueries({ queryKey: ['superAdmin'] }),
-    onError: (e: Error) => Alert.alert('Failed', e.message),
+    mutationFn: async (userId: string) => {
+      const result = await superAdminApi.setAdmin(userId, false);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: () => {
+      invalidate();
+      Alert.alert('Done', 'Admin access has been revoked.');
+    },
+    onError: (e: Error) => Alert.alert('Failed to remove admin', e.message),
   });
 
   const columns = useMemo<AdminTableColumn<SuperAdminAdminRow>[]>(
@@ -96,24 +109,27 @@ export function SuperAdminAdminsScreen() {
           row.is_admin && !row.is_super_admin ? (
             <Button
               variant="ghost"
+              disabled={revokeMutation.isPending}
               onPress={() => {
-                Alert.alert('Remove admin', `Revoke admin access for ${row.email}?`, [
-                  { text: 'Cancel', style: 'cancel' },
-                  {
-                    text: 'Remove',
-                    style: 'destructive',
-                    onPress: () => revokeMutation.mutate(row.id),
-                  },
-                ]);
+                Alert.alert(
+                  'Remove admin',
+                  `Revoke admin access for ${row.email ?? 'this user'}?`,
+                  [
+                    { text: 'Cancel', style: 'cancel' },
+                    {
+                      text: 'Remove',
+                      style: 'destructive',
+                      onPress: () => revokeMutation.mutate(row.id),
+                    },
+                  ],
+                );
               }}
               textStyle={{ color: colors.error }}
             >
-              Delete
+              {revokeMutation.isPending ? 'Removing…' : 'Remove'}
             </Button>
           ) : (
-            <Text muted variant="caption">
-              —
-            </Text>
+            <Text muted variant="caption">—</Text>
           ),
       },
     ],
@@ -141,7 +157,7 @@ export function SuperAdminAdminsScreen() {
           <Button
             onPress={() => promoteMutation.mutate(newAdminEmail.trim())}
             loading={promoteMutation.isPending}
-            disabled={!newAdminEmail.trim()}
+            disabled={!newAdminEmail.trim() || promoteMutation.isPending}
           >
             Add
           </Button>
@@ -153,10 +169,7 @@ export function SuperAdminAdminsScreen() {
 
       <SearchFilterBar
         value={search}
-        onChangeText={(t) => {
-          setSearch(t);
-          setPage(0);
-        }}
+        onChangeText={(t) => { setSearch(t); setPage(0); }}
         placeholder="Search by name or email…"
       />
 

@@ -22,6 +22,8 @@ import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { formatListInput, parseListInput } from '@/utils/formatting';
 
+const isWeb = Platform.OS === 'web';
+
 export function AcademicInformationScreen() {
   const router = useRouter();
   useOnboardingGuard();
@@ -60,15 +62,13 @@ export function AcademicInformationScreen() {
   const handleContinue = async () => {
     clearError();
     if (!university.trim() || !courseMajor.trim()) {
-      Alert.alert('Required fields', 'Please select your university and course/major.');
+      Alert.alert('Required fields', 'Please enter your university and course/major.');
       return;
     }
-
     if (interests.length === 0) {
       Alert.alert('Required fields', 'Please select at least one interest.');
       return;
     }
-
     const academic = {
       university: university.trim(),
       degreeLevel,
@@ -76,12 +76,9 @@ export function AcademicInformationScreen() {
       interests,
       careerInterests: parseListInput(careerText),
     };
-
     setAcademic(academic);
     const ok = await saveAcademicInfo(academic);
-    if (ok) {
-      router.push(ROUTES.ONBOARDING.PREFERENCES);
-    }
+    if (ok) router.push(ROUTES.ONBOARDING.PREFERENCES);
   };
 
   return (
@@ -96,15 +93,18 @@ export function AcademicInformationScreen() {
           Help us tailor opportunities to your studies and goals.
         </Text>
 
-        <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <FormField label="University *">
             <Input value={university} onChangeText={setUniversity} placeholder="Your institution" />
           </FormField>
-
           <FormField label="Degree level *">
             <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
           </FormField>
-
           <FormField label="Course / Major *">
             <SelectWithOther
               options={COURSE_MAJOR_OPTIONS}
@@ -114,7 +114,6 @@ export function AcademicInformationScreen() {
               placeholder="Select course / major"
             />
           </FormField>
-
           <FormField label="Interests *">
             <MultiSelectWithOther
               options={INTEREST_OPTIONS}
@@ -124,7 +123,6 @@ export function AcademicInformationScreen() {
               placeholder="Select interests"
             />
           </FormField>
-
           <FormField label="Career interests (comma-separated)">
             <Input
               value={careerText}
@@ -133,15 +131,23 @@ export function AcademicInformationScreen() {
               multiline
             />
           </FormField>
-
           {error ? <ErrorMessage message={error} /> : null}
         </ScrollView>
 
-        <View style={styles.footer}>
-          <Button variant="secondary" onPress={() => router.back()}>
+        <View style={[styles.footer, isWeb && styles.footerWeb]}>
+          <Button
+            variant="secondary"
+            onPress={() => router.back()}
+            style={isWeb ? styles.backBtn : styles.mobileBtn}
+          >
             Back
           </Button>
-          <Button onPress={handleContinue} loading={isLoading} disabled={isLoading}>
+          <Button
+            onPress={handleContinue}
+            loading={isLoading}
+            disabled={isLoading}
+            style={isWeb ? styles.ctaBtn : styles.mobileBtn}
+          >
             Continue
           </Button>
         </View>
@@ -151,8 +157,18 @@ export function AcademicInformationScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
+  flex: { flex: 1, paddingTop: spacing.lg },
   subtitle: { marginBottom: spacing.md },
   scroll: { flex: 1 },
-  footer: { paddingTop: spacing.md, gap: spacing.sm },
+  scrollContent: { paddingBottom: spacing.md },
+  footer: {
+    paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  footerWeb: { justifyContent: 'flex-end' },
+  mobileBtn: { flex: 1 },
+  backBtn: { minWidth: 120 },
+  ctaBtn: { minWidth: 160 },
 });

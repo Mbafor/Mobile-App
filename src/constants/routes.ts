@@ -3,8 +3,6 @@
  */
 export const ROUTES = {
   ROOT: '/',
-  /** Web marketing landing (`app/index.web.tsx`). Mobile uses splash at `/`. */
-  LANDING: '/',
   AUTH: {
     WELCOME: '/(auth)/welcome',
     EMAIL: '/(auth)/email',

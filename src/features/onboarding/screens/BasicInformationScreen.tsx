@@ -15,6 +15,8 @@ import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 
+const isWeb = Platform.OS === 'web';
+
 export function BasicInformationScreen() {
   const router = useRouter();
   useOnboardingGuard();
@@ -30,12 +32,7 @@ export function BasicInformationScreen() {
 
   useEffect(() => {
     if (profile) {
-      loadFromServer({
-        basic: {
-          fullName: profile.fullName ?? '',
-          country: profile.country ?? '',
-        },
-      });
+      loadFromServer({ basic: { fullName: profile.fullName ?? '', country: profile.country ?? '' } });
       setFullName(profile.fullName ?? '');
       setCountry(profile.country ?? '');
     }
@@ -47,12 +44,9 @@ export function BasicInformationScreen() {
       Alert.alert('Required fields', 'Please enter your full name and country.');
       return;
     }
-
     setBasic({ fullName, country });
     const ok = await saveBasicInfo({ fullName: fullName.trim(), country: country.trim() });
-    if (ok) {
-      router.push(ROUTES.ONBOARDING.ACADEMIC);
-    }
+    if (ok) router.push(ROUTES.ONBOARDING.ACADEMIC);
   };
 
   return (
@@ -64,10 +58,15 @@ export function BasicInformationScreen() {
         <OnboardingProgress currentStep={ONBOARDING_STEPS.BASIC} />
         <Text variant="title">Basic information</Text>
         <Text muted style={styles.subtitle}>
-          Tell us a bit about yourself to personalize your experience.
+          Tell us a bit about yourself to personalise your experience.
         </Text>
 
-        <ScrollView style={styles.scroll} keyboardShouldPersistTaps="handled">
+        <ScrollView
+          style={styles.scroll}
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
           <FormField label="Full name *">
             <Input
               value={fullName}
@@ -76,19 +75,19 @@ export function BasicInformationScreen() {
               autoComplete="name"
             />
           </FormField>
-
           <FormField label="Country *">
             <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
           </FormField>
-
           {error ? <ErrorMessage message={error} /> : null}
         </ScrollView>
 
-        <View style={styles.footer}>
+        <View style={[styles.footer, isWeb && styles.footerWeb]}>
           <Button
             onPress={handleContinue}
             loading={isLoading || loadingProfile}
             disabled={isLoading || loadingProfile}
+            fullWidth={!isWeb}
+            style={isWeb ? styles.ctaBtn : undefined}
           >
             Continue
           </Button>
@@ -99,8 +98,11 @@ export function BasicInformationScreen() {
 }
 
 const styles = StyleSheet.create({
-  flex: { flex: 1 },
+  flex: { flex: 1, paddingTop: spacing.lg },
   subtitle: { marginBottom: spacing.md },
   scroll: { flex: 1 },
-  footer: { paddingTop: spacing.md },
+  scrollContent: { paddingBottom: spacing.md },
+  footer: { paddingTop: spacing.md, paddingBottom: spacing.lg },
+  footerWeb: { flexDirection: 'row', justifyContent: 'flex-end' },
+  ctaBtn: { minWidth: 160 },
 });

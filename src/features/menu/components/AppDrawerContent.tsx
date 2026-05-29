@@ -35,11 +35,6 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
     Platform.OS === 'web'
       ? [
           {
-            label: 'Home page',
-            route: ROUTES.LANDING as Href,
-            icon: 'home-outline',
-          },
-          {
             label: 'Welcome / Sign in',
             route: ROUTES.AUTH.WELCOME as Href,
             icon: 'log-in-outline',
