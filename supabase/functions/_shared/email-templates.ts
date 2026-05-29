@@ -2,7 +2,7 @@ const BRAND = '#1A3D25';
 const MUTED = '#555555';
 const LIGHT_BG = '#F3F7F4';
 
-export const EMAIL_FROM = 'Olives Forum <onboarding@resend.dev>';
+export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Olives Forum <onboarding@resend.dev>';
 
 export function appWebBase(): string {
   return (Deno.env.get('APP_WEB_URL') ?? 'https://olivesforum.com').replace(/\/$/, '');
