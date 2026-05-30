@@ -1,7 +1,8 @@
 {
-  "buildCommand": "npx expo export --platform web",
+  "buildCommand": "npm run build:web",
   "outputDirectory": "dist",
   "framework": null,
+  "nodeVersion": "20.x",
   "rewrites": [
     {
       "source": "/((?!.*\\.[a-z0-9]+$).*)",
