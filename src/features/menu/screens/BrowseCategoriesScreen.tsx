@@ -8,7 +8,6 @@ import { BROWSE_CATEGORIES, categoryToSlug } from '@/constants/browse-categories
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing, typography } from '@/constants/theme';
 
-// Assign a soft accent color to each card by index
 const CARD_ACCENTS = [
   { bg: '#E8F5EE', text: '#1A3D25' },
   { bg: '#EAF0FB', text: '#1A2E5A' },
@@ -25,28 +24,11 @@ export function BrowseCategoriesScreen() {
   const insets = useSafeAreaInsets();
 
   return (
-    <View style={[styles.root, { paddingTop: insets.top }]}>
-
-      {/* Header */}
-      <View style={styles.header}>
-        <Pressable
-          onPress={() => router.push(ROUTES.MAIN.DASHBOARD as Href)}
-          style={styles.backBtn}
-          hitSlop={12}
-          accessible={true}
-          accessibilityRole="button"
-          accessibilityLabel="Go back to dashboard"
-        >
-          <Ionicons name="arrow-back" size={18} color={colors.text} />
-        </Pressable>
-
-        <View style={styles.headerText}>
-          <Text style={styles.title}>Browse categories</Text>
-          <Text style={styles.subtitle}>Find opportunities by focus area.</Text>
-        </View>
+    <View style={styles.root}>
+      <View style={styles.intro}>
+        <Text style={styles.subtitle}>Find opportunities by focus area.</Text>
       </View>
 
-      {/* Grid */}
       <ScrollView
         contentContainerStyle={[
           styles.grid,
@@ -67,13 +49,10 @@ export function BrowseCategoriesScreen() {
                 router.push(ROUTES.MAIN.DRAWER.category(categoryToSlug(category)) as Href)
               }
             >
-              {/* Accent dot */}
               <View style={[styles.dot, { backgroundColor: accent.text + '22' }]} />
-
               <Text style={[styles.cardText, { color: accent.text }]}>
                 {category}
               </Text>
-
               <Ionicons
                 name="arrow-forward"
                 size={14}
@@ -93,49 +72,21 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-
-  // Header
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
+  intro: {
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.md,
-    borderBottomWidth: 0.5,
-    borderBottomColor: colors.border,
-  },
-  backBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 11,
-    borderWidth: 0.5,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  headerText: {
-    flex: 1,
-    gap: 2,
-  },
-  title: {
-    fontSize: typography.fontSize.lg,
-    fontWeight: '600',
-    color: colors.text,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
   },
   subtitle: {
     fontSize: typography.fontSize.sm,
     color: colors.textMuted,
   },
-
-  // Grid
   grid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
     padding: spacing.md,
   },
-
   card: {
     width: '47%',
     minHeight: 96,
@@ -143,21 +94,18 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     justifyContent: 'space-between',
   },
-
   dot: {
     width: 28,
     height: 28,
     borderRadius: 8,
     marginBottom: spacing.sm,
   },
-
   cardText: {
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 20,
     flex: 1,
   },
-
   cardArrow: {
     marginTop: spacing.sm,
     alignSelf: 'flex-start',

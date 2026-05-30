@@ -41,6 +41,13 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         active: pathname.includes('/cv-builder'),
         onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
       },
+      {
+        key: 'browse-categories',
+        label: 'Browse',
+        icon: 'grid-outline',
+        active: pathname.includes('/browse-categories'),
+        onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
+      },
       ...(isAdmin
         ? [
             {

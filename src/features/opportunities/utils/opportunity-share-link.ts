@@ -1,9 +1,8 @@
 import * as Linking from 'expo-linking';
 
-const WEB_BASE = (process.env.EXPO_PUBLIC_APP_WEB_URL ?? 'https://olivesforum.com').replace(
-  /\/$/,
-  '',
-);
+import { env } from '@/config/env';
+
+const WEB_BASE = (process.env.EXPO_PUBLIC_APP_WEB_URL ?? env.LANDING_URL).replace(/\/$/, '');
 
 /** Deep link that opens the opportunity in the app (requires install + sign-in). */
 export function buildOpportunityAppLink(opportunityId: string): string {

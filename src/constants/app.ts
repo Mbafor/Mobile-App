@@ -1,8 +1,10 @@
-export const SUPPORT_EMAIL = 'vesforum.com';
+import { env } from '@/config/env';
 
-/** Web base for shared opportunity links (set EXPO_PUBLIC_APP_WEB_URL in .env). */
+export const SUPPORT_EMAIL = 'support@olivesforum.com';
+
+/** Web base for shared opportunity links — falls back to LANDING_URL. */
 export const APP_WEB_BASE_URL =
-  (process.env.EXPO_PUBLIC_APP_WEB_URL ?? 'https://olivesforum.com').replace(/\/$/, '');
+  (process.env.EXPO_PUBLIC_APP_WEB_URL ?? env.LANDING_URL).replace(/\/$/, '');
 
 export const REFERRAL_MESSAGE =
-  'Join me on Olives Forum — discover scholarships, internships and opportunities worldwide! https://olivesforum.com';
+  `Join me on Olives Forum — discover scholarships, internships and opportunities worldwide! ${env.LANDING_URL}`;

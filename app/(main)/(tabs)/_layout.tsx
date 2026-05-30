@@ -8,6 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { colors, spacing } from '@/constants/theme';
 import { ROUTES } from '@/constants/routes';
+import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
@@ -105,6 +106,14 @@ export default function MainTabsLayout() {
         }}
       />
       <Tabs.Screen
+        name="browse-categories"
+        options={{
+          title: 'Browse',
+          headerTitle: 'Browse by Category',
+          tabBarIcon: tabBarIcon('grid-outline', 'grid'),
+        }}
+      />
+      <Tabs.Screen
         name="notifications"
         options={{
           title: 'Notifications',
@@ -140,7 +149,7 @@ export default function MainTabsLayout() {
           items={webNavItems}
           compact={isWebMobile}
           onMenuToggle={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-          onGoHome={!isWebMobile ? () => router.push(ROUTES.MAIN.DASHBOARD as Href) : undefined}
+          onGoHome={!isWebMobile ? () => { window.location.href = env.LANDING_URL; } : undefined}
           rightSlot={<AppHeaderActions />}
         />
         <View style={styles.webContent}>{tabs}</View>

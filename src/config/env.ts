@@ -3,6 +3,7 @@ const SUPABASE_ANON_KEY = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ?? '';
 const PAYSTACK_PUBLIC_KEY = process.env.EXPO_PUBLIC_PAYSTACK_PUBLIC_KEY ?? '';
 const API_BASE_URL = process.env.EXPO_PUBLIC_API_BASE_URL ?? 'http://localhost:3000';
 const API_PORT = process.env.EXPO_PUBLIC_API_PORT ?? '3000';
+const LANDING_URL = process.env.EXPO_PUBLIC_LANDING_URL ?? 'http://localhost:3000';
 
 const PLACEHOLDER_URL_PATTERNS = [
   'your_project',
@@ -54,6 +55,7 @@ export const env = {
   PAYSTACK_PUBLIC_KEY,
   API_BASE_URL,
   API_PORT,
+  LANDING_URL,
   isPaystackConfigured: Boolean(PAYSTACK_PUBLIC_KEY),
   isConfigured: Boolean(SUPABASE_URL && SUPABASE_ANON_KEY) && !envError,
   configError: envError,
