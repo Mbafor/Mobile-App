@@ -6,25 +6,17 @@ import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { NotificationEmptyState } from '@/features/notifications/components/NotificationEmptyState';
-import { NotificationFilterBar } from '@/features/notifications/components/NotificationFilterBar';
 import { NotificationSkeletonList } from '@/features/notifications/components/NotificationSkeleton';
 import { PushPermissionBanner } from '@/features/notifications/components/PushPermissionBanner';
 import { SwipeableNotificationRow } from '@/features/notifications/components/SwipeableNotificationRow';
 import { useNotificationEnrichment } from '@/features/notifications/hooks/useNotificationEnrichment';
 import { useNotifications } from '@/features/notifications/hooks/useNotifications';
 import { getPushPermissionStatus } from '@/features/notifications/services/push-registration';
-import {
-  filterNotifications,
-  groupNotificationsByDate,
-} from '@/features/notifications/utils/notification-filters';
+import { groupNotificationsByDate } from '@/features/notifications/utils/notification-filters';
 import { navigateFromNotification } from '@/features/notifications/utils/notification-navigation';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { colors, spacing } from '@/constants/theme';
-import type {
-  AppNotification,
-  NotificationFilter,
-  PushPermissionStatus,
-} from '@/types/domain/notification';
+import type { AppNotification, PushPermissionStatus } from '@/types/domain/notification';
 
 export function NotificationsScreen() {
   const router = useRouter();
@@ -44,19 +36,13 @@ export function NotificationsScreen() {
     isMarkingRead,
   } = useNotifications();
 
-  const [filter, setFilter] = useState<NotificationFilter>('all');
   const [permission, setPermission] = useState<PushPermissionStatus>('undetermined');
 
   useEffect(() => {
     void getPushPermissionStatus().then(setPermission);
   }, []);
 
-  const filtered = useMemo(
-    () => filterNotifications(notifications, filter),
-    [notifications, filter],
-  );
-
-  const sections = useMemo(() => groupNotificationsByDate(filtered), [filtered]);
+  const sections = useMemo(() => groupNotificationsByDate(notifications), [notifications]);
   const { data: enrichment } = useNotificationEnrichment(notifications);
 
   const handlePress = useCallback(
@@ -113,12 +99,6 @@ export function NotificationsScreen() {
         ) : null}
       </View>
 
-      <NotificationFilterBar
-        active={filter}
-        onChange={setFilter}
-        unreadCount={unreadCount}
-      />
-
       {permission === 'denied' ? (
         <View style={styles.bannerWrap}>
           <PushPermissionBanner />
@@ -139,9 +119,9 @@ export function NotificationsScreen() {
         stickySectionHeadersEnabled
         refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={refetch} />}
         contentContainerStyle={
-          filtered.length === 0 ? styles.emptyContainer : styles.listContent
+          notifications.length === 0 ? styles.emptyContainer : styles.listContent
         }
-        ListEmptyComponent={<NotificationEmptyState filter={filter} />}
+        ListEmptyComponent={<NotificationEmptyState />}
         renderSectionHeader={({ section: { title } }) => (
           <View style={styles.sectionHeader}>
             <Text variant="caption" style={styles.sectionTitle}>

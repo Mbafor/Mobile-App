@@ -32,8 +32,16 @@ export type Database = {
         Args: { p_student_id: string; p_mentor_id: string };
         Returns: number;
       };
+      list_available_mentors: {
+        Args: Record<string, never>;
+        Returns: Json;
+      };
       request_mentorship_coach: {
-        Args: { p_requested_mentor_id?: string | null };
+        Args: {
+          p_requested_mentor_id?: string | null;
+          /** Legacy 028 signature; ignored when only the uuid overload exists. */
+          p_match_snapshot?: Json;
+        };
         Returns: Json;
       };
       cancel_mentorship_request: {

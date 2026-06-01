@@ -11,6 +11,7 @@ const COUNTRY_NAMES = [
   'Belgium',
   'Brazil',
   'Canada',
+  'Cameroon',
   'Chile',
   'China',
   'Colombia',

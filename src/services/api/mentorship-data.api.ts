@@ -9,7 +9,11 @@ import {
 import { mapMentorshipError, mentorshipErrorFromUnknown } from '@/services/mentorship/errors';
 import { supabase } from '@/services/supabase/client';
 import type { ApiResult } from '@/types/api';
+import { listAvailableMentorsFallback } from '@/services/api/mentorship-list-fallback';
+import { normalizeAvailableMentorsPayload } from '@/services/mentorship/normalize-available-mentors';
+import { parseAvailableMentors } from '@/services/mentorship/parse-rpc';
 import type {
+  AvailableMentor,
   MentorAvailabilityRule,
   MentorProfile,
   MenteeSummary,
@@ -130,6 +134,55 @@ export const mentorshipDataApi = {
       });
 
       return { success: true, data: summaries };
+    } catch (e) {
+      return failUnknown(e);
+    }
+  },
+
+  listAvailableMentors: async (): Promise<ApiResult<AvailableMentor[]>> => {
+    try {
+      const {
+        data: { user },
+        error: authError,
+      } = await supabase.auth.getUser();
+
+      if (authError) return fail(authError);
+      if (!user) {
+        return { success: false, error: { code: '42501', message: 'You must be signed in.' } };
+      }
+
+      const { data: rpcData, error: rpcError } = await supabase.rpc('list_available_mentors');
+
+      let coaches: AvailableMentor[] = [];
+      if (!rpcError) {
+        coaches = parseAvailableMentors(normalizeAvailableMentorsPayload(rpcData));
+      }
+
+      const rpcMissing =
+        rpcError &&
+        (rpcError.code === 'PGRST202' ||
+          rpcError.code === '42883' ||
+          rpcError.code === '42P01' ||
+          /list_available_mentors/i.test(rpcError.message ?? '') ||
+          /function.*does not exist/i.test(rpcError.message ?? ''));
+
+      if (coaches.length === 0) {
+        try {
+          const fallback = await listAvailableMentorsFallback(user.id);
+          if (fallback.length > 0) {
+            coaches = fallback;
+          }
+        } catch (fallbackError) {
+          if (rpcError && !rpcMissing) return fail(rpcError);
+          return failUnknown(fallbackError);
+        }
+      }
+
+      if (coaches.length === 0 && rpcError && !rpcMissing) {
+        return fail(rpcError);
+      }
+
+      return { success: true, data: coaches };
     } catch (e) {
       return failUnknown(e);
     }

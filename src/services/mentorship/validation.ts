@@ -34,3 +34,11 @@ export function validateRequestedMentorId(
   if (!mentorId.trim()) return 'Invalid mentor id.';
   return null;
 }
+
+/** Required when a student picks a specific coach (Choose Coach flow). */
+export function requireCoachUserId(mentorId: string | undefined | null): string | null {
+  if (!mentorId?.trim()) {
+    return 'Please select a coach from the list before continuing.';
+  }
+  return validateRequestedMentorId(mentorId);
+}

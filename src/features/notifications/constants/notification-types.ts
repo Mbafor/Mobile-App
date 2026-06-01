@@ -30,16 +30,5 @@ export const OPPORTUNITY_NOTIFICATION_TYPES: NotificationType[] = [
 
 export const SYSTEM_NOTIFICATION_TYPES: NotificationType[] = ['mentor_broadcast'];
 
-export const NOTIFICATION_FILTER_LABELS: Record<
-  import('@/types/domain/notification').NotificationFilter,
-  string
-> = {
-  all: 'All',
-  unread: 'Unread',
-  mentorship: 'Mentorship',
-  opportunities: 'Opportunities',
-  system: 'System',
-};
-
 export const DEADLINE_REMINDER_DAYS = 3;
 export const SAVED_REMINDER_DAYS = 1;

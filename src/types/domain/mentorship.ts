@@ -111,6 +111,18 @@ export type MenteeSummary = {
   progressPercent: number;
 };
 
+/** Mentor row for student browse / choose-coach flow. */
+export type AvailableMentor = {
+  mentorUserId: string;
+  matchScore: number;
+  activeMenteeCount: number;
+  maxStudents: number;
+  hasCapacity: boolean;
+  isAcceptingStudents: boolean;
+  profile: MentorshipParticipantProfile;
+  mentor: MentorProfile;
+};
+
 export type WaitingListStatus = {
   requestId: string;
   position: number;

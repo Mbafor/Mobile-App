@@ -1,27 +1,4 @@
-import {
-  MENTORSHIP_NOTIFICATION_TYPES,
-  OPPORTUNITY_NOTIFICATION_TYPES,
-  SYSTEM_NOTIFICATION_TYPES,
-} from '@/features/notifications/constants/notification-types';
-import type { AppNotification, NotificationFilter } from '@/types/domain/notification';
-
-export function filterNotifications(
-  items: AppNotification[],
-  filter: NotificationFilter,
-): AppNotification[] {
-  switch (filter) {
-    case 'unread':
-      return items.filter((n) => !n.readAt);
-    case 'mentorship':
-      return items.filter((n) => MENTORSHIP_NOTIFICATION_TYPES.includes(n.type));
-    case 'opportunities':
-      return items.filter((n) => OPPORTUNITY_NOTIFICATION_TYPES.includes(n.type));
-    case 'system':
-      return items.filter((n) => SYSTEM_NOTIFICATION_TYPES.includes(n.type));
-    default:
-      return items;
-  }
-}
+import type { AppNotification } from '@/types/domain/notification';
 
 export type NotificationGroup = {
   key: string;

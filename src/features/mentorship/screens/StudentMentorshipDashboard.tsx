@@ -1,3 +1,4 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import {
   ActivityIndicator,
@@ -15,6 +16,7 @@ import { UpcomingSessionsPanel } from '@/features/mentorship/components/calendar
 import { CoachDashboardSummary } from '@/features/mentorship/components/student/CoachDashboardSummary';
 import { CoachProfileCard } from '@/features/mentorship/components/student/CoachProfileCard';
 import { SessionsTable } from '@/features/mentorship/components/student/SessionsTable';
+import { MentorChooser } from '@/features/mentorship/components/student/MentorChooser';
 import { WaitingListCard } from '@/features/mentorship/components/student/WaitingListCard';
 import { MatchedBanner } from '@/features/mentorship/components/shared/MatchedBanner';
 import { MentorshipChat } from '@/features/mentorship/components/shared/MentorshipChat';
@@ -41,6 +43,8 @@ export function StudentMentorshipDashboard() {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [selectingMentorId, setSelectingMentorId] = useState<string | null>(null);
+  const queryClient = useQueryClient();
 
   const {
     activeMentorship,
@@ -53,8 +57,10 @@ export function StudentMentorshipDashboard() {
   } = useStudentMentorship();
 
   const {
-    requestCoach,
-    isRequesting,
+    chooseCoach,
+    isChoosingCoach,
+    joinWaitingList,
+    isJoiningWaitingList,
     cancelRequest,
     isCancelling,
     leaveMentorship,
@@ -84,7 +90,30 @@ export function StudentMentorshipDashboard() {
 
   const handleRequestCoach = () => {
     if (!user?.id) return;
-    requestCoach(undefined);
+    void queryClient.invalidateQueries({ queryKey: ['mentorship', 'availableMentors', user.id] });
+    setActiveSection('browse');
+  };
+
+  const handleChooseCoach = (mentorUserId: string) => {
+    if (!mentorUserId?.trim()) {
+      Alert.alert('Select a coach', 'Please choose a coach from the list before continuing.');
+      return;
+    }
+    setSelectingMentorId(mentorUserId);
+    chooseCoach(mentorUserId, {
+      onSettled: () => setSelectingMentorId(null),
+      onSuccess: () => setActiveSection('dashboard'),
+    });
+  };
+
+  const handleJoinWaitingList = () => {
+    joinWaitingList(undefined, {
+      onSuccess: (data) => {
+        if (data.outcome === 'waiting_list') {
+          setActiveSection('dashboard');
+        }
+      },
+    });
   };
 
   const handleLeave = async () => {
@@ -136,7 +165,7 @@ export function StudentMentorshipDashboard() {
 
   const navItems = STUDENT_NAV_ITEMS.filter((i) => (hasCoach ? true : i.id !== 'leave'));
   const sectionTitle = STUDENT_SECTION_TITLES[activeSection] ?? 'Mentorship';
-  const isFullHeightSection = activeSection === 'messages';
+  const isFullHeightSection = activeSection === 'messages' || activeSection === 'browse';
 
   const renderSection = () => {
     switch (activeSection) {
@@ -144,14 +173,9 @@ export function StudentMentorshipDashboard() {
         return (
           <View style={styles.sectionBody}>
             {canRequest ? (
-              <Button fullWidth onPress={handleRequestCoach} loading={isRequesting}>
+              <Button fullWidth onPress={handleRequestCoach}>
                 Request a Coach
               </Button>
-            ) : null}
-            {openRequest?.status === 'pending' ? (
-              <View style={styles.statusCard}>
-                <Text>Finding a compatible coach…</Text>
-              </View>
             ) : null}
             {onWaitingList && waitingList ? (
               <WaitingListCard
@@ -179,9 +203,19 @@ export function StudentMentorshipDashboard() {
           </View>
         );
 
+      case 'browse':
+        return (
+          <MentorChooser
+            onSelect={handleChooseCoach}
+            onJoinWaitingList={handleJoinWaitingList}
+            isSelecting={isChoosingCoach || isJoiningWaitingList}
+            selectingMentorId={selectingMentorId}
+          />
+        );
+
       case 'coach':
         if (!hasCoach) {
-          return <Text muted>Match with a coach to view their profile.</Text>;
+          return <Text muted>Choose a coach to view their profile.</Text>;
         }
         return (
           <CoachProfileCard
@@ -193,7 +227,7 @@ export function StudentMentorshipDashboard() {
 
       case 'messages':
         if (!hasCoach || !mentorshipId) {
-          return <Text muted>Match with a coach to start messaging.</Text>;
+          return <Text muted>Choose a coach to start messaging.</Text>;
         }
         return (
           <MentorshipChat
@@ -212,7 +246,7 @@ export function StudentMentorshipDashboard() {
 
       case 'book':
         if (!hasCoach || !mentorshipId || !mentorId) {
-          return <Text muted>Match with a coach to book sessions.</Text>;
+          return <Text muted>Choose a coach to book sessions.</Text>;
         }
         return (
           <View style={styles.sectionBody}>
@@ -290,10 +324,5 @@ export function StudentMentorshipDashboard() {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, gap: spacing.md },
   sectionBody: { gap: spacing.md },
-  statusCard: {
-    padding: spacing.md,
-    borderRadius: 12,
-    backgroundColor: mentorshipColors.surface,
-  },
   leaveHint: { marginBottom: spacing.sm },
 });

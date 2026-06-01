@@ -10,13 +10,6 @@ export type NotificationType =
   | 'mentorship_message'
   | 'mentor_broadcast';
 
-export type NotificationFilter =
-  | 'all'
-  | 'unread'
-  | 'mentorship'
-  | 'opportunities'
-  | 'system';
-
 export type NotificationAvatarKind = 'user' | 'opportunity' | 'system';
 
 export type NotificationPreferences = {

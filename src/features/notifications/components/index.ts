@@ -1,5 +1,4 @@
 export { NotificationAvatar } from '@/features/notifications/components/NotificationAvatar';
-export { NotificationFilterBar } from '@/features/notifications/components/NotificationFilterBar';
 export { NotificationEmptyState } from '@/features/notifications/components/NotificationEmptyState';
 export { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 export { NotificationListItem } from '@/features/notifications/components/NotificationListItem';

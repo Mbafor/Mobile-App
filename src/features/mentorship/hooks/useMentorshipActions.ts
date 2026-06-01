@@ -1,33 +1,47 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Alert } from 'react-native';
 
-import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { mentorshipApi } from '@/services/api';
 
 export function useMentorshipActions() {
-  const { user } = useAuth();
-  const userId = user?.id ?? '';
   const queryClient = useQueryClient();
 
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: ['mentorship'] });
   };
 
-  const requestCoachMutation = useMutation({
-    mutationFn: async (requestedMentorId?: string) => {
-      const result = await mentorshipApi.requestCoach(requestedMentorId);
+  const chooseCoachMutation = useMutation({
+    mutationFn: async (mentorUserId: string) => {
+      if (!mentorUserId?.trim()) {
+        throw new Error('Please select a coach from the list before continuing.');
+      }
+      const result = await mentorshipApi.chooseCoach(mentorUserId);
+      if (!result.success) throw new Error(result.error.message);
+      return result.data;
+    },
+    onSuccess: () => {
+      invalidateAll();
+      Alert.alert(
+        'Coach connected',
+        'Your mentorship is active. You can message your coach and book sessions from the dashboard.',
+      );
+    },
+    onError: (e: Error) => Alert.alert('Could not connect', e.message),
+  });
+
+  const joinWaitingListMutation = useMutation({
+    mutationFn: async () => {
+      const result = await mentorshipApi.joinMentorshipWaitingList();
       if (!result.success) throw new Error(result.error.message);
       return result.data;
     },
     onSuccess: (data) => {
       invalidateAll();
-      if (data.outcome === 'matched') {
-        Alert.alert('Coach assigned', 'You have been matched with a mentor.');
-      } else {
+      if (data.outcome === 'waiting_list') {
         Alert.alert(
           'On the waiting list',
-          `You are #${data.queuePosition} in the queue. We will assign you when a coach has capacity.`,
+          `You are #${data.queuePosition} in the queue. We will notify you when a coach has capacity.`,
         );
       }
     },
@@ -74,8 +88,11 @@ export function useMentorshipActions() {
   });
 
   return {
-    requestCoach: requestCoachMutation.mutate,
-    isRequesting: requestCoachMutation.isPending,
+    chooseCoach: chooseCoachMutation.mutate,
+    chooseCoachAsync: chooseCoachMutation.mutateAsync,
+    isChoosingCoach: chooseCoachMutation.isPending,
+    joinWaitingList: joinWaitingListMutation.mutate,
+    isJoiningWaitingList: joinWaitingListMutation.isPending,
     cancelRequest: cancelRequestMutation.mutate,
     isCancelling: cancelRequestMutation.isPending,
     leaveMentorship: leaveMutation.mutate,

@@ -14,9 +14,10 @@ import {
   validateEndStatus,
   validateMentorshipId,
   validateRequestId,
-  validateRequestedMentorId,
+  requireCoachUserId,
 } from '@/services/mentorship/validation';
 import { supabase } from '@/services/supabase/client';
+import type { Json } from '@/services/supabase/types';
 import type { ApiResult } from '@/types/api';
 import type {
   CancelRequestResult,
@@ -36,36 +37,101 @@ function failUnknown<T>(e: unknown): ApiResult<T> {
   return { success: false, error: mentorshipErrorFromUnknown(e) };
 }
 
+function isRpcSignatureMismatch(error: { code?: string; message?: string }): boolean {
+  const msg = error.message ?? '';
+  return (
+    error.code === 'PGRST203' ||
+    /could not choose the best candidate function/i.test(msg) ||
+    /function.*not found/i.test(msg) ||
+    /does not exist/i.test(msg)
+  );
+}
+
+async function buildMatchSnapshotForRpc(studentId: string): Promise<Json> {
+  const { data } = await supabase
+    .from('profiles')
+    .select('course_major, degree_level, interests, career_interests, university')
+    .eq('id', studentId)
+    .maybeSingle();
+
+  return {
+    course_major: data?.course_major ?? null,
+    degree_level: data?.degree_level ?? null,
+    interests: data?.interests ?? [],
+    career_interests: data?.career_interests ?? [],
+    university: data?.university ?? null,
+  };
+}
+
+async function invokeRequestMentorshipCoach(
+  mentorUserId: string | null,
+): Promise<ApiResult<RequestCoachResult>> {
+  try {
+    const {
+      data: { user },
+      error: authError,
+    } = await supabase.auth.getUser();
+
+    if (authError) return fail(authError);
+    if (!user) {
+      return { success: false, error: { code: '42501', message: 'You must be signed in.' } };
+    }
+
+    let { data, error } = await supabase.rpc('request_mentorship_coach', {
+      p_requested_mentor_id: mentorUserId,
+    });
+
+    if (error && isRpcSignatureMismatch(error) && mentorUserId) {
+      const snapshot = await buildMatchSnapshotForRpc(user.id);
+      ({ data, error } = await supabase.rpc('request_mentorship_coach', {
+        p_match_snapshot: snapshot,
+        p_requested_mentor_id: mentorUserId,
+      }));
+    }
+
+    if (error) return fail(error);
+    const parsed = parseRequestCoachResult(data);
+    if (!parsed) {
+      return {
+        success: false,
+        error: { code: 'parse', message: 'Unexpected response from server.' },
+      };
+    }
+    return { success: true, data: parsed };
+  } catch (e) {
+    return failUnknown(e);
+  }
+}
+
 export const mentorshipApi = {
   /**
-   * Student taps "Request a Coach" — matches by major/interests/career goals,
-   * assigns immediately if a compatible coach has capacity, otherwise waiting list.
+   * Student tapped "Choose Coach" — must include the selected mentor's user id.
+   * Creates an active mentorship immediately (no approval step).
    */
-  requestCoach: async (
-    requestedMentorId?: string | null,
-  ): Promise<ApiResult<RequestCoachResult>> => {
-    const mentorValidation = validateRequestedMentorId(requestedMentorId);
+  chooseCoach: async (mentorUserId: string): Promise<ApiResult<RequestCoachResult>> => {
+    const mentorValidation = requireCoachUserId(mentorUserId);
     if (mentorValidation) {
       return { success: false, error: { code: 'validation', message: mentorValidation } };
     }
+    return invokeRequestMentorshipCoach(mentorUserId.trim());
+  },
 
-    try {
-      const { data, error } = await supabase.rpc('request_mentorship_coach', {
-        p_requested_mentor_id: requestedMentorId ?? undefined,
-      });
+  /**
+   * Join the waiting list when no coaches exist or every coach is at capacity.
+   * Do not call this from "Request a Coach" — that button should open browse only.
+   */
+  joinMentorshipWaitingList: async (): Promise<ApiResult<RequestCoachResult>> => {
+    return invokeRequestMentorshipCoach(null);
+  },
 
-      if (error) return fail(error);
-      const parsed = parseRequestCoachResult(data);
-      if (!parsed) {
-        return {
-          success: false,
-          error: { code: 'parse', message: 'Unexpected response from server.' },
-        };
-      }
-      return { success: true, data: parsed };
-    } catch (e) {
-      return failUnknown(e);
+  /** @deprecated Use chooseCoach or joinMentorshipWaitingList */
+  requestCoach: async (
+    requestedMentorId?: string | null,
+  ): Promise<ApiResult<RequestCoachResult>> => {
+    if (requestedMentorId?.trim()) {
+      return mentorshipApi.chooseCoach(requestedMentorId);
     }
+    return mentorshipApi.joinMentorshipWaitingList();
   },
 
   cancelRequest: async (requestId?: string): Promise<ApiResult<CancelRequestResult>> => {
