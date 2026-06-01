@@ -7,6 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { SearchField } from '@/components/ui/SearchField';
 import { Text } from '@/components/ui';
@@ -41,6 +42,7 @@ export function MentorChooser({
   isSelecting,
   selectingMentorId,
 }: MentorChooserProps) {
+  const insets = useSafeAreaInsets();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({
     enabled: true,
   });
@@ -63,6 +65,8 @@ export function MentorChooser({
   const showWaitingList = !isLoading && !error && shouldOfferWaitingList(mentors);
   const showEmptySearch =
     !isLoading && !error && !showWaitingList && mentors.length > 0 && filtered.length === 0;
+
+  const listMentors = recommended.length > 0 ? all : filtered;
 
   if (isLoading || (isFetching && mentors.length === 0)) {
     return (
@@ -137,30 +141,26 @@ export function MentorChooser({
         </View>
       </ScrollView>
 
-      <ScrollView style={styles.list} contentContainerStyle={styles.listContent}>
-        {recommended.length > 0 ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionTitle}>Recommended Coaches For You</Text>
-            <View style={styles.sectionList}>{recommended.map(renderMentor)}</View>
-          </View>
-        ) : null}
-
+      {recommended.length > 0 ? (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>All Available Coaches</Text>
-          {recommended.length > 0 && all.length === 0 ? (
-            <Text muted>All matching coaches are shown above.</Text>
-          ) : null}
-          {showEmptySearch ? (
-            <Text muted>No coaches match your search. Try another filter or keyword.</Text>
-          ) : recommended.length === 0 && all.length === 0 && mentors.length === 0 ? (
-            <Text muted>No coaches to display.</Text>
-          ) : (
-            <View style={styles.sectionList}>
-              {(recommended.length > 0 ? all : filtered).map(renderMentor)}
-            </View>
-          )}
+          <Text style={styles.sectionTitle}>Recommended Coaches For You</Text>
+          <View style={styles.sectionList}>{recommended.map(renderMentor)}</View>
         </View>
-      </ScrollView>
+      ) : null}
+
+      <View style={[styles.section, styles.sectionLast]}>
+        <Text style={styles.sectionTitle}>All Available Coaches</Text>
+        {recommended.length > 0 && all.length === 0 ? (
+          <Text muted>All matching coaches are shown above.</Text>
+        ) : null}
+        {showEmptySearch ? (
+          <Text muted>No coaches match your search. Try another filter or keyword.</Text>
+        ) : listMentors.length === 0 && mentors.length === 0 ? (
+          <Text muted>No coaches to display.</Text>
+        ) : (
+          <View style={styles.sectionList}>{listMentors.map(renderMentor)}</View>
+        )}
+      </View>
 
       <Modal
         visible={profileMentor != null}
@@ -168,14 +168,26 @@ export function MentorChooser({
         presentationStyle="pageSheet"
         onRequestClose={() => setProfileMentor(null)}
       >
-        <View style={styles.modal}>
-          <ScrollView contentContainerStyle={styles.modalContent}>
+        <View style={[styles.modal, { paddingTop: Math.max(insets.top, spacing.md) }]}>
+          <ScrollView
+            style={styles.modalScroll}
+            contentContainerStyle={[
+              styles.modalContent,
+              { paddingBottom: spacing.xl + insets.bottom },
+            ]}
+            showsVerticalScrollIndicator
+          >
             {profileMentor ? (
               <>
                 <ParticipantProfileDetail
                   profile={profileMentor.profile}
                   mentorProfile={profileMentor.mentor}
                 />
+                {!profileMentor.mentor.bio?.trim() ? (
+                  <Text muted style={styles.modalBioEmpty}>
+                    This coach has not added a bio yet.
+                  </Text>
+                ) : null}
                 {profileMentor.isAcceptingStudents && profileMentor.hasCapacity ? (
                   <Button
                     fullWidth
@@ -193,9 +205,11 @@ export function MentorChooser({
               </>
             ) : null}
           </ScrollView>
-          <Button variant="secondary" onPress={() => setProfileMentor(null)}>
-            Close
-          </Button>
+          <View style={[styles.modalFooter, { paddingBottom: insets.bottom + spacing.sm }]}>
+            <Button variant="secondary" fullWidth onPress={() => setProfileMentor(null)}>
+              Close
+            </Button>
+          </View>
         </View>
       </Modal>
     </View>
@@ -203,9 +217,9 @@ export function MentorChooser({
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, gap: spacing.sm, minHeight: 360 },
+  root: { gap: spacing.md, paddingBottom: spacing.xl * 2 },
   centered: { padding: spacing.lg, alignItems: 'center', gap: spacing.md },
-  chipScroll: { flexGrow: 0 },
+  chipScroll: { flexGrow: 0, marginHorizontal: -spacing.xs },
   chipRow: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.xs },
   chip: {
     paddingVertical: spacing.xs,
@@ -218,16 +232,24 @@ const styles = StyleSheet.create({
   chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
   chipText: { fontSize: 13, color: colors.text },
   chipTextActive: { color: colors.background },
-  list: { flex: 1 },
-  listContent: { gap: spacing.lg, paddingBottom: spacing.xl },
   section: { gap: spacing.sm },
+  sectionLast: { marginBottom: spacing.md },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: mentorshipColors.text },
   sectionList: { gap: spacing.md },
   waitingWrap: { gap: spacing.md, padding: spacing.md },
   waitingTitle: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
   waitingBody: { lineHeight: 22 },
-  modal: { flex: 1, padding: spacing.lg, gap: spacing.md, backgroundColor: colors.background },
-  modalContent: { gap: spacing.md, paddingBottom: spacing.lg },
+  modal: { flex: 1, backgroundColor: colors.background },
+  modalScroll: { flex: 1 },
+  modalContent: { gap: spacing.md, paddingHorizontal: spacing.lg, paddingTop: spacing.sm },
+  modalFooter: {
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
+  },
+  modalBioEmpty: { fontStyle: 'italic', textAlign: 'center', marginTop: spacing.xs },
   capacityModal: {
     textAlign: 'center',
     fontWeight: '600',

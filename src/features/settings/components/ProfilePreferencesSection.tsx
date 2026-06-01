@@ -8,6 +8,7 @@ import { FundingPicker } from '@/features/onboarding/components';
 import { DegreeLevelPicker } from '@/features/onboarding/components/DegreeLevelPicker';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
+import { MentorBioSection } from '@/features/settings/components/MentorBioSection';
 import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
@@ -199,6 +200,8 @@ export function ProfilePreferencesSection() {
           />
         </FormField>
       </SectionGroup>
+
+      <MentorBioSection />
 
       <SectionGroup title="Opportunity preferences">
         <FormField label="Opportunity types *">

@@ -165,7 +165,7 @@ export function StudentMentorshipDashboard() {
 
   const navItems = STUDENT_NAV_ITEMS.filter((i) => (hasCoach ? true : i.id !== 'leave'));
   const sectionTitle = STUDENT_SECTION_TITLES[activeSection] ?? 'Mentorship';
-  const isFullHeightSection = activeSection === 'messages' || activeSection === 'browse';
+  const isFullHeightSection = activeSection === 'messages';
 
   const renderSection = () => {
     switch (activeSection) {

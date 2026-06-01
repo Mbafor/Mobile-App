@@ -66,6 +66,23 @@ export const mentorshipDataApi = {
     }
   },
 
+  updateMentorBio: async (userId: string, bio: string): Promise<ApiResult<MentorProfile>> => {
+    try {
+      const trimmed = bio.trim();
+      const { data, error } = await supabase
+        .from('mentor_profiles')
+        .update({ bio: trimmed.length > 0 ? trimmed : null })
+        .eq('user_id', userId)
+        .select('*')
+        .single();
+
+      if (error) return fail(error);
+      return { success: true, data: mapMentorProfileRow(data) };
+    } catch (e) {
+      return failUnknown(e);
+    }
+  },
+
   getParticipantProfile: async (
     userId: string,
   ): Promise<ApiResult<MentorshipParticipantProfile | null>> => {

@@ -6,6 +6,10 @@ import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { CapacityBadge } from '@/features/mentorship/components/coach/CapacityBadge';
 import { TagList } from '@/features/mentorship/components/shared/TagList';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
+import {
+  getMentorAcademicFocus,
+  getMentorInterestTags,
+} from '@/features/mentorship/utils/mentor-card-tags';
 import type { AvailableMentor } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -34,15 +38,11 @@ export function MentorBrowseCard({
 }: MentorBrowseCardProps) {
   const { profile, mentor: mp } = mentor;
   const name = profile.fullName?.trim() || 'Coach';
-  const tags = [
-    ...new Set([
-      ...mp.mentoringInterests,
-      ...mp.mentoringCareerAreas,
-      ...mp.mentoringMajors,
-    ]),
-  ].filter(Boolean);
+  const academicFocus = getMentorAcademicFocus(mentor);
+  const interests = getMentorInterestTags(mentor);
   const availability = availabilityLabel(mentor);
   const canChoose = mentor.isAcceptingStudents && mentor.hasCapacity;
+  const bioPreview = mp.bio?.trim();
 
   return (
     <View style={styles.card}>
@@ -64,13 +64,18 @@ export function MentorBrowseCard({
           </View>
         </View>
 
-        {mp.bio ? (
-          <Text style={styles.bio} numberOfLines={3}>
-            {mp.bio}
+        {bioPreview ? (
+          <Text style={styles.bio} numberOfLines={2}>
+            {bioPreview}
           </Text>
         ) : null}
 
-        {tags.length > 0 ? <TagList label="Expertise" items={tags.slice(0, 8)} /> : null}
+        {academicFocus.length > 0 ? (
+          <TagList label="Academic focus" items={academicFocus.slice(0, 6)} />
+        ) : null}
+        {interests.length > 0 ? (
+          <TagList label="Interests" items={interests.slice(0, 6)} />
+        ) : null}
 
         <CapacityBadge activeCount={mentor.activeMenteeCount} maxStudents={mentor.maxStudents} />
       </Pressable>
