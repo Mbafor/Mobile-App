@@ -31,14 +31,28 @@ async function cacheOpportunityImage(
   }
 }
 
+function firstNWords(text: string, n: number): string {
+  const words = text
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  return words.slice(0, n).join(' ');
+}
+
 function buildShareMessage(opportunity: Opportunity, opportunityLink: string): string {
-  return [
+  const description = opportunity.description?.trim() ?? '';
+  const snippet = description ? firstNWords(description, 50) : '';
+
+  const parts: Array<string> = [
     opportunity.title,
     opportunity.organization,
     `Deadline: ${formatDeadline(opportunity.deadline)}`,
+    snippet ? `About: ${snippet}` : '',
     '',
     opportunityLink,
-  ].join('\n');
+  ];
+
+  return parts.filter((p) => p.trim().length > 0).join('\n');
 }
 
 /**
@@ -50,6 +64,17 @@ export async function shareOpportunity(opportunity: Opportunity) {
   const message = buildShareMessage(opportunity, opportunityLink);
 
   if (Platform.OS === 'web') {
+    // Best-effort: attempt to download the image so the share sheet can attach it.
+    // Some web share targets may ignore local file URIs, so we fallback to message-only.
+    const imageUri = opportunity.imageUrl?.trim()
+      ? await cacheOpportunityImage(opportunity.imageUrl.trim(), opportunity.id)
+      : null;
+
+    if (imageUri) {
+      await Share.share({ title: opportunity.title, message, url: imageUri });
+      return;
+    }
+
     await Share.share({ title: opportunity.title, message });
     return;
   }

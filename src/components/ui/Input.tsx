@@ -3,7 +3,14 @@ import { StyleSheet, TextInput, type TextInputProps } from 'react-native';
 import { colors, spacing, typography } from '@/constants/theme';
 
 export function Input(props: TextInputProps) {
-  return <TextInput style={styles.input} placeholderTextColor={colors.textMuted} {...props} />;
+  const { style, ...rest } = props;
+  return (
+    <TextInput
+      style={[styles.input, style]}
+      placeholderTextColor={colors.textMuted}
+      {...rest}
+    />
+  );
 }
 
 const styles = StyleSheet.create({

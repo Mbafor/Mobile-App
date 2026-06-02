@@ -3,7 +3,6 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
-import { CapacityBadge } from '@/features/mentorship/components/coach/CapacityBadge';
 import { TagList } from '@/features/mentorship/components/shared/TagList';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import {
@@ -42,7 +41,6 @@ export function MentorBrowseCard({
   const interests = getMentorInterestTags(mentor);
   const availability = availabilityLabel(mentor);
   const canChoose = mentor.isAcceptingStudents && mentor.hasCapacity;
-  const bioPreview = mp.bio?.trim();
 
   return (
     <View style={styles.card}>
@@ -64,20 +62,12 @@ export function MentorBrowseCard({
           </View>
         </View>
 
-        {bioPreview ? (
-          <Text style={styles.bio} numberOfLines={2}>
-            {bioPreview}
-          </Text>
-        ) : null}
-
         {academicFocus.length > 0 ? (
           <TagList label="Academic focus" items={academicFocus.slice(0, 6)} />
         ) : null}
         {interests.length > 0 ? (
           <TagList label="Interests" items={interests.slice(0, 6)} />
         ) : null}
-
-        <CapacityBadge activeCount={mentor.activeMenteeCount} maxStudents={mentor.maxStudents} />
       </Pressable>
 
       <View style={styles.actions}>
@@ -115,7 +105,6 @@ const styles = StyleSheet.create({
   availability: { fontSize: 12, fontWeight: '600', color: mentorshipColors.textMuted, marginTop: 4 },
   availabilityOk: { color: mentorshipColors.accent },
   availabilityFull: { color: '#C62828' },
-  bio: { fontSize: 14, lineHeight: 20, color: mentorshipColors.text },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, justifyContent: 'flex-end' },
   capacityBlock: {
     paddingVertical: spacing.sm,
