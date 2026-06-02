@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -13,14 +13,28 @@ import { spacing } from '@/constants/theme';
 type CoachMessagesViewProps = {
   mentees: MenteeSummary[];
   currentUserId: string;
+  initialActiveMentorshipId?: string;
 };
 
-export function CoachMessagesView({ mentees, currentUserId }: CoachMessagesViewProps) {
+export function CoachMessagesView({
+  mentees,
+  currentUserId,
+  initialActiveMentorshipId,
+}: CoachMessagesViewProps) {
   const { width } = useWindowDimensions();
   const isNarrow = width < 720;
-  const [selectedId, setSelectedId] = useState<string | undefined>(mentees[0]?.mentorship.id);
+  const [selectedId, setSelectedId] = useState<string | undefined>(() => {
+    return initialActiveMentorshipId ?? mentees[0]?.mentorship.id;
+  });
   const [showThreadList, setShowThreadList] = useState(isNarrow);
   const activeId = selectedId ?? mentees[0]?.mentorship.id;
+
+  useEffect(() => {
+    if (!initialActiveMentorshipId) return;
+    if (initialActiveMentorshipId === selectedId) return;
+    setSelectedId(initialActiveMentorshipId);
+    if (isNarrow) setShowThreadList(false);
+  }, [initialActiveMentorshipId, isNarrow, selectedId]);
 
   const mentorshipIds = mentees.map((m) => m.mentorship.id);
   const { previewsByMentorshipId } = useCoachThreadPreviews(mentorshipIds);

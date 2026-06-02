@@ -2,10 +2,10 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import {
   ActivityIndicator,
-  Alert,
   StyleSheet,
   View,
 } from 'react-native';
+import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
@@ -125,19 +125,12 @@ export function StudentMentorshipDashboard() {
     leaveMentorship({ mentorshipId: activeMentorship.id });
   };
 
-  const handleCancelSession = (sessionId: string) => {
-    Alert.alert('Cancel session', 'Cancel this session?', [
-      { text: 'No', style: 'cancel' },
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: () => {
-          void cancel(sessionId, 'Cancelled by student').catch((e: Error) =>
-            Alert.alert('Cannot cancel', e.message),
-          );
-        },
-      },
-    ]);
+  const handleCancelSession = async (sessionId: string) => {
+    const ok = await confirmAction('Cancel session', 'Cancel this session?');
+    if (!ok) return;
+    void cancel(sessionId, 'Cancelled by student').catch((e: Error) =>
+      Alert.alert('Cannot cancel', e.message),
+    );
   };
 
   if (isLoading) {

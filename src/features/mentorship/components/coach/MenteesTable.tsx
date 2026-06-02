@@ -1,21 +1,26 @@
 import { useState } from 'react';
-import { Alert, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
+import { OptionsSheet } from '@/components/ui/OptionsSheet';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MenteeSummary } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
+import { confirmAction } from '@/utils/confirm-action';
 
 type MenteesTableProps = {
   mentees: MenteeSummary[];
   onRemove: (mentorshipId: string) => void;
   isRemoving?: boolean;
+  onMessage?: (mentorshipId: string) => void;
 };
 
-export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProps) {
+export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: MenteesTableProps) {
   const [profileMentee, setProfileMentee] = useState<MenteeSummary | null>(null);
+  const [menuMentee, setMenuMentee] = useState<MenteeSummary | null>(null);
 
   return (
     <>
@@ -58,32 +63,16 @@ export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProp
                     />
                     <View style={[styles.cell, styles.actionsCell, { width: 170 }]}>
                       <Pressable
-                        style={styles.actionBtn}
-                        onPress={() => setProfileMentee(row)}
-                        accessibilityLabel={`View profile for ${name}`}
+                        style={styles.menuBtn}
+                        hitSlop={12}
+                        onPress={() => setMenuMentee(row)}
+                        accessibilityLabel={`Actions for ${name}`}
                       >
-                        <Text style={styles.actionBtnText}>View profile</Text>
-                      </Pressable>
-                      <Pressable
-                        style={styles.removeBtn}
-                        disabled={isRemoving}
-                        onPress={() => {
-                          Alert.alert(
-                            'Remove student?',
-                            `Are you sure you want to remove ${name} from mentorship?`,
-                            [
-                              { text: 'Cancel', style: 'cancel' },
-                              {
-                                text: 'Remove',
-                                style: 'destructive',
-                                onPress: () => onRemove(row.mentorship.id),
-                              },
-                            ],
-                          );
-                        }}
-                        accessibilityLabel={`Remove ${name}`}
-                      >
-                        <Text style={styles.removeBtnText}>{isRemoving ? 'Removing...' : 'Remove'}</Text>
+                        <Ionicons
+                          name="ellipsis-vertical"
+                          size={22}
+                          color={mentorshipColors.text}
+                        />
                       </Pressable>
                     </View>
                   </View>
@@ -93,6 +82,44 @@ export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProp
           </View>
         </ScrollView>
       </View>
+
+      <OptionsSheet
+        visible={menuMentee != null}
+        title={menuMentee?.profile.fullName?.trim() ?? 'Student'}
+        onClose={() => setMenuMentee(null)}
+        options={[
+          {
+            key: 'view',
+            label: 'View profile',
+            onPress: () => {
+              if (menuMentee) setProfileMentee(menuMentee);
+            },
+          },
+          {
+            key: 'message',
+            label: 'Message',
+            onPress: () => {
+              if (menuMentee) onMessage?.(menuMentee.mentorship.id);
+            },
+          },
+          {
+            key: 'delete',
+            label: isRemoving ? 'Deleting…' : 'Delete',
+            destructive: true,
+            onPress: () => {
+              if (!menuMentee) return;
+              void (async () => {
+                const ok = await confirmAction(
+                  'Remove student',
+                  `Are you sure you want to remove ${menuMentee.profile.fullName?.trim() || 'this student'} from mentorship?`,
+                );
+                if (!ok) return;
+                onRemove(menuMentee.mentorship.id);
+              })();
+            },
+          },
+        ]}
+      />
 
       <Modal
         visible={profileMentee != null}
@@ -166,26 +193,15 @@ const styles = StyleSheet.create({
   cellText: { color: mentorshipColors.text, fontSize: 14, fontWeight: '500' },
   avatarCell: { alignItems: 'center' },
   actionsCell: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-  actionBtn: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: mentorshipColors.border,
-    borderRadius: 8,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 7,
-    backgroundColor: mentorshipColors.surface,
-  },
-  actionBtnText: { color: mentorshipColors.text, fontSize: 12, fontWeight: '600' },
-  removeBtn: {
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: mentorshipColors.danger,
-    borderRadius: 8,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 7,
-    backgroundColor: mentorshipColors.surface,
-  },
-  removeBtnText: { color: mentorshipColors.danger, fontSize: 12, fontWeight: '600' },
   emptyRow: { padding: spacing.lg, alignItems: 'center' },
   profileModal: { flex: 1, backgroundColor: mentorshipColors.surfaceElevated },
+  menuBtn: {
+    padding: spacing.xs,
+    borderRadius: 10,
+    backgroundColor: mentorshipColors.surface,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   profileHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',

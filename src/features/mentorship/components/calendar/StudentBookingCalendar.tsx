@@ -119,7 +119,7 @@ export function StudentBookingCalendar({
   return (
     <View style={styles.wrap}>
       <Text muted style={styles.hint}>
-        Tap a green slot to book. Grey slots are already taken.
+        Tap a green slot to book. Blue slots are already taken. You can only book one session at a time.
       </Text>
       <View style={styles.legend}>
         <LegendDot color={calendarColors.available} label="Available" />

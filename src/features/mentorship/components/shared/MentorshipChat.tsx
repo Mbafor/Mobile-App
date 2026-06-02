@@ -81,6 +81,7 @@ export function MentorshipChat({
   const { peerTyping, onDraftChange } = useMentorshipTyping(mentorshipId, currentUserId, true);
   const tabBarHeight = useMainTabBarHeight();
   const composerBottomPad = fullScreen ? Math.max(tabBarHeight, spacing.sm) : spacing.sm;
+  const listBottomPad = fullScreen ? composerBottomPad + spacing.sm : spacing.sm;
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -186,7 +187,7 @@ export function MentorshipChat({
             style={styles.list}
             data={messages}
             keyExtractor={(m) => m.id}
-            contentContainerStyle={styles.listContent}
+            contentContainerStyle={[styles.listContent, { paddingBottom: listBottomPad }]}
             showsVerticalScrollIndicator
             keyboardShouldPersistTaps="handled"
             onContentSizeChange={() => {
@@ -325,7 +326,7 @@ const styles = StyleSheet.create({
   messageStream: {
     flex: 1,
     minHeight: 0,
-    overflow: 'hidden',
+    overflow: 'visible',
   },
   peerHeader: {
     flexDirection: 'row',
@@ -339,13 +340,12 @@ const styles = StyleSheet.create({
   peerMeta: { flex: 1, gap: 2 },
   peerName: { fontSize: 15, fontWeight: '600', color: mentorshipColors.text },
   emptyWrap: { flex: 1, justifyContent: 'center' },
-  list: { flex: 1 },
+  list: { flex: 1, minHeight: 0 },
   listContent: {
     flexGrow: 1,
     gap: spacing.xs,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.xs,
-    justifyContent: 'flex-end',
   },
   bubbleRow: { flexDirection: 'row', width: '100%' },
   bubbleRowMine: { justifyContent: 'flex-end' },

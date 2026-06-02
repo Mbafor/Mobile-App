@@ -3,9 +3,11 @@ import { useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -34,12 +36,15 @@ import {
 import { queryKeys } from '@/constants/query-keys';
 import { mentorshipSchedulingApi } from '@/services/api';
 import { spacing } from '@/constants/theme';
+import { confirmAction } from '@/utils/confirm-action';
 
 export function CoachMentorshipDashboard() {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [chatMentorshipId, setChatMentorshipId] = useState<string | undefined>(undefined);
+  const [showCompletedSessions, setShowCompletedSessions] = useState(true);
 
   const { mentees, capacity, isLoading, error, refetch } = useCoachMentorship();
   const { removeMentee, isRemoving } = useMentorshipActions();
@@ -61,6 +66,11 @@ export function CoachMentorshipDashboard() {
 
   const handleConfirmSession = async (sessionId: string) => {
     try {
+      const ok = await confirmAction(
+        'Confirm session',
+        'Are you sure you want to confirm this session? The Jitsi link will be ready to join.',
+      );
+      if (!ok) return;
       await confirm(sessionId);
       Alert.alert('Session confirmed', 'Session is confirmed. The Jitsi link is ready to join.');
       void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
@@ -69,19 +79,13 @@ export function CoachMentorshipDashboard() {
     }
   };
 
-  const handleCancelSession = (sessionId: string) => {
-    Alert.alert('Cancel session', 'Cancel this session? The student will be notified.', [
-      { text: 'No', style: 'cancel' },
-      {
-        text: 'Yes',
-        style: 'destructive',
-        onPress: () => {
-          void cancel(sessionId, 'Cancelled by coach').catch((e: Error) =>
-            Alert.alert('Error', e.message),
-          );
-        },
-      },
-    ]);
+  const handleCancelSession = async (sessionId: string) => {
+    const ok = await confirmAction(
+      'Cancel session',
+      'Cancel this session? The student will be notified and the slot will become available.',
+    );
+    if (!ok) return;
+    void cancel(sessionId, 'Cancelled by coach').catch((e: Error) => Alert.alert('Error', e.message));
   };
 
   const handleSetMeetingUrl = async (sessionId: string, url: string) => {
@@ -119,12 +123,22 @@ export function CoachMentorshipDashboard() {
               mentees={mentees}
               onRemove={(id) => removeMentee({ mentorshipId: id, reason: 'Removed by coach' })}
               isRemoving={isRemoving}
+              onMessage={(id) => {
+                setChatMentorshipId(id);
+                setActiveSection('messages');
+              }}
             />
           </View>
         );
 
       case 'messages':
-        return <CoachMessagesView mentees={mentees} currentUserId={userId} />;
+        return (
+          <CoachMessagesView
+            mentees={mentees}
+            currentUserId={userId}
+            initialActiveMentorshipId={chatMentorshipId}
+          />
+        );
 
       case 'availability':
         return (
@@ -155,6 +169,7 @@ export function CoachMentorshipDashboard() {
           <View style={styles.sectionBody}>
             <CoachSessionsTable
               title="Upcoming"
+              isCompleted={false}
               sessions={sessions.filter(
                 (s) => s.status !== 'cancelled' && s.status !== 'completed',
               )}
@@ -169,17 +184,39 @@ export function CoachMentorshipDashboard() {
               onCancel={handleCancelSession}
               onSetMeetingUrl={handleSetMeetingUrl}
             />
-            <CoachSessionsTable
-              title="Completed"
-              sessions={completed}
-              getMenteeDetails={(session) => {
-                const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
-                return {
-                  name: mentee?.profile.fullName?.trim() || 'Mentee',
-                  email: mentee?.profile.email ?? null,
-                };
-              }}
-            />
+            <View style={styles.completedToggleRow}>
+              <Text style={styles.completedToggleTitle}>Completed</Text>
+              <Pressable
+                hitSlop={10}
+                style={styles.completedToggleBtn}
+                onPress={() => setShowCompletedSessions((v) => !v)}
+                accessibilityLabel="Toggle completed sessions"
+              >
+                <Ionicons
+                  name="chevron-down"
+                  size={18}
+                  color={mentorshipColors.textMuted}
+                  style={{
+                    transform: [
+                      { rotate: showCompletedSessions ? '0deg' : '180deg' },
+                    ],
+                  }}
+                />
+              </Pressable>
+            </View>
+            {showCompletedSessions ? (
+              <CoachSessionsTable
+                sessions={completed}
+                isCompleted
+                getMenteeDetails={(session) => {
+                  const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
+                  return {
+                    name: mentee?.profile.fullName?.trim() || 'Mentee',
+                    email: mentee?.profile.email ?? null,
+                  };
+                }}
+              />
+            ) : null}
           </View>
         );
 
@@ -215,4 +252,20 @@ export function CoachMentorshipDashboard() {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
   sectionBody: { gap: spacing.md },
+  completedToggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    backgroundColor: mentorshipColors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: mentorshipColors.border,
+    borderRadius: 12,
+  },
+  completedToggleTitle: { fontSize: 16, fontWeight: '700', color: mentorshipColors.text },
+  completedToggleBtn: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs,
+  },
 });

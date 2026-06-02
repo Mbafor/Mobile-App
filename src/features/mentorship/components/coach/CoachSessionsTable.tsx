@@ -10,6 +10,7 @@ import { spacing } from '@/constants/theme';
 type CoachSessionsTableProps = {
   sessions: MentorshipSession[];
   title?: string;
+  isCompleted?: boolean;
   getMenteeDetails?: (session: MentorshipSession) => { name: string; email?: string | null };
   onConfirm?: (sessionId: string) => void;
   onCancel?: (sessionId: string) => void;
@@ -19,12 +20,13 @@ type CoachSessionsTableProps = {
 export function CoachSessionsTable({
   sessions,
   title,
+  isCompleted,
   getMenteeDetails,
   onConfirm,
   onCancel,
   onSetMeetingUrl,
 }: CoachSessionsTableProps) {
-  const isCompletedTable = title?.toLowerCase() === 'completed';
+  const isCompletedTable = isCompleted ?? title?.toLowerCase() === 'completed';
   const showUpcomingActions = !isCompletedTable;
 
   const handleJoinMeeting = (session: MentorshipSession) => {
@@ -103,6 +105,7 @@ export function CoachSessionsTable({
                           </Pressable>
                           <Pressable
                             style={styles.iconBtn}
+                            hitSlop={12}
                             onPress={() => {
                               if (onConfirm && session.status !== 'confirmed') {
                                 onConfirm(session.id);
@@ -127,8 +130,10 @@ export function CoachSessionsTable({
                           </Pressable>
                           <Pressable
                             style={styles.iconBtn}
+                            hitSlop={12}
                             onPress={() => onCancel?.(session.id)}
                             accessibilityLabel="Cancel session"
+                            accessibilityRole="button"
                           >
                             <Ionicons
                               name="close-circle-outline"

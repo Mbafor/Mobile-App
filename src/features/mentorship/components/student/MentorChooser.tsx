@@ -71,7 +71,8 @@ export function MentorChooser({
 
   const listMentors = recommended.length > 0 ? all : filtered;
   const isWeb = Platform.OS === 'web';
-  const webColumns = width >= 1024 ? 3 : width >= 760 ? 2 : 1;
+  // Web: keep layout compact with 2 cards per row.
+  const webColumns = width >= 760 ? 2 : 1;
   const webCardWidth = isWeb ? `${100 / webColumns}%` : '100%';
 
   if (isLoading || (isFetching && mentors.length === 0)) {
