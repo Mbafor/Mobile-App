@@ -29,12 +29,6 @@ export function MentorshipShell({
   scrollable = true,
   children,
 }: MentorshipShellProps) {
-  const content = (
-    <ResponsiveContainer minHorizontalPadding={spacing.md}>
-      <View style={styles.content}>{children}</View>
-    </ResponsiveContainer>
-  );
-
   return (
     <View style={styles.root}>
       <ResponsiveContainer minHorizontalPadding={spacing.md}>
@@ -66,10 +60,17 @@ export function MentorshipShell({
             ) : undefined
           }
         >
-          {content}
+          <ResponsiveContainer minHorizontalPadding={spacing.md}>
+            <View style={styles.content}>{children}</View>
+          </ResponsiveContainer>
         </ScrollView>
       ) : (
-        <View style={styles.flexContent}>{content}</View>
+        <View style={styles.flexContent}>
+          {/* No horizontal padding — full-width for chat/full-screen views */}
+          <ResponsiveContainer minHorizontalPadding={0} style={styles.fillHeight}>
+            <View style={styles.content}>{children}</View>
+          </ResponsiveContainer>
+        </View>
       )}
     </View>
   );
@@ -107,7 +108,10 @@ const styles = StyleSheet.create({
     flex: 1,
     minHeight: 0,
     overflow: 'hidden',
-    paddingTop: spacing.sm,
+  },
+  fillHeight: {
+    flex: 1,
+    minHeight: 0,
   },
   content: {
     flex: 1,

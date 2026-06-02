@@ -105,53 +105,55 @@ export function DashboardScreen() {
 
   return (
     <View style={styles.container}>
-      <OpportunitySearchBar
-        query={query}
-        onChangeQuery={setQuery}
-        activeFilterCount={activeFilterCount}
-        onOpenFilters={() => setFiltersOpen(true)}
-      />
+      <View style={styles.pageContent}>
+        <OpportunitySearchBar
+          query={query}
+          onChangeQuery={setQuery}
+          activeFilterCount={activeFilterCount}
+          onOpenFilters={() => setFiltersOpen(true)}
+        />
 
-      {isSearchActive ? (
-        <OpportunitySearchResults
-          results={results}
-          resultCount={resultCount}
-          isLoading={searchLoading}
-          isRefetching={searchRefetching}
-          error={searchError}
-          onRefetch={refetchSearch}
-          onPressOpportunity={handleCardPress}
-        />
-      ) : (
-        <FlatList
-          data={sections}
-          keyExtractor={(item) => item.key}
-          renderItem={renderSection}
-          showsVerticalScrollIndicator={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={dashboardRefetching || searchRefetching}
-              onRefresh={handleRefresh}
-              tintColor={colors.primary}
-            />
-          }
-          ListHeaderComponent={
-            <View style={styles.header}>
-              <DashboardStatsRow savedCount={savedCount} appliedCount={appliedCount} />
-              {dashboardError ? (
-                <ErrorMessage
-                  message={
-                    dashboardError instanceof Error
-                      ? dashboardError.message
-                      : 'Failed to load dashboard'
-                  }
-                />
-              ) : null}
-            </View>
-          }
-          contentContainerStyle={styles.list}
-        />
-      )}
+        {isSearchActive ? (
+          <OpportunitySearchResults
+            results={results}
+            resultCount={resultCount}
+            isLoading={searchLoading}
+            isRefetching={searchRefetching}
+            error={searchError}
+            onRefetch={refetchSearch}
+            onPressOpportunity={handleCardPress}
+          />
+        ) : (
+          <FlatList
+            data={sections}
+            keyExtractor={(item) => item.key}
+            renderItem={renderSection}
+            showsVerticalScrollIndicator={false}
+            refreshControl={
+              <RefreshControl
+                refreshing={dashboardRefetching || searchRefetching}
+                onRefresh={handleRefresh}
+                tintColor={colors.primary}
+              />
+            }
+            ListHeaderComponent={
+              <View style={styles.header}>
+                <DashboardStatsRow savedCount={savedCount} appliedCount={appliedCount} />
+                {dashboardError ? (
+                  <ErrorMessage
+                    message={
+                      dashboardError instanceof Error
+                        ? dashboardError.message
+                        : 'Failed to load dashboard'
+                    }
+                  />
+                ) : null}
+              </View>
+            }
+            contentContainerStyle={styles.list}
+          />
+        )}
+      </View>
 
       <Modal
         visible={filtersOpen}
@@ -175,8 +177,15 @@ export function DashboardScreen() {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
+  pageContent: {
+    flex: 1,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: spacing.md,
+  },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: spacing.xs },
+  header: { paddingBottom: spacing.sm, gap: spacing.xs },
   list: { paddingBottom: spacing.md },
   modalOverlay: {
     flex: 1,

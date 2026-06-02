@@ -1,4 +1,4 @@
-import { Alert, Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text } from '@/components/ui';
@@ -7,7 +7,6 @@ import { formatSessionDateTime } from '@/features/mentorship/utils/format-sessio
 import {
   canStudentCancelSession,
   isPendingSessionStatus,
-  studentCancelBlockedMessage,
 } from '@/features/mentorship/utils/session-rules';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
@@ -92,28 +91,13 @@ export function SessionsTable({
                     <Ionicons name="videocam-outline" size={14} color="#fff" />
                     <Text style={styles.joinBtnText}>Join now</Text>
                   </Pressable>
-                  {onCancel ? (
-                    canStudentCancelSession(session) ? (
-                      <Pressable
-                        style={styles.cancelBtn}
-                        onPress={() => {
-                          Alert.alert('Cancel session', 'Cancel this session?', [
-                            { text: 'No', style: 'cancel' },
-                            {
-                              text: 'Yes',
-                              style: 'destructive',
-                              onPress: () => onCancel(session.id),
-                            },
-                          ]);
-                        }}
-                      >
-                        <Text style={styles.cancelText}>Cancel</Text>
-                      </Pressable>
-                    ) : (
-                      <Text variant="caption" muted numberOfLines={2} style={styles.cancelHint}>
-                        {studentCancelBlockedMessage(session)}
-                      </Text>
-                    )
+                  {onCancel && canStudentCancelSession(session) ? (
+                    <Pressable
+                      style={styles.cancelBtn}
+                      onPress={() => onCancel(session.id)}
+                    >
+                      <Text style={styles.cancelText}>Cancel</Text>
+                    </Pressable>
                   ) : null}
                 </View>
               </View>

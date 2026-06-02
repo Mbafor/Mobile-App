@@ -28,11 +28,13 @@ export function AccountSection() {
         >
           Manage opportunities
         </Button>
-      ) : (
-        <Text muted style={styles.hint}>
-          Your account is secured with email sign-in. Use Help & FAQ if you need support.
-        </Text>
-      )}
+      ) : null}
+      <Button
+        variant="secondary"
+        onPress={() => router.push(ROUTES.MAIN.HELP.INDEX as Href)}
+      >
+        Help & Support
+      </Button>
     </View>
   );
 }

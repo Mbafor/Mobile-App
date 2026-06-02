@@ -166,6 +166,9 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
   },
   toolbarTop: {
     flexDirection: 'row',
@@ -187,7 +190,12 @@ const styles = StyleSheet.create({
   },
   previewText: { fontWeight: '600', color: colors.primary, fontSize: 14 },
   scroll: { flex: 1 },
-  scrollContent: { paddingTop: spacing.md },
+  scrollContent: {
+    paddingTop: spacing.md,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
   formPanel: {
     margin: spacing.md,
     padding: spacing.md,

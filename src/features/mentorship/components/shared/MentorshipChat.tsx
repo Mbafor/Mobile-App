@@ -32,7 +32,6 @@ import {
   pickPhotoFromLibrary,
   showAttachmentError,
 } from '@/features/mentorship/utils/pick-mentorship-attachment';
-import { useMainTabBarHeight } from '@/constants/layout';
 import { spacing } from '@/constants/theme';
 import type { MentorshipMessage } from '@/types/domain/mentorship';
 
@@ -79,9 +78,8 @@ export function MentorshipChat({
   const canAttach = Boolean(mentorshipId?.trim()) && !isSending && !uploading;
 
   const { peerTyping, onDraftChange } = useMentorshipTyping(mentorshipId, currentUserId, true);
-  const tabBarHeight = useMainTabBarHeight();
-  const composerBottomPad = fullScreen ? Math.max(tabBarHeight, spacing.sm) : spacing.sm;
-  const listBottomPad = fullScreen ? composerBottomPad + spacing.sm : spacing.sm;
+  const composerBottomPad = spacing.sm;
+  const listBottomPad = spacing.sm;
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -162,7 +160,7 @@ export function MentorshipChat({
     <KeyboardAvoidingView
       style={[styles.wrap, fullScreen && styles.fullScreen]}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? tabBarHeight + 88 : 0}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 88 : 0}
     >
       {peerName ? (
         <View style={styles.peerHeader}>

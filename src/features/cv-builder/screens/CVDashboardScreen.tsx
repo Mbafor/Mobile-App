@@ -163,49 +163,60 @@ export function CVDashboardScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: insets.top }]}>
-      <View style={styles.appBar}>
-        <View style={styles.appBarBrand}>
-          {Platform.OS !== 'web' ? <DrawerToggleButton tintColor={colors.text} /> : null}
-          <View style={styles.appLogo}>
-            <Ionicons name="document-text" size={22} color={colors.background} />
+      {/* App bar — full-bleed background, content centered */}
+      <View style={styles.appBarOuter}>
+        <View style={styles.barContent}>
+          <View style={styles.appBar}>
+            <View style={styles.appBarBrand}>
+              {Platform.OS !== 'web' ? <DrawerToggleButton tintColor={colors.text} /> : null}
+              <View style={styles.appLogo}>
+                <Ionicons name="document-text" size={22} color={colors.background} />
+              </View>
+              <Text style={styles.appTitle}>CV Builder</Text>
+            </View>
+            <View style={styles.appBarActions}>
+              <Pressable
+                onPress={() => void handleCreateNew()}
+                disabled={isCreating}
+                style={styles.newBtn}
+              >
+                {isCreating ? (
+                  <ActivityIndicator size="small" color={colors.primary} />
+                ) : (
+                  <>
+                    <Ionicons name="add" size={22} color={colors.primary} />
+                    <Text style={styles.newBtnText}>New</Text>
+                  </>
+                )}
+              </Pressable>
+            </View>
           </View>
-          <Text style={styles.appTitle}>CV Builder</Text>
-        </View>
-        <View style={styles.appBarActions}>
-          <Pressable
-          onPress={() => void handleCreateNew()}
-          disabled={isCreating}
-          style={styles.newBtn}
-        >
-          {isCreating ? (
-            <ActivityIndicator size="small" color={colors.primary} />
-          ) : (
-            <>
-              <Ionicons name="add" size={22} color={colors.primary} />
-              <Text style={styles.newBtnText}>New</Text>
-            </>
-          )}
-        </Pressable>
         </View>
       </View>
 
-      <View style={styles.searchBar}>
-        <SearchField
-          variant="docs"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="Search CVs"
-        />
+      {/* Search bar — full-bleed background, content centered */}
+      <View style={styles.searchBarOuter}>
+        <View style={styles.barContent}>
+          <SearchField
+            variant="docs"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search CVs"
+          />
+        </View>
       </View>
 
       {error ? (
-        <View style={styles.banner}>
-          <ErrorMessage
-            message={error instanceof Error ? error.message : 'Failed to load your CVs'}
-          />
+        <View style={styles.bannerOuter}>
+          <View style={styles.barContent}>
+            <ErrorMessage
+              message={error instanceof Error ? error.message : 'Failed to load your CVs'}
+            />
+          </View>
         </View>
       ) : null}
 
+      <View style={styles.listContainer}>
       <FlatList
         data={filteredCvs}
         keyExtractor={(item) => item.id}
@@ -238,6 +249,7 @@ export function CVDashboardScreen() {
           ) : null
         }
       />
+      </View>
 
       <OptionsSheet
         visible={menuCv !== null}
@@ -290,15 +302,22 @@ const styles = StyleSheet.create({
     backgroundColor: cvDocsTheme.pageBg,
   },
   loadingText: { color: cvDocsTheme.textOnPage, fontSize: 14 },
+  barContent: {
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: spacing.md,
+  },
+  appBarOuter: {
+    backgroundColor: cvDocsTheme.barBg,
+    borderBottomWidth: 1,
+    borderBottomColor: cvDocsTheme.divider,
+  },
   appBar: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingHorizontal: spacing.md,
     paddingVertical: spacing.sm,
-    backgroundColor: cvDocsTheme.barBg,
-    borderBottomWidth: 1,
-    borderBottomColor: cvDocsTheme.divider,
   },
   appBarBrand: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   appBarActions: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
@@ -321,18 +340,23 @@ const styles = StyleSheet.create({
     backgroundColor: cvDocsTheme.primaryTint,
   },
   newBtnText: { fontSize: 14, fontWeight: '600', color: colors.primary },
-  searchBar: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+  searchBarOuter: {
     backgroundColor: cvDocsTheme.barBg,
     borderBottomWidth: 1,
     borderBottomColor: cvDocsTheme.divider,
+    paddingVertical: spacing.sm,
     zIndex: 10,
   },
-  banner: { padding: spacing.md, backgroundColor: cvDocsTheme.barBg },
+  bannerOuter: { backgroundColor: cvDocsTheme.barBg },
+  listContainer: {
+    flex: 1,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+    paddingHorizontal: spacing.md,
+  },
   list: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   listHeader: {
-    paddingHorizontal: spacing.md,
     paddingTop: spacing.md,
     paddingBottom: spacing.xs,
     backgroundColor: cvDocsTheme.pageBg,

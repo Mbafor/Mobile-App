@@ -86,7 +86,14 @@ export function CVTemplatesScreen() {
 
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
-  scroll: { padding: spacing.md, paddingBottom: spacing.lg, gap: spacing.md },
+  scroll: {
+    padding: spacing.md,
+    paddingBottom: spacing.lg,
+    gap: spacing.md,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
   hero: {
     flexDirection: 'row',
     gap: spacing.md,

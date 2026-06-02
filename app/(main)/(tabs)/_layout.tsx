@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import { Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
 import { colors, spacing } from '@/constants/theme';
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
@@ -152,20 +153,24 @@ export default function MainTabsLayout() {
           onGoHome={!isWebMobile ? () => { window.location.href = env.LANDING_URL; } : undefined}
           rightSlot={<AppHeaderActions />}
         />
-        <View style={styles.webContent}>{tabs}</View>
+        <View style={styles.webContent}>
+          {tabs}
+          <FloatingHelpButton />
+        </View>
       </View>
     );
   }
 
-  return tabs;
+  return (
+    <View style={styles.mobileRoot}>
+      {tabs}
+      <FloatingHelpButton />
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  webRoot: {
-    flex: 1,
-    backgroundColor: colors.background,
-  },
-  webContent: {
-    flex: 1,
-  },
+  mobileRoot: { flex: 1 },
+  webRoot: { flex: 1, backgroundColor: colors.background },
+  webContent: { flex: 1 },
 });

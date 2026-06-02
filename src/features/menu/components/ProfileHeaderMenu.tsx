@@ -76,6 +76,11 @@ export function ProfileHeaderMenu() {
       onPress: () => navigate(ROUTES.MAIN.DRAWER.REFER as Href),
     },
     {
+      label: 'Help & Support',
+      icon: 'help-circle-outline',
+      onPress: () => navigate(ROUTES.MAIN.HELP.INDEX as Href),
+    },
+    {
       label: isLoggingOut ? 'Logging out…' : 'Log out',
       icon: 'log-out-outline',
       onPress: () => void handleLogout(),

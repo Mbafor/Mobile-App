@@ -33,7 +33,13 @@ export function CVTipsScreen() {
 
 const styles = StyleSheet.create({
   scroll: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
-  content: { padding: spacing.md, paddingBottom: spacing.lg },
+  content: {
+    padding: spacing.md,
+    paddingBottom: spacing.lg,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
   subtitle: { marginTop: spacing.xs, marginBottom: spacing.lg, lineHeight: 20 },
   list: { gap: spacing.sm },
 });

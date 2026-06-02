@@ -31,6 +31,12 @@ export const ROUTES = {
       section: (cvId: string, sectionId: string) =>
         `/(main)/(tabs)/cv-builder/${cvId}/section/${sectionId}` as const,
     },
+    HELP: {
+      INDEX: '/(main)/help',
+      REPORT_BUG: '/(main)/help/report-bug',
+      FEATURE_REQUEST: '/(main)/help/feature-request',
+      FEEDBACK: '/(main)/help/feedback',
+    },
     DRAWER: {
       PROFILE: '/(main)/settings/profile',
       BROWSE: '/(main)/browse-categories',

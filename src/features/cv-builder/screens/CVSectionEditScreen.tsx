@@ -100,6 +100,9 @@ export function CVSectionEditScreen() {
             paddingTop: spacing.md,
             paddingHorizontal: spacing.md,
             paddingBottom: insets.bottom + spacing.lg,
+            maxWidth: 1280,
+            width: '100%',
+            alignSelf: 'center',
           },
         ]}
         keyboardShouldPersistTaps="handled"

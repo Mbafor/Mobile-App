@@ -71,9 +71,9 @@ export function MentorChooser({
 
   const listMentors = recommended.length > 0 ? all : filtered;
   const isWeb = Platform.OS === 'web';
-  // Web: ALWAYS show 2 cards per row, regardless of width.
-  const webColumns = 2;
-  const webCardWidth = isWeb ? `${100 / webColumns}%` : '100%';
+  // 3 columns on desktop web (≥768 px), single column everywhere else
+  const columns = isWeb && width >= 768 ? 3 : 1;
+  const webCardWidth = columns > 1 ? `${100 / columns}%` : '100%';
 
   if (isLoading || (isFetching && mentors.length === 0)) {
     return (
@@ -116,11 +116,9 @@ export function MentorChooser({
         key={item.mentorUserId}
         mentor={item}
         onViewProfile={() => setProfileMentor(item)}
-        onChoose={() => onSelect(item.mentorUserId)}
-        isChoosing={isSelecting && selectingMentorId === item.mentorUserId}
       />
     );
-    if (!isWeb) return card;
+    if (columns === 1) return card;
     return (
       <View key={item.mentorUserId} style={[styles.webCardWrap, { width: webCardWidth }]}>
         {card}
@@ -159,7 +157,7 @@ export function MentorChooser({
       {recommended.length > 0 ? (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recommended Coaches For You</Text>
-          <View style={[styles.sectionList, isWeb && styles.sectionListWeb]}>
+          <View style={[styles.sectionList, columns > 1 && styles.sectionListWeb]}>
             {recommended.map(renderMentor)}
           </View>
         </View>
@@ -175,7 +173,7 @@ export function MentorChooser({
         ) : listMentors.length === 0 && mentors.length === 0 ? (
           <Text muted>No coaches to display.</Text>
         ) : (
-          <View style={[styles.sectionList, isWeb && styles.sectionListWeb]}>
+          <View style={[styles.sectionList, columns > 1 && styles.sectionListWeb]}>
             {listMentors.map(renderMentor)}
           </View>
         )}
@@ -255,7 +253,7 @@ const styles = StyleSheet.create({
   sectionLast: { marginBottom: spacing.md },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: mentorshipColors.text },
   sectionList: { gap: spacing.md },
-  sectionListWeb: { flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -spacing.xs },
+  sectionListWeb: { flexDirection: 'row', flexWrap: 'wrap' },
   webCardWrap: { paddingHorizontal: spacing.xs, paddingBottom: spacing.sm },
   waitingWrap: { gap: spacing.md, padding: spacing.md },
   waitingTitle: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },

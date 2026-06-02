@@ -36,6 +36,10 @@ export default function MainLayout() {
         name="settings"
         options={{ ...hiddenDrawerItem, title: 'Settings', headerShown: false }}
       />
+      <Drawer.Screen
+        name="help"
+        options={{ ...hiddenDrawerItem, title: 'Help & Support', headerShown: false }}
+      />
       <Drawer.Screen name="profile" options={{ ...hiddenDrawerItem, title: 'Profile' }} />
     </Drawer>
   );

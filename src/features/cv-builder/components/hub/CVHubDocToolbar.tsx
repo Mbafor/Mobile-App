@@ -35,6 +35,7 @@ export function CVHubDocToolbar({
 
   return (
     <View style={styles.wrap}>
+      <View style={styles.inner}>
       <View style={styles.titleRow}>
         <Pressable
           onPress={() => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href)}
@@ -75,6 +76,7 @@ export function CVHubDocToolbar({
       <Text style={styles.progressMeta}>
         {progressPercent}% complete · {getProgressMessage(progressPercent)}
       </Text>
+      </View>
     </View>
   );
 }
@@ -82,11 +84,16 @@ export function CVHubDocToolbar({
 const styles = StyleSheet.create({
   wrap: {
     backgroundColor: cvDocsTheme.barBg,
+    borderBottomWidth: 1,
+    borderBottomColor: cvDocsTheme.divider,
+  },
+  inner: {
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     paddingBottom: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: cvDocsTheme.divider,
   },
   titleRow: {
     flexDirection: 'row',

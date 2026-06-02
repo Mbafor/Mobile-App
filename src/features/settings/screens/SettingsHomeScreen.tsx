@@ -132,7 +132,13 @@ export function SettingsHomeScreen() {
 const styles = StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
-  content: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
+  content: {
+    padding: spacing.md,
+    paddingBottom: spacing.xl * 2,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
   profileCard: {
     flexDirection: 'row',
     alignItems: 'center',

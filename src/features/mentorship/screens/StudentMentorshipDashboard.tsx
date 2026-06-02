@@ -250,6 +250,7 @@ export function StudentMentorshipDashboard() {
               onBook={async (input) => {
                 await book(input);
               }}
+              onCancel={handleCancelSession}
               isBooking={isBooking}
               isLoadingSessions={sessionsLoading}
             />

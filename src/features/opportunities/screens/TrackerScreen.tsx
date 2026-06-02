@@ -182,10 +182,20 @@ export function TrackerScreen() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  container: {
+    flex: 1,
+    backgroundColor: colors.background,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   banner: { padding: spacing.md },
-  toolbar: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.xs },
+  toolbar: {
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.xs,
+  },
   actionsRow: {
     flexDirection: 'row',
     alignItems: 'center',

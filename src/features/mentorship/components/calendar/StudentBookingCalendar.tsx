@@ -18,7 +18,9 @@ import {
   buildAvailabilityEvents,
   buildSessionEvents,
   mergeCalendarEvents,
+  parseEventMeta,
 } from '@/features/mentorship/utils/calendar-events';
+import { canStudentCancelSession } from '@/features/mentorship/utils/session-rules';
 import {
   bookPayloadFromAvailableEvent,
   SLOT_DURATION_MINUTES,
@@ -48,6 +50,7 @@ type StudentBookingCalendarProps = {
     timezone: string;
     notes?: string;
   }) => Promise<void>;
+  onCancel?: (sessionId: string) => void;
   isBooking?: boolean;
   isLoadingSessions?: boolean;
 };
@@ -58,6 +61,7 @@ export function StudentBookingCalendar({
   mentorshipId,
   sessions,
   onBook,
+  onCancel,
   isBooking,
   isLoadingSessions,
 }: StudentBookingCalendarProps) {
@@ -73,6 +77,39 @@ export function StudentBookingCalendar({
 
   const onPressEvent = useCallback(
     (event: OnEventResponse) => {
+      // Tap on a booked session → offer cancellation
+      const meta = parseEventMeta(event);
+      if (meta?.kind === 'booked' && meta.sessionId) {
+        const session = sessions.find((s) => s.id === meta.sessionId);
+        if (session && canStudentCancelSession(session)) {
+          Alert.alert(
+            'Cancel session?',
+            formatSessionDateTime(session.scheduledStart, session.timezone),
+            [
+              { text: 'Keep it', style: 'cancel' },
+              {
+                text: 'Cancel session',
+                style: 'destructive',
+                onPress: () => onCancel?.(session.id),
+              },
+            ],
+          );
+          return;
+        }
+      }
+
+      // Tap on an available slot → guard against double-booking
+      const hasActive = sessions.some(
+        (s) => s.status !== 'cancelled' && s.status !== 'completed',
+      );
+      if (hasActive) {
+        Alert.alert(
+          'Session already booked',
+          'You already have an active session. Cancel it before booking a new one.',
+        );
+        return;
+      }
+
       const payload = bookPayloadFromAvailableEvent(event, slots, timezone, (startIso, tz) => {
         const start = new Date(startIso);
         return `${formatDayOfWeek(start.getDay())} · ${formatSessionDateTime(startIso, tz)}`;
@@ -86,18 +123,22 @@ export function StudentBookingCalendar({
         notes: '',
       });
     },
-    [slots, timezone],
+    [slots, timezone, sessions, onCancel],
   );
 
   const confirmBook = async () => {
     if (!pending) return;
+    if (!pending.notes.trim()) {
+      Alert.alert('Notes required', 'Please add a short note for your coach before confirming.');
+      return;
+    }
     try {
       await onBook({
         mentorshipId,
         scheduledStart: pending.scheduledStart,
         scheduledEnd: pending.scheduledEnd,
         timezone: pending.timezone,
-        notes: pending.notes.trim() || undefined,
+        notes: pending.notes.trim(),
       });
       setPending(null);
       Alert.alert('Session requested', 'Your coach has been notified.');
@@ -145,7 +186,11 @@ export function StudentBookingCalendar({
       )}
 
       <Modal visible={pending != null} transparent animationType="fade" onRequestClose={() => setPending(null)}>
-        <Pressable style={styles.modalBackdrop} onPress={() => setPending(null)}>
+        <View style={styles.modalOverlay}>
+          {/* Dimmed backdrop — tapping it dismisses the modal */}
+          <Pressable style={StyleSheet.absoluteFillObject} onPress={() => setPending(null)} />
+
+          {/* Card sits as a sibling so taps inside never reach the backdrop */}
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Book a session?</Text>
             {pending ? (
@@ -155,17 +200,18 @@ export function StudentBookingCalendar({
                 </Text>
                 <View style={styles.notesWrap}>
                   <Text variant="caption" muted>
-                    My notes
+                    Short notes <Text style={styles.required}>*</Text>
                   </Text>
                   <Input
                     value={pending.notes}
                     onChangeText={(value) =>
                       setPending((prev) => (prev ? { ...prev, notes: value } : prev))
                     }
-                    placeholder="Add a short note for your coach (optional)"
+                    placeholder="What do you want to work on in this session?"
                     multiline
                     numberOfLines={3}
                     maxLength={220}
+                    autoFocus
                   />
                 </View>
               </>
@@ -179,7 +225,7 @@ export function StudentBookingCalendar({
               </Button>
             </View>
           </View>
-        </Pressable>
+        </View>
       </Modal>
     </View>
   );
@@ -199,19 +245,23 @@ function LegendDot({ color, label }: { color: string; label: string }) {
 const styles = StyleSheet.create({
   wrap: { gap: spacing.sm },
   hint: { fontSize: 13 },
+  required: { color: '#B00020' },
   empty: { padding: spacing.lg, textAlign: 'center' },
   legend: { flexDirection: 'row', gap: spacing.md },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   dot: { width: 10, height: 10, borderRadius: 5 },
   calendarBox: { height: 420, borderRadius: 12, overflow: 'hidden' },
   loader: { marginVertical: spacing.lg },
-  modalBackdrop: {
+  modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',
     justifyContent: 'center',
+    alignItems: 'center',
     padding: spacing.lg,
   },
   modalCard: {
+    width: '100%',
+    maxWidth: 480,
     backgroundColor: mentorshipColors.surfaceElevated,
     borderRadius: 16,
     padding: spacing.lg,

@@ -15,8 +15,7 @@ export function hoursUntilSession(scheduledStart: string): number {
 }
 
 export function canStudentCancelSession(session: MentorshipSession): boolean {
-  if (!isActiveSessionStatus(session.status)) return false;
-  return hoursUntilSession(session.scheduledStart) >= 24;
+  return session.status !== 'cancelled' && session.status !== 'completed';
 }
 
 export function canJoinGoogleMeet(session: MentorshipSession): boolean {
@@ -24,10 +23,6 @@ export function canJoinGoogleMeet(session: MentorshipSession): boolean {
   return true;
 }
 
-export function studentCancelBlockedMessage(session: MentorshipSession): string {
-  const hours = hoursUntilSession(session.scheduledStart);
-  if (hours < 24) {
-    return 'You can only cancel sessions at least 24 hours before the start time.';
-  }
+export function studentCancelBlockedMessage(_session: MentorshipSession): string {
   return 'This session cannot be cancelled.';
 }

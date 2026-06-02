@@ -89,7 +89,10 @@ export function mergeCalendarEvents(
   const bookedKeys = new Set<string>();
   for (const ev of sessions) {
     const meta = ev.meta as MentorshipCalendarMeta | undefined;
-    if (meta?.kind === 'cancelled' || meta?.kind === 'completed') continue;
+    // Completed sessions are in the past — let the slot reopen.
+    // Cancelled sessions must NOT reopen the slot (would flash green), but
+    // also must NOT render as a visible event — they simply disappear.
+    if (meta?.kind === 'completed') continue;
     const start = ev.start?.dateTime;
     if (!start) continue;
     const d = new Date(start);
@@ -108,7 +111,13 @@ export function mergeCalendarEvents(
     return !key || !bookedKeys.has(key);
   });
 
-  return [...openAvailability, ...sessions];
+  // Cancelled sessions are excluded from the rendered output — the slot just goes blank.
+  const visibleSessions = sessions.filter((ev) => {
+    const meta = ev.meta as MentorshipCalendarMeta | undefined;
+    return meta?.kind !== 'cancelled';
+  });
+
+  return [...openAvailability, ...visibleSessions];
 }
 
 export function parseEventMeta(event: unknown): MentorshipCalendarMeta | null {

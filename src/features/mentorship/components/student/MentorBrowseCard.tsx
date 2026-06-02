@@ -15,8 +15,6 @@ import { spacing } from '@/constants/theme';
 type MentorBrowseCardProps = {
   mentor: AvailableMentor;
   onViewProfile: () => void;
-  onChoose: () => void;
-  isChoosing?: boolean;
 };
 
 function availabilityLabel(mentor: AvailableMentor): { text: string; tone: 'ok' | 'muted' | 'full' } {
@@ -32,57 +30,55 @@ function availabilityLabel(mentor: AvailableMentor): { text: string; tone: 'ok' 
 export function MentorBrowseCard({
   mentor,
   onViewProfile,
-  onChoose,
-  isChoosing,
 }: MentorBrowseCardProps) {
-  const { profile, mentor: mp } = mentor;
+  const { profile } = mentor;
   const name = profile.fullName?.trim() || 'Coach';
   const academicFocus = getMentorAcademicFocus(mentor);
   const interests = getMentorInterestTags(mentor);
   const availability = availabilityLabel(mentor);
-  const canChoose = mentor.isAcceptingStudents && mentor.hasCapacity;
+
+  const badgeStyle =
+    availability.tone === 'ok'
+      ? styles.badgeOk
+      : availability.tone === 'full'
+      ? styles.badgeFull
+      : styles.badgeMuted;
 
   return (
     <View style={styles.card}>
       <Pressable onPress={onViewProfile} style={styles.pressable}>
-        <View style={styles.row}>
-          <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={56} />
-          <View style={styles.meta}>
-            <Text style={styles.name}>{name}</Text>
-            {profile.university ? <Text style={styles.sub}>{profile.university}</Text> : null}
-            <Text
-              style={[
-                styles.availability,
-                availability.tone === 'ok' && styles.availabilityOk,
-                availability.tone === 'full' && styles.availabilityFull,
-              ]}
-            >
-              {availability.text}
-            </Text>
+        {/* Avatar */}
+        <View style={styles.avatarRow}>
+          <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={72} />
+        </View>
+
+        {/* Name + badge */}
+        <View style={styles.header}>
+          <Text style={styles.name} numberOfLines={1}>{name}</Text>
+          <View style={[styles.badge, badgeStyle]}>
+            <Text style={styles.badgeText}>{availability.text}</Text>
           </View>
         </View>
 
+        {/* University */}
+        {profile.university ? (
+          <Text style={styles.university} numberOfLines={1}>{profile.university}</Text>
+        ) : null}
+
+        {/* Tags */}
         {academicFocus.length > 0 ? (
-          <TagList label="Academic focus" items={academicFocus.slice(0, 6)} />
+          <TagList label="Academic focus" items={academicFocus.slice(0, 4)} />
         ) : null}
         {interests.length > 0 ? (
-          <TagList label="Interests" items={interests.slice(0, 6)} />
+          <TagList label="Interests" items={interests.slice(0, 4)} />
         ) : null}
       </Pressable>
 
+      {/* Actions */}
       <View style={styles.actions}>
-        <Button variant="secondary" onPress={onViewProfile}>
+        <Button onPress={onViewProfile} style={styles.actionBtn}>
           View profile
         </Button>
-        {canChoose ? (
-          <Button onPress={onChoose} loading={isChoosing}>
-            Choose Coach
-          </Button>
-        ) : (
-          <View style={styles.capacityBlock}>
-            <Text style={styles.capacityText}>Currently at capacity</Text>
-          </View>
-        )}
       </View>
     </View>
   );
@@ -92,25 +88,50 @@ const styles = StyleSheet.create({
   card: {
     gap: spacing.md,
     padding: spacing.md,
-    borderRadius: 14,
+    borderRadius: 16,
     backgroundColor: mentorshipColors.surfaceElevated,
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: mentorshipColors.border,
   },
   pressable: { gap: spacing.sm },
-  row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md },
-  meta: { flex: 1, gap: 2 },
-  name: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
-  sub: { fontSize: 13, color: mentorshipColors.textMuted },
-  availability: { fontSize: 12, fontWeight: '600', color: mentorshipColors.textMuted, marginTop: 4 },
-  availabilityOk: { color: mentorshipColors.accent },
-  availabilityFull: { color: '#C62828' },
-  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, justifyContent: 'flex-end' },
-  capacityBlock: {
+
+  avatarRow: {
+    alignItems: 'flex-start',
     paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: 8,
-    backgroundColor: '#FDECEC',
   },
-  capacityText: { fontSize: 13, fontWeight: '600', color: '#C62828' },
+
+  header: {
+    alignItems: 'flex-start',
+    gap: spacing.xs,
+  },
+  name: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: mentorshipColors.text,
+  },
+  badge: {
+    alignSelf: 'flex-start',
+    borderRadius: 999,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 3,
+  },
+  badgeOk: { backgroundColor: mentorshipColors.accentMuted },
+  badgeFull: { backgroundColor: '#FDECEC' },
+  badgeMuted: { backgroundColor: '#F0F0F0' },
+  badgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: mentorshipColors.accentDark,
+  },
+
+  university: {
+    fontSize: 12,
+    color: mentorshipColors.textMuted,
+  },
+
+  actions: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+  },
+  actionBtn: { flex: 1 },
 });

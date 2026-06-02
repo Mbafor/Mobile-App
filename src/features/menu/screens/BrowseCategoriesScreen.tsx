@@ -25,18 +25,19 @@ export function BrowseCategoriesScreen() {
 
   return (
     <View style={styles.root}>
-      <View style={styles.intro}>
-        <Text style={styles.subtitle}>Find opportunities by focus area.</Text>
-      </View>
+      <View style={styles.fill}>
+        <View style={styles.intro}>
+          <Text style={styles.subtitle}>Find opportunities by focus area.</Text>
+        </View>
 
-      <ScrollView
-        contentContainerStyle={[
-          styles.grid,
-          { paddingBottom: insets.bottom + spacing.xl },
-        ]}
-        showsVerticalScrollIndicator={false}
-      >
-        {BROWSE_CATEGORIES.map((category, i) => {
+        <ScrollView
+          contentContainerStyle={[
+            styles.grid,
+            { paddingBottom: insets.bottom + spacing.xl },
+          ]}
+          showsVerticalScrollIndicator={false}
+        >
+          {BROWSE_CATEGORIES.map((category, i) => {
           const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
           return (
             <Pressable
@@ -61,8 +62,9 @@ export function BrowseCategoriesScreen() {
               />
             </Pressable>
           );
-        })}
-      </ScrollView>
+          })}
+        </ScrollView>
+      </View>
     </View>
   );
 }
@@ -72,8 +74,14 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: colors.background,
   },
-  intro: {
+  fill: {
+    flex: 1,
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
     paddingHorizontal: spacing.md,
+  },
+  intro: {
     paddingTop: spacing.sm,
     paddingBottom: spacing.xs,
   },
@@ -85,7 +93,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     gap: spacing.sm,
-    padding: spacing.md,
+    paddingTop: spacing.sm,
   },
   card: {
     width: '47%',
