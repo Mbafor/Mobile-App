@@ -125,32 +125,4 @@ export const mentorshipSchedulingApi = {
       return failUnknown(e);
     }
   },
-
-  createGoogleCalendarEvent: async (input: {
-    sessionId: string;
-    coachEmail: string;
-    studentEmail: string;
-    scheduledStart: string;
-    scheduledEnd: string;
-    timezone: string;
-    title: string;
-  }): Promise<ApiResult<{ meetingUrl: string; eventId: string }>> => {
-    try {
-      const { data, error } = await supabase.functions.invoke('google-calendar-create-event', {
-        body: input,
-      });
-
-      if (error) return fail({ message: error.message });
-      const payload = data as { meetingUrl?: string; eventId?: string; error?: string };
-      if (payload?.error || !payload?.meetingUrl) {
-        return fail({ message: payload?.error ?? 'Google Calendar event could not be created.' });
-      }
-      return {
-        success: true,
-        data: { meetingUrl: payload.meetingUrl, eventId: payload.eventId ?? '' },
-      };
-    } catch (e) {
-      return failUnknown(e);
-    }
-  },
 };

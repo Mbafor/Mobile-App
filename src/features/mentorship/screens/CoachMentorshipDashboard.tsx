@@ -32,7 +32,7 @@ import {
   useSessionMutations,
 } from '@/features/mentorship/hooks/useMentorshipSessions';
 import { queryKeys } from '@/constants/query-keys';
-import { mentorshipDataApi, mentorshipSchedulingApi } from '@/services/api';
+import { mentorshipSchedulingApi } from '@/services/api';
 import { spacing } from '@/constants/theme';
 
 export function CoachMentorshipDashboard() {
@@ -60,43 +60,9 @@ export function CoachMentorshipDashboard() {
   const isFullHeightSection = activeSection === 'messages';
 
   const handleConfirmSession = async (sessionId: string) => {
-    const session = sessions.find((s) => s.id === sessionId);
-    if (!session) return;
-
-    const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
-    const coachProfile = await mentorshipDataApi.getParticipantProfile(userId);
-    const coachEmail = coachProfile.success ? coachProfile.data?.email : null;
-    const studentEmail = mentee?.profile.email;
-
-    if (!coachEmail || !studentEmail) {
-      Alert.alert(
-        'Missing emails',
-        'Coach and student need email addresses on their profiles for Google Calendar invites.',
-      );
-      return;
-    }
-
     try {
-      const result = await mentorshipSchedulingApi.createGoogleCalendarEvent({
-        sessionId,
-        coachEmail,
-        studentEmail,
-        scheduledStart: session.scheduledStart,
-        scheduledEnd: session.scheduledEnd,
-        timezone: session.timezone,
-        title: session.title ?? 'Mentorship session',
-      });
-      if (!result.success) {
-        await confirm(sessionId);
-        void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
-        Alert.alert(
-          'Session confirmed',
-          `Google Meet link could not be created: ${result.error.message}\n\nYou can add a meeting URL manually.`,
-        );
-        return;
-      }
-      await confirm(sessionId, result.data.meetingUrl);
-      Alert.alert('Session confirmed', 'Google Meet link has been added for this session.');
+      await confirm(sessionId);
+      Alert.alert('Session confirmed', 'Session is confirmed. The Jitsi link is ready to join.');
       void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
     } catch (e) {
       Alert.alert('Error', e instanceof Error ? e.message : 'Could not confirm session.');

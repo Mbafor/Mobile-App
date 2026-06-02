@@ -95,7 +95,7 @@ serve(async (req) => {
       const result = await sendResendEmail({
         apiKey: resendApiKey,
         to: recipient.email,
-        subject: isConfirmed ? '✅ Session confirmed with Google Meet link' : '📅 Session update',
+        subject: isConfirmed ? '✅ Session confirmed with join link' : '📅 Session update',
         html: emailShell({
           headline: isConfirmed
             ? `Your session is confirmed, ${firstName}!`
@@ -104,7 +104,7 @@ serve(async (req) => {
             <p>${notification.body}</p>
             ${
               meetingUrl
-                ? `<p><strong>Google Meet:</strong> <a href="${meetingUrl}">${meetingUrl}</a></p>`
+                ? `<p><strong>Session link:</strong> <a href="${meetingUrl}">${meetingUrl}</a></p>`
                 : ''
             }
             ${sessionId ? `<p><strong>Session ID:</strong> ${sessionId}</p>` : ''}

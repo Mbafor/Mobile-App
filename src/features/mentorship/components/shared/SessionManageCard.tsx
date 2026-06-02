@@ -97,17 +97,12 @@ export function SessionManageCard({
               style={styles.primaryBtn}
               onPress={() => void Linking.openURL(session.meetingUrl!)}
             >
-              <Text style={styles.primaryBtnText}>Join on Google Meet</Text>
+              <Text style={styles.primaryBtnText}>Join now</Text>
             </Pressable>
           ) : null}
           {awaitingLink ? (
             <Text variant="caption" muted style={styles.waiting}>
-              Waiting for coach to confirm and share Meet link
-            </Text>
-          ) : null}
-          {role === 'mentee' && session.status === 'confirmed' && session.meetingUrl && !canJoin ? (
-            <Text variant="caption" muted style={styles.waiting}>
-              Join opens 15 minutes before the session
+              Waiting for coach to confirm and share the session link
             </Text>
           ) : null}
           {role === 'coach' && onConfirm && isPendingSessionStatus(session.status) ? (
@@ -118,7 +113,7 @@ export function SessionManageCard({
           {role === 'coach' && onSetMeetingUrl && isActive ? (
             <Pressable onPress={() => setZoomOpen(true)}>
               <Text style={styles.confirm}>
-                {session.meetingUrl ? 'Edit link' : 'Add Zoom link'}
+                {session.meetingUrl ? 'Edit link' : 'Add meeting link'}
               </Text>
             </Pressable>
           ) : null}
@@ -158,14 +153,14 @@ export function SessionManageCard({
       <Modal visible={zoomOpen} transparent animationType="slide" onRequestClose={() => setZoomOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setZoomOpen(false)}>
           <Pressable style={styles.modalCard} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Google Meet / meeting link</Text>
+            <Text style={styles.modalTitle}>Meeting link</Text>
             <Text muted variant="caption">
               Share this with your mentee before the session starts.
             </Text>
             <Input
               value={zoomUrl}
               onChangeText={setZoomUrl}
-              placeholder="https://zoom.us/j/…"
+              placeholder="https://meet.jit.si/voila-session-…"
               autoCapitalize="none"
               keyboardType="url"
             />

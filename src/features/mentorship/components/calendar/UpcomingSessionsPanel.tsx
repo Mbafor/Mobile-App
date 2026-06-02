@@ -84,13 +84,8 @@ export function UpcomingSessionsPanel({
                     style={styles.meetBtn}
                     onPress={() => void Linking.openURL(session.meetingUrl!)}
                   >
-                    <Text style={styles.meetBtnText}>Join on Google Meet</Text>
+                    <Text style={styles.meetBtnText}>Join now</Text>
                   </Pressable>
-                ) : null}
-                {session.status === 'confirmed' && !canJoin && session.meetingUrl ? (
-                  <Text variant="caption" muted>
-                    Join opens 15 minutes before the session
-                  </Text>
                 ) : null}
                 {showStudentCancel ? (
                   allowCancel ? (
