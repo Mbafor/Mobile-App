@@ -326,7 +326,9 @@ const styles = StyleSheet.create({
   messageStream: {
     flex: 1,
     minHeight: 0,
-    overflow: 'visible',
+    // Prevent bubbles from overflowing and causing page-level scrolling.
+    // The FlatList inside should be the only vertical scroll region.
+    overflow: 'hidden',
   },
   peerHeader: {
     flexDirection: 'row',

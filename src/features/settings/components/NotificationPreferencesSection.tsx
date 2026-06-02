@@ -109,11 +109,6 @@ export function NotificationPreferencesSection() {
         </Text>
       ) : null}
 
-      {permission === 'unavailable' ? (
-        <Text muted variant="caption" style={styles.warning}>
-          Push is not available on this device or platform (use a physical phone with a dev build).
-        </Text>
-      ) : null}
 
       <View style={styles.toggleGroup}>
       <PreferenceToggleRow
