@@ -188,7 +188,12 @@ export function MentorshipChat({
             keyExtractor={(m) => m.id}
             contentContainerStyle={styles.listContent}
             showsVerticalScrollIndicator
-            onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
+            keyboardShouldPersistTaps="handled"
+            onContentSizeChange={() => {
+              if (messages.length > 0) {
+                listRef.current?.scrollToEnd({ animated: true });
+              }
+            }}
             renderItem={({ item }) => {
               const mine = item.senderId === currentUserId;
               const time = new Date(item.createdAt).toLocaleTimeString([], {
@@ -340,6 +345,7 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.xs,
+    justifyContent: 'flex-end',
   },
   bubbleRow: { flexDirection: 'row', width: '100%' },
   bubbleRowMine: { justifyContent: 'flex-end' },

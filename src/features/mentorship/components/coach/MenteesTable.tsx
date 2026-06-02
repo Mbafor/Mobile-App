@@ -1,11 +1,8 @@
 import { useState } from 'react';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import { Alert, Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
-import { OptionsSheet } from '@/components/ui/OptionsSheet';
-import { MentorshipMobileList } from '@/features/mentorship/components/shared/MentorshipMobileList';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MenteeSummary } from '@/types/domain/mentorship';
@@ -18,81 +15,84 @@ type MenteesTableProps = {
 };
 
 export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProps) {
-  const [menuMentee, setMenuMentee] = useState<MenteeSummary | null>(null);
   const [profileMentee, setProfileMentee] = useState<MenteeSummary | null>(null);
 
   return (
     <>
-      <MentorshipMobileList
-        data={mentees}
-        keyExtractor={(m) => m.mentorship.id}
-        emptyMessage="No active mentees. Students from the waiting list will appear here when assigned."
-        renderCard={(row) => {
-          const name = row.profile.fullName?.trim() || 'Student';
-          return (
-            <View style={styles.card}>
-              <View style={styles.topRow}>
-                <UserAvatarDisplay
-                  displayName={name}
-                  avatarUrl={row.profile.avatarUrl ?? null}
-                  size={48}
-                />
-                <View style={styles.meta}>
-                  <Text style={styles.name}>{name}</Text>
-                  {row.profile.courseMajor ? (
-                    <Text variant="caption" muted numberOfLines={1}>
-                      {row.profile.courseMajor}
-                    </Text>
-                  ) : null}
-                  {row.profile.university ? (
-                    <Text variant="caption" muted numberOfLines={1}>
-                      {row.profile.university}
-                    </Text>
-                  ) : null}
-                </View>
-                <Pressable
-                  style={styles.menuBtn}
-                  hitSlop={12}
-                  onPress={() => setMenuMentee(row)}
-                  accessibilityLabel={`Actions for ${name}`}
-                >
-                  <Ionicons name="ellipsis-vertical" size={22} color={mentorshipColors.text} />
-                </Pressable>
-              </View>
-              <View style={styles.progressTrack}>
-                <View style={[styles.progressFill, { width: `${row.progressPercent}%` }]} />
-              </View>
-              <Text variant="caption" muted>
-                {row.progressPercent}% of 3-month mentorship · ends{' '}
-                {new Date(row.mentorship.endsAt).toLocaleDateString()}
-              </Text>
+      <View style={styles.tableShell}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <View>
+            <View style={styles.tableHeader}>
+              <HeaderCell label="Profile" width={88} />
+              <HeaderCell label="Name" width={190} />
+              <HeaderCell label="Course" width={180} />
+              <HeaderCell label="University" width={210} />
+              <HeaderCell label="Ends On" width={120} />
+              <HeaderCell label="Actions" width={170} />
             </View>
-          );
-        }}
-      />
 
-      <OptionsSheet
-        visible={menuMentee != null}
-        title={menuMentee?.profile.fullName?.trim() ?? 'Student'}
-        onClose={() => setMenuMentee(null)}
-        options={[
-          {
-            key: 'view',
-            label: 'View full profile',
-            onPress: () => {
-              if (menuMentee) setProfileMentee(menuMentee);
-            },
-          },
-          {
-            key: 'remove',
-            label: 'Remove student',
-            destructive: true,
-            onPress: () => {
-              if (menuMentee) onRemove(menuMentee.mentorship.id);
-            },
-          },
-        ]}
-      />
+            {mentees.length === 0 ? (
+              <View style={styles.emptyRow}>
+                <Text muted>
+                  No active mentees. Students from the waiting list will appear here when assigned.
+                </Text>
+              </View>
+            ) : (
+              mentees.map((row) => {
+                const name = row.profile.fullName?.trim() || 'Student';
+                return (
+                  <View key={row.mentorship.id} style={styles.row}>
+                    <View style={[styles.cell, styles.avatarCell, { width: 88 }]}>
+                      <UserAvatarDisplay
+                        displayName={name}
+                        avatarUrl={row.profile.avatarUrl ?? null}
+                        size={36}
+                      />
+                    </View>
+                    <CellText width={190} text={name} />
+                    <CellText width={180} text={row.profile.courseMajor?.trim() || '-'} />
+                    <CellText width={210} text={row.profile.university?.trim() || '-'} />
+                    <CellText
+                      width={120}
+                      text={new Date(row.mentorship.endsAt).toLocaleDateString()}
+                    />
+                    <View style={[styles.cell, styles.actionsCell, { width: 170 }]}>
+                      <Pressable
+                        style={styles.actionBtn}
+                        onPress={() => setProfileMentee(row)}
+                        accessibilityLabel={`View profile for ${name}`}
+                      >
+                        <Text style={styles.actionBtnText}>View profile</Text>
+                      </Pressable>
+                      <Pressable
+                        style={styles.removeBtn}
+                        disabled={isRemoving}
+                        onPress={() => {
+                          Alert.alert(
+                            'Remove student?',
+                            `Are you sure you want to remove ${name} from mentorship?`,
+                            [
+                              { text: 'Cancel', style: 'cancel' },
+                              {
+                                text: 'Remove',
+                                style: 'destructive',
+                                onPress: () => onRemove(row.mentorship.id),
+                              },
+                            ],
+                          );
+                        }}
+                        accessibilityLabel={`Remove ${name}`}
+                      >
+                        <Text style={styles.removeBtnText}>{isRemoving ? 'Removing...' : 'Remove'}</Text>
+                      </Pressable>
+                    </View>
+                  </View>
+                );
+              })
+            )}
+          </View>
+        </ScrollView>
+      </View>
 
       <Modal
         visible={profileMentee != null}
@@ -103,15 +103,12 @@ export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProp
           <View style={styles.profileHeader}>
             <Text style={styles.profileTitle}>Student profile</Text>
             <Pressable onPress={() => setProfileMentee(null)} hitSlop={12}>
-              <Ionicons name="close" size={26} color={mentorshipColors.textMuted} />
+              <Text style={styles.closeText}>Close</Text>
             </Pressable>
           </View>
           <ScrollView contentContainerStyle={styles.profileScroll}>
             {profileMentee ? (
-              <ParticipantProfileDetail
-                profile={profileMentee.profile}
-                roleLabel="Mentee"
-              />
+              <ParticipantProfileDetail profile={profileMentee.profile} roleLabel="Mentee" />
             ) : null}
           </ScrollView>
         </View>
@@ -120,23 +117,74 @@ export function MenteesTable({ mentees, onRemove, isRemoving }: MenteesTableProp
   );
 }
 
+function HeaderCell({ label, width }: { label: string; width: number }) {
+  return (
+    <View style={[styles.headerCell, { width }]}>
+      <Text style={styles.headerText}>{label}</Text>
+    </View>
+  );
+}
+
+function CellText({ width, text }: { width: number; text: string }) {
+  return (
+    <View style={[styles.cell, { width }]}>
+      <Text numberOfLines={2} style={styles.cellText}>
+        {text}
+      </Text>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
-  card: { padding: spacing.md, gap: spacing.sm },
-  topRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  meta: { flex: 1, gap: 2 },
-  name: { fontSize: 17, fontWeight: '700', color: mentorshipColors.text },
-  menuBtn: {
-    padding: spacing.xs,
+  tableShell: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: mentorshipColors.border,
+    borderRadius: 14,
+    overflow: 'hidden',
+    backgroundColor: mentorshipColors.surfaceElevated,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    backgroundColor: mentorshipColors.surface,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: mentorshipColors.border,
+  },
+  headerCell: { paddingHorizontal: spacing.sm, paddingVertical: spacing.sm },
+  headerText: {
+    fontSize: 12,
+    color: mentorshipColors.textMuted,
+    textTransform: 'uppercase',
+    fontWeight: '700',
+  },
+  row: {
+    flexDirection: 'row',
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: mentorshipColors.border,
+    minHeight: 72,
+  },
+  cell: { justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.sm },
+  cellText: { color: mentorshipColors.text, fontSize: 14, fontWeight: '500' },
+  avatarCell: { alignItems: 'center' },
+  actionsCell: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  actionBtn: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: mentorshipColors.border,
     borderRadius: 8,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 7,
     backgroundColor: mentorshipColors.surface,
   },
-  progressTrack: {
-    height: 6,
-    backgroundColor: mentorshipColors.border,
-    borderRadius: 3,
-    overflow: 'hidden',
+  actionBtnText: { color: mentorshipColors.text, fontSize: 12, fontWeight: '600' },
+  removeBtn: {
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: mentorshipColors.danger,
+    borderRadius: 8,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 7,
+    backgroundColor: mentorshipColors.surface,
   },
-  progressFill: { height: '100%', backgroundColor: mentorshipColors.accent },
+  removeBtnText: { color: mentorshipColors.danger, fontSize: 12, fontWeight: '600' },
+  emptyRow: { padding: spacing.lg, alignItems: 'center' },
   profileModal: { flex: 1, backgroundColor: mentorshipColors.surfaceElevated },
   profileHeader: {
     flexDirection: 'row',
@@ -148,5 +196,6 @@ const styles = StyleSheet.create({
     borderBottomColor: mentorshipColors.border,
   },
   profileTitle: { fontSize: 20, fontWeight: '700', color: mentorshipColors.text },
+  closeText: { color: mentorshipColors.textMuted, fontWeight: '600' },
   profileScroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
 });

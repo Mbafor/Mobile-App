@@ -2,9 +2,11 @@ import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
+  useWindowDimensions,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -43,6 +45,7 @@ export function MentorChooser({
   selectingMentorId,
 }: MentorChooserProps) {
   const insets = useSafeAreaInsets();
+  const { width } = useWindowDimensions();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({
     enabled: true,
   });
@@ -67,6 +70,9 @@ export function MentorChooser({
     !isLoading && !error && !showWaitingList && mentors.length > 0 && filtered.length === 0;
 
   const listMentors = recommended.length > 0 ? all : filtered;
+  const isWeb = Platform.OS === 'web';
+  const webColumns = width >= 1024 ? 3 : width >= 760 ? 2 : 1;
+  const webCardWidth = isWeb ? `${100 / webColumns}%` : '100%';
 
   if (isLoading || (isFetching && mentors.length === 0)) {
     return (
@@ -103,15 +109,23 @@ export function MentorChooser({
     );
   }
 
-  const renderMentor = (item: AvailableMentor) => (
-    <MentorBrowseCard
-      key={item.mentorUserId}
-      mentor={item}
-      onViewProfile={() => setProfileMentor(item)}
-      onChoose={() => onSelect(item.mentorUserId)}
-      isChoosing={isSelecting && selectingMentorId === item.mentorUserId}
-    />
-  );
+  const renderMentor = (item: AvailableMentor) => {
+    const card = (
+      <MentorBrowseCard
+        key={item.mentorUserId}
+        mentor={item}
+        onViewProfile={() => setProfileMentor(item)}
+        onChoose={() => onSelect(item.mentorUserId)}
+        isChoosing={isSelecting && selectingMentorId === item.mentorUserId}
+      />
+    );
+    if (!isWeb) return card;
+    return (
+      <View key={item.mentorUserId} style={[styles.webCardWrap, { width: webCardWidth }]}>
+        {card}
+      </View>
+    );
+  };
 
   return (
     <View style={styles.root}>
@@ -144,7 +158,9 @@ export function MentorChooser({
       {recommended.length > 0 ? (
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Recommended Coaches For You</Text>
-          <View style={styles.sectionList}>{recommended.map(renderMentor)}</View>
+          <View style={[styles.sectionList, isWeb && styles.sectionListWeb]}>
+            {recommended.map(renderMentor)}
+          </View>
         </View>
       ) : null}
 
@@ -158,7 +174,9 @@ export function MentorChooser({
         ) : listMentors.length === 0 && mentors.length === 0 ? (
           <Text muted>No coaches to display.</Text>
         ) : (
-          <View style={styles.sectionList}>{listMentors.map(renderMentor)}</View>
+          <View style={[styles.sectionList, isWeb && styles.sectionListWeb]}>
+            {listMentors.map(renderMentor)}
+          </View>
         )}
       </View>
 
@@ -236,6 +254,8 @@ const styles = StyleSheet.create({
   sectionLast: { marginBottom: spacing.md },
   sectionTitle: { fontSize: 16, fontWeight: '700', color: mentorshipColors.text },
   sectionList: { gap: spacing.md },
+  sectionListWeb: { flexDirection: 'row', flexWrap: 'wrap', marginHorizontal: -spacing.xs },
+  webCardWrap: { paddingHorizontal: spacing.xs, paddingBottom: spacing.sm },
   waitingWrap: { gap: spacing.md, padding: spacing.md },
   waitingTitle: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
   waitingBody: { lineHeight: 22 },

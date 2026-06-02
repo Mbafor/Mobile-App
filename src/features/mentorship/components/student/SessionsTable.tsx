@@ -4,6 +4,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/ui';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
+import {
+  canStudentCancelSession,
+  isPendingSessionStatus,
+  studentCancelBlockedMessage,
+} from '@/features/mentorship/utils/session-rules';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -11,12 +16,21 @@ type SessionsTableProps = {
   sessions: MentorshipSession[];
   coachName: string;
   coachEmail?: string | null;
+  title?: string;
   onCancel?: (sessionId: string) => void;
 };
 
-export function SessionsTable({ sessions, coachName, coachEmail, onCancel }: SessionsTableProps) {
+export function SessionsTable({
+  sessions,
+  coachName,
+  coachEmail,
+  title,
+  onCancel,
+}: SessionsTableProps) {
   return (
-    <View style={styles.tableShell}>
+    <View style={styles.wrap}>
+      {title ? <Text style={styles.heading}>{title}</Text> : null}
+      <View style={styles.tableShell}>
       <ScrollView horizontal showsHorizontalScrollIndicator={false}>
         <View>
           <View style={styles.tableHeader}>
@@ -62,10 +76,7 @@ export function SessionsTable({ sessions, coachName, coachEmail, onCancel }: Ses
                   )}
                 </View>
                 <View style={[styles.cell, { width: 130 }]}>
-                  <View style={styles.statusPill}>
-                    <View style={styles.statusDot} />
-                    <Text style={styles.statusText}>Confirmed</Text>
-                  </View>
+                  <StatusPill session={session} />
                 </View>
                 <View style={[styles.cell, styles.actionsCell, { width: 210 }]}>
                   <Pressable
@@ -81,15 +92,48 @@ export function SessionsTable({ sessions, coachName, coachEmail, onCancel }: Ses
                     <Ionicons name="videocam-outline" size={14} color="#fff" />
                     <Text style={styles.joinBtnText}>Join now</Text>
                   </Pressable>
-                  <Pressable style={styles.cancelBtn} onPress={() => onCancel?.(session.id)}>
-                    <Text style={styles.cancelText}>Cancel</Text>
-                  </Pressable>
+                  {onCancel ? (
+                    canStudentCancelSession(session) ? (
+                      <Pressable
+                        style={styles.cancelBtn}
+                        onPress={() => {
+                          Alert.alert('Cancel session', 'Cancel this session?', [
+                            { text: 'No', style: 'cancel' },
+                            {
+                              text: 'Yes',
+                              style: 'destructive',
+                              onPress: () => onCancel(session.id),
+                            },
+                          ]);
+                        }}
+                      >
+                        <Text style={styles.cancelText}>Cancel</Text>
+                      </Pressable>
+                    ) : (
+                      <Text variant="caption" muted numberOfLines={2} style={styles.cancelHint}>
+                        {studentCancelBlockedMessage(session)}
+                      </Text>
+                    )
+                  ) : null}
                 </View>
               </View>
             ))
           )}
         </View>
       </ScrollView>
+      </View>
+    </View>
+  );
+}
+
+function StatusPill({ session }: { session: MentorshipSession }) {
+  const pending = isPendingSessionStatus(session.status);
+  return (
+    <View style={[styles.statusPill, pending ? styles.statusPillPending : styles.statusPillConfirmed]}>
+      <View style={[styles.statusDot, pending ? styles.statusDotPending : styles.statusDotConfirmed]} />
+      <Text style={[styles.statusText, pending ? styles.statusTextPending : styles.statusTextConfirmed]}>
+        {pending ? 'Pending' : 'Confirmed'}
+      </Text>
     </View>
   );
 }
@@ -113,6 +157,8 @@ function CellText({ width, text }: { width: number; text: string }) {
 }
 
 const styles = StyleSheet.create({
+  wrap: { gap: spacing.sm },
+  heading: { fontSize: 17, fontWeight: '700', color: mentorshipColors.text },
   tableShell: {
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: mentorshipColors.border,
@@ -149,11 +195,17 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     paddingHorizontal: 10,
     paddingVertical: 5,
-    backgroundColor: '#DCFCE7',
     alignSelf: 'flex-start',
   },
-  statusDot: { width: 8, height: 8, borderRadius: 4, backgroundColor: '#16A34A' },
-  statusText: { fontSize: 12, fontWeight: '700', color: '#166534' },
+  statusPillConfirmed: { backgroundColor: '#DCFCE7' },
+  statusPillPending: { backgroundColor: '#FEF3C7' },
+  statusDot: { width: 8, height: 8, borderRadius: 4 },
+  statusDotConfirmed: { backgroundColor: '#16A34A' },
+  statusDotPending: { backgroundColor: '#D97706' },
+  statusText: { fontSize: 12, fontWeight: '700' },
+  statusTextConfirmed: { color: '#166534' },
+  statusTextPending: { color: '#92400E' },
+  cancelHint: { maxWidth: 120 },
   actionsCell: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
   joinBtn: {
     height: 32,

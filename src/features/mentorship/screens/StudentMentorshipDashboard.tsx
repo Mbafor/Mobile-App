@@ -12,7 +12,6 @@ import { EmptyState } from '@/components/feedback/EmptyState';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { StudentBookingCalendar } from '@/features/mentorship/components/calendar/StudentBookingCalendar';
-import { UpcomingSessionsPanel } from '@/features/mentorship/components/calendar/UpcomingSessionsPanel';
 import { CoachDashboardSummary } from '@/features/mentorship/components/student/CoachDashboardSummary';
 import { CoachProfileCard } from '@/features/mentorship/components/student/CoachProfileCard';
 import { SessionsTable } from '@/features/mentorship/components/student/SessionsTable';
@@ -261,12 +260,17 @@ export function StudentMentorshipDashboard() {
               isBooking={isBooking}
               isLoadingSessions={sessionsLoading}
             />
-            <UpcomingSessionsPanel
-              sessions={mySessions}
-              role="student"
-              peerLabel={coachName}
-              onCancel={handleCancelSession}
-            />
+            {sessionsLoading ? (
+              <ActivityIndicator color={mentorshipColors.accent} />
+            ) : (
+              <SessionsTable
+                title="Upcoming sessions"
+                sessions={myUpcoming}
+                coachName={coachName}
+                coachEmail={coach?.profile?.email ?? null}
+                onCancel={handleCancelSession}
+              />
+            )}
           </View>
         );
 
