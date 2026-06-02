@@ -158,11 +158,28 @@ export function CoachMentorshipDashboard() {
               sessions={sessions.filter(
                 (s) => s.status !== 'cancelled' && s.status !== 'completed',
               )}
+              getMenteeDetails={(session) => {
+                const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
+                return {
+                  name: mentee?.profile.fullName?.trim() || 'Mentee',
+                  email: mentee?.profile.email ?? null,
+                };
+              }}
               onConfirm={handleConfirmSession}
               onCancel={handleCancelSession}
               onSetMeetingUrl={handleSetMeetingUrl}
             />
-            <CoachSessionsTable title="Completed" sessions={completed} />
+            <CoachSessionsTable
+              title="Completed"
+              sessions={completed}
+              getMenteeDetails={(session) => {
+                const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
+                return {
+                  name: mentee?.profile.fullName?.trim() || 'Mentee',
+                  email: mentee?.profile.email ?? null,
+                };
+              }}
+            />
           </View>
         );
 

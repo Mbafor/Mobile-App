@@ -80,7 +80,7 @@ export function MentorshipChat({
 
   const { peerTyping, onDraftChange } = useMentorshipTyping(mentorshipId, currentUserId, true);
   const tabBarHeight = useMainTabBarHeight();
-  const composerBottomPad = fullScreen ? tabBarHeight : spacing.sm;
+  const composerBottomPad = fullScreen ? Math.max(tabBarHeight, spacing.sm) : spacing.sm;
 
   const handleSend = async () => {
     const text = draft.trim();
@@ -275,6 +275,7 @@ export function MentorshipChat({
           style={styles.input}
           multiline
           maxLength={2000}
+          textAlignVertical="center"
         />
 
         <Pressable
@@ -325,19 +326,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    paddingBottom: spacing.sm,
-    marginBottom: spacing.xs,
+    paddingBottom: spacing.xs,
+    marginBottom: 2,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: mentorshipColors.border,
   },
   peerMeta: { flex: 1, gap: 2 },
-  peerName: { fontSize: 16, fontWeight: '600', color: mentorshipColors.text },
+  peerName: { fontSize: 15, fontWeight: '600', color: mentorshipColors.text },
   emptyWrap: { flex: 1, justifyContent: 'center' },
   list: { flex: 1 },
   listContent: {
     flexGrow: 1,
-    gap: spacing.sm,
-    paddingVertical: spacing.md,
+    gap: spacing.xs,
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.xs,
   },
   bubbleRow: { flexDirection: 'row', width: '100%' },
@@ -345,11 +346,10 @@ const styles = StyleSheet.create({
   bubbleRowTheirs: { justifyContent: 'flex-start' },
   bubble: {
     maxWidth: '82%',
-    paddingTop: 10,
-    paddingBottom: 8,
-    paddingHorizontal: 14,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
     borderRadius: 18,
-    gap: 6,
+    gap: 4,
   },
   bubbleMine: {
     backgroundColor: mentorshipColors.accent,
@@ -363,7 +363,7 @@ const styles = StyleSheet.create({
   },
   bubbleText: {
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 20,
     color: mentorshipColors.text,
   },
   bubbleTextMine: { color: mentorshipColors.textOnAccent },
@@ -394,25 +394,26 @@ const styles = StyleSheet.create({
   fileChipTextMine: { color: mentorshipColors.textOnAccent },
   time: {
     fontSize: 11,
-    color: mentorshipColors.textMuted,
+    color: mentorshipColors.text,
+    opacity: 0.72,
     alignSelf: 'flex-end',
     marginTop: 2,
   },
-  timeMine: { color: 'rgba(255,255,255,0.75)' },
+  timeMine: { color: mentorshipColors.textOnAccent, opacity: 0.88 },
   composerBar: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     gap: spacing.sm,
-    paddingTop: spacing.sm,
+    paddingTop: spacing.xs,
     paddingHorizontal: spacing.xs,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: mentorshipColors.border,
     backgroundColor: mentorshipColors.surfaceElevated,
   },
   attachBtn: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 44,
+    height: 44,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: mentorshipColors.border,
     backgroundColor: mentorshipColors.surfaceElevated,
@@ -423,21 +424,21 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     minHeight: 44,
-    maxHeight: 120,
+    maxHeight: 110,
     paddingHorizontal: spacing.md,
-    paddingVertical: Platform.OS === 'ios' ? 11 : 9,
+    paddingVertical: Platform.OS === 'ios' ? 10 : 8,
     fontSize: 15,
     lineHeight: 20,
     color: mentorshipColors.text,
     backgroundColor: mentorshipColors.surfaceElevated,
-    borderRadius: 22,
+    borderRadius: 12,
     borderWidth: 1,
     borderColor: mentorshipColors.border,
   },
   sendBtn: {
     width: 44,
     height: 44,
-    borderRadius: 22,
+    borderRadius: 12,
     backgroundColor: mentorshipColors.surface,
     borderWidth: 1,
     borderColor: mentorshipColors.border,

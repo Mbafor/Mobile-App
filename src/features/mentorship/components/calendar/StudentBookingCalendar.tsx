@@ -9,6 +9,7 @@ import { ActivityIndicator, Alert, Modal, Pressable, StyleSheet, View } from 're
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
 import { mentorshipCalendarTheme } from '@/features/mentorship/components/calendar/calendar-theme';
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
@@ -32,6 +33,7 @@ type PendingBook = {
   scheduledEnd: string;
   timezone: string;
   label: string;
+  notes: string;
 };
 
 type StudentBookingCalendarProps = {
@@ -44,6 +46,7 @@ type StudentBookingCalendarProps = {
     scheduledStart: string;
     scheduledEnd: string;
     timezone: string;
+    notes?: string;
   }) => Promise<void>;
   isBooking?: boolean;
   isLoadingSessions?: boolean;
@@ -80,6 +83,7 @@ export function StudentBookingCalendar({
         scheduledEnd: payload.scheduledEnd,
         timezone: payload.timezone,
         label: payload.label,
+        notes: '',
       });
     },
     [slots, timezone],
@@ -93,6 +97,7 @@ export function StudentBookingCalendar({
         scheduledStart: pending.scheduledStart,
         scheduledEnd: pending.scheduledEnd,
         timezone: pending.timezone,
+        notes: pending.notes.trim() || undefined,
       });
       setPending(null);
       Alert.alert('Session requested', 'Your coach has been notified.');
@@ -144,9 +149,26 @@ export function StudentBookingCalendar({
           <View style={styles.modalCard}>
             <Text style={styles.modalTitle}>Book a session?</Text>
             {pending ? (
-              <Text muted style={styles.modalBody}>
-                Book a session with {coachName} on {pending.label}?
-              </Text>
+              <>
+                <Text muted style={styles.modalBody}>
+                  Book a session with {coachName} on {pending.label}?
+                </Text>
+                <View style={styles.notesWrap}>
+                  <Text variant="caption" muted>
+                    My notes
+                  </Text>
+                  <Input
+                    value={pending.notes}
+                    onChangeText={(value) =>
+                      setPending((prev) => (prev ? { ...prev, notes: value } : prev))
+                    }
+                    placeholder="Add a short note for your coach (optional)"
+                    multiline
+                    numberOfLines={3}
+                    maxLength={220}
+                  />
+                </View>
+              </>
             ) : null}
             <View style={styles.modalActions}>
               <Button variant="ghost" onPress={() => setPending(null)}>
@@ -197,5 +219,6 @@ const styles = StyleSheet.create({
   },
   modalTitle: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
   modalBody: { lineHeight: 22 },
+  notesWrap: { gap: spacing.xs },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm },
 });

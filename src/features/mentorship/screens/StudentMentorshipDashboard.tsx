@@ -281,6 +281,7 @@ export function StudentMentorshipDashboard() {
           <SessionsTable
             sessions={myUpcoming}
             coachName={coachName}
+            coachEmail={coach?.profile?.email ?? null}
             onCancel={handleCancelSession}
           />
         );
