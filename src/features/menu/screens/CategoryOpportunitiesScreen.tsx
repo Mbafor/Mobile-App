@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
+import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { slugToCategory } from '@/constants/browse-categories';
 import { colors, spacing } from '@/constants/theme';
@@ -48,14 +49,19 @@ export function CategoryOpportunitiesScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
+      <View style={styles.root}>
+        <PageHeader title={categoryName} />
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <View style={styles.root}>
+      <PageHeader title={categoryName} />
+
       <FlatList
         data={results}
         keyExtractor={(item) => item.id}
@@ -71,8 +77,7 @@ export function CategoryOpportunitiesScreen() {
         }
         ListHeaderComponent={
           <Text variant="caption" muted style={styles.meta}>
-            {results.length} {results.length === 1 ? 'opportunity' : 'opportunities'} in{' '}
-            {categoryName}
+            {results.length} {results.length === 1 ? 'opportunity' : 'opportunities'}
           </Text>
         }
         ListEmptyComponent={
@@ -81,15 +86,29 @@ export function CategoryOpportunitiesScreen() {
             description={`Nothing active in ${categoryName} right now. Check back later.`}
           />
         }
-        contentContainerStyle={results.length === 0 ? styles.empty : undefined}
+        contentContainerStyle={[
+          styles.list,
+          results.length === 0 && styles.empty,
+        ]}
+        style={styles.scroll}
       />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
+  root: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  meta: { padding: spacing.md, paddingBottom: spacing.sm },
+  scroll: { flex: 1 },
+  list: {
+    maxWidth: 1280,
+    width: '100%',
+    alignSelf: 'center',
+  },
+  meta: {
+    paddingHorizontal: spacing.md,
+    paddingVertical: spacing.sm,
+    color: colors.textMuted,
+  },
   empty: { flexGrow: 1 },
 });

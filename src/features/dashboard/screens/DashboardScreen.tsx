@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
     maxWidth: 1280,
     width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   titleRow: {

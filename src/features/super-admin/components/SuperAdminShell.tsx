@@ -1,12 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
 import { usePathname, useRouter, type Href } from 'expo-router';
 import type { PropsWithChildren } from 'react';
-import { Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
+import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
-import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
+import { webPressableStyle } from '@/utils/web/pressable';
 
 type NavItem = {
   href: Href;
@@ -16,16 +16,36 @@ type NavItem = {
 };
 
 const NAV: NavItem[] = [
-  { href: ROUTES.SUPER_ADMIN.HOME as Href, label: 'Overview', icon: 'grid-outline', segment: 'super-admin/index' },
+  {
+    href: ROUTES.SUPER_ADMIN.HOME as Href,
+    label: 'Overview',
+    icon: 'grid-outline',
+    segment: 'super-admin/index',
+  },
   {
     href: ROUTES.SUPER_ADMIN.ANALYTICS as Href,
     label: 'Analytics',
     icon: 'stats-chart-outline',
     segment: 'analytics',
   },
-  { href: ROUTES.SUPER_ADMIN.ADMINS as Href, label: 'Admins', icon: 'shield-outline', segment: 'admins' },
-  { href: ROUTES.SUPER_ADMIN.MENTORS as Href, label: 'Mentors', icon: 'school-outline', segment: 'mentors' },
-  { href: ROUTES.SUPER_ADMIN.MENTEES as Href, label: 'Mentees', icon: 'people-outline', segment: 'mentees' },
+  {
+    href: ROUTES.SUPER_ADMIN.ADMINS as Href,
+    label: 'Admins',
+    icon: 'shield-outline',
+    segment: 'admins',
+  },
+  {
+    href: ROUTES.SUPER_ADMIN.MENTORS as Href,
+    label: 'Mentors',
+    icon: 'school-outline',
+    segment: 'mentors',
+  },
+  {
+    href: ROUTES.SUPER_ADMIN.MENTEES as Href,
+    label: 'Mentees',
+    icon: 'people-outline',
+    segment: 'mentees',
+  },
   {
     href: ROUTES.SUPER_ADMIN.OPPORTUNITIES as Href,
     label: 'Opportunities',
@@ -34,113 +54,104 @@ const NAV: NavItem[] = [
   },
 ];
 
+function isActive(item: NavItem, pathname: string): boolean {
+  if (item.segment === 'super-admin/index') {
+    return pathname.endsWith('/super-admin') || pathname.endsWith('/super-admin/index');
+  }
+  return pathname.includes(item.segment);
+}
+
 export function SuperAdminShell({ children }: PropsWithChildren) {
   const router = useRouter();
   const pathname = usePathname();
-  const { width } = useWindowDimensions();
-  const showSidebar = width >= 768;
 
   return (
     <View style={styles.root}>
-      {showSidebar ? (
-        <View style={styles.sidebar}>
-          <Text variant="title" style={styles.brand}>
-            Super Admin
-          </Text>
+      {/* Horizontal tab bar — matches MentorshipTabNav / CVHubTopNav style */}
+      <View style={styles.tabBar}>
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.tabRow}
+        >
           {NAV.map((item) => {
-            const active =
-              item.segment === 'super-admin/index'
-                ? pathname.endsWith('/super-admin') || pathname.endsWith('/super-admin/index')
-                : pathname.includes(item.segment);
+            const active = isActive(item, pathname);
             return (
               <Pressable
                 key={item.label}
-                style={[styles.navItem, active && styles.navItemActive]}
+                style={Platform.OS === 'web'
+                  ? webPressableStyle(
+                      [styles.tab, active && styles.tabActive],
+                      styles.tabHover,
+                    )
+                  : [styles.tab, active && styles.tabActive]}
                 onPress={() => router.push(item.href)}
+                accessibilityRole="tab"
               >
                 <Ionicons
                   name={item.icon}
-                  size={18}
+                  size={15}
                   color={active ? colors.primary : colors.textMuted}
                 />
-                <Text style={[styles.navLabel, active && styles.navLabelActive]}>{item.label}</Text>
+                <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
+                  {item.label}
+                </Text>
               </Pressable>
             );
           })}
-        </View>
-      ) : null}
-      <View style={styles.main}>
-        {!showSidebar ? (
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.mobileNav}>
-            {NAV.map((item) => {
-              const active =
-              item.segment === 'super-admin/index'
-                ? pathname.endsWith('/super-admin') || pathname.endsWith('/super-admin/index')
-                : pathname.includes(item.segment);
-              return (
-                <Pressable
-                  key={item.label}
-                  style={[styles.chip, active && styles.chipActive]}
-                  onPress={() => router.push(item.href)}
-                >
-                  <Text style={[styles.chipText, active && styles.chipTextActive]}>{item.label}</Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
-        ) : null}
-        <View style={styles.content}>
-          <ResponsiveContainer style={styles.contentInner} maxWidth={1280}>
-            {children}
-          </ResponsiveContainer>
-        </View>
+        </ScrollView>
       </View>
+
+      {/* Page content */}
+      <View style={styles.content}>{children}</View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  root: { flex: 1, flexDirection: 'row', backgroundColor: colors.background },
-  sidebar: {
-    width: 220,
-    borderRightWidth: 1,
-    borderRightColor: colors.border,
-    padding: spacing.md,
-    gap: spacing.xs,
-    backgroundColor: colors.surface,
-  },
-  brand: { fontSize: 18, fontWeight: '700', marginBottom: spacing.md },
-  navItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 8,
-  },
-  navItemActive: { backgroundColor: colors.background },
-  navLabel: { fontSize: 14, color: colors.text },
-  navLabelActive: { color: colors.primary, fontWeight: '600' },
-  main: { flex: 1 },
-  mobileNav: {
-    maxHeight: 48,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  chip: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.xs,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginRight: spacing.xs,
+  root: {
+    flex: 1,
+    flexDirection: 'column',
     backgroundColor: colors.background,
   },
-  chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-  chipText: { fontSize: 13, fontWeight: '500' },
-  chipTextActive: { color: colors.background },
+
+  // ─── Tab bar ──────────────────────────────────────────────────────────────
+  tabBar: {
+    backgroundColor: colors.background,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
+  },
+  tabRow: {
+    flexDirection: 'row',
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    gap: spacing.xs,
+  },
+  tab: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: spacing.xs + 2,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'transparent',
+  },
+  tabActive: {
+    borderColor: colors.primary,
+    backgroundColor: `${colors.primary}0D`,
+  },
+  tabHover: { backgroundColor: colors.surface },
+  tabLabel: {
+    fontSize: 13,
+    fontWeight: '500',
+    color: colors.textMuted,
+  },
+  tabLabelActive: {
+    color: colors.primary,
+    fontWeight: '600',
+  },
+
+  // ─── Content ──────────────────────────────────────────────────────────────
   content: { flex: 1 },
-  contentInner: { flex: 1 },
 });

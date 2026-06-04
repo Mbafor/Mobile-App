@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -54,6 +54,12 @@ export function OpportunitySection({
 
 const styles = StyleSheet.create({
   section: { marginBottom: spacing.lg },
-  heading: { marginBottom: spacing.sm, paddingHorizontal: spacing.md },
-  listContent: { paddingHorizontal: spacing.md, paddingBottom: spacing.xs },
+  heading: {
+    marginBottom: spacing.sm,
+    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
+  },
+  listContent: {
+    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
+    paddingBottom: spacing.xs,
+  },
 });

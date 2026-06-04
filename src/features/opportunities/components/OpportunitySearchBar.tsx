@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 
 import { FilterChipButton, SearchField } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -36,7 +36,7 @@ export function OpportunitySearchBar({
 
 const styles = StyleSheet.create({
   wrap: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
     paddingTop: spacing.md,
     paddingBottom: spacing.sm,
   },

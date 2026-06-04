@@ -5,7 +5,7 @@ import { Platform } from 'react-native';
 import { SuperAdminShell } from '@/features/super-admin/components/SuperAdminShell';
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { colors, spacing } from '@/constants/theme';
+import { colors } from '@/constants/theme';
 
 const isWeb = Platform.OS === 'web';
 

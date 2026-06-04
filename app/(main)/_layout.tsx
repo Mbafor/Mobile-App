@@ -26,7 +26,7 @@ export default function MainLayout() {
           drawerLabel: 'Home',
         }}
       />
-      <Drawer.Screen name="category/[category]" options={{ title: 'Category' }} />
+      <Drawer.Screen name="category/[category]" options={{ title: 'Category', headerShown: false }} />
       <Drawer.Screen name="refer" options={{ title: 'Refer a Friend', headerShown: false }} />
       <Drawer.Screen
         name="opportunity/[id]"
