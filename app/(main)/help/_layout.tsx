@@ -13,13 +13,7 @@ export default function HelpLayout() {
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen
-        name="index"
-        options={{
-          title: 'Help & Support',
-          headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
-        }}
-      />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen name="report-bug" options={{ title: 'Report a Bug' }} />
       <Stack.Screen name="feature-request" options={{ title: 'Feature Request' }} />
       <Stack.Screen name="feedback" options={{ title: 'Leave Feedback' }} />

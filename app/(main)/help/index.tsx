@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter, type Href } from 'expo-router';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
@@ -50,48 +51,54 @@ export default function HelpIndexScreen() {
   const router = useRouter();
 
   return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={styles.content}
-      showsVerticalScrollIndicator={false}
-    >
-      <Text style={styles.intro}>
-        How can we help you? Choose an option below.
-      </Text>
+    <View style={styles.root}>
+      <PageHeader title="Help & Support" />
 
-      <View style={styles.list}>
-        {items.map((item, i) => (
-          <Pressable
-            key={item.label}
-            style={({ pressed }) => [
-              styles.row,
-              i < items.length - 1 && styles.rowBorder,
-              pressed && styles.rowPressed,
-            ]}
-            onPress={item.route ? () => router.push(item.route as Href) : item.onPress}
-            accessibilityRole="button"
-          >
-            <View style={styles.iconWrap}>
-              <Ionicons name={item.icon} size={20} color={colors.primary} />
-            </View>
-            <View style={styles.rowMeta}>
-              <Text style={styles.rowLabel}>{item.label}</Text>
-              <Text style={styles.rowSub}>{item.subtitle}</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
-          </Pressable>
-        ))}
-      </View>
-    </ScrollView>
+      <ScrollView
+        style={styles.scroll}
+        contentContainerStyle={styles.content}
+        showsVerticalScrollIndicator={false}
+      >
+        <Text style={styles.intro}>
+          How can we help you? Choose an option below.
+        </Text>
+
+        <View style={styles.list}>
+          {items.map((item, i) => (
+            <Pressable
+              key={item.label}
+              style={({ pressed }) => [
+                styles.row,
+                i < items.length - 1 && styles.rowBorder,
+                pressed && styles.rowPressed,
+              ]}
+              onPress={item.route ? () => router.push(item.route as Href) : item.onPress}
+              accessibilityRole="button"
+            >
+              <View style={styles.iconWrap}>
+                <Ionicons name={item.icon} size={20} color={colors.primary} />
+              </View>
+              <View style={styles.rowMeta}>
+                <Text style={styles.rowLabel}>{item.label}</Text>
+                <Text style={styles.rowSub}>{item.subtitle}</Text>
+              </View>
+              <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+            </Pressable>
+          ))}
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: colors.background },
+  root: { flex: 1, backgroundColor: colors.background },
+  scroll: { flex: 1 },
   content: {
-    padding: spacing.md,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.md,
     paddingBottom: spacing.xl * 2,
-    maxWidth: 1280,
+    maxWidth: 680,
     width: '100%',
     alignSelf: 'center',
   },
@@ -102,17 +109,13 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   list: {
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    overflow: 'hidden',
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
     gap: spacing.md,
     backgroundColor: colors.background,
   },
@@ -125,9 +128,10 @@ const styles = StyleSheet.create({
     width: 36,
     height: 36,
     borderRadius: 10,
-    backgroundColor: `${colors.primary}14`,
+    backgroundColor: `${colors.primary}10`,
     alignItems: 'center',
     justifyContent: 'center',
+    flexShrink: 0,
   },
   rowMeta: { flex: 1, gap: 2 },
   rowLabel: { fontSize: 15, fontWeight: '600', color: colors.text },

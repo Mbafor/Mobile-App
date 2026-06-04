@@ -12,7 +12,7 @@ function SectionGroup({ title, children }: { title: string; children: React.Reac
   return (
     <View style={groupStyles.wrap}>
       <Text style={groupStyles.heading}>{title}</Text>
-      <View style={groupStyles.card}>{children}</View>
+      <View style={groupStyles.body}>{children}</View>
     </View>
   );
 }
@@ -27,13 +27,11 @@ const groupStyles = StyleSheet.create({
     color: colors.textMuted,
     paddingHorizontal: spacing.xs,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 2,
-    borderColor: colors.border,
-    padding: spacing.md,
+  body: {
     gap: spacing.sm,
+    paddingTop: spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
 });
 

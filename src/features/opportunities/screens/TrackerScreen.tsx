@@ -3,20 +3,16 @@ import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
-  Modal,
-  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { FilterChipButton, SearchField, Text } from '@/components/ui';
+import { SearchField, Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
-import { TrackerFiltersPanel } from '@/features/opportunities/components/tracker/TrackerFiltersPanel';
 import { TrackerKanbanBoard } from '@/features/opportunities/components/tracker/TrackerKanbanBoard';
 import { useTrackerOpportunities } from '@/features/opportunities/hooks/useTrackerOpportunities';
 import {
-  countActiveTrackerFilters,
   filterTrackerItems,
   groupByStage,
 } from '@/features/opportunities/utils/filter-tracker';
@@ -25,7 +21,6 @@ import { colors, spacing } from '@/constants/theme';
 import {
   EMPTY_TRACKER_FILTERS,
   nextTrackerStage,
-  type TrackerFilters,
   type TrackerStage,
 } from '@/types/domain/tracker';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
@@ -33,8 +28,6 @@ import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker'
 export function TrackerScreen() {
   const router = useRouter();
   const [query, setQuery] = useState('');
-  const [filters, setFilters] = useState<TrackerFilters>(EMPTY_TRACKER_FILTERS);
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const [exporting, setExporting] = useState(false);
 
   const {
@@ -48,12 +41,11 @@ export function TrackerScreen() {
   } = useTrackerOpportunities();
 
   const filteredItems = useMemo(
-    () => filterTrackerItems(items, query, filters),
-    [items, query, filters],
+    () => filterTrackerItems(items, query, EMPTY_TRACKER_FILTERS),
+    [items, query],
   );
 
   const grouped = useMemo(() => groupByStage(filteredItems), [filteredItems]);
-  const activeFilterCount = countActiveTrackerFilters(filters);
 
   const handlePressCard = useCallback(
     (item: TrackerItem) => {
@@ -92,12 +84,12 @@ export function TrackerScreen() {
 
   const handleExport = useCallback(async () => {
     if (filteredItems.length === 0) {
-      Alert.alert('Nothing to export', 'Add or adjust filters to include tracker cards.');
+      Alert.alert('Nothing to export', 'Add items to your tracker first.');
       return;
     }
     setExporting(true);
     try {
-      const label = activeFilterCount > 0 || query.trim() ? 'filtered' : 'all';
+      const label = query.trim() ? 'filtered' : 'all';
       await exportTrackerToXlsx(filteredItems, label);
     } catch (e) {
       Alert.alert(
@@ -107,7 +99,7 @@ export function TrackerScreen() {
     } finally {
       setExporting(false);
     }
-  }, [filteredItems, activeFilterCount, query]);
+  }, [filteredItems, query]);
 
   if (isLoading) {
     return (
@@ -128,25 +120,13 @@ export function TrackerScreen() {
       ) : null}
 
       <View style={styles.toolbar}>
-        <SearchField
-          value={query}
-          onChangeText={setQuery}
-          placeholder="Search title or company…"
-          trailing={
-            <FilterChipButton
-              label="Filters"
-              activeCount={activeFilterCount}
-              onPress={() => setFiltersOpen(true)}
-            />
-          }
-        />
-      </View>
-
-      <View style={styles.actionsRow}>
-        <Text variant="caption" muted>
-          {filteredItems.length} {filteredItems.length === 1 ? 'card' : 'cards'}
-          {activeFilterCount > 0 || query.trim() ? ' (filtered)' : ''}
-        </Text>
+        <View style={styles.searchWrap}>
+          <SearchField
+            value={query}
+            onChangeText={setQuery}
+            placeholder="Search title or company…"
+          />
+        </View>
         <Button
           variant="secondary"
           loading={exporting}
@@ -155,6 +135,13 @@ export function TrackerScreen() {
         >
           Export .xlsx
         </Button>
+      </View>
+
+      <View style={styles.countRow}>
+        <Text variant="caption" muted>
+          {filteredItems.length} {filteredItems.length === 1 ? 'card' : 'cards'}
+          {query.trim() ? ' (filtered)' : ''}
+        </Text>
       </View>
 
       <TrackerKanbanBoard
@@ -166,17 +153,6 @@ export function TrackerScreen() {
         refreshing={isRefetching}
         onRefresh={() => void refetch()}
       />
-
-      <Modal visible={filtersOpen} animationType="slide" transparent>
-        <Pressable style={styles.modalBackdrop} onPress={() => setFiltersOpen(false)} />
-        <View style={styles.modalSheet}>
-          <TrackerFiltersPanel
-            filters={filters}
-            onChange={setFilters}
-            onClose={() => setFiltersOpen(false)}
-          />
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -192,25 +168,17 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   banner: { padding: spacing.md },
   toolbar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
     paddingHorizontal: spacing.md,
     paddingTop: spacing.sm,
     paddingBottom: spacing.xs,
   },
-  actionsRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
+  searchWrap: { flex: 1 },
+  exportBtn: { flexShrink: 0 },
+  countRow: {
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
-  },
-  exportBtn: { paddingHorizontal: spacing.md },
-  modalBackdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.35)' },
-  modalSheet: {
-    backgroundColor: colors.background,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    maxHeight: '75%',
   },
 });

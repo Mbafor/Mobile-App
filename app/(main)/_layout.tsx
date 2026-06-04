@@ -27,7 +27,7 @@ export default function MainLayout() {
         }}
       />
       <Drawer.Screen name="category/[category]" options={{ title: 'Category' }} />
-      <Drawer.Screen name="refer" options={{ title: 'Refer a Friend' }} />
+      <Drawer.Screen name="refer" options={{ title: 'Refer a Friend', headerShown: false }} />
       <Drawer.Screen
         name="opportunity/[id]"
         options={{ ...hiddenDrawerItem, title: 'Opportunity' }}
@@ -40,7 +40,7 @@ export default function MainLayout() {
         name="help"
         options={{ ...hiddenDrawerItem, title: 'Help & Support', headerShown: false }}
       />
-      <Drawer.Screen name="profile" options={{ ...hiddenDrawerItem, title: 'Profile' }} />
+      <Drawer.Screen name="profile" options={{ ...hiddenDrawerItem, title: 'Profile', headerShown: false }} />
     </Drawer>
   );
 }

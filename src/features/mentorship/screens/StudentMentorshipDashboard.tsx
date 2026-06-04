@@ -155,7 +155,7 @@ export function StudentMentorshipDashboard() {
   const canRequest = !hasCoach && !openRequest;
   const coachName = coach?.profile?.fullName?.trim() || 'Your coach';
 
-  const navItems = STUDENT_NAV_ITEMS.filter((i) => (hasCoach ? true : i.id !== 'leave'));
+  const navItems = STUDENT_NAV_ITEMS;
   const sectionTitle = STUDENT_SECTION_TITLES[activeSection] ?? 'Mentorship';
   const isFullHeightSection = activeSection === 'messages';
 
@@ -184,6 +184,19 @@ export function StudentMentorshipDashboard() {
                   mentor={coach?.mentor ?? null}
                   onViewProfile={() => setActiveSection('coach')}
                 />
+                <View style={styles.leaveSection}>
+                  <Text muted style={styles.leaveHint}>
+                    End your current mentorship. You may request a new coach later.
+                  </Text>
+                  <Button
+                    variant="secondary"
+                    onPress={() => void handleLeave()}
+                    loading={isLeaving}
+                    textStyle={{ color: colors.error }}
+                  >
+                    Leave mentorship
+                  </Button>
+                </View>
               </>
             ) : null}
             {!canRequest && !hasCoach && !onWaitingList ? (
@@ -284,23 +297,6 @@ export function StudentMentorshipDashboard() {
           />
         );
 
-      case 'leave':
-        return (
-          <View style={styles.sectionBody}>
-            <Text muted style={styles.leaveHint}>
-              End your current mentorship. You may request a new coach later.
-            </Text>
-            <Button
-              variant="secondary"
-              onPress={() => void handleLeave()}
-              loading={isLeaving}
-              textStyle={{ color: colors.error }}
-            >
-              Leave mentorship
-            </Button>
-          </View>
-        );
-
       default:
         return null;
     }
@@ -323,5 +319,12 @@ export function StudentMentorshipDashboard() {
 const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, gap: spacing.md },
   sectionBody: { gap: spacing.md },
-  leaveHint: { marginBottom: spacing.sm },
+  leaveSection: {
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    gap: spacing.sm,
+  },
+  leaveHint: {},
 });

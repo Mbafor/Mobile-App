@@ -4,6 +4,7 @@ import {
   ActivityIndicator,
   FlatList,
   Modal,
+  Platform,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -12,15 +13,16 @@ import {
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
-import { DashboardStatsRow } from '@/features/dashboard/components/DashboardStatsRow';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { OpportunityFiltersPanel } from '@/features/opportunities/components/OpportunityFiltersPanel';
 import { OpportunitySearchBar } from '@/features/opportunities/components/OpportunitySearchBar';
 import { OpportunitySearchResults } from '@/features/opportunities/components/OpportunitySearchResults';
 import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
 import { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
-import { useAuth } from '@/features/auth/hooks/useAuth';
+import { env } from '@/config/env';
 import { colors, spacing } from '@/constants/theme';
+import { getWebFontStyle } from '@/constants/theme/webTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 type DashboardSection = {
@@ -31,7 +33,7 @@ type DashboardSection = {
 
 export function DashboardScreen() {
   const router = useRouter();
-  const { profile } = useAuth();
+  const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);
 
   const {
@@ -52,8 +54,6 @@ export function DashboardScreen() {
     recommended,
     recent,
     closingSoon,
-    savedCount,
-    appliedCount,
     isLoading: dashboardLoading,
     isRefetching: dashboardRefetching,
     error: dashboardError,
@@ -95,6 +95,12 @@ export function DashboardScreen() {
     void refetchDashboard();
   }, [refetchDashboard, refetchSearch]);
 
+  const handleGoHome = useCallback(() => {
+    if (Platform.OS === 'web' && typeof window !== 'undefined') {
+      window.location.href = env.LANDING_URL;
+    }
+  }, []);
+
   if (dashboardLoading && !isSearchActive) {
     return (
       <View style={styles.centered}>
@@ -106,6 +112,12 @@ export function DashboardScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.pageContent}>
+        {isDesktop && (
+          <Pressable onPress={handleGoHome} style={styles.titleRow} accessibilityRole="link">
+            <Text style={[styles.pageTitle, getWebFontStyle('bold')]}>Dashboard</Text>
+          </Pressable>
+        )}
+
         <OpportunitySearchBar
           query={query}
           onChangeQuery={setQuery}
@@ -137,9 +149,8 @@ export function DashboardScreen() {
               />
             }
             ListHeaderComponent={
-              <View style={styles.header}>
-                <DashboardStatsRow savedCount={savedCount} appliedCount={appliedCount} />
-                {dashboardError ? (
+              dashboardError ? (
+                <View style={styles.header}>
                   <ErrorMessage
                     message={
                       dashboardError instanceof Error
@@ -147,8 +158,8 @@ export function DashboardScreen() {
                         : 'Failed to load dashboard'
                     }
                   />
-                ) : null}
-              </View>
+                </View>
+              ) : null
             }
             contentContainerStyle={styles.list}
           />
@@ -185,7 +196,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  header: { paddingBottom: spacing.sm, gap: spacing.xs },
+  titleRow: {
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+  },
+  pageTitle: {
+    fontSize: 26,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+  },
+  header: { paddingBottom: spacing.sm },
   list: { paddingBottom: spacing.md },
   modalOverlay: {
     flex: 1,

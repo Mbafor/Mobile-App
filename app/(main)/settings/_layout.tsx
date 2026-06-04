@@ -12,7 +12,7 @@ export default function SettingsLayout() {
         headerTintColor: colors.text,
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Settings' }} />
+      <Stack.Screen name="index" options={{ headerShown: false }} />
       <Stack.Screen
         name="profile"
         options={{

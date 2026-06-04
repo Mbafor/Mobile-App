@@ -3,9 +3,11 @@ import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
-import { MentorshipDrawerNav, type MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
+import { MentorshipTabNav } from '@/features/mentorship/components/shared/MentorshipTabNav';
+import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { colors, spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 type MentorshipShellProps = PropsWithChildren<{
   navItems: MentorshipNavItem[];
@@ -29,21 +31,33 @@ export function MentorshipShell({
   scrollable = true,
   children,
 }: MentorshipShellProps) {
-  return (
-    <View style={styles.root}>
+  const isDesktop = useWebDesktop();
+
+  const tabNav = (
+    <MentorshipTabNav
+      items={navItems}
+      activeId={activeSection}
+      onSelect={onSelectSection}
+      mode={isDesktop ? 'horizontal' : 'bottom'}
+    />
+  );
+
+  const titleBlock = (
+    <View style={styles.titleSection}>
       <ResponsiveContainer minHorizontalPadding={spacing.md}>
-        <View style={styles.toolbar}>
-          <MentorshipDrawerNav
-            items={navItems}
-            activeId={activeSection}
-            onSelect={onSelectSection}
-          />
-          <View style={styles.titleBlock}>
-            <Text style={styles.sectionTitle}>{sectionTitle}</Text>
-            {headerExtra}
-          </View>
+        <View style={styles.titleBlock}>
+          <Text style={styles.sectionTitle}>{sectionTitle}</Text>
+          {headerExtra}
         </View>
       </ResponsiveContainer>
+    </View>
+  );
+
+  return (
+    <View style={styles.root}>
+      {isDesktop && tabNav}
+
+      {titleBlock}
 
       {scrollable ? (
         <ScrollView
@@ -66,12 +80,13 @@ export function MentorshipShell({
         </ScrollView>
       ) : (
         <View style={styles.flexContent}>
-          {/* No horizontal padding — full-width for chat/full-screen views */}
           <ResponsiveContainer minHorizontalPadding={0} style={styles.fillHeight}>
             <View style={styles.content}>{children}</View>
           </ResponsiveContainer>
         </View>
       )}
+
+      {!isDesktop && tabNav}
     </View>
   );
 }
@@ -83,15 +98,16 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     overflow: 'hidden',
   },
-  toolbar: {
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.md,
+  titleSection: {
+    backgroundColor: mentorshipColors.surfaceElevated,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: mentorshipColors.border,
-    backgroundColor: mentorshipColors.surfaceElevated,
-    gap: spacing.sm,
   },
-  titleBlock: { gap: 2 },
+  titleBlock: {
+    gap: 2,
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.md,
+  },
   sectionTitle: {
     fontSize: 22,
     fontWeight: '700',

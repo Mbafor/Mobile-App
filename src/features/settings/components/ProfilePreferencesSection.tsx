@@ -29,7 +29,7 @@ function SectionGroup({ title, children }: { title: string; children: ReactNode 
   return (
     <View style={groupStyles.wrap}>
       <Text style={groupStyles.heading}>{title}</Text>
-      <View style={groupStyles.card}>{children}</View>
+      <View style={groupStyles.body}>{children}</View>
     </View>
   );
 }
@@ -44,13 +44,11 @@ const groupStyles = StyleSheet.create({
     color: colors.textMuted,
     paddingHorizontal: spacing.xs,
   },
-  card: {
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    padding: spacing.md,
+  body: {
     gap: spacing.sm,
+    paddingTop: spacing.xs,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
 });
 
@@ -155,7 +153,7 @@ export function ProfilePreferencesSection() {
     <View style={styles.wrap}>
       {/* Avatar */}
       {user?.id ? (
-        <View style={styles.avatarWrap}>
+        <View style={styles.avatarCenter}>
           <ProfileAvatar
             userId={user.id}
             displayName={fullName || authProfile?.displayName || null}
@@ -238,13 +236,8 @@ export function ProfilePreferencesSection() {
 const styles = StyleSheet.create({
   wrap: { gap: spacing.md },
   centered: { paddingVertical: spacing.xl, alignItems: 'center' },
-  avatarWrap: {
+  avatarCenter: {
     alignItems: 'center',
     paddingVertical: spacing.sm,
-    backgroundColor: colors.surface,
-    borderRadius: 14,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: spacing.xs,
   },
 });

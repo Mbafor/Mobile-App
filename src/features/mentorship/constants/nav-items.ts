@@ -6,7 +6,6 @@ export const STUDENT_NAV_ITEMS: MentorshipNavItem[] = [
   { id: 'messages', label: 'Messages', icon: 'chatbubbles-outline' },
   { id: 'book', label: 'Book session', icon: 'calendar-outline' },
   { id: 'sessions', label: 'Upcoming sessions', icon: 'time-outline' },
-  { id: 'leave', label: 'Leave mentorship', icon: 'exit-outline' },
 ];
 
 export const COACH_NAV_ITEMS: MentorshipNavItem[] = [
@@ -24,7 +23,6 @@ export const STUDENT_SECTION_TITLES: Record<string, string> = {
   messages: 'Messages',
   book: 'Book a Session',
   sessions: 'Upcoming Sessions',
-  leave: 'Settings',
 };
 
 export const COACH_SECTION_TITLES: Record<string, string> = {

@@ -6,6 +6,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, spacing } from '@/constants/theme';
 import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { useHideMainTabBar } from '@/features/cv-builder/hooks/useHideMainTabBar';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
@@ -19,9 +20,20 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 
 export default function CVHubTabsLayout() {
   const insets = useSafeAreaInsets();
+  const isDesktop = useWebDesktop();
   useHideMainTabBar();
 
   const tabBarHeight = 65 + insets.bottom;
+
+  const tabBarWebStyle = isDesktop
+    ? { display: 'none' as const }
+    : {
+        position: 'fixed' as const,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        zIndex: 100,
+      };
 
   return (
     <Tabs
@@ -38,15 +50,7 @@ export default function CVHubTabsLayout() {
           height: tabBarHeight,
           paddingBottom: Math.max(insets.bottom, spacing.xs),
           paddingTop: spacing.xs,
-          ...(Platform.OS === 'web'
-            ? {
-                position: 'fixed' as const,
-                bottom: 0,
-                left: 0,
-                right: 0,
-                zIndex: 100,
-              }
-            : {}),
+          ...(Platform.OS === 'web' ? tabBarWebStyle : {}),
         },
         sceneStyle: { backgroundColor: colors.background },
       }}
