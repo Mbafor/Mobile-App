@@ -69,7 +69,7 @@ export function OpportunityDetailScreen() {
 
   if (error || !opportunity) {
     return (
-      <View style={styles.errorWrap}>
+      <View style={styles.root}>
         <PageHeader title="Opportunity Details" />
         <View style={styles.errorBody}>
           <ErrorMessage
@@ -85,23 +85,23 @@ export function OpportunityDetailScreen() {
 
   const orgInitial = opportunity.organization.charAt(0).toUpperCase();
 
-  const metaItems: { icon: keyof typeof Ionicons.glyphMap; label: string }[] = [
-    ...(opportunity.category ? [{ icon: 'bookmark-outline' as const, label: opportunity.category }] : []),
-    ...(opportunity.country ? [{ icon: 'location-outline' as const, label: opportunity.country }] : []),
-    ...(opportunity.locationType ? [{ icon: 'globe-outline' as const, label: opportunity.locationType }] : []),
-    ...(opportunity.fundingType ? [{ icon: 'cash-outline' as const, label: opportunity.fundingType }] : []),
+  const metaParts: string[] = [
+    ...(opportunity.category ? [opportunity.category] : []),
+    ...(opportunity.country ? [opportunity.country] : []),
+    ...(opportunity.locationType ? [opportunity.locationType] : []),
+    ...(opportunity.fundingType ? [opportunity.fundingType] : []),
+    ...(opportunity.degreeLevels.length ? [opportunity.degreeLevels.join(', ')] : []),
   ];
 
   return (
     <View style={styles.root}>
-      {/* PageHeader: back arrow left | "Opportunity Details" center */}
       <PageHeader title="Opportunity Details" />
 
       <ScrollView
         contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        {/* Hero image or placeholder */}
+        {/* Hero */}
         {opportunity.imageUrl ? (
           <Image
             source={{ uri: opportunity.imageUrl }}
@@ -114,43 +114,17 @@ export function OpportunityDetailScreen() {
           </View>
         )}
 
+        {/* Content — plain text, no cards */}
         <View style={styles.body}>
-          {/* Title */}
           <Text style={[styles.title, getWebFontStyle('bold')]}>{opportunity.title}</Text>
-
-          {/* Organization */}
           <Text style={styles.org}>{opportunity.organization}</Text>
 
-          {/* Deadline */}
           <DeadlineBadge deadline={opportunity.deadline} />
 
-          {/* Meta info row */}
-          {metaItems.length > 0 ? (
-            <View style={styles.metaRow}>
-              {metaItems.map((m, i) => (
-                <View key={m.label} style={styles.metaItem}>
-                  <Ionicons name={m.icon} size={13} color={colors.textMuted} />
-                  <Text style={styles.metaText}>{m.label}</Text>
-                  {i < metaItems.length - 1 ? (
-                    <Text style={styles.metaSep}>·</Text>
-                  ) : null}
-                </View>
-              ))}
-            </View>
+          {metaParts.length > 0 ? (
+            <Text style={styles.meta}>{metaParts.join('  ·  ')}</Text>
           ) : null}
 
-          {/* Degree levels */}
-          {opportunity.degreeLevels.length > 0 ? (
-            <View style={styles.metaRow}>
-              <Ionicons name="school-outline" size={13} color={colors.textMuted} />
-              <Text style={styles.metaText}>{opportunity.degreeLevels.join(' · ')}</Text>
-            </View>
-          ) : null}
-
-          {/* Divider */}
-          <View style={styles.divider} />
-
-          {/* Tags */}
           {opportunity.tags.length > 0 ? (
             <View style={styles.tagRow}>
               {opportunity.tags.map((tag) => (
@@ -161,12 +135,11 @@ export function OpportunityDetailScreen() {
             </View>
           ) : null}
 
-          {/* Description heading */}
+          <View style={styles.divider} />
+
           <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
             About this opportunity
           </Text>
-
-          {/* Description body */}
           <Text style={styles.description}>
             {opportunity.description?.trim() ||
               'No description provided for this opportunity.'}
@@ -174,7 +147,7 @@ export function OpportunityDetailScreen() {
         </View>
       </ScrollView>
 
-      {/* Sticky action footer */}
+      {/* Sticky footer */}
       <View style={styles.footer}>
         <Button fullWidth onPress={() => applyNow(opportunity)}>
           Apply Now
@@ -214,19 +187,17 @@ export function OpportunityDetailScreen() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  errorWrap: { flex: 1, backgroundColor: colors.background },
   errorBody: { padding: spacing.lg, gap: spacing.md },
 
-  // ─── Scroll ────────────────────────────────────────────────────────────────
   scroll: {
     paddingBottom: spacing.xl * 2,
-    maxWidth: 780,
+    maxWidth: 1100,
     width: '100%',
     alignSelf: 'center',
   },
 
   // ─── Hero ──────────────────────────────────────────────────────────────────
-  heroImage: { width: '100%', height: 220 },
+  heroImage: { width: '100%', height: 240 },
   heroPlaceholder: {
     width: '100%',
     height: 180,
@@ -235,34 +206,33 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   heroInitial: {
-    fontSize: 64,
+    fontSize: 72,
     fontWeight: '800',
     color: 'rgba(255,255,255,0.9)',
-    letterSpacing: -2,
+    letterSpacing: -3,
   },
 
-  // ─── Body ──────────────────────────────────────────────────────────────────
+  // ─── Body — plain text ─────────────────────────────────────────────────────
   body: {
-    paddingHorizontal: spacing.lg,
+    paddingHorizontal: spacing.xl,
     paddingTop: spacing.lg,
     gap: spacing.md,
   },
 
   title: {
-    fontSize: 22,
+    fontSize: 26,
     fontWeight: '700',
     color: colors.text,
-    lineHeight: 30,
-    letterSpacing: -0.3,
+    lineHeight: 34,
+    letterSpacing: -0.4,
   },
   org: {
-    fontSize: 15,
+    fontSize: 16,
     color: colors.textMuted,
     fontWeight: '500',
     marginTop: -spacing.xs,
   },
 
-  // ─── Deadline badge ────────────────────────────────────────────────────────
   deadlineBadge: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -274,28 +244,13 @@ const styles = StyleSheet.create({
   },
   deadlineText: { fontSize: 13, fontWeight: '600' },
 
-  // ─── Meta row ──────────────────────────────────────────────────────────────
-  metaRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    alignItems: 'center',
-    gap: spacing.xs,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-  },
-  metaText: { fontSize: 13, color: colors.textMuted },
-  metaSep: { fontSize: 13, color: colors.border, marginLeft: spacing.xs },
-
-  // ─── Divider ───────────────────────────────────────────────────────────────
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
+  meta: {
+    fontSize: 14,
+    color: colors.textMuted,
+    lineHeight: 20,
+    textTransform: 'capitalize',
   },
 
-  // ─── Tags ──────────────────────────────────────────────────────────────────
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   tag: {
     paddingHorizontal: spacing.sm,
@@ -307,17 +262,21 @@ const styles = StyleSheet.create({
   },
   tagText: { fontSize: 12, color: colors.primary, fontWeight: '500' },
 
-  // ─── Description ───────────────────────────────────────────────────────────
+  divider: {
+    height: StyleSheet.hairlineWidth,
+    backgroundColor: colors.border,
+  },
+
   sectionHeading: {
-    fontSize: 16,
+    fontSize: 17,
     fontWeight: '700',
     color: colors.text,
     letterSpacing: -0.1,
   },
   description: {
-    fontSize: 15,
+    fontSize: 16,
     color: colors.text,
-    lineHeight: 26,
+    lineHeight: 28,
   },
 
   // ─── Footer ────────────────────────────────────────────────────────────────
@@ -329,7 +288,7 @@ const styles = StyleSheet.create({
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
     backgroundColor: colors.background,
-    maxWidth: 780,
+    maxWidth: 1100,
     width: '100%',
     alignSelf: 'center',
   },
