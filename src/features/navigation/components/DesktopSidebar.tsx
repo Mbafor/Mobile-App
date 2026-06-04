@@ -74,6 +74,14 @@ export function DesktopSidebar() {
       onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
       matchPath: '/cv-builder',
     },
+    {
+      key: 'browse',
+      label: 'Browse',
+      icon: 'compass-outline',
+      iconActive: 'compass',
+      onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
+      matchPath: '/browse-categories',
+    },
   ];
 
   const adminItems: SidebarItem[] = isAdmin
