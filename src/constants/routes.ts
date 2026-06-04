@@ -38,7 +38,7 @@ export const ROUTES = {
       FEEDBACK: '/(main)/help/feedback',
     },
     DRAWER: {
-      PROFILE: '/(main)/settings/profile',
+      PROFILE: '/(main)/profile',
       BROWSE: '/(main)/browse-categories',
       category: (slug: string) => `/(main)/category/${slug}` as const,
       HELP: '/(main)/help',

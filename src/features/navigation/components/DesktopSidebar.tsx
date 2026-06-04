@@ -7,6 +7,7 @@ import { colors, spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { webPressableStyle } from '@/utils/web/pressable';
 
 type SidebarItem = {
@@ -18,11 +19,18 @@ type SidebarItem = {
   matchPath?: string;
 };
 
+type SidebarSection = {
+  key: string;
+  label: string;
+  items: SidebarItem[];
+};
+
 export function DesktopSidebar() {
   const router = useRouter();
   const pathname = usePathname();
+  const { isAdmin, isSuperAdmin } = useAuth();
 
-  const items: SidebarItem[] = [
+  const mainItems: SidebarItem[] = [
     {
       key: 'home',
       label: 'Home',
@@ -68,38 +76,78 @@ export function DesktopSidebar() {
     },
   ];
 
+  const adminItems: SidebarItem[] = isAdmin
+    ? [
+        {
+          key: 'admin',
+          label: 'Admin',
+          icon: 'shield-outline',
+          iconActive: 'shield',
+          onPress: () => router.push(ROUTES.ADMIN.HOME as Href),
+          matchPath: '/admin',
+        },
+      ]
+    : [];
+
+  const superAdminItems: SidebarItem[] = isSuperAdmin
+    ? [
+        {
+          key: 'super-admin',
+          label: 'Super Admin',
+          icon: 'planet-outline',
+          iconActive: 'planet',
+          onPress: () => router.push(ROUTES.SUPER_ADMIN.HOME as Href),
+          matchPath: '/super-admin',
+        },
+      ]
+    : [];
+
+  const sections: SidebarSection[] = [
+    { key: 'main', label: 'App', items: mainItems },
+    ...(adminItems.length > 0 || superAdminItems.length > 0
+      ? [{ key: 'admin', label: 'Admin', items: [...adminItems, ...superAdminItems] }]
+      : []),
+  ];
+
+  const renderItem = (item: SidebarItem) => {
+    const active = item.matchPath ? pathname.includes(item.matchPath) : false;
+    return (
+      <Pressable
+        key={item.key}
+        style={webPressableStyle(
+          [styles.item, active && styles.itemActive],
+          styles.itemHover,
+        )}
+        onPress={item.onPress}
+        accessibilityRole="menuitem"
+      >
+        <Ionicons
+          name={active ? item.iconActive : item.icon}
+          size={20}
+          color={active ? colors.primary : colors.textMuted}
+        />
+        <Text
+          style={[
+            styles.itemLabel,
+            getWebFontStyle('medium'),
+            active && styles.itemLabelActive,
+          ]}
+        >
+          {item.label}
+        </Text>
+      </Pressable>
+    );
+  };
+
   return (
     <View style={styles.sidebar}>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-        {items.map((item) => {
-          const active = item.matchPath ? pathname.includes(item.matchPath) : false;
-          return (
-            <Pressable
-              key={item.key}
-              style={webPressableStyle(
-                [styles.item, active && styles.itemActive],
-                styles.itemHover,
-              )}
-              onPress={item.onPress}
-              accessibilityRole="menuitem"
-            >
-              <Ionicons
-                name={active ? item.iconActive : item.icon}
-                size={20}
-                color={active ? colors.primary : colors.textMuted}
-              />
-              <Text
-                style={[
-                  styles.itemLabel,
-                  getWebFontStyle('medium'),
-                  active && styles.itemLabelActive,
-                ]}
-              >
-                {item.label}
-              </Text>
-            </Pressable>
-          );
-        })}
+        {sections.map((section, si) => (
+          <View key={section.key} style={si > 0 ? styles.sectionGap : undefined}>
+            <Text style={styles.sectionLabel}>{section.label}</Text>
+            {section.items.map(renderItem)}
+          </View>
+        ))}
       </ScrollView>
     </View>
   );
@@ -117,6 +165,21 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.md,
+  },
+  sectionGap: {
+    marginTop: spacing.md,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
+  sectionLabel: {
+    fontSize: 11,
+    fontWeight: '700',
+    letterSpacing: 0.6,
+    textTransform: 'uppercase',
+    color: colors.textMuted,
+    paddingHorizontal: spacing.sm + 2,
+    paddingBottom: spacing.xs,
   },
   item: {
     flexDirection: 'row',

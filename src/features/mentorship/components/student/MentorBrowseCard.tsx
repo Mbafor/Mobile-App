@@ -1,137 +1,103 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { Button } from '@/components/ui/Button';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
-import { TagList } from '@/features/mentorship/components/shared/TagList';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 import {
   getMentorAcademicFocus,
   getMentorInterestTags,
 } from '@/features/mentorship/utils/mentor-card-tags';
 import type { AvailableMentor } from '@/types/domain/mentorship';
-import { spacing } from '@/constants/theme';
 
 type MentorBrowseCardProps = {
   mentor: AvailableMentor;
   onViewProfile: () => void;
 };
 
-function availabilityLabel(mentor: AvailableMentor): { text: string; tone: 'ok' | 'muted' | 'full' } {
+function availabilityText(mentor: AvailableMentor): { label: string; color: string } {
   if (!mentor.isAcceptingStudents) {
-    return { text: 'Not accepting students', tone: 'muted' };
+    return { label: 'Not accepting students', color: colors.textMuted };
   }
   if (!mentor.hasCapacity) {
-    return { text: 'Currently at capacity', tone: 'full' };
+    return { label: 'Currently full', color: '#B00020' };
   }
-  return { text: 'Available', tone: 'ok' };
+  return { label: 'Available', color: '#1B7F4E' };
 }
 
-export function MentorBrowseCard({
-  mentor,
-  onViewProfile,
-}: MentorBrowseCardProps) {
+export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProps) {
   const { profile } = mentor;
   const name = profile.fullName?.trim() || 'Coach';
   const academicFocus = getMentorAcademicFocus(mentor);
   const interests = getMentorInterestTags(mentor);
-  const availability = availabilityLabel(mentor);
-
-  const badgeStyle =
-    availability.tone === 'ok'
-      ? styles.badgeOk
-      : availability.tone === 'full'
-      ? styles.badgeFull
-      : styles.badgeMuted;
+  const allTags = [...academicFocus, ...interests].slice(0, 4);
+  const credential = [profile.university, profile.degreeLevel].filter(Boolean).join(' · ');
+  const availability = availabilityText(mentor);
 
   return (
-    <View style={styles.card}>
-      <Pressable onPress={onViewProfile} style={styles.pressable}>
-        {/* Avatar */}
-        <View style={styles.avatarRow}>
-          <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={72} />
-        </View>
+    <Pressable
+      style={({ pressed }) => [styles.row, pressed && styles.rowPressed]}
+      onPress={onViewProfile}
+      accessibilityRole="button"
+    >
+      <UserAvatarDisplay
+        displayName={name}
+        avatarUrl={profile.avatarUrl ?? null}
+        size={48}
+      />
 
-        {/* Name + badge */}
-        <View style={styles.header}>
-          <Text style={styles.name} numberOfLines={1}>{name}</Text>
-          <View style={[styles.badge, badgeStyle]}>
-            <Text style={styles.badgeText}>{availability.text}</Text>
-          </View>
-        </View>
+      <View style={styles.info}>
+        <Text style={styles.name} numberOfLines={1}>{name}</Text>
 
-        {/* University */}
-        {profile.university ? (
-          <Text style={styles.university} numberOfLines={1}>{profile.university}</Text>
+        {credential ? (
+          <Text style={styles.credential} numberOfLines={1}>{credential}</Text>
         ) : null}
 
-        {/* Tags */}
-        {academicFocus.length > 0 ? (
-          <TagList label="Academic focus" items={academicFocus.slice(0, 4)} />
+        {allTags.length > 0 ? (
+          <Text style={styles.tags} numberOfLines={2}>
+            {allTags.join('  ·  ')}
+          </Text>
         ) : null}
-        {interests.length > 0 ? (
-          <TagList label="Interests" items={interests.slice(0, 4)} />
-        ) : null}
-      </Pressable>
 
-      {/* Actions */}
-      <View style={styles.actions}>
-        <Button onPress={onViewProfile} style={styles.actionBtn}>
-          View profile
-        </Button>
+        <Text style={[styles.availability, { color: availability.color }]}>
+          {availability.label}
+        </Text>
       </View>
-    </View>
+
+      <Ionicons name="chevron-forward" size={16} color={colors.border} />
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  card: {
+  row: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.md,
-    padding: spacing.md,
-    borderRadius: 16,
-    backgroundColor: mentorshipColors.surfaceElevated,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: mentorshipColors.border,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
   },
-  pressable: { gap: spacing.sm },
+  rowPressed: { backgroundColor: colors.surface },
 
-  avatarRow: {
-    alignItems: 'flex-start',
-    paddingVertical: spacing.sm,
-  },
+  info: { flex: 1, gap: 3, minWidth: 0 },
 
-  header: {
-    alignItems: 'flex-start',
-    gap: spacing.xs,
-  },
   name: {
     fontSize: 16,
     fontWeight: '700',
-    color: mentorshipColors.text,
+    color: colors.text,
   },
-  badge: {
-    alignSelf: 'flex-start',
-    borderRadius: 999,
-    paddingHorizontal: spacing.sm,
-    paddingVertical: 3,
+  credential: {
+    fontSize: 14,
+    color: colors.textMuted,
   },
-  badgeOk: { backgroundColor: mentorshipColors.accentMuted },
-  badgeFull: { backgroundColor: '#FDECEC' },
-  badgeMuted: { backgroundColor: '#F0F0F0' },
-  badgeText: {
-    fontSize: 11,
+  tags: {
+    fontSize: 13,
+    color: colors.textMuted,
+    lineHeight: 20,
+  },
+  availability: {
+    fontSize: 13,
     fontWeight: '600',
-    color: mentorshipColors.accentDark,
+    marginTop: 2,
   },
-
-  university: {
-    fontSize: 12,
-    color: mentorshipColors.textMuted,
-  },
-
-  actions: {
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  actionBtn: { flex: 1 },
 });

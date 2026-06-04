@@ -95,10 +95,10 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
-    paddingHorizontal: spacing.md,
+    paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
     paddingBottom: spacing.xl * 2,
-    maxWidth: 680,
+    maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
   },

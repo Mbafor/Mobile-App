@@ -310,6 +310,7 @@ export function StudentMentorshipDashboard() {
       onSelectSection={setActiveSection}
       onRefresh={() => void refetch()}
       scrollable={!isFullHeightSection}
+      fillWidth={activeSection === 'browse'}
     >
       {renderSection()}
     </MentorshipShell>

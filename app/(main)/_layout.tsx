@@ -30,7 +30,7 @@ export default function MainLayout() {
       <Drawer.Screen name="refer" options={{ title: 'Refer a Friend', headerShown: false }} />
       <Drawer.Screen
         name="opportunity/[id]"
-        options={{ ...hiddenDrawerItem, title: 'Opportunity' }}
+        options={{ ...hiddenDrawerItem, title: 'Opportunity', headerShown: false }}
       />
       <Drawer.Screen
         name="settings"

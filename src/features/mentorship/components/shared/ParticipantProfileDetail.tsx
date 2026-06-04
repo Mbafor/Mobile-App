@@ -44,7 +44,7 @@ export function ParticipantProfileDetail({
   const skills = [...new Set([...(mentorProfile?.mentoringDegreeLevels ?? []), ...majors])];
 
   return (
-    <View style={[styles.card, compact && styles.cardCompact]}>
+    <View style={styles.flat}>
       <View style={styles.hero}>
         <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={compact ? 56 : 72} />
         <View style={styles.heroMeta}>
@@ -79,15 +79,9 @@ export function ParticipantProfileDetail({
 }
 
 const styles = StyleSheet.create({
-  card: {
+  flat: {
     gap: spacing.md,
-    padding: spacing.lg,
-    borderRadius: 16,
-    backgroundColor: mentorshipColors.surfaceElevated,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: mentorshipColors.border,
   },
-  cardCompact: { padding: spacing.md },
   hero: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
   heroMeta: { flex: 1, gap: 4 },
   role: {

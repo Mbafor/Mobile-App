@@ -18,6 +18,8 @@ type MentorshipShellProps = PropsWithChildren<{
   refreshing?: boolean;
   headerExtra?: ReactNode;
   scrollable?: boolean;
+  /** Skip the ResponsiveContainer so content fills the full available width, left-aligned. */
+  fillWidth?: boolean;
 }>;
 
 export function MentorshipShell({
@@ -29,6 +31,7 @@ export function MentorshipShell({
   refreshing = false,
   headerExtra,
   scrollable = true,
+  fillWidth = false,
   children,
 }: MentorshipShellProps) {
   const isDesktop = useWebDesktop();
@@ -74,9 +77,13 @@ export function MentorshipShell({
             ) : undefined
           }
         >
-          <ResponsiveContainer minHorizontalPadding={spacing.md}>
+          {fillWidth ? (
             <View style={styles.content}>{children}</View>
-          </ResponsiveContainer>
+          ) : (
+            <ResponsiveContainer minHorizontalPadding={spacing.md}>
+              <View style={styles.content}>{children}</View>
+            </ResponsiveContainer>
+          )}
         </ScrollView>
       ) : (
         <View style={styles.flexContent}>

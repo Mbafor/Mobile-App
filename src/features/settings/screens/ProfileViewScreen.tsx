@@ -33,10 +33,17 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   );
 }
 
+const FUNDING_LABELS: Record<string, string> = {
+  any: 'Any funding',
+  fully_funded: 'Fully funded',
+  partially_funded: 'Partially funded',
+  self_funded: 'Self-funded',
+};
+
 export function ProfileViewScreen() {
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
-  const { profile } = useProfileData();
+  const { profile, preferences } = useProfileData();
   const [editOpen, setEditOpen] = useState(false);
 
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
@@ -51,6 +58,14 @@ export function ProfileViewScreen() {
   const hasAcademic =
     !!profile?.university || !!profile?.country || !!profile?.courseMajor || !!profile?.degreeLevel;
   const hasInterests = (profile?.interests?.length ?? 0) > 0;
+  const hasPreferences =
+    (preferences?.opportunityTypes?.length ?? 0) > 0 ||
+    (preferences?.preferredCountries?.length ?? 0) > 0 ||
+    !!preferences?.fundingPreference;
+
+  const fundingLabel = preferences?.fundingPreference
+    ? (FUNDING_LABELS[preferences.fundingPreference] ?? preferences.fundingPreference)
+    : null;
 
   return (
     <View style={styles.root}>
@@ -138,13 +153,35 @@ export function ProfileViewScreen() {
         {hasInterests ? (
           <View style={styles.section}>
             <Text style={styles.sectionLabel}>Interests</Text>
-            <Text style={styles.interestsText}>
+            <Text style={styles.infoVal}>
               {(profile?.interests ?? []).join('  ·  ')}
             </Text>
           </View>
         ) : null}
 
-        {!hasAcademic && !hasInterests ? (
+        {/* Opportunity Preferences */}
+        {hasPreferences ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>Opportunity Preferences</Text>
+            {(preferences?.opportunityTypes?.length ?? 0) > 0 ? (
+              <InfoRow
+                label="Opportunity types"
+                value={(preferences?.opportunityTypes ?? []).join('  ·  ')}
+              />
+            ) : null}
+            {(preferences?.preferredCountries?.length ?? 0) > 0 ? (
+              <InfoRow
+                label="Preferred countries"
+                value={(preferences?.preferredCountries ?? []).join('  ·  ')}
+              />
+            ) : null}
+            {fundingLabel ? (
+              <InfoRow label="Funding" value={fundingLabel} />
+            ) : null}
+          </View>
+        ) : null}
+
+        {!hasAcademic && !hasInterests && !hasPreferences ? (
           <View style={styles.emptyHint}>
             <Text muted style={styles.emptyText}>
               Tap Edit to fill in your profile details.
@@ -242,7 +279,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.xl,
     paddingBottom: spacing.xl * 2,
-    maxWidth: 600,
+    maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
   },
@@ -300,7 +337,6 @@ const styles = StyleSheet.create({
   },
   infoKey: { width: 130, fontSize: 14, color: colors.textMuted, flexShrink: 0 },
   infoVal: { flex: 1, fontSize: 14, color: colors.text, fontWeight: '500' },
-  interestsText: { fontSize: 15, color: colors.text, lineHeight: 24 },
   emptyHint: { alignItems: 'center', paddingTop: spacing.xl },
   emptyText: { fontSize: 15, textAlign: 'center' },
 
@@ -311,7 +347,7 @@ const styles = StyleSheet.create({
   modalContent: {
     padding: spacing.md,
     paddingBottom: spacing.xl * 2,
-    maxWidth: 600,
+    maxWidth: 1200,
     width: '100%',
     alignSelf: 'center',
   },
