@@ -23,7 +23,7 @@ export function OpportunitySearchBar({
       <SearchField
         value={query}
         onChangeText={onChangeQuery}
-        placeholder="Search opportunities, tags, organisations…"
+        placeholder="Search"
         trailing={
           <FilterChipButton
             label="Filters"

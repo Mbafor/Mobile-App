@@ -32,8 +32,10 @@ export function useDashboard() {
 
   return {
     ...sections,
+    totalOpportunities: opportunitiesQuery.data?.length ?? 0,
     savedCount: stats.savedCount,
     appliedCount: stats.appliedCount,
+    mentorsCount: stats.mentorsCount,
     isLoading: opportunitiesQuery.isLoading || stats.isLoading,
     isRefetching: opportunitiesQuery.isRefetching || stats.isRefetching,
     error: opportunitiesQuery.error,

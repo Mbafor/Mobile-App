@@ -58,7 +58,13 @@ export function DashboardScreen() {
     isRefetching: dashboardRefetching,
     error: dashboardError,
     refetch: refetchDashboard,
+    totalOpportunities,
+    appliedCount,
+    mentorsCount,
   } = useDashboard();
+
+  const isWeb = Platform.OS === 'web';
+  const showMobileWebStats = isWeb && !isDesktop;
 
   const isSearchActive =
     query.trim().length > 0 || activeFilterCount > 0;
@@ -124,6 +130,23 @@ export function DashboardScreen() {
           activeFilterCount={activeFilterCount}
           onOpenFilters={() => setFiltersOpen(true)}
         />
+
+        {showMobileWebStats && !isSearchActive && (
+          <View style={styles.statsContainer}>
+            <View style={styles.statCard}>
+              <Text style={styles.statLabel}>Opportunities</Text>
+              <Text style={styles.statValue}>{dashboardLoading ? '-' : totalOpportunities}</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={styles.statLabel}>Applied</Text>
+              <Text style={styles.statValue}>{dashboardLoading ? '-' : appliedCount}</Text>
+            </View>
+            <View style={styles.statCard}>
+              <Text style={styles.statLabel}>Mentors</Text>
+              <Text style={styles.statValue}>{dashboardLoading ? '-' : mentorsCount}</Text>
+            </View>
+          </View>
+        )}
 
         {isSearchActive ? (
           <OpportunitySearchResults
@@ -207,6 +230,39 @@ const styles = StyleSheet.create({
   },
   header: { paddingBottom: spacing.sm },
   list: { paddingBottom: spacing.md },
+  statsContainer: {
+    flexDirection: 'row',
+    paddingHorizontal: spacing.sm,
+    paddingBottom: spacing.sm,
+    gap: spacing.sm,
+    justifyContent: 'center',
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: '#059669', // Emerald green
+    borderRadius: 12,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
+  },
+  statLabel: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: 'rgba(255,255,255,0.9)',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',

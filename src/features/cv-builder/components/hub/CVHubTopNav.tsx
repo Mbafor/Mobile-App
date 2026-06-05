@@ -4,6 +4,7 @@ import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
 import { colors, spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { webPressableStyle } from '@/utils/web/pressable';
 
 type TabDef = {
@@ -59,13 +60,14 @@ export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
   const pathname = usePathname();
   const router = useRouter();
   const activeKey = getActiveKey(pathname, cvId);
+  const isDesktop = useWebDesktop();
 
   return (
     <View style={styles.bar}>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.tabs}
+        contentContainerStyle={[styles.tabs, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}
       >
         {CV_TABS.map((tab) => {
           const active = tab.key === activeKey;
@@ -103,7 +105,6 @@ const styles = StyleSheet.create({
   },
   tabs: {
     flexDirection: 'row',
-    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs + 2,
     gap: spacing.xs,
   },

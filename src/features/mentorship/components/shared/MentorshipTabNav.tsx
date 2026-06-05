@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
 import { colors, spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { webPressableStyle } from '@/utils/web/pressable';
 import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 
@@ -17,6 +18,7 @@ type MentorshipTabNavProps = {
 
 export function MentorshipTabNav({ items, activeId, onSelect, mode }: MentorshipTabNavProps) {
   const insets = useSafeAreaInsets();
+  const isDesktop = useWebDesktop();
 
   if (mode === 'horizontal') {
     return (
@@ -24,7 +26,7 @@ export function MentorshipTabNav({ items, activeId, onSelect, mode }: Mentorship
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.hTabs}
+          contentContainerStyle={[styles.hTabs, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}
         >
           {items.map((item) => {
             const active = item.id === activeId;
@@ -94,7 +96,6 @@ const styles = StyleSheet.create({
   },
   hTabs: {
     flexDirection: 'row',
-    paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs + 2,
     gap: spacing.xs,
   },
