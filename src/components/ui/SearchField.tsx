@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ReactNode } from 'react';
-import { Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { Input } from '@/components/ui/Input';
 import { Text } from '@/components/ui/Text';
@@ -40,7 +40,7 @@ export function SearchField({
           placeholder={placeholder}
           autoCapitalize="none"
           autoCorrect={false}
-          style={styles.input}
+          style={[styles.input, Platform.OS === 'web' && ({ outlineStyle: 'none' } as any)]}
         />
         {showClear ? (
           <Pressable

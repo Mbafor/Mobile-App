@@ -142,23 +142,6 @@ export function DashboardScreen() {
           />
         </View>
 
-        {showMobileWebStats && !isSearchActive && (
-          <View style={styles.statsContainer}>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Opportunities</Text>
-              <Text style={styles.statValue}>{dashboardLoading ? '-' : totalOpportunities}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Applied</Text>
-              <Text style={styles.statValue}>{dashboardLoading ? '-' : appliedCount}</Text>
-            </View>
-            <View style={styles.statCard}>
-              <Text style={styles.statLabel}>Mentors</Text>
-              <Text style={styles.statValue}>{dashboardLoading ? '-' : mentorsCount}</Text>
-            </View>
-          </View>
-        )}
-
         {isSearchActive ? (
           <OpportunitySearchResults
             results={results}
@@ -183,17 +166,35 @@ export function DashboardScreen() {
               />
             }
             ListHeaderComponent={
-              dashboardError ? (
-                <View style={styles.header}>
-                  <ErrorMessage
-                    message={
-                      dashboardError instanceof Error
-                        ? dashboardError.message
-                        : 'Failed to load dashboard'
-                    }
-                  />
-                </View>
-              ) : null
+              <View>
+                {showMobileWebStats && (
+                  <View style={styles.statsContainer}>
+                    <View style={styles.statCard}>
+                      <Text style={styles.statLabel}>Opportunities</Text>
+                      <Text style={styles.statValue}>{dashboardLoading ? '-' : totalOpportunities}</Text>
+                    </View>
+                    <View style={styles.statCard}>
+                      <Text style={styles.statLabel}>Applied</Text>
+                      <Text style={styles.statValue}>{dashboardLoading ? '-' : appliedCount}</Text>
+                    </View>
+                    <View style={styles.statCard}>
+                      <Text style={styles.statLabel}>Mentors</Text>
+                      <Text style={styles.statValue}>{dashboardLoading ? '-' : mentorsCount}</Text>
+                    </View>
+                  </View>
+                )}
+                {dashboardError && (
+                  <View style={styles.header}>
+                    <ErrorMessage
+                      message={
+                        dashboardError instanceof Error
+                          ? dashboardError.message
+                          : 'Failed to load dashboard'
+                      }
+                    />
+                  </View>
+                )}
+              </View>
             }
             contentContainerStyle={styles.list}
           />
