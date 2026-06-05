@@ -1,4 +1,4 @@
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -7,6 +7,7 @@ import {
   OPPORTUNITY_CARD_WIDTH,
 } from '@/features/opportunities/components/OpportunityCard';
 import { spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 type OpportunitySectionProps = {
@@ -20,10 +21,12 @@ export function OpportunitySection({
   opportunities,
   onCardPress,
 }: OpportunitySectionProps) {
+  const isDesktop = useWebDesktop();
+
   if (opportunities.length === 0) {
     return (
       <View style={styles.section}>
-        <Text variant="title" style={styles.heading}>
+        <Text variant="title" style={[styles.heading, isDesktop && { paddingHorizontal: spacing.md }]}>
           {title}
         </Text>
         <EmptyState title="Nothing here yet" description="Check back soon for new listings." />
@@ -33,7 +36,7 @@ export function OpportunitySection({
 
   return (
     <View style={styles.section}>
-      <Text variant="title" style={styles.heading}>
+      <Text variant="title" style={[styles.heading, isDesktop && { paddingHorizontal: spacing.md }]}>
         {title}
       </Text>
       <FlatList
@@ -43,7 +46,7 @@ export function OpportunitySection({
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         snapToInterval={OPPORTUNITY_CARD_WIDTH + spacing.md}
-        contentContainerStyle={styles.listContent}
+        contentContainerStyle={[styles.listContent, isDesktop && { paddingHorizontal: spacing.md }]}
         renderItem={({ item }) => (
           <OpportunityCard opportunity={item} onPress={onCardPress} />
         )}
@@ -56,10 +59,8 @@ const styles = StyleSheet.create({
   section: { marginBottom: spacing.lg },
   heading: {
     marginBottom: spacing.sm,
-    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
   },
   listContent: {
-    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
     paddingBottom: spacing.xs,
   },
 });

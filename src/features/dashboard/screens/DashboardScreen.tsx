@@ -111,7 +111,7 @@ export function DashboardScreen() {
 
   return (
     <View style={styles.container}>
-      <View style={styles.pageContent}>
+      <View style={[styles.pageContent, isDesktop && { paddingHorizontal: spacing.md }]}>
         {isDesktop && (
           <Pressable onPress={handleGoHome} style={styles.titleRow} accessibilityRole="link">
             <Text style={[styles.pageTitle, getWebFontStyle('bold')]}>Dashboard</Text>
@@ -193,7 +193,6 @@ const styles = StyleSheet.create({
     maxWidth: 1280,
     width: '100%',
     alignSelf: 'center',
-    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   titleRow: {

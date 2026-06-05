@@ -1,7 +1,8 @@
-import { Platform, StyleSheet, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import { FilterChipButton, SearchField } from '@/components/ui';
 import { spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 type OpportunitySearchBarProps = {
   query: string;
@@ -16,8 +17,9 @@ export function OpportunitySearchBar({
   activeFilterCount,
   onOpenFilters,
 }: OpportunitySearchBarProps) {
+  const isDesktop = useWebDesktop();
   return (
-    <View style={styles.wrap}>
+    <View style={[styles.wrap, isDesktop && { paddingHorizontal: spacing.md }]}>
       <SearchField
         value={query}
         onChangeText={onChangeQuery}
@@ -36,7 +38,6 @@ export function OpportunitySearchBar({
 
 const styles = StyleSheet.create({
   wrap: {
-    paddingHorizontal: Platform.OS === 'web' ? spacing.md : 0,
     paddingTop: spacing.md,
     paddingBottom: spacing.sm,
   },

@@ -7,7 +7,7 @@ import { MentorshipTabNav } from '@/features/mentorship/components/shared/Mentor
 import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { colors, spacing } from '@/constants/theme';
-import { useWebDesktop } from '@/hooks/useWebDesktop';
+import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 
 type MentorshipShellProps = PropsWithChildren<{
   navItems: MentorshipNavItem[];
@@ -35,6 +35,7 @@ export function MentorshipShell({
   children,
 }: MentorshipShellProps) {
   const isDesktop = useWebDesktop();
+  const isWeb = useIsWeb();
 
   const tabNav = (
     <MentorshipTabNav
@@ -56,9 +57,15 @@ export function MentorshipShell({
     </View>
   );
 
+  // On web mobile (non-desktop), show tabs at the top of the page content.
+  // On native mobile, keep tabs at the bottom.
+  const showTabsAtTop = !isDesktop && isWeb;
+  const showTabsAtBottom = !isDesktop && !isWeb;
+
   return (
     <View style={styles.root}>
       {isDesktop && tabNav}
+      {showTabsAtTop && tabNav}
 
       {titleBlock}
 
@@ -93,7 +100,7 @@ export function MentorshipShell({
         </View>
       )}
 
-      {!isDesktop && tabNav}
+      {showTabsAtBottom && tabNav}
     </View>
   );
 }

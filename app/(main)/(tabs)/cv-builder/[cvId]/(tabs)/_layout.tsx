@@ -25,15 +25,8 @@ export default function CVHubTabsLayout() {
 
   const tabBarHeight = 65 + insets.bottom;
 
-  const tabBarWebStyle = isDesktop
-    ? { display: 'none' as const }
-    : {
-        position: 'fixed' as const,
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 100,
-      };
+  // Hide native tab bar on all web — CVHubTopNav handles navigation at the top
+  const tabBarWebStyle = { display: 'none' as const };
 
   return (
     <Tabs

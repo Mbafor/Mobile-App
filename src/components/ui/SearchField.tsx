@@ -52,8 +52,8 @@ export function SearchField({
             <Ionicons name="close-circle" size={20} color={colors.textMuted} />
           </Pressable>
         ) : null}
+        {trailing}
       </View>
-      {trailing}
     </View>
   );
 }
@@ -69,17 +69,15 @@ export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChip
   return (
     <Pressable
       onPress={onPress}
-      style={[styles.filterBtn, active && styles.filterBtnActive]}
+      style={styles.filterBtn}
+      accessibilityLabel={`${label}${active ? ` (${activeCount} active)` : ''}`}
+      hitSlop={8}
     >
       <Ionicons
-        name="options-outline"
-        size={16}
-        color={active ? colors.background : colors.text}
+        name={active ? "options" : "options-outline"}
+        size={20}
+        color={active ? colors.primary : colors.textMuted}
       />
-      <Text style={[styles.filterText, active && styles.filterTextActive]}>
-        {label}
-        {active ? ` (${activeCount})` : ''}
-      </Text>
     </Pressable>
   );
 }
@@ -88,7 +86,6 @@ const styles = StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
   },
   field: {
     flex: 1,
@@ -112,23 +109,9 @@ const styles = StyleSheet.create({
   },
   clearBtn: { padding: spacing.xs },
   filterBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.md,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-    minHeight: 48,
+    padding: spacing.xs,
+    marginLeft: spacing.xs,
   },
-  filterBtnActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  filterText: { fontSize: 13, fontWeight: '600', color: colors.text },
-  filterTextActive: { color: colors.background },
   fieldDocs: {
     backgroundColor: '#F1F3F4',
     borderColor: 'transparent',
