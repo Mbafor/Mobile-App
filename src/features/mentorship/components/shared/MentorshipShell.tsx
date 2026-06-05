@@ -42,7 +42,7 @@ export function MentorshipShell({
       items={navItems}
       activeId={activeSection}
       onSelect={onSelectSection}
-      mode={isDesktop ? 'horizontal' : 'bottom'}
+      mode={isWeb ? 'horizontal' : 'bottom'}
     />
   );
 

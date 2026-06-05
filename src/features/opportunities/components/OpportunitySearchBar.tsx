@@ -19,7 +19,7 @@ export function OpportunitySearchBar({
 }: OpportunitySearchBarProps) {
   const isDesktop = useWebDesktop();
   return (
-    <View style={[styles.wrap, isDesktop && { paddingHorizontal: spacing.md }]}>
+    <View style={[styles.wrap, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
       <SearchField
         value={query}
         onChangeText={onChangeQuery}

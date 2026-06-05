@@ -124,12 +124,23 @@ export function DashboardScreen() {
           </Pressable>
         )}
 
-        <OpportunitySearchBar
-          query={query}
-          onChangeQuery={setQuery}
-          activeFilterCount={activeFilterCount}
-          onOpenFilters={() => setFiltersOpen(true)}
-        />
+        <View
+          style={[
+            Platform.OS === 'web' && {
+              position: 'sticky' as any,
+              top: 0,
+              zIndex: 10,
+              backgroundColor: colors.background,
+            },
+          ]}
+        >
+          <OpportunitySearchBar
+            query={query}
+            onChangeQuery={setQuery}
+            activeFilterCount={activeFilterCount}
+            onOpenFilters={() => setFiltersOpen(true)}
+          />
+        </View>
 
         {showMobileWebStats && !isSearchActive && (
           <View style={styles.statsContainer}>
@@ -239,7 +250,7 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
-    backgroundColor: '#059669', // Emerald green
+    backgroundColor: colors.primary,
     borderRadius: 12,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.xs,

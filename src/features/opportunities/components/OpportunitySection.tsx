@@ -26,7 +26,7 @@ export function OpportunitySection({
   if (opportunities.length === 0) {
     return (
       <View style={styles.section}>
-        <Text variant="title" style={[styles.heading, isDesktop && { paddingHorizontal: spacing.md }]}>
+        <Text variant="title" style={[styles.heading, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
           {title}
         </Text>
         <EmptyState title="Nothing here yet" description="Check back soon for new listings." />
@@ -36,7 +36,7 @@ export function OpportunitySection({
 
   return (
     <View style={styles.section}>
-      <Text variant="title" style={[styles.heading, isDesktop && { paddingHorizontal: spacing.md }]}>
+      <Text variant="title" style={[styles.heading, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
         {title}
       </Text>
       <FlatList
@@ -46,7 +46,7 @@ export function OpportunitySection({
         showsHorizontalScrollIndicator={false}
         decelerationRate="fast"
         snapToInterval={OPPORTUNITY_CARD_WIDTH + spacing.md}
-        contentContainerStyle={[styles.listContent, isDesktop && { paddingHorizontal: spacing.md }]}
+        contentContainerStyle={[styles.listContent, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}
         renderItem={({ item }) => (
           <OpportunityCard opportunity={item} onPress={onCardPress} />
         )}
