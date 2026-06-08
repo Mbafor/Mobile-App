@@ -1,5 +1,7 @@
+import { Ionicons } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -13,6 +15,9 @@ import {
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
+import { useAppStore } from '@/store/slices/app.slice';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { OpportunityFiltersPanel } from '@/features/opportunities/components/OpportunityFiltersPanel';
 import { OpportunitySearchBar } from '@/features/opportunities/components/OpportunitySearchBar';
@@ -31,10 +36,22 @@ type DashboardSection = {
   data: Opportunity[];
 };
 
+function getGreetingPhrase() {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'morning';
+  if (hour < 17) return 'afternoon';
+  return 'evening';
+}
+
 export function DashboardScreen() {
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);
+
+  const { isSearchVisible, setSearchVisible } = useAppStore();
+  const { profile, user } = useAuth();
+  const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? 'User';
 
   const {
     query,
@@ -48,6 +65,7 @@ export function DashboardScreen() {
     isRefetching: searchRefetching,
     error: searchError,
     refetch: refetchSearch,
+    clearFilters,
   } = useOpportunitySearch();
 
   const {
@@ -63,11 +81,17 @@ export function DashboardScreen() {
     mentorsCount,
   } = useDashboard();
 
+  useEffect(() => {
+    if (!isSearchVisible) {
+      setQuery('');
+      clearFilters();
+    }
+  }, [isSearchVisible, setQuery, clearFilters]);
+
   const isWeb = Platform.OS === 'web';
-  const showMobileWebStats = isWeb && !isDesktop;
 
   const isSearchActive =
-    query.trim().length > 0 || activeFilterCount > 0;
+    isSearchVisible && (query.trim().length > 0 || activeFilterCount > 0);
 
   const sections: DashboardSection[] = [
     { key: 'recommended', title: 'Recommended For You', data: recommended },
@@ -91,9 +115,10 @@ export function DashboardScreen() {
         title={item.title}
         opportunities={item.data}
         onCardPress={handleCardPress}
+        onViewAll={item.key === 'recommended' ? () => setSearchVisible(true) : undefined}
       />
     ),
-    [handleCardPress],
+    [handleCardPress, setSearchVisible],
   );
 
   const handleRefresh = useCallback(() => {
@@ -124,23 +149,25 @@ export function DashboardScreen() {
           </Pressable>
         )}
 
-        <View
-          style={[
-            Platform.OS === 'web' && {
-              position: 'sticky' as any,
-              top: 0,
-              zIndex: 10,
-              backgroundColor: colors.background,
-            },
-          ]}
-        >
-          <OpportunitySearchBar
-            query={query}
-            onChangeQuery={setQuery}
-            activeFilterCount={activeFilterCount}
-            onOpenFilters={() => setFiltersOpen(true)}
-          />
-        </View>
+        {isSearchVisible && (
+          <View
+            style={[
+              Platform.OS === 'web' && {
+                position: 'sticky' as any,
+                top: 0,
+                zIndex: 10,
+                backgroundColor: colors.background,
+              },
+            ]}
+          >
+            <OpportunitySearchBar
+              query={query}
+              onChangeQuery={setQuery}
+              activeFilterCount={activeFilterCount}
+              onOpenFilters={() => setFiltersOpen(true)}
+            />
+          </View>
+        )}
 
         {isSearchActive ? (
           <OpportunitySearchResults
@@ -166,23 +193,67 @@ export function DashboardScreen() {
               />
             }
             ListHeaderComponent={
-              <View>
-                {showMobileWebStats && (
-                  <View style={styles.statsContainer}>
-                    <View style={styles.statCard}>
-                      <Text style={styles.statLabel}>Opportunities</Text>
-                      <Text style={styles.statValue}>{dashboardLoading ? '-' : totalOpportunities}</Text>
+              <View style={[styles.listHeader, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
+                <LinearGradient
+                  colors={['#F3F7F5', '#E4EDE7']}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                  style={styles.heroCard}
+                >
+                  <Text style={styles.heroSubtitle}>YOUR DASHBOARD</Text>
+                  <Text style={styles.heroTitle}>
+                    Good {getGreetingPhrase()}, {userName}.
+                  </Text>
+                  <Text style={styles.heroSubheadline}>
+                    Here is what is moving today...
+                  </Text>
+
+                  <View style={styles.heroStatsList}>
+                    <View style={styles.heroStatItem}>
+                      <Ionicons
+                        name="briefcase-outline"
+                        size={16}
+                        color={colors.primary}
+                        style={styles.heroStatIcon}
+                      />
+                      <Text style={styles.heroStatText}>
+                        <Text style={styles.heroStatValue}>
+                          {dashboardLoading ? '-' : totalOpportunities}
+                        </Text>{' '}
+                        Available Opportunities
+                      </Text>
                     </View>
-                    <View style={styles.statCard}>
-                      <Text style={styles.statLabel}>Applied</Text>
-                      <Text style={styles.statValue}>{dashboardLoading ? '-' : appliedCount}</Text>
+                    <View style={styles.heroStatItem}>
+                      <Ionicons
+                        name="people-outline"
+                        size={16}
+                        color={colors.primary}
+                        style={styles.heroStatIcon}
+                      />
+                      <Text style={styles.heroStatText}>
+                        <Text style={styles.heroStatValue}>
+                          {dashboardLoading ? '-' : mentorsCount}
+                        </Text>{' '}
+                        Connected Mentors
+                      </Text>
                     </View>
-                    <View style={styles.statCard}>
-                      <Text style={styles.statLabel}>Mentors</Text>
-                      <Text style={styles.statValue}>{dashboardLoading ? '-' : mentorsCount}</Text>
+                    <View style={styles.heroStatItem}>
+                      <Ionicons
+                        name="checkmark-circle-outline"
+                        size={16}
+                        color={colors.primary}
+                        style={styles.heroStatIcon}
+                      />
+                      <Text style={styles.heroStatText}>
+                        <Text style={styles.heroStatValue}>
+                          {dashboardLoading ? '-' : appliedCount}
+                        </Text>{' '}
+                        Submitted Applications
+                      </Text>
                     </View>
                   </View>
-                )}
+                </LinearGradient>
+
                 {dashboardError && (
                   <View style={styles.header}>
                     <ErrorMessage
@@ -241,40 +312,58 @@ const styles = StyleSheet.create({
     letterSpacing: -0.3,
   },
   header: { paddingBottom: spacing.sm },
-  list: { paddingBottom: spacing.md },
-  statsContainer: {
-    flexDirection: 'row',
-    paddingHorizontal: spacing.sm,
-    paddingBottom: spacing.sm,
-    gap: spacing.sm,
-    justifyContent: 'center',
+  listHeader: {
+    paddingTop: spacing.md,
   },
-  statCard: {
-    flex: 1,
-    backgroundColor: colors.primary,
-    borderRadius: 12,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.xs,
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
+  heroCard: {
+    borderRadius: 16,
+    padding: spacing.md + 4,
+    marginBottom: spacing.lg,
+    borderWidth: 1,
+    borderColor: 'rgba(26, 61, 37, 0.08)',
   },
-  statLabel: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: 'rgba(255,255,255,0.9)',
-    textAlign: 'center',
+  heroSubtitle: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: colors.primary,
+    letterSpacing: 1.2,
+    marginBottom: spacing.xs,
+  },
+  heroTitle: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
     marginBottom: 4,
   },
-  statValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+  heroSubheadline: {
+    fontSize: 14,
+    color: colors.textMuted,
+    marginBottom: spacing.md,
   },
+  heroStatsList: {
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(26, 61, 37, 0.08)',
+    paddingTop: spacing.md,
+    gap: spacing.sm,
+  },
+  heroStatItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  heroStatIcon: {
+    marginRight: spacing.sm,
+    opacity: 0.85,
+  },
+  heroStatText: {
+    fontSize: 14,
+    color: colors.textMuted,
+  },
+  heroStatValue: {
+    fontWeight: '700',
+    color: colors.text,
+  },
+  list: { paddingBottom: spacing.md },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',

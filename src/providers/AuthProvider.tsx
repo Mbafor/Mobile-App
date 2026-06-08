@@ -49,7 +49,11 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
 
       const fingerprint = sessionFingerprint(session);
-      if (fingerprint === lastFingerprint.current && event !== 'SIGNED_OUT') {
+      // USER_UPDATED fires when auth.updateUser() is called (e.g. after onboarding
+      // marks onboarding_complete). We must bypass the fingerprint dedup so the
+      // profile is re-fetched and onboardingComplete reflects the new state.
+      const isUserUpdated = event === 'USER_UPDATED';
+      if (fingerprint === lastFingerprint.current && event !== 'SIGNED_OUT' && !isUserUpdated) {
         return;
       }
       lastFingerprint.current = fingerprint;

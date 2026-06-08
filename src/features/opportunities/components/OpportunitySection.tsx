@@ -1,4 +1,4 @@
-import { FlatList, StyleSheet, View } from 'react-native';
+import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -6,7 +6,7 @@ import {
   OpportunityCard,
   OPPORTUNITY_CARD_WIDTH,
 } from '@/features/opportunities/components/OpportunityCard';
-import { spacing } from '@/constants/theme';
+import { colors, spacing } from '@/constants/theme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -14,21 +14,30 @@ type OpportunitySectionProps = {
   title: string;
   opportunities: Opportunity[];
   onCardPress?: (opportunity: Opportunity) => void;
+  onViewAll?: () => void;
 };
 
 export function OpportunitySection({
   title,
   opportunities,
   onCardPress,
+  onViewAll,
 }: OpportunitySectionProps) {
   const isDesktop = useWebDesktop();
 
   if (opportunities.length === 0) {
     return (
       <View style={styles.section}>
-        <Text variant="title" style={[styles.heading, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
-          {title}
-        </Text>
+        <View style={[styles.headerRow, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
+          <Text variant="title" style={styles.heading}>
+            {title}
+          </Text>
+          {onViewAll && (
+            <Pressable onPress={onViewAll} accessibilityRole="link">
+              <Text style={styles.viewAllText}>View all opportunities →</Text>
+            </Pressable>
+          )}
+        </View>
         <EmptyState title="Nothing here yet" description="Check back soon for new listings." />
       </View>
     );
@@ -36,9 +45,16 @@ export function OpportunitySection({
 
   return (
     <View style={styles.section}>
-      <Text variant="title" style={[styles.heading, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
-        {title}
-      </Text>
+      <View style={[styles.headerRow, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
+        <Text variant="title" style={styles.heading}>
+          {title}
+        </Text>
+        {onViewAll && (
+          <Pressable onPress={onViewAll} accessibilityRole="link">
+            <Text style={styles.viewAllText}>View all opportunities →</Text>
+          </Pressable>
+        )}
+      </View>
       <FlatList
         data={opportunities}
         keyExtractor={(item) => item.id}
@@ -57,8 +73,19 @@ export function OpportunitySection({
 
 const styles = StyleSheet.create({
   section: { marginBottom: spacing.lg },
-  heading: {
+  headerRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: spacing.sm,
+  },
+  heading: {
+    marginBottom: 0,
+  },
+  viewAllText: {
+    fontSize: 14,
+    color: colors.primary,
+    fontWeight: '600',
   },
   listContent: {
     paddingBottom: spacing.xs,

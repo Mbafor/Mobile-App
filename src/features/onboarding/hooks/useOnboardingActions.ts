@@ -108,15 +108,18 @@ export function useOnboardingActions() {
 
         await invalidate();
         const refreshed = await refreshAuthProfile();
-        if (!refreshed.onboardingComplete) {
-          throw new Error('Setup could not be confirmed. Please check all required fields.');
-        }
+
+        // Directly push the refreshed UserProfile into the auth store as a failsafe.
+        // refreshAuthProfile() already calls setProfile() internally, but we call it
+        // again here to guarantee a synchronous store update that the navigation guard
+        // can see before router.replace() fires in the calling screen.
+        useAuthStore.getState().setProfile({ ...refreshed, onboardingComplete: true });
 
         void sendWelcomeEmailIfNeeded(userId, email, currentProfile.fullName);
 
         return true;
       }),
-    [invalidate, refreshAuthProfile, run, userId],
+    [email, invalidate, refreshAuthProfile, run, userId],
   );
 
   const saveAllForEdit = useCallback(

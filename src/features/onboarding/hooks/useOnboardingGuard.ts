@@ -31,6 +31,9 @@ export function useOnboardingGuard() {
       return;
     }
 
+    // Do not redirect while profile is loading — completeOnboarding triggers
+    // query invalidation which causes profileLoading to cycle. Navigating during
+    // that cycle would interrupt the finish flow.
     if (profileLoading) return;
 
     const segmentList = segments as string[];
