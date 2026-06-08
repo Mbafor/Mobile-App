@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 import {
   ActivityIndicator,
   Image,
+  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -17,6 +18,7 @@ import { Button, Text } from '@/components/ui';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
 import { useOpportunityDetail } from '@/features/opportunities/hooks/useOpportunityDetail';
 import { useOpportunityEngagement } from '@/features/opportunities/hooks/useOpportunityEngagement';
+import { buildOpportunityWebLink } from '@/features/opportunities/utils/opportunity-share-link';
 import { colors, spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
@@ -96,7 +98,6 @@ export function OpportunityDetailScreen() {
     toggleSave,
     toggleApplied,
     applyNow,
-    shareOpportunity,
   } = useOpportunityEngagement(opportunityId);
 
   const { data: allOpportunities } = useActiveOpportunities();
@@ -119,6 +120,11 @@ export function OpportunityDetailScreen() {
       params: { id: o.id },
     });
   };
+
+  const opportunityLink = useMemo(() => {
+    if (!opportunity) return '';
+    return buildOpportunityWebLink(opportunity.id);
+  }, [opportunity]);
 
   if (isLoading) {
     return (
@@ -222,13 +228,6 @@ export function OpportunityDetailScreen() {
               {isSaved ? '✓ Saved' : 'Save'}
             </Button>
             <Button
-              variant="secondary"
-              style={styles.flexBtn}
-              onPress={() => shareOpportunity(opportunity)}
-            >
-              Share
-            </Button>
-            <Button
               variant={isApplied ? 'primary' : 'secondary'}
               style={styles.flexBtn}
               onPress={toggleApplied}
@@ -238,7 +237,68 @@ export function OpportunityDetailScreen() {
               {isApplied ? 'Applied ✓' : 'Mark applied'}
             </Button>
           </View>
+
+          {/* Social share icons row */}
+          <View style={styles.shareSection}>
+            <Text style={styles.shareLabel}>Share opportunity via</Text>
+            <View style={styles.shareIconsRow}>
+              <Pressable
+                style={({ pressed }) => [
+                  styles.shareIconBtn,
+                  { backgroundColor: '#EAF8F2' },
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => {
+                  const text = `Check out this opportunity: ${opportunity.title} at ${opportunity.organization}\n${opportunityLink}`;
+                  Linking.openURL(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+                }}
+                accessibilityLabel="Share on WhatsApp"
+              >
+                <Ionicons name="logo-whatsapp" size={20} color="#25D366" />
+              </Pressable>
+
+              <Pressable
+                style={({ pressed }) => [
+                  styles.shareIconBtn,
+                  { backgroundColor: '#EAF3FC' },
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => {
+                  Linking.openURL(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(opportunityLink)}`);
+                }}
+                accessibilityLabel="Share on LinkedIn"
+              >
+                <Ionicons name="logo-linkedin" size={20} color="#0A66C2" />
+              </Pressable>
+
+              <Pressable
+                style={({ pressed }) => [
+                  styles.shareIconBtn,
+                  { backgroundColor: '#EBF2FC' },
+                  pressed && { opacity: 0.75 },
+                ]}
+                onPress={() => {
+                  Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(opportunityLink)}`);
+                }}
+                accessibilityLabel="Share on Facebook"
+              >
+                <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+              </Pressable>
+            </View>
+          </View>
         </View>
+
+        {/* Related opportunities at the bottom on mobile */}
+        {!isDesktop && relatedOpportunities.length > 0 && (
+          <View style={styles.mobileRelatedSection}>
+            <Text style={[styles.sidebarHeading, getWebFontStyle('semibold')]}>
+              You might also like
+            </Text>
+            {relatedOpportunities.map((o) => (
+              <RelatedOpportunityCard key={o.id} opportunity={o} onPress={handleRelatedPress} />
+            ))}
+          </View>
+        )}
       </View>
     </ScrollView>
   );
@@ -398,6 +458,41 @@ const styles = StyleSheet.create({
   },
   secondaryRow: { flexDirection: 'row', gap: spacing.sm },
   flexBtn: { flex: 1 },
+
+  // Social Sharing Layout
+  shareSection: {
+    marginTop: spacing.md,
+    alignItems: 'center',
+    gap: spacing.xs,
+  },
+  shareLabel: {
+    fontSize: 13,
+    color: colors.textMuted,
+    fontWeight: '500',
+  },
+  shareIconsRow: {
+    flexDirection: 'row',
+    gap: spacing.md,
+    justifyContent: 'center',
+  },
+  shareIconBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+
+  // Mobile Related Layout
+  mobileRelatedSection: {
+    marginTop: spacing.xl,
+    paddingTop: spacing.lg,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    paddingBottom: spacing.xl,
+  },
 
   // ─── Related opportunity card ───────────────────────────────────────────────
   relatedCard: {

@@ -5,40 +5,23 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Platform,
   Pressable,
-  ScrollView,
   StyleSheet,
-  TextInput,
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
-import { BROWSE_CATEGORY_LIST } from '@/constants/opportunity-fields';
 import { colors, spacing, typography } from '@/constants/theme';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
-import { filterOpportunities } from '@/features/opportunities/utils/search-opportunities';
-import { EMPTY_OPPORTUNITY_FILTERS } from '@/types/domain/opportunity';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 const PAGE_SIZE = 10;
 
-const CARD_ACCENTS = [
-  { bg: '#E8F5EE', text: '#1A3D25' },
-  { bg: '#EAF0FB', text: '#1A2E5A' },
-  { bg: '#FDF3E7', text: '#5A3A10' },
-  { bg: '#F3EEF9', text: '#3A1A5A' },
-  { bg: '#E8F5F0', text: '#1A3D2E' },
-  { bg: '#FBF0EA', text: '#5A2A10' },
-  { bg: '#EAF4FB', text: '#1A3A5A' },
-  { bg: '#F9EEF3', text: '#5A1A3A' },
-];
-
-/** Vertical opportunity card for the search results grid. */
+/** Vertical opportunity card for the results grid. */
 function OpportunityResultCard({
   opportunity,
   onPress,
@@ -103,35 +86,19 @@ export function BrowseCategoriesScreen() {
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
 
-  const [query, setQuery] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [page, setPage] = useState(1);
 
   const { data: allOpportunities, isLoading } = useActiveOpportunities();
 
-  const isSearchMode = query.trim().length > 0 || selectedCategory !== null;
+  const totalPages = useMemo(() => {
+    if (!allOpportunities) return 1;
+    return Math.max(1, Math.ceil(allOpportunities.length / PAGE_SIZE));
+  }, [allOpportunities]);
 
-  const filteredResults = useMemo(() => {
+  const pagedResults = useMemo(() => {
     if (!allOpportunities) return [];
-    const filters = {
-      ...EMPTY_OPPORTUNITY_FILTERS,
-      categories: selectedCategory ? [selectedCategory] : [],
-    };
-    return filterOpportunities(allOpportunities, query, filters);
-  }, [allOpportunities, query, selectedCategory]);
-
-  const totalPages = Math.max(1, Math.ceil(filteredResults.length / PAGE_SIZE));
-  const pagedResults = filteredResults.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
-
-  const handleCategoryToggle = (cat: string) => {
-    setPage(1);
-    setSelectedCategory((prev) => (prev === cat ? null : cat));
-  };
-
-  const handleQueryChange = (text: string) => {
-    setQuery(text);
-    setPage(1);
-  };
+    return allOpportunities.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+  }, [allOpportunities, page]);
 
   const handleCardPress = (opportunity: Opportunity) => {
     router.push({
@@ -143,185 +110,99 @@ export function BrowseCategoriesScreen() {
   return (
     <View style={styles.root}>
       <View style={[styles.fill, isDesktop && styles.fillDesktop]}>
-
-        {/* ── Search bar ─────────────────────────────────────────── */}
-        <View style={styles.searchWrap}>
-          <View style={styles.searchField}>
-            <Ionicons
-              name="search-outline"
-              size={18}
-              color={colors.textMuted}
-              style={styles.searchIcon}
-            />
-            <TextInput
-              style={styles.searchInput}
-              value={query}
-              onChangeText={handleQueryChange}
-              placeholder="Search opportunities..."
-              placeholderTextColor={colors.textMuted}
-              returnKeyType="search"
-              clearButtonMode="while-editing"
-            />
-            {query.length > 0 && Platform.OS !== 'ios' && (
-              <Pressable onPress={() => handleQueryChange('')} hitSlop={8}>
-                <Ionicons name="close-circle" size={18} color={colors.textMuted} />
-              </Pressable>
-            )}
+        {isLoading ? (
+          <View style={styles.centered}>
+            <ActivityIndicator size="large" color={colors.primary} />
           </View>
-        </View>
-
-        {/* ── Category filter chips ───────────────────────────────── */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.chipsRow}
-          style={styles.chipsScroll}
-        >
-          {BROWSE_CATEGORY_LIST.map((cat) => {
-            const active = selectedCategory === cat;
-            return (
-              <Pressable
-                key={cat}
-                onPress={() => handleCategoryToggle(cat)}
-                style={[styles.chip, active && styles.chipActive]}
-              >
-                <Text style={[styles.chipText, active && styles.chipTextActive]}>{cat}</Text>
-              </Pressable>
-            );
-          })}
-        </ScrollView>
-
-        {/* ── Content area ────────────────────────────────────────── */}
-        {isSearchMode ? (
-          isLoading ? (
-            <View style={styles.centered}>
-              <ActivityIndicator size="large" color={colors.primary} />
-            </View>
-          ) : (
-            <View style={styles.resultsContainer}>
-              {/* Result count + page info */}
-              <View style={styles.resultsMeta}>
-                <Text style={styles.resultsCount}>
-                  {filteredResults.length}{' '}
-                  {filteredResults.length === 1 ? 'result' : 'results'}
-                  {selectedCategory ? ` in "${selectedCategory}"` : ''}
+        ) : (
+          <View style={styles.resultsContainer}>
+            <View style={styles.resultsMeta}>
+              <Text style={styles.resultsCount}>
+                {allOpportunities?.length ?? 0}{' '}
+                {(allOpportunities?.length ?? 0) === 1 ? 'opportunity' : 'opportunities'}
+              </Text>
+              {totalPages > 1 && (
+                <Text style={styles.pageInfo}>
+                  Page {page} of {totalPages}
                 </Text>
-                {totalPages > 1 && (
-                  <Text style={styles.pageInfo}>
-                    Page {page} of {totalPages}
-                  </Text>
-                )}
-              </View>
-
-              {pagedResults.length === 0 ? (
-                <EmptyState
-                  title="No matches"
-                  description="Try a different search or category."
-                />
-              ) : (
-                <FlatList
-                  data={pagedResults}
-                  keyExtractor={(item) => item.id}
-                  renderItem={({ item }) => (
-                    <OpportunityResultCard opportunity={item} onPress={handleCardPress} />
-                  )}
-                  numColumns={isDesktop ? 2 : 1}
-                  key={isDesktop ? 'grid2' : 'grid1'}
-                  columnWrapperStyle={isDesktop ? styles.gridRow : undefined}
-                  showsVerticalScrollIndicator={false}
-                  contentContainerStyle={[
-                    styles.resultsList,
-                    { paddingBottom: insets.bottom + spacing.xl },
-                  ]}
-                  ListFooterComponent={
-                    totalPages > 1 ? (
-                      <View style={styles.pagination}>
-                        <Pressable
-                          onPress={() => setPage((p) => Math.max(1, p - 1))}
-                          disabled={page === 1}
-                          style={[styles.pageBtn, page === 1 && styles.pageBtnDisabled]}
-                        >
-                          <Ionicons
-                            name="chevron-back"
-                            size={16}
-                            color={page === 1 ? colors.textMuted : colors.primary}
-                          />
-                          <Text
-                            style={[
-                              styles.pageBtnText,
-                              page === 1 && styles.pageBtnTextDisabled,
-                            ]}
-                          >
-                            Previous
-                          </Text>
-                        </Pressable>
-
-                        <Text style={styles.pageNumbers}>
-                          {page} / {totalPages}
-                        </Text>
-
-                        <Pressable
-                          onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
-                          disabled={page === totalPages}
-                          style={[
-                            styles.pageBtn,
-                            page === totalPages && styles.pageBtnDisabled,
-                          ]}
-                        >
-                          <Text
-                            style={[
-                              styles.pageBtnText,
-                              page === totalPages && styles.pageBtnTextDisabled,
-                            ]}
-                          >
-                            Next
-                          </Text>
-                          <Ionicons
-                            name="chevron-forward"
-                            size={16}
-                            color={page === totalPages ? colors.textMuted : colors.primary}
-                          />
-                        </Pressable>
-                      </View>
-                    ) : null
-                  }
-                />
               )}
             </View>
-          )
-        ) : (
-          /* Default: category discovery grid */
-          <ScrollView
-            contentContainerStyle={[
-              styles.grid,
-              { paddingBottom: insets.bottom + spacing.xl },
-            ]}
-            showsVerticalScrollIndicator={false}
-          >
-            <Text style={styles.discoverLabel}>Find opportunities by focus area</Text>
-            {BROWSE_CATEGORY_LIST.map((category, i) => {
-              const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
-              return (
-                <Pressable
-                  key={category}
-                  style={({ pressed }) => [
-                    styles.card,
-                    { backgroundColor: accent.bg, opacity: pressed ? 0.85 : 1 },
-                  ]}
-                  onPress={() => handleCategoryToggle(category)}
-                >
-                  <View style={[styles.dot, { backgroundColor: accent.text + '22' }]} />
-                  <Text style={[styles.cardText, { color: accent.text }]}>{category}</Text>
-                  <Ionicons
-                    name="arrow-forward"
-                    size={14}
-                    color={accent.text}
-                    style={styles.cardArrow}
-                  />
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+
+            {pagedResults.length === 0 ? (
+              <EmptyState
+                title="No opportunities available"
+                description="Check back later for new opportunities."
+              />
+            ) : (
+              <FlatList
+                data={pagedResults}
+                keyExtractor={(item) => item.id}
+                renderItem={({ item }) => (
+                  <OpportunityResultCard opportunity={item} onPress={handleCardPress} />
+                )}
+                numColumns={isDesktop ? 2 : 1}
+                key={isDesktop ? 'grid2' : 'grid1'}
+                columnWrapperStyle={isDesktop ? styles.gridRow : undefined}
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={[
+                  styles.resultsList,
+                  { paddingBottom: insets.bottom + spacing.xl },
+                ]}
+                ListFooterComponent={
+                  totalPages > 1 ? (
+                    <View style={styles.pagination}>
+                      <Pressable
+                        onPress={() => setPage((p) => Math.max(1, p - 1))}
+                        disabled={page === 1}
+                        style={[styles.pageBtn, page === 1 && styles.pageBtnDisabled]}
+                      >
+                        <Ionicons
+                          name="chevron-back"
+                          size={16}
+                          color={page === 1 ? colors.textMuted : colors.primary}
+                        />
+                        <Text
+                          style={[
+                            styles.pageBtnText,
+                            page === 1 && styles.pageBtnTextDisabled,
+                          ]}
+                        >
+                          Previous
+                        </Text>
+                      </Pressable>
+
+                      <Text style={styles.pageNumbers}>
+                        {page} / {totalPages}
+                      </Text>
+
+                      <Pressable
+                        onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                        disabled={page === totalPages}
+                        style={[
+                          styles.pageBtn,
+                          page === totalPages && styles.pageBtnDisabled,
+                        ]}
+                      >
+                        <Text
+                          style={[
+                            styles.pageBtnText,
+                            page === totalPages && styles.pageBtnTextDisabled,
+                          ]}
+                        >
+                          Next
+                        </Text>
+                        <Ionicons
+                          name="chevron-forward"
+                          size={16}
+                          color={page === totalPages ? colors.textMuted : colors.primary}
+                        />
+                      </Pressable>
+                    </View>
+                  ) : null
+                }
+              />
+            )}
+          </View>
         )}
       </View>
     </View>
@@ -343,57 +224,15 @@ const styles = StyleSheet.create({
   fillDesktop: {
     paddingHorizontal: spacing.lg,
   },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-
-  // ── Search bar ────────────────────────────────────────────────────────────
-  searchWrap: {
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xs,
-  },
-  searchField: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-    paddingHorizontal: spacing.sm,
-    height: 44,
-    gap: spacing.xs,
-  },
-  searchIcon: { marginRight: 2 },
-  searchInput: {
+  centered: {
     flex: 1,
-    fontSize: 15,
-    color: colors.text,
-    paddingVertical: 0,
-    ...Platform.select({ web: { outlineStyle: 'none' } as any }),
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-
-  // ── Category chips ────────────────────────────────────────────────────────
-  chipsScroll: { maxHeight: 44, marginBottom: spacing.sm },
-  chipsRow: {
-    flexDirection: 'row',
-    gap: spacing.xs,
-    paddingVertical: spacing.xs,
+  resultsContainer: {
+    flex: 1,
+    paddingTop: spacing.md,
   },
-  chip: {
-    paddingVertical: 6,
-    paddingHorizontal: spacing.sm,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
-    backgroundColor: colors.surface,
-  },
-  chipActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
-  },
-  chipText: { fontSize: 13, fontWeight: '500', color: colors.text },
-  chipTextActive: { color: colors.background },
-
-  // ── Results ───────────────────────────────────────────────────────────────
-  resultsContainer: { flex: 1 },
   resultsMeta: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -409,9 +248,12 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: colors.textMuted,
   },
-  resultsList: { gap: spacing.sm },
-  gridRow: { gap: spacing.sm },
-
+  resultsList: {
+    gap: spacing.sm,
+  },
+  gridRow: {
+    gap: spacing.sm,
+  },
   resultCard: {
     flex: 1,
     backgroundColor: colors.background,
@@ -421,11 +263,15 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     marginBottom: spacing.sm,
   },
-  resultImage: { width: '100%', height: 140 },
+  resultImage: {
+    width: '100%',
+    height: 140,
+  },
   resultImagePlaceholder: {
     backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    height: 140,
   },
   resultImageLetter: {
     fontSize: 40,
@@ -444,16 +290,32 @@ const styles = StyleSheet.create({
     borderRadius: 999,
     marginBottom: 2,
   },
-  resultCategoryText: { fontSize: 11, color: colors.primary, fontWeight: '600' },
+  resultCategoryText: {
+    fontSize: 11,
+    color: colors.primary,
+    fontWeight: '600',
+  },
   resultTitle: {
     fontSize: typography.fontSize.md,
     fontWeight: '700',
     color: colors.text,
     lineHeight: 22,
   },
-  resultOrg: { fontSize: 13, color: colors.textMuted },
-  resultDeadline: { fontSize: 13, color: colors.primary, fontWeight: '500' },
-  resultTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 2 },
+  resultOrg: {
+    fontSize: 13,
+    color: colors.textMuted,
+  },
+  resultDeadline: {
+    fontSize: 13,
+    color: colors.primary,
+    fontWeight: '500',
+  },
+  resultTags: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 4,
+    marginTop: 2,
+  },
   resultTag: {
     backgroundColor: colors.surface,
     paddingHorizontal: spacing.sm,
@@ -461,9 +323,10 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     maxWidth: 110,
   },
-  resultTagText: { fontSize: 11, color: colors.textMuted },
-
-  // ── Pagination ────────────────────────────────────────────────────────────
+  resultTagText: {
+    fontSize: 11,
+    color: colors.textMuted,
+  },
   pagination: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -486,43 +349,17 @@ const styles = StyleSheet.create({
   pageBtnDisabled: {
     backgroundColor: colors.surface,
   },
-  pageBtnText: { fontSize: 14, fontWeight: '600', color: colors.primary },
-  pageBtnTextDisabled: { color: colors.textMuted },
-  pageNumbers: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
-
-  // ── Discovery grid ────────────────────────────────────────────────────────
-  discoverLabel: {
-    fontSize: typography.fontSize.sm,
-    color: colors.textMuted,
-    marginBottom: spacing.sm,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.sm,
-    paddingTop: spacing.xs,
-  },
-  card: {
-    width: '47%',
-    minHeight: 96,
-    padding: spacing.md,
-    borderRadius: 16,
-    justifyContent: 'space-between',
-  },
-  dot: {
-    width: 28,
-    height: 28,
-    borderRadius: 8,
-    marginBottom: spacing.sm,
-  },
-  cardText: {
+  pageBtnText: {
     fontSize: 14,
     fontWeight: '600',
-    lineHeight: 20,
-    flex: 1,
+    color: colors.primary,
   },
-  cardArrow: {
-    marginTop: spacing.sm,
-    alignSelf: 'flex-start',
+  pageBtnTextDisabled: {
+    color: colors.textMuted,
+  },
+  pageNumbers: {
+    fontSize: 14,
+    color: colors.textMuted,
+    fontWeight: '500',
   },
 });
