@@ -51,7 +51,7 @@ export function OpportunitySection({
         </Text>
         {onViewAll && (
           <Pressable onPress={onViewAll} accessibilityRole="link">
-            <Text style={styles.viewAllText}>View all opportunities →</Text>
+            <Text style={styles.viewAllText}>All opportunities →</Text>
           </Pressable>
         )}
       </View>
