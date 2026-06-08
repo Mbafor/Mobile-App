@@ -25,8 +25,10 @@ import { OpportunitySearchResults } from '@/features/opportunities/components/Op
 import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
 import { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
 import { env } from '@/config/env';
+import { ROUTES } from '@/constants/routes';
 import { colors, spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
+import { useGreeting } from '@/hooks/useGreeting';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -36,17 +38,12 @@ type DashboardSection = {
   data: Opportunity[];
 };
 
-function getGreetingPhrase() {
-  const hour = new Date().getHours();
-  if (hour < 12) return 'morning';
-  if (hour < 17) return 'afternoon';
-  return 'evening';
-}
 
 export function DashboardScreen() {
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const greeting = useGreeting();
 
   const { isSearchVisible, setSearchVisible } = useAppStore();
   const { profile, user } = useAuth();
@@ -109,16 +106,20 @@ export function DashboardScreen() {
     [router],
   );
 
+  const handleViewAll = useCallback(() => {
+    router.push(ROUTES.MAIN.TABS.BROWSE as any);
+  }, [router]);
+
   const renderSection = useCallback(
     ({ item }: { item: DashboardSection }) => (
       <OpportunitySection
         title={item.title}
         opportunities={item.data}
         onCardPress={handleCardPress}
-        onViewAll={item.key === 'recommended' ? () => setSearchVisible(true) : undefined}
+        onViewAll={item.key === 'recommended' ? handleViewAll : undefined}
       />
     ),
-    [handleCardPress, setSearchVisible],
+    [handleCardPress, handleViewAll],
   );
 
   const handleRefresh = useCallback(() => {
@@ -202,7 +203,7 @@ export function DashboardScreen() {
                 >
                   <Text style={styles.heroSubtitle}>YOUR DASHBOARD</Text>
                   <Text style={styles.heroTitle}>
-                    Good {getGreetingPhrase()}, {userName}.
+                    Good {greeting}, {userName}.
                   </Text>
                   <Text style={styles.heroSubheadline}>
                     Here is what is moving today...

@@ -37,6 +37,9 @@ export const ROUTES = {
       FEATURE_REQUEST: '/(main)/help/feature-request',
       FEEDBACK: '/(main)/help/feedback',
     },
+    TABS: {
+      BROWSE: '/(main)/(tabs)/browse-categories',
+    },
     DRAWER: {
       PROFILE: '/(main)/profile',
       BROWSE: '/(main)/browse-categories',

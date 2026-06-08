@@ -1,21 +1,27 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
   FlatList,
+  Image,
+  Pressable,
   RefreshControl,
   StyleSheet,
   View,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { EmptyState } from '@/components/feedback';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { slugToCategory } from '@/constants/browse-categories';
-import { colors, spacing } from '@/constants/theme';
-import { OpportunityListRow } from '@/features/opportunities/components/OpportunityListRow';
+import { colors, spacing, typography } from '@/constants/theme';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
+import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
+
+const PAGE_SIZE = 10;
 
 function matchesCategory(opportunity: Opportunity, category: string): boolean {
   const normalized = category.trim().toLowerCase();
@@ -23,12 +29,75 @@ function matchesCategory(opportunity: Opportunity, category: string): boolean {
   return opportunity.tags.some((tag) => tag.trim().toLowerCase() === normalized);
 }
 
+/** Vertical card for category results — same visual style as BrowseCategoriesScreen. */
+function OpportunityResultCard({
+  opportunity,
+  onPress,
+}: {
+  opportunity: Opportunity;
+  onPress: (o: Opportunity) => void;
+}) {
+  const daysLeft = daysUntilDeadline(opportunity.deadline);
+  const deadlineLabel =
+    daysLeft <= 14
+      ? `${formatDeadline(opportunity.deadline)} · ${daysLeft}d left`
+      : formatDeadline(opportunity.deadline);
+
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.resultCard, pressed && { opacity: 0.85 }]}
+      onPress={() => onPress(opportunity)}
+      accessibilityRole="button"
+    >
+      {opportunity.imageUrl ? (
+        <Image
+          source={{ uri: opportunity.imageUrl }}
+          style={styles.resultImage}
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={[styles.resultImage, styles.resultImagePlaceholder]}>
+          <Text style={styles.resultImageLetter}>{opportunity.organization.charAt(0)}</Text>
+        </View>
+      )}
+      <View style={styles.resultBody}>
+        {opportunity.category ? (
+          <View style={styles.resultCategoryBadge}>
+            <Text style={styles.resultCategoryText}>{opportunity.category}</Text>
+          </View>
+        ) : null}
+        <Text style={styles.resultTitle} numberOfLines={2}>
+          {opportunity.title}
+        </Text>
+        <Text style={styles.resultOrg} numberOfLines={1}>
+          {opportunity.organization}
+        </Text>
+        <Text style={styles.resultDeadline}>{deadlineLabel}</Text>
+        {opportunity.tags.length > 0 ? (
+          <View style={styles.resultTags}>
+            {opportunity.tags.slice(0, 3).map((tag) => (
+              <View key={tag} style={styles.resultTag}>
+                <Text style={styles.resultTagText} numberOfLines={1}>
+                  {tag}
+                </Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+      </View>
+    </Pressable>
+  );
+}
+
 export function CategoryOpportunitiesScreen() {
   const router = useRouter();
+  const isDesktop = useWebDesktop();
   const { category: categorySlug } = useLocalSearchParams<{ category: string }>();
   const categoryName = slugToCategory(
     typeof categorySlug === 'string' ? categorySlug : categorySlug?.[0] ?? '',
   );
+
+  const [page, setPage] = useState(1);
 
   const { data, isLoading, isRefetching, refetch } = useActiveOpportunities();
 
@@ -36,6 +105,9 @@ export function CategoryOpportunitiesScreen() {
     () => (data ?? []).filter((o) => matchesCategory(o, categoryName)),
     [categoryName, data],
   );
+
+  const totalPages = Math.max(1, Math.ceil(results.length / PAGE_SIZE));
+  const pagedResults = results.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
   const handlePress = useCallback(
     (opportunity: Opportunity) => {
@@ -63,11 +135,14 @@ export function CategoryOpportunitiesScreen() {
       <PageHeader title={categoryName} />
 
       <FlatList
-        data={results}
+        data={pagedResults}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <OpportunityListRow opportunity={item} onPress={handlePress} />
+          <OpportunityResultCard opportunity={item} onPress={handlePress} />
         )}
+        numColumns={isDesktop ? 2 : 1}
+        key={isDesktop ? 'grid2' : 'grid1'}
+        columnWrapperStyle={isDesktop ? styles.gridRow : undefined}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -76,9 +151,16 @@ export function CategoryOpportunitiesScreen() {
           />
         }
         ListHeaderComponent={
-          <Text variant="caption" muted style={styles.meta}>
-            {results.length} {results.length === 1 ? 'opportunity' : 'opportunities'}
-          </Text>
+          <View style={styles.metaRow}>
+            <Text variant="caption" muted style={styles.meta}>
+              {results.length} {results.length === 1 ? 'opportunity' : 'opportunities'}
+            </Text>
+            {totalPages > 1 && (
+              <Text variant="caption" muted>
+                Page {page} of {totalPages}
+              </Text>
+            )}
+          </View>
         }
         ListEmptyComponent={
           <EmptyState
@@ -91,6 +173,52 @@ export function CategoryOpportunitiesScreen() {
           results.length === 0 && styles.empty,
         ]}
         style={styles.scroll}
+        ListFooterComponent={
+          totalPages > 1 ? (
+            <View style={styles.pagination}>
+              <Pressable
+                onPress={() => setPage((p) => Math.max(1, p - 1))}
+                disabled={page === 1}
+                style={[styles.pageBtn, page === 1 && styles.pageBtnDisabled]}
+              >
+                <Ionicons
+                  name="chevron-back"
+                  size={16}
+                  color={page === 1 ? colors.textMuted : colors.primary}
+                />
+                <Text
+                  style={[styles.pageBtnText, page === 1 && styles.pageBtnTextDisabled]}
+                >
+                  Previous
+                </Text>
+              </Pressable>
+
+              <Text style={styles.pageNumbers}>
+                {page} / {totalPages}
+              </Text>
+
+              <Pressable
+                onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                disabled={page === totalPages}
+                style={[styles.pageBtn, page === totalPages && styles.pageBtnDisabled]}
+              >
+                <Text
+                  style={[
+                    styles.pageBtnText,
+                    page === totalPages && styles.pageBtnTextDisabled,
+                  ]}
+                >
+                  Next
+                </Text>
+                <Ionicons
+                  name="chevron-forward"
+                  size={16}
+                  color={page === totalPages ? colors.textMuted : colors.primary}
+                />
+              </Pressable>
+            </View>
+          ) : null
+        }
       />
     </View>
   );
@@ -104,11 +232,99 @@ const styles = StyleSheet.create({
     maxWidth: 1280,
     width: '100%',
     alignSelf: 'center',
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.sm,
+    gap: spacing.sm,
+  },
+  gridRow: { gap: spacing.sm },
+  metaRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: spacing.sm,
   },
   meta: {
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
     color: colors.textMuted,
   },
   empty: { flexGrow: 1 },
+
+  // ── Vertical result card ──────────────────────────────────────────────────
+  resultCard: {
+    flex: 1,
+    backgroundColor: colors.background,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: colors.border,
+    overflow: 'hidden',
+    marginBottom: spacing.sm,
+  },
+  resultImage: { width: '100%', height: 140 },
+  resultImagePlaceholder: {
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  resultImageLetter: {
+    fontSize: 40,
+    fontWeight: '700',
+    color: 'rgba(255,255,255,0.9)',
+  },
+  resultBody: {
+    padding: spacing.md,
+    gap: spacing.xs,
+  },
+  resultCategoryBadge: {
+    alignSelf: 'flex-start',
+    backgroundColor: `${colors.primary}12`,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 999,
+    marginBottom: 2,
+  },
+  resultCategoryText: { fontSize: 11, color: colors.primary, fontWeight: '600' },
+  resultTitle: {
+    fontSize: typography.fontSize.md,
+    fontWeight: '700',
+    color: colors.text,
+    lineHeight: 22,
+  },
+  resultOrg: { fontSize: 13, color: colors.textMuted },
+  resultDeadline: { fontSize: 13, color: colors.primary, fontWeight: '500' },
+  resultTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 2 },
+  resultTag: {
+    backgroundColor: colors.surface,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 2,
+    borderRadius: 10,
+    maxWidth: 110,
+  },
+  resultTagText: { fontSize: 11, color: colors.textMuted },
+
+  // ── Pagination ────────────────────────────────────────────────────────────
+  pagination: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingTop: spacing.md,
+    paddingBottom: spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    marginTop: spacing.sm,
+    marginHorizontal: spacing.md,
+  },
+  pageBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    paddingVertical: spacing.xs,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 8,
+    backgroundColor: `${colors.primary}0D`,
+  },
+  pageBtnDisabled: {
+    backgroundColor: colors.surface,
+  },
+  pageBtnText: { fontSize: 14, fontWeight: '600', color: colors.primary },
+  pageBtnTextDisabled: { color: colors.textMuted },
+  pageNumbers: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
 });

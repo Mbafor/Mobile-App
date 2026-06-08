@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useMemo } from 'react';
 import {
   ActivityIndicator,
   Image,
   Platform,
+  Pressable,
   ScrollView,
   StyleSheet,
   View,
@@ -12,11 +14,14 @@ import {
 import { ErrorMessage } from '@/components/feedback';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button, Text } from '@/components/ui';
+import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
 import { useOpportunityDetail } from '@/features/opportunities/hooks/useOpportunityDetail';
 import { useOpportunityEngagement } from '@/features/opportunities/hooks/useOpportunityEngagement';
 import { colors, spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
+import type { Opportunity } from '@/types/domain/opportunity';
 
 function DeadlineBadge({ deadline }: { deadline: string }) {
   const days = daysUntilDeadline(deadline);
@@ -42,8 +47,43 @@ function DeadlineBadge({ deadline }: { deadline: string }) {
   );
 }
 
+/** Compact card used in the related opportunities sidebar. */
+function RelatedOpportunityCard({
+  opportunity,
+  onPress,
+}: {
+  opportunity: Opportunity;
+  onPress: (o: Opportunity) => void;
+}) {
+  const daysLeft = daysUntilDeadline(opportunity.deadline);
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.relatedCard, pressed && { opacity: 0.8 }]}
+      onPress={() => onPress(opportunity)}
+      accessibilityRole="button"
+    >
+      {opportunity.imageUrl ? (
+        <Image source={{ uri: opportunity.imageUrl }} style={styles.relatedThumb} resizeMode="cover" />
+      ) : (
+        <View style={[styles.relatedThumb, styles.relatedThumbPlaceholder]}>
+          <Text style={styles.relatedThumbLetter}>{opportunity.organization.charAt(0)}</Text>
+        </View>
+      )}
+      <View style={styles.relatedBody}>
+        <Text style={styles.relatedTitle} numberOfLines={2}>{opportunity.title}</Text>
+        <Text style={styles.relatedOrg} numberOfLines={1}>{opportunity.organization}</Text>
+        <Text style={styles.relatedDeadline}>
+          {formatDeadline(opportunity.deadline)}
+          {daysLeft > 0 ? ` · ${daysLeft}d left` : ''}
+        </Text>
+      </View>
+    </Pressable>
+  );
+}
+
 export function OpportunityDetailScreen() {
   const router = useRouter();
+  const isDesktop = useWebDesktop();
   const { id } = useLocalSearchParams<{ id: string }>();
   const opportunityId = typeof id === 'string' ? id : id?.[0];
 
@@ -58,6 +98,27 @@ export function OpportunityDetailScreen() {
     applyNow,
     shareOpportunity,
   } = useOpportunityEngagement(opportunityId);
+
+  const { data: allOpportunities } = useActiveOpportunities();
+
+  const relatedOpportunities = useMemo(() => {
+    if (!opportunity || !allOpportunities) return [];
+    return allOpportunities
+      .filter(
+        (o) =>
+          o.id !== opportunity.id &&
+          o.category &&
+          o.category === opportunity.category,
+      )
+      .slice(0, 5);
+  }, [opportunity, allOpportunities]);
+
+  const handleRelatedPress = (o: Opportunity) => {
+    router.push({
+      pathname: '/(main)/opportunity/[id]',
+      params: { id: o.id },
+    });
+  };
 
   if (isLoading) {
     return (
@@ -93,93 +154,116 @@ export function OpportunityDetailScreen() {
     ...(opportunity.degreeLevels.length ? [opportunity.degreeLevels.join(', ')] : []),
   ];
 
+  const mainContent = (
+    <ScrollView
+      contentContainerStyle={[
+        styles.scroll,
+        isDesktop && styles.scrollDesktop,
+      ]}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Hero */}
+      {opportunity.imageUrl ? (
+        <Image
+          source={{ uri: opportunity.imageUrl }}
+          style={styles.heroImage}
+          resizeMode="cover"
+        />
+      ) : (
+        <View style={styles.heroPlaceholder}>
+          <Text style={styles.heroInitial}>{orgInitial}</Text>
+        </View>
+      )}
+
+      {/* Content */}
+      <View style={styles.body}>
+        <Text style={[styles.title, getWebFontStyle('bold')]}>{opportunity.title}</Text>
+        <Text style={styles.org}>{opportunity.organization}</Text>
+
+        <DeadlineBadge deadline={opportunity.deadline} />
+
+        {metaParts.length > 0 ? (
+          <Text style={styles.meta}>{metaParts.join('  ·  ')}</Text>
+        ) : null}
+
+        {opportunity.tags.length > 0 ? (
+          <View style={styles.tagRow}>
+            {opportunity.tags.map((tag) => (
+              <View key={tag} style={styles.tag}>
+                <Text style={styles.tagText}>{tag}</Text>
+              </View>
+            ))}
+          </View>
+        ) : null}
+
+        <View style={styles.divider} />
+
+        <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
+          About this opportunity
+        </Text>
+        <Text style={styles.description}>
+          {opportunity.description?.trim() ||
+            'No description provided for this opportunity.'}
+        </Text>
+
+        {/* Action buttons — inside scroll so user scrolls to find them */}
+        <View style={styles.actionSection}>
+          <Button fullWidth onPress={() => applyNow(opportunity)}>
+            Apply Now
+          </Button>
+          <View style={styles.secondaryRow}>
+            <Button
+              variant="secondary"
+              style={styles.flexBtn}
+              onPress={toggleSave}
+              loading={isSaving}
+              disabled={isSaving}
+            >
+              {isSaved ? '✓ Saved' : 'Save'}
+            </Button>
+            <Button
+              variant="secondary"
+              style={styles.flexBtn}
+              onPress={() => shareOpportunity(opportunity)}
+            >
+              Share
+            </Button>
+            <Button
+              variant={isApplied ? 'primary' : 'secondary'}
+              style={styles.flexBtn}
+              onPress={toggleApplied}
+              loading={isApplying}
+              disabled={isApplying}
+            >
+              {isApplied ? 'Applied ✓' : 'Mark applied'}
+            </Button>
+          </View>
+        </View>
+      </View>
+    </ScrollView>
+  );
+
   return (
     <View style={styles.root}>
       <PageHeader title="Opportunity Details" />
 
-      <ScrollView
-        contentContainerStyle={styles.scroll}
-        showsVerticalScrollIndicator={false}
-      >
-        {/* Hero */}
-        {opportunity.imageUrl ? (
-          <Image
-            source={{ uri: opportunity.imageUrl }}
-            style={styles.heroImage}
-            resizeMode="cover"
-          />
-        ) : (
-          <View style={styles.heroPlaceholder}>
-            <Text style={styles.heroInitial}>{orgInitial}</Text>
-          </View>
-        )}
-
-        {/* Content — plain text, no cards */}
-        <View style={styles.body}>
-          <Text style={[styles.title, getWebFontStyle('bold')]}>{opportunity.title}</Text>
-          <Text style={styles.org}>{opportunity.organization}</Text>
-
-          <DeadlineBadge deadline={opportunity.deadline} />
-
-          {metaParts.length > 0 ? (
-            <Text style={styles.meta}>{metaParts.join('  ·  ')}</Text>
-          ) : null}
-
-          {opportunity.tags.length > 0 ? (
-            <View style={styles.tagRow}>
-              {opportunity.tags.map((tag) => (
-                <View key={tag} style={styles.tag}>
-                  <Text style={styles.tagText}>{tag}</Text>
-                </View>
+      {isDesktop && relatedOpportunities.length > 0 ? (
+        <View style={styles.desktopLayout}>
+          <View style={styles.mainCol}>{mainContent}</View>
+          <View style={styles.sidebarCol}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <Text style={[styles.sidebarHeading, getWebFontStyle('semibold')]}>
+                You might also like
+              </Text>
+              {relatedOpportunities.map((o) => (
+                <RelatedOpportunityCard key={o.id} opportunity={o} onPress={handleRelatedPress} />
               ))}
-            </View>
-          ) : null}
-
-          <View style={styles.divider} />
-
-          <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
-            About this opportunity
-          </Text>
-          <Text style={styles.description}>
-            {opportunity.description?.trim() ||
-              'No description provided for this opportunity.'}
-          </Text>
+            </ScrollView>
+          </View>
         </View>
-      </ScrollView>
-
-      {/* Sticky footer */}
-      <View style={styles.footer}>
-        <Button fullWidth onPress={() => applyNow(opportunity)}>
-          Apply Now
-        </Button>
-        <View style={styles.secondaryRow}>
-          <Button
-            variant="secondary"
-            style={styles.flexBtn}
-            onPress={toggleSave}
-            loading={isSaving}
-            disabled={isSaving}
-          >
-            {isSaved ? '✓ Saved' : 'Save'}
-          </Button>
-          <Button
-            variant="secondary"
-            style={styles.flexBtn}
-            onPress={() => shareOpportunity(opportunity)}
-          >
-            Share
-          </Button>
-          <Button
-            variant={isApplied ? 'primary' : 'secondary'}
-            style={styles.flexBtn}
-            onPress={toggleApplied}
-            loading={isApplying}
-            disabled={isApplying}
-          >
-            {isApplied ? 'Applied ✓' : 'Mark applied'}
-          </Button>
-        </View>
-      </View>
+      ) : (
+        mainContent
+      )}
     </View>
   );
 }
@@ -189,11 +273,35 @@ const styles = StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   errorBody: { padding: spacing.lg, gap: spacing.md },
 
-  scroll: {
-    paddingBottom: spacing.xl * 2,
-    maxWidth: 1100,
+  // Desktop two-column layout
+  desktopLayout: {
+    flex: 1,
+    flexDirection: 'row',
+    maxWidth: 1280,
     width: '100%',
     alignSelf: 'center',
+  },
+  mainCol: { flex: 2 },
+  sidebarCol: {
+    flex: 1,
+    borderLeftWidth: StyleSheet.hairlineWidth,
+    borderLeftColor: colors.border,
+    paddingHorizontal: spacing.md,
+    paddingTop: spacing.lg,
+  },
+  sidebarHeading: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.md,
+    letterSpacing: -0.1,
+  },
+
+  scroll: {
+    paddingBottom: spacing.xl * 2,
+  },
+  scrollDesktop: {
+    // no maxWidth here — the desktopLayout handles constraint
   },
 
   // ─── Hero ──────────────────────────────────────────────────────────────────
@@ -279,19 +387,35 @@ const styles = StyleSheet.create({
     lineHeight: 28,
   },
 
-  // ─── Footer ────────────────────────────────────────────────────────────────
-  footer: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: Platform.OS === 'ios' ? spacing.lg : spacing.md,
-    gap: spacing.sm,
+  // ─── Action buttons (below description, inside scroll) ─────────────────────
+  actionSection: {
+    marginTop: spacing.lg,
+    paddingTop: spacing.lg,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
-    backgroundColor: colors.background,
-    maxWidth: 1100,
-    width: '100%',
-    alignSelf: 'center',
+    gap: spacing.sm,
+    paddingBottom: Platform.OS === 'ios' ? spacing.lg : spacing.md,
   },
   secondaryRow: { flexDirection: 'row', gap: spacing.sm },
   flexBtn: { flex: 1 },
+
+  // ─── Related opportunity card ───────────────────────────────────────────────
+  relatedCard: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: colors.border,
+  },
+  relatedThumb: { width: 60, height: 60, borderRadius: 8 },
+  relatedThumbPlaceholder: {
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  relatedThumbLetter: { color: colors.background, fontWeight: '700', fontSize: 18 },
+  relatedBody: { flex: 1, gap: 2 },
+  relatedTitle: { fontSize: 13, fontWeight: '600', color: colors.text, lineHeight: 18 },
+  relatedOrg: { fontSize: 12, color: colors.textMuted },
+  relatedDeadline: { fontSize: 12, color: colors.primary, fontWeight: '500' },
 });
