@@ -39,7 +39,7 @@ function firstNWords(text: string, n: number): string {
   return words.slice(0, n).join(' ');
 }
 
-function buildShareMessage(opportunity: Opportunity, opportunityLink: string): string {
+export function buildShareMessage(opportunity: Opportunity, opportunityLink: string): string {
   const description = opportunity.description?.trim() ?? '';
   const snippet = description ? firstNWords(description, 50) : '';
 

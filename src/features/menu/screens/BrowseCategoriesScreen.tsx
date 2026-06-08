@@ -13,6 +13,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
+import { BROWSE_CATEGORY_LIST } from '@/constants/opportunity-fields';
+import { categoryToSlug } from '@/constants/browse-categories';
 import { colors, spacing, typography } from '@/constants/theme';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
@@ -20,6 +22,17 @@ import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 const PAGE_SIZE = 10;
+
+const CARD_ACCENTS = [
+  { bg: '#E8F5EE', text: '#1A3D25' },
+  { bg: '#EAF0FB', text: '#1A2E5A' },
+  { bg: '#FDF3E7', text: '#5A3A10' },
+  { bg: '#F3EEF9', text: '#3A1A5A' },
+  { bg: '#E8F5F0', text: '#1A3D2E' },
+  { bg: '#FBF0EA', text: '#5A2A10' },
+  { bg: '#EAF4FB', text: '#1A3A5A' },
+  { bg: '#F9EEF3', text: '#5A1A3A' },
+];
 
 /** Vertical opportunity card for the results grid. */
 function OpportunityResultCard({
@@ -107,6 +120,46 @@ export function BrowseCategoriesScreen() {
     });
   };
 
+  const handleCategoryPress = (category: string) => {
+    router.push({
+      pathname: '/(main)/category/[category]',
+      params: { category: categoryToSlug(category) },
+    });
+  };
+
+  const renderHeader = () => {
+    return (
+      <View style={styles.headerContainer}>
+        <Text style={styles.discoverLabel}>Find opportunities by focus area</Text>
+        <View style={styles.grid}>
+          {BROWSE_CATEGORY_LIST.map((category, i) => {
+            const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
+            return (
+              <Pressable
+                key={category}
+                style={({ pressed }) => [
+                  styles.card,
+                  { backgroundColor: accent.bg, opacity: pressed ? 0.85 : 1 },
+                ]}
+                onPress={() => handleCategoryPress(category)}
+              >
+                <View style={[styles.dot, { backgroundColor: accent.text + '22' }]} />
+                <Text style={[styles.cardText, { color: accent.text }]}>{category}</Text>
+                <Ionicons
+                  name="arrow-forward"
+                  size={14}
+                  color={accent.text}
+                  style={styles.cardArrow}
+                />
+              </Pressable>
+            );
+          })}
+        </View>
+        <Text style={styles.sectionHeading}>All active opportunities</Text>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.root}>
       <View style={[styles.fill, isDesktop && styles.fillDesktop]}>
@@ -116,92 +169,74 @@ export function BrowseCategoriesScreen() {
           </View>
         ) : (
           <View style={styles.resultsContainer}>
-            <View style={styles.resultsMeta}>
-              <Text style={styles.resultsCount}>
-                {allOpportunities?.length ?? 0}{' '}
-                {(allOpportunities?.length ?? 0) === 1 ? 'opportunity' : 'opportunities'}
-              </Text>
-              {totalPages > 1 && (
-                <Text style={styles.pageInfo}>
-                  Page {page} of {totalPages}
-                </Text>
+            <FlatList
+              data={pagedResults}
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <OpportunityResultCard opportunity={item} onPress={handleCardPress} />
               )}
-            </View>
-
-            {pagedResults.length === 0 ? (
-              <EmptyState
-                title="No opportunities available"
-                description="Check back later for new opportunities."
-              />
-            ) : (
-              <FlatList
-                data={pagedResults}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <OpportunityResultCard opportunity={item} onPress={handleCardPress} />
-                )}
-                numColumns={isDesktop ? 2 : 1}
-                key={isDesktop ? 'grid2' : 'grid1'}
-                columnWrapperStyle={isDesktop ? styles.gridRow : undefined}
-                showsVerticalScrollIndicator={false}
-                contentContainerStyle={[
-                  styles.resultsList,
-                  { paddingBottom: insets.bottom + spacing.xl },
-                ]}
-                ListFooterComponent={
-                  totalPages > 1 ? (
-                    <View style={styles.pagination}>
-                      <Pressable
-                        onPress={() => setPage((p) => Math.max(1, p - 1))}
-                        disabled={page === 1}
-                        style={[styles.pageBtn, page === 1 && styles.pageBtnDisabled]}
-                      >
-                        <Ionicons
-                          name="chevron-back"
-                          size={16}
-                          color={page === 1 ? colors.textMuted : colors.primary}
-                        />
-                        <Text
-                          style={[
-                            styles.pageBtnText,
-                            page === 1 && styles.pageBtnTextDisabled,
-                          ]}
-                        >
-                          Previous
-                        </Text>
-                      </Pressable>
-
-                      <Text style={styles.pageNumbers}>
-                        {page} / {totalPages}
-                      </Text>
-
-                      <Pressable
-                        onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
-                        disabled={page === totalPages}
+              ListHeaderComponent={renderHeader}
+              numColumns={isDesktop ? 2 : 1}
+              key={isDesktop ? 'grid2' : 'grid1'}
+              columnWrapperStyle={isDesktop ? styles.gridRow : undefined}
+              showsVerticalScrollIndicator={false}
+              contentContainerStyle={[
+                styles.resultsList,
+                { paddingBottom: insets.bottom + spacing.xl },
+              ]}
+              ListFooterComponent={
+                totalPages > 1 ? (
+                  <View style={styles.pagination}>
+                    <Pressable
+                      onPress={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page === 1}
+                      style={[styles.pageBtn, page === 1 && styles.pageBtnDisabled]}
+                    >
+                      <Ionicons
+                        name="chevron-back"
+                        size={16}
+                        color={page === 1 ? colors.textMuted : colors.primary}
+                      />
+                      <Text
                         style={[
-                          styles.pageBtn,
-                          page === totalPages && styles.pageBtnDisabled,
+                          styles.pageBtnText,
+                          page === 1 && styles.pageBtnTextDisabled,
                         ]}
                       >
-                        <Text
-                          style={[
-                            styles.pageBtnText,
-                            page === totalPages && styles.pageBtnTextDisabled,
-                          ]}
-                        >
-                          Next
-                        </Text>
-                        <Ionicons
-                          name="chevron-forward"
-                          size={16}
-                          color={page === totalPages ? colors.textMuted : colors.primary}
-                        />
-                      </Pressable>
-                    </View>
-                  ) : null
-                }
-              />
-            )}
+                        Previous
+                      </Text>
+                    </Pressable>
+
+                    <Text style={styles.pageNumbers}>
+                      {page} / {totalPages}
+                    </Text>
+
+                    <Pressable
+                      onPress={() => setPage((p) => Math.min(totalPages, p + 1))}
+                      disabled={page === totalPages}
+                      style={[
+                        styles.pageBtn,
+                        page === totalPages && styles.pageBtnDisabled,
+                      ]}
+                    >
+                      <Text
+                        style={[
+                          styles.pageBtnText,
+                          page === totalPages && styles.pageBtnTextDisabled,
+                        ]}
+                      >
+                        Next
+                      </Text>
+                      <Ionicons
+                        name="chevron-forward"
+                        size={16}
+                        color={page === totalPages ? colors.textMuted : colors.primary}
+                      />
+                    </Pressable>
+                  </View>
+                ) : null
+              }
+            />
           </View>
         )}
       </View>
@@ -232,21 +267,6 @@ const styles = StyleSheet.create({
   resultsContainer: {
     flex: 1,
     paddingTop: spacing.md,
-  },
-  resultsMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingBottom: spacing.sm,
-  },
-  resultsCount: {
-    fontSize: 13,
-    color: colors.textMuted,
-    fontWeight: '500',
-  },
-  pageInfo: {
-    fontSize: 13,
-    color: colors.textMuted,
   },
   resultsList: {
     gap: spacing.sm,
@@ -361,5 +381,50 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: colors.textMuted,
     fontWeight: '500',
+  },
+
+  // Header Categories Styles
+  headerContainer: {
+    marginBottom: spacing.lg,
+  },
+  discoverLabel: {
+    fontSize: typography.fontSize.sm,
+    color: colors.textMuted,
+    marginBottom: spacing.sm,
+  },
+  grid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: spacing.sm,
+    marginBottom: spacing.xl,
+  },
+  card: {
+    width: '47%',
+    minHeight: 96,
+    padding: spacing.md,
+    borderRadius: 16,
+    justifyContent: 'space-between',
+  },
+  dot: {
+    width: 28,
+    height: 28,
+    borderRadius: 8,
+    marginBottom: spacing.sm,
+  },
+  cardText: {
+    fontSize: 14,
+    fontWeight: '600',
+    lineHeight: 20,
+    flex: 1,
+  },
+  cardArrow: {
+    marginTop: spacing.sm,
+    alignSelf: 'flex-start',
+  },
+  sectionHeading: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.text,
+    marginBottom: spacing.xs,
   },
 });
