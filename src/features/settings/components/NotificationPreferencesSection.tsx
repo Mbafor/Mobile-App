@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -11,10 +13,11 @@ import {
 } from '@/features/notifications/services/push-registration';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { pushTokensApi } from '@/services/api/push-tokens.api';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { PushPermissionStatus } from '@/types/domain/notification';
 
 export function NotificationPreferencesSection() {
+  const styles = useThemedStyles(createStyles);
   const { user } = useAuth();
   const { preferences, isLoading, setPreference, isSaving } = useNotificationPreferences();
   const [permission, setPermission] = useState<PushPermissionStatus>('undetermined');
@@ -185,7 +188,8 @@ export function NotificationPreferencesSection() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.xs },
   intro: { marginBottom: spacing.sm, lineHeight: 22 },
   warning: { marginBottom: spacing.sm },
@@ -197,3 +201,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.sm,
   },
 });
+}

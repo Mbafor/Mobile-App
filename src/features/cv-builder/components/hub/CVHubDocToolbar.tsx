@@ -1,12 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getProgressMessage } from '@/features/cv-builder/utils/section-config';
 import type { CVContent } from '@/types/domain/cv';
 
@@ -30,6 +33,7 @@ export function CVHubDocToolbar({
   onPreview,
   downloadProps,
 }: CVHubDocToolbarProps) {
+  const styles = useAppThemedStyles(createStyles);
   const router = useRouter();
   const pct = Math.min(100, Math.max(0, progressPercent));
 
@@ -81,7 +85,9 @@ export function CVHubDocToolbar({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: {
     backgroundColor: cvDocsTheme.barBg,
     borderBottomWidth: 1,
@@ -143,3 +149,4 @@ const styles = StyleSheet.create({
     color: cvDocsTheme.textSecondary,
   },
 });
+}

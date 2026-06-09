@@ -1,8 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
 import { Text } from '@/components/ui';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MentorProfile, MentorshipParticipantProfile } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -13,6 +14,7 @@ type CoachProfileCardProps = {
 };
 
 export function CoachProfileCard({ profile, mentor, endsAt }: CoachProfileCardProps) {
+  const styles = useAppThemedStyles(createStyles);
   if (!profile) {
     return null;
   }
@@ -33,7 +35,9 @@ export function CoachProfileCard({ profile, mentor, endsAt }: CoachProfileCardPr
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   ends: {
     fontSize: 13,
@@ -42,3 +46,4 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.xs,
   },
 });
+}

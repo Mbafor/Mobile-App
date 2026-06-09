@@ -1,4 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import {
   ActivityIndicator,
@@ -34,11 +38,12 @@ import {
 } from '@/features/mentorship/hooks/useMentorshipSessions';
 import { useMentorshipMessages } from '@/features/mentorship/hooks/useMentorshipMessages';
 import { useStudentMentorship } from '@/features/mentorship/hooks/useStudentMentorship';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
-import { colors, spacing } from '@/constants/theme';
+import { SupportContactHint } from '@/features/help/components/SupportContactHint';
+import { spacing } from '@/constants/theme';
 import { confirmAction } from '@/utils/confirm-action';
 
 export function StudentMentorshipDashboard() {
+  const styles = useAppThemedStyles(createStyles);
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -278,6 +283,7 @@ export function StudentMentorshipDashboard() {
                 onCancel={handleCancelSession}
               />
             )}
+            <SupportContactHint />
           </View>
         );
 
@@ -317,7 +323,9 @@ export function StudentMentorshipDashboard() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, gap: spacing.md },
   sectionBody: { gap: spacing.md },
   leaveSection: {
@@ -329,3 +337,4 @@ const styles = StyleSheet.create({
   },
   leaveHint: {},
 });
+}

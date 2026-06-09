@@ -1,12 +1,15 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet } from 'react-native';
 
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { ROUTES } from '@/constants/routes';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 export function FloatingHelpButton() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const isDesktopWeb = useWebDesktop();
 
@@ -27,7 +30,8 @@ export function FloatingHelpButton() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   fab: {
     position: 'absolute',
     right: spacing.md + spacing.xs,
@@ -46,3 +50,4 @@ const styles = StyleSheet.create({
   },
   pressed: { opacity: 0.8 },
 });
+}

@@ -2,12 +2,13 @@ import { Drawer } from 'expo-router/drawer';
 
 import { AppDrawerContent } from '@/features/menu/components/AppDrawerContent';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/useTheme';
 
 const hiddenDrawerItem = { drawerItemStyle: { display: 'none' as const }, headerShown: true };
 
 export default function MainLayout() {
   useAuthRedirect('authenticated');
+  const { colors } = useTheme();
 
   return (
     <Drawer
@@ -16,6 +17,8 @@ export default function MainLayout() {
         headerShown: true,
         headerTintColor: colors.text,
         drawerActiveTintColor: colors.primary,
+        drawerInactiveTintColor: colors.textMuted,
+        drawerStyle: { backgroundColor: colors.background },
       }}
     >
       <Drawer.Screen

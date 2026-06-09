@@ -1,11 +1,14 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Button, Text } from '@/components/ui';
 import { CVReorderSectionsModal } from '@/features/cv-builder/components/hub/CVReorderSectionsModal';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import {
   CV_SECTION_ICON_BG,
   CV_SECTION_ICON_COLOR,
@@ -14,10 +17,11 @@ import {
 import { ALL_SECTION_IDS, type CVSectionId } from '@/features/cv-builder/constants/sections';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { isSectionEnabled } from '@/features/cv-builder/utils/section-config';
 
 export function CVSectionSettingsScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const { layout, setSectionEnabled, setSectionOrder, saveLayout, saveState } =
     useCVBuilderContext();
@@ -97,7 +101,9 @@ export function CVSectionSettingsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   scroll: { padding: spacing.md, paddingBottom: spacing.lg },
   pageTitle: {
@@ -141,3 +147,4 @@ const styles = StyleSheet.create({
   rowTitle: { fontSize: 14, fontWeight: '500', color: colors.text },
   rowCaption: { fontSize: 12, color: cvDocsTheme.textSecondary },
 });
+}

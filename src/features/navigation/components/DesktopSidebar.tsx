@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
@@ -26,6 +28,7 @@ type SidebarSection = {
 };
 
 export function DesktopSidebar() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const pathname = usePathname();
   const { isAdmin, isSuperAdmin } = useAuth();
@@ -161,7 +164,8 @@ export function DesktopSidebar() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   sidebar: {
     width: 220,
     flexShrink: 0,
@@ -211,3 +215,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+}

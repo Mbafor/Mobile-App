@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 export type MentorshipNavItem = {
@@ -19,6 +20,7 @@ type MentorshipDrawerNavProps = {
 };
 
 export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDrawerNavProps) {
+  const styles = useAppThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
 
   return (
@@ -79,7 +81,9 @@ export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDra
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   menuBtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -143,3 +147,4 @@ const styles = StyleSheet.create({
     backgroundColor: mentorshipColors.accent,
   },
 });
+}

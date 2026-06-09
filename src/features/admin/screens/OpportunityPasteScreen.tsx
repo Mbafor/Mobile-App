@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { TextArea } from '@/components/ui/TextArea';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { adminApi } from '@/services/api';
 import { parseOpportunityPaste } from '@/features/admin/utils/parse-opportunity-paste';
 
@@ -27,6 +29,7 @@ type OpportunityPasteScreenProps = {
 };
 
 export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) {
+  const styles = useThemedStyles(createStyles);
   const [raw, setRaw] = useState('');
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -95,7 +98,8 @@ export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) 
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
   title: { fontSize: 20, fontWeight: '700', color: colors.text },
   hint: { lineHeight: 22 },
@@ -103,3 +107,4 @@ const styles = StyleSheet.create({
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, justifyContent: 'flex-end' },
   result: { color: colors.primary, fontWeight: '600' },
 });
+}

@@ -5,7 +5,7 @@ import { Input } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
-import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
+import { useCvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
 import { createEmptyLanguage } from '@/features/cv-builder/utils/normalize-cv-content';
 import type { CVLanguageEntry } from '@/types/domain/cv';
 
@@ -24,6 +24,7 @@ export function LanguageListEditor({
   entries,
   onChange,
 }: LanguageListEditorProps) {
+  const cvUi = useCvUi();
   const updateEntry = (id: string, patch: Partial<CVLanguageEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };

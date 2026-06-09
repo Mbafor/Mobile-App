@@ -1,8 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 type MatchedBannerProps = {
@@ -10,6 +11,7 @@ type MatchedBannerProps = {
 };
 
 export function MatchedBanner({ endsAt }: MatchedBannerProps) {
+  const styles = useAppThemedStyles(createStyles);
   const endLabel = new Date(endsAt).toLocaleDateString(undefined, {
     month: '2-digit',
     day: '2-digit',
@@ -26,7 +28,9 @@ export function MatchedBanner({ endsAt }: MatchedBannerProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   banner: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -44,3 +48,4 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 });
+}

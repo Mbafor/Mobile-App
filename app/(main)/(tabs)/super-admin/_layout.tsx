@@ -5,12 +5,13 @@ import { Platform } from 'react-native';
 import { SuperAdminShell } from '@/features/super-admin/components/SuperAdminShell';
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/useTheme';
 
 const isWeb = Platform.OS === 'web';
 
 export default function SuperAdminLayout() {
   useRequireSuperAdmin();
+  const { colors } = useTheme();
 
   return (
     <SuperAdminShell>

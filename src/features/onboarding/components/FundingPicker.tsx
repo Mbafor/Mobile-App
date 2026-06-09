@@ -1,10 +1,12 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { FUNDING_OPTIONS } from '@/constants/onboarding';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
 type FundingPickerProps = {
@@ -15,6 +17,7 @@ type FundingPickerProps = {
 };
 
 export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProps) {
+  const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
 
   const options = excludeAny
@@ -77,7 +80,8 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   trigger: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -140,3 +144,4 @@ const styles = StyleSheet.create({
   },
   optionTextSelected: { color: colors.primary, fontWeight: '600' },
 });
+}

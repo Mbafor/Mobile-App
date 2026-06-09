@@ -1,9 +1,11 @@
 import * as ImagePicker from 'expo-image-picker';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { avatarApi } from '@/services/api/avatar.api';
 
 const AVATAR_SIZE = 112;
@@ -28,6 +30,7 @@ export function ProfileAvatar({
   avatarUrl,
   onAvatarUpdated,
 }: ProfileAvatarProps) {
+  const styles = useThemedStyles(createStyles);
   const [uploading, setUploading] = useState(false);
 
   const handlePress = async () => {
@@ -88,7 +91,8 @@ export function ProfileAvatar({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { alignItems: 'center', marginBottom: spacing.md },
   pressable: { position: 'relative' },
   image: {
@@ -116,3 +120,4 @@ const styles = StyleSheet.create({
   },
   hint: { marginTop: spacing.xs },
 });
+}

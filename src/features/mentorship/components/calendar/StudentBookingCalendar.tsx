@@ -1,3 +1,5 @@
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import {
   CalendarBody,
   CalendarContainer,
@@ -10,9 +12,9 @@ import { ActivityIndicator, Alert, Modal, Pressable, StyleSheet, View } from 're
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { mentorshipCalendarTheme } from '@/features/mentorship/components/calendar/calendar-theme';
+import { createMentorshipCalendarTheme } from '@/features/mentorship/components/calendar/calendar-theme';
+import { useTheme } from '@/hooks/useTheme';
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { useAvailabilitySlots } from '@/features/mentorship/hooks/useAvailabilitySlots';
 import {
   buildAvailabilityEvents,
@@ -65,6 +67,12 @@ export function StudentBookingCalendar({
   isBooking,
   isLoadingSessions,
 }: StudentBookingCalendarProps) {
+  const { mentorshipColors } = useTheme();
+  const styles = useAppThemedStyles(createStyles);
+  const calendarTheme = useMemo(
+    () => createMentorshipCalendarTheme(mentorshipColors),
+    [mentorshipColors],
+  );
   const { slots, isLoading: slotsLoading } = useAvailabilitySlots(coachId);
   const [pending, setPending] = useState<PendingBook | null>(null);
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -163,8 +171,8 @@ export function StudentBookingCalendar({
         Tap a green slot to book. Blue slots are already taken. You can only book one session at a time.
       </Text>
       <View style={styles.legend}>
-        <LegendDot color={calendarColors.available} label="Available" />
-        <LegendDot color={calendarColors.booked} label="Booked" />
+        <LegendDot styles={styles} color={calendarColors.available} label="Available" />
+        <LegendDot styles={styles} color={calendarColors.booked} label="Booked" />
       </View>
 
       {loading ? (
@@ -172,7 +180,7 @@ export function StudentBookingCalendar({
       ) : (
         <View style={styles.calendarBox}>
           <CalendarContainer
-            theme={mentorshipCalendarTheme}
+            theme={calendarTheme}
             events={events}
             numberOfDays={7}
             timeInterval={SLOT_DURATION_MINUTES}
@@ -231,7 +239,15 @@ export function StudentBookingCalendar({
   );
 }
 
-function LegendDot({ color, label }: { color: string; label: string }) {
+function LegendDot({
+  styles,
+  color,
+  label,
+}: {
+  styles: ReturnType<typeof createStyles>;
+  color: string;
+  label: string;
+}) {
   return (
     <View style={styles.legendItem}>
       <View style={[styles.dot, { backgroundColor: color }]} />
@@ -242,7 +258,9 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   hint: { fontSize: 13 },
   required: { color: '#B00020' },
@@ -272,3 +290,4 @@ const styles = StyleSheet.create({
   notesWrap: { gap: spacing.xs },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm },
 });
+}

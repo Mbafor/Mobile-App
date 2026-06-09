@@ -1,9 +1,12 @@
 import { StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { MENTORSHIP_MAX_ACTIVE_MENTEES } from '@/features/mentorship/constants/mentorship';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CapacityBadgeProps = {
   activeCount: number;
@@ -11,6 +14,7 @@ type CapacityBadgeProps = {
 };
 
 export function CapacityBadge({ activeCount, maxStudents = MENTORSHIP_MAX_ACTIVE_MENTEES }: CapacityBadgeProps) {
+  const styles = useAppThemedStyles(createStyles);
   const atCapacity = activeCount >= maxStudents;
 
   return (
@@ -22,7 +26,9 @@ export function CapacityBadge({ activeCount, maxStudents = MENTORSHIP_MAX_ACTIVE
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   badge: {
     alignSelf: 'flex-start',
     backgroundColor: mentorshipColors.accentMuted,
@@ -34,3 +40,4 @@ const styles = StyleSheet.create({
   text: { color: mentorshipColors.accent, fontWeight: '600', fontSize: 13 },
   textFull: { color: colors.error },
 });
+}

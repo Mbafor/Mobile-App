@@ -1,3 +1,5 @@
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   DrawerContentScrollView,
   type DrawerContentComponentProps,
@@ -6,10 +8,11 @@ import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
+  const styles = useThemedStyles(createStyles);
   const tabNavItems = useMainTabNavItems();
 
   return (
@@ -40,7 +43,8 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   scroll: { paddingTop: spacing.lg, paddingBottom: spacing.xl },
   brand: { paddingHorizontal: spacing.md, paddingBottom: spacing.md, gap: spacing.xs },
   brandHint: { fontSize: 13, lineHeight: 18 },
@@ -69,3 +73,4 @@ const styles = StyleSheet.create({
   itemText: { fontSize: 16, color: colors.text, flex: 1 },
   itemTextActive: { color: colors.primary, fontWeight: '600' },
 });
+}

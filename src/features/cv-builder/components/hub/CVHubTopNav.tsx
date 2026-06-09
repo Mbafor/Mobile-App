@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { webPressableStyle } from '@/utils/web/pressable';
 
@@ -57,6 +59,7 @@ function getActiveKey(pathname: string, cvId: string): string {
 type CVHubTopNavProps = { cvId: string };
 
 export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
+  const styles = useThemedStyles(createStyles);
   const pathname = usePathname();
   const router = useRouter();
   const activeKey = getActiveKey(pathname, cvId);
@@ -97,7 +100,8 @@ export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   bar: {
     backgroundColor: colors.background,
     borderBottomWidth: 1,
@@ -133,3 +137,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+}

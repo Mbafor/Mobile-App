@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CV } from '@/types/domain/cv';
 
 type CVCardProps = {
@@ -35,6 +37,7 @@ export function CVCard({
   isDuplicating,
   isDeleting,
 }: CVCardProps) {
+  const styles = useThemedStyles(createStyles);
   const busy = isDuplicating || isDeleting;
   const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? cv.templateId;
 
@@ -91,7 +94,8 @@ export function CVCard({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     borderRadius: 14,
     borderWidth: 1,
@@ -154,3 +158,4 @@ const styles = StyleSheet.create({
   actionText: { color: colors.text, fontWeight: '600', fontSize: 13 },
   actionDanger: { color: colors.error, fontWeight: '600', fontSize: 13 },
 });
+}

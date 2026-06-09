@@ -1,7 +1,9 @@
 import { useRef } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 
 const OTP_LENGTH = 6;
 
@@ -12,6 +14,7 @@ type Props = {
 };
 
 export function OtpInput({ value, onChange, autoFocus }: Props) {
+  const styles = useThemedStyles(createStyles);
   const inputRef = useRef<TextInput>(null);
   const digits = Array.from({ length: OTP_LENGTH }, (_, i) => value[i] ?? '');
 
@@ -40,7 +43,8 @@ export function OtpInput({ value, onChange, autoFocus }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { marginVertical: spacing.md },
   hidden: { position: 'absolute', width: 1, height: 1, opacity: 0 },
   row: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.xs },
@@ -58,3 +62,4 @@ const styles = StyleSheet.create({
   boxFilled: { borderColor: colors.primary, backgroundColor: '#E8F0EB' },
   digit: { fontSize: typography.fontSize.xl, fontWeight: '700', color: colors.text },
 });
+}

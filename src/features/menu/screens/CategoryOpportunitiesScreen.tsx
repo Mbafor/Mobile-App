@@ -1,4 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -15,7 +17,7 @@ import { EmptyState } from '@/components/feedback';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { slugToCategory } from '@/constants/browse-categories';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
@@ -90,6 +92,7 @@ function OpportunityResultCard({
 }
 
 export function CategoryOpportunitiesScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { category: categorySlug } = useLocalSearchParams<{ category: string }>();
@@ -224,7 +227,8 @@ export function CategoryOpportunitiesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   scroll: { flex: 1 },
@@ -328,3 +332,4 @@ const styles = StyleSheet.create({
   pageBtnTextDisabled: { color: colors.textMuted },
   pageNumbers: { fontSize: 14, color: colors.textMuted, fontWeight: '500' },
 });
+}

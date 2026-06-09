@@ -1,3 +1,5 @@
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import {
   CalendarBody,
   CalendarContainer,
@@ -9,9 +11,9 @@ import { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { mentorshipCalendarTheme } from '@/features/mentorship/components/calendar/calendar-theme';
+import { createMentorshipCalendarTheme } from '@/features/mentorship/components/calendar/calendar-theme';
+import { useTheme } from '@/hooks/useTheme';
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { useAvailabilitySlots } from '@/features/mentorship/hooks/useAvailabilitySlots';
 import {
   buildAvailabilityEvents,
@@ -40,6 +42,12 @@ export function CoachSchedulingCalendar({
   sessions,
   isLoadingSessions,
 }: CoachSchedulingCalendarProps) {
+  const { mentorshipColors } = useTheme();
+  const styles = useAppThemedStyles(createStyles);
+  const calendarTheme = useMemo(
+    () => createMentorshipCalendarTheme(mentorshipColors),
+    [mentorshipColors],
+  );
   const [viewMode, setViewMode] = useState<'week' | 'day'>('week');
   const { slots, toggleSlot, isToggling, isLoading: slotsLoading } = useAvailabilitySlots(coachId);
   const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
@@ -123,9 +131,9 @@ export function CoachSchedulingCalendar({
       </View>
 
       <View style={styles.legend}>
-        <LegendDot color={calendarColors.available} label="Available" />
-        <LegendDot color={calendarColors.booked} label="Booked" />
-        <LegendDot color={calendarColors.completed} label="Completed" />
+        <LegendDot styles={styles} color={calendarColors.available} label="Available" />
+        <LegendDot styles={styles} color={calendarColors.booked} label="Booked" />
+        <LegendDot styles={styles} color={calendarColors.completed} label="Completed" />
       </View>
 
       {loading ? (
@@ -133,7 +141,7 @@ export function CoachSchedulingCalendar({
       ) : (
         <View style={styles.calendarBox}>
           <CalendarContainer
-            theme={mentorshipCalendarTheme}
+            theme={calendarTheme}
             events={events}
             numberOfDays={viewMode === 'week' ? 7 : 1}
             timeInterval={SLOT_DURATION_MINUTES}
@@ -151,7 +159,15 @@ export function CoachSchedulingCalendar({
   );
 }
 
-function LegendDot({ color, label }: { color: string; label: string }) {
+function LegendDot({
+  styles,
+  color,
+  label,
+}: {
+  styles: ReturnType<typeof createStyles>;
+  color: string;
+  label: string;
+}) {
   return (
     <View style={styles.legendItem}>
       <View style={[styles.dot, { backgroundColor: color }]} />
@@ -162,7 +178,9 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   toolbar: { gap: spacing.xs },
   toggleRow: { flexDirection: 'row', gap: spacing.xs },
@@ -181,3 +199,4 @@ const styles = StyleSheet.create({
   calendarBox: { height: 420, borderRadius: 12, overflow: 'hidden' },
   loader: { marginVertical: spacing.lg },
 });
+}

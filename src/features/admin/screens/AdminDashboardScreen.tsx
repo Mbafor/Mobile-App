@@ -1,4 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -12,7 +14,7 @@ import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { FUNDING_TYPE_LABELS } from '@/constants/search-filters';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { AdminBarChart } from '@/features/admin/components/AdminBarChart';
 import { AdminPieChart } from '@/features/admin/components/AdminPieChart';
 import { AdminStatCard } from '@/features/admin/components/AdminStatCard';
@@ -29,6 +31,7 @@ function formatFundingChart(data: ChartDatum[]): ChartDatum[] {
 }
 
 export function AdminDashboardScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { isReady } = useRequireAdmin();
   const { data: analytics, isLoading, error, refetch, isRefetching } = useAdminAnalytics();
@@ -113,7 +116,8 @@ export function AdminDashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.sm },
   subtitle: { marginBottom: spacing.md },
@@ -131,3 +135,4 @@ const styles = StyleSheet.create({
   },
   actions: { gap: spacing.sm, marginTop: spacing.lg },
 });
+}

@@ -1,4 +1,6 @@
 import { useCallback } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   ActivityIndicator,
   FlatList,
@@ -10,7 +12,7 @@ import {
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { OpportunityListRow } from '@/features/opportunities/components/OpportunityListRow';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 type OpportunitySearchResultsProps = {
@@ -32,6 +34,7 @@ export function OpportunitySearchResults({
   onRefetch,
   onPressOpportunity,
 }: OpportunitySearchResultsProps) {
+  const styles = useThemedStyles(createStyles);
   const renderItem = useCallback(
     ({ item }: { item: Opportunity }) => (
       <OpportunityListRow opportunity={item} onPress={onPressOpportunity} />
@@ -82,10 +85,12 @@ export function OpportunitySearchResults({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   banner: { paddingHorizontal: spacing.md },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   resultMeta: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
   emptyList: { flexGrow: 1 },
 });
+}

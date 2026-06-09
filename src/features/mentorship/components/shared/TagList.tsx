@@ -1,7 +1,8 @@
 import { StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 type TagListProps = {
@@ -10,6 +11,7 @@ type TagListProps = {
 };
 
 export function TagList({ label, items }: TagListProps) {
+  const styles = useAppThemedStyles(createStyles);
   if (items.length === 0) return null;
 
   return (
@@ -30,7 +32,9 @@ export function TagList({ label, items }: TagListProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.xs },
   tags: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   tag: {
@@ -41,3 +45,4 @@ const styles = StyleSheet.create({
   },
   tagText: { color: mentorshipColors.accentDark, fontWeight: '500' },
 });
+}

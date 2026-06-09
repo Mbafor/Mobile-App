@@ -1,4 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -10,12 +12,13 @@ import { AdminDataTable, type AdminTableColumn } from '@/features/admin/componen
 import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { superAdminApi, type SuperAdminAdminRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
 
 export function SuperAdminAdminsScreen() {
+  const styles = useThemedStyles(createStyles);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [newAdminEmail, setNewAdminEmail] = useState('');
@@ -191,7 +194,8 @@ export function SuperAdminAdminsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.md },
   pageTitle: { fontSize: 22, fontWeight: '700', color: colors.text },
   intro: { lineHeight: 22 },
@@ -210,3 +214,4 @@ const styles = StyleSheet.create({
   cellText: { fontWeight: '600' },
   postCount: { fontWeight: '700', color: colors.primary },
 });
+}

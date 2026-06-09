@@ -2,7 +2,9 @@ import type { PropsWithChildren } from 'react';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
+import type { ColorScheme } from '@/constants/theme/types';
 import { spacing } from '@/constants/theme';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 type FormFieldProps = PropsWithChildren<{
   label: string;
@@ -10,6 +12,8 @@ type FormFieldProps = PropsWithChildren<{
 }>;
 
 export function FormField({ label, error, children }: FormFieldProps) {
+  const styles = useThemedStyles(createStyles);
+
   return (
     <View style={styles.field}>
       <Text variant="caption">{label}</Text>
@@ -19,7 +23,9 @@ export function FormField({ label, error, children }: FormFieldProps) {
   );
 }
 
-const styles = StyleSheet.create({
-  field: { gap: spacing.xs, marginBottom: spacing.md },
-  error: { color: '#B00020', fontSize: 12 },
-});
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
+    field: { gap: spacing.xs, marginBottom: spacing.md },
+    error: { color: colors.error, fontSize: 12 },
+  });
+}

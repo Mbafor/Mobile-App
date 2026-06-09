@@ -1,13 +1,16 @@
 import { Alert, ScrollView, Share, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Button, Text } from '@/components/ui';
 import { REFERRAL_MESSAGE } from '@/constants/app';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 
 export function ReferFriendScreen() {
+  const styles = useThemedStyles(createStyles);
   const handleShare = async () => {
     try {
       await Share.share({ message: REFERRAL_MESSAGE });
@@ -56,7 +59,8 @@ export function ReferFriendScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -117,3 +121,4 @@ const styles = StyleSheet.create({
     fontSize: 13,
   },
 });
+}

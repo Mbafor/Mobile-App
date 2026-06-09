@@ -1,4 +1,6 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -7,7 +9,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useEffect } from 'react';
 
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 function SkeletonRow() {
   const opacity = useSharedValue(0.45);
@@ -31,6 +33,7 @@ function SkeletonRow() {
 }
 
 export function NotificationSkeletonList({ count = 6 }: { count?: number }) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View>
       {Array.from({ length: count }, (_, i) => (
@@ -40,7 +43,8 @@ export function NotificationSkeletonList({ count = 6 }: { count?: number }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -65,3 +69,4 @@ const styles = StyleSheet.create({
   lineShort: { width: '28%' },
   lineTitle: { width: '72%', height: 14 },
 });
+}

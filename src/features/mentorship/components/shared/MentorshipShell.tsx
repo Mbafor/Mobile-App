@@ -1,12 +1,15 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { MentorshipTabNav } from '@/features/mentorship/components/shared/MentorshipTabNav';
 import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 
 type MentorshipShellProps = PropsWithChildren<{
@@ -34,6 +37,7 @@ export function MentorshipShell({
   fillWidth = false,
   children,
 }: MentorshipShellProps) {
+  const styles = useAppThemedStyles(createStyles);
   const isDesktop = useWebDesktop();
   const isWeb = useIsWeb();
 
@@ -105,7 +109,9 @@ export function MentorshipShell({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'column',
@@ -148,3 +154,4 @@ const styles = StyleSheet.create({
     minHeight: 0,
   },
 });
+}

@@ -1,9 +1,10 @@
 import { Fragment } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { ONBOARDING_STEPS } from '@/constants/onboarding';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 const STEP_LABELS = ['Basic info', 'Academic', 'Preferences'] as const;
 const TOTAL = ONBOARDING_STEPS.TOTAL;
@@ -11,6 +12,7 @@ const TOTAL = ONBOARDING_STEPS.TOTAL;
 type Props = { currentStep: number };
 
 export function OnboardingProgress({ currentStep }: Props) {
+  const { colors } = useTheme();
   return Platform.OS === 'web' ? (
     <WebStepper currentStep={currentStep} />
   ) : (

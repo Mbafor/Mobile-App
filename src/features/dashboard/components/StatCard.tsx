@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 
 type StatCardProps = {
   label: string;
@@ -10,6 +12,7 @@ type StatCardProps = {
 };
 
 export function StatCard({ label, value, accent = false }: StatCardProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={[styles.card, accent && styles.cardAccent]}>
       <Text style={[styles.value, accent && styles.valueAccent]}>{value}</Text>
@@ -20,7 +23,8 @@ export function StatCard({ label, value, accent = false }: StatCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     flex: 1,
     backgroundColor: colors.surface,
@@ -44,3 +48,4 @@ const styles = StyleSheet.create({
   label: { color: colors.textMuted, textAlign: 'center' },
   labelAccent: { color: colors.background },
 });
+}

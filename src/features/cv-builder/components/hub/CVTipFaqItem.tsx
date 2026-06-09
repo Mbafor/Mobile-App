@@ -1,8 +1,10 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVTipFaqItemProps = {
   title: string;
@@ -10,6 +12,7 @@ type CVTipFaqItemProps = {
 };
 
 export function CVTipFaqItem({ title, body }: CVTipFaqItemProps) {
+  const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +37,8 @@ export function CVTipFaqItem({ title, body }: CVTipFaqItemProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   item: {
     borderRadius: 12,
     borderWidth: 1,
@@ -69,3 +73,4 @@ const styles = StyleSheet.create({
   },
   bodyText: { lineHeight: 22, fontSize: 14 },
 });
+}

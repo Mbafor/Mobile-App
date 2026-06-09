@@ -1,11 +1,12 @@
 import { useMemo, useState } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { TextArea } from '@/components/ui/TextArea';
 import { MentorshipMobileList } from '@/features/mentorship/components/shared/MentorshipMobileList';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import {
   buildBookingSlots,
   slotToBookingPayload,
@@ -39,6 +40,7 @@ export function BookingCalendarGrid({
   onBook,
   isBooking,
 }: BookingCalendarGridProps) {
+  const styles = useAppThemedStyles(createStyles);
   const slots = useMemo(() => buildBookingSlots(rules, sessions), [rules, sessions]);
   const [pendingSlot, setPendingSlot] = useState<BookingSlot | null>(null);
   const [notes, setNotes] = useState('');
@@ -161,7 +163,9 @@ export function BookingCalendarGrid({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   hint: { fontSize: 13, marginBottom: spacing.xs },
   empty: { padding: spacing.lg, textAlign: 'center' },
@@ -207,3 +211,4 @@ const styles = StyleSheet.create({
     marginTop: spacing.sm,
   },
 });
+}

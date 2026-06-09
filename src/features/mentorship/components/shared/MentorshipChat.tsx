@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -22,7 +24,6 @@ import {
   type AttachMenuAction,
 } from '@/features/mentorship/components/shared/AttachMenuSheet';
 import { TypingIndicator } from '@/features/mentorship/components/shared/TypingIndicator';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { SendMessageInput } from '@/features/mentorship/hooks/useMentorshipMessages';
 import { useMentorshipTyping } from '@/features/mentorship/hooks/useMentorshipTyping';
 import {
@@ -69,6 +70,7 @@ export function MentorshipChat({
   peerAvatarUrl,
   fullScreen = false,
 }: MentorshipChatProps) {
+  const styles = useAppThemedStyles(createStyles);
   const [draft, setDraft] = useState('');
   const [uploading, setUploading] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);
@@ -310,7 +312,9 @@ export function MentorshipChat({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: {
     minHeight: 320,
     flexDirection: 'column',
@@ -456,3 +460,4 @@ const styles = StyleSheet.create({
     borderColor: mentorshipColors.accent,
   },
 });
+}

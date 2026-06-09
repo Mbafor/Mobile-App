@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import {
@@ -20,7 +22,7 @@ import { useOpportunityDetail } from '@/features/opportunities/hooks/useOpportun
 import { useOpportunityEngagement } from '@/features/opportunities/hooks/useOpportunityEngagement';
 import { buildOpportunityWebLink } from '@/features/opportunities/utils/opportunity-share-link';
 import { buildShareMessage } from '@/features/opportunities/utils/share-opportunity';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
@@ -85,6 +87,7 @@ function RelatedOpportunityCard({
 }
 
 export function OpportunityDetailScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -351,7 +354,8 @@ export function OpportunityDetailScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   errorBody: { padding: spacing.lg, gap: spacing.md },
@@ -554,3 +558,4 @@ const styles = StyleSheet.create({
   relatedOrg: { fontSize: 12, color: colors.textMuted },
   relatedDeadline: { fontSize: 12, color: colors.primary, fontWeight: '500' },
 });
+}

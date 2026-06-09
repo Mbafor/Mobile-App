@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import {
@@ -15,7 +17,7 @@ import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { BROWSE_CATEGORY_LIST } from '@/constants/opportunity-fields';
 import { categoryToSlug } from '@/constants/browse-categories';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useActiveOpportunities } from '@/features/opportunities/hooks/useActiveOpportunities';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
@@ -95,6 +97,7 @@ function OpportunityResultCard({
 }
 
 export function BrowseCategoriesScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
@@ -244,7 +247,8 @@ export function BrowseCategoriesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.background,
@@ -428,3 +432,4 @@ const styles = StyleSheet.create({
     marginBottom: spacing.xs,
   },
 });
+}

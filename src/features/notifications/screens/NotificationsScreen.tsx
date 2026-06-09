@@ -1,4 +1,6 @@
 import { useRouter } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 
@@ -15,10 +17,11 @@ import { getPushPermissionStatus } from '@/features/notifications/services/push-
 import { groupNotificationsByDate } from '@/features/notifications/utils/notification-filters';
 import { navigateFromNotification } from '@/features/notifications/utils/notification-navigation';
 import { useAuth } from '@/features/auth/hooks/useAuth';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { AppNotification, PushPermissionStatus } from '@/types/domain/notification';
 
 export function NotificationsScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { user } = useAuth();
   const userId = user?.id;
@@ -143,7 +146,8 @@ export function NotificationsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -172,3 +176,4 @@ const styles = StyleSheet.create({
     letterSpacing: 0.6,
   },
 });
+}

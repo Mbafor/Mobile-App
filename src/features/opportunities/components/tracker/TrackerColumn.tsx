@@ -1,10 +1,13 @@
 import { memo, useRef } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { TrackerCard } from '@/features/opportunities/components/tracker/TrackerCard';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { TRACKER_STAGE_LABELS, type TrackerStage } from '@/types/domain/tracker';
 
 const COLUMN_WIDTH = 288;
@@ -100,7 +103,8 @@ function TrackerColumnComponent({
 export const TrackerColumn = memo(TrackerColumnComponent);
 export const TRACKER_COLUMN_WIDTH = COLUMN_WIDTH;
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   column: {
     width: COLUMN_WIDTH,
     height: '100%',
@@ -142,3 +146,4 @@ const styles = StyleSheet.create({
   },
   emptyText: { textAlign: 'center', lineHeight: 20 },
 });
+}

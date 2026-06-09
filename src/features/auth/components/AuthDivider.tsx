@@ -1,9 +1,12 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function AuthDivider() {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.row}>
       <View style={styles.line} />
@@ -15,7 +18,8 @@ export function AuthDivider() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -24,3 +28,4 @@ const styles = StyleSheet.create({
   },
   line: { flex: 1, height: 1, backgroundColor: colors.border },
 });
+}

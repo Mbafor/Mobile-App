@@ -1,4 +1,6 @@
 import { useRouter } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -17,7 +19,7 @@ import {
   groupByStage,
 } from '@/features/opportunities/utils/filter-tracker';
 import { exportTrackerToXlsx } from '@/features/opportunities/utils/export-tracker-xlsx';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import {
   EMPTY_TRACKER_FILTERS,
   nextTrackerStage,
@@ -26,6 +28,7 @@ import {
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
 
 export function TrackerScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [exporting, setExporting] = useState(false);
@@ -157,7 +160,8 @@ export function TrackerScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.background,
@@ -182,3 +186,4 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.sm,
   },
 });
+}

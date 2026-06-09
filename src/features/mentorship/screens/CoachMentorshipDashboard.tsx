@@ -1,4 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
 import {
   ActivityIndicator,
@@ -23,7 +25,6 @@ import {
   COACH_NAV_ITEMS,
   COACH_SECTION_TITLES,
 } from '@/features/mentorship/constants/nav-items';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useCoachMentorship } from '@/features/mentorship/hooks/useCoachMentorship';
 import { useMentorshipSchedulingRealtime } from '@/features/mentorship/hooks/useMentorshipSchedulingRealtime';
@@ -39,6 +40,7 @@ import { spacing } from '@/constants/theme';
 import { confirmAction } from '@/utils/confirm-action';
 
 export function CoachMentorshipDashboard() {
+  const styles = useAppThemedStyles(createStyles);
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
@@ -249,7 +251,9 @@ export function CoachMentorshipDashboard() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
   sectionBody: { gap: spacing.md },
   completedToggleRow: {
@@ -269,3 +273,4 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.xs,
   },
 });
+}

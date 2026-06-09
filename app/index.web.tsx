@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ROUTES } from '@/constants/routes';
-import { colors } from '@/constants/theme';
+
 
 const LANDING_URL = process.env.EXPO_PUBLIC_LANDING_URL ?? 'http://localhost:3000';
 
@@ -18,6 +19,7 @@ const LANDING_URL = process.env.EXPO_PUBLIC_LANDING_URL ?? 'http://localhost:300
  * - Authenticated, onboarding complete: go to dashboard.
  */
 export default function WebRoot() {
+  const { colors } = useTheme();
   const router = useRouter();
   const { isAuthReady, isAuthenticated, onboardingComplete } = useAuth();
 

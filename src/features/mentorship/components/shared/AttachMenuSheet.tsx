@@ -1,9 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { MENTORSHIP_ATTACHMENT_SIZE_HINT } from '@/features/mentorship/constants/attachments';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 export type AttachMenuAction = 'library' | 'camera' | 'document';
@@ -21,6 +22,7 @@ const OPTIONS: { key: AttachMenuAction; label: string; icon: keyof typeof Ionico
 ];
 
 export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetProps) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
@@ -51,7 +53,9 @@ export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetP
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',
@@ -79,3 +83,4 @@ const styles = StyleSheet.create({
   cancelBtn: { marginTop: spacing.sm, alignItems: 'center', paddingVertical: spacing.md },
   cancelText: { fontSize: 16, fontWeight: '600', color: mentorshipColors.textMuted },
 });
+}

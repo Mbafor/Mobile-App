@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, StyleSheet, View } from 'react-native';
 
 import { FormField } from '@/components/forms';
 import { Button, Input, Text } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { mentorshipDataApi } from '@/services/api';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 function SectionGroup({ title, children }: { title: string; children: React.ReactNode }) {
@@ -36,6 +38,7 @@ const groupStyles = StyleSheet.create({
 });
 
 export function MentorBioSection() {
+  const styles = useThemedStyles(createStyles);
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
@@ -98,7 +101,9 @@ export function MentorBioSection() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   hint: { lineHeight: 20, marginBottom: spacing.xs },
   bioInput: { minHeight: 120, textAlignVertical: 'top' },
 });
+}

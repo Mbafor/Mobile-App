@@ -1,8 +1,10 @@
 import type { PropsWithChildren } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type SettingsSectionProps = PropsWithChildren<{
   index: number;
@@ -10,6 +12,7 @@ type SettingsSectionProps = PropsWithChildren<{
 }>;
 
 export function SettingsSection({ index, title, children }: SettingsSectionProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.section}>
       <View style={styles.header}>
@@ -26,7 +29,8 @@ export function SettingsSection({ index, title, children }: SettingsSectionProps
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   section: {
     marginBottom: spacing.lg,
   },
@@ -74,3 +78,4 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
 });
+}

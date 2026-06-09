@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
@@ -9,7 +11,7 @@ import { NotificationAvatar } from '@/features/notifications/components/Notifica
 import { NOTIFICATION_TYPE_LABELS } from '@/features/notifications/constants/notification-types';
 import { resolveAvatarSource } from '@/features/notifications/utils/notification-avatar';
 import type { NotificationEnrichment } from '@/features/notifications/hooks/useNotificationEnrichment';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { AppNotification } from '@/types/domain/notification';
 import { formatRelativeDate } from '@/utils/formatting';
 
@@ -28,6 +30,7 @@ export function SwipeableNotificationRow({
   onMarkRead,
   onDelete,
 }: Props) {
+  const styles = useThemedStyles(createStyles);
   const isUnread = !notification.readAt;
   const avatarSource = resolveAvatarSource(notification, {
     opportunityImages: enrichment?.opportunityImages ?? new Map(),
@@ -93,7 +96,8 @@ export function SwipeableNotificationRow({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -162,3 +166,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+}

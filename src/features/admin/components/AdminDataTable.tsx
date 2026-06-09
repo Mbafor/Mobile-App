@@ -1,8 +1,11 @@
 import type { ReactNode } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export type AdminTableColumn<T> = {
   key: string;
@@ -74,7 +77,8 @@ export function AdminDataTable<T>({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   table: {
     borderWidth: 1,
     borderColor: colors.border,
@@ -100,3 +104,4 @@ const styles = StyleSheet.create({
   footer: { padding: spacing.sm },
   emptyWrap: { padding: spacing.lg, alignItems: 'center' },
 });
+}

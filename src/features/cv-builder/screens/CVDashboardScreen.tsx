@@ -1,4 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
@@ -18,14 +22,14 @@ import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { OptionsSheet, SearchField, Text } from '@/components/ui';
 import { CVDocumentListItem } from '@/features/cv-builder/components/CVDocumentListItem';
 import { CVRenameModal } from '@/features/cv-builder/components/CVRenameModal';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { useUserCVs } from '@/features/cv-builder/hooks/useUserCVs';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { confirmAction } from '@/utils/confirm-action';
 import type { CV } from '@/types/domain/cv';
 
 export function CVDashboardScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
@@ -292,7 +296,9 @@ export function CVDashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   centered: {
     flex: 1,
@@ -371,3 +377,4 @@ const styles = StyleSheet.create({
   emptyList: { flexGrow: 1 },
   emptyWrap: { padding: spacing.lg, backgroundColor: cvDocsTheme.pageBg },
 });
+}

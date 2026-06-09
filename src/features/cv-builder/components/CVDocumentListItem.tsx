@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui/Text';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CV } from '@/types/domain/cv';
 
 type CVDocumentListItemProps = {
@@ -34,6 +37,7 @@ export function CVDocumentListItem({
   isRenaming,
   isDeleting,
 }: CVDocumentListItemProps) {
+  const styles = useAppThemedStyles(createStyles);
   const busy = isRenaming || isDeleting;
   const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? 'CV';
 
@@ -76,7 +80,9 @@ export function CVDocumentListItem({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -107,3 +113,4 @@ const styles = StyleSheet.create({
   meta: { fontSize: 12, color: cvDocsTheme.textSecondary },
   menuBtn: { paddingHorizontal: spacing.md, paddingVertical: spacing.md },
 });
+}

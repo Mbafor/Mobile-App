@@ -1,9 +1,11 @@
 import type { PropsWithChildren } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Platform, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle, webCardShadow } from '@/constants/theme/webTheme';
 
 const CARD_MAX_WIDTH = 560;
@@ -17,6 +19,7 @@ const PAGE_PADDING_H = 24;
  *           card with an explicit pixel width (so it never stretches full-screen).
  */
 export function OnboardingShell({ children }: PropsWithChildren) {
+  const styles = useThemedStyles(createStyles);
   const { width: windowWidth } = useWindowDimensions();
 
   if (Platform.OS !== 'web') {
@@ -53,7 +56,8 @@ export function OnboardingShell({ children }: PropsWithChildren) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   /* ── Native ─────────────────────────────── */
   safe: {
     flex: 1,
@@ -116,3 +120,4 @@ const styles = StyleSheet.create({
     letterSpacing: -0.2,
   },
 });
+}

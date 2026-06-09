@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { NotificationAvatarSource } from '@/features/notifications/utils/notification-avatar';
 
 const SIZE = 48;
@@ -19,6 +21,7 @@ function initial(displayName: string | null): string {
 }
 
 export function NotificationAvatar({ source }: Props) {
+  const styles = useThemedStyles(createStyles);
   if (source.kind === 'user') {
     return (
       <UserAvatarDisplay
@@ -54,7 +57,8 @@ export function NotificationAvatar({ source }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   opportunityImage: {
     width: SIZE,
     height: SIZE,
@@ -80,3 +84,4 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
 });
+}

@@ -11,8 +11,11 @@ import {
   type ViewStyle,
 } from 'react-native';
 
-import { colors, spacing, typography, webTransition } from '@/constants/theme';
+import type { ColorScheme } from '@/constants/theme/types';
+import { spacing, typography, webTransition } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
+import { useTheme } from '@/hooks/useTheme';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { webPressableStyle } from '@/utils/web/pressable';
 
@@ -37,6 +40,8 @@ export function Button({
   style,
   ...props
 }: ButtonProps) {
+  const { colors, isDark } = useTheme();
+  const styles = useThemedStyles(createStyles);
   const isDisabled = disabled || loading;
   const isDesktopWeb = useWebDesktop();
 
@@ -53,9 +58,9 @@ export function Button({
     ],
     !isDisabled && Platform.OS === 'web'
       ? [
-          variant === 'primary' && styles.webHoverPrimary,
-          variant === 'secondary' && styles.webHoverSecondary,
-          variant === 'ghost' && styles.webHoverGhost,
+          variant === 'primary' && { backgroundColor: isDark ? '#4A9B6E' : '#15301f' },
+          variant === 'secondary' && { backgroundColor: colors.background },
+          variant === 'ghost' && { backgroundColor: `${colors.primary}0c` },
         ]
       : undefined,
   );
@@ -63,7 +68,9 @@ export function Button({
   return (
     <Pressable onPress={onPress} disabled={isDisabled} style={pressableStyle} {...props}>
       {loading ? (
-        <ActivityIndicator color={variant === 'primary' ? colors.background : colors.primary} />
+        <ActivityIndicator
+          color={variant === 'primary' ? colors.textOnPrimary : colors.primary}
+        />
       ) : (
         <Text
           style={[
@@ -83,39 +90,38 @@ export function Button({
   );
 }
 
-const styles = StyleSheet.create({
-  base: {
-    paddingVertical: spacing.sm + 2,
-    paddingHorizontal: spacing.md,
-    borderRadius: 8,
-    alignItems: 'center',
-    minHeight: 48,
-    justifyContent: 'center',
-    ...webTransition,
-  },
-  baseDesktop: {
-    borderRadius: 10,
-    paddingHorizontal: spacing.lg,
-    minHeight: 44,
-  },
-  fullWidth: { alignSelf: 'stretch', width: '100%' },
-  primary: { backgroundColor: colors.primary },
-  secondary: {
-    backgroundColor: colors.surface,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  ghost: { backgroundColor: 'transparent' },
-  disabled: { opacity: 0.5 },
-  label: { fontSize: typography.fontSize.md, fontWeight: '600' },
-  labelDesktop: {
-    fontSize: typography.fontSize.sm,
-    letterSpacing: 0.1,
-  },
-  labelPrimary: { color: colors.background },
-  labelSecondary: { color: colors.text },
-  labelGhost: { color: colors.primary },
-  webHoverPrimary: Platform.OS === 'web' ? { backgroundColor: '#15301f' } : {},
-  webHoverSecondary: Platform.OS === 'web' ? { backgroundColor: colors.background } : {},
-  webHoverGhost: Platform.OS === 'web' ? { backgroundColor: `${colors.primary}0c` } : {},
-});
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
+    base: {
+      paddingVertical: spacing.sm + 2,
+      paddingHorizontal: spacing.md,
+      borderRadius: 8,
+      alignItems: 'center',
+      minHeight: 48,
+      justifyContent: 'center',
+      ...webTransition,
+    },
+    baseDesktop: {
+      borderRadius: 10,
+      paddingHorizontal: spacing.lg,
+      minHeight: 44,
+    },
+    fullWidth: { alignSelf: 'stretch', width: '100%' },
+    primary: { backgroundColor: colors.primary },
+    secondary: {
+      backgroundColor: colors.surface,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    ghost: { backgroundColor: 'transparent' },
+    disabled: { opacity: 0.5 },
+    label: { fontSize: typography.fontSize.md, fontWeight: '600' },
+    labelDesktop: {
+      fontSize: typography.fontSize.sm,
+      letterSpacing: 0.1,
+    },
+    labelPrimary: { color: colors.textOnPrimary },
+    labelSecondary: { color: colors.text },
+    labelGhost: { color: colors.primary },
+  });
+}

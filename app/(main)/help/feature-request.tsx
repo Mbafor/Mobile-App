@@ -1,4 +1,6 @@
 import { useRouter } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import {
   Alert,
@@ -13,9 +15,10 @@ import { Button, Text } from '@/components/ui';
 import { Input } from '@/components/ui/Input';
 import { TextArea } from '@/components/ui/TextArea';
 import { useSubmitFeatureRequest } from '@/features/help/hooks/useHelpSubmissions';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export default function FeatureRequestScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { mutate, isPending } = useSubmitFeatureRequest();
   const [title, setTitle] = useState('');
@@ -78,7 +81,8 @@ export default function FeatureRequestScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -94,3 +98,4 @@ const styles = StyleSheet.create({
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
   required: { color: colors.error },
 });
+}

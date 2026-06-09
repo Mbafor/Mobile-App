@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -14,11 +16,12 @@ import {
 import { Button, Text } from '@/components/ui';
 import { TextArea } from '@/components/ui/TextArea';
 import { useSubmitFeedback } from '@/features/help/hooks/useHelpSubmissions';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 
 export default function FeedbackScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { mutate, isPending } = useSubmitFeedback();
   const [rating, setRating] = useState(0);
@@ -95,7 +98,8 @@ export default function FeedbackScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -121,3 +125,4 @@ const styles = StyleSheet.create({
   label: { fontSize: 14, fontWeight: '600', color: colors.text },
   optional: { fontSize: 13, fontWeight: '400', color: colors.textMuted },
 });
+}

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Modal,
   Pressable,
@@ -10,7 +12,7 @@ import {
 import { Input, Text } from '@/components/ui';
 import type { SelectOption } from '@/constants/onboarding-options';
 import { OTHER_OPTION_VALUE } from '@/constants/onboarding-options';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import {
   parseSingleSelectValue,
   serializeSingleSelectValue,
@@ -31,6 +33,7 @@ export function SelectWithOther({
   onChange,
   placeholder = 'Select an option',
 }: SelectWithOtherProps) {
+  const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('');
   const [otherText, setOtherText] = useState('');
@@ -137,7 +140,8 @@ function ButtonRow({ onClose }: { onClose: () => void }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   trigger: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -190,3 +194,4 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
 });
+}

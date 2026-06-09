@@ -1,12 +1,14 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { FormField } from '@/components/forms';
 import { Input, Text } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
-import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
-import { colors, spacing } from '@/constants/theme';
+import { useCvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
+import { spacing } from '@/constants/theme';
 
 type TagListEditorProps = {
   title: string;
@@ -25,6 +27,8 @@ export function TagListEditor({
   placeholder = 'Type and add an item',
   addLabel = 'Add item',
 }: TagListEditorProps) {
+  const cvUi = useCvUi();
+  const styles = useThemedStyles(createStyles);
   const [draft, setDraft] = useState('');
 
   const addTag = () => {
@@ -74,7 +78,8 @@ export function TagListEditor({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -84,3 +89,4 @@ const styles = StyleSheet.create({
   tagText: { flex: 1, fontSize: 15, color: colors.text, fontWeight: '500' },
   remove: { fontSize: 22, color: colors.textMuted, fontWeight: '600', lineHeight: 24 },
 });
+}

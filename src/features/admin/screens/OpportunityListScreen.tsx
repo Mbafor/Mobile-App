@@ -1,4 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { confirmAction } from '@/utils/confirm-action';
@@ -6,7 +8,7 @@ import { confirmAction } from '@/utils/confirm-action';
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAdminOpportunities } from '@/features/admin/hooks/useAdminOpportunities';
 import { useDeleteOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
 import { formatDeadline } from '@/utils/formatting';
@@ -28,6 +30,7 @@ export function OpportunityListScreen({
   title = 'Opportunities',
   subtitle = 'Create, paste, edit, or remove listings shown to students.',
 }: OpportunityListScreenProps) {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
   const deleteMutation = useDeleteOpportunityMutation();
@@ -122,7 +125,8 @@ export function OpportunityListScreen({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   hero: {
     padding: spacing.md,
@@ -161,3 +165,4 @@ const styles = StyleSheet.create({
   link: { color: colors.primary, fontWeight: '600' },
   danger: { color: colors.error, fontWeight: '600' },
 });
+}

@@ -1,9 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type FilterDropdownGroupProps<T extends string> = {
   label: string;
@@ -95,7 +98,8 @@ export function FilterDropdownGroup<T extends string>({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { marginBottom: spacing.sm, paddingHorizontal: spacing.md },
   trigger: {
     flexDirection: 'row',
@@ -143,3 +147,4 @@ const styles = StyleSheet.create({
   optionText: { flex: 1, fontSize: 14, color: colors.text },
   optionTextActive: { fontWeight: '600', color: colors.primary },
 });
+}

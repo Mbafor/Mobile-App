@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { OPPORTUNITY_DEGREE_OPTIONS } from '@/constants/opportunity-fields';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type MultiDegreeLevelPickerProps = {
   values: string[];
@@ -10,6 +12,7 @@ type MultiDegreeLevelPickerProps = {
 };
 
 export function MultiDegreeLevelPicker({ values, onChange }: MultiDegreeLevelPickerProps) {
+  const styles = useThemedStyles(createStyles);
   const toggle = (level: string) => {
     onChange(
       values.includes(level) ? values.filter((v) => v !== level) : [...values, level],
@@ -36,7 +39,8 @@ export function MultiDegreeLevelPicker({ values, onChange }: MultiDegreeLevelPic
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   chip: {
     paddingVertical: spacing.xs,
@@ -50,3 +54,4 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 13, color: colors.text },
   chipTextSelected: { color: colors.background },
 });
+}

@@ -1,10 +1,13 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Text } from '@/components/ui/Text';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVRenameModalProps = {
   visible: boolean;
@@ -25,6 +28,7 @@ export function CVRenameModal({
   onSave,
   saving,
 }: CVRenameModalProps) {
+  const styles = useAppThemedStyles(createStyles);
   const trimmed = value.trim();
   const canSave = trimmed.length > 0 && trimmed !== currentTitle.trim();
 
@@ -54,7 +58,9 @@ export function CVRenameModal({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.4)',
@@ -71,3 +77,4 @@ const styles = StyleSheet.create({
   actions: { flexDirection: 'row', gap: spacing.sm },
   btn: { flex: 1 },
 });
+}

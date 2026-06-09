@@ -1,8 +1,9 @@
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
 import {
   canStudentCancelSession,
@@ -26,6 +27,7 @@ export function SessionsTable({
   title,
   onCancel,
 }: SessionsTableProps) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={styles.wrap}>
       {title ? <Text style={styles.heading}>{title}</Text> : null}
@@ -140,7 +142,9 @@ function CellText({ width, text }: { width: number; text: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   heading: { fontSize: 17, fontWeight: '700', color: mentorshipColors.text },
   tableShell: {
@@ -213,3 +217,4 @@ const styles = StyleSheet.create({
   cancelText: { color: mentorshipColors.danger, fontSize: 12, fontWeight: '600' },
   emptyRow: { padding: spacing.lg, alignItems: 'center' },
 });
+}

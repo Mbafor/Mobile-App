@@ -1,7 +1,9 @@
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type Props = {
   label: string;
@@ -20,6 +22,7 @@ export function PreferenceToggleRow({
   disabled,
   loading,
 }: Props) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.row}>
       <View style={styles.copy}>
@@ -44,7 +47,8 @@ export function PreferenceToggleRow({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -56,3 +60,4 @@ const styles = StyleSheet.create({
   },
   copy: { flex: 1, gap: spacing.xs },
 });
+}

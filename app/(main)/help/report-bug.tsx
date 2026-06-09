@@ -1,4 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
@@ -20,9 +23,11 @@ import {
   uploadScreenshot,
   useSubmitBug,
 } from '@/features/help/hooks/useHelpSubmissions';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export default function ReportBugScreen() {
+  const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { mutate, isPending } = useSubmitBug();
   const [title, setTitle] = useState('');
@@ -133,7 +138,8 @@ export default function ReportBugScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -171,3 +177,4 @@ const styles = StyleSheet.create({
   imagePickerPressed: { opacity: 0.7 },
   imagePickerText: { fontSize: 14, color: colors.primary, fontWeight: '500' },
 });
+}

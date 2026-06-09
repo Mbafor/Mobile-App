@@ -1,14 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAppStore } from '@/store/slices/app.slice';
 import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 import { ProfileHeaderMenu } from '@/features/menu/components/ProfileHeaderMenu';
 
 /** Header right cluster — profile avatar then notification bell, flush right. */
 export function AppHeaderActions() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { isSearchVisible, setSearchVisible } = useAppStore();
 
@@ -38,7 +41,8 @@ export function AppHeaderActions() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -48,3 +52,4 @@ const styles = StyleSheet.create({
     padding: spacing.xs,
   },
 });
+}

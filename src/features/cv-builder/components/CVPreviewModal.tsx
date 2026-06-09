@@ -1,3 +1,5 @@
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Modal,
   Pressable,
@@ -11,7 +13,7 @@ import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CV
 import { CVPdfPreviewPanel } from '@/features/cv-builder/components/preview/CVPdfPreviewPanel';
 import { CV_TEMPLATE_UNLOCK_FEE_GHS } from '@/features/cv-builder/constants/payments';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
 
 type CVPreviewModalProps = {
@@ -35,6 +37,7 @@ export function CVPreviewModal({
   downloadLoading = false,
   templatePurchased = false,
 }: CVPreviewModalProps) {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const templateLabel = getTemplateDefinition(templateId)?.label ?? templateId;
 
@@ -81,7 +84,8 @@ export function CVPreviewModal({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#525659',
@@ -122,3 +126,4 @@ const styles = StyleSheet.create({
   },
   footerHint: { textAlign: 'center', lineHeight: 18 },
 });
+}

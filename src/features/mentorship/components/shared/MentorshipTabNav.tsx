@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { webPressableStyle } from '@/utils/web/pressable';
 import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
@@ -17,6 +19,7 @@ type MentorshipTabNavProps = {
 };
 
 export function MentorshipTabNav({ items, activeId, onSelect, mode }: MentorshipTabNavProps) {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
 
@@ -87,7 +90,8 @@ export function MentorshipTabNav({ items, activeId, onSelect, mode }: Mentorship
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   // ─── Horizontal (desktop top strip) ───────────────────────────────────────
   hBar: {
     backgroundColor: colors.background,
@@ -150,3 +154,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+}

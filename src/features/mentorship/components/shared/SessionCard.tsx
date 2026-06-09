@@ -1,10 +1,12 @@
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
 import type { MentorshipSession } from '@/types/domain/mentorship';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type SessionCardProps = {
   session: MentorshipSession;
@@ -21,6 +23,7 @@ export function SessionCard({
   onReschedule,
   showActions,
 }: SessionCardProps) {
+  const styles = useThemedStyles(createStyles);
   const canJoin =
     session.meetingUrl &&
     session.status !== 'cancelled' &&
@@ -82,7 +85,8 @@ function statusStyle(status: string) {
   return { backgroundColor: '#FFF4E5' };
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     gap: spacing.xs,
     padding: spacing.md,
@@ -101,3 +105,4 @@ const styles = StyleSheet.create({
   link: { color: colors.primary, fontWeight: '600' },
   danger: { color: colors.error },
 });
+}

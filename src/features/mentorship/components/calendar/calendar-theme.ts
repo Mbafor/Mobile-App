@@ -1,20 +1,24 @@
 import type { DeepPartial, ThemeConfigs } from '@howljs/calendar-kit';
 
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
+import type { MentorshipColorScheme } from '@/constants/theme/types';
 
-export const mentorshipCalendarTheme: DeepPartial<ThemeConfigs> = {
-  colors: {
-    primary: mentorshipColors.accent,
-    onPrimary: mentorshipColors.textOnAccent,
-    background: mentorshipColors.surfaceElevated,
-    onBackground: mentorshipColors.text,
-    border: calendarColors.border,
-    text: mentorshipColors.text,
-    surface: calendarColors.empty,
-    onSurface: mentorshipColors.textMuted,
-  },
-  hourTextStyle: { color: mentorshipColors.textMuted, fontSize: 11 },
-  unavailableHourBackgroundColor: calendarColors.empty,
-  nowIndicatorColor: mentorshipColors.accent,
-};
+export function createMentorshipCalendarTheme(
+  mentorshipColors: MentorshipColorScheme,
+): DeepPartial<ThemeConfigs> {
+  return {
+    colors: {
+      primary: mentorshipColors.accent,
+      onPrimary: mentorshipColors.textOnAccent,
+      background: mentorshipColors.surfaceElevated,
+      onBackground: mentorshipColors.text,
+      border: calendarColors.border,
+      text: mentorshipColors.text,
+      surface: calendarColors.empty,
+      onSurface: mentorshipColors.textMuted,
+    },
+    hourTextStyle: { color: mentorshipColors.textMuted, fontSize: 11 },
+    unavailableHourBackgroundColor: calendarColors.empty,
+    nowIndicatorColor: mentorshipColors.accent,
+  };
+}

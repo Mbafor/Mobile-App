@@ -1,7 +1,9 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui/Text';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export type OptionsSheetItem = {
   key: string;
@@ -18,6 +20,7 @@ type OptionsSheetProps = {
 };
 
 export function OptionsSheet({ visible, title, options, onClose }: OptionsSheetProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
@@ -59,7 +62,8 @@ export function OptionsSheet({ visible, title, options, onClose }: OptionsSheetP
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',
@@ -102,3 +106,4 @@ const styles = StyleSheet.create({
   },
   cancelLabel: { fontSize: 16, fontWeight: '600', color: colors.textMuted },
 });
+}

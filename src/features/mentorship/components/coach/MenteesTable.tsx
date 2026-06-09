@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -6,7 +8,6 @@ import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
 import { OptionsSheet } from '@/components/ui/OptionsSheet';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MenteeSummary } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 import { confirmAction } from '@/utils/confirm-action';
@@ -19,6 +20,7 @@ type MenteesTableProps = {
 };
 
 export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: MenteesTableProps) {
+  const styles = useAppThemedStyles(createStyles);
   const [profileMentee, setProfileMentee] = useState<MenteeSummary | null>(null);
   const [menuMentee, setMenuMentee] = useState<MenteeSummary | null>(null);
 
@@ -162,7 +164,9 @@ function CellText({ width, text }: { width: number; text: string }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   tableShell: {
     borderWidth: StyleSheet.hairlineWidth,
     borderColor: mentorshipColors.border,
@@ -215,3 +219,4 @@ const styles = StyleSheet.create({
   closeText: { color: mentorshipColors.textMuted, fontWeight: '600' },
   profileScroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
 });
+}

@@ -1,4 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { Alert, StyleSheet, View } from 'react-native';
 
@@ -7,7 +9,7 @@ import { FormField } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
 import { AuthScreenLayout } from '@/features/auth/components';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
@@ -16,6 +18,7 @@ import { isValidEmail } from '@/utils/validation';
 import { isValidPassword } from '@/utils/validation/password';
 
 export function EmailOtpScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   useAuthRedirect('guest');
   const { signInWithEmailPassword, isLoading, error, clearError } = useAuthActions();
@@ -99,7 +102,8 @@ export function EmailOtpScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   actions: { marginTop: spacing.md },
   continueBtn: {
     backgroundColor: colors.primary,
@@ -111,3 +115,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+}

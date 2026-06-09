@@ -1,8 +1,10 @@
 import type { PropsWithChildren, ReactNode } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type MentorshipSectionProps = PropsWithChildren<{
   title: string;
@@ -12,6 +14,7 @@ type MentorshipSectionProps = PropsWithChildren<{
 }>;
 
 export function MentorshipSection({ title, subtitle, action, children }: MentorshipSectionProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.section}>
       <View style={styles.header}>
@@ -32,7 +35,8 @@ export function MentorshipSection({ title, subtitle, action, children }: Mentors
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   section: {
     marginBottom: spacing.lg,
   },
@@ -54,3 +58,4 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
 });
+}

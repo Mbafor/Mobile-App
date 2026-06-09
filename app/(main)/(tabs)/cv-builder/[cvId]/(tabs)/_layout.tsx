@@ -3,9 +3,9 @@ import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { colors, spacing } from '@/constants/theme';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
+import { spacing } from '@/constants/theme';
 import { useHideMainTabBar } from '@/features/cv-builder/hooks/useHideMainTabBar';
+import { useTheme } from '@/hooks/useTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
@@ -21,11 +21,11 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 export default function CVHubTabsLayout() {
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
+  const { colors, cvDocsTheme } = useTheme();
   useHideMainTabBar();
 
   const tabBarHeight = 65 + insets.bottom;
 
-  // Hide native tab bar on all web — CVHubTopNav handles navigation at the top
   const tabBarWebStyle = { display: 'none' as const };
 
   return (

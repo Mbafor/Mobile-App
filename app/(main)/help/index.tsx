@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 const SUPPORT_EMAIL = 'olivesforum@gmail.com';
 
@@ -48,6 +50,7 @@ const items: HelpItem[] = [
 ];
 
 export default function HelpIndexScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
 
   return (
@@ -91,7 +94,8 @@ export default function HelpIndexScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -137,3 +141,4 @@ const styles = StyleSheet.create({
   rowLabel: { fontSize: 15, fontWeight: '600', color: colors.text },
   rowSub: { fontSize: 13, color: colors.textMuted, lineHeight: 18 },
 });
+}

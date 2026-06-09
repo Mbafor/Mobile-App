@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -12,7 +14,7 @@ import {
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import {
   getOAuthAvatarUrl,
@@ -29,6 +31,7 @@ type MenuItem = {
 };
 
 export function ProfileHeaderMenu() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { profile, user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -138,7 +141,8 @@ export function ProfileHeaderMenu() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   avatarBtn: {
     marginRight: spacing.xs,
     padding: 2,
@@ -195,3 +199,4 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
 });
+}

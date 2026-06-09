@@ -1,4 +1,6 @@
 import { useRef, useState, type ReactNode } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Alert,
   Keyboard,
@@ -16,7 +18,7 @@ import {
   SelectWithOther,
 } from '@/components/forms';
 import { Button, Input, Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import {
   OPPORTUNITY_CATEGORY_OPTIONS,
   OPPORTUNITY_DEGREE_OPTIONS,
@@ -55,6 +57,7 @@ export function OpportunityForm({
   loading,
   onSubmit,
 }: OpportunityFormProps) {
+  const styles = useThemedStyles(createStyles);
   const scrollRef = useRef<ScrollView>(null);
   const [title, setTitle] = useState(initialValues.title);
   const [organization, setOrganization] = useState(initialValues.organization);
@@ -249,7 +252,8 @@ function Field({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1 },
   scroll: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.md },
   footer: {
@@ -271,3 +275,4 @@ const styles = StyleSheet.create({
   multiline: { minHeight: 100, textAlignVertical: 'top' },
   error: { color: colors.error, fontSize: 13 },
 });
+}

@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -21,9 +23,10 @@ import { SectionTabs } from '@/features/cv-builder/components/SectionTabs';
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
 import { useCVBuilder } from '@/features/cv-builder/hooks/useCVBuilder';
 import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function CVBuilderScreen() {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ id?: string }>();
   const cvId = typeof params.id === 'string' ? params.id : params.id?.[0];
@@ -148,7 +151,8 @@ export function CVBuilderScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.surface },
   centered: {
     flex: 1,
@@ -205,3 +209,4 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
   },
 });
+}

@@ -1,4 +1,6 @@
 import { useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
@@ -13,7 +15,7 @@ import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ErrorMessage } from '@/components/feedback';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { isValidEmail } from '@/utils/validation';
 import { isValidPassword } from '@/utils/validation/password';
@@ -109,6 +111,7 @@ function OliveBranchIllustration() {
 
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export function WelcomeScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
@@ -375,7 +378,8 @@ export function WelcomeScreen() {
 // ─── Styles ───────────────────────────────────────────────────────────────────
 const PANEL_RADIUS = 28;
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: {
     flex: 1,
     backgroundColor: colors.forest,
@@ -592,3 +596,4 @@ const styles = StyleSheet.create({
     marginTop: spacing.xs,
   },
 });
+}

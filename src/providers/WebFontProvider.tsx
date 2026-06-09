@@ -1,3 +1,5 @@
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -8,12 +10,13 @@ import {
 import type { PropsWithChildren } from 'react';
 import { ActivityIndicator, Platform, StyleSheet, View } from 'react-native';
 
-import { colors } from '@/constants/theme';
+
 
 /**
  * Loads Inter on web only. Native platforms skip font loading entirely.
  */
 export function WebFontProvider({ children }: PropsWithChildren) {
+  const styles = useThemedStyles(createStyles);
   if (Platform.OS !== 'web') {
     return children;
   }
@@ -40,7 +43,8 @@ function WebFontLoader({ children }: PropsWithChildren) {
   return children;
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   boot: {
     flex: 1,
     alignItems: 'center',
@@ -48,3 +52,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
 });
+}

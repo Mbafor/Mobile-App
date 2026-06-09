@@ -1,4 +1,8 @@
 import { useRouter, type Href } from 'expo-router';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,13 +12,13 @@ import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelec
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
 import { useSelectCVTemplate } from '@/features/cv-builder/hooks/useSelectCVTemplate';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { Ionicons } from '@expo/vector-icons';
 
 export function CVTemplatesScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { cv, templateId, saveState } = useCVBuilderContext();
@@ -84,7 +88,9 @@ export function CVTemplatesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   scroll: {
     padding: spacing.md,
@@ -114,3 +120,4 @@ const styles = StyleSheet.create({
   heroCopy: { flex: 1, gap: spacing.sm },
   heroSubtitle: { lineHeight: 20 },
 });
+}

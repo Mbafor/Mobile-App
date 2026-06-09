@@ -1,9 +1,12 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function PrivacySection() {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.wrap}>
       <Text muted style={styles.intro}>
@@ -20,9 +23,11 @@ export function PrivacySection() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   intro: { lineHeight: 22 },
   body: { lineHeight: 22, color: colors.text },
   note: { marginTop: spacing.xs, lineHeight: 20 },
 });
+}

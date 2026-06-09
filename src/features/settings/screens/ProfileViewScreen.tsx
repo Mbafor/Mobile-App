@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import {
   Image,
@@ -20,7 +22,7 @@ import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { getOAuthAvatarUrl, getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
@@ -41,6 +43,7 @@ const FUNDING_LABELS: Record<string, string> = {
 };
 
 export function ProfileViewScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
   const { profile, preferences } = useProfileData();
@@ -218,7 +221,8 @@ export function ProfileViewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
 
   // ─── Header ───────────────────────────────────────────────────────────────
@@ -370,3 +374,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+}

@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -6,7 +8,6 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { OptionsSheet } from '@/components/ui/OptionsSheet';
 import { MentorshipMobileList } from '@/features/mentorship/components/shared/MentorshipMobileList';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatAvailabilityRule, formatDayOfWeek } from '@/features/mentorship/utils/format-availability';
 import type { MentorAvailabilityRule } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
@@ -29,6 +30,7 @@ type AvailabilityManagerProps = {
 };
 
 export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: AvailabilityManagerProps) {
+  const styles = useAppThemedStyles(createStyles);
   const [modalOpen, setModalOpen] = useState(false);
   const [dayOfWeek, setDayOfWeek] = useState('1');
   const [startTime, setStartTime] = useState('09:00');
@@ -128,7 +130,9 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.md },
   header: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   hint: { flex: 1, fontSize: 13 },
@@ -162,3 +166,4 @@ const styles = StyleSheet.create({
   timeInput: { flex: 1 },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm, marginTop: spacing.sm },
 });
+}

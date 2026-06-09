@@ -1,13 +1,16 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { CoachMentorshipDashboard } from '@/features/mentorship/screens/CoachMentorshipDashboard';
 import { StudentMentorshipDashboard } from '@/features/mentorship/screens/StudentMentorshipDashboard';
 import { useMentorshipRole } from '@/features/mentorship/hooks/useMentorshipRole';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function MentorshipScreen() {
+  const styles = useThemedStyles(createStyles);
   const { isCoach, isLoading, error } = useMentorshipRole();
 
   if (isLoading) {
@@ -34,7 +37,8 @@ export function MentorshipScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   screen: {
     flex: 1,
     flexDirection: 'column',
@@ -50,3 +54,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
   },
 });
+}

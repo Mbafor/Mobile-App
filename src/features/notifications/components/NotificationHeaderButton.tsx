@@ -1,13 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useNotifications } from '@/features/notifications/hooks/useNotifications';
 
 export function NotificationHeaderButton() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { unreadCount } = useNotifications();
 
@@ -31,7 +34,8 @@ export function NotificationHeaderButton() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   button: {
     marginRight: spacing.sm,
     padding: spacing.xs,
@@ -56,3 +60,4 @@ const styles = StyleSheet.create({
     lineHeight: 12,
   },
 });
+}

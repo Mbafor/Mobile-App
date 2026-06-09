@@ -1,14 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import {
   CV_TEMPLATES,
   resolveTemplateId,
   type CVTemplateId,
 } from '@/features/cv-builder/constants/templates';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type TemplateSelectorProps = {
   selectedId: string;
@@ -122,6 +125,7 @@ export function TemplateSelector({
   disabled,
   variant = 'gallery',
 }: TemplateSelectorProps) {
+  const styles = useAppThemedStyles(createStyles);
   const activeId = resolveTemplateId(selectedId);
   const purchasedSet = new Set(purchasedTemplateIds.map((id) => resolveTemplateId(id)));
 
@@ -250,7 +254,9 @@ const mock = StyleSheet.create({
   lineShort: { height: 3, borderRadius: 2, backgroundColor: '#F3F4F6', width: '60%' },
 });
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   list: { gap: spacing.sm },
   card: {
     flexDirection: 'row',
@@ -350,3 +356,4 @@ const styles = StyleSheet.create({
   compactTitle: { fontSize: 12, fontWeight: '700', color: colors.text, alignSelf: 'stretch' },
   compactEye: { position: 'absolute', bottom: 6, right: 6 },
 });
+}

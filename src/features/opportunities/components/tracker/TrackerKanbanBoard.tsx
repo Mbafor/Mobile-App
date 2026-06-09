@@ -1,4 +1,6 @@
 import { useCallback, useRef, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import {
@@ -6,7 +8,7 @@ import {
   TRACKER_COLUMN_WIDTH,
 } from '@/features/opportunities/components/tracker/TrackerColumn';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import {
   TRACKER_STAGE_ORDER,
   type TrackerStage,
@@ -31,6 +33,7 @@ export function TrackerKanbanBoard({
   refreshing = false,
   onRefresh,
 }: TrackerKanbanBoardProps) {
+  const styles = useThemedStyles(createStyles);
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const draggingIdRef = useRef<string | null>(null);
   const columnBounds = useRef<Partial<Record<TrackerStage, { x: number; width: number }>>>({});
@@ -103,7 +106,8 @@ export function TrackerKanbanBoard({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { flex: 1 },
   row: {
     paddingHorizontal: spacing.md,
@@ -112,3 +116,4 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
 });
+}

@@ -1,12 +1,15 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { performLogout } from '@/features/auth/utils/perform-logout';
 import { confirmAction } from '@/utils/confirm-action';
 
 export function SettingsLogoutFooter() {
+  const styles = useThemedStyles(createStyles);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
@@ -42,7 +45,8 @@ export function SettingsLogoutFooter() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: {
     marginTop: spacing.sm,
     paddingTop: spacing.md,
@@ -73,3 +77,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+}

@@ -1,10 +1,12 @@
 import { Alert, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import type { MenteeSummary } from '@/types/domain/mentorship';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type MenteeCardProps = {
   mentee: MenteeSummary;
@@ -13,6 +15,7 @@ type MenteeCardProps = {
 };
 
 export function MenteeCard({ mentee, onRemove, isRemoving }: MenteeCardProps) {
+  const styles = useThemedStyles(createStyles);
   const { profile, mentorship, progressPercent } = mentee;
   const name = profile.fullName ?? 'Student';
 
@@ -56,7 +59,8 @@ export function MenteeCard({ mentee, onRemove, isRemoving }: MenteeCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     gap: spacing.sm,
     padding: spacing.md,
@@ -78,3 +82,4 @@ const styles = StyleSheet.create({
   progressFill: { height: '100%', backgroundColor: colors.primary },
   remove: { color: colors.error, alignSelf: 'flex-start' },
 });
+}

@@ -4,7 +4,7 @@ import Svg, { Circle, Ellipse, Line } from 'react-native-svg';
 import { Text } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 
 // ─── Olive branch illustration (same language as WelcomeScreen) ───────────────
 function OliveBranchIllustration() {

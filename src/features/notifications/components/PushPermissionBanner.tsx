@@ -1,9 +1,12 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function PushPermissionBanner() {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.banner}>
       <Text style={styles.title}>Push notifications are off</Text>
@@ -14,7 +17,8 @@ export function PushPermissionBanner() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   title: { fontWeight: '600' },
   banner: {
     backgroundColor: colors.surface,
@@ -24,3 +28,4 @@ const styles = StyleSheet.create({
     gap: spacing.xs,
   },
 });
+}

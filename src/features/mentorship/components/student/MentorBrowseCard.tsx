@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import {
   getMentorAcademicFocus,
   getMentorInterestTags,
@@ -26,6 +28,7 @@ function availabilityText(mentor: AvailableMentor): { label: string; color: stri
 }
 
 export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProps) {
+  const styles = useThemedStyles(createStyles);
   const { profile } = mentor;
   const name = profile.fullName?.trim() || 'Coach';
   const academicFocus = getMentorAcademicFocus(mentor);
@@ -69,7 +72,8 @@ export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProp
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -101,3 +105,4 @@ const styles = StyleSheet.create({
     marginTop: 2,
   },
 });
+}

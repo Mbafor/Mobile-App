@@ -1,4 +1,6 @@
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { EmptyState } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -6,7 +8,7 @@ import {
   OpportunityCard,
   OPPORTUNITY_CARD_WIDTH,
 } from '@/features/opportunities/components/OpportunityCard';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -23,6 +25,7 @@ export function OpportunitySection({
   onCardPress,
   onViewAll,
 }: OpportunitySectionProps) {
+  const styles = useThemedStyles(createStyles);
   const isDesktop = useWebDesktop();
 
   if (opportunities.length === 0) {
@@ -71,7 +74,8 @@ export function OpportunitySection({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   section: { marginBottom: spacing.lg },
   headerRow: {
     flexDirection: 'row',
@@ -91,3 +95,4 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.xs,
   },
 });
+}

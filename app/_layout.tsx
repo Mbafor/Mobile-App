@@ -1,14 +1,14 @@
 import 'react-native-gesture-handler';
 
 import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
 
+import { ThemedStatusBar } from '@/components/layout/ThemedStatusBar';
 import { AppProviders } from '@/providers';
 
 export default function RootLayout() {
   return (
     <AppProviders>
-      <StatusBar style="auto" />
+      <ThemedStatusBar />
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" />
         <Stack.Screen name="auth/callback" options={{ title: 'Signing in' }} />

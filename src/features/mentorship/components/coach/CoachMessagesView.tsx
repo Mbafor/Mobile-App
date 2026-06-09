@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { MentorshipChat } from '@/features/mentorship/components/shared/MentorshipChat';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { useCoachThreadPreviews } from '@/features/mentorship/hooks/useCoachThreadPreviews';
 import { useMentorshipMessages } from '@/features/mentorship/hooks/useMentorshipMessages';
 import type { MenteeSummary } from '@/types/domain/mentorship';
@@ -21,6 +22,7 @@ export function CoachMessagesView({
   currentUserId,
   initialActiveMentorshipId,
 }: CoachMessagesViewProps) {
+  const styles = useAppThemedStyles(createStyles);
   const { width } = useWindowDimensions();
   const isNarrow = width < 720;
   const [selectedId, setSelectedId] = useState<string | undefined>(() => {
@@ -132,7 +134,9 @@ export function CoachMessagesView({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'row',
@@ -206,3 +210,4 @@ const styles = StyleSheet.create({
   backBtn: { paddingVertical: spacing.sm, paddingHorizontal: spacing.sm },
   backText: { fontWeight: '600', color: mentorshipColors.accent, fontSize: 14 },
 });
+}

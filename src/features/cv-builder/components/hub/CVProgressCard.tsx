@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getProgressMessage } from '@/features/cv-builder/utils/section-config';
 
 type CVProgressCardProps = {
@@ -10,6 +12,7 @@ type CVProgressCardProps = {
 };
 
 export function CVProgressCard({ percent, enabledCount }: CVProgressCardProps) {
+  const styles = useThemedStyles(createStyles);
   const segments = Math.min(enabledCount, 8);
   const filledSegments = Math.round((percent / 100) * segments);
 
@@ -36,7 +39,8 @@ export function CVProgressCard({ percent, enabledCount }: CVProgressCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     marginHorizontal: spacing.md,
     marginTop: spacing.md,
@@ -72,3 +76,4 @@ const styles = StyleSheet.create({
   segmentFilled: { backgroundColor: colors.primary },
   hint: { lineHeight: 18 },
 });
+}

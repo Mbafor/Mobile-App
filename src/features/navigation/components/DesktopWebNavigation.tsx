@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing, webTransition } from '@/constants/theme';
+import { spacing, webTransition } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
@@ -31,6 +33,7 @@ export function DesktopWebNavigation({
   rightSlot,
   compact = false,
 }: DesktopWebNavigationProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.root}>
       <View style={styles.row}>
@@ -60,7 +63,8 @@ export function DesktopWebNavigation({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: {
     backgroundColor: colors.background,
     borderBottomWidth: 1,
@@ -109,3 +113,4 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
 });
+}

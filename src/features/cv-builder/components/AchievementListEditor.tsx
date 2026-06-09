@@ -5,7 +5,7 @@ import { Input, TextArea } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
-import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
+import { useCvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
 import { createEmptyAchievement } from '@/features/cv-builder/utils/normalize-cv-content';
 import type { CVAchievementEntry } from '@/types/domain/cv';
 
@@ -24,6 +24,7 @@ export function AchievementListEditor({
   onChange,
   addLabel = 'Add achievement',
 }: AchievementListEditorProps) {
+  const cvUi = useCvUi();
   const updateEntry = (id: string, patch: Partial<CVAchievementEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };

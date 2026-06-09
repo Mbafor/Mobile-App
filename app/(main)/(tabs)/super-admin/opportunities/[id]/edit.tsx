@@ -1,9 +1,10 @@
 import { useLocalSearchParams } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
-import { colors } from '@/constants/theme';
+
 import { OpportunityForm } from '@/features/admin/components/OpportunityForm';
 import { useAdminOpportunity } from '@/features/admin/hooks/useAdminOpportunities';
 import { useUpdateOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
@@ -12,6 +13,7 @@ import { opportunityToFormValues } from '@/features/admin/types/opportunity-form
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
 
 export default function SuperAdminEditOpportunity() {
+  const { colors } = useTheme();
   useRequireSuperAdmin();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { isReady } = useCanManageOpportunities();

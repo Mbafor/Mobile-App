@@ -1,10 +1,12 @@
 import type { PropsWithChildren } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui/Text';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type AccordionProps = PropsWithChildren<{
   title: string;
@@ -14,6 +16,7 @@ type AccordionProps = PropsWithChildren<{
 }>;
 
 export function Accordion({ title, index, children, defaultOpen = false }: AccordionProps) {
+  const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(defaultOpen);
   const numbered = index !== undefined;
 
@@ -36,7 +39,8 @@ export function Accordion({ title, index, children, defaultOpen = false }: Accor
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     borderRadius: 12,
     backgroundColor: colors.surface,
@@ -94,3 +98,4 @@ const styles = StyleSheet.create({
     backgroundColor: colors.surface,
   },
 });
+}

@@ -1,8 +1,11 @@
 import { memo } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -46,7 +49,8 @@ function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRo
 
 export const OpportunityListRow = memo(OpportunityListRowComponent);
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: spacing.md,
@@ -66,3 +70,4 @@ const styles = StyleSheet.create({
   title: { fontSize: typography.fontSize.md, fontWeight: '600', color: colors.text },
   deadline: { color: colors.primary },
 });
+}

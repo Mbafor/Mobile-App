@@ -1,8 +1,10 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVProTipCardProps = {
   tip: string;
@@ -10,6 +12,7 @@ type CVProTipCardProps = {
 };
 
 export function CVProTipCard({ tip, onViewTips }: CVProTipCardProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.card}>
       <View style={styles.iconWrap}>
@@ -28,7 +31,8 @@ export function CVProTipCard({ tip, onViewTips }: CVProTipCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -60,3 +64,4 @@ const styles = StyleSheet.create({
   },
   btnText: { color: colors.background, fontWeight: '700', fontSize: 12 },
 });
+}

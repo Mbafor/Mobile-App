@@ -1,14 +1,17 @@
 import { useQuery } from '@tanstack/react-query';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { AdminStatCard } from '@/features/admin/components/AdminStatCard';
 import { queryKeys } from '@/constants/query-keys';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { superAdminApi } from '@/services/api';
 
 export function SuperAdminOverviewScreen() {
+  const styles = useThemedStyles(createStyles);
   const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: queryKeys.superAdmin.overview,
     queryFn: async () => {
@@ -59,10 +62,12 @@ export function SuperAdminOverviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
   subtitle: { marginBottom: spacing.md },
   section: { fontWeight: '700', fontSize: 16, marginTop: spacing.md, marginBottom: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
 });
+}

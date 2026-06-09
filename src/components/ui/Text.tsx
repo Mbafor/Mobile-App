@@ -1,8 +1,10 @@
 import type { PropsWithChildren } from 'react';
 import { Platform, Text as RNText, StyleSheet, type TextProps as RNTextProps } from 'react-native';
 
-import { colors, typography, webTypographyScale, type WebTextVariant } from '@/constants/theme';
+import type { ColorScheme } from '@/constants/theme/types';
+import { typography, webTypographyScale, type WebTextVariant } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 type TextVariant = 'body' | 'title' | 'caption' | WebTextVariant;
@@ -27,6 +29,7 @@ function resolveWebTypeVariant(variant: TextVariant, isDesktopWeb: boolean): Web
 
 export function Text({ variant = 'body', muted, weight, style, ...props }: TextProps) {
   const isDesktopWeb = useWebDesktop();
+  const styles = useThemedStyles(createStyles);
   const webTypeKey = Platform.OS === 'web' ? resolveWebTypeVariant(variant, isDesktopWeb) : null;
   const webVariantStyle = webTypeKey ? webTypographyScale[webTypeKey] : undefined;
 
@@ -47,14 +50,16 @@ export function Text({ variant = 'body', muted, weight, style, ...props }: TextP
   );
 }
 
-const styles = StyleSheet.create({
-  body: { fontSize: typography.fontSize.md, color: colors.text },
-  title: { fontSize: typography.fontSize.xl, color: colors.text },
-  titleDesktop: {
-    fontSize: 22,
-    lineHeight: 30,
-    letterSpacing: -0.2,
-  },
-  caption: { fontSize: typography.fontSize.sm, color: colors.textMuted },
-  muted: { color: colors.textMuted },
-});
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
+    body: { fontSize: typography.fontSize.md, color: colors.text },
+    title: { fontSize: typography.fontSize.xl, color: colors.text },
+    titleDesktop: {
+      fontSize: 22,
+      lineHeight: 30,
+      letterSpacing: -0.2,
+    },
+    caption: { fontSize: typography.fontSize.sm, color: colors.textMuted },
+    muted: { color: colors.textMuted },
+  });
+}

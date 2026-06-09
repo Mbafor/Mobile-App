@@ -1,4 +1,6 @@
 import { useRouter } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback } from 'react';
 import {
   ActivityIndicator,
@@ -12,10 +14,11 @@ import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { SavedOpportunityListRow } from '@/features/opportunities/components/SavedOpportunityListRow';
 import { useSavedOpportunities } from '@/features/opportunities/hooks/useSavedOpportunities';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 export function SavedOpportunitiesScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { opportunities, isLoading, isRefetching, error, refetch } = useSavedOpportunities();
 
@@ -83,7 +86,8 @@ export function SavedOpportunitiesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   banner: { padding: spacing.md },
@@ -91,3 +95,4 @@ const styles = StyleSheet.create({
   emptyList: { flexGrow: 1 },
   listContent: { paddingBottom: spacing.md },
 });
+}

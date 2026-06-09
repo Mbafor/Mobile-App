@@ -1,4 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -8,18 +12,18 @@ import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
 import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
 import { CVPdfPreviewPanel } from '@/features/cv-builder/components/preview/CVPdfPreviewPanel';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
 import { useCVTemplateDownload } from '@/features/cv-builder/hooks/useCVTemplateDownload';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import { getEnabledSections, getSectionStatus } from '@/features/cv-builder/utils/section-config';
 
 export function CVEditorPreviewScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { cv, content, templateId, layout, isLoading, error } = useCVBuilderContext();
@@ -132,7 +136,9 @@ export function CVEditorPreviewScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   page: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
   toolbar: {
@@ -203,3 +209,4 @@ const styles = StyleSheet.create({
   },
   nativeHintText: { textAlign: 'center', lineHeight: 18 },
 });
+}

@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import type { SaveIndicatorState } from '@/features/cv-builder/hooks/useCVBuilder';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type SaveIndicatorProps = {
   state: SaveIndicatorState;
@@ -11,6 +13,7 @@ type SaveIndicatorProps = {
 };
 
 export function SaveIndicator({ state, errorMessage }: SaveIndicatorProps) {
+  const styles = useThemedStyles(createStyles);
   if (state === 'idle') {
     return (
       <View style={styles.row}>
@@ -54,7 +57,8 @@ export function SaveIndicator({ state, errorMessage }: SaveIndicatorProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -64,3 +68,4 @@ const styles = StyleSheet.create({
   saved: { color: colors.success, fontWeight: '600' },
   error: { color: colors.error, fontWeight: '600', flex: 1 },
 });
+}

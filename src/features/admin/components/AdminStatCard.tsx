@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type AdminStatCardProps = {
   label: string;
@@ -9,6 +11,7 @@ type AdminStatCardProps = {
 };
 
 export function AdminStatCard({ label, value }: AdminStatCardProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.card}>
       <Text style={styles.value}>{value}</Text>
@@ -19,7 +22,8 @@ export function AdminStatCard({ label, value }: AdminStatCardProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     flex: 1,
     minWidth: '45%',
@@ -33,3 +37,4 @@ const styles = StyleSheet.create({
   value: { fontSize: 28, fontWeight: '700', color: colors.text },
   label: { fontSize: 13 },
 });
+}

@@ -1,3 +1,5 @@
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   ActivityIndicator,
   RefreshControl,
@@ -15,7 +17,7 @@ import { AdminTopList } from '@/features/admin/components/AdminTopList';
 import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSuperAdmin';
 import { usePlatformAnalyticsQuery } from '@/hooks/use-platform-analytics';
 import { FUNDING_TYPE_LABELS } from '@/constants/search-filters';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { ChartDatum } from '@/features/admin/types/analytics';
 
 function formatFundingChart(data: ChartDatum[]): ChartDatum[] {
@@ -26,6 +28,7 @@ function formatFundingChart(data: ChartDatum[]): ChartDatum[] {
 }
 
 export function PlatformAnalyticsPanel() {
+  const styles = useThemedStyles(createStyles);
   const { isReady } = useRequireSuperAdmin();
   const { data: analytics, isLoading, error, refetch, isRefetching } =
     usePlatformAnalyticsQuery(isReady);
@@ -102,7 +105,8 @@ export function PlatformAnalyticsPanel() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.lg },
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.sm },
   pageTitle: { fontSize: 22, fontWeight: '700', color: colors.text },
@@ -116,3 +120,4 @@ const styles = StyleSheet.create({
   },
   statsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
 });
+}

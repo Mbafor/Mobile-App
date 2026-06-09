@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Animated, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 type TypingIndicatorProps = {
@@ -39,6 +40,7 @@ function BouncingDot({ delay }: { delay: number }) {
 }
 
 export function TypingIndicator({ visible, peerName }: TypingIndicatorProps) {
+  const styles = useAppThemedStyles(createStyles);
   if (!visible) return null;
 
   const label = peerName.trim() || 'Someone';
@@ -55,7 +57,9 @@ export function TypingIndicator({ visible, peerName }: TypingIndicatorProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -72,3 +76,4 @@ const styles = StyleSheet.create({
   },
   text: { fontSize: 12, color: mentorshipColors.textMuted, fontStyle: 'italic' },
 });
+}

@@ -1,9 +1,10 @@
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
 import { Text } from '@/components/ui';
 import { MentorshipMobileList } from '@/features/mentorship/components/shared/MentorshipMobileList';
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
 import {
   canJoinGoogleMeet,
@@ -46,6 +47,7 @@ export function UpcomingSessionsPanel({
   onCancel,
   onConfirm,
 }: UpcomingSessionsPanelProps) {
+  const styles = useAppThemedStyles(createStyles);
   const upcoming = sessions
     .filter((s) => isActiveSessionStatus(s.status))
     .sort((a, b) => new Date(a.scheduledStart).getTime() - new Date(b.scheduledStart).getTime());
@@ -112,7 +114,9 @@ export function UpcomingSessionsPanel({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm, marginTop: spacing.md },
   heading: { fontSize: 17, fontWeight: '700', color: mentorshipColors.text },
   card: { padding: spacing.md, gap: spacing.xs },
@@ -137,3 +141,4 @@ const styles = StyleSheet.create({
   meetBtnText: { color: mentorshipColors.textOnAccent, fontWeight: '600' },
   danger: { color: mentorshipColors.danger, fontWeight: '600' },
 });
+}

@@ -1,7 +1,9 @@
 import { Image, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui/Text';
-import { colors } from '@/constants/theme';
+
 
 const DEFAULT_BG = colors.primary;
 
@@ -22,6 +24,7 @@ export function UserAvatarDisplay({
   avatarUrl,
   size = 72,
 }: UserAvatarDisplayProps) {
+  const styles = useThemedStyles(createStyles);
   const radius = size / 2;
 
   if (avatarUrl) {
@@ -55,7 +58,8 @@ export function UserAvatarDisplay({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   placeholder: {
     alignItems: 'center',
     justifyContent: 'center',
@@ -65,3 +69,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+}

@@ -1,4 +1,8 @@
 import { useRouter, type Href } from 'expo-router';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -16,14 +20,14 @@ import { CVHubDocToolbar } from '@/features/cv-builder/components/hub/CVHubDocTo
 import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
 import { CVReorderSectionsModal } from '@/features/cv-builder/components/hub/CVReorderSectionsModal';
 import { CVSectionRow } from '@/features/cv-builder/components/hub/CVSectionRow';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import { useCVBuilderContext } from '@/features/cv-builder/context/CVBuilderContext';
 import { useCVPaymentContext } from '@/features/cv-builder/context/CVPaymentContext';
 import { useCVTemplateDownload } from '@/features/cv-builder/hooks/useCVTemplateDownload';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
+import { SupportContactHint } from '@/features/help/components/SupportContactHint';
 import {
   calculateCVProgress,
   getEnabledSections,
@@ -31,6 +35,7 @@ import {
 } from '@/features/cv-builder/utils/section-config';
 
 export function CVHubDashboardScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const {
@@ -176,6 +181,8 @@ export function CVHubDashboardScreen() {
               label="Download PDF"
             />
           </View>
+
+          <SupportContactHint />
         </ScrollView>
       </View>
 
@@ -190,7 +197,9 @@ export function CVHubDashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   page: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
   searchStrip: {
@@ -254,3 +263,4 @@ const styles = StyleSheet.create({
   },
   previewCtaText: { fontSize: 14, fontWeight: '600', color: colors.primary },
 });
+}

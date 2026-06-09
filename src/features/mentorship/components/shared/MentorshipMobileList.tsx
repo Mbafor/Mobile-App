@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 type MentorshipMobileListProps<T> = {
@@ -38,7 +39,9 @@ export function MentorshipMobileList<T>({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   list: { gap: spacing.sm },
   cardWrap: {
     borderRadius: 14,
@@ -54,3 +57,4 @@ const styles = StyleSheet.create({
     backgroundColor: mentorshipColors.surface,
   },
 });
+}

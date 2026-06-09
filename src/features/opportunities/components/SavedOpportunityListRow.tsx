@@ -1,10 +1,13 @@
 import { memo } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { OpportunityListRow } from '@/features/opportunities/components/OpportunityListRow';
 import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 type SavedOpportunityListRowProps = {
@@ -33,7 +36,8 @@ function SavedOpportunityListRowComponent({ opportunity, onPress }: SavedOpportu
 
 export const SavedOpportunityListRow = memo(SavedOpportunityListRowComponent);
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { backgroundColor: colors.background },
   actions: {
     paddingHorizontal: spacing.md,
@@ -51,3 +55,4 @@ const styles = StyleSheet.create({
   unsaveBtnDisabled: { opacity: 0.6 },
   unsaveText: { color: colors.error, fontWeight: '600', fontSize: 13 },
 });
+}

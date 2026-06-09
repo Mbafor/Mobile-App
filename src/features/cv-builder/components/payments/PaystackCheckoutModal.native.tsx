@@ -1,4 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ActivityIndicator,
@@ -11,9 +15,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
 
 import { Text } from '@/components/ui';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import { extractReferenceFromUrl } from '@/services/paystack/paystack';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type PaystackCheckoutModalProps = {
   visible: boolean;
@@ -32,6 +35,7 @@ export function PaystackCheckoutModal({
   onSuccess,
   onFailure,
 }: PaystackCheckoutModalProps) {
+  const styles = useAppThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const handledRef = useRef(false);
@@ -128,7 +132,9 @@ export function PaystackCheckoutModal({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   toolbar: {
     flexDirection: 'row',
@@ -162,3 +168,4 @@ const styles = StyleSheet.create({
   },
   loadingText: { fontSize: 13 },
 });
+}

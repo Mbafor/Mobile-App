@@ -1,4 +1,6 @@
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
@@ -9,7 +11,7 @@ import { OtpInput } from '@/features/auth/components';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import type { OtpVerificationType } from '@/services/api/auth.api';
 
 const RESEND_COOLDOWN_SEC = 60;
@@ -20,6 +22,7 @@ function parseOtpType(value: string | string[] | undefined): OtpVerificationType
 }
 
 export function VerifyOtpScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const params = useLocalSearchParams<{ email?: string; otpType?: string }>();
   const email =
@@ -131,7 +134,8 @@ export function VerifyOtpScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   panelSub: {
     color: colors.textMuted,
     fontSize: typography.fontSize.sm,
@@ -168,3 +172,4 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 });
+}

@@ -1,7 +1,9 @@
 import { Pressable, StyleSheet } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVAddButtonProps = {
   label: string;
@@ -10,6 +12,7 @@ type CVAddButtonProps = {
 };
 
 export function CVAddButton({ label, onPress, disabled }: CVAddButtonProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <Pressable
       onPress={onPress}
@@ -23,7 +26,8 @@ export function CVAddButton({ label, onPress, disabled }: CVAddButtonProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   button: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -40,3 +44,4 @@ const styles = StyleSheet.create({
   plus: { fontSize: 18, fontWeight: '700', color: colors.primary },
   label: { fontSize: 15, fontWeight: '600', color: colors.primary },
 });
+}

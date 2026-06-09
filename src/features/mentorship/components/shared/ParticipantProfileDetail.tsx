@@ -1,9 +1,10 @@
 import { StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
 import { TagList } from '@/features/mentorship/components/shared/TagList';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MentorProfile, MentorshipParticipantProfile } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -30,6 +31,7 @@ export function ParticipantProfileDetail({
   roleLabel,
   compact = false,
 }: ParticipantProfileDetailProps) {
+  const styles = useAppThemedStyles(createStyles);
   const name = profile.fullName?.trim() || 'Unknown';
   const interests = [...new Set([...profile.interests, ...(mentorProfile?.mentoringInterests ?? [])])];
   const career = [
@@ -78,7 +80,9 @@ export function ParticipantProfileDetail({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   flat: {
     gap: spacing.md,
   },
@@ -112,3 +116,4 @@ const styles = StyleSheet.create({
   },
   bio: { fontSize: 15, lineHeight: 22, color: mentorshipColors.text },
 });
+}

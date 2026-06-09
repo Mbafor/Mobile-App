@@ -1,8 +1,10 @@
 import { Stack } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export default function SuperAdminOpportunitiesLayout() {
+  const { colors } = useTheme();
   return (
     <Stack
       screenOptions={{

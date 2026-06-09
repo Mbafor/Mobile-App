@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
@@ -26,7 +28,7 @@ import { OpportunitySection } from '@/features/opportunities/components/Opportun
 import { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
 import { env } from '@/config/env';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useGreeting } from '@/hooks/useGreeting';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
@@ -40,6 +42,7 @@ type DashboardSection = {
 
 
 export function DashboardScreen() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -293,7 +296,8 @@ export function DashboardScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   pageContent: {
     flex: 1,
@@ -378,3 +382,4 @@ const styles = StyleSheet.create({
     paddingBottom: spacing.lg,
   },
 });
+}

@@ -1,14 +1,17 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 const COPY = {
   title: 'All caught up',
   subtitle: 'When you get matches, messages, or deadline reminders, they will show up here.',
 };
 
 export function NotificationEmptyState() {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.wrap}>
       <View style={styles.iconCircle}>
@@ -24,7 +27,8 @@ export function NotificationEmptyState() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: {
     flex: 1,
     alignItems: 'center',
@@ -51,3 +55,4 @@ const styles = StyleSheet.create({
     lineHeight: 22,
   },
 });
+}

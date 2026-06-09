@@ -1,8 +1,10 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { PieChart } from 'react-native-gifted-charts';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { ChartDatum } from '@/features/admin/types/analytics';
 
 const SLICE_COLORS = [
@@ -22,6 +24,7 @@ type AdminPieChartProps = {
 };
 
 export function AdminPieChart({ title, data }: AdminPieChartProps) {
+  const styles = useThemedStyles(createStyles);
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>
@@ -69,7 +72,8 @@ export function AdminPieChart({ title, data }: AdminPieChartProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.sm, paddingVertical: spacing.sm },
   title: { fontWeight: '600', fontSize: 15, color: colors.text },
   chartRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
@@ -78,3 +82,4 @@ const styles = StyleSheet.create({
   swatch: { width: 10, height: 10, borderRadius: 5 },
   legendText: { flex: 1, fontSize: 12, color: colors.text },
 });
+}

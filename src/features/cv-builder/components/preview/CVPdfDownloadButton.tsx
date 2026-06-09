@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
 
 type CVPdfDownloadButtonProps = {
@@ -24,6 +26,7 @@ export function CVPdfDownloadButton({
   label = 'Download PDF',
   compact = false,
 }: CVPdfDownloadButtonProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <Pressable
       onPress={onPress}
@@ -40,7 +43,8 @@ export function CVPdfDownloadButton({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   btn: {
     paddingVertical: spacing.sm + 2,
     paddingHorizontal: spacing.lg,
@@ -59,3 +63,4 @@ const styles = StyleSheet.create({
   btnText: { fontSize: 14, fontWeight: '700', color: colors.background },
   compactText: { fontSize: 13, fontWeight: '600', color: colors.background },
 });
+}

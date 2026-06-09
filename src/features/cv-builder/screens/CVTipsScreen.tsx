@@ -1,13 +1,15 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { Text } from '@/components/ui';
 import { CVTipFaqItem } from '@/features/cv-builder/components/hub/CVTipFaqItem';
 import { CV_TIPS } from '@/features/cv-builder/constants/cv-tips';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function CVTipsScreen() {
+  const styles = useAppThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
   return (
@@ -31,7 +33,9 @@ export function CVTipsScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   scroll: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
   content: {
     padding: spacing.md,
@@ -43,3 +47,4 @@ const styles = StyleSheet.create({
   subtitle: { marginTop: spacing.xs, marginBottom: spacing.lg, lineHeight: 20 },
   list: { gap: spacing.sm },
 });
+}

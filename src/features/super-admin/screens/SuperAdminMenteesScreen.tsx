@@ -1,4 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -8,12 +10,13 @@ import { Text } from '@/components/ui';
 import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { superAdminApi } from '@/services/api';
 
 const PAGE_SIZE = 15;
 
 export function SuperAdminMenteesScreen() {
+  const styles = useThemedStyles(createStyles);
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
 
@@ -55,7 +58,8 @@ export function SuperAdminMenteesScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
   card: {
     padding: spacing.md,
@@ -67,3 +71,4 @@ const styles = StyleSheet.create({
   },
   name: { fontWeight: '600', fontSize: 16 },
 });
+}

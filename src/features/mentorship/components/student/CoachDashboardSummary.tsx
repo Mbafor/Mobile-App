@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { TagList } from '@/features/mentorship/components/shared/TagList';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import type { MentorProfile, MentorshipParticipantProfile } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
@@ -14,6 +15,7 @@ type CoachDashboardSummaryProps = {
 };
 
 export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachDashboardSummaryProps) {
+  const styles = useAppThemedStyles(createStyles);
   if (!profile) {
     return (
       <View style={styles.card}>
@@ -54,7 +56,9 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   card: {
     gap: spacing.md,
     padding: spacing.md,
@@ -76,3 +80,4 @@ const styles = StyleSheet.create({
   sub: { fontSize: 13, color: mentorshipColors.textMuted },
   link: { fontSize: 13, fontWeight: '600', color: mentorshipColors.accent },
 });
+}

@@ -1,4 +1,13 @@
 export { colors } from '@/constants/theme/colors';
+export { lightColors, darkColors, buildAppTheme } from '@/constants/theme/palettes';
+export type {
+  AppTheme,
+  ColorScheme,
+  CvDocsTheme,
+  MentorshipColorScheme,
+  ResolvedTheme,
+  ThemeMode,
+} from '@/constants/theme/types';
 export { spacing } from '@/constants/theme/spacing';
 export { typography } from '@/constants/theme/typography';
 export {

@@ -1,12 +1,13 @@
 import { Switch, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 
 import { FormField } from '@/components/forms';
 import { Input, Text, TextArea } from '@/components/ui';
 import { CVAddButton } from '@/features/cv-builder/components/shared/CVAddButton';
 import { CVEntryCard } from '@/features/cv-builder/components/shared/CVEntryCard';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
-import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
-import { colors } from '@/constants/theme';
+import { useCvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
+
 import { createEmptyExperience } from '@/features/cv-builder/utils/normalize-cv-content';
 import type { CVExperienceEntry } from '@/types/domain/cv';
 
@@ -25,6 +26,8 @@ export function ExperienceListEditor({
   onChange,
   addLabel = 'Add entry',
 }: ExperienceListEditorProps) {
+  const { colors } = useTheme();
+  const cvUi = useCvUi();
   const updateEntry = (id: string, patch: Partial<CVExperienceEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };

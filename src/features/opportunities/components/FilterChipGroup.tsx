@@ -1,7 +1,10 @@
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type FilterChipGroupProps<T extends string> = {
   label: string;
@@ -63,7 +66,8 @@ export function FilterChipGroup<T extends string>({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.xs, marginBottom: spacing.sm },
   label: { paddingHorizontal: spacing.md },
   row: { flexDirection: 'row', gap: spacing.xs, paddingHorizontal: spacing.md },
@@ -79,3 +83,4 @@ const styles = StyleSheet.create({
   chipText: { fontSize: 13, color: colors.text },
   chipTextActive: { color: colors.background },
 });
+}

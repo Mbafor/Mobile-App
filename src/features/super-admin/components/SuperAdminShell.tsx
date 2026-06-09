@@ -1,11 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { usePathname, useRouter, type Href } from 'expo-router';
 import type { PropsWithChildren } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
 type NavItem = {
@@ -62,6 +64,7 @@ function isActive(item: NavItem, pathname: string): boolean {
 }
 
 export function SuperAdminShell({ children }: PropsWithChildren) {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const pathname = usePathname();
 
@@ -108,7 +111,8 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: {
     flex: 1,
     flexDirection: 'column',
@@ -155,3 +159,4 @@ const styles = StyleSheet.create({
   // ─── Content ──────────────────────────────────────────────────────────────
   content: { flex: 1 },
 });
+}

@@ -1,4 +1,6 @@
 import type { PropsWithChildren } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -11,7 +13,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Text } from '@/components/ui';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 
 type Props = PropsWithChildren<{
   title: string;
@@ -29,6 +31,7 @@ export function AuthScreenLayout({
   backgroundColor,
   backTextColor,
 }: Props) {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
 
   return (
@@ -69,7 +72,8 @@ export function AuthScreenLayout({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.primary },
   flex: { flex: 1 },
   hero: { paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
@@ -93,3 +97,4 @@ const styles = StyleSheet.create({
   },
   subtitle: { marginTop: spacing.xs, marginBottom: spacing.lg, lineHeight: 22 },
 });
+}

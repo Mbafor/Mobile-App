@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -7,7 +9,7 @@ import { Input } from '@/components/ui/Input';
 import { OptionsSheet } from '@/components/ui/OptionsSheet';
 import { formatAvailabilityRule } from '@/features/mentorship/utils/format-availability';
 import type { MentorAvailabilityRule } from '@/types/domain/mentorship';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 const DAYS: { key: string; label: string }[] = [
   { key: '0', label: 'Sunday' },
@@ -27,6 +29,7 @@ type AvailabilityEditorProps = {
 };
 
 export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: AvailabilityEditorProps) {
+  const styles = useThemedStyles(createStyles);
   const [dayOfWeek, setDayOfWeek] = useState('1');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
@@ -96,7 +99,8 @@ export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: Availa
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   ruleRow: {
     flexDirection: 'row',
@@ -119,3 +123,4 @@ const styles = StyleSheet.create({
   row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   time: { flex: 1 },
 });
+}

@@ -1,10 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { Input } from '@/components/ui/Input';
 import { Text } from '@/components/ui/Text';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type SearchFieldProps = {
   value: string;
@@ -27,6 +29,7 @@ export function SearchField({
   variant = 'default',
   trailing,
 }: SearchFieldProps) {
+  const styles = useThemedStyles(createStyles);
   const showClear = value.length > 0;
   const isDocs = variant === 'docs';
 
@@ -65,6 +68,7 @@ type FilterChipButtonProps = {
 };
 
 export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChipButtonProps) {
+  const styles = useThemedStyles(createStyles);
   const active = activeCount > 0;
   return (
     <Pressable
@@ -82,7 +86,8 @@ export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChip
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -119,3 +124,4 @@ const styles = StyleSheet.create({
     minHeight: 44,
   },
 });
+}

@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Modal,
   Pressable,
@@ -10,7 +12,7 @@ import {
 import { Input, Text } from '@/components/ui';
 import type { SelectOption } from '@/constants/onboarding-options';
 import { OTHER_OPTION_VALUE } from '@/constants/onboarding-options';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import {
   parseMultiSelectValues,
   serializeMultiSelectValues,
@@ -34,6 +36,7 @@ export function MultiSelectWithOther({
   placeholder = 'Select options',
   syncOnChange = false,
 }: MultiSelectWithOtherProps) {
+  const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
   const [draftSelected, setDraftSelected] = useState<string[]>([]);
   const [draftOtherText, setDraftOtherText] = useState('');
@@ -171,7 +174,8 @@ export function MultiSelectWithOther({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   trigger: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -247,3 +251,4 @@ const styles = StyleSheet.create({
   },
   doneBtnText: { color: colors.background, fontWeight: '600' },
 });
+}

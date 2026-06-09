@@ -1,8 +1,10 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { WaitingListStatus } from '@/types/domain/mentorship';
 
 type WaitingListCardProps = {
@@ -12,6 +14,7 @@ type WaitingListCardProps = {
 };
 
 export function WaitingListCard({ status, onCancel, isCancelling }: WaitingListCardProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.card}>
       <View style={styles.badge}>
@@ -34,7 +37,8 @@ export function WaitingListCard({ status, onCancel, isCancelling }: WaitingListC
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: { gap: spacing.sm },
   badge: {
     alignSelf: 'flex-start',
@@ -48,3 +52,4 @@ const styles = StyleSheet.create({
   estimate: { color: colors.primary, fontWeight: '500' },
   btn: { marginTop: spacing.xs },
 });
+}

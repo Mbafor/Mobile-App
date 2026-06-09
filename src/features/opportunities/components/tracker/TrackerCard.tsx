@@ -1,4 +1,7 @@
 import * as Linking from 'expo-linking';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { Alert, Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
@@ -11,7 +14,7 @@ import Animated, {
 
 import { Text } from '@/components/ui';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import {
   TRACKER_STAGE_LABELS,
   nextTrackerStage,
@@ -209,7 +212,8 @@ export const TrackerCard = memo(TrackerCardComponent);
 
 const IMAGE_HEIGHT = 56;
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     backgroundColor: colors.background,
     borderRadius: 12,
@@ -310,3 +314,4 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
 });
+}

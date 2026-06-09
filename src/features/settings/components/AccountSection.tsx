@@ -1,12 +1,15 @@
 import { useRouter, type Href } from 'expo-router';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 
 export function AccountSection() {
+  const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { userEmail, isAdmin } = useAuth();
 
@@ -39,7 +42,8 @@ export function AccountSection() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.md },
   emailCard: {
     gap: spacing.xs,
@@ -52,3 +56,4 @@ const styles = StyleSheet.create({
   email: { fontWeight: '600', color: colors.text },
   hint: { lineHeight: 20 },
 });
+}

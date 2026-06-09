@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -6,7 +8,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Button, Text } from '@/components/ui';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVReorderSectionsModalProps = {
   visible: boolean;
@@ -23,6 +25,7 @@ export function CVReorderSectionsModal({
   onClose,
   onSave,
 }: CVReorderSectionsModalProps) {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const [draftOrder, setDraftOrder] = useState<CVSectionId[]>([]);
 
@@ -107,7 +110,8 @@ export function CVReorderSectionsModal({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
   toolbar: {
     flexDirection: 'row',
@@ -133,3 +137,4 @@ const styles = StyleSheet.create({
   arrowBtn: { padding: spacing.xs },
   footer: { paddingHorizontal: spacing.md, paddingTop: spacing.sm },
 });
+}

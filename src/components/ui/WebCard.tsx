@@ -1,7 +1,9 @@
 import type { PropsWithChildren } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Platform, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
-import { colors } from '@/constants/theme';
+
 import { webCardBase, webCardShadowHover, webTransition } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
@@ -15,6 +17,7 @@ type WebCardProps = PropsWithChildren<{
  * Card surface with web elevation and optional hover lift. On native, renders a plain bordered View.
  */
 export function WebCard({ children, style, hoverable = false, onPress }: WebCardProps) {
+  const styles = useThemedStyles(createStyles);
   const cardStyle = [styles.card, style];
 
   if (onPress || (hoverable && Platform.OS === 'web')) {
@@ -31,7 +34,8 @@ export function WebCard({ children, style, hoverable = false, onPress }: WebCard
   return <View style={cardStyle}>{children}</View>;
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     ...webCardBase,
     backgroundColor: colors.background,
@@ -39,3 +43,4 @@ const styles = StyleSheet.create({
   },
   cardHover: Platform.OS === 'web' ? { transform: [{ translateY: -2 }] } : {},
 });
+}

@@ -1,8 +1,9 @@
 import type { ReactNode } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 export type MentorshipTableColumn<T> = {
@@ -80,7 +81,9 @@ export function MentorshipDataTable<T>({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   table: {
     minWidth: '100%',
     borderRadius: 12,
@@ -123,3 +126,4 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
 });
+}

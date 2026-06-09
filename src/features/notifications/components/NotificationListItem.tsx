@@ -1,8 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { NOTIFICATION_TYPE_LABELS } from '@/features/notifications/constants/notification-types';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { AppNotification } from '@/types/domain/notification';
 import { formatRelativeDate } from '@/utils/formatting';
 
@@ -12,6 +14,7 @@ type Props = {
 };
 
 export function NotificationListItem({ notification, onPress }: Props) {
+  const styles = useThemedStyles(createStyles);
   const isUnread = !notification.readAt;
 
   return (
@@ -35,7 +38,8 @@ export function NotificationListItem({ notification, onPress }: Props) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   row: {
     padding: spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -53,3 +57,4 @@ const styles = StyleSheet.create({
   },
   title: { fontWeight: '600', marginBottom: spacing.xs },
 });
+}

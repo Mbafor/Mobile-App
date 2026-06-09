@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import type { MenteeSummary } from '@/types/domain/mentorship';
 import type { MentorshipMessage, MentorshipSession } from '@/types/domain/mentorship';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { spacing } from '@/constants/theme';
 
 type CoachNotificationsPanelProps = {
@@ -20,6 +21,7 @@ export function CoachNotificationsPanel({
   messagesByMentorship,
   currentUserId,
 }: CoachNotificationsPanelProps) {
+  const styles = useAppThemedStyles(createStyles);
   const recentMentees = useMemo(
     () =>
       mentees.filter((m) => {
@@ -83,7 +85,9 @@ export function CoachNotificationsPanel({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   item: {
     padding: spacing.sm,
@@ -94,3 +98,4 @@ const styles = StyleSheet.create({
   },
   itemTitle: { fontWeight: '600', marginBottom: 2 },
 });
+}

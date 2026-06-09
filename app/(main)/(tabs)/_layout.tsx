@@ -7,8 +7,10 @@ import { StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { useTheme } from '@/hooks/useTheme';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { DesktopWebNavigation, DesktopSidebar } from '@/features/navigation/components';
@@ -26,6 +28,8 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 
 export default function MainTabsLayout() {
   const { isAdmin, isSuperAdmin } = useAuth();
+  const { colors } = useTheme();
+  const styles = useThemedStyles(createStyles);
   const refreshProfile = useRefreshProfile();
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
@@ -179,10 +183,12 @@ export default function MainTabsLayout() {
   );
 }
 
-const styles = StyleSheet.create({
-  mobileRoot: { flex: 1 },
-  webRoot: { flex: 1, backgroundColor: colors.background },
-  webContent: { flex: 1 },
-  desktopBody: { flex: 1, flexDirection: 'row' },
-  desktopContent: { flex: 1 },
-});
+function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
+  return StyleSheet.create({
+    mobileRoot: { flex: 1 },
+    webRoot: { flex: 1, backgroundColor: colors.background },
+    webContent: { flex: 1 },
+    desktopBody: { flex: 1, flexDirection: 'row' },
+    desktopContent: { flex: 1 },
+  });
+}

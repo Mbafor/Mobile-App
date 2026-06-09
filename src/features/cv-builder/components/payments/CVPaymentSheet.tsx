@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
 import type { PaymentProduct } from '@/features/cv-builder/constants/payments';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVPaymentSheetProps = {
   visible: boolean;
@@ -21,6 +24,7 @@ export function CVPaymentSheet({
   onClose,
   onPay,
 }: CVPaymentSheetProps) {
+  const styles = useAppThemedStyles(createStyles);
   if (!product) return null;
 
   return (
@@ -63,7 +67,9 @@ export function CVPaymentSheet({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   backdrop: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -111,3 +117,4 @@ const styles = StyleSheet.create({
   trustText: { fontSize: 12, color: cvDocsTheme.textSecondary },
   actions: { gap: spacing.sm },
 });
+}

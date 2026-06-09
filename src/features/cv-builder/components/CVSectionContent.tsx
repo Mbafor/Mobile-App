@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
 
 import { FormField } from '@/components/forms';
@@ -12,10 +14,10 @@ import { ProjectListEditor } from '@/features/cv-builder/components/ProjectListE
 import { ReferenceListEditor } from '@/features/cv-builder/components/ReferenceListEditor';
 import { TagListEditor } from '@/features/cv-builder/components/TagListEditor';
 import { CVSectionHeader } from '@/features/cv-builder/components/shared/CVSectionHeader';
-import { cvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
+import { useCvUi } from '@/features/cv-builder/components/shared/cv-ui-styles';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
 
 type CVSectionContentProps = {
@@ -25,6 +27,8 @@ type CVSectionContentProps = {
 };
 
 export function CVSectionContent({ section, content, onChange }: CVSectionContentProps) {
+  const cvUi = useCvUi();
+  const styles = useThemedStyles(createStyles);
   const meta = getSectionMeta(section);
 
   switch (section) {
@@ -254,7 +258,8 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
   }
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   profileNote: {
     flexDirection: 'row',
     alignItems: 'flex-start',
@@ -267,3 +272,4 @@ const styles = StyleSheet.create({
   },
   profileNoteText: { flex: 1, fontSize: 13, lineHeight: 18 },
 });
+}

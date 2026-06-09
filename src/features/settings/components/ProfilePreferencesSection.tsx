@@ -1,4 +1,6 @@
 import { type ReactNode, useEffect, useState } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -21,7 +23,7 @@ import {
   PREDEFINED_INTERESTS,
   PREDEFINED_OPPORTUNITY_TYPES,
 } from '@/constants/onboarding-options';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { formatListInput, parseListInput } from '@/utils/formatting';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
@@ -53,6 +55,7 @@ const groupStyles = StyleSheet.create({
 });
 
 export function ProfilePreferencesSection() {
+  const styles = useThemedStyles(createStyles);
   const { user, profile: authProfile, userEmail } = useAuth();
   const setAuthProfile = useAuthStore((s) => s.setProfile);
   const { profile, preferences, isLoading: loadingData, refetch } = useProfileData();
@@ -233,7 +236,8 @@ export function ProfilePreferencesSection() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.md },
   centered: { paddingVertical: spacing.xl, alignItems: 'center' },
   avatarCenter: {
@@ -241,3 +245,4 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
 });
+}

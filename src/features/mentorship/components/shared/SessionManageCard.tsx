@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Linking, Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 import { formatSessionDateTime } from '@/features/mentorship/utils/format-session';
 import {
   canJoinGoogleMeet,
@@ -32,6 +33,7 @@ export function SessionManageCard({
   onCancel,
   onSetMeetingUrl,
 }: SessionManageCardProps) {
+  const styles = useAppThemedStyles(createStyles);
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomUrl, setZoomUrl] = useState(session.meetingUrl ?? '');
   const [savingUrl, setSavingUrl] = useState(false);
@@ -179,7 +181,9 @@ export function SessionManageCard({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   card: { padding: spacing.md, gap: spacing.xs },
   datetime: { fontSize: 16, fontWeight: '700', color: mentorshipColors.text },
   coach: { fontSize: 14, fontWeight: '500', color: mentorshipColors.text },
@@ -237,3 +241,4 @@ const styles = StyleSheet.create({
   modalTitle: { fontSize: 18, fontWeight: '700' },
   modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm, marginTop: spacing.sm },
 });
+}

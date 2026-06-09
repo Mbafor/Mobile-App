@@ -1,9 +1,11 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack } from 'expo-router';
 
-import { colors } from '@/constants/theme';
+import { useTheme } from '@/hooks/useTheme';
 
 export default function HelpLayout() {
+  const { colors } = useTheme();
+
   return (
     <Stack
       screenOptions={{

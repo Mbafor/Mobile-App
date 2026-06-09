@@ -1,8 +1,10 @@
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { CV_SECTIONS, type CVSectionId } from '@/features/cv-builder/constants/sections';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type SectionTabsProps = {
   active: CVSectionId;
@@ -11,6 +13,7 @@ type SectionTabsProps = {
 };
 
 export function SectionTabs({ active, onSelect, disabled }: SectionTabsProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.wrap}>
       <ScrollView
@@ -38,7 +41,8 @@ export function SectionTabs({ active, onSelect, disabled }: SectionTabsProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: {
     backgroundColor: colors.surface,
     borderBottomWidth: StyleSheet.hairlineWidth,
@@ -65,3 +69,4 @@ const styles = StyleSheet.create({
   tabText: { fontSize: 13, color: colors.text, fontWeight: '600' },
   tabTextActive: { color: colors.background },
 });
+}

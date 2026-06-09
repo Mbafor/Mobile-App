@@ -1,16 +1,4 @@
-import { colors } from '@/constants/theme';
+import { createCvDocsTheme, lightColors } from '@/constants/theme/palettes';
 
-/** CV builder surfaces — white theme. */
-export const cvDocsTheme = {
-  pageBg: '#FFFFFF',
-  barBg: '#FFFFFF',
-  canvasBg: '#FFFFFF',
-  searchBg: '#F5F5F5',
-  searchBorder: '#DADCE0',
-  divider: '#E8EAED',
-  hover: '#F8F9FA',
-  primaryTint: '#F0F4F8',
-  textSecondary: '#5F6368',
-  /** Muted copy on the page background */
-  textOnPage: '#9AA0A6',
-} as const;
+/** @deprecated Use `useTheme().cvDocsTheme` for theme-aware styling */
+export const cvDocsTheme = createCvDocsTheme(lightColors);

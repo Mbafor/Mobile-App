@@ -1,9 +1,12 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { CVSectionStatusBadge } from '@/features/cv-builder/components/hub/CVSectionStatusBadge';
-import { cvDocsTheme } from '@/features/cv-builder/constants/cv-docs-theme';
 import {
   CV_SECTION_ICON_BG,
   CV_SECTION_ICON_COLOR,
@@ -12,7 +15,7 @@ import {
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
 import type { CVSectionId } from '@/features/cv-builder/constants/sections';
 import type { CVSectionStatus } from '@/features/cv-builder/utils/section-config';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 type CVSectionRowProps = {
   sectionId: CVSectionId;
@@ -22,6 +25,7 @@ type CVSectionRowProps = {
 };
 
 export function CVSectionRow({ sectionId, status, onPress, showDivider }: CVSectionRowProps) {
+  const styles = useAppThemedStyles(createStyles);
   const meta = getSectionMeta(sectionId);
   const iconName = CV_SECTION_ICONS[sectionId];
 
@@ -45,7 +49,9 @@ export function CVSectionRow({ sectionId, status, onPress, showDivider }: CVSect
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(theme: AppTheme) {
+  const { colors, mentorshipColors, cvDocsTheme } = theme;
+  return StyleSheet.create({
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -70,3 +76,4 @@ const styles = StyleSheet.create({
   title: { fontSize: 14, fontWeight: '500', color: colors.text },
   desc: { fontSize: 12, color: cvDocsTheme.textSecondary },
 });
+}

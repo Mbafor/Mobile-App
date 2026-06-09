@@ -1,9 +1,12 @@
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { ProfilePreferencesSection } from '@/features/settings/components/ProfilePreferencesSection';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 
 export function ProfileScreen() {
+  const styles = useThemedStyles(createStyles);
   return (
     <KeyboardAvoidingView
       style={styles.flex}
@@ -21,7 +24,8 @@ export function ProfileScreen() {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.background },
   scroll: { flex: 1 },
   content: {
@@ -32,3 +36,4 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 });
+}

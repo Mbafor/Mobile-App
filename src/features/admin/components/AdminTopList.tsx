@@ -1,7 +1,9 @@
 import { StyleSheet, View } from 'react-native';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import type { TopEngagementRow } from '@/features/admin/types/analytics';
 
 type AdminTopListProps = {
@@ -10,6 +12,7 @@ type AdminTopListProps = {
 };
 
 export function AdminTopList({ title, items }: AdminTopListProps) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.wrap}>
       <Text style={styles.title}>{title}</Text>
@@ -32,7 +35,8 @@ export function AdminTopList({ title, items }: AdminTopListProps) {
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   wrap: { gap: spacing.sm },
   title: { fontWeight: '600', fontSize: 15, color: colors.text },
   row: {
@@ -46,3 +50,4 @@ const styles = StyleSheet.create({
   body: { flex: 1, gap: 2 },
   name: { fontSize: 14, color: colors.text },
 });
+}

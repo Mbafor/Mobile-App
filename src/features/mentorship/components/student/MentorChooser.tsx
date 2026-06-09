@@ -1,4 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -27,7 +29,7 @@ import {
   shouldOfferWaitingList,
 } from '@/features/mentorship/utils/filter-available-mentors';
 import type { AvailableMentor } from '@/types/domain/mentorship';
-import { colors, spacing } from '@/constants/theme';
+import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 
 type MentorChooserProps = {
@@ -42,6 +44,7 @@ export function MentorChooser({
   onJoinWaitingList,
   isSelecting,
 }: MentorChooserProps) {
+  const styles = useThemedStyles(createStyles);
   const insets = useSafeAreaInsets();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({ enabled: true });
   const [search, setSearch] = useState('');
@@ -248,7 +251,8 @@ export function MentorChooser({
   );
 }
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   root: { flex: 1 },
   centered: { padding: spacing.lg, alignItems: 'center', gap: spacing.md },
 
@@ -384,3 +388,4 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
   },
 });
+}

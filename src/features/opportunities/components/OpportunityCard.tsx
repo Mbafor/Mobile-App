@@ -1,10 +1,13 @@
 import { memo } from 'react';
+import type { ColorScheme } from '@/constants/theme/types';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
 import { shareOpportunity } from '@/features/opportunities/utils/share-opportunity';
-import { colors, spacing, typography } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
@@ -109,7 +112,8 @@ export const OpportunityCard = memo(OpportunityCardComponent);
 
 export const OPPORTUNITY_CARD_WIDTH = CARD_WIDTH;
 
-const styles = StyleSheet.create({
+function createStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   card: {
     width: CARD_WIDTH,
     backgroundColor: colors.background,
@@ -159,3 +163,4 @@ const styles = StyleSheet.create({
   },
   actionIcon: { fontSize: 20, color: colors.primary },
 });
+}
