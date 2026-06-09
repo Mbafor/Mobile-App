@@ -1,8 +1,6 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';

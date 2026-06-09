@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
@@ -30,6 +29,7 @@ import type { CV } from '@/types/domain/cv';
 
 export function CVDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');

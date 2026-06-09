@@ -25,6 +25,8 @@ export function FilterDropdownGroup<T extends string>({
   single = false,
   formatLabel = (v) => v,
 }: FilterDropdownGroupProps<T>) {
+  const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [open, setOpen] = useState(false);
 
   const normalized = options.map((opt) =>

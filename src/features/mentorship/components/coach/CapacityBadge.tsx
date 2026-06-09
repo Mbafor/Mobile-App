@@ -1,8 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
 import { MENTORSHIP_MAX_ACTIVE_MENTEES } from '@/features/mentorship/constants/mentorship';

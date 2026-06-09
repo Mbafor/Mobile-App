@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -36,6 +35,8 @@ function TemplateStatusIcon({
 }: {
   purchased: boolean;
 }) {
+  const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   return (
     <View style={[styles.statusIcon, purchased ? styles.statusPurchased : styles.statusLocked]}>
       <Ionicons
@@ -126,6 +127,7 @@ export function TemplateSelector({
   variant = 'gallery',
 }: TemplateSelectorProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   const activeId = resolveTemplateId(selectedId);
   const purchasedSet = new Set(purchasedTemplateIds.map((id) => resolveTemplateId(id)));
 

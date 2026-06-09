@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useCallback, useEffect, useRef } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -28,6 +27,7 @@ export function PaystackCheckoutModal({
   onFailure,
 }: PaystackCheckoutModalProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const popupRef = useRef<Window | null>(null);
   const handledRef = useRef(false);

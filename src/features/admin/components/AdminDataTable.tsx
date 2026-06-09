@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useTheme } from '@/hooks/useTheme';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -30,6 +29,7 @@ export function AdminDataTable<T>({
   emptyMessage = 'No records found.',
   footer,
 }: AdminDataTableProps<T>) {
+  const styles = useThemedStyles(createStyles);
   if (data.length === 0) {
     return (
       <View style={styles.emptyWrap}>

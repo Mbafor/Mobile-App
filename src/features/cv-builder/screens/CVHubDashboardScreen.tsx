@@ -1,8 +1,7 @@
 import { useRouter, type Href } from 'expo-router';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -36,6 +35,7 @@ import {
 
 export function CVHubDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const {

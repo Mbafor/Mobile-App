@@ -1,8 +1,7 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
 
 import { ResponsiveContainer } from '@/components/layout';
@@ -38,6 +37,7 @@ export function MentorshipShell({
   children,
 }: MentorshipShellProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const isDesktop = useWebDesktop();
   const isWeb = useIsWeb();
 

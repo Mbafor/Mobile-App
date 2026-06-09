@@ -9,7 +9,6 @@ import { spacing } from '@/constants/theme';
 import { avatarApi } from '@/services/api/avatar.api';
 
 const AVATAR_SIZE = 112;
-const AVATAR_BG = colors.primary;
 
 type ProfileAvatarProps = {
   userId: string;
@@ -99,15 +98,15 @@ function createStyles(colors: ColorScheme) {
     width: AVATAR_SIZE,
     height: AVATAR_SIZE,
     borderRadius: AVATAR_SIZE / 2,
-    backgroundColor: AVATAR_BG,
+    backgroundColor: colors.primary,
   },
   placeholder: {
-    backgroundColor: AVATAR_BG,
+    backgroundColor: colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
   initial: {
-    color: '#FFFFFF',
+    color: colors.textOnPrimary,
     fontSize: 44,
     fontWeight: '700',
   },

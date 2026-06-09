@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useTheme } from '@/hooks/useTheme';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -16,6 +15,7 @@ type SavedOpportunityListRowProps = {
 };
 
 function SavedOpportunityListRowComponent({ opportunity, onPress }: SavedOpportunityListRowProps) {
+  const styles = useThemedStyles(createStyles);
   const { toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
 
   return (

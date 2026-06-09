@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
 
@@ -34,6 +33,7 @@ export function CVHubDocToolbar({
   downloadProps,
 }: CVHubDocToolbarProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const pct = Math.min(100, Math.max(0, progressPercent));
 

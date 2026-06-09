@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
@@ -25,6 +24,7 @@ export function CVPaymentSheet({
   onPay,
 }: CVPaymentSheetProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { colors, cvDocsTheme } = useTheme();
   if (!product) return null;
 
   return (

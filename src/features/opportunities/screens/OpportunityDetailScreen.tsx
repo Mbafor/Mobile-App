@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useMemo } from 'react';
 import {
@@ -29,6 +30,7 @@ import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 function DeadlineBadge({ deadline }: { deadline: string }) {
+  const { colors } = useTheme();
   const days = daysUntilDeadline(deadline);
   const label = formatDeadline(deadline);
   const urgent = days >= 0 && days <= 7;
@@ -88,6 +90,7 @@ function RelatedOpportunityCard({
 
 export function OpportunityDetailScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { id } = useLocalSearchParams<{ id: string }>();

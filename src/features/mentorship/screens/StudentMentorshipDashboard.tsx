@@ -1,8 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import {
   ActivityIndicator,
@@ -44,6 +43,7 @@ import { confirmAction } from '@/utils/confirm-action';
 
 export function StudentMentorshipDashboard() {
   const styles = useAppThemedStyles(createStyles);
+  const { colors, mentorshipColors } = useTheme();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');

@@ -1,7 +1,6 @@
 import { memo, useRef } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useTheme } from '@/hooks/useTheme';
 import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -45,6 +44,7 @@ function TrackerColumnComponent({
   onDragMove,
   onDragEnd,
 }: TrackerColumnProps) {
+  const styles = useThemedStyles(createStyles);
   const viewRef = useRef<View>(null);
 
   const handleLayout = (_e: LayoutChangeEvent) => {

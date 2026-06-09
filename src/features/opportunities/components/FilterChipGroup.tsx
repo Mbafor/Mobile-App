@@ -1,7 +1,6 @@
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useTheme } from '@/hooks/useTheme';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -23,6 +22,7 @@ export function FilterChipGroup<T extends string>({
   single = false,
   formatLabel = (v) => v,
 }: FilterChipGroupProps<T>) {
+  const styles = useThemedStyles(createStyles);
   const normalized = options.map((opt) =>
     typeof opt === 'string' ? { value: opt, label: formatLabel(opt) } : opt,
   );

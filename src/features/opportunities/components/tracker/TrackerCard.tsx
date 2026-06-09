@@ -47,6 +47,8 @@ function TrackerCardComponent({
   onDragEnd,
   isDragging = false,
 }: TrackerCardProps) {
+  const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [notes, setNotes] = useState(item.notes);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useSharedValue(0);

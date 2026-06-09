@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -26,6 +25,7 @@ type CVSectionRowProps = {
 
 export function CVSectionRow({ sectionId, status, onPress, showDivider }: CVSectionRowProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { cvDocsTheme } = useTheme();
   const meta = getSectionMeta(sectionId);
   const iconName = CV_SECTION_ICONS[sectionId];
 

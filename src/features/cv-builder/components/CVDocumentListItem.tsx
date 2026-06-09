@@ -1,8 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui/Text';
@@ -38,6 +37,7 @@ export function CVDocumentListItem({
   isDeleting,
 }: CVDocumentListItemProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { colors, cvDocsTheme } = useTheme();
   const busy = isRenaming || isDeleting;
   const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? 'CV';
 

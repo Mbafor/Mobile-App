@@ -1,7 +1,6 @@
 import { memo } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useTheme } from '@/hooks/useTheme';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -15,6 +14,7 @@ type OpportunityListRowProps = {
 };
 
 function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRowProps) {
+  const styles = useThemedStyles(createStyles);
   const daysLeft = daysUntilDeadline(opportunity.deadline);
 
   return (
