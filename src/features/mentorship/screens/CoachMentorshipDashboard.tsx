@@ -1,4 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
@@ -41,6 +42,7 @@ import { confirmAction } from '@/utils/confirm-action';
 
 export function CoachMentorshipDashboard() {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();

@@ -20,6 +20,7 @@ export function MentorshipMobileList<T>({
   renderCard,
   emptyMessage = 'Nothing here yet.',
 }: MentorshipMobileListProps<T>) {
+  const styles = useAppThemedStyles(createStyles);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>

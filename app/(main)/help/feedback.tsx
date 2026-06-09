@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
 import {
@@ -22,6 +23,7 @@ const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
 
 export default function FeedbackScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { mutate, isPending } = useSubmitFeedback();
   const [rating, setRating] = useState(0);

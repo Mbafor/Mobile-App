@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,6 +19,7 @@ type FundingPickerProps = {
 
 export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [open, setOpen] = useState(false);
 
   const options = excludeAny

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
@@ -45,6 +46,7 @@ export function MentorChooser({
   isSelecting,
 }: MentorChooserProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({ enabled: true });
   const [search, setSearch] = useState('');

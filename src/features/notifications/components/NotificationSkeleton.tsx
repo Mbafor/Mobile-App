@@ -12,6 +12,7 @@ import { useEffect } from 'react';
 import { spacing } from '@/constants/theme';
 
 function SkeletonRow() {
+  const styles = useThemedStyles(createStyles);
   const opacity = useSharedValue(0.45);
 
   useEffect(() => {

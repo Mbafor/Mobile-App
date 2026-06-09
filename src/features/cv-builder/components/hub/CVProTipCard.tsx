@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -13,6 +14,7 @@ type CVProTipCardProps = {
 
 export function CVProTipCard({ tip, onViewTips }: CVProTipCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   return (
     <View style={styles.card}>
       <View style={styles.iconWrap}>

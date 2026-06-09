@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
@@ -14,6 +15,7 @@ type SaveIndicatorProps = {
 
 export function SaveIndicator({ state, errorMessage }: SaveIndicatorProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   if (state === 'idle') {
     return (
       <View style={styles.row}>

@@ -12,6 +12,7 @@ type TypingIndicatorProps = {
 };
 
 function BouncingDot({ delay }: { delay: number }) {
+  const styles = useAppThemedStyles(createStyles);
   const anim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {

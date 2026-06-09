@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
@@ -12,6 +13,7 @@ const COPY = {
 
 export function NotificationEmptyState() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   return (
     <View style={styles.wrap}>
       <View style={styles.iconCircle}>

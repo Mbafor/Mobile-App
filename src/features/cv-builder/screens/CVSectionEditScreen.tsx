@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useLocalSearchParams, useRouter } from 'expo-router';
@@ -25,6 +26,7 @@ import { spacing } from '@/constants/theme';
 
 export function CVSectionEditScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ sectionId?: string }>();

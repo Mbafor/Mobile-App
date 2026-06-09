@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -43,6 +44,7 @@ type DashboardSection = {
 
 export function DashboardScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);

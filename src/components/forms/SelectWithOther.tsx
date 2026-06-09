@@ -133,6 +133,7 @@ export function SelectWithOther({
 }
 
 function ButtonRow({ onClose }: { onClose: () => void }) {
+  const styles = useThemedStyles(createStyles);
   return (
     <Pressable style={styles.doneBtn} onPress={onClose}>
       <Text style={styles.doneBtnText}>Done</Text>

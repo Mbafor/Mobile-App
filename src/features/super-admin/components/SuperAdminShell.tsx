@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { usePathname, useRouter, type Href } from 'expo-router';
@@ -65,6 +66,7 @@ function isActive(item: NavItem, pathname: string): boolean {
 
 export function SuperAdminShell({ children }: PropsWithChildren) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
 

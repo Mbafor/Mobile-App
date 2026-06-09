@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
@@ -39,6 +40,7 @@ function OpportunityResultCard({
   opportunity: Opportunity;
   onPress: (o: Opportunity) => void;
 }) {
+  const styles = useThemedStyles(createStyles);
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
@@ -93,6 +95,7 @@ function OpportunityResultCard({
 
 export function CategoryOpportunitiesScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { category: categorySlug } = useLocalSearchParams<{ category: string }>();

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -60,6 +61,7 @@ type CVHubTopNavProps = { cvId: string };
 
 export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const pathname = usePathname();
   const router = useRouter();
   const activeKey = getActiveKey(pathname, cvId);

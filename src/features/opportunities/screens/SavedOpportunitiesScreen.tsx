@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback } from 'react';
@@ -19,6 +20,7 @@ import type { Opportunity } from '@/types/domain/opportunity';
 
 export function SavedOpportunitiesScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { opportunities, isLoading, isRefetching, error, refetch } = useSavedOpportunities();
 

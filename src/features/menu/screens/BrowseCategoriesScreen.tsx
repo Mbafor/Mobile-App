@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -44,6 +45,7 @@ function OpportunityResultCard({
   opportunity: Opportunity;
   onPress: (o: Opportunity) => void;
 }) {
+  const styles = useThemedStyles(createStyles);
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
@@ -98,6 +100,7 @@ function OpportunityResultCard({
 
 export function BrowseCategoriesScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();

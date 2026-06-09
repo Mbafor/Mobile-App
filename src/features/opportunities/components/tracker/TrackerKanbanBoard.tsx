@@ -1,4 +1,5 @@
 import { useCallback, useRef, useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
@@ -34,6 +35,7 @@ export function TrackerKanbanBoard({
   onRefresh,
 }: TrackerKanbanBoardProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const draggingIdRef = useRef<string | null>(null);
   const columnBounds = useRef<Partial<Record<TrackerStage, { x: number; width: number }>>>({});

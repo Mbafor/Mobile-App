@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
@@ -26,6 +27,7 @@ export function CVReorderSectionsModal({
   onSave,
 }: CVReorderSectionsModalProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const [draftOrder, setDraftOrder] = useState<CVSectionId[]>([]);
 

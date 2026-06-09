@@ -1,4 +1,5 @@
 import type { ColorScheme } from '@/constants/theme/types';
+import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   DrawerContentScrollView,
@@ -13,6 +14,7 @@ import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavIte
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const tabNavItems = useMainTabNavItems();
 
   return (

@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { useTheme } from '@/hooks/useTheme';
+import { colors } from '@/constants/theme/colors';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -12,7 +12,6 @@ const TOTAL = ONBOARDING_STEPS.TOTAL;
 type Props = { currentStep: number };
 
 export function OnboardingProgress({ currentStep }: Props) {
-  const { colors } = useTheme();
   return Platform.OS === 'web' ? (
     <WebStepper currentStep={currentStep} />
   ) : (

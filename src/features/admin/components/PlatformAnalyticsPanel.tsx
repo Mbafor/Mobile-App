@@ -1,4 +1,5 @@
 import type { ColorScheme } from '@/constants/theme/types';
+import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   ActivityIndicator,
@@ -29,6 +30,7 @@ function formatFundingChart(data: ChartDatum[]): ChartDatum[] {
 
 export function PlatformAnalyticsPanel() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { isReady } = useRequireSuperAdmin();
   const { data: analytics, isLoading, error, refetch, isRefetching } =
     usePlatformAnalyticsQuery(isReady);

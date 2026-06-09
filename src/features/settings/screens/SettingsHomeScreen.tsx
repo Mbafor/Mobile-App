@@ -6,7 +6,6 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { AccountSection } from '@/features/settings/components/AccountSection';
-import { AppearanceSection } from '@/features/settings/components/AppearanceSection';
 import { NotificationPreferencesSection } from '@/features/settings/components/NotificationPreferencesSection';
 import { PrivacySection } from '@/features/settings/components/PrivacySection';
 import { SettingsLogoutFooter } from '@/features/settings/components/SettingsLogoutFooter';
@@ -40,10 +39,6 @@ export function SettingsHomeScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <SettingsSection title="Appearance">
-          <AppearanceSection />
-        </SettingsSection>
-
         <SettingsSection title="Notifications">
           <NotificationPreferencesSection />
         </SettingsSection>

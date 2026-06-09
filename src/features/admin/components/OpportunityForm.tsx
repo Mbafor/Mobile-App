@@ -244,6 +244,7 @@ export function OpportunityForm({
 }
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.field}>
       <Text style={styles.label}>{label}</Text>

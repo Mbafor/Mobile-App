@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -12,6 +13,7 @@ import { ProfileHeaderMenu } from '@/features/menu/components/ProfileHeaderMenu'
 /** Header right cluster — profile avatar then notification bell, flush right. */
 export function AppHeaderActions() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { isSearchVisible, setSearchVisible } = useAppStore();
 

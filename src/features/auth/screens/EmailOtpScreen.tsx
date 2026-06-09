@@ -1,4 +1,5 @@
 import { useRouter, type Href } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
@@ -19,6 +20,7 @@ import { isValidPassword } from '@/utils/validation/password';
 
 export function EmailOtpScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   useAuthRedirect('guest');
   const { signInWithEmailPassword, isLoading, error, clearError } = useAuthActions();

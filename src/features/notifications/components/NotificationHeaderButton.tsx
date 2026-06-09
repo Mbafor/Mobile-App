@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
@@ -11,6 +12,7 @@ import { useNotifications } from '@/features/notifications/hooks/useNotification
 
 export function NotificationHeaderButton() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { unreadCount } = useNotifications();
 

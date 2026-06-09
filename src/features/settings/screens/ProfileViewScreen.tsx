@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
@@ -27,6 +28,7 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
 function InfoRow({ label, value }: { label: string; value: string }) {
+  const styles = useThemedStyles(createStyles);
   return (
     <View style={styles.infoRow}>
       <Text style={styles.infoKey}>{label}</Text>
@@ -44,6 +46,7 @@ const FUNDING_LABELS: Record<string, string> = {
 
 export function ProfileViewScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
   const { profile, preferences } = useProfileData();

@@ -28,6 +28,7 @@ export function MentorshipDataTable<T>({
   keyExtractor,
   emptyMessage = 'No data to display.',
 }: MentorshipDataTableProps<T>) {
+  const styles = useAppThemedStyles(createStyles);
   if (data.length === 0) {
     return (
       <View style={styles.empty}>

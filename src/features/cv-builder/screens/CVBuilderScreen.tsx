@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useLocalSearchParams } from 'expo-router';
@@ -27,6 +28,7 @@ import { spacing } from '@/constants/theme';
 
 export function CVBuilderScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ id?: string }>();
   const cvId = typeof params.id === 'string' ? params.id : params.id?.[0];

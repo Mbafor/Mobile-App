@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
@@ -32,6 +33,7 @@ export function AuthScreenLayout({
   backTextColor,
 }: Props) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (

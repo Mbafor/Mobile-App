@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
@@ -35,6 +36,7 @@ export function OpportunitySearchResults({
   onPressOpportunity,
 }: OpportunitySearchResultsProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const renderItem = useCallback(
     ({ item }: { item: Opportunity }) => (
       <OpportunityListRow opportunity={item} onPress={onPressOpportunity} />

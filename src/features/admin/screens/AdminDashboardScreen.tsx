@@ -1,4 +1,5 @@
 import { useRouter, type Href } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
@@ -32,6 +33,7 @@ function formatFundingChart(data: ChartDatum[]): ChartDatum[] {
 
 export function AdminDashboardScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { isReady } = useRequireAdmin();
   const { data: analytics, isLoading, error, refetch, isRefetching } = useAdminAnalytics();

@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -11,6 +12,7 @@ import {
   getMentorInterestTags,
 } from '@/features/mentorship/utils/mentor-card-tags';
 import type { AvailableMentor } from '@/types/domain/mentorship';
+import { colors } from '@/constants/theme/colors';
 
 type MentorBrowseCardProps = {
   mentor: AvailableMentor;
@@ -29,6 +31,7 @@ function availabilityText(mentor: AvailableMentor): { label: string; color: stri
 
 export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { profile } = mentor;
   const name = profile.fullName?.trim() || 'Coach';
   const academicFocus = getMentorAcademicFocus(mentor);

@@ -1,4 +1,5 @@
 import { useLocalSearchParams, useRouter, type Href } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
@@ -23,6 +24,7 @@ function parseOtpType(value: string | string[] | undefined): OtpVerificationType
 
 export function VerifyOtpScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const params = useLocalSearchParams<{ email?: string; otpType?: string }>();
   const email =

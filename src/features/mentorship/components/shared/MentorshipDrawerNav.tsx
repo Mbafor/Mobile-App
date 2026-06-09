@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
@@ -21,6 +22,7 @@ type MentorshipDrawerNavProps = {
 
 export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDrawerNavProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const [open, setOpen] = useState(false);
 
   return (

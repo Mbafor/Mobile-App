@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -23,6 +24,7 @@ const OPTIONS: { key: AttachMenuAction; label: string; icon: keyof typeof Ionico
 
 export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>

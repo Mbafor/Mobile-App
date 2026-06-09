@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
@@ -30,6 +31,7 @@ export function SearchField({
   trailing,
 }: SearchFieldProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const showClear = value.length > 0;
   const isDocs = variant === 'docs';
 
@@ -69,6 +71,7 @@ type FilterChipButtonProps = {
 
 export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChipButtonProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const active = activeCount > 0;
   return (
     <Pressable

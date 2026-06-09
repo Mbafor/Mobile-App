@@ -30,6 +30,7 @@ import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 function DeadlineBadge({ deadline }: { deadline: string }) {
+  const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const days = daysUntilDeadline(deadline);
   const label = formatDeadline(deadline);
@@ -62,6 +63,7 @@ function RelatedOpportunityCard({
   opportunity: Opportunity;
   onPress: (o: Opportunity) => void;
 }) {
+  const styles = useThemedStyles(createStyles);
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   return (
     <Pressable

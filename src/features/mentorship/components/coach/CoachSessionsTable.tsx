@@ -1,4 +1,5 @@
-import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -28,6 +29,7 @@ export function CoachSessionsTable({
   onSetMeetingUrl,
 }: CoachSessionsTableProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const isCompletedTable = isCompleted ?? title?.toLowerCase() === 'completed';
   const showUpcomingActions = !isCompletedTable;
 
@@ -162,6 +164,7 @@ export function CoachSessionsTable({
 }
 
 function HeaderCell({ label, width }: { label: string; width: number }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.headerCell, { width }]}>
       <Text style={styles.headerText}>{label}</Text>
@@ -170,6 +173,7 @@ function HeaderCell({ label, width }: { label: string; width: number }) {
 }
 
 function CellText({ width, text }: { width: number; text: string }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.cell, { width }]}>
       <Text numberOfLines={2} style={styles.primaryText}>
@@ -180,6 +184,7 @@ function CellText({ width, text }: { width: number; text: string }) {
 }
 
 function StatusPill({ completed }: { completed: boolean }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.statusPill, completed ? styles.completedPill : styles.upcomingPill]}>
       <View style={[styles.dot, completed ? styles.completedDot : styles.upcomingDot]} />

@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -12,6 +13,7 @@ type MatchedBannerProps = {
 
 export function MatchedBanner({ endsAt }: MatchedBannerProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const endLabel = new Date(endsAt).toLocaleDateString(undefined, {
     month: '2-digit',
     day: '2-digit',

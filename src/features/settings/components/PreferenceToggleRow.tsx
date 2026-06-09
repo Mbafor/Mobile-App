@@ -1,4 +1,5 @@
 import { ActivityIndicator, StyleSheet, Switch, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
@@ -23,6 +24,7 @@ export function PreferenceToggleRow({
   loading,
 }: Props) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   return (
     <View style={styles.row}>
       <View style={styles.copy}>

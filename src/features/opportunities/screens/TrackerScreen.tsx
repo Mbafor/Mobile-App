@@ -1,4 +1,5 @@
 import { useRouter } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
@@ -29,6 +30,7 @@ import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker'
 
 export function TrackerScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [exporting, setExporting] = useState(false);

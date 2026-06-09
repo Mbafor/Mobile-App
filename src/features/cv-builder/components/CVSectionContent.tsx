@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
@@ -27,6 +28,7 @@ type CVSectionContentProps = {
 };
 
 export function CVSectionContent({ section, content, onChange }: CVSectionContentProps) {
+  const { colors } = useTheme();
   const cvUi = useCvUi();
   const styles = useThemedStyles(createStyles);
   const meta = getSectionMeta(section);

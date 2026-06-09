@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
@@ -21,12 +22,14 @@ import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
 import { spacing } from '@/constants/theme';
+import { colors as themeColors } from '@/constants/theme/colors';
 import { superAdminApi, type SuperAdminMentorRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
 
 export function SuperAdminMentorsScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -244,9 +247,9 @@ export function SuperAdminMentorsScreen() {
 }
 
 function statusStyle(status: string) {
-  if (status === 'approved') return { color: colors.success, fontWeight: '600' as const };
+  if (status === 'approved') return { color: themeColors.success, fontWeight: '600' as const };
   if (status === 'pending') return { color: '#B45309', fontWeight: '600' as const };
-  if (status === 'suspended') return { color: colors.error, fontWeight: '600' as const };
+  if (status === 'suspended') return { color: themeColors.error, fontWeight: '600' as const };
   return undefined;
 }
 

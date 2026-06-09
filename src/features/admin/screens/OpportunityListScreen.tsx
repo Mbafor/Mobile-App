@@ -1,4 +1,5 @@
 import { useRouter, type Href } from 'expo-router';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
@@ -31,6 +32,7 @@ export function OpportunityListScreen({
   subtitle = 'Create, paste, edit, or remove listings shown to students.',
 }: OpportunityListScreenProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
   const deleteMutation = useDeleteOpportunityMutation();

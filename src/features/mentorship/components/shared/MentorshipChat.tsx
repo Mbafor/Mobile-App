@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useRef, useState } from 'react';
@@ -71,6 +72,7 @@ export function MentorshipChat({
   fullScreen = false,
 }: MentorshipChatProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const [draft, setDraft] = useState('');
   const [uploading, setUploading] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);

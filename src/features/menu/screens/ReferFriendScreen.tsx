@@ -1,4 +1,5 @@
 import { Alert, ScrollView, Share, StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -11,6 +12,7 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 
 export function ReferFriendScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const handleShare = async () => {
     try {
       await Share.share({ message: REFERRAL_MESSAGE });

@@ -1,4 +1,5 @@
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
@@ -15,6 +16,7 @@ import {
 } from '@/features/mentorship/utils/session-rules';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
+import { mentorshipColors } from '@/features/mentorship/constants/theme';
 
 type UpcomingSessionsPanelProps = {
   sessions: MentorshipSession[];

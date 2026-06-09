@@ -16,6 +16,7 @@ type ParticipantProfileDetailProps = {
 };
 
 function DetailRow({ label, value }: { label: string; value: string | null | undefined }) {
+  const styles = useAppThemedStyles(createStyles);
   if (!value?.trim()) return null;
   return (
     <View style={styles.row}>

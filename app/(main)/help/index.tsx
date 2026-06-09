@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
@@ -51,6 +52,7 @@ const items: HelpItem[] = [
 
 export default function HelpIndexScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
 
   return (

@@ -1,4 +1,4 @@
-import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -113,6 +113,7 @@ export function SessionsTable({
 }
 
 function StatusPill({ session }: { session: MentorshipSession }) {
+  const styles = useAppThemedStyles(createStyles);
   const pending = isPendingSessionStatus(session.status);
   return (
     <View style={[styles.statusPill, pending ? styles.statusPillPending : styles.statusPillConfirmed]}>
@@ -125,6 +126,7 @@ function StatusPill({ session }: { session: MentorshipSession }) {
 }
 
 function HeaderCell({ label, width }: { label: string; width: number }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.headerCell, { width }]}>
       <Text style={styles.headerText}>{label}</Text>
@@ -133,6 +135,7 @@ function HeaderCell({ label, width }: { label: string; width: number }) {
 }
 
 function CellText({ width, text }: { width: number; text: string }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.cell, { width }]}>
       <Text numberOfLines={2} style={styles.primaryText}>

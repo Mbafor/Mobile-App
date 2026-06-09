@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
@@ -38,6 +39,7 @@ export function CVCard({
   isDeleting,
 }: CVCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const busy = isDuplicating || isDeleting;
   const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? cv.templateId;
 

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
@@ -12,6 +13,7 @@ import { superAdminApi } from '@/services/api';
 
 export function SuperAdminOverviewScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: queryKeys.superAdmin.overview,
     queryFn: async () => {

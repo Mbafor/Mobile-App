@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
@@ -32,6 +33,7 @@ type MenuItem = {
 
 export function ProfileHeaderMenu() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const { profile, user } = useAuth();
   const [open, setOpen] = useState(false);

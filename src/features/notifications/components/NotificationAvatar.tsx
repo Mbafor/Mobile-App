@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, StyleSheet, View } from 'react-native';
@@ -22,6 +23,7 @@ function initial(displayName: string | null): string {
 
 export function NotificationAvatar({ source }: Props) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   if (source.kind === 'user') {
     return (
       <UserAvatarDisplay

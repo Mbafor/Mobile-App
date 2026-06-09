@@ -1,4 +1,5 @@
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -10,6 +11,7 @@ import { spacing } from '@/constants/theme';
 
 export function CVTipsScreen() {
   const styles = useAppThemedStyles(createStyles);
+  const { cvDocsTheme } = useTheme();
   const insets = useSafeAreaInsets();
 
   return (

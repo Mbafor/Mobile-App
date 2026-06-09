@@ -1,4 +1,5 @@
 import type { ColorScheme } from '@/constants/theme/types';
+import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Inter_400Regular,
@@ -25,6 +26,8 @@ export function WebFontProvider({ children }: PropsWithChildren) {
 }
 
 function WebFontLoader({ children }: PropsWithChildren) {
+  const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [loaded, error] = useFonts({
     Inter_400Regular,
     Inter_500Medium,

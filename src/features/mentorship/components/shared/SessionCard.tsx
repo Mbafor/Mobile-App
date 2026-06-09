@@ -1,5 +1,6 @@
 import { Linking, Pressable, StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
+import { colors as themeColors } from '@/constants/theme/colors';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
@@ -81,7 +82,7 @@ export function SessionCard({
 function statusStyle(status: string) {
   if (status === 'confirmed') return { backgroundColor: '#E8F5EE' };
   if (status === 'cancelled') return { backgroundColor: '#FDECEC' };
-  if (status === 'completed') return { backgroundColor: colors.surface };
+  if (status === 'completed') return { backgroundColor: themeColors.surface };
   return { backgroundColor: '#FFF4E5' };
 }
 

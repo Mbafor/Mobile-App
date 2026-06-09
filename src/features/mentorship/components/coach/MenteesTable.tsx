@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -21,6 +22,7 @@ type MenteesTableProps = {
 
 export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: MenteesTableProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const [profileMentee, setProfileMentee] = useState<MenteeSummary | null>(null);
   const [menuMentee, setMenuMentee] = useState<MenteeSummary | null>(null);
 
@@ -147,6 +149,7 @@ export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: Mente
 }
 
 function HeaderCell({ label, width }: { label: string; width: number }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.headerCell, { width }]}>
       <Text style={styles.headerText}>{label}</Text>
@@ -155,6 +158,7 @@ function HeaderCell({ label, width }: { label: string; width: number }) {
 }
 
 function CellText({ width, text }: { width: number; text: string }) {
+  const styles = useAppThemedStyles(createStyles);
   return (
     <View style={[styles.cell, { width }]}>
       <Text numberOfLines={2} style={styles.cellText}>

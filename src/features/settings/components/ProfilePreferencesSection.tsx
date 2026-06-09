@@ -1,4 +1,5 @@
 import { type ReactNode, useEffect, useState } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Alert, StyleSheet, View } from 'react-native';
@@ -24,6 +25,7 @@ import {
   PREDEFINED_OPPORTUNITY_TYPES,
 } from '@/constants/onboarding-options';
 import { spacing } from '@/constants/theme';
+import { colors } from '@/constants/theme/colors';
 import { formatListInput, parseListInput } from '@/utils/formatting';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
@@ -56,6 +58,7 @@ const groupStyles = StyleSheet.create({
 
 export function ProfilePreferencesSection() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { user, profile: authProfile, userEmail } = useAuth();
   const setAuthProfile = useAuthStore((s) => s.setProfile);
   const { profile, preferences, isLoading: loadingData, refetch } = useProfileData();

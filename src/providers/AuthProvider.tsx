@@ -3,6 +3,10 @@ import type { PropsWithChildren } from 'react';
 import { useEffect, useRef } from 'react';
 
 import { useAuthStore } from '@/features/auth/store/auth.store';
+import {
+  isInvalidRefreshTokenError,
+  recoverFromStaleSession,
+} from '@/features/auth/utils/auth-session-errors';
 import { clearSupabaseAuthStorage } from '@/features/auth/utils/clear-auth-storage';
 import { resolveUserProfile } from '@/features/auth/utils/resolve-user-profile';
 import { authApi } from '@/services/api';
@@ -44,8 +48,17 @@ export function AuthProvider({ children }: PropsWithChildren) {
 
       if (event === 'SIGNED_OUT') {
         lastFingerprint.current = null;
+        // Ignore stale sign-out events during session replacement (e.g. right after login).
+        const { data: current } = await authApi.getSession();
+        if (current.session) {
+          return;
+        }
         await clearSupabaseAuthStorage();
         useAuthStore.getState().reset();
+        setSession(null);
+        setProfile(null);
+        setProfileLoading(false);
+        return;
       }
 
       const fingerprint = sessionFingerprint(session);
@@ -53,7 +66,7 @@ export function AuthProvider({ children }: PropsWithChildren) {
       // marks onboarding_complete). We must bypass the fingerprint dedup so the
       // profile is re-fetched and onboardingComplete reflects the new state.
       const isUserUpdated = event === 'USER_UPDATED';
-      if (fingerprint === lastFingerprint.current && event !== 'SIGNED_OUT' && !isUserUpdated) {
+      if (fingerprint === lastFingerprint.current && !isUserUpdated) {
         return;
       }
       lastFingerprint.current = fingerprint;
@@ -69,15 +82,32 @@ export function AuthProvider({ children }: PropsWithChildren) {
       }
     };
 
+    const handleStaleSession = async () => {
+      await recoverFromStaleSession();
+      if (!mounted) return;
+      lastFingerprint.current = null;
+      setSession(null);
+      setProfile(null);
+      setProfileLoading(false);
+    };
+
     const hydrate = async () => {
       setHydrating(true);
       try {
         const { data, error } = await authApi.getSession();
         if (error) {
+          if (isInvalidRefreshTokenError(error)) {
+            await handleStaleSession();
+            return;
+          }
           console.warn('[AuthProvider] getSession:', error.message);
         }
         await applySession(data.session);
       } catch (e) {
+        if (isInvalidRefreshTokenError(e)) {
+          await handleStaleSession();
+          return;
+        }
         console.warn('[AuthProvider] hydrate failed:', e);
         if (mounted) {
           lastFingerprint.current = null;

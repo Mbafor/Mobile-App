@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
@@ -17,6 +18,7 @@ type AccordionProps = PropsWithChildren<{
 
 export function Accordion({ title, index, children, defaultOpen = false }: AccordionProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [open, setOpen] = useState(defaultOpen);
   const numbered = index !== undefined;
 

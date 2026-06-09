@@ -1,4 +1,5 @@
 import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
@@ -11,6 +12,7 @@ import { spacing } from '@/constants/theme';
 
 export function MentorshipScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { isCoach, isLoading, error } = useMentorshipRole();
 
   if (isLoading) {

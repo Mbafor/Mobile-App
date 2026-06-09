@@ -1,4 +1,5 @@
 import { Dimensions, StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { BarChart } from 'react-native-gifted-charts';
@@ -16,6 +17,7 @@ const CHART_WIDTH = Dimensions.get('window').width - spacing.md * 4;
 
 export function AdminBarChart({ title, data }: AdminBarChartProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>

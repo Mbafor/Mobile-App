@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { PieChart } from 'react-native-gifted-charts';
@@ -6,9 +7,10 @@ import { PieChart } from 'react-native-gifted-charts';
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import type { ChartDatum } from '@/features/admin/types/analytics';
+import { lightColors } from '@/constants/theme/palettes';
 
 const SLICE_COLORS = [
-  colors.primary,
+  lightColors.primary,
   '#5C6BC0',
   '#26A69A',
   '#FFA726',
@@ -25,6 +27,7 @@ type AdminPieChartProps = {
 
 export function AdminPieChart({ title, data }: AdminPieChartProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>

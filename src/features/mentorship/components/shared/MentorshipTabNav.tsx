@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
@@ -20,6 +21,7 @@ type MentorshipTabNavProps = {
 
 export function MentorshipTabNav({ items, activeId, onSelect, mode }: MentorshipTabNavProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
 

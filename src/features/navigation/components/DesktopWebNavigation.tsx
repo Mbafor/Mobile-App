@@ -1,4 +1,5 @@
 import { Ionicons } from '@expo/vector-icons';
+import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
@@ -34,6 +35,7 @@ export function DesktopWebNavigation({
   compact = false,
 }: DesktopWebNavigationProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   return (
     <View style={styles.root}>
       <View style={styles.row}>
