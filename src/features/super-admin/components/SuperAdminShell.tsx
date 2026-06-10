@@ -144,8 +144,9 @@ function createStyles(colors: ColorScheme) {
     borderColor: 'transparent',
   },
   tabActive: {
-    borderColor: colors.primary,
-    backgroundColor: `${colors.primary}0D`,
+    backgroundColor: 'transparent',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.primary,
   },
   tabHover: { backgroundColor: colors.surface },
   tabLabel: {
