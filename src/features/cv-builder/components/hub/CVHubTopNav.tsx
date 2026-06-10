@@ -125,8 +125,7 @@ function createStyles(colors: ColorScheme) {
     borderColor: 'transparent',
   },
   tabActive: {
-    borderColor: colors.primary,
-    backgroundColor: `${colors.primary}0D`,
+    backgroundColor: 'transparent',
   },
   tabHover: { backgroundColor: colors.surface },
   tabLabel: {
@@ -137,6 +136,7 @@ function createStyles(colors: ColorScheme) {
   tabLabelActive: {
     color: colors.primary,
     fontWeight: '600',
+    textDecorationLine: 'underline',
   },
 });
 }

@@ -116,8 +116,7 @@ function createStyles(colors: ColorScheme) {
     borderColor: 'transparent',
   },
   hTabActive: {
-    borderColor: colors.primary,
-    backgroundColor: `${colors.primary}0D`,
+    backgroundColor: 'transparent',
   },
   hTabHover: { backgroundColor: colors.surface },
   hTabLabel: {
@@ -128,6 +127,7 @@ function createStyles(colors: ColorScheme) {
   hTabLabelActive: {
     color: colors.primary,
     fontWeight: '600',
+    textDecorationLine: 'underline',
   },
   // ─── Bottom (mobile tab bar) ───────────────────────────────────────────────
   bBar: {

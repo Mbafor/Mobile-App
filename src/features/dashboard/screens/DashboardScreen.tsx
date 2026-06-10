@@ -95,8 +95,10 @@ export function DashboardScreen() {
   const isSearchActive =
     isSearchVisible && (query.trim().length > 0 || activeFilterCount > 0);
 
+  const recommendedTitle = isDesktop ? 'Recommended For You' : 'For You';
+
   const sections: DashboardSection[] = [
-    { key: 'recommended', title: 'Recommended For You', data: recommended },
+    { key: 'recommended', title: recommendedTitle, data: recommended },
     { key: 'recent', title: 'Recently Uploaded', data: recent },
     { key: 'closing', title: 'Closing Soon', data: closingSoon },
   ];

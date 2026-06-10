@@ -57,16 +57,16 @@ function createStyles(colors: ColorScheme) {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.md,
     borderRadius: 20,
-    borderWidth: 1,
-    borderColor: colors.border,
     backgroundColor: colors.background,
   },
   tabActive: {
-    backgroundColor: colors.primary,
-    borderColor: colors.primary,
+    backgroundColor: 'transparent',
   },
   tabDisabled: { opacity: 0.55 },
   tabText: { fontSize: 13, color: colors.text, fontWeight: '600' },
-  tabTextActive: { color: colors.background },
+  tabTextActive: {
+    color: colors.primary,
+    textDecorationLine: 'underline',
+  },
 });
 }
