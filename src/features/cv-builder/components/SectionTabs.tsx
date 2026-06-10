@@ -61,12 +61,13 @@ function createStyles(colors: ColorScheme) {
   },
   tabActive: {
     backgroundColor: 'transparent',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.primary,
   },
   tabDisabled: { opacity: 0.55 },
   tabText: { fontSize: 13, color: colors.text, fontWeight: '600' },
   tabTextActive: {
     color: colors.primary,
-    textDecorationLine: 'underline',
   },
 });
 }
