@@ -249,26 +249,26 @@ function Eyebrow({ label }: { label: string }) {
 
 function Hero() {
   return (
-    <section className="relative bg-forest overflow-hidden pb-20 md:pb-32">
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-[#1A3D25] opacity-60 -top-40 -right-28 pointer-events-none" />
-      <div className="absolute w-[360px] h-[360px] rounded-full bg-[#2D6040] opacity-30 -bottom-24 -left-16 pointer-events-none" />
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-accent opacity-[0.06] top-[30%] left-[40%] pointer-events-none" />
+    <section className="relative bg-white overflow-hidden pb-12 md:pb-16">
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-surface opacity-40 -top-40 -right-28 pointer-events-none" />
+      <div className="absolute w-[360px] h-[360px] rounded-full bg-surface-tinted opacity-30 -bottom-24 -left-16 pointer-events-none" />
+      <div className="absolute w-[200px] h-[200px] rounded-full bg-accent opacity-[0.04] top-[30%] left-[40%] pointer-events-none" />
 
       <div className="relative mx-auto max-w-[1200px] px-6 pt-16 md:pt-24">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
           {/* Copy */}
           <div className="flex-1 flex flex-col gap-5">
-            <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-[rgba(139,201,154,0.12)] border border-[rgba(139,201,154,0.25)]">
-              <div className="w-1.5 h-1.5 rounded-full bg-accent" />
-              <span className="text-accent text-xs font-semibold tracking-wide">Built for ambitious students</span>
+            <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-[rgba(26,61,37,0.08)] border border-[rgba(26,61,37,0.15)]">
+              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+              <span className="text-primary text-xs font-semibold tracking-wide">Built for ambitious students</span>
             </div>
 
-            <h1 className="text-white text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
+            <h1 className="text-[#1A1A1A] text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
               Find opportunities.<br />
-              <span className="text-accent">Build your future.</span>
+              <span className="text-primary">Build your future.</span>
             </h1>
 
-            <p className="text-white/60 text-lg leading-7 max-w-[520px]">
+            <p className="text-muted text-lg leading-7 max-w-[520px]">
               Olives Forum matches scholarships, internships, and programs to your profile —
               with mentorship and CV tools in one place.
             </p>
@@ -276,14 +276,14 @@ function Hero() {
             <div id="get-started" className="flex flex-wrap gap-3 mt-1">
               <a
                 href={SIGNUP_URL}
-                className="inline-flex items-center gap-2 bg-white hover:bg-primary text-primary hover:text-white font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white hover:text-white font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
               >
                 Get started free
                 <ArrowIcon className="w-[18px] h-[18px]" />
               </a>
               <a
                 href="#how-it-works"
-                className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-white/20 hover:border-white/50 hover:bg-white/[0.07] text-white/75 hover:text-white font-medium text-base transition-all duration-150"
+                className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/[0.04] text-primary/60 hover:text-primary font-medium text-base transition-all duration-150"
               >
                 See how it works
               </a>
@@ -296,29 +296,29 @@ function Hero() {
                   <div
                     key={initial}
                     style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 4 - i, position: "relative" }}
-                    className="w-[30px] h-[30px] rounded-full bg-[#2D6040] border-2 border-forest flex items-center justify-center"
+                    className="w-[30px] h-[30px] rounded-full bg-primary border-2 border-white flex items-center justify-center"
                   >
                     <span className="text-white text-[11px] font-bold">{initial}</span>
                   </div>
                 ))}
               </div>
-              <p className="text-white/55 text-xs leading-[18px]">
-                Joined by <span className="text-white/85 font-semibold">24,000+</span> students across Africa
+              <p className="text-muted text-xs leading-[18px]">
+                Joined by <span className="text-primary font-semibold">24,000+</span> students across Africa
               </p>
             </div>
 
             {/* Stats strip */}
-            <div className="flex flex-wrap items-center gap-4 mt-2 pt-4 border-t border-white/10">
+            <div className="flex flex-wrap items-center gap-4 mt-2 pt-4 border-t border-border">
               {[
                 { value: "Global", label: "Feed" },
                 { value: "1:1", label: "Mentorship" },
                 { value: "Free", label: "CV Builder" },
               ].map((stat, i) => (
                 <div key={stat.label} className="flex items-center gap-4">
-                  {i > 0 && <div className="w-px h-8 bg-white/15" />}
+                  {i > 0 && <div className="w-px h-8 bg-border" />}
                   <div>
-                    <p className="text-white text-xl font-bold">{stat.value}</p>
-                    <p className="text-white/45 text-xs tracking-wide">{stat.label}</p>
+                    <p className="text-[#1A1A1A] text-xl font-bold">{stat.value}</p>
+                    <p className="text-muted text-xs tracking-wide">{stat.label}</p>
                   </div>
                 </div>
               ))}
