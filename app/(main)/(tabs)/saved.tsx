@@ -40,7 +40,6 @@ export default function SavedScreen() {
         </View>
       ) : null}
 
-      <Text variant="title" style={styles.title}>Saved</Text>
 
       <OpportunitySection
         title="Saved opportunities"

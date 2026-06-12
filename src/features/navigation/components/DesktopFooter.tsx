@@ -15,7 +15,13 @@ export function DesktopFooter() {
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
     const handler = () => {
-      const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20;
+      const scrollHeight = Math.max(
+        document.body.scrollHeight,
+        document.documentElement.scrollHeight,
+      );
+      const clientHeight = window.innerHeight || document.documentElement.clientHeight;
+      const isScrollable = scrollHeight > clientHeight + 1;
+      const atBottom = isScrollable && window.scrollY + clientHeight >= scrollHeight - 20;
       setShow(atBottom);
     };
     handler();
@@ -42,7 +48,7 @@ export function DesktopFooter() {
           <Text style={styles.link}>Become an Opportunity admin</Text>
         </Pressable>
         <Pressable
-          onPress={() => router.push(ROUTES.MAIN.HELP.REPORT_BUG)}
+          onPress={() => router.push(ROUTES.MAIN.HELP.INDEX)}
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
         >
           <Text style={styles.link}>Report an issue</Text>
@@ -60,6 +66,11 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     footer: {
       width: '100%',
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 999,
       borderTopWidth: StyleSheet.hairlineWidth,
       borderTopColor: colors.border,
       paddingVertical: 12,
