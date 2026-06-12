@@ -1,26 +1,32 @@
-import React, { useMemo, useState } from 'react';
-import { ActivityIndicator, RefreshControl, StyleSheet, View } from 'react-native';
+import React, { useMemo } from 'react';
+import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { Text } from '@/components/ui';
-import { ErrorMessage } from '@/components/feedback';
-import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
+import { EmptyState, ErrorMessage } from '@/components/feedback';
+import { SavedOpportunityListRow } from '@/features/opportunities/components/SavedOpportunityListRow';
 import { useTrackerOpportunities } from '@/features/opportunities/hooks/useTrackerOpportunities';
 import { filterTrackerItems } from '@/features/opportunities/utils/filter-tracker';
 import { EMPTY_TRACKER_FILTERS, type TrackerStage, type TrackerFilters } from '@/types/domain/tracker';
+import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 
 export default function SavedScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
-  const [query, setQuery] = useState('');
+  const router = useRouter();
 
   const { items, isLoading, isRefetching, error, refetch } = useTrackerOpportunities();
 
   const savedItems = useMemo(() => {
     const filters: TrackerFilters = { ...EMPTY_TRACKER_FILTERS, stages: ['saved' as TrackerStage] };
-    return filterTrackerItems(items, query, filters).map((i) => i.opportunity);
-  }, [items, query]);
+    return filterTrackerItems(items, '', filters).map((i) => i.opportunity);
+  }, [items]);
+
+  const handlePress = (opportunity: { id: string }) => {
+    router.push(ROUTES.MAIN.opportunity(opportunity.id));
+  };
 
   if (isLoading) {
     return (
@@ -40,11 +46,33 @@ export default function SavedScreen() {
         </View>
       ) : null}
 
-
-      <OpportunitySection
-        title="Saved opportunities"
-        opportunities={savedItems}
-        onCardPress={() => {}}
+      <FlatList
+        data={savedItems}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <SavedOpportunityListRow opportunity={item} onPress={handlePress} />
+        )}
+        refreshControl={
+          <RefreshControl
+            refreshing={isRefetching}
+            onRefresh={() => void refetch()}
+            tintColor={colors.primary}
+          />
+        }
+        ListHeaderComponent={
+          <Text variant="caption" muted style={styles.meta}>
+            {savedItems.length} saved {savedItems.length === 1 ? 'opportunity' : 'opportunities'}
+          </Text>
+        }
+        ListEmptyComponent={
+          <EmptyState
+            title="Nothing saved yet"
+            description="Save opportunities from the dashboard or details to see them here."
+          />
+        }
+        contentContainerStyle={
+          savedItems.length === 0 ? styles.emptyList : styles.listContent
+        }
       />
     </View>
   );
@@ -55,6 +83,8 @@ function createStyles(colors: any) {
     container: { flex: 1, backgroundColor: colors.background, paddingBottom: spacing.md },
     centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
     banner: { padding: spacing.md },
-    title: { paddingHorizontal: spacing.md, paddingTop: spacing.sm, paddingBottom: spacing.xs },
+    meta: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
+    emptyList: { flexGrow: 1 },
+    listContent: { paddingBottom: spacing.md },
   });
 }

@@ -33,6 +33,13 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         onPress: () => router.push(ROUTES.MAIN.DASHBOARD as Href),
       },
       {
+        key: 'saved',
+        label: 'Saved',
+        icon: 'bookmark-outline',
+        active: pathname.includes('/saved'),
+        onPress: () => router.push(ROUTES.MAIN.SAVED as Href),
+      },
+      {
         key: 'tracker',
         label: 'Tracker',
         icon: 'clipboard-outline',

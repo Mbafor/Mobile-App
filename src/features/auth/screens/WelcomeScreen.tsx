@@ -6,6 +6,7 @@ import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensi
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import { Circle, Ellipse, Line, Rect, Svg } from 'react-native-svg';
 import startImage from '@/assets/images/start.jpg';
 
 import { ResponsiveContainer } from '@/components/layout';
