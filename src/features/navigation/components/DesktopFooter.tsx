@@ -10,13 +10,37 @@ import { useRouter } from 'expo-router';
 export function DesktopFooter() {
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
+  const [show, setShow] = React.useState(false);
+
+  React.useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const handler = () => {
+      const atBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20;
+      setShow(atBottom);
+    };
+    handler();
+    window.addEventListener('scroll', handler, { passive: true });
+    window.addEventListener('resize', handler);
+    return () => {
+      window.removeEventListener('scroll', handler);
+      window.removeEventListener('resize', handler);
+    };
+  }, []);
+
+  if (!show) return null;
 
   return (
     <View style={styles.footer}>
       <View style={styles.linksRow}>
-        <Text style={styles.link}>About</Text>
-        <Text style={styles.link}>Become a Mentor</Text>
-        <Text style={styles.link}>Become an Opportunity admin</Text>
+        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help')}>
+          <Text style={styles.link}>About</Text>
+        </Pressable>
+        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help/feature-request')}>
+          <Text style={styles.link}>Become a Mentor</Text>
+        </Pressable>
+        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help/feedback')}>
+          <Text style={styles.link}>Become an Opportunity admin</Text>
+        </Pressable>
         <Pressable
           onPress={() => router.push(ROUTES.MAIN.HELP.REPORT_BUG)}
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}

@@ -81,19 +81,34 @@ export default function MainTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="tracker"
-        options={{
-          title: 'Tracker',
-          headerTitle: 'My Tracker',
-          tabBarIcon: tabBarIcon('clipboard-outline', 'clipboard'),
-        }}
-      />
-      <Tabs.Screen
         name="mentorship"
         options={{
           title: 'Mentorship',
           headerTitle: 'Mentorship',
           tabBarIcon: tabBarIcon('people-outline', 'people'),
+        }}
+      />
+      <Tabs.Screen
+        name="cv-builder"
+        options={{
+          title: 'CV Builder',
+          headerShown: false,
+          tabBarIcon: tabBarIcon('document-text-outline', 'document-text'),
+        }}
+      />
+      <Tabs.Screen
+        name="more"
+        options={{
+          title: 'More',
+          tabBarIcon: tabBarIcon('ellipsis-horizontal-outline', 'ellipsis-horizontal'),
+        }}
+      />
+      <Tabs.Screen
+        name="tracker"
+        options={{
+          title: 'Tracker',
+          headerTitle: 'My Tracker',
+          tabBarIcon: tabBarIcon('clipboard-outline', 'clipboard'),
         }}
       />
       <Tabs.Screen
