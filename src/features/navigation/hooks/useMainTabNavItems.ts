@@ -2,6 +2,7 @@ import { usePathname, useRouter, type Href } from 'expo-router';
 import { useMemo } from 'react';
 
 import { ROUTES } from '@/constants/routes';
+import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { DesktopNavItem } from '@/features/navigation/components/DesktopWebNavigation';
 
@@ -14,9 +15,20 @@ export function useMainTabNavItems(): DesktopNavItem[] {
   return useMemo<DesktopNavItem[]>(
     () => [
       {
+        key: 'home',
+        label: 'Home',
+        icon: 'home-outline',
+        active: pathname === '/',
+        onPress: () => {
+          if (typeof window !== 'undefined') {
+            window.location.href = env.LANDING_URL;
+          }
+        },
+      },
+      {
         key: 'dashboard',
         label: 'Dashboard',
-        icon: 'home-outline',
+        icon: 'grid-outline',
         active: pathname.includes('/dashboard'),
         onPress: () => router.push(ROUTES.MAIN.DASHBOARD as Href),
       },
@@ -26,6 +38,13 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         icon: 'clipboard-outline',
         active: pathname.includes('/tracker'),
         onPress: () => router.push('/(main)/(tabs)/tracker' as Href),
+      },
+      {
+        key: 'browse-categories',
+        label: 'Browse',
+        icon: 'grid-outline',
+        active: pathname.includes('/browse-categories'),
+        onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
       },
       {
         key: 'mentorship',
@@ -42,11 +61,25 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
       },
       {
-        key: 'browse-categories',
-        label: 'Browse',
-        icon: 'grid-outline',
-        active: pathname.includes('/browse-categories'),
-        onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
+        key: 'notifications',
+        label: 'Notifications',
+        icon: 'notifications-outline',
+        active: pathname.includes('/notifications'),
+        onPress: () => router.push(ROUTES.MAIN.NOTIFICATIONS as Href),
+      },
+      {
+        key: 'profile',
+        label: 'Profile',
+        icon: 'person-outline',
+        active: pathname.includes('/profile'),
+        onPress: () => router.push(ROUTES.MAIN.DRAWER.PROFILE as Href),
+      },
+      {
+        key: 'settings',
+        label: 'Settings',
+        icon: 'settings-outline',
+        active: pathname.includes('/settings'),
+        onPress: () => router.push(ROUTES.MAIN.SETTINGS as Href),
       },
       ...(isAdmin
         ? [
