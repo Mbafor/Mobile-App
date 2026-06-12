@@ -142,9 +142,50 @@ export function DesktopSidebar() {
     : [];
 
   const sections: SidebarSection[] = [
-    { key: 'main', label: 'App', items: mainItems },
+    {
+      key: 'main',
+      label: 'Main',
+      items: [
+        mainItems.find((i) => i.key === 'home')!,
+        mainItems.find((i) => i.key === 'dashboard')!,
+        // Saved uses ROUTES.MAIN.SAVED
+        {
+          key: 'saved',
+          label: 'Saved',
+          icon: 'bookmark-outline',
+          iconActive: 'bookmark',
+          onPress: () => router.push(ROUTES.MAIN.SAVED as Href),
+          matchPath: '/saved',
+        },
+        mainItems.find((i) => i.key === 'browse')!,
+      ],
+    },
+    {
+      key: 'career',
+      label: 'Career Tools',
+      items: [
+        mainItems.find((i) => i.key === 'tracker')!,
+        mainItems.find((i) => i.key === 'mentorship')!,
+        mainItems.find((i) => i.key === 'cv-builder')!,
+      ],
+    },
+    {
+      key: 'account',
+      label: 'Account',
+      items: [
+        mainItems.find((i) => i.key === 'notifications')!,
+        mainItems.find((i) => i.key === 'profile')!,
+        mainItems.find((i) => i.key === 'settings')!,
+      ],
+    },
     ...(adminItems.length > 0 || superAdminItems.length > 0
-      ? [{ key: 'admin', label: 'Admin', items: [...adminItems, ...superAdminItems] }]
+      ? [
+          {
+            key: 'admin',
+            label: 'Administration',
+            items: [...adminItems, ...superAdminItems],
+          },
+        ]
       : []),
   ];
 
@@ -159,6 +200,8 @@ export function DesktopSidebar() {
         )}
         onPress={item.onPress}
         accessibilityRole="menuitem"
+        // show native tooltip on web when collapsed
+        {...(collapsed ? { title: item.label } : {})}
       >
         <Ionicons
           name={active ? item.iconActive : item.icon}

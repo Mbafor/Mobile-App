@@ -23,24 +23,95 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
         <Text variant="title">Olives Forum</Text>
       </View>
 
-      <Text style={styles.sectionLabel}>App</Text>
-      {tabNavItems.map((item) => (
-        <Pressable
-          key={item.key}
-          style={[styles.item, item.active && styles.itemActive]}
-          onPress={() => {
-            props.navigation.closeDrawer();
-            item.onPress();
-          }}
-        >
-          <Ionicons
-            name={item.icon}
-            size={20}
-            color={item.active ? colors.primary : colors.textMuted}
-          />
-          <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
-        </Pressable>
-      ))}
+      {/* Grouped sections: Main, Career Tools, Account, Administration */}
+      <Text style={styles.sectionLabel}>Main</Text>
+      {tabNavItems
+        .filter((i) => ['home', 'dashboard', 'saved', 'browse-categories'].includes(i.key))
+        .map((item) => (
+          <Pressable
+            key={item.key}
+            style={[styles.item, item.active && styles.itemActive]}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              item.onPress();
+            }}
+          >
+            <Ionicons
+              name={item.icon}
+              size={20}
+              color={item.active ? colors.primary : colors.textMuted}
+            />
+            <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
+          </Pressable>
+        ))}
+
+      <Text style={styles.sectionLabel}>Career Tools</Text>
+      {tabNavItems
+        .filter((i) => ['tracker', 'mentorship', 'cv-builder'].includes(i.key))
+        .map((item) => (
+          <Pressable
+            key={item.key}
+            style={[styles.item, item.active && styles.itemActive]}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              item.onPress();
+            }}
+          >
+            <Ionicons
+              name={item.icon}
+              size={20}
+              color={item.active ? colors.primary : colors.textMuted}
+            />
+            <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
+          </Pressable>
+        ))}
+
+      <Text style={styles.sectionLabel}>Account</Text>
+      {tabNavItems
+        .filter((i) => ['notifications', 'profile', 'settings'].includes(i.key))
+        .map((item) => (
+          <Pressable
+            key={item.key}
+            style={[styles.item, item.active && styles.itemActive]}
+            onPress={() => {
+              props.navigation.closeDrawer();
+              item.onPress();
+            }}
+          >
+            <Ionicons
+              name={item.icon}
+              size={20}
+              color={item.active ? colors.primary : colors.textMuted}
+            />
+            <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
+          </Pressable>
+        ))}
+
+      {/** Administration group only shown when items exist */}
+      {tabNavItems.some((i) => i.key === 'admin' || i.key === 'super-admin') && (
+        <>
+          <Text style={styles.sectionLabel}>Administration</Text>
+          {tabNavItems
+            .filter((i) => i.key === 'admin' || i.key === 'super-admin')
+            .map((item) => (
+              <Pressable
+                key={item.key}
+                style={[styles.item, item.active && styles.itemActive]}
+                onPress={() => {
+                  props.navigation.closeDrawer();
+                  item.onPress();
+                }}
+              >
+                <Ionicons
+                  name={item.icon}
+                  size={20}
+                  color={item.active ? colors.primary : colors.textMuted}
+                />
+                <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
+              </Pressable>
+            ))}
+        </>
+      )}
     </DrawerContentScrollView>
   );
 }

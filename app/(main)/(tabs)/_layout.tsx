@@ -13,7 +13,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { DesktopWebNavigation, DesktopSidebar } from '@/features/navigation/components';
+import { DesktopWebNavigation, DesktopSidebar, DesktopFooter } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
@@ -151,8 +151,11 @@ export default function MainTabsLayout() {
           <View style={styles.desktopBody}>
             <DesktopSidebar />
             <View style={styles.desktopContent}>
-              {tabs}
-              <FloatingHelpButton />
+              <View style={styles.contentMain}>
+                {tabs}
+                <FloatingHelpButton />
+              </View>
+              <DesktopFooter />
             </View>
           </View>
         </View>
@@ -189,6 +192,7 @@ function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
     webRoot: { flex: 1, backgroundColor: colors.background },
     webContent: { flex: 1 },
     desktopBody: { flex: 1, flexDirection: 'row' },
-    desktopContent: { flex: 1 },
+    desktopContent: { flex: 1, flexDirection: 'column' },
+    contentMain: { flex: 1 },
   });
 }
