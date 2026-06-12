@@ -3,6 +3,7 @@ import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AnimatedStat from "./components/AnimatedStat";
 import FaqItem from "./components/FaqItem";
+import ScrollReveal from "./components/ScrollReveal";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.olivesforum.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://olivesforum.com";
@@ -239,9 +240,8 @@ function StarIcon() {
 
 function Eyebrow({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-1.5 mb-1">
-      <div className="w-2 h-2 rounded-full bg-primary" />
-      <span className="text-primary text-xs font-bold tracking-[0.05em] uppercase">{label}</span>
+    <div className="inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary mb-6">
+      {label}
     </div>
   );
 }
@@ -250,26 +250,26 @@ function Eyebrow({ label }: { label: string }) {
 
 function Hero() {
   return (
-    <section className="relative bg-white overflow-hidden pb-8 md:pb-10">
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-surface opacity-40 -top-40 -right-28 pointer-events-none" />
-      <div className="absolute w-[360px] h-[360px] rounded-full bg-surface-tinted opacity-30 -bottom-24 -left-16 pointer-events-none" />
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-accent opacity-[0.04] top-[30%] left-[40%] pointer-events-none" />
+    <section className="relative bg-primary text-white overflow-hidden pb-8 md:pb-10">
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-white/10 -top-40 -right-28 opacity-40 pointer-events-none" />
+      <div className="absolute w-[360px] h-[360px] rounded-full bg-white/10 -bottom-24 -left-16 opacity-30 pointer-events-none" />
+      <div className="absolute w-[200px] h-[200px] rounded-full bg-white/5 top-[30%] left-[40%] pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1200px] px-6 pt-12 md:pt-20">
+      <div className="relative mx-auto max-w-[1200px] px-6 pt-2 md:pt-4">
         <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
           {/* Copy */}
           <div className="flex-1 flex flex-col gap-5">
-            <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-[rgba(26,61,37,0.08)] border border-[rgba(26,61,37,0.15)]">
-              <div className="w-1.5 h-1.5 rounded-full bg-primary" />
-              <span className="text-primary text-xs font-semibold tracking-wide">Built for ambitious students</span>
+            <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
+              <div className="w-1.5 h-1.5 rounded-full bg-white" />
+              <span className="text-white text-xs font-semibold tracking-wide">Built for ambitious students</span>
             </div>
 
-            <h1 className="text-[#1A1A1A] text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
+            <h1 className="text-white text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
               Find opportunities.<br />
-              <span className="text-primary">Build your future.</span>
+              <span className="text-surface">Build your future.</span>
             </h1>
 
-            <p className="text-muted text-lg leading-7 max-w-[520px]">
+            <p className="text-white/80 text-lg leading-7 max-w-[520px]">
               Olives Forum matches scholarships, internships, and programs to your profile —
               with mentorship and CV tools in one place.
             </p>
@@ -277,13 +277,13 @@ function Hero() {
             <div id="get-started" className="flex flex-wrap gap-3 mt-1">
               <a
                 href={SIGNUP_URL}
-                className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white hover:text-white font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
+                className="inline-flex items-center gap-2 bg-white text-primary font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
               >
                 Get started free
               </a>
               <a
                 href="#how-it-works"
-                className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-border hover:border-primary/50 hover:bg-primary/[0.04] text-primary/60 hover:text-primary font-medium text-base transition-all duration-150"
+                className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20 font-medium text-base transition-all duration-150"
               >
                 See how it works
               </a>
@@ -302,26 +302,9 @@ function Hero() {
                   </div>
                 ))}
               </div>
-              <p className="text-muted text-xs leading-[18px]">
-                Joined by <span className="text-primary font-semibold">24,000+</span> students across Africa
+              <p className="text-muted text-xs leading-[18px] text-white hover:bg-white/20 font-medium text-base transition-all duration-150">
+                Joined by <span className="text-primary font-semibold text-white hover:bg-white/20 font-medium text-base transition-all duration-150">24,000+</span> students across Africa
               </p>
-            </div>
-
-            {/* Stats strip */}
-            <div className="flex flex-wrap items-center gap-4 mt-2 pt-4 border-t border-border">
-              {[
-                { value: "Global", label: "Feed" },
-                { value: "1:1", label: "Mentorship" },
-                { value: "Free", label: "CV Builder" },
-              ].map((stat, i) => (
-                <div key={stat.label} className="flex items-center gap-4">
-                  {i > 0 && <div className="w-px h-8 bg-border" />}
-                  <div>
-                    <p className="text-[#1A1A1A] text-xl font-bold">{stat.value}</p>
-                    <p className="text-muted text-xs tracking-wide">{stat.label}</p>
-                  </div>
-                </div>
-              ))}
             </div>
           </div>
 
@@ -347,12 +330,14 @@ function Hero() {
 function TrustSection() {
   return (
     <section className="bg-white border-b border-border py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6">
-        <Eyebrow label="By the numbers" />
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-3 max-w-[660px]">
+      <div className="mx-auto max-w-[1200px] px-6 text-center">
+        <div className="flex justify-center">
+          <Eyebrow label="By the numbers" />
+        </div>
+        <h2 className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold mb-3 mx-auto">
           Real impact for students and early-career professionals.
         </h2>
-        <p className="text-muted text-lg leading-7 mb-10 max-w-[600px]">
+        <p className="text-muted text-lg leading-7 mb-10 mx-auto max-w-[600px]">
           Olives connects talent to opportunities, mentorship, and the tools needed to build a stronger career.
         </p>
         <div className="flex flex-wrap gap-4">
@@ -378,26 +363,26 @@ function TrustSection() {
 function FeaturesSection() {
   return (
     <section id="features" className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6">
+      <div className="mx-auto max-w-[1200px] px-6 text-center">
         <Eyebrow label="Features" />
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-3 max-w-[660px]">
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
           Everything you need to compete globally
         </h2>
-        <p className="text-muted text-lg leading-7 mb-10 max-w-[600px]">
+        <p className="text-muted text-base leading-7 mb-12 mx-auto max-w-[640px]">
           From discovery to application — stay organised and supported at every step.
         </p>
-        <div className="flex flex-wrap gap-4">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
           {FEATURES.map((feature) => (
-            <div
+            <ScrollReveal
               key={feature.title}
-              className="flex-1 basis-[280px] p-6 bg-white rounded-2xl border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 flex flex-col gap-3"
+              className="rounded-[32px] border border-border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
-              <div className="w-12 h-12 rounded-[14px] bg-primary/[0.06] border border-primary/[0.10] flex items-center justify-center mb-1">
+              <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary transition">
                 {feature.icon}
               </div>
-              <h3 className="text-[#1A1A1A] font-semibold text-[17px]">{feature.title}</h3>
-              <p className="text-muted text-sm leading-[22px]">{feature.description}</p>
-            </div>
+              <h3 className="text-[#1A1A1A] font-semibold text-lg mb-3">{feature.title}</h3>
+              <p className="text-muted text-sm leading-7">{feature.description}</p>
+            </ScrollReveal>
           ))}
         </div>
       </div>
@@ -410,28 +395,53 @@ function FeaturesSection() {
 function HowItWorksSection() {
   return (
     <section id="how-it-works" className="bg-[#F4F7F5] py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6">
+      <div className="mx-auto max-w-[1200px] px-6 text-center">
         <Eyebrow label="How it works" />
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-10 max-w-[660px]">
-          Get matched in three simple steps.
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
+          Up and running in 3 simple steps
         </h2>
-        <div className="flex flex-col md:flex-row gap-4 items-stretch">
-          {HOW_IT_WORKS.map((step, i) => (
-            <div key={step.title} className="flex flex-col md:flex-row flex-1 items-stretch">
-              <div className="flex-1 p-6 bg-white rounded-2xl border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 flex flex-col gap-3">
-                <div className="w-12 h-12 rounded-[14px] bg-primary flex items-center justify-center mb-1">
-                  <span className="text-white text-sm font-extrabold tracking-wide">{step.step}</span>
+        <p className="text-muted text-base leading-7 mb-12 mx-auto max-w-[640px]">
+          Getting started with Olives Forum takes less than two minutes.
+        </p>
+        <div className="relative mx-auto max-w-[980px]">
+          <div className="absolute left-4 right-4 top-14 hidden h-px bg-primary/20 md:block" />
+          <div className="grid gap-10 md:grid-cols-3">
+            {HOW_IT_WORKS.map((step, i) => (
+              <ScrollReveal key={step.title} className="relative flex flex-col items-center text-center">
+                <div className="absolute inset-x-0 top-0 flex justify-center">
+                  <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-lg">
+                    {step.step}
+                  </div>
                 </div>
-                <h3 className="text-[#1A1A1A] font-semibold text-[17px]">{step.title}</h3>
-                <p className="text-muted text-sm leading-[22px]">{step.description}</p>
-              </div>
-              {i < HOW_IT_WORKS.length - 1 && (
-                <div className="hidden md:flex items-center px-2 text-accent">
-                  <ArrowIcon className="w-5 h-5" />
+                <div className="mt-14 flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary shadow-sm">
+                  {i === 0 ? (
+                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
+                      <circle cx="8.5" cy="7" r="4" />
+                      <path d="M20 8v6" />
+                      <path d="M23 11h-6" />
+                    </svg>
+                  ) : i === 1 ? (
+                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M21 10c0 6-9 12-9 12S3 16 3 10a9 9 0 0118 0z" />
+                      <circle cx="12" cy="10" r="3" />
+                    </svg>
+                  ) : (
+                    <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="7" width="18" height="10" rx="2" />
+                      <path d="M16 17v2" />
+                      <path d="M8 17v2" />
+                      <path d="M7 7V5a2 2 0 012-2h6a2 2 0 012 2v2" />
+                    </svg>
+                  )}
                 </div>
-              )}
-            </div>
-          ))}
+                <div className="mt-6 rounded-[28px] border border-border bg-white px-6 pb-8 pt-10 shadow-sm">
+                  <h3 className="text-lg font-semibold text-[#1A1A1A] mb-2">{step.title}</h3>
+                  <p className="text-muted text-sm leading-7">{step.description}</p>
+                </div>
+              </ScrollReveal>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -456,12 +466,14 @@ function MentorshipSection() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col gap-3">
-            <Eyebrow label="Mentorship" />
-            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold max-w-[660px]">
+          <div className="flex-1 flex flex-col gap-3 text-center md:text-left">
+            <div className="flex md:block justify-center">
+              <Eyebrow label="Mentorship" />
+            </div>
+            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold">
               Guidance from people who have been there
             </h2>
-            <p className="text-muted text-lg leading-7 max-w-[600px] mb-2">
+            <p className="text-muted text-lg leading-7 mb-2">
               Connect with coaches, book sessions, and track your mentorship journey without leaving the platform.
             </p>
             <div className="flex flex-col gap-4 mt-2">
@@ -496,9 +508,11 @@ function MentorshipSection() {
 function TestimonialsSection() {
   return (
     <section className="bg-[#F4F7F5] py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6">
-        <Eyebrow label="Success stories" />
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-10 max-w-[660px]">
+      <div className="mx-auto max-w-[1200px] px-6 text-center">
+        <div className="flex justify-center">
+          <Eyebrow label="Success stories" />
+        </div>
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-10 mx-auto">
           Students and mentors finding momentum together.
         </h2>
         <div className="flex flex-col md:flex-row gap-4">
@@ -537,8 +551,10 @@ function FaqSection() {
   return (
     <section className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
-        <Eyebrow label="FAQ" />
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-10 max-w-[660px] mx-auto">
+        <div className="flex justify-center">
+          <Eyebrow label="FAQ" />
+        </div>
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-10 mx-auto">
           Got questions? We&apos;ve got answers.
         </h2>
         <div className="mx-auto max-w-[760px] border-t border-border">
@@ -559,7 +575,7 @@ function CtaSection() {
       <div className="absolute w-[400px] h-[400px] rounded-full bg-primary opacity-60 -left-36 -top-24 pointer-events-none" />
       <div className="absolute w-[300px] h-[300px] rounded-full bg-accent opacity-[0.08] -right-20 -bottom-16 pointer-events-none" />
       <div className="relative mx-auto max-w-[820px] px-6">
-        <h2 className="text-white text-3xl md:text-4xl font-bold mb-3">
+        <h2 className="text-white text-3xl md:text-4xl font-bold mb-3 text-center">
           Ready to find your next opportunity?
         </h2>
         <p className="text-white/65 text-lg leading-7 mb-10">
