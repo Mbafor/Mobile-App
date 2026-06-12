@@ -279,7 +279,6 @@ function Hero() {
                 className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white hover:text-white font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
               >
                 Get started free
-                <ArrowIcon className="w-[18px] h-[18px]" />
               </a>
               <a
                 href="#how-it-works"

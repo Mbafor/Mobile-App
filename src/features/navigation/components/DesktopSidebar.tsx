@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
@@ -34,6 +35,7 @@ export function DesktopSidebar() {
   const router = useRouter();
   const pathname = usePathname();
   const { isAdmin, isSuperAdmin } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
 
   const mainItems: SidebarItem[] = [
     {
@@ -54,6 +56,30 @@ export function DesktopSidebar() {
       iconActive: 'grid',
       onPress: () => router.push(ROUTES.MAIN.DASHBOARD as Href),
       matchPath: '/dashboard',
+    },
+    {
+      key: 'notifications',
+      label: 'Notifications',
+      icon: 'notifications-outline',
+      iconActive: 'notifications',
+      onPress: () => router.push(ROUTES.MAIN.NOTIFICATIONS as Href),
+      matchPath: '/notifications',
+    },
+    {
+      key: 'profile',
+      label: 'Profile',
+      icon: 'person-outline',
+      iconActive: 'person',
+      onPress: () => router.push(ROUTES.MAIN.DRAWER.PROFILE as Href),
+      matchPath: '/profile',
+    },
+    {
+      key: 'settings',
+      label: 'Settings',
+      icon: 'settings-outline',
+      iconActive: 'settings',
+      onPress: () => router.push(ROUTES.MAIN.SETTINGS as Href),
+      matchPath: '/settings',
     },
     {
       key: 'tracker',
@@ -128,7 +154,7 @@ export function DesktopSidebar() {
       <Pressable
         key={item.key}
         style={webPressableStyle(
-          [styles.item, active && styles.itemActive],
+          [styles.item, collapsed && styles.itemCollapsed, active && styles.itemActive],
           styles.itemHover,
         )}
         onPress={item.onPress}
@@ -139,25 +165,44 @@ export function DesktopSidebar() {
           size={20}
           color={active ? colors.primary : colors.textMuted}
         />
-        <Text
-          style={[
-            styles.itemLabel,
-            getWebFontStyle('medium'),
-            active && styles.itemLabelActive,
-          ]}
-        >
-          {item.label}
-        </Text>
+        {!collapsed && (
+          <Text
+            style={[
+              styles.itemLabel,
+              getWebFontStyle('medium'),
+              active && styles.itemLabelActive,
+            ]}
+          >
+            {item.label}
+          </Text>
+        )}
       </Pressable>
     );
   };
 
   return (
-    <View style={styles.sidebar}>
+    <View style={[styles.sidebar, collapsed && styles.sidebarCollapsed]}>
+      <View style={styles.toggleContainer}>
+        <Pressable
+          style={webPressableStyle(styles.toggleButton, styles.itemHover)}
+          onPress={() => setCollapsed((value) => !value)}
+          accessibilityRole="button"
+          accessibilityLabel={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        >
+          <Ionicons
+            name={collapsed ? 'chevron-forward-outline' : 'chevron-back-outline'}
+            size={20}
+            color={colors.text}
+          />
+          {!collapsed && (
+            <Text style={[styles.toggleLabel, getWebFontStyle('medium')]}>Collapse</Text>
+          )}
+        </Pressable>
+      </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
         {sections.map((section, si) => (
           <View key={section.key} style={si > 0 ? styles.sectionGap : undefined}>
-            <Text style={styles.sectionLabel}>{section.label}</Text>
+            {!collapsed && <Text style={styles.sectionLabel}>{section.label}</Text>}
             {section.items.map(renderItem)}
           </View>
         ))}
@@ -175,6 +220,26 @@ function createStyles(colors: ColorScheme) {
     borderRightWidth: 1,
     borderRightColor: colors.border,
     paddingBottom: spacing.xl,
+  },
+  sidebarCollapsed: {
+    width: 72,
+  },
+  toggleContainer: {
+    paddingHorizontal: spacing.sm,
+    paddingTop: spacing.md,
+    paddingBottom: spacing.xs,
+  },
+  toggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.sm,
+    borderRadius: 10,
+  },
+  toggleLabel: {
+    fontSize: 13,
+    color: colors.text,
   },
   scroll: {
     paddingHorizontal: spacing.sm,
@@ -203,6 +268,10 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.sm + 2,
     borderRadius: 10,
     marginBottom: spacing.xs,
+  },
+  itemCollapsed: {
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm,
   },
   itemActive: {
     backgroundColor: `${colors.primary}12`,
