@@ -1,10 +1,10 @@
 "use client";
 
-import { ReactNode, useEffect, useRef, useState } from "react";
+import { ElementType, ReactNode, useEffect, useRef, useState } from "react";
 
 interface ScrollRevealProps {
   children: ReactNode;
-  as?: keyof JSX.IntrinsicElements;
+  as?: ElementType;
   className?: string;
   threshold?: number;
   rootMargin?: string;

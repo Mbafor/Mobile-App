@@ -250,13 +250,13 @@ function Eyebrow({ label }: { label: string }) {
 
 function Hero() {
   return (
-    <section className="relative bg-primary text-white overflow-hidden pb-8 md:pb-10">
+    <section className="relative bg-primary text-white overflow-hidden pt-10 pb-8 md:pt-16 md:pb-10">
       <div className="absolute w-[500px] h-[500px] rounded-full bg-white/10 -top-40 -right-28 opacity-40 pointer-events-none" />
       <div className="absolute w-[360px] h-[360px] rounded-full bg-white/10 -bottom-24 -left-16 opacity-30 pointer-events-none" />
       <div className="absolute w-[200px] h-[200px] rounded-full bg-white/5 top-[30%] left-[40%] pointer-events-none" />
 
       <div className="relative mx-auto max-w-[1200px] px-6 pt-2 md:pt-4">
-        <div className="flex flex-col md:flex-row md:items-center gap-10 md:gap-16">
+        <div className="flex flex-col-reverse md:flex-row md:items-center gap-10 md:gap-16">
           {/* Copy */}
           <div className="flex-1 flex flex-col gap-5">
             <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
@@ -309,15 +309,16 @@ function Hero() {
           </div>
 
           {/* Product image */}
-          <div className="hidden md:flex flex-1 max-w-[460px] items-center justify-center">
-            <Image
-              src="/images/product.png"
-              alt="Olives Forum app"
-              width={460}
-              height={520}
-              className="w-full object-contain"
-              priority
-            />
+          <div className="flex-1 max-w-[460px] w-full mx-auto md:mx-0">
+            <div className="relative h-[520px] overflow-hidden rounded-[28px]">
+              <Image
+                src="/images/product.png"
+                alt="Olives Forum app"
+                fill
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -453,7 +454,7 @@ function HowItWorksSection() {
 function MentorshipSection() {
   return (
     <section className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6">
+      <ScrollReveal className="mx-auto max-w-[1200px] px-6">
         <div className="flex flex-col md:flex-row gap-12 md:gap-16 md:items-center">
           <div className="flex-1 relative rounded-[20px] overflow-hidden min-h-[320px] md:min-h-[400px]">
             <Image src="/images/mentorship.jpg" alt="Mentorship" fill className="object-cover" />
@@ -498,7 +499,7 @@ function MentorshipSection() {
             </a>
           </div>
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
@@ -550,7 +551,7 @@ function TestimonialsSection() {
 function FaqSection() {
   return (
     <section className="bg-white py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6 text-center">
+      <ScrollReveal className="mx-auto max-w-[1200px] px-6 text-center">
         <div className="flex justify-center">
           <Eyebrow label="FAQ" />
         </div>
@@ -562,7 +563,7 @@ function FaqSection() {
             <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
           ))}
         </div>
-      </div>
+      </ScrollReveal>
     </section>
   );
 }
@@ -574,7 +575,7 @@ function CtaSection() {
     <section className="relative bg-forest py-20 md:py-28 overflow-hidden text-center">
       <div className="absolute w-[400px] h-[400px] rounded-full bg-primary opacity-60 -left-36 -top-24 pointer-events-none" />
       <div className="absolute w-[300px] h-[300px] rounded-full bg-accent opacity-[0.08] -right-20 -bottom-16 pointer-events-none" />
-      <div className="relative mx-auto max-w-[820px] px-6">
+      <ScrollReveal className="relative mx-auto max-w-[820px] px-6">
         <h2 className="text-white text-3xl md:text-4xl font-bold mb-3 text-center">
           Ready to find your next opportunity?
         </h2>
@@ -593,8 +594,7 @@ function CtaSection() {
           </a>
         </div>
         <p className="text-white/40 text-xs tracking-wide">No credit card required · Free for students</p>
-      </div>
-    
+      </ScrollReveal>
     </section>
   );
 }

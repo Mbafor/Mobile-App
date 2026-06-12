@@ -51,23 +51,20 @@ export default function Nav() {
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
-          className={`ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full border transition-colors duration-150 md:hidden ${scrolled ? "border-border bg-white text-[#1A1A1A]" : "border-white bg-white text-[#1A1A1A]"}`}
+          className={`ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-150 md:hidden bg-transparent ${scrolled ? "text-primary" : "text-white"}`}
           aria-label="Toggle navigation menu"
         >
-          <span className="w-5 h-0.5 bg-current block rounded-full" />
-          <span className="w-5 h-0.5 bg-current block rounded-full mt-1.5" />
-          <span className="w-5 h-0.5 bg-current block rounded-full mt-1.5" />
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M4 7h16" />
+            <path d="M4 12h16" />
+            <path d="M4 17h16" />
+          </svg>
         </button>
 
-        <div
-          className={`w-full md:w-auto md:flex md:items-center md:justify-center md:gap-4 ${
-            menuOpen ? "block" : "hidden"
-          }`}
-        >
-          <div className="flex flex-col items-center gap-4 pb-4 md:flex-row md:items-center md:pb-0 md:gap-4 md:justify-center w-full">
+        <div className="hidden md:flex md:items-center md:justify-center md:gap-4">
+          <div className="flex items-center gap-4">
             <a
               href="/about"
-              onClick={() => setMenuOpen(false)}
               className={`text-sm font-semibold transition-all duration-150 ${
                 pathname === "/about" ? activeLinkClass : inactiveLinkClass
               }`}
@@ -76,7 +73,6 @@ export default function Nav() {
             </a>
             <a
               href="/mentor"
-              onClick={() => setMenuOpen(false)}
               className={`text-sm font-semibold transition-all duration-150 ${
                 pathname === "/mentor" ? activeLinkClass : inactiveLinkClass
               }`}
@@ -85,7 +81,6 @@ export default function Nav() {
             </a>
             <a
               href="/#features"
-              onClick={() => setMenuOpen(false)}
               className={`text-sm font-semibold transition-all duration-150 ${
                 activeHash === "#features" ? activeLinkClass : inactiveLinkClass
               }`}
@@ -94,7 +89,6 @@ export default function Nav() {
             </a>
             <a
               href="/#how-it-works"
-              onClick={() => setMenuOpen(false)}
               className={`text-sm font-semibold transition-all duration-150 ${
                 activeHash === "#how-it-works" ? activeLinkClass : inactiveLinkClass
               }`}
@@ -115,14 +109,65 @@ export default function Nav() {
       </div>
 
       {menuOpen && (
-        <div className={`border-t ${scrolled ? "border-border bg-white" : "border-white bg-primary"} md:hidden`}>
-          <div className="mx-auto max-w-[1200px] px-6 pb-4 pt-3 flex flex-col items-center gap-3">
+        <div className="fixed inset-0 z-50 md:hidden">
+          <button
+            type="button"
+            onClick={() => setMenuOpen(false)}
+            className="absolute inset-0 bg-black/30"
+            aria-label="Close navigation menu"
+          />
+          <div className="absolute inset-y-0 right-0 w-[min(320px,88vw)] bg-white shadow-2xl p-6 flex flex-col gap-6 overflow-y-auto">
+            <button
+              type="button"
+              onClick={() => setMenuOpen(false)}
+              className="self-end inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[#1A1A1A]"
+              aria-label="Close menu"
+            >
+              <span className="block h-0.5 w-5 rotate-45 bg-current" />
+              <span className="block h-0.5 w-5 -rotate-45 bg-current -mt-0.5" />
+            </button>
+            <div className="flex flex-col gap-4">
+              <a
+                href="/about"
+                onClick={() => setMenuOpen(false)}
+                className={`text-sm font-semibold transition-all duration-150 ${
+                  pathname === "/about" ? activeLinkClass : inactiveLinkClass
+                }`}
+              >
+                About
+              </a>
+              <a
+                href="/mentor"
+                onClick={() => setMenuOpen(false)}
+                className={`text-sm font-semibold transition-all duration-150 ${
+                  pathname === "/mentor" ? activeLinkClass : inactiveLinkClass
+                }`}
+              >
+                Mentors
+              </a>
+              <a
+                href="/#features"
+                onClick={() => setMenuOpen(false)}
+                className={`text-sm font-semibold transition-all duration-150 ${
+                  activeHash === "#features" ? activeLinkClass : inactiveLinkClass
+                }`}
+              >
+                Features
+              </a>
+              <a
+                href="/#how-it-works"
+                onClick={() => setMenuOpen(false)}
+                className={`text-sm font-semibold transition-all duration-150 ${
+                  activeHash === "#how-it-works" ? activeLinkClass : inactiveLinkClass
+                }`}
+              >
+                How it works
+              </a>
+            </div>
             <a
               href={SIGNUP_URL}
               onClick={() => setMenuOpen(false)}
-              className={`w-full text-center rounded-lg px-4 py-3 text-sm font-semibold transition-colors duration-150 ${
-                scrolled ? "bg-primary text-white hover:bg-forest" : "bg-white text-primary hover:bg-accent"
-              }`}
+              className="mt-4 inline-flex items-center justify-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-forest"
             >
               Get started free
             </a>
