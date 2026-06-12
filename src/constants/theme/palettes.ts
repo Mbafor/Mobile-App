@@ -6,8 +6,8 @@ import type {
 } from '@/constants/theme/types';
 
 export const lightColors: ColorScheme = {
-  primary: '#1A3D25',
-  forest: '#0F2018',
+  primary: '#0B6623',
+  forest: '#0B6623',
   background: '#FFFFFF',
   surface: '#F5F5F5',
   surfaceElevated: '#FFFFFF',
