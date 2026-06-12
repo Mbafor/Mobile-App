@@ -1,11 +1,12 @@
 import { useRouter, type Href } from 'expo-router';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert } from 'react-native';
+import { useTheme } from '@/hooks/useTheme';
+import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, Alert, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Circle, Ellipse, Line, Rect } from 'react-native-svg';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
+import startImage from '@/assets/images/start.jpg';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Button, Text, Input } from '@/components/ui';
@@ -23,6 +24,8 @@ import { useWebMobile, useWebDesktop } from '@/hooks/useWebDesktop';
 
 // ─── Olive branch illustration ───────────────────────────────────────────────
 function OliveBranchIllustration() {
+  const { colors } = useTheme();
+
   return (
     <Svg
       width="100%"
@@ -33,8 +36,8 @@ function OliveBranchIllustration() {
       <Rect width="390" height="340" fill="#0F2018" />
 
       {/* Ambient glow circles */}
-      <Circle cx="195" cy="90" r="160" fill="#1A3D25" opacity="0.5" />
-      <Circle cx="195" cy="90" r="110" fill="#1A3D25" opacity="0.4" />
+      <Circle cx="195" cy="90" r="160" fill={colors.primary} opacity="0.5" />
+      <Circle cx="195" cy="90" r="110" fill={colors.primary} opacity="0.4" />
       <Ellipse cx="130" cy="200" rx="80" ry="30" fill="#2A5C35" opacity="0.15" />
       <Ellipse cx="260" cy="180" rx="60" ry="22" fill="#2A5C35" opacity="0.12" />
 
@@ -103,8 +106,8 @@ function OliveBranchIllustration() {
       <Circle cx="195" cy="165" r="3.5" fill="#8BC99A" opacity="0.6" />
 
       {/* Corner glow blobs */}
-      <Circle cx="280" cy="260" r="60" fill="#1A3D25" opacity="0.2" />
-      <Circle cx="80" cy="290" r="50" fill="#1A3D25" opacity="0.15" />
+      <Circle cx="280" cy="260" r="60" fill={colors.primary} opacity="0.2" />
+      <Circle cx="80" cy="290" r="50" fill={colors.primary} opacity="0.15" />
     </Svg>
   );
 }
@@ -239,10 +242,13 @@ export function WelcomeScreen() {
     return (
       <View style={[styles.root, { paddingTop: insets.top }]}>
         <ScrollView contentContainerStyle={styles.mobileContainer}>
-          <View style={styles.mobileHero}>
-            <View style={StyleSheet.absoluteFillObject}>
-              <OliveBranchIllustration />
-            </View>
+          <ImageBackground
+            source={startImage}
+            resizeMode="cover"
+            style={styles.mobileHero}
+            imageStyle={styles.heroImage}
+          >
+            <View style={styles.heroOverlay} />
             <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
               <View style={styles.heroContent}>
                 <View style={styles.logoMark}>
@@ -255,7 +261,7 @@ export function WelcomeScreen() {
                 <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
               </View>
             </ResponsiveContainer>
-          </View>
+          </ImageBackground>
 
           <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
             <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
@@ -302,23 +308,26 @@ export function WelcomeScreen() {
   if (isWebMobile) {
     return (
       <ScrollView style={[styles.root, { paddingTop: insets.top }]} contentContainerStyle={{ flexGrow: 1 }}>
-        <View style={styles.webMobileHero}>
-          <View style={StyleSheet.absoluteFillObject}>
-            <OliveBranchIllustration />
-          </View>
+        <ImageBackground
+          source={startImage}
+          resizeMode="cover"
+          style={styles.webMobileHero}
+          imageStyle={styles.heroImage}
+        >
+          <View style={styles.heroOverlay} />
           <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
-            <View style={styles.heroContent}>
-              <View style={styles.logoMark}>
-                <RNText style={styles.logoText}>O</RNText>
-              </View>
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>Olives Forum</Text>
-              </View>
-              <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
-              <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+              <View style={styles.heroContent}>
+                <View style={styles.logoMark}>
+                  <RNText style={styles.logoText}>O</RNText>
+                </View>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>Olives Forum</Text>
+                </View>
+                <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
+                <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
             </View>
           </ResponsiveContainer>
-        </View>
+        </ImageBackground>
 
         <View style={[styles.panel, { paddingBottom: spacing.xl }]}>
           <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
@@ -340,24 +349,27 @@ export function WelcomeScreen() {
   return (
     <View style={styles.root}>
       <View style={styles.splitContainer}>
-        {/* Left Column - Dark Green Hero (45%) */}
-        <View style={styles.leftColumn}>
-          <View style={StyleSheet.absoluteFillObject}>
-            <OliveBranchIllustration />
-          </View>
-          <View style={[styles.heroContent, { paddingTop: insets.top + spacing.lg, paddingHorizontal: spacing.lg }]}>
+        {/* Left Column - Image Hero (50%) */}
+        <ImageBackground
+          source={startImage}
+          resizeMode="cover"
+          style={styles.leftColumn}
+          imageStyle={styles.leftImage}
+        >
+          <View style={styles.leftOverlay} />
+          <View style={[styles.heroContent, { alignItems: 'center', paddingTop: insets.top + spacing.lg, paddingHorizontal: spacing.lg }]}>
             <View style={styles.logoMark}>
               <RNText style={styles.logoText}>O</RNText>
             </View>
             <View style={styles.badge}>
               <Text style={styles.badgeText}>Olives Forum</Text>
             </View>
-            <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
-            <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+            <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>Find your next{'\n'}opportunity</Text>
+            <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>Matched to your interests and ambitions, globally.</Text>
           </View>
-        </View>
+        </ImageBackground>
 
-        {/* Right Column - White Auth Form (55%) */}
+        {/* Right Column - White Auth Form (50%) */}
         <ScrollView style={styles.rightColumn} contentContainerStyle={{ flexGrow: 1 }}>
           <View style={[styles.authFormContainer, { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xl }]}>
             <View style={styles.authFormContent}>
@@ -411,12 +423,18 @@ function createStyles(colors: ColorScheme) {
   },
   leftColumn: {
     flex: 0.5,
-    backgroundColor: colors.forest,
+    flexBasis: '50%',
+    width: '50%',
+    backgroundColor: 'transparent',
+    padding: 0,
+    margin: 0,
     justifyContent: 'center',
     overflow: 'hidden',
   },
   rightColumn: {
     flex: 0.5,
+    flexBasis: '50%',
+    width: '50%',
     backgroundColor: colors.background,
   },
 
@@ -454,7 +472,7 @@ function createStyles(colors: ColorScheme) {
     width: 64,
     height: 64,
     borderRadius: 18,
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: colors.primary,
     borderWidth: 0.5,
     borderColor: 'rgba(255,255,255,0.2)',
     alignItems: 'center',
@@ -472,7 +490,7 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs / 1.5,
     borderRadius: 999,
-    backgroundColor: 'rgba(255,255,255,0.12)',
+    backgroundColor: colors.primary,
     borderWidth: 0.5,
     borderColor: 'rgba(255,255,255,0.2)',
   },
@@ -492,12 +510,69 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 40,
   },
 
+  heroTitleLeft: {
+    textAlign: 'left',
+    maxWidth: 360,
+  },
+
   heroTagline: {
-    color: 'rgba(255,255,255,0.55)',
+    color: 'rgba(255,255,255,0.95)',
     fontSize: typography.fontSize.sm,
     textAlign: 'center',
-    maxWidth: 240,
-    lineHeight: 22,
+    maxWidth: 280,
+    lineHeight: 24,
+  },
+
+  heroTaglineLeft: {
+    textAlign: 'left',
+    maxWidth: 360,
+  },
+
+  heroTitleDesktop: {
+    fontWeight: '800',
+    fontSize: 40,
+    textAlign: 'center',
+    color: '#fff',
+    textShadowColor: 'rgba(0,0,0,0.6)',
+    textShadowOffset: { width: 0, height: 3 },
+    textShadowRadius: 6,
+  },
+
+  heroTaglineDesktop: {
+    textAlign: 'center',
+    color: 'rgba(255,255,255,0.95)',
+    fontWeight: '600',
+    textShadowColor: 'rgba(0,0,0,0.45)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+    maxWidth: 360,
+  },
+
+  heroImage: {
+    opacity: 0.95,
+  },
+
+  heroOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(15, 32, 24, 0.45)',
+  },
+
+  heroContentLeft: {
+    alignItems: 'flex-start',
+    justifyContent: 'flex-end',
+    paddingBottom: spacing.xl,
+  },
+
+  leftImage: {
+    opacity: 0.98,
+    width: '100%',
+    height: '100%',
+    alignSelf: 'stretch',
+  },
+
+  leftOverlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'transparent',
   },
 
   // ── Auth Panel (Mobile/Web Mobile) ─────────────────────────────
@@ -543,7 +618,7 @@ function createStyles(colors: ColorScheme) {
   },
 
   googleBtnText: {
-    color: '#000',
+    color: colors.primary,
     fontWeight: '500',
   },
 

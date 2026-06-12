@@ -1,4 +1,4 @@
-const BRAND = '#1A3D25';
+const BRAND = '#0B6623';
 const MUTED = '#555555';
 const LIGHT_BG = '#F3F7F4';
 

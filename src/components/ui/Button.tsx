@@ -58,7 +58,7 @@ export function Button({
     ],
     !isDisabled && Platform.OS === 'web'
       ? [
-          variant === 'primary' && { backgroundColor: isDark ? '#4A9B6E' : '#15301f' },
+          variant === 'primary' && { backgroundColor: colors.primary },
           variant === 'secondary' && { backgroundColor: colors.background },
           variant === 'ghost' && { backgroundColor: `${colors.primary}0c` },
         ]

@@ -167,13 +167,13 @@ const FAQS = [
   },
 ];
 
-const AVATAR_BG = ["#1A3D25", "#2D6040", "#3D7A50", "#8BC99A"];
+const AVATAR_BG = ["#0B6623", "#2D6040", "#3D7A50", "#8BC99A"];
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
 function CompassIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <circle cx="12" cy="12" r="10" />
       <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
     </svg>
@@ -181,35 +181,35 @@ function CompassIcon() {
 }
 function ClipboardIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
     </svg>
   );
 }
 function DocumentIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
     </svg>
   );
 }
 function BellIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
     </svg>
   );
 }
 function GridIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zm10 0a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
     </svg>
   );
 }
 function ShieldIcon() {
   return (
-    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#1A3D25" strokeWidth={1.8}>
+    <svg className="w-[22px] h-[22px]" fill="none" viewBox="0 0 24 24" stroke="#0B6623" strokeWidth={1.8}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
     </svg>
   );
@@ -258,8 +258,8 @@ function Hero() {
       <div className="relative mx-auto max-w-[1200px] px-6 pt-2 md:pt-4">
         <div className="flex flex-col-reverse md:flex-row md:items-center gap-10 md:gap-16">
           {/* Copy */}
-          <div className="flex-1 flex flex-col gap-5">
-            <div className="self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
+          <div className="flex-1 flex flex-col gap-5 text-center md:text-left items-center md:items-start">
+            <div className="self-center md:self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
               <div className="w-1.5 h-1.5 rounded-full bg-white" />
               <span className="text-white text-xs font-semibold tracking-wide">Built for ambitious students</span>
             </div>
@@ -274,10 +274,10 @@ function Hero() {
               with mentorship and CV tools in one place.
             </p>
 
-            <div id="get-started" className="flex flex-wrap gap-3 mt-1">
+            <div id="get-started" className="flex flex-col items-center gap-3 mt-6 sm:flex-row sm:justify-center md:justify-start">
               <a
                 href={SIGNUP_URL}
-                className="inline-flex items-center gap-2 bg-white text-primary font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px] justify-center"
+                className="inline-flex items-center justify-center gap-2 bg-white text-primary font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px]"
               >
                 Get started free
               </a>
@@ -290,7 +290,7 @@ function Hero() {
             </div>
 
             {/* Social proof */}
-            <div className="flex items-center gap-3 mt-1">
+            <div className="flex flex-col items-center gap-3 mt-4 text-center md:flex-row md:items-center md:text-left md:justify-start">
               <div className="flex">
                 {["A", "C", "N", "K"].map((initial, i) => (
                   <div
@@ -302,8 +302,8 @@ function Hero() {
                   </div>
                 ))}
               </div>
-              <p className="text-muted text-xs leading-[18px] text-white hover:bg-white/20 font-medium text-base transition-all duration-150">
-                Joined by <span className="text-primary font-semibold text-white hover:bg-white/20 font-medium text-base transition-all duration-150">24,000+</span> students across Africa
+              <p className="text-white/80 text-sm leading-[1.6] font-medium">
+                Joined by <span className="text-white font-semibold">24,000+</span> students across Africa
               </p>
             </div>
           </div>
@@ -467,11 +467,11 @@ function MentorshipSection() {
             </div>
           </div>
 
-          <div className="flex-1 flex flex-col gap-3 text-center md:text-left">
+          <div className="flex-1 flex flex-col gap-3 text-left">
             <div className="flex md:block justify-center">
               <Eyebrow label="Mentorship" />
             </div>
-            <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold">
+            <h2 className="text-center md:text-left text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold">
               Guidance from people who have been there
             </h2>
             <p className="text-muted text-lg leading-7 mb-2">

@@ -130,36 +130,28 @@ export default function Nav() {
               <a
                 href="/about"
                 onClick={() => setMenuOpen(false)}
-                className={`text-sm font-semibold transition-all duration-150 ${
-                  pathname === "/about" ? activeLinkClass : inactiveLinkClass
-                }`}
+                className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
                 About
               </a>
               <a
                 href="/mentor"
                 onClick={() => setMenuOpen(false)}
-                className={`text-sm font-semibold transition-all duration-150 ${
-                  pathname === "/mentor" ? activeLinkClass : inactiveLinkClass
-                }`}
+                className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
                 Mentors
               </a>
               <a
                 href="/#features"
                 onClick={() => setMenuOpen(false)}
-                className={`text-sm font-semibold transition-all duration-150 ${
-                  activeHash === "#features" ? activeLinkClass : inactiveLinkClass
-                }`}
+                className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
                 Features
               </a>
               <a
                 href="/#how-it-works"
                 onClick={() => setMenuOpen(false)}
-                className={`text-sm font-semibold transition-all duration-150 ${
-                  activeHash === "#how-it-works" ? activeLinkClass : inactiveLinkClass
-                }`}
+                className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
                 How it works
               </a>

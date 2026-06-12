@@ -5,14 +5,17 @@ import { Text } from '@/components/ui';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { spacing, typography } from '@/constants/theme';
+import { useTheme } from '@/hooks/useTheme';
 
 // ─── Olive branch illustration (same language as WelcomeScreen) ───────────────
 function OliveBranchIllustration() {
+  const { colors } = useTheme();
+
   return (
     <Svg width="260" height="260" viewBox="0 0 260 260">
       {/* Ambient glow */}
-      <Circle cx="130" cy="130" r="120" fill="#1A3D25" opacity="0.5" />
-      <Circle cx="130" cy="130" r="80" fill="#1A3D25" opacity="0.4" />
+      <Circle cx="130" cy="130" r="120" fill={colors.primary} opacity="0.5" />
+      <Circle cx="130" cy="130" r="80" fill={colors.primary} opacity="0.4" />
 
       {/* Stem */}
       <Line

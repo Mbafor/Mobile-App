@@ -6,8 +6,8 @@ import type {
 } from '@/constants/theme/types';
 
 export const lightColors: ColorScheme = {
-  primary: '#1A3D25',
-  forest: '#0F2018',
+  primary: '#0B6623',
+  forest: '#0B6623',
   background: '#FFFFFF',
   surface: '#F5F5F5',
   surfaceElevated: '#FFFFFF',
@@ -16,12 +16,12 @@ export const lightColors: ColorScheme = {
   textOnPrimary: '#FFFFFF',
   border: '#E0E0E0',
   error: '#B00020',
-  success: '#1B7F4E',
+  success: '#0B6623',
 };
 
 export const darkColors: ColorScheme = {
-  primary: '#5BA876',
-  forest: '#0A1510',
+  primary: '0B6623',
+  forest: '0B6623',
   background: '#0F1412',
   surface: '#1A211E',
   surfaceElevated: '#232A27',
@@ -30,15 +30,15 @@ export const darkColors: ColorScheme = {
   textOnPrimary: '#0F1412',
   border: '#2E3530',
   error: '#FF6B7A',
-  success: '#5BC48A',
+  success: '#0B6623',
 };
 
 export function createMentorshipColors(colors: ColorScheme): MentorshipColorScheme {
   return colors.background === lightColors.background
     ? {
-        accent: '#2D5A27',
+        accent: '0B6623',
         accentMuted: '#E8F0E6',
-        accentDark: '#1E3D1A',
+        accentDark: '#0B6623',
         surface: '#FAFAFA',
         surfaceElevated: '#FFFFFF',
         border: '#E8E8E8',
@@ -54,9 +54,9 @@ export function createMentorshipColors(colors: ColorScheme): MentorshipColorSche
         success: '#E8F5EE',
       }
     : {
-        accent: '#5BA876',
+        accent: '#0B6623',
         accentMuted: '#1E2E24',
-        accentDark: '#3D7A55',
+        accentDark: '#0B6623',
         surface: '#141914',
         surfaceElevated: '#1C211D',
         border: '#2E3530',

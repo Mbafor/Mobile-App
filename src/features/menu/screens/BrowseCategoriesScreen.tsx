@@ -27,7 +27,7 @@ import type { Opportunity } from '@/types/domain/opportunity';
 const PAGE_SIZE = 10;
 
 const CARD_ACCENTS = [
-  { bg: '#E8F5EE', text: '#1A3D25' },
+  { bg: '#E8F5EE', text: '#0B6623' },
   { bg: '#EAF0FB', text: '#1A2E5A' },
   { bg: '#FDF3E7', text: '#5A3A10' },
   { bg: '#F3EEF9', text: '#3A1A5A' },
