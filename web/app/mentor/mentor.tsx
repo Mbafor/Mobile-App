@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FormEvent, useState } from 'react';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -119,7 +120,34 @@ export default function MentorPage() {
             </div>
           </div>
 
-          <form className="space-y-5 rounded-[28px] border border-border bg-white p-8 shadow-sm">
+          <form
+            className="space-y-5 rounded-[28px] border border-border bg-white p-8 shadow-sm"
+            onSubmit={async (e: FormEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              const form = e.currentTarget;
+              const fd = new FormData(form);
+              const payload = Object.fromEntries(fd.entries());
+
+              const submitBtn = form.querySelector('button[type=submit]') as HTMLButtonElement | null;
+              if (submitBtn) submitBtn.disabled = true;
+
+              try {
+                const res = await fetch('/api/mentor/apply', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify(payload),
+                });
+                const json = await res.json();
+                if (!res.ok) throw new Error(json?.error || 'Submission failed');
+                form.reset();
+                alert('Application submitted — we will review and be in touch.');
+              } catch (err) {
+                alert((err as Error).message || 'Submission failed');
+              } finally {
+                if (submitBtn) submitBtn.disabled = false;
+              }
+            }}
+          >
             <div>
               <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary mb-3">
                 Instructor Application

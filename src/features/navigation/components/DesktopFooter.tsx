@@ -38,13 +38,28 @@ export function DesktopFooter() {
   return (
     <View style={styles.footer}>
       <View style={styles.linksRow}>
-        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help')}>
+        <Pressable
+          style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
+          onPress={() => {
+            if (typeof window !== 'undefined') window.open('/about', '_blank');
+          }}
+        >
           <Text style={styles.link}>About</Text>
         </Pressable>
-        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help/feature-request')}>
+        <Pressable
+          style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
+          onPress={() => {
+            if (typeof window !== 'undefined') window.open('/mentor', '_blank');
+          }}
+        >
           <Text style={styles.link}>Become a Mentor</Text>
         </Pressable>
-        <Pressable style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)} onPress={() => router.push('/(main)/help/feedback')}>
+        <Pressable
+          style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
+          onPress={() => {
+            if (typeof window !== 'undefined') window.open('/mentor', '_blank');
+          }}
+        >
           <Text style={styles.link}>Become an Opportunity admin</Text>
         </Pressable>
         <Pressable
