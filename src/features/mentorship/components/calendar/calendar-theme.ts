@@ -20,5 +20,11 @@ export function createMentorshipCalendarTheme(
     hourTextStyle: { color: mentorshipColors.textMuted, fontSize: 11 },
     unavailableHourBackgroundColor: calendarColors.empty,
     nowIndicatorColor: mentorshipColors.accent,
+    todayName: { color: mentorshipColors.accent },
+    todayNumber: { color: mentorshipColors.textOnAccent, fontWeight: '700' },
+    todayNumberContainer: {
+      backgroundColor: mentorshipColors.accent,
+      borderRadius: 20,
+    },
   };
 }

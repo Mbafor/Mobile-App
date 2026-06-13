@@ -1,7 +1,7 @@
 /** Google Calendar–style slot colors for mentorship scheduling. */
 export const calendarColors = {
   empty: '#F3F4F6',
-  available: '#22C55E',
+  available: '#0B6623',
   booked: '#3B82F6',
   completed: '#D1D5DB',
   cancelled: '#EF4444',
