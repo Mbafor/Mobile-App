@@ -15,14 +15,14 @@ Apply migrations in order through `021_notification_system_completion.sql`:
 
 ```env
 EXPO_PUBLIC_EAS_PROJECT_ID=your-eas-project-uuid
-EXPO_PUBLIC_APP_WEB_URL=https://olivesforum.com
+EXPO_PUBLIC_APP_WEB_URL=https://voila-africa.com
 ```
 
 Supabase secrets (Dashboard → Edge Functions → Secrets):
 
 - `RESEND_API_KEY` — transactional email
 - `CRON_SECRET` — protects scheduled edge functions
-- `APP_WEB_URL` — optional; defaults to `https://olivesforum.com` for email CTAs
+- `APP_WEB_URL` — optional; defaults to `https://voila-africa.com` for email CTAs
 
 ## 3. In-app + push flows
 

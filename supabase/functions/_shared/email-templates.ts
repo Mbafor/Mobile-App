@@ -5,7 +5,7 @@ const LIGHT_BG = '#F3F7F4';
 export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Olives Forum <onboarding@resend.dev>';
 
 export function appWebBase(): string {
-  return (Deno.env.get('APP_WEB_URL') ?? 'https://olivesforum.com').replace(/\/$/, '');
+  return (Deno.env.get('APP_WEB_URL') ?? 'https://voila-africa.com').replace(/\/$/, '');
 }
 
 export function emailShell(params: {

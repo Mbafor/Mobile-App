@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 
 const SIGNUP_URL =
-  (process.env.NEXT_PUBLIC_APP_URL ?? "https://app.olivesforum.com") + "/welcome";
+  (process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com") + "/welcome";
 
 export default function Nav() {
   const pathname = usePathname();

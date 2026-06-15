@@ -5,8 +5,8 @@ import AnimatedStat from "./components/AnimatedStat";
 import FaqItem from "./components/FaqItem";
 import ScrollReveal from "./components/ScrollReveal";
 
-const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.olivesforum.com";
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://olivesforum.com";
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com";
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voila-africa.com";
 const SIGNUP_URL = `${APP_URL}/welcome`;
 
 function JsonLd() {
