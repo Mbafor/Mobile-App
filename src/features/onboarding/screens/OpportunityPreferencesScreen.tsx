@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -95,6 +96,7 @@ export function OpportunityPreferencesScreen() {
           values={opportunityTypes}
           onChange={setOpportunityTypes}
           placeholder="Select opportunity types"
+          pillMode
         />
       </FormField>
       <FormField label="Preferred countries (comma-separated) *">
@@ -103,6 +105,7 @@ export function OpportunityPreferencesScreen() {
           onChangeText={setCountriesText}
           placeholder="e.g. UK, Germany, Canada"
           multiline
+          leftIcon={<Ionicons name="globe-outline" size={16} color="#9CA3AF" />}
         />
       </FormField>
       <FormField label="Funding preference *">

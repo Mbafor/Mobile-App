@@ -323,7 +323,14 @@ function createStyles(colors: ColorScheme) {
       borderRadius: 8,
     },
     sidebarItemActive: {
-      backgroundColor: `${colors.primary}08`,
+      backgroundColor: '#FFFFFF',
+      borderWidth: 1,
+      borderColor: `${colors.primary}28`,
+      shadowColor: '#000',
+      shadowOffset: { width: 0, height: 1 },
+      shadowOpacity: 0.07,
+      shadowRadius: 4,
+      elevation: 2,
     },
     sidebarAccent: {
       width: 3,
@@ -389,9 +396,10 @@ function createStyles(colors: ColorScheme) {
       paddingVertical: 2,
     },
     sidebarConnector: {
-      width: 1.5,
-      height: 20,
-      backgroundColor: '#E5E7EB',
+      width: 2,
+      height: 28,
+      backgroundColor: '#CBD5E1',
+      borderRadius: 1,
     },
     sidebarConnectorDone: {
       backgroundColor: DONE_GREEN,
@@ -423,8 +431,9 @@ function createStyles(colors: ColorScheme) {
       paddingHorizontal: 3,
     },
     stepBarConnector: {
-      height: 1.5,
-      backgroundColor: '#E5E7EB',
+      height: 2,
+      backgroundColor: '#CBD5E1',
+      borderRadius: 1,
     },
     stepBarConnectorDone: {
       backgroundColor: colors.primary,
@@ -520,19 +529,28 @@ function createStyles(colors: ColorScheme) {
       justifyContent: 'center',
       backgroundColor: colors.primary,
       borderRadius: 12,
-      height: 50,
+      height: 54,
       marginTop: spacing.lg,
+      shadowColor: colors.primary,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.28,
+      shadowRadius: 8,
+      elevation: 4,
     },
     ctaDisabled: {
       opacity: 0.5,
+      shadowOpacity: 0,
+      elevation: 0,
     },
     ctaPressed: {
-      opacity: 0.85,
+      opacity: 0.88,
+      shadowOpacity: 0.15,
     },
     ctaText: {
       color: '#fff',
       fontSize: typography.fontSize.md,
-      fontWeight: '600',
+      fontWeight: '700',
+      letterSpacing: 0.2,
     },
     ctaArrow: {
       marginLeft: spacing.sm,

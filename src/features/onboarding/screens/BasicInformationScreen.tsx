@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Alert } from 'react-native';
@@ -59,6 +60,7 @@ export function BasicInformationScreen() {
           onChangeText={setFullName}
           placeholder="e.g. Jane Doe"
           autoComplete="name"
+          leftIcon={<Ionicons name="person-outline" size={16} color="#9CA3AF" />}
         />
       </FormField>
       <FormField label="Country *">

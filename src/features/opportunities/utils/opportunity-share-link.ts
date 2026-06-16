@@ -2,7 +2,8 @@ import * as Linking from 'expo-linking';
 
 import { env } from '@/config/env';
 
-const WEB_BASE = (process.env.EXPO_PUBLIC_APP_WEB_URL ?? env.LANDING_URL).replace(/\/$/, '');
+// Always share to the public-facing website so recipients can view without signing in.
+const WEB_BASE = (process.env.EXPO_PUBLIC_LANDING_URL ?? env.LANDING_URL).replace(/\/$/, '');
 
 /** Deep link that opens the opportunity in the app (requires install + sign-in). */
 export function buildOpportunityAppLink(opportunityId: string): string {

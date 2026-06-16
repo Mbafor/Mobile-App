@@ -3,7 +3,7 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
@@ -165,8 +165,18 @@ export default function MainTabsLayout() {
           />
           <View style={styles.desktopBody}>
             <DesktopSidebar />
-            <View style={styles.desktopContent}>
-              <View style={styles.contentMain}>
+            <View
+              style={[
+                styles.desktopContent,
+                Platform.OS === 'web' && ({ overflowY: 'auto' } as object),
+              ]}
+            >
+              <View
+                style={[
+                  styles.contentMain,
+                  Platform.OS === 'web' && ({ minHeight: '100%' } as object),
+                ]}
+              >
                 {tabs}
                 <FloatingHelpButton />
               </View>
