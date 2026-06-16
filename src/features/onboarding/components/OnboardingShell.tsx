@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import React from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -18,16 +19,14 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 
 const STEP_META = [
-  { label: 'Basic Info', description: 'Name & location' },
-  { label: 'Academic', description: 'University & studies' },
-  { label: 'Preferences', description: 'Opportunity interests' },
+  { label: 'Basic Info' },
+  { label: 'Academic' },
+  { label: 'Preferences' },
 ] as const;
 
 const TOTAL = STEP_META.length;
-const SIDEBAR_BREAKPOINT = 768;
-const ICON_SIZE = 24;
-const DONE_GREEN = '#16A34A';
-const CTA_DARK = '#111111';
+const DESKTOP_BREAKPOINT = 768;
+const DOT_SIZE = 22;
 
 interface OnboardingShellProps {
   children: ReactNode;
@@ -55,108 +54,80 @@ export function OnboardingShell({
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === 'web';
-  const showSidebar = isWeb && width >= SIDEBAR_BREAKPOINT;
+  const isDesktop = isWeb && width >= DESKTOP_BREAKPOINT;
 
-  // ── Step icon ──────────────────────────────────────────────────────────────
-
-  function StepIcon({ num, isDone, isActive }: { num: number; isDone: boolean; isActive: boolean }) {
-    if (isDone) {
-      return (
-        <View style={[styles.stepIcon, { backgroundColor: DONE_GREEN, borderColor: DONE_GREEN }]}>
-          <Ionicons name="checkmark" size={12} color="#fff" />
-        </View>
-      );
-    }
-    if (isActive) {
-      return (
-        <View style={[styles.stepIcon, { backgroundColor: colors.primary, borderColor: colors.primary }]}>
-          <View style={styles.stepActiveDot} />
-        </View>
-      );
-    }
-    return (
-      <View style={[styles.stepIcon, styles.stepIconUpcoming]}>
-        <Text style={styles.stepIconNum}>{num}</Text>
-      </View>
+  // ── Back button ──────────────────────────────────────────────────────────
+  const BackBtn = () =>
+    onBack ? (
+      <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
+        <Ionicons name="chevron-back" size={16} color="#374151" />
+        <Text style={styles.backBtnText}>Back</Text>
+      </Pressable>
+    ) : (
+      <View style={styles.backBtnPlaceholder} />
     );
-  }
 
-  // ── Sidebar ────────────────────────────────────────────────────────────────
-
-  const SidebarSteps = () => (
-    <View style={styles.sidebarInner}>
-      <Text style={styles.sidebarHeader}>Profile Setup</Text>
-      <View style={styles.stepList}>
-        {STEP_META.map((step, i) => {
-          const num = i + 1;
-          const isDone = num < currentStep;
-          const isActive = num === currentStep;
-          const isLast = i === TOTAL - 1;
-          return (
-            <View key={num} style={styles.stepRow}>
-              {/* Left: icon + connector */}
-              <View style={styles.stepIconCol}>
-                <StepIcon num={num} isDone={isDone} isActive={isActive} />
-                {!isLast && (
-                  <View style={[styles.stepConnector, isDone && styles.stepConnectorDone]} />
+  // ── Horizontal stepper ───────────────────────────────────────────────────
+  const Stepper = () => (
+    <View style={styles.stepper}>
+      {STEP_META.map((step, i) => {
+        const num = i + 1;
+        const isDone = num < currentStep;
+        const isActive = num === currentStep;
+        const isLast = i === TOTAL - 1;
+        return (
+          <React.Fragment key={i}>
+            <View style={styles.stepItem}>
+              <View
+                style={[
+                  styles.stepDot,
+                  isDone && styles.stepDotDone,
+                  isActive && styles.stepDotActive,
+                ]}
+              >
+                {isDone ? (
+                  <Ionicons name="checkmark" size={11} color="#fff" />
+                ) : (
+                  <Text style={[styles.stepNum, isActive && styles.stepNumActive]}>
+                    {num}
+                  </Text>
                 )}
               </View>
-              {/* Right: labels */}
-              <View style={[styles.stepTextCol, !isLast && styles.stepTextColSpaced]}>
-                <Text
-                  style={[
-                    styles.stepLabel,
-                    isDone && styles.stepLabelDone,
-                    isActive && styles.stepLabelActive,
-                  ]}
-                >
-                  {step.label}
-                </Text>
-                <Text style={styles.stepDesc}>{step.description}</Text>
-              </View>
+              <Text
+                style={[
+                  styles.stepLabel,
+                  isDone && styles.stepLabelDone,
+                  isActive && styles.stepLabelActive,
+                ]}
+                numberOfLines={1}
+              >
+                {step.label}
+              </Text>
             </View>
-          );
-        })}
-      </View>
+            {!isLast && (
+              <View style={styles.stepConnectorWrap}>
+                <View style={[styles.stepConnector, isDone && styles.stepConnectorDone]} />
+              </View>
+            )}
+          </React.Fragment>
+        );
+      })}
     </View>
   );
 
-  // ── Mobile compact progress bar ────────────────────────────────────────────
-
-  const CompactProgress = () => (
-    <View style={styles.compactProgress}>
-      <View style={styles.compactProgressRow}>
-        <Text style={styles.compactStepText}>
-          Step {currentStep} of {TOTAL}
-        </Text>
-        <Text style={styles.compactStepName}>
-          {STEP_META[currentStep - 1]?.label}
-        </Text>
-      </View>
-      <View style={styles.progressTrack}>
-        {STEP_META.map((_, i) => (
-          <View
-            key={i}
-            style={[styles.progressSeg, i < currentStep && styles.progressSegActive]}
-          />
-        ))}
-      </View>
-    </View>
-  );
-
-  // ── Shared form body (heading + subtitle + form + CTA) ─────────────────────
-
-  const FormBody = ({ wide }: { wide?: boolean }) => (
-    <View style={[styles.formBody, wide && styles.formBodyWide]}>
+  // ── Inner form content (shared across all layouts) ───────────────────────
+  const FormContent = () => (
+    <View style={styles.formContent}>
+      <BackBtn />
+      <Stepper />
       <Text style={styles.heading}>{title}</Text>
       <Text style={styles.headingSubtitle}>{subtitle}</Text>
-      <View style={styles.formFields}>{children}</View>
+      <View style={styles.fields}>{children}</View>
       <Pressable
         onPress={onContinue}
         disabled={isLoading}
         style={({ pressed }) => [
           styles.cta,
-          wide && styles.ctaWide,
           isLoading && styles.ctaDisabled,
           pressed && !isLoading && styles.ctaPressed,
         ]}
@@ -169,93 +140,65 @@ export function OnboardingShell({
     </View>
   );
 
-  // ── Back button ────────────────────────────────────────────────────────────
-
-  const BackBtn = ({ light }: { light?: boolean }) =>
-    onBack ? (
-      <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
-        <View style={[styles.backBtnInner, light && styles.backBtnLight]}>
-          <Ionicons name="arrow-back" size={18} color={light ? '#111' : colors.text} />
-        </View>
-      </Pressable>
-    ) : null;
-
-  // ── NATIVE MOBILE ──────────────────────────────────────────────────────────
-
+  // ── NATIVE MOBILE ────────────────────────────────────────────────────────
   if (!isWeb) {
     return (
-      <View style={[styles.mobileRoot, { paddingTop: insets.top }]}>
-        <View style={styles.mobileTopBar}>
-          <BackBtn />
-          <CompactProgress />
-        </View>
-        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : undefined} style={styles.flex}>
+      <View style={[styles.root, { paddingTop: insets.top }]}>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === 'ios' ? 'padding' : undefined}
+          style={styles.flex}
+        >
           <ScrollView
             style={styles.flex}
-            contentContainerStyle={[styles.mobileScrollContent, { paddingBottom: insets.bottom + 40 }]}
+            contentContainerStyle={[
+              styles.mobileScrollContent,
+              { paddingBottom: insets.bottom + spacing.xl },
+            ]}
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-            <FormBody />
+            <FormContent />
           </ScrollView>
         </KeyboardAvoidingView>
       </View>
     );
   }
 
-  // ── WEB DESKTOP (sidebar layout) ───────────────────────────────────────────
-
-  if (showSidebar) {
+  // ── WEB DESKTOP (≥ 768px) — left-aligned single column ───────────────────
+  if (isDesktop) {
     return (
-      <View style={styles.webRoot}>
-        {/* Gradient accent layer */}
-        <View style={styles.gradientAccent} pointerEvents="none" />
-
-        {/* Top bar: back button only */}
-        <View style={[styles.webTopBar, { paddingTop: insets.top + spacing.md }]}>
-          <BackBtn light />
-        </View>
-
-        {/* Body: sidebar + content */}
-        <View style={styles.webBody}>
-          {/* Sidebar */}
-          <View style={styles.sidebar}>
-            <SidebarSteps />
+      <View style={[styles.root, { paddingTop: insets.top }]}>
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={[
+            styles.desktopScrollContent,
+            { paddingBottom: insets.bottom + spacing.xl * 2 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.desktopColumn}>
+            <FormContent />
           </View>
-
-          {/* Right: form content */}
-          <ScrollView
-            style={styles.flex}
-            contentContainerStyle={[styles.webScrollContent, { paddingBottom: insets.bottom + spacing.xl }]}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.webFormWrap}>
-              <FormBody wide />
-            </View>
-          </ScrollView>
-        </View>
+        </ScrollView>
       </View>
     );
   }
 
-  // ── WEB MOBILE (< 768px) ───────────────────────────────────────────────────
-
+  // ── WEB MOBILE (< 768px) — centered, full-width ───────────────────────────
   return (
-    <View style={styles.webRoot}>
-      <View style={styles.gradientAccent} pointerEvents="none" />
-      <View style={[styles.webTopBar, { paddingTop: insets.top + spacing.md }]}>
-        <BackBtn light />
-      </View>
+    <View style={[styles.root, { paddingTop: insets.top }]}>
       <ScrollView
         style={styles.flex}
-        contentContainerStyle={[styles.webMobileScrollContent, { paddingBottom: insets.bottom + spacing.xl }]}
+        contentContainerStyle={[
+          styles.webMobileScrollContent,
+          { paddingBottom: insets.bottom + spacing.xl },
+        ]}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <CompactProgress />
-        <View style={styles.webMobileFormWrap}>
-          <FormBody />
+        <View style={styles.webMobileColumn}>
+          <FormContent />
         </View>
       </ScrollView>
     </View>
@@ -268,234 +211,141 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     flex: { flex: 1 },
 
-    // ── Native mobile root ──────────────────────────────────────────────────
-    mobileRoot: {
+    root: {
       flex: 1,
-      backgroundColor: '#F4F7F5',
-    },
-    mobileTopBar: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      paddingHorizontal: spacing.md,
-      paddingBottom: spacing.sm,
-      gap: spacing.sm,
-    },
-    mobileScrollContent: {
-      paddingHorizontal: spacing.md,
-      paddingTop: spacing.md,
+      backgroundColor: '#fff',
     },
 
-    // ── Web root ────────────────────────────────────────────────────────────
-    webRoot: {
-      flex: 1,
-      backgroundColor: '#F4F7F5',
-    },
-    gradientAccent: {
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      height: 320,
-      backgroundColor: 'rgba(11,102,35,0.035)',
-      pointerEvents: 'none',
-    },
-    webTopBar: {
-      paddingHorizontal: spacing.lg,
-      paddingBottom: spacing.sm,
-    },
-    webBody: {
-      flex: 1,
-      flexDirection: 'row',
-    },
-    webScrollContent: {
+    // ── Native mobile ────────────────────────────────────────────────────────
+    mobileScrollContent: {
       flexGrow: 1,
       justifyContent: 'center',
       paddingHorizontal: spacing.lg,
-      paddingVertical: spacing.xl,
+      paddingTop: spacing.xl,
     },
-    webFormWrap: {
-      maxWidth: 560,
+
+    // ── Web desktop ──────────────────────────────────────────────────────────
+    desktopScrollContent: {
+      flexGrow: 1,
+      justifyContent: 'center',
+      paddingTop: spacing.xl * 2,
+      paddingLeft: 80,
+    },
+    desktopColumn: {
+      maxWidth: 520,
       width: '100%',
-      alignSelf: 'flex-start',
     },
+
+    // ── Web mobile ───────────────────────────────────────────────────────────
     webMobileScrollContent: {
       flexGrow: 1,
-      paddingHorizontal: spacing.md,
-      paddingTop: spacing.sm,
+      justifyContent: 'center',
+      paddingHorizontal: spacing.lg,
+      paddingTop: spacing.xl,
     },
-    webMobileFormWrap: {
-      marginTop: spacing.md,
+    webMobileColumn: {
+      width: '100%',
+      maxWidth: 480,
+      alignSelf: 'center',
     },
 
-    // ── Sidebar ─────────────────────────────────────────────────────────────
-    sidebar: {
-      width: 240,
-      backgroundColor: '#fff',
-      borderRightWidth: 1,
-      borderRightColor: '#E8EDE9',
-      paddingTop: spacing.lg,
-      paddingBottom: spacing.xl,
-    },
-    sidebarInner: {
-      paddingHorizontal: spacing.lg,
-    },
-    sidebarHeader: {
-      fontSize: 10,
-      fontWeight: '700',
-      color: '#9CA3AF',
-      letterSpacing: 1.2,
-      textTransform: 'uppercase',
-      marginBottom: spacing.lg,
-    },
-    stepList: {
-      gap: 0,
-    },
-    stepRow: {
+    // ── Form content container ────────────────────────────────────────────────
+    formContent: {},
+
+    // ── Back button ───────────────────────────────────────────────────────────
+    backBtn: {
       flexDirection: 'row',
-      alignItems: 'flex-start',
-    },
-    stepIconCol: {
       alignItems: 'center',
-      width: ICON_SIZE,
+      alignSelf: 'flex-start',
+      paddingVertical: 6,
+      paddingHorizontal: 10,
+      borderRadius: 8,
+      borderWidth: 1,
+      borderColor: '#E5E7EB',
+      backgroundColor: '#F9FAFB',
+      marginBottom: spacing.xl,
+      gap: 4,
     },
-    stepIcon: {
-      width: ICON_SIZE,
-      height: ICON_SIZE,
-      borderRadius: ICON_SIZE / 2,
-      borderWidth: 2,
-      alignItems: 'center',
-      justifyContent: 'center',
-      borderColor: colors.primary,
-      backgroundColor: colors.primary,
-    },
-    stepIconUpcoming: {
-      backgroundColor: '#F3F4F6',
-      borderColor: '#D1D5DB',
-    },
-    stepActiveDot: {
-      width: 7,
-      height: 7,
-      borderRadius: 4,
-      backgroundColor: '#fff',
-    },
-    stepIconNum: {
-      fontSize: 10,
-      fontWeight: '700',
-      color: '#9CA3AF',
-    },
-    stepConnector: {
-      width: 2,
-      height: 32,
-      backgroundColor: '#E5E7EB',
-      marginTop: 2,
-    },
-    stepConnectorDone: {
-      backgroundColor: DONE_GREEN,
-    },
-    stepTextCol: {
-      flex: 1,
-      paddingLeft: 12,
-      paddingTop: 2,
-    },
-    stepTextColSpaced: {
-      paddingBottom: 32,
-    },
-    stepLabel: {
+    backBtnText: {
       fontSize: 13,
       fontWeight: '500',
-      color: '#9CA3AF',
-      lineHeight: 18,
+      color: '#374151',
     },
-    stepLabelDone: {
-      color: DONE_GREEN,
-      fontWeight: '600',
+    backBtnPlaceholder: {
+      height: 32,
+      marginBottom: spacing.xl,
+    },
+
+    // ── Stepper ───────────────────────────────────────────────────────────────
+    stepper: {
+      flexDirection: 'row',
+      alignItems: 'flex-start',
+      marginBottom: spacing.xl,
+    },
+    stepItem: {
+      alignItems: 'center',
+      minWidth: 60,
+    },
+    stepConnectorWrap: {
+      flex: 1,
+      paddingTop: 11,
+      paddingHorizontal: 4,
+    },
+    stepConnector: {
+      height: 1.5,
+      backgroundColor: '#E5E7EB',
+    },
+    stepConnectorDone: {
+      backgroundColor: colors.primary,
+    },
+    stepDot: {
+      width: DOT_SIZE,
+      height: DOT_SIZE,
+      borderRadius: DOT_SIZE / 2,
+      backgroundColor: '#F3F4F6',
+      borderWidth: 1.5,
+      borderColor: '#D1D5DB',
+      alignItems: 'center',
+      justifyContent: 'center',
+      marginBottom: 5,
+    },
+    stepDotActive: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    stepDotDone: {
+      backgroundColor: colors.primary,
+      borderColor: colors.primary,
+    },
+    stepNum: {
+      fontSize: 10,
+      fontWeight: '700',
+      color: '#9CA3AF',
+    },
+    stepNumActive: {
+      color: '#fff',
+    },
+    stepLabel: {
+      fontSize: 10,
+      fontWeight: '500',
+      color: '#9CA3AF',
+      textAlign: 'center',
     },
     stepLabelActive: {
       color: colors.primary,
       fontWeight: '700',
     },
-    stepDesc: {
-      fontSize: 11,
-      color: '#C4C9CE',
-      marginTop: 1,
-    },
-
-    // ── Compact progress (mobile + web-mobile) ──────────────────────────────
-    compactProgress: {
-      flex: 1,
-      gap: spacing.xs,
-    },
-    compactProgressRow: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      alignItems: 'center',
-    },
-    compactStepText: {
-      fontSize: 12,
-      color: '#9CA3AF',
-    },
-    compactStepName: {
-      fontSize: 12,
-      fontWeight: '600',
+    stepLabelDone: {
       color: colors.primary,
     },
-    progressTrack: {
-      flexDirection: 'row',
-      gap: 4,
-    },
-    progressSeg: {
-      flex: 1,
-      height: 3,
-      borderRadius: 2,
-      backgroundColor: '#E5E7EB',
-    },
-    progressSegActive: {
-      backgroundColor: colors.primary,
-    },
 
-    // ── Back button ─────────────────────────────────────────────────────────
-    backBtn: {},
-    backBtnInner: {
-      width: 36,
-      height: 36,
-      borderRadius: 10,
-      backgroundColor: '#F3F4F6',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    backBtnLight: {
-      backgroundColor: '#fff',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.08,
-      shadowRadius: 3,
-      elevation: 2,
-    },
-
-    // ── Form body ───────────────────────────────────────────────────────────
-    formBody: {
-      backgroundColor: '#fff',
-      borderRadius: 20,
-      padding: spacing.lg,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 2 },
-      shadowOpacity: 0.06,
-      shadowRadius: 12,
-      elevation: 3,
-    },
-    formBodyWide: {
-      shadowOpacity: 0,
-      elevation: 0,
-      backgroundColor: 'transparent',
-      padding: 0,
-      borderRadius: 0,
-    },
+    // ── Heading ───────────────────────────────────────────────────────────────
     heading: {
-      fontSize: 28,
-      fontWeight: '800',
-      color: '#111111',
-      letterSpacing: -0.4,
-      lineHeight: 36,
+      fontSize: 26,
+      fontWeight: '700',
+      color: '#111827',
+      letterSpacing: -0.3,
+      lineHeight: 34,
       marginBottom: spacing.xs,
     },
     headingSubtitle: {
@@ -504,22 +354,17 @@ function createStyles(colors: ColorScheme) {
       lineHeight: 22,
       marginBottom: spacing.lg,
     },
-    formFields: {},
+    fields: {},
 
-    // ── CTA button ──────────────────────────────────────────────────────────
+    // ── Continue button ───────────────────────────────────────────────────────
     cta: {
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: CTA_DARK,
+      backgroundColor: colors.primary,
       borderRadius: 12,
       height: 50,
       marginTop: spacing.lg,
-    },
-    ctaWide: {
-      alignSelf: 'flex-start',
-      paddingHorizontal: spacing.lg,
-      minWidth: 160,
     },
     ctaDisabled: {
       opacity: 0.5,
