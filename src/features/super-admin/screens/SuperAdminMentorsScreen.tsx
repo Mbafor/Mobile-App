@@ -149,9 +149,12 @@ export function SuperAdminMentorsScreen() {
             <Pressable
               disabled={deleteMutation.isPending}
               onPress={() => {
+                const hasActiveMentees = row.active_mentees > 0;
                 Alert.alert(
                   'Delete mentor',
-                  `Remove coach profile for ${row.email ?? 'this user'}?`,
+                  hasActiveMentees
+                    ? `Remove coach profile for ${row.email ?? 'this user'}?\n\nThis will end ${row.active_mentees} active mentorship${row.active_mentees !== 1 ? 's' : ''}, cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.`
+                    : `Remove coach profile for ${row.email ?? 'this user'}?\n\nAny pending requests from students who chose this coach will be cancelled. This cannot be undone.`,
                   [
                     { text: 'Cancel', style: 'cancel' },
                     {
@@ -193,7 +196,14 @@ export function SuperAdminMentorsScreen() {
             keyboardType="email-address"
           />
           <Button
-            onPress={() => createMutation.mutate(newMentorEmail.trim())}
+            onPress={() => {
+              const email = newMentorEmail.trim();
+              if (!email.includes('@') || !email.includes('.')) {
+                Alert.alert('Invalid email', 'Please enter a valid email address.');
+                return;
+              }
+              createMutation.mutate(email);
+            }}
             loading={createMutation.isPending}
             disabled={!newMentorEmail.trim() || createMutation.isPending}
           >

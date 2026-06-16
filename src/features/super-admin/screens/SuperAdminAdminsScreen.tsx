@@ -160,7 +160,14 @@ export function SuperAdminAdminsScreen() {
             keyboardType="email-address"
           />
           <Button
-            onPress={() => promoteMutation.mutate(newAdminEmail.trim())}
+            onPress={() => {
+              const email = newAdminEmail.trim();
+              if (!email.includes('@') || !email.includes('.')) {
+                Alert.alert('Invalid email', 'Please enter a valid email address.');
+                return;
+              }
+              promoteMutation.mutate(email);
+            }}
             loading={promoteMutation.isPending}
             disabled={!newAdminEmail.trim() || promoteMutation.isPending}
           >
