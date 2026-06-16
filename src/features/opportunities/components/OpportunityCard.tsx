@@ -1,11 +1,11 @@
-import { memo } from 'react';
+import { memo, useState } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { Alert, Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
-import { shareOpportunity } from '@/features/opportunities/utils/share-opportunity';
+import { SharePreviewSheet } from '@/features/opportunities/components/SharePreviewSheet';
 import { spacing, typography } from '@/constants/theme';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
@@ -22,20 +22,13 @@ type OpportunityCardProps = {
 function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCardProps) {
   const styles = useThemedStyles(createStyles);
   const { isSaved, toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
+  const [shareVisible, setShareVisible] = useState(false);
 
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
       ? `${formatDeadline(opportunity.deadline)} · ${daysLeft}d left`
       : formatDeadline(opportunity.deadline);
-
-  const handleShare = async () => {
-    try {
-      await shareOpportunity(opportunity);
-    } catch {
-      Alert.alert('Share failed', 'Could not open the share sheet.');
-    }
-  };
 
   const handleSavePress = (event?: { stopPropagation?: () => void }) => {
     event?.stopPropagation?.();
@@ -96,7 +89,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
           <Pressable
             onPress={(e) => {
               e.stopPropagation();
-              handleShare();
+              setShareVisible(true);
             }}
             hitSlop={8}
             accessibilityLabel="Share"
@@ -105,6 +98,12 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
           </Pressable>
         </View>
       </View>
+
+      <SharePreviewSheet
+        opportunity={opportunity}
+        visible={shareVisible}
+        onClose={() => setShareVisible(false)}
+      />
     </Pressable>
   );
 }
