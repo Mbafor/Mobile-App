@@ -251,6 +251,27 @@ export function WelcomeScreen() {
     <>
       {(error || formError) ? <ErrorMessage message={error || formError} /> : null}
 
+      <Pressable
+        onPress={() => { clearError(); void signInWithGoogle(); }}
+        disabled={isLoading}
+        style={[styles.googleBtn, googleButtonHover && styles.googleBtnHover]}
+        {...(Platform.OS === 'web' && {
+          onMouseEnter: () => setGoogleButtonHover(true),
+          onMouseLeave: () => setGoogleButtonHover(false),
+        } as any)}
+      >
+        <View style={styles.googleBtnContent}>
+          <Ionicons name="logo-google" size={18} color={googleButtonHover ? '#fff' : '#000'} style={{ marginRight: spacing.xs }} />
+          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
+        </View>
+      </Pressable>
+
+      <View style={styles.dividerContainer}>
+        <View style={styles.dividerLine} />
+        <Text style={styles.dividerText}>or</Text>
+        <View style={styles.dividerLine} />
+      </View>
+
       <FormField label="Full name">
         <Input
           value={name}

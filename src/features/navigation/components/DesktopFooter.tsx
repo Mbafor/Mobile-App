@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -10,30 +9,6 @@ import { useRouter } from 'expo-router';
 export function DesktopFooter() {
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
-  const [show, setShow] = React.useState(false);
-
-  React.useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const handler = () => {
-      const scrollHeight = Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-      );
-      const clientHeight = window.innerHeight || document.documentElement.clientHeight;
-      const isScrollable = scrollHeight > clientHeight + 1;
-      const atBottom = isScrollable && window.scrollY + clientHeight >= scrollHeight - 20;
-      setShow(atBottom);
-    };
-    handler();
-    window.addEventListener('scroll', handler, { passive: true });
-    window.addEventListener('resize', handler);
-    return () => {
-      window.removeEventListener('scroll', handler);
-      window.removeEventListener('resize', handler);
-    };
-  }, []);
-
-  if (!show) return null;
 
   return (
     <View style={styles.footer}>
