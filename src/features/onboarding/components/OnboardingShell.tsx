@@ -28,14 +28,19 @@ const STEP_META = [
 ] as const;
 
 // Per-step left-panel content: heading, description, illustration, floating icons
-const STEP_PANEL = [
+const STEP_PANEL: {
+  heading: string;
+  description: string;
+  illustration: number;
+  icons: (keyof typeof Ionicons.glyphMap)[];
+}[] = [
   {
     heading: "Let's get to know you",
     description:
       'Tell us a little about yourself so we can personalize your experience and recommend opportunities that fit your profile.',
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/basic-info.png') as number,
-    icons: ['👤', '📍', '📧', '📱'] as const,
+    icons: ['person-outline', 'location-outline', 'mail-outline', 'phone-portrait-outline'],
   },
   {
     heading: 'Build your academic profile',
@@ -43,7 +48,7 @@ const STEP_PANEL = [
       'Help us understand your educational background so we can find opportunities that match your level and interests.',
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/acadmic.png') as number,
-    icons: ['🎓', '📚', '🏫', '📜'] as const,
+    icons: ['school-outline', 'book-outline', 'business-outline', 'document-outline'],
   },
   {
     heading: "Let's tailor opportunities for you",
@@ -51,9 +56,9 @@ const STEP_PANEL = [
       "Choose the types of opportunities you're interested in and we'll recommend the most relevant ones.",
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/preferences.png') as number,
-    icons: ['🌍', '💼', '🎓', '💰'] as const,
+    icons: ['globe-outline', 'briefcase-outline', 'school-outline', 'cash-outline'],
   },
-] as const;
+];
 
 // Floating badge positions around illustration (absolute, relative to container)
 const BADGE_POSITIONS = [
@@ -150,7 +155,7 @@ export function OnboardingShell({
                   key={idx}
                   style={[styles.iconBadge, BADGE_POSITIONS[idx] as object]}
                 >
-                  <Text style={styles.iconBadgeText}>{icon}</Text>
+                  <Ionicons name={icon} size={18} color={DONE_GREEN} />
                 </View>
               ))}
             </View>
@@ -499,10 +504,6 @@ function createStyles(colors: ColorScheme) {
       shadowRadius: 8,
       elevation: 4,
     },
-    iconBadgeText: {
-      fontSize: 20,
-    },
-
     // Decorative dot row
     dotRow: {
       flexDirection: 'row',

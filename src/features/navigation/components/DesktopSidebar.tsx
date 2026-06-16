@@ -14,13 +14,6 @@ import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { webPressableStyle } from '@/utils/web/pressable';
 
-type SidebarChildItem = {
-  key: string;
-  label: string;
-  icon: keyof typeof Ionicons.glyphMap;
-  onPress: () => void;
-};
-
 type SidebarItem = {
   key: string;
   label: string;
@@ -28,7 +21,6 @@ type SidebarItem = {
   iconActive: keyof typeof Ionicons.glyphMap;
   onPress: () => void;
   matchPath?: string;
-  children?: SidebarChildItem[];
 };
 
 type SidebarSection = {
@@ -44,20 +36,10 @@ export function DesktopSidebar() {
   const pathname = usePathname();
   const { isAdmin, isSuperAdmin } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
-  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const scrollRef = useRef<ScrollView>(null);
   const [scrollY, setScrollY] = useState(0);
   const [contentHeight, setContentHeight] = useState(0);
   const [containerHeight, setContainerHeight] = useState(0);
-
-  const toggleGroup = (key: string) => {
-    setExpandedGroups((prev) => {
-      const next = new Set(prev);
-      if (next.has(key)) next.delete(key);
-      else next.add(key);
-      return next;
-    });
-  };
 
   const canScrollUp = scrollY > 4;
   const canScrollDown =
@@ -106,32 +88,6 @@ export function DesktopSidebar() {
       iconActive: 'people',
       onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
       matchPath: '/mentorship',
-      children: [
-        {
-          key: 'mentorship-dashboard',
-          label: 'Dashboard',
-          icon: 'grid-outline',
-          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
-        },
-        {
-          key: 'mentorship-messages',
-          label: 'Messages',
-          icon: 'chatbubbles-outline',
-          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
-        },
-        {
-          key: 'mentorship-book',
-          label: 'Book session',
-          icon: 'calendar-outline',
-          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
-        },
-        {
-          key: 'mentorship-sessions',
-          label: 'Sessions',
-          icon: 'time-outline',
-          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
-        },
-      ],
     },
     {
       key: 'cv-builder',
@@ -140,26 +96,6 @@ export function DesktopSidebar() {
       iconActive: 'document-text',
       onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
       matchPath: '/cv-builder',
-      children: [
-        {
-          key: 'cv-my-cvs',
-          label: 'My CVs',
-          icon: 'documents-outline',
-          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
-        },
-        {
-          key: 'cv-templates',
-          label: 'Templates',
-          icon: 'layers-outline',
-          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
-        },
-        {
-          key: 'cv-tips',
-          label: 'Tips & guidance',
-          icon: 'bulb-outline',
-          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
-        },
-      ],
     },
     {
       key: 'notifications',
@@ -262,72 +198,35 @@ export function DesktopSidebar() {
 
   const renderItem = (item: SidebarItem) => {
     const active = item.matchPath ? pathname.includes(item.matchPath) : false;
-    const hasChildren = !collapsed && Boolean(item.children?.length);
-    const isExpanded = expandedGroups.has(item.key);
 
     return (
-      <View key={item.key}>
-        <View style={[styles.itemRow, active && styles.itemActive]}>
-          <Pressable
-            style={webPressableStyle(
-              [styles.itemMain, collapsed && styles.itemMainCollapsed],
-              styles.itemHover,
-            )}
-            onPress={item.onPress}
-            accessibilityRole="menuitem"
-            {...(collapsed ? { title: item.label } : {})}
-          >
-            <Ionicons
-              name={active ? item.iconActive : item.icon}
-              size={20}
-              color={active ? colors.primary : colors.textMuted}
-            />
-            {!collapsed && (
-              <Text
-                style={[
-                  styles.itemLabel,
-                  getWebFontStyle('medium'),
-                  active && styles.itemLabelActive,
-                ]}
-              >
-                {item.label}
-              </Text>
-            )}
-          </Pressable>
-          {hasChildren && (
-            <Pressable
-              onPress={() => toggleGroup(item.key)}
-              style={styles.chevronBtn}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel={isExpanded ? 'Collapse' : 'Expand'}
-            >
-              <Ionicons
-                name={isExpanded ? 'chevron-up' : 'chevron-down'}
-                size={12}
-                color={active ? colors.primary : colors.textMuted}
-              />
-            </Pressable>
+      <View key={item.key} style={[styles.itemRow, active && styles.itemActive]}>
+        <Pressable
+          style={webPressableStyle(
+            [styles.itemMain, collapsed && styles.itemMainCollapsed],
+            styles.itemHover,
           )}
-        </View>
-
-        {hasChildren && isExpanded && (
-          <View style={styles.childrenList}>
-            {item.children!.map((child) => (
-              <Pressable
-                key={child.key}
-                style={webPressableStyle(styles.childItem, styles.childItemHover)}
-                onPress={child.onPress}
-                accessibilityRole="menuitem"
-              >
-                <Ionicons name={child.icon} size={14} color={colors.textMuted} />
-                <Text style={[styles.childLabel, getWebFontStyle('regular')]}>
-                  {child.label}
-                </Text>
-              </Pressable>
-            ))}
-          </View>
-        )}
+          onPress={item.onPress}
+          accessibilityRole="menuitem"
+          {...(collapsed ? { title: item.label } : {})}
+        >
+          <Ionicons
+            name={active ? item.iconActive : item.icon}
+            size={20}
+            color={active ? colors.primary : colors.textMuted}
+          />
+          {!collapsed && (
+            <Text
+              style={[
+                styles.itemLabel,
+                getWebFontStyle('medium'),
+                active && styles.itemLabelActive,
+              ]}
+            >
+              {item.label}
+            </Text>
+          )}
+        </Pressable>
       </View>
     );
   };
@@ -471,35 +370,6 @@ function createStyles(colors: ColorScheme) {
   itemLabelActive: {
     color: colors.primary,
     fontWeight: '600',
-  },
-  chevronBtn: {
-    paddingVertical: spacing.sm,
-    paddingRight: spacing.sm + 2,
-    paddingLeft: spacing.xs,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  // ── Children ──────────────────────────────────────────────────────────────
-  childrenList: {
-    marginLeft: spacing.sm + 2 + 20 + spacing.sm,
-    marginBottom: spacing.xs,
-    borderLeftWidth: 1,
-    borderLeftColor: colors.border,
-    paddingLeft: spacing.sm,
-  },
-  childItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.xs + 2,
-    paddingVertical: 5,
-    paddingHorizontal: spacing.xs + 2,
-    borderRadius: 6,
-    marginBottom: 1,
-  },
-  childItemHover: { backgroundColor: colors.surface },
-  childLabel: {
-    fontSize: 12,
-    color: colors.textMuted,
   },
   // ── Scroll buttons ────────────────────────────────────────────────────────
   scrollButtons: {
