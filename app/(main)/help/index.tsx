@@ -10,7 +10,7 @@ import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 
-const SUPPORT_EMAIL = 'olivesforum@gmail.com';
+const SUPPORT_EMAIL = 'Voila@gmail.com';
 
 type HelpItem = {
   label: string;
@@ -45,7 +45,7 @@ const items: HelpItem[] = [
     icon: 'mail-outline',
     onPress: () =>
       void Linking.openURL(
-        `mailto:${SUPPORT_EMAIL}?subject=Support Request — Olives Forum`,
+        `mailto:${SUPPORT_EMAIL}?subject=Support Request — Voila`,
       ),
   },
 ];

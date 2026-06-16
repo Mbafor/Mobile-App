@@ -1,4 +1,4 @@
-# Navigation — Olives Forum
+# Navigation — Voila
 
 Expo Router file-based routes. Route groups `(name)` do not appear in the URL path.
 
@@ -43,14 +43,14 @@ app/
     └── moderation.tsx
 ```
 
-## Deep linking (scheme: `olivesforum://`)
+## Deep linking (scheme: `Voila://`)
 
 | Path | Screen |
 |------|--------|
-| `olivesforum://login` | `(auth)/login` |
-| `olivesforum://dashboard` | `(main)/(tabs)/dashboard` |
-| `olivesforum://opportunities/:id` | `(main)/opportunity/[id]` *(add when feature ships)* |
-| `olivesforum://admin` | `(admin)` |
+| `Voila://login` | `(auth)/login` |
+| `Voila://dashboard` | `(main)/(tabs)/dashboard` |
+| `Voila://opportunities/:id` | `(main)/opportunity/[id]` *(add when feature ships)* |
+| `Voila://admin` | `(admin)` |
 
 Config: `src/navigation/linking/config.ts`
 

@@ -53,7 +53,7 @@ export function PaystackCheckoutModal({
       if (handledRef.current) return;
 
       const isCallback =
-        url.startsWith('olivesforum://') ||
+        url.startsWith('Voila://') ||
         SUCCESS_PATTERNS.some((p) => url.includes(p));
 
       if (!isCallback) return;
@@ -65,7 +65,7 @@ export function PaystackCheckoutModal({
         return;
       }
 
-      if (url.includes('close') || url.startsWith('olivesforum://')) {
+      if (url.includes('close') || url.startsWith('Voila://')) {
         handledRef.current = true;
         onFailure('Payment was cancelled', true);
       }

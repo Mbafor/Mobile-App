@@ -1,10 +1,10 @@
 import type { ExpoConfig } from 'expo/config';
 
 const config: ExpoConfig = {
-  name: 'Olives Forum',
-  slug: 'olives-forum',
+  name: 'Voila',
+  slug: 'Voila',
   version: '1.0.0',
-  scheme: 'olivesforum',
+  scheme: 'Voila',
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
   // Disabled for Expo Go — turn on for EAS dev/production builds.
@@ -29,9 +29,9 @@ const config: ExpoConfig = {
       'expo-image-picker',
       {
         photosPermission:
-          'Allow Olives Forum to access your photos so you can set a profile picture and share images in mentorship chat.',
+          'Allow Voila to access your photos so you can set a profile picture and share images in mentorship chat.',
         cameraPermission:
-          'Allow Olives Forum to use your camera to take photos for mentorship chat.',
+          'Allow Voila to use your camera to take photos for mentorship chat.',
       },
     ],
     'expo-document-picker',
@@ -42,11 +42,11 @@ const config: ExpoConfig = {
     },
   },
   ios: {
-    bundleIdentifier: 'com.olivesforum.app',
+    bundleIdentifier: 'com.Voila.app',
     usesAppleSignIn: true,
   },
   android: {
-    package: 'com.olivesforum.app',
+    package: 'com.Voila.app',
   },
 };
 

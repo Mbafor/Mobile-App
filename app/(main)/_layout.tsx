@@ -24,7 +24,7 @@ export default function MainLayout() {
       <Drawer.Screen
         name="(tabs)"
         options={{
-          title: 'Olives Forum',
+          title: 'Voila',
           headerShown: false,
           drawerLabel: 'Home',
         }}

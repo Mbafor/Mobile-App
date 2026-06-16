@@ -99,7 +99,7 @@ function OliveBranchIllustration() {
         originY="138"
       />
 
-      {/* Olives */}
+      {/* Voila */}
       <Circle cx="170" cy="75" r="4" fill="#8BC99A" opacity="0.5" />
       <Circle cx="221" cy="100" r="4" fill="#8BC99A" opacity="0.5" />
       <Circle cx="162" cy="120" r="3" fill="#8BC99A" opacity="0.4" />
@@ -256,7 +256,7 @@ export function WelcomeScreen() {
                   <RNText style={styles.logoText}>O</RNText>
                 </View>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Olives Forum</Text>
+                  <Text style={styles.badgeText}>Voila</Text>
                 </View>
                 <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
                 <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
@@ -322,7 +322,7 @@ export function WelcomeScreen() {
                   <RNText style={styles.logoText}>O</RNText>
                 </View>
                 <View style={styles.badge}>
-                  <Text style={styles.badgeText}>Olives Forum</Text>
+                  <Text style={styles.badgeText}>Voila</Text>
                 </View>
                 <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
                 <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
@@ -363,7 +363,7 @@ export function WelcomeScreen() {
               <RNText style={styles.logoText}>O</RNText>
             </View>
             <View style={styles.badge}>
-              <Text style={styles.badgeText}>Olives Forum</Text>
+              <Text style={styles.badgeText}>Voila</Text>
             </View>
             <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>Find your next{'\n'}opportunity</Text>
             <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>Matched to your interests and ambitions, globally.</Text>

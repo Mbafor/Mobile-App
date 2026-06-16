@@ -36,12 +36,12 @@ serve(async (req) => {
     const result = await sendResendEmail({
       apiKey: resendApiKey,
       to: email,
-      subject: 'Welcome to Olives Forum',
+      subject: 'Welcome to Voila',
       html: emailShell({
         headline: `Welcome, ${firstName}! 👋`,
         bodyHtml: `
           <p>
-            You're now part of <strong>Olives Forum</strong> — your home for discovering global
+            You're now part of <strong>Voila</strong> — your home for discovering global
             opportunities matched to your interests and ambitions.
           </p>
           <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-top: 16px;">
@@ -53,7 +53,7 @@ serve(async (req) => {
             </ul>
           </div>
           <p style="margin-top: 16px; font-size: 14px;">
-            Questions? Reply to this email or contact support@olivesforum.com.
+            Questions? Reply to this email or contact support@voila-africa.com.
           </p>
         `,
         ctaLabel: 'Open Platform',

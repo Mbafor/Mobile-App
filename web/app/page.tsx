@@ -16,36 +16,36 @@ function JsonLd() {
       {
         "@type": "Organization",
         "@id": `${SITE_URL}/#organization`,
-        name: "Olives Forum",
+        name: "Voila",
         url: SITE_URL,
         description:
-          "Olives Forum matches scholarships, internships, and programs to students' profiles — with mentorship and CV tools in one place.",
+          "Voila matches scholarships, internships, and programs to students' profiles — with mentorship and CV tools in one place.",
         sameAs: [
-          "https://twitter.com/olivesforum",
-          "https://linkedin.com/company/olivesforum",
-          "https://instagram.com/olivesforum",
+          "https://twitter.com/Voila",
+          "https://linkedin.com/company/Voila",
+          "https://instagram.com/Voila",
         ],
       },
       {
         "@type": "WebSite",
         "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
-        name: "Olives Forum",
+        name: "Voila",
         publisher: { "@id": `${SITE_URL}/#organization` },
       },
       {
         "@type": "WebPage",
         "@id": `${SITE_URL}/#webpage`,
         url: SITE_URL,
-        name: "Olives Forum — Find opportunities. Build your future.",
+        name: "Voila — Find opportunities. Build your future.",
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#organization` },
         description:
-          "Olives Forum matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place. Free for African students.",
+          "Voila matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place. Free for African students.",
       },
       {
         "@type": "SoftwareApplication",
-        name: "Olives Forum",
+        name: "Voila",
         applicationCategory: "EducationApplication",
         operatingSystem: "iOS, Android, Web",
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
@@ -107,7 +107,7 @@ const HOW_IT_WORKS = [
   {
     step: "01",
     title: "Create profile",
-    description: "Add your goals, education, skills and interests so Olives can surface the best matches for you.",
+    description: "Add your goals, education, skills and interests so Voila can surface the best matches for you.",
   },
   {
     step: "02",
@@ -132,7 +132,7 @@ const PARTNERS = ["University networks", "Scholarship boards", "Career centres",
 
 const TESTIMONIALS = [
   {
-    quote: '"Olives helped me find a paid internship and connect with a mentor who understood my ambitions."',
+    quote: '"Voila helped me find a paid internship and connect with a mentor who understood my ambitions."',
     name: "Amina",
     role: "Computer Science student",
   },
@@ -142,7 +142,7 @@ const TESTIMONIALS = [
     role: "Business student",
   },
   {
-    quote: '"I mentor young talent through Olives because the platform makes it easy to share real career advice."',
+    quote: '"I mentor young talent through Voila because the platform makes it easy to share real career advice."',
     name: "Ngozi",
     role: "Career mentor",
   },
@@ -150,7 +150,7 @@ const TESTIMONIALS = [
 
 const FAQS = [
   {
-    question: "Is Olives Forum free to use?",
+    question: "Is Voila free to use?",
     answer: "Yes! Creating an account, browsing opportunities, and matching with mentors is completely free for students.",
   },
   {
@@ -270,7 +270,7 @@ function Hero() {
             </h1>
 
             <p className="text-white/80 text-lg leading-7 max-w-[520px]">
-              Olives Forum matches scholarships, internships, and programs to your profile —
+              Voila matches scholarships, internships, and programs to your profile —
               with mentorship and CV tools in one place.
             </p>
 
@@ -313,7 +313,7 @@ function Hero() {
             <div className="relative h-[520px] overflow-hidden rounded-[28px]">
               <Image
                 src="/images/product.png"
-                alt="Olives Forum app"
+                alt="Voila app"
                 fill
                 className="object-contain"
                 priority
@@ -339,7 +339,7 @@ function TrustSection() {
           Real impact for students and early-career professionals.
         </h2>
         <p className="text-muted text-lg leading-7 mb-10 mx-auto max-w-[600px]">
-          Olives connects talent to opportunities, mentorship, and the tools needed to build a stronger career.
+          Voila connects talent to opportunities, mentorship, and the tools needed to build a stronger career.
         </p>
         <div className="flex flex-wrap gap-4">
           {TRUST_STATS.map((stat) => (
@@ -402,7 +402,7 @@ function HowItWorksSection() {
           Up and running in 3 simple steps
         </h2>
         <p className="text-muted text-base leading-7 mb-12 mx-auto max-w-[640px]">
-          Getting started with Olives Forum takes less than two minutes.
+          Getting started with Voila takes less than two minutes.
         </p>
         <div className="relative mx-auto max-w-[980px]">
           <div className="absolute left-4 right-4 top-14 hidden h-px bg-primary/20 md:block" />
@@ -580,7 +580,7 @@ function CtaSection() {
           Ready to find your next opportunity?
         </h2>
         <p className="text-white/65 text-lg leading-7 mb-10">
-          Join Olives Forum and start with a personalised feed in minutes.
+          Join Voila and start with a personalised feed in minutes.
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-4">
           <a

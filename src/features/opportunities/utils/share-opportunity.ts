@@ -57,7 +57,7 @@ export function buildShareMessage(opportunity: Opportunity, opportunityLink: str
 
 /**
  * Shares the listing image file (when available) plus title, org, deadline,
- * and a single Olives Forum opportunity link — never the apply URL or raw image URL.
+ * and a single Voila opportunity link — never the apply URL or raw image URL.
  */
 export async function shareOpportunity(opportunity: Opportunity) {
   const opportunityLink = buildOpportunityWebLink(opportunity.id);

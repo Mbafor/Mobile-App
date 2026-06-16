@@ -7,7 +7,7 @@ import type { CVPaymentType } from '@/types/domain/cv';
 /** Must match Paystack `callback_url` and `WebBrowser.openAuthSessionAsync` redirect. */
 export function getPaystackRedirectUri(): string {
   return makeRedirectUri({
-    scheme: 'olivesforum',
+    scheme: 'Voila',
     path: 'paystack-callback',
   });
 }

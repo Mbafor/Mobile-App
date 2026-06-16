@@ -2,7 +2,7 @@ const BRAND = '#0B6623';
 const MUTED = '#555555';
 const LIGHT_BG = '#F3F7F4';
 
-export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Olives Forum <onboarding@resend.dev>';
+export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Voila <onboarding@resend.dev>';
 
 export function appWebBase(): string {
   return (Deno.env.get('APP_WEB_URL') ?? 'https://voila-africa.com').replace(/\/$/, '');
@@ -41,7 +41,7 @@ export function emailShell(params: {
       ${cta}
       <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
       <p style="color: #aaa; font-size: 12px; margin: 0; line-height: 1.5;">
-        ${params.footerNote ?? 'Olives Forum · Helping students find global opportunities'}
+        ${params.footerNote ?? 'Voila · Helping students find global opportunities'}
       </p>
     </div>
   `;

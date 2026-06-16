@@ -148,7 +148,7 @@ serve(async (req) => {
         ctaLabel: 'View Profile',
         ctaHref: `${webBase}/mentorship`,
         footerNote:
-          'You are receiving this because you were matched on Olives Forum mentorship.',
+          'You are receiving this because you were matched on Voila mentorship.',
       });
 
       const result = await sendResendEmail({

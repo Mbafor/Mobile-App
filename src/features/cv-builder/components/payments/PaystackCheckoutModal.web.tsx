@@ -18,7 +18,7 @@ type PaystackCheckoutModalProps = {
   onFailure: (message: string, cancelled?: boolean) => void;
 };
 
-/** Web: open Paystack in a popup and listen for redirect to olivesforum:// or success URL. */
+/** Web: open Paystack in a popup and listen for redirect to Voila:// or success URL. */
 export function PaystackCheckoutModal({
   visible,
   authorizationUrl,

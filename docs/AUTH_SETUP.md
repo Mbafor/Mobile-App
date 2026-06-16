@@ -14,7 +14,7 @@
    Add every URL your app uses:
 
    ```
-   olivesforum://auth/callback
+   Voila://auth/callback
    http://localhost:8081/auth/callback
    http://127.0.0.1:8081/auth/callback
    exp://127.0.0.1:8081/--/auth/callback

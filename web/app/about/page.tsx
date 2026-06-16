@@ -4,8 +4,8 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 export const metadata: Metadata = {
-  title: "About — Olives Forum",
-  description: "Learn more about Olives Forum's mission, approach, and support for students.",
+  title: "About — Voila",
+  description: "Learn more about Voila's mission, approach, and support for students.",
 };
 
 export default function AboutPage() {
@@ -16,10 +16,10 @@ export default function AboutPage() {
         <section className="mx-auto max-w-[960px] px-6 py-16 md:py-20">
           <div className="flex flex-col gap-8">
           <div className="space-y-4">
-            <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em]">About Olives Forum</p>
+            <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em]">About Voila</p>
             <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">A career platform built for African students.</h1>
             <p className="text-muted text-lg leading-8 max-w-[760px]">
-              Olives Forum helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place.
+              Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place.
               We bring personalised opportunity matching, application tracking, and guided career support to ambitious learners across Africa.
             </p>
           </div>
@@ -34,7 +34,7 @@ export default function AboutPage() {
             <div className="rounded-3xl border border-border bg-surface p-8">
               <h2 className="text-2xl font-semibold mb-3">Why it matters</h2>
               <p className="text-muted leading-7">
-                Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Olives Forum brings those experiences together so students can move forward with confidence.
+                Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Voila brings those experiences together so students can move forward with confidence.
               </p>
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function AboutPage() {
                 <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Built for students</p>
                 <h2 className="text-3xl font-bold">Designed to help you go from discovery to application.</h2>
                 <p className="text-muted leading-7">
-                  Whether you are searching for scholarships, internships, or career mentorship, Olives Forum brings the tools and recommendations into one workflow.
+                  Whether you are searching for scholarships, internships, or career mentorship, Voila brings the tools and recommendations into one workflow.
                 </p>
                 <div className="mt-4">
                   <a
@@ -80,7 +80,7 @@ export default function AboutPage() {
                 </div>
               </div>
               <div className="relative h-[180px] rounded-[24px] overflow-hidden bg-white shadow-lg">
-                <Image src="/images/product.png" alt="Olives Forum app" fill className="object-cover" priority />
+                <Image src="/images/product.png" alt="Voila app" fill className="object-cover" priority />
               </div>
             </div>
           </div>

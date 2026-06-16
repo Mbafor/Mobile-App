@@ -12,7 +12,7 @@ export default function Footer() {
               <div className="w-[34px] h-[34px] rounded-[9px] bg-forest flex items-center justify-center">
                 <span className="text-accent text-base font-bold">O</span>
               </div>
-              <span className="text-[#1A1A1A] font-bold text-lg">Olives Forum</span>
+              <span className="text-[#1A1A1A] font-bold text-lg">Voila</span>
             </div>
             <p className="text-muted text-sm leading-[22px] max-w-[280px]">
               Building career confidence for African students and young professionals.
@@ -64,7 +64,7 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border pt-6 flex flex-wrap justify-between items-center gap-3">
-          <p className="text-muted text-sm">© {year} Olives Forum. All rights reserved.</p>
+          <p className="text-muted text-sm">© {year} Voila. All rights reserved.</p>
           <p className="text-muted text-sm">Made with care for African students 🌿</p>
         </div>
       </div>

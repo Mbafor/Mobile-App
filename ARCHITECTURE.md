@@ -1,4 +1,4 @@
-# Olives Forum — Architecture
+# Voila — Architecture
 
 Production-oriented **feature-first** architecture for React Native (Expo) + TypeScript + Supabase.
 

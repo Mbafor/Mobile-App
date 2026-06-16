@@ -20,7 +20,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.scroll}>
       <View style={styles.brand}>
-        <Text variant="title">Olives Forum</Text>
+        <Text variant="title">Voila</Text>
       </View>
 
       {/* Grouped sections: Main, Career Tools, Account, Administration */}

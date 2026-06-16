@@ -97,19 +97,19 @@ serve(async (req) => {
 
       const messages = {
         1: {
-          subject: '📄 Your CV is waiting for you — Olives Forum',
+          subject: '📄 Your CV is waiting for you — Voila',
           headline: `Your CV is ready, ${firstName}!`,
-          body: "You started building your CV on Olives Forum. It's saved and ready — come back and finish the remaining sections.",
+          body: "You started building your CV on Voila. It's saved and ready — come back and finish the remaining sections.",
         },
         2: {
-          subject: "⏰ Don't forget your CV — Olives Forum",
+          subject: "⏰ Don't forget your CV — Voila",
           headline: `Still interested, ${firstName}?`,
-          body: 'Your CV is still saved on Olives Forum. Continue building it today and get closer to downloading.',
+          body: 'Your CV is still saved on Voila. Continue building it today and get closer to downloading.',
         },
         3: {
-          subject: '📋 Last reminder — Your CV on Olives Forum',
+          subject: '📋 Last reminder — Your CV on Voila',
           headline: `Last chance, ${firstName}`,
-          body: "This is your final reminder. Your CV is waiting on Olives Forum — we won't send any more emails about this.",
+          body: "This is your final reminder. Your CV is waiting on Voila — we won't send any more emails about this.",
         },
       } as const;
 
@@ -141,7 +141,7 @@ serve(async (req) => {
           footerNote:
             reminderNumber === 3
               ? 'This is the last email we will send about this CV.'
-              : 'You are receiving this because you started a CV on Olives Forum.',
+              : 'You are receiving this because you started a CV on Voila.',
         }),
       });
 

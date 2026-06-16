@@ -1,4 +1,4 @@
-# Olives Forum — Screen inventory
+# Voila — Screen inventory
 
 Use this list when working on frontend UI. Each row maps an **Expo Router route** to its **screen component** and **backend data**.
 

@@ -10,12 +10,12 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
     // Google Title Tag — under 60 chars, keyword-first
-    default: "Olives Forum | Scholarships, Internships & Mentorship Africa",
-    template: "%s | Olives Forum",
+    default: "Voila | Scholarships, Internships & Mentorship Africa",
+    template: "%s | Voila",
   },
   // Meta Description — under 155 chars, includes primary keyword + CTA signal
   description:
-    "Join 24,000+ African students discovering scholarships, internships, fellowships and 1:1 mentorship on Olives Forum. Free CV builder included.",
+    "Join 24,000+ African students discovering scholarships, internships, fellowships and 1:1 mentorship on Voila. Free CV builder included.",
   keywords: [
     "scholarships for African students",
     "internships Africa",
@@ -24,11 +24,11 @@ export const metadata: Metadata = {
     "free CV builder for students",
     "career opportunities Africa",
     "student opportunities platform",
-    "Olives Forum",
+    "Voila",
   ],
-  authors: [{ name: "Olives Forum" }],
-  creator: "Olives Forum",
-  publisher: "Olives Forum",
+  authors: [{ name: "Voila" }],
+  creator: "Voila",
+  publisher: "Voila",
   robots: {
     index: true,
     follow: true,
@@ -44,26 +44,26 @@ export const metadata: Metadata = {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
-    siteName: "Olives Forum",
+    siteName: "Voila",
     // og:title — punchy, under 60 chars, reads well as a link preview
-    title: "Olives Forum — Find Your Next Opportunity",
+    title: "Voila — Find Your Next Opportunity",
     // og:description — hooks the reader, fits WhatsApp/LinkedIn preview truncation (~150 chars)
     description:
-      "Scholarships, internships, mentorship and a free CV builder — all personalised to your profile. Join 24,000+ African students already on Olives Forum.",
+      "Scholarships, internships, mentorship and a free CV builder — all personalised to your profile. Join 24,000+ African students already on Voila.",
     images: [
       {
         // og:image — must be 1200×630px, under 8 MB, hosted at an absolute URL
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Olives Forum — Scholarships, Internships & Mentorship for African Students",
+        alt: "Voila — Scholarships, Internships & Mentorship for African Students",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
     // twitter:title
-    title: "Olives Forum — Find Your Next Opportunity",
+    title: "Voila — Find Your Next Opportunity",
     // twitter:description
     description:
       "Scholarships, internships, mentorship and a free CV builder — personalised for African students. Free to join.",

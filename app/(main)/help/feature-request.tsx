@@ -50,7 +50,7 @@ export default function FeatureRequestScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.intro}>
-          Have an idea that would make Olives Forum better? We'd love to hear it.
+          Have an idea that would make Voila better? We'd love to hear it.
         </Text>
 
         <View style={styles.field}>

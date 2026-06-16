@@ -39,7 +39,7 @@ export async function exportTrackerToXlsx(
   XLSX.utils.book_append_sheet(workbook, sheet, 'My Tracker');
 
   const base64 = XLSX.write(workbook, { type: 'base64', bookType: 'xlsx' });
-  const fileName = `olives-${fileLabel}-${Date.now()}.xlsx`;
+  const fileName = `Voila-${fileLabel}-${Date.now()}.xlsx`;
 
   if (Platform.OS === 'web') {
     const binary = atob(base64);

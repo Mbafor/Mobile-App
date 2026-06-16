@@ -1,4 +1,4 @@
-# Olives Forum (OLF)
+# Voila (OLF)
 
 React Native + Expo + TypeScript + Supabase — feature-first production scaffold.
 

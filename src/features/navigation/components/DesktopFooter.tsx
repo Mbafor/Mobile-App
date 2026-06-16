@@ -71,7 +71,7 @@ export function DesktopFooter() {
       </View>
 
       <View style={styles.brandRow}>
-        <Text style={styles.brand}>Olives Forum</Text>
+        <Text style={styles.brand}>Voila</Text>
       </View>
     </View>
   );

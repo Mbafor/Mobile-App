@@ -43,8 +43,8 @@ const nextConfig: NextConfig = {
   //   return [
   //     {
   //       source: "/(.*)",
-  //       has: [{ type: "host", value: "olivesforum.com" }],
-  //       destination: "https://www.olivesforum.com/:path*",
+  //       has: [{ type: "host", value: "voila-africa.com" }],
+  //       destination: "https://www.voila-africa.com/:path*",
   //       permanent: true,
   //     },
   //   ];

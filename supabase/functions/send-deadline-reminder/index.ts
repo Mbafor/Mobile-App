@@ -91,7 +91,7 @@ serve(async (req) => {
           `,
           ctaLabel: 'View Opportunity',
           ctaHref: opportunityUrl,
-          footerNote: 'You are receiving this because you saved this opportunity on Olives Forum.',
+          footerNote: 'You are receiving this because you saved this opportunity on Voila.',
         }),
       });
 

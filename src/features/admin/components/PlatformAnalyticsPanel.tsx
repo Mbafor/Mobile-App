@@ -56,7 +56,7 @@ export function PlatformAnalyticsPanel() {
     >
       <Text style={styles.pageTitle}>Platform analytics</Text>
       <Text muted style={styles.subtitle}>
-        Users, opportunities, engagement, and notifications across Olives Forum.
+        Users, opportunities, engagement, and notifications across Voila.
       </Text>
 
       {error ? (

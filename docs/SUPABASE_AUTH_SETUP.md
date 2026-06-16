@@ -1,4 +1,4 @@
-# Supabase Auth setup — Olives Forum
+# Supabase Auth setup — Voila
 
 **All authentication uses Supabase** (no Firebase).
 
@@ -36,7 +36,7 @@ Apply migration `022_require_profile_email.sql` so `profiles.email` is required.
 
 | Platform | Redirect URL |
 |----------|----------------|
-| Dev build | `olivesforum://auth/callback` |
+| Dev build | `Voila://auth/callback` |
 | Expo Go | `exp://127.0.0.1:8081/--/auth/callback` |
 | Web | `http://localhost:8081/auth/callback` |
 

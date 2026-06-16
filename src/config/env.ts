@@ -46,7 +46,7 @@ function validateEnv(): string | null {
 const envError = validateEnv();
 
 if (__DEV__ && envError) {
-  console.error(`[Olives Forum] ${envError}`);
+  console.error(`[Voila] ${envError}`);
 }
 
 export const env = {

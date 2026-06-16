@@ -111,7 +111,7 @@ serve(async (req) => {
           `,
           ctaLabel,
           ctaHref,
-          footerNote: 'You are receiving this because of a mentorship session update on Olives Forum.',
+          footerNote: 'You are receiving this because of a mentorship session update on Voila.',
         }),
       });
 

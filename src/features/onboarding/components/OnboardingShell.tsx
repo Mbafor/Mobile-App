@@ -47,7 +47,7 @@ export function OnboardingShell({ children }: PropsWithChildren) {
           <View style={styles.brandMark}>
             <Text style={styles.brandMarkText}>O</Text>
           </View>
-          <Text style={[styles.brandName, getWebFontStyle('bold')]}>Olives Forum</Text>
+          <Text style={[styles.brandName, getWebFontStyle('bold')]}>Voila</Text>
         </View>
 
         {children}

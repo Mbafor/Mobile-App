@@ -15,7 +15,7 @@ WebBrowser.maybeCompleteAuthSession();
 
 export function getAuthRedirectUri(): string {
   return makeRedirectUri({
-    scheme: 'olivesforum',
+    scheme: 'Voila',
     path: 'auth/callback',
     preferLocalhost: true,
   });

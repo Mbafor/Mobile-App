@@ -65,7 +65,7 @@ serve(async (req) => {
         amount: Math.round(Number(amount)),
         currency: 'GHS',
         reference,
-        callback_url: callbackUrl ?? 'olivesforum://paystack-callback',
+        callback_url: callbackUrl ?? 'Voila://paystack-callback',
         metadata: {
           user_id: user.id,
           cv_id: cvId,

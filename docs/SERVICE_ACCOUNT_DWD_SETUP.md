@@ -33,7 +33,7 @@ consent flow.
 ### 1.1 Select (or create) your Google Cloud project
 
 1. Open [https://console.cloud.google.com](https://console.cloud.google.com)
-2. In the top bar, select the project linked to Olives Forum (or create a new one)
+2. In the top bar, select the project linked to Voila (or create a new one)
 
 ### 1.2 Enable the Google Calendar API
 
@@ -46,9 +46,9 @@ consent flow.
 1. Go to **IAM & Admin → Service Accounts**
 2. Click **+ Create Service Account**
 3. Fill in:
-   - **Name**: `olives-forum-calendar` (or any descriptive name)
-   - **ID**: auto-filled, e.g. `olives-forum-calendar@your-project.iam.gserviceaccount.com`
-   - **Description**: "Creates Google Calendar events for Olives Forum mentorship sessions"
+   - **Name**: `Voila-calendar` (or any descriptive name)
+   - **ID**: auto-filled, e.g. `Voila-calendar@your-project.iam.gserviceaccount.com`
+   - **Description**: "Creates Google Calendar events for Voila mentorship sessions"
 4. Click **Create and Continue**
 5. Skip the optional "Grant access" and "Grant users access" steps — click **Done**
 
@@ -61,7 +61,7 @@ consent flow.
 2. Click the **Details** tab (or scroll to "Advanced settings")
 3. Under **Domain-wide delegation**, click **Edit**
 4. Check **Enable Google Workspace Domain-wide Delegation**
-5. Enter a product name for the consent screen (e.g. "Olives Forum")
+5. Enter a product name for the consent screen (e.g. "Voila")
 6. Click **Save**
 7. **Note the Client ID** shown (a long number like `123456789012345678901`). You need it in Part 2.
 
@@ -78,7 +78,7 @@ consent flow.
   "project_id": "your-project",
   "private_key_id": "abc123...",
   "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEv...\n-----END PRIVATE KEY-----\n",
-  "client_email": "olives-forum-calendar@your-project.iam.gserviceaccount.com",
+  "client_email": "Voila-calendar@your-project.iam.gserviceaccount.com",
   "client_id": "123456789012345678901",
   ...
 }
@@ -151,7 +151,7 @@ key file downloaded in step 1.5 and your decisions in step 2.3.
 
 | Secret name | Value |
 |-------------|-------|
-| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | `client_email` from the JSON key, e.g. `olives-forum-calendar@your-project.iam.gserviceaccount.com` |
+| `GOOGLE_SERVICE_ACCOUNT_EMAIL` | `client_email` from the JSON key, e.g. `Voila-calendar@your-project.iam.gserviceaccount.com` |
 | `GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY` | Full `private_key` value from the JSON key, including the `-----BEGIN/END-----` headers |
 | `GOOGLE_SERVICE_ACCOUNT_IMPERSONATE_EMAIL` | The Workspace user to impersonate, e.g. `meetings@yourworkspace.com` |
 | `GOOGLE_CALENDAR_ID` | `primary` (uses the impersonated user's primary calendar) — or a specific calendar ID if you want a shared team calendar |
@@ -160,7 +160,7 @@ key file downloaded in step 1.5 and your decisions in step 2.3.
 
 ```bash
 supabase secrets set \
-  GOOGLE_SERVICE_ACCOUNT_EMAIL="olives-forum-calendar@your-project.iam.gserviceaccount.com" \
+  GOOGLE_SERVICE_ACCOUNT_EMAIL="Voila-calendar@your-project.iam.gserviceaccount.com" \
   GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY="-----BEGIN PRIVATE KEY-----
 MIIEv...
 -----END PRIVATE KEY-----" \

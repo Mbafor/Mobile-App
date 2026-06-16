@@ -41,11 +41,11 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="/" className="flex items-center gap-2" aria-label="Olives Forum home">
+        <a href="/" className="flex items-center gap-2" aria-label="Voila home">
           <div className={`w-9 h-9 rounded-[10px] flex items-center justify-center ${scrolled ? "bg-surface border-border" : "bg-white border-white"}`}>
             <span className={`${scrolled ? "text-primary" : "text-primary"} font-bold text-lg leading-none`}>O</span>
           </div>
-          <span className={`${scrolled ? "text-[#1A1A1A]" : "text-white"} font-bold text-base tracking-tight`}>Olives Forum</span>
+          <span className={`${scrolled ? "text-[#1A1A1A]" : "text-white"} font-bold text-base tracking-tight`}>Voila</span>
         </a>
 
         <button

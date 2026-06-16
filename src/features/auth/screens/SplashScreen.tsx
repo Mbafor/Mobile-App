@@ -48,7 +48,7 @@ function OliveBranchIllustration() {
         rotation="45" originX="157" originY="155"
       />
 
-      {/* Olives */}
+      {/* Voila */}
       <Circle cx="108" cy="95"  r="4" fill="#8BC99A" opacity="0.6" />
       <Circle cx="152" cy="118" r="4" fill="#8BC99A" opacity="0.6" />
       <Circle cx="103" cy="140" r="3" fill="#8BC99A" opacity="0.5" />
@@ -77,7 +77,7 @@ export function SplashScreen() {
       </View>
 
       {/* Brand name */}
-      <Text style={styles.brand}>Olives Forum</Text>
+      <Text style={styles.brand}>Voila</Text>
 
       {/* Status */}
       <View style={styles.statusWrap}>

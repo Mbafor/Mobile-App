@@ -1,4 +1,4 @@
--- Olives Forum: opportunities (Phase 3 home feed)
+-- Voila: opportunities (Phase 3 home feed)
 -- Run after 001_profiles_and_preferences.sql
 
 create table if not exists public.opportunities (

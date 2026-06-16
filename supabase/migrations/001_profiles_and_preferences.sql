@@ -1,4 +1,4 @@
--- Olives Forum: profiles + user_preferences (Phase 2 onboarding)
+-- Voila: profiles + user_preferences (Phase 2 onboarding)
 -- Run in Supabase SQL Editor or via: supabase db push
 
 -- ---------------------------------------------------------------------------
