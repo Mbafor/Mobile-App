@@ -1,12 +1,11 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { FormField, MultiSelectWithOther } from '@/components/forms';
-import { Screen } from '@/components/layout';
-import { Button, Input, Text } from '@/components/ui';
-import { FundingPicker, OnboardingProgress } from '@/features/onboarding/components';
+import { Input } from '@/components/ui';
+import { FundingPicker, OnboardingShell } from '@/features/onboarding/components';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGuard';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
@@ -17,12 +16,9 @@ import {
 } from '@/constants/onboarding-options';
 import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { ROUTES } from '@/constants/routes';
-import { spacing } from '@/constants/theme';
 import { formatListInput, parseListInput } from '@/utils/formatting';
 import { hasCompletedAcademicInfo, hasCompletedBasicInfo } from '@/utils/profile/onboarding-status';
 import type { FundingPreference } from '@/types/domain/user-preferences';
-
-const isWeb = Platform.OS === 'web';
 
 export function OpportunityPreferencesScreen() {
   const router = useRouter();
@@ -83,81 +79,36 @@ export function OpportunityPreferencesScreen() {
   };
 
   return (
-    <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.flex}
-      >
-        <OnboardingProgress currentStep={ONBOARDING_STEPS.PREFERENCES} />
-        <Text variant="title">Opportunity preferences</Text>
-        <Text muted style={styles.subtitle}>
-          We&apos;ll use this to personalise your recommendations.
-        </Text>
-
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <FormField label="Opportunity types *">
-            <MultiSelectWithOther
-              options={OPPORTUNITY_TYPE_OPTIONS}
-              predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
-              values={opportunityTypes}
-              onChange={setOpportunityTypes}
-              placeholder="Select opportunity types"
-            />
-          </FormField>
-          <FormField label="Preferred countries (comma-separated) *">
-            <Input
-              value={countriesText}
-              onChangeText={setCountriesText}
-              placeholder="e.g. UK, Germany, Canada"
-              multiline
-            />
-          </FormField>
-          <FormField label="Funding preference *">
-            <FundingPicker value={funding} onChange={setFunding} />
-          </FormField>
-          {error ? <ErrorMessage message={error} /> : null}
-        </ScrollView>
-
-        <View style={[styles.footer, isWeb && styles.footerWeb]}>
-          <Button
-            variant="secondary"
-            onPress={() => router.back()}
-            style={isWeb ? styles.backBtn : styles.mobileBtn}
-          >
-            Back
-          </Button>
-          <Button
-            onPress={() => void handleFinish()}
-            loading={isLoading || loadingProfile}
-            disabled={isLoading || loadingProfile}
-            style={isWeb ? styles.ctaBtn : styles.mobileBtn}
-          >
-            Finish setup
-          </Button>
-        </View>
-      </KeyboardAvoidingView>
-    </Screen>
+    <OnboardingShell
+      currentStep={ONBOARDING_STEPS.PREFERENCES}
+      title="Opportunity preferences"
+      subtitle="We'll use this to personalise your recommendations."
+      onBack={() => router.back()}
+      onContinue={() => void handleFinish()}
+      continueLabel="Finish setup"
+      isLoading={isLoading || loadingProfile}
+    >
+      <FormField label="Opportunity types *">
+        <MultiSelectWithOther
+          options={OPPORTUNITY_TYPE_OPTIONS}
+          predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
+          values={opportunityTypes}
+          onChange={setOpportunityTypes}
+          placeholder="Select opportunity types"
+        />
+      </FormField>
+      <FormField label="Preferred countries (comma-separated) *">
+        <Input
+          value={countriesText}
+          onChangeText={setCountriesText}
+          placeholder="e.g. UK, Germany, Canada"
+          multiline
+        />
+      </FormField>
+      <FormField label="Funding preference *">
+        <FundingPicker value={funding} onChange={setFunding} />
+      </FormField>
+      {error ? <ErrorMessage message={error} /> : null}
+    </OnboardingShell>
   );
 }
-
-const styles = StyleSheet.create({
-  flex: { flex: 1, paddingTop: spacing.lg },
-  subtitle: { marginBottom: spacing.md },
-  scroll: { flex: 1 },
-  scrollContent: { paddingBottom: spacing.md },
-  footer: {
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-    flexDirection: 'row',
-    gap: spacing.sm,
-  },
-  footerWeb: { justifyContent: 'flex-end' },
-  mobileBtn: { flex: 1 },
-  backBtn: { minWidth: 120 },
-  ctaBtn: { minWidth: 160 },
-});

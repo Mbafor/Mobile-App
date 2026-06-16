@@ -9,10 +9,11 @@ export type OtpVerificationType = 'signup' | 'email';
 export const authApi = {
   getSession: () => supabase.auth.getSession(),
 
-  signUpWithPassword: (email: string, password: string) =>
+  signUpWithPassword: (email: string, password: string, metadata?: Record<string, unknown>) =>
     supabase.auth.signUp({
       email: email.trim().toLowerCase(),
       password,
+      options: metadata ? { data: metadata } : undefined,
     }),
 
   signInWithPassword: (email: string, password: string) =>

@@ -203,6 +203,33 @@ export function useAuthActions() {
     [run],
   );
 
+  const signUpWithEmailPasswordAndName = useCallback(
+    (name: string, email: string, password: string) =>
+      run(async (): Promise<EmailPasswordSignInResult | null> => {
+        const normalized = email.trim().toLowerCase();
+        if (!isValidPassword(password)) {
+          throw new Error('Password must be at least 8 characters.');
+        }
+        const { data, error } = await authApi.signUpWithPassword(normalized, password, {
+          full_name: name.trim(),
+        });
+        if (error) {
+          const msg = error.message.toLowerCase();
+          if (msg.includes('already registered') || msg.includes('already been registered')) {
+            throw new Error('An account with this email already exists. Try signing in instead.');
+          }
+          throw error;
+        }
+        if (data.session) {
+          await applyAuthSession(data.session);
+          await profilesApi.syncEmailFromAuth(normalized);
+          return { needsOtp: false };
+        }
+        return { needsOtp: true, otpType: 'signup' };
+      }),
+    [run],
+  );
+
   const clearError = useCallback(() => setError(null), []);
 
   return {
@@ -210,6 +237,7 @@ export function useAuthActions() {
     error,
     clearError,
     signInWithEmailPassword,
+    signUpWithEmailPasswordAndName,
     verifyEmailOtp,
     resendEmailOtp,
     signOut,

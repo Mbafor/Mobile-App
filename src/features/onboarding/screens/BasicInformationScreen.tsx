@@ -1,21 +1,17 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { CountrySelect, FormField } from '@/components/forms';
-import { Screen } from '@/components/layout';
-import { Button, Input, Text } from '@/components/ui';
-import { OnboardingProgress } from '@/features/onboarding/components';
+import { Input } from '@/components/ui';
+import { OnboardingShell } from '@/features/onboarding/components';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGuard';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { useOnboardingStore } from '@/features/onboarding/store/onboarding.store';
 import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { ROUTES } from '@/constants/routes';
-import { spacing } from '@/constants/theme';
-
-const isWeb = Platform.OS === 'web';
 
 export function BasicInformationScreen() {
   const router = useRouter();
@@ -50,59 +46,25 @@ export function BasicInformationScreen() {
   };
 
   return (
-    <Screen>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-        style={styles.flex}
-      >
-        <OnboardingProgress currentStep={ONBOARDING_STEPS.BASIC} />
-        <Text variant="title">Basic information</Text>
-        <Text muted style={styles.subtitle}>
-          Tell us a bit about yourself to personalise your experience.
-        </Text>
-
-        <ScrollView
-          style={styles.scroll}
-          contentContainerStyle={styles.scrollContent}
-          keyboardShouldPersistTaps="handled"
-          showsVerticalScrollIndicator={false}
-        >
-          <FormField label="Full name *">
-            <Input
-              value={fullName}
-              onChangeText={setFullName}
-              placeholder="e.g. Jane Doe"
-              autoComplete="name"
-            />
-          </FormField>
-          <FormField label="Country *">
-            <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
-          </FormField>
-          {error ? <ErrorMessage message={error} /> : null}
-        </ScrollView>
-
-        <View style={[styles.footer, isWeb && styles.footerWeb]}>
-          <Button
-            onPress={handleContinue}
-            loading={isLoading || loadingProfile}
-            disabled={isLoading || loadingProfile}
-            fullWidth={!isWeb}
-            style={isWeb ? styles.ctaBtn : undefined}
-          >
-            Continue
-          </Button>
-        </View>
-      </KeyboardAvoidingView>
-    </Screen>
+    <OnboardingShell
+      currentStep={ONBOARDING_STEPS.BASIC}
+      title="Basic information"
+      subtitle="Tell us a bit about yourself to personalise your experience."
+      onContinue={() => void handleContinue()}
+      isLoading={isLoading || loadingProfile}
+    >
+      <FormField label="Full name *">
+        <Input
+          value={fullName}
+          onChangeText={setFullName}
+          placeholder="e.g. Jane Doe"
+          autoComplete="name"
+        />
+      </FormField>
+      <FormField label="Country *">
+        <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
+      </FormField>
+      {error ? <ErrorMessage message={error} /> : null}
+    </OnboardingShell>
   );
 }
-
-const styles = StyleSheet.create({
-  flex: { flex: 1, paddingTop: spacing.lg },
-  subtitle: { marginBottom: spacing.md },
-  scroll: { flex: 1 },
-  scrollContent: { paddingBottom: spacing.md },
-  footer: { paddingTop: spacing.md, paddingBottom: spacing.lg },
-  footerWeb: { flexDirection: 'row', justifyContent: 'flex-end' },
-  ctaBtn: { minWidth: 160 },
-});

@@ -2,7 +2,7 @@ const BRAND = '#0B6623';
 const MUTED = '#555555';
 const LIGHT_BG = '#F3F7F4';
 
-export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Voila <onboarding@resend.dev>';
+export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Voila <noreply@voila-africa.com>';
 
 export function appWebBase(): string {
   return (Deno.env.get('APP_WEB_URL') ?? 'https://voila-africa.com').replace(/\/$/, '');

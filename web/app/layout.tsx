@@ -25,6 +25,7 @@ export const metadata: Metadata = {
     "career opportunities Africa",
     "student opportunities platform",
     "Voila",
+    "Voila Africa"
   ],
   authors: [{ name: "Voila" }],
   creator: "Voila",

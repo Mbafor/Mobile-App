@@ -26,12 +26,14 @@ export function VerifyOtpScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
-  const params = useLocalSearchParams<{ email?: string; otpType?: string }>();
+  const params = useLocalSearchParams<{ email?: string; otpType?: string; source?: string }>();
   const email =
     typeof params.email === 'string'
       ? decodeURIComponent(params.email).trim().toLowerCase()
       : '';
   const otpType = parseOtpType(params.otpType);
+  const backRoute =
+    params.source === 'welcome' ? (ROUTES.AUTH.WELCOME as Href) : (ROUTES.AUTH.EMAIL as Href);
 
   const { isAuthenticated, onboardingComplete, isAuthReady, isProfileLoading } = useAuth();
   const { verifyEmailOtp, resendEmailOtp, isLoading, error, clearError } = useAuthActions();
@@ -101,7 +103,7 @@ export function VerifyOtpScreen() {
     <AuthScreenLayout
       title="Confirm your email"
       subtitle={`Enter the 6-digit code sent to ${email}`}
-      onBack={() => router.replace(ROUTES.AUTH.EMAIL as Href)}
+      onBack={() => router.replace(backRoute)}
       backgroundColor={colors.background}
       backTextColor={colors.text}
     >
