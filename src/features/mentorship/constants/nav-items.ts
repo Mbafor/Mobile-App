@@ -18,7 +18,6 @@ export const COACH_NAV_ITEMS: MentorshipNavItem[] = [
 
 export const STUDENT_SECTION_TITLES: Record<string, string> = {
   dashboard: 'Dashboard',
-  browse: 'Choose a Coach',
   coach: 'My Coach',
   messages: 'Messages',
   book: 'Book a Session',

@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
@@ -14,6 +14,13 @@ import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { webPressableStyle } from '@/utils/web/pressable';
 
+type SidebarChildItem = {
+  key: string;
+  label: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  onPress: () => void;
+};
+
 type SidebarItem = {
   key: string;
   label: string;
@@ -21,6 +28,7 @@ type SidebarItem = {
   iconActive: keyof typeof Ionicons.glyphMap;
   onPress: () => void;
   matchPath?: string;
+  children?: SidebarChildItem[];
 };
 
 type SidebarSection = {
@@ -36,6 +44,24 @@ export function DesktopSidebar() {
   const pathname = usePathname();
   const { isAdmin, isSuperAdmin } = useAuth();
   const [collapsed, setCollapsed] = useState(false);
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
+  const scrollRef = useRef<ScrollView>(null);
+  const [scrollY, setScrollY] = useState(0);
+  const [contentHeight, setContentHeight] = useState(0);
+  const [containerHeight, setContainerHeight] = useState(0);
+
+  const toggleGroup = (key: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) next.delete(key);
+      else next.add(key);
+      return next;
+    });
+  };
+
+  const canScrollUp = scrollY > 4;
+  const canScrollDown =
+    contentHeight > 0 && containerHeight > 0 && scrollY + containerHeight < contentHeight - 4;
 
   const mainItems: SidebarItem[] = [
     {
@@ -80,6 +106,32 @@ export function DesktopSidebar() {
       iconActive: 'people',
       onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
       matchPath: '/mentorship',
+      children: [
+        {
+          key: 'mentorship-dashboard',
+          label: 'Dashboard',
+          icon: 'grid-outline',
+          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
+        },
+        {
+          key: 'mentorship-messages',
+          label: 'Messages',
+          icon: 'chatbubbles-outline',
+          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
+        },
+        {
+          key: 'mentorship-book',
+          label: 'Book session',
+          icon: 'calendar-outline',
+          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
+        },
+        {
+          key: 'mentorship-sessions',
+          label: 'Sessions',
+          icon: 'time-outline',
+          onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
+        },
+      ],
     },
     {
       key: 'cv-builder',
@@ -88,6 +140,26 @@ export function DesktopSidebar() {
       iconActive: 'document-text',
       onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
       matchPath: '/cv-builder',
+      children: [
+        {
+          key: 'cv-my-cvs',
+          label: 'My CVs',
+          icon: 'documents-outline',
+          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
+        },
+        {
+          key: 'cv-templates',
+          label: 'Templates',
+          icon: 'layers-outline',
+          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
+        },
+        {
+          key: 'cv-tips',
+          label: 'Tips & guidance',
+          icon: 'bulb-outline',
+          onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
+        },
+      ],
     },
     {
       key: 'notifications',
@@ -148,7 +220,6 @@ export function DesktopSidebar() {
       items: [
         mainItems.find((i) => i.key === 'home')!,
         mainItems.find((i) => i.key === 'dashboard')!,
-        // Saved uses ROUTES.MAIN.SAVED
         {
           key: 'saved',
           label: 'Saved',
@@ -191,35 +262,73 @@ export function DesktopSidebar() {
 
   const renderItem = (item: SidebarItem) => {
     const active = item.matchPath ? pathname.includes(item.matchPath) : false;
+    const hasChildren = !collapsed && Boolean(item.children?.length);
+    const isExpanded = expandedGroups.has(item.key);
+
     return (
-      <Pressable
-        key={item.key}
-        style={webPressableStyle(
-          [styles.item, collapsed && styles.itemCollapsed, active && styles.itemActive],
-          styles.itemHover,
-        )}
-        onPress={item.onPress}
-        accessibilityRole="menuitem"
-        // show native tooltip on web when collapsed
-        {...(collapsed ? { title: item.label } : {})}
-      >
-        <Ionicons
-          name={active ? item.iconActive : item.icon}
-          size={20}
-          color={active ? colors.primary : colors.textMuted}
-        />
-        {!collapsed && (
-          <Text
-            style={[
-              styles.itemLabel,
-              getWebFontStyle('medium'),
-              active && styles.itemLabelActive,
-            ]}
+      <View key={item.key}>
+        <View style={[styles.itemRow, active && styles.itemActive]}>
+          <Pressable
+            style={webPressableStyle(
+              [styles.itemMain, collapsed && styles.itemMainCollapsed],
+              styles.itemHover,
+            )}
+            onPress={item.onPress}
+            accessibilityRole="menuitem"
+            {...(collapsed ? { title: item.label } : {})}
           >
-            {item.label}
-          </Text>
+            <Ionicons
+              name={active ? item.iconActive : item.icon}
+              size={20}
+              color={active ? colors.primary : colors.textMuted}
+            />
+            {!collapsed && (
+              <Text
+                style={[
+                  styles.itemLabel,
+                  getWebFontStyle('medium'),
+                  active && styles.itemLabelActive,
+                ]}
+              >
+                {item.label}
+              </Text>
+            )}
+          </Pressable>
+          {hasChildren && (
+            <Pressable
+              onPress={() => toggleGroup(item.key)}
+              style={styles.chevronBtn}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel={isExpanded ? 'Collapse' : 'Expand'}
+            >
+              <Ionicons
+                name={isExpanded ? 'chevron-up' : 'chevron-down'}
+                size={12}
+                color={active ? colors.primary : colors.textMuted}
+              />
+            </Pressable>
+          )}
+        </View>
+
+        {hasChildren && isExpanded && (
+          <View style={styles.childrenList}>
+            {item.children!.map((child) => (
+              <Pressable
+                key={child.key}
+                style={webPressableStyle(styles.childItem, styles.childItemHover)}
+                onPress={child.onPress}
+                accessibilityRole="menuitem"
+              >
+                <Ionicons name={child.icon} size={14} color={colors.textMuted} />
+                <Text style={[styles.childLabel, getWebFontStyle('regular')]}>
+                  {child.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         )}
-      </Pressable>
+      </View>
     );
   };
 
@@ -239,7 +348,16 @@ export function DesktopSidebar() {
           />
         </Pressable>
       </View>
-      <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
+
+      <ScrollView
+        ref={scrollRef}
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={styles.scroll}
+        onScroll={(e) => setScrollY(e.nativeEvent.contentOffset.y)}
+        onContentSizeChange={(_w, h) => setContentHeight(h)}
+        onLayout={(e) => setContainerHeight(e.nativeEvent.layout.height)}
+        scrollEventThrottle={16}
+      >
         {sections.map((section, si) => (
           <View key={section.key} style={si > 0 ? styles.sectionGap : undefined}>
             {!collapsed && <Text style={styles.sectionLabel}>{section.label}</Text>}
@@ -247,6 +365,31 @@ export function DesktopSidebar() {
           </View>
         ))}
       </ScrollView>
+
+      <View style={styles.scrollButtons}>
+        <Pressable
+          onPress={() =>
+            scrollRef.current?.scrollTo({ y: Math.max(0, scrollY - 120), animated: true })
+          }
+          disabled={!canScrollUp}
+          style={[styles.scrollBtn, !canScrollUp && styles.scrollBtnDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="Scroll up"
+        >
+          <Ionicons name="chevron-up" size={13} color={colors.textMuted} />
+        </Pressable>
+        <Pressable
+          onPress={() =>
+            scrollRef.current?.scrollTo({ y: scrollY + 120, animated: true })
+          }
+          disabled={!canScrollDown}
+          style={[styles.scrollBtn, !canScrollDown && styles.scrollBtnDisabled]}
+          accessibilityRole="button"
+          accessibilityLabel="Scroll down"
+        >
+          <Ionicons name="chevron-down" size={13} color={colors.textMuted} />
+        </Pressable>
+      </View>
     </View>
   );
 }
@@ -259,7 +402,6 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.background,
     borderRightWidth: 1,
     borderRightColor: colors.border,
-    paddingBottom: spacing.xl,
   },
   sidebarCollapsed: {
     width: 72,
@@ -280,6 +422,7 @@ function createStyles(colors: ColorScheme) {
   scroll: {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.md,
+    paddingBottom: spacing.lg,
   },
   sectionGap: {
     marginTop: spacing.md,
@@ -288,7 +431,7 @@ function createStyles(colors: ColorScheme) {
     borderTopColor: colors.border,
   },
   sectionLabel: {
-    fontSize: 10,
+    fontSize: 10.5,
     fontWeight: '700',
     letterSpacing: 0.6,
     textTransform: 'uppercase',
@@ -296,30 +439,90 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.sm + 2,
     paddingBottom: spacing.xs,
   },
-  item: {
+  // ── Item row ──────────────────────────────────────────────────────────────
+  itemRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderRadius: 10,
+    marginBottom: 2,
+    overflow: 'hidden',
+  },
+  itemActive: {
+    backgroundColor: `${colors.primary}12`,
+  },
+  itemMain: {
+    flex: 1,
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm + 2,
-    borderRadius: 10,
-    marginBottom: 2,
   },
-  itemCollapsed: {
+  itemMainCollapsed: {
     justifyContent: 'center',
     paddingHorizontal: spacing.sm,
   },
-  itemActive: {
-    backgroundColor: `${colors.primary}12`,
-  },
-  itemHover: { backgroundColor: colors.background },
+  itemHover: { backgroundColor: colors.surface },
   itemLabel: {
+    flex: 1,
     fontSize: 13,
     color: colors.text,
   },
   itemLabelActive: {
     color: colors.primary,
     fontWeight: '600',
+  },
+  chevronBtn: {
+    paddingVertical: spacing.sm,
+    paddingRight: spacing.sm + 2,
+    paddingLeft: spacing.xs,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  // ── Children ──────────────────────────────────────────────────────────────
+  childrenList: {
+    marginLeft: spacing.sm + 2 + 20 + spacing.sm,
+    marginBottom: spacing.xs,
+    borderLeftWidth: 1,
+    borderLeftColor: colors.border,
+    paddingLeft: spacing.sm,
+  },
+  childItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs + 2,
+    paddingVertical: 5,
+    paddingHorizontal: spacing.xs + 2,
+    borderRadius: 6,
+    marginBottom: 1,
+  },
+  childItemHover: { backgroundColor: colors.surface },
+  childLabel: {
+    fontSize: 12,
+    color: colors.textMuted,
+  },
+  // ── Scroll buttons ────────────────────────────────────────────────────────
+  scrollButtons: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    gap: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    paddingBottom: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
+  scrollBtn: {
+    width: 26,
+    height: 26,
+    borderRadius: 6,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  scrollBtnDisabled: {
+    opacity: 0.3,
   },
 });
 }
