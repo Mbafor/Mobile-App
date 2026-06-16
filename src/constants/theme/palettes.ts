@@ -20,14 +20,14 @@ export const lightColors: ColorScheme = {
 };
 
 export const darkColors: ColorScheme = {
-  primary: '0B6623',
-  forest: '0B6623',
+  primary: '#0B6623',
+  forest: '#0B6623',
   background: '#0F1412',
   surface: '#1A211E',
   surfaceElevated: '#232A27',
   text: '#F0F2F1',
   textMuted: '#9CA39E',
-  textOnPrimary: '#0F1412',
+  textOnPrimary: '#FFFFFF',
   border: '#2E3530',
   error: '#FF6B7A',
   success: '#0B6623',
@@ -36,7 +36,7 @@ export const darkColors: ColorScheme = {
 export function createMentorshipColors(colors: ColorScheme): MentorshipColorScheme {
   return colors.background === lightColors.background
     ? {
-        accent: '0B6623',
+        accent: '#0B6623',
         accentMuted: '#E8F0E6',
         accentDark: '#0B6623',
         surface: '#FAFAFA',
@@ -63,7 +63,7 @@ export function createMentorshipColors(colors: ColorScheme): MentorshipColorSche
         borderSubtle: '#252B27',
         text: '#F0F2F1',
         textMuted: '#9CA39E',
-        textOnAccent: '#0F1412',
+        textOnAccent: '#FFFFFF',
         bubbleMine: '#3D7A55',
         bubbleTheirs: '#2A302C',
         bannerBg: '#1A221C',

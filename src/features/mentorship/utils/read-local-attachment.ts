@@ -1,5 +1,6 @@
 import { decode } from 'base64-arraybuffer';
 import * as FileSystem from 'expo-file-system/legacy';
+import { Platform } from 'react-native';
 
 export class AttachmentTooLargeError extends Error {
   readonly maxBytes: number;
@@ -34,6 +35,16 @@ export async function readLocalAttachment(
   uri: string,
   maxBytes: number,
 ): Promise<{ data: ArrayBuffer; byteLength: number }> {
+  // On web, expo-image-picker and expo-document-picker return blob: or data: URLs
+  // that expo-file-system cannot read. Use fetch() instead.
+  if (Platform.OS === 'web') {
+    const resp = await fetch(uri);
+    if (!resp.ok) throw new Error('Could not read the selected file.');
+    const data = await resp.arrayBuffer();
+    if (data.byteLength > maxBytes) throw new AttachmentTooLargeError(maxBytes);
+    return { data, byteLength: data.byteLength };
+  }
+
   await assertAttachmentSize(uri, maxBytes);
 
   const base64 = await FileSystem.readAsStringAsync(uri, {

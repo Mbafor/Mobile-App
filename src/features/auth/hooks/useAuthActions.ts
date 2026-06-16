@@ -216,7 +216,7 @@ export function useAuthActions() {
         if (error) {
           const msg = error.message.toLowerCase();
           if (msg.includes('already registered') || msg.includes('already been registered')) {
-            throw new Error('An account with this email already exists. Try signing in instead.');
+            return { accountExists: true as const };
           }
           throw error;
         }

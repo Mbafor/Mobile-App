@@ -90,6 +90,7 @@ export function WelcomeScreen() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
   const [googleButtonHover, setGoogleButtonHover] = useState(false);
 
@@ -107,6 +108,7 @@ export function WelcomeScreen() {
   const switchMode = (next: AuthMode) => {
     setMode(next);
     setFormError('');
+    setConfirmPassword('');
     clearError();
   };
 
@@ -150,8 +152,17 @@ export function WelcomeScreen() {
       setFormError('Password must be at least 8 characters.');
       return;
     }
+    if (password !== confirmPassword) {
+      setFormError('Passwords do not match.');
+      return;
+    }
     const result = await signUpWithEmailPasswordAndName(name.trim(), normalized, password);
     if (!result) return;
+    if ('accountExists' in result) {
+      setMode('signin');
+      setFormError('This email already has an account. Please sign in.');
+      return;
+    }
     if (result.needsOtp) {
       router.push(`/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}&source=welcome` as Href);
       return;
@@ -303,6 +314,18 @@ export function WelcomeScreen() {
           autoCapitalize="none"
           autoComplete="new-password"
           placeholder="At least 8 characters"
+          editable={!isLoading}
+        />
+      </FormField>
+
+      <FormField label="Confirm password">
+        <Input
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
+          autoCapitalize="none"
+          autoComplete="new-password"
+          placeholder="Re-enter your password"
           editable={!isLoading}
         />
       </FormField>

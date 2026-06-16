@@ -289,8 +289,8 @@ function createStyles(colors: ColorScheme) {
       flexGrow: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      paddingHorizontal: spacing.xl,
-      paddingVertical: spacing.xl * 2,
+      paddingHorizontal: spacing.md,
+      paddingVertical: spacing.xl,
     },
     desktopFormCard: {
       width: '100%',
@@ -299,13 +299,11 @@ function createStyles(colors: ColorScheme) {
 
     // ── Sidebar ──────────────────────────────────────────────────────────────
     sidebar: {
-      width: 236,
+      width: 200,
       backgroundColor: '#fff',
-      borderRightWidth: 1,
-      borderRightColor: '#F0F0F0',
-      paddingTop: spacing.xl * 2,
-      paddingBottom: spacing.xl,
-      paddingHorizontal: spacing.lg,
+      justifyContent: 'center',
+      paddingVertical: spacing.xl,
+      paddingHorizontal: spacing.md,
     },
     sidebarTitle: {
       fontSize: 10,
