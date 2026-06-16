@@ -221,7 +221,7 @@ function createStyles(theme: AppTheme) {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderRadius: 8,
-    backgroundColor: mentorshipColors.accent,
+    backgroundColor: '#16A34A',
   },
   primaryBtnText: { color: mentorshipColors.textOnAccent, fontWeight: '600', fontSize: 13 },
   confirm: { color: mentorshipColors.accent, fontWeight: '600', fontSize: 13 },

@@ -1,7 +1,7 @@
 import { memo } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { Alert, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
@@ -16,9 +16,10 @@ const IMAGE_HEIGHT = 140;
 type OpportunityCardProps = {
   opportunity: Opportunity;
   onPress?: (opportunity: Opportunity) => void;
+  style?: StyleProp<ViewStyle>;
 };
 
-function OpportunityCardComponent({ opportunity, onPress }: OpportunityCardProps) {
+function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCardProps) {
   const styles = useThemedStyles(createStyles);
   const { isSaved, toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
 
@@ -43,7 +44,7 @@ function OpportunityCardComponent({ opportunity, onPress }: OpportunityCardProps
 
   return (
     <Pressable
-      style={styles.card}
+      style={[styles.card, style]}
       onPress={() => onPress?.(opportunity)}
       accessibilityRole="button"
     >

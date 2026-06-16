@@ -1,7 +1,6 @@
-import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { FormField, MultiSelectWithOther, SelectWithOther } from '@/components/forms';
@@ -88,31 +87,20 @@ export function AcademicInformationScreen() {
       isLoading={isLoading}
     >
       <FormField label="University *">
-        <Input
-          value={university}
-          onChangeText={setUniversity}
-          placeholder="Your institution"
-          leftIcon={<Ionicons name="school-outline" size={16} color="#9CA3AF" />}
+        <Input value={university} onChangeText={setUniversity} placeholder="Your institution" />
+      </FormField>
+      <FormField label="Degree level *">
+        <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
+      </FormField>
+      <FormField label="Course / Major *">
+        <SelectWithOther
+          options={COURSE_MAJOR_OPTIONS}
+          predefinedValues={PREDEFINED_COURSE_MAJORS}
+          value={courseMajor}
+          onChange={setCourseMajor}
+          placeholder="Select course / major"
         />
       </FormField>
-      <View style={academicStyles.row}>
-        <View style={academicStyles.col}>
-          <FormField label="Degree level *">
-            <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
-          </FormField>
-        </View>
-        <View style={academicStyles.col}>
-          <FormField label="Course / Major *">
-            <SelectWithOther
-              options={COURSE_MAJOR_OPTIONS}
-              predefinedValues={PREDEFINED_COURSE_MAJORS}
-              value={courseMajor}
-              onChange={setCourseMajor}
-              placeholder="Select course / major"
-            />
-          </FormField>
-        </View>
-      </View>
       <FormField label="Interests *">
         <MultiSelectWithOther
           options={INTEREST_OPTIONS}
@@ -120,7 +108,6 @@ export function AcademicInformationScreen() {
           values={interests}
           onChange={setInterests}
           placeholder="Select interests"
-          pillMode
         />
       </FormField>
       <FormField label="Career interests (comma-separated)">
@@ -135,13 +122,3 @@ export function AcademicInformationScreen() {
     </OnboardingShell>
   );
 }
-
-const academicStyles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  col: {
-    flex: 1,
-  },
-});

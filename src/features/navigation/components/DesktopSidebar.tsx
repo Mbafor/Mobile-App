@@ -233,13 +233,10 @@ export function DesktopSidebar() {
           accessibilityLabel={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <Ionicons
-            name={collapsed ? 'chevron-forward-outline' : 'chevron-back-outline'}
+            name={collapsed ? 'menu-outline' : 'close-outline'}
             size={20}
-            color={colors.text}
+            color={colors.textMuted}
           />
-          {!collapsed && (
-            <Text style={[styles.toggleLabel, getWebFontStyle('medium')]}>Collapse</Text>
-          )}
         </Pressable>
       </View>
       <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
@@ -280,10 +277,6 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.sm,
     borderRadius: 10,
   },
-  toggleLabel: {
-    fontSize: 13,
-    color: colors.text,
-  },
   scroll: {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.md,
@@ -295,7 +288,7 @@ function createStyles(colors: ColorScheme) {
     borderTopColor: colors.border,
   },
   sectionLabel: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '700',
     letterSpacing: 0.6,
     textTransform: 'uppercase',
@@ -307,10 +300,10 @@ function createStyles(colors: ColorScheme) {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.sm,
-    paddingVertical: spacing.sm + 2,
+    paddingVertical: spacing.sm,
     paddingHorizontal: spacing.sm + 2,
     borderRadius: 10,
-    marginBottom: spacing.xs,
+    marginBottom: 2,
   },
   itemCollapsed: {
     justifyContent: 'center',
@@ -321,7 +314,7 @@ function createStyles(colors: ColorScheme) {
   },
   itemHover: { backgroundColor: colors.background },
   itemLabel: {
-    fontSize: 15,
+    fontSize: 13,
     color: colors.text,
   },
   itemLabelActive: {

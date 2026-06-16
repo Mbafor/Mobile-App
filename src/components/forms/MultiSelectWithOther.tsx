@@ -26,8 +26,6 @@ type MultiSelectWithOtherProps = {
   placeholder?: string;
   /** When true, each selection is saved immediately (no Apply step required). */
   syncOnChange?: boolean;
-  /** When true, render selected values as inline pills with an Add pill instead of a dropdown trigger. */
-  pillMode?: boolean;
 };
 
 export function MultiSelectWithOther({
@@ -37,7 +35,6 @@ export function MultiSelectWithOther({
   onChange,
   placeholder = 'Select options',
   syncOnChange = false,
-  pillMode = false,
 }: MultiSelectWithOtherProps) {
   const styles = useThemedStyles(createStyles);
   const [open, setOpen] = useState(false);
@@ -81,59 +78,42 @@ export function MultiSelectWithOther({
 
   const showOtherInput = draftSelected.includes(OTHER_OPTION_VALUE);
 
-  const openModal = () => {
-    const parsed = parseMultiSelectValues(values, predefinedValues);
-    setDraftSelected(parsed.selected);
-    setDraftOtherText(parsed.otherText);
-    setOpen(true);
-  };
-
   return (
     <View>
-      {pillMode ? (
-        <View style={styles.pillContainer}>
+      <Pressable
+        style={styles.trigger}
+        onPress={() => {
+          const parsed = parseMultiSelectValues(values, predefinedValues);
+          setDraftSelected(parsed.selected);
+          setDraftOtherText(parsed.otherText);
+          setOpen(true);
+        }}
+      >
+        <Text
+          style={[
+            styles.triggerText,
+            displayValues.length === 0 && styles.placeholder,
+          ]}
+        >
+          {displayValues.length > 0
+            ? `${displayValues.length} selected`
+            : placeholder}
+        </Text>
+        <Text style={styles.chevron}>▼</Text>
+      </Pressable>
+
+      {displayValues.length > 0 ? (
+        <View style={styles.chips}>
           {displayValues.map((item) => (
-            <View key={item} style={styles.pill}>
-              <Text style={styles.pillText}>{item}</Text>
+            <View key={item} style={styles.chip}>
+              <Text style={styles.chipText}>{item}</Text>
               <Pressable onPress={() => removeChip(item)} hitSlop={8}>
-                <Text style={styles.pillX}>×</Text>
+                <Text style={styles.chipRemove}>×</Text>
               </Pressable>
             </View>
           ))}
-          <Pressable style={styles.pillAddBtn} onPress={openModal}>
-            <Text style={styles.pillAddText}>+ Add</Text>
-          </Pressable>
         </View>
-      ) : (
-        <>
-          <Pressable style={styles.trigger} onPress={openModal}>
-            <Text
-              style={[
-                styles.triggerText,
-                displayValues.length === 0 && styles.placeholder,
-              ]}
-            >
-              {displayValues.length > 0
-                ? `${displayValues.length} selected`
-                : placeholder}
-            </Text>
-            <Text style={styles.chevron}>▼</Text>
-          </Pressable>
-
-          {displayValues.length > 0 ? (
-            <View style={styles.chips}>
-              {displayValues.map((item) => (
-                <View key={item} style={styles.chip}>
-                  <Text style={styles.chipText}>{item}</Text>
-                  <Pressable onPress={() => removeChip(item)} hitSlop={8}>
-                    <Text style={styles.chipRemove}>×</Text>
-                  </Pressable>
-                </View>
-              ))}
-            </View>
-          ) : null}
-        </>
-      )}
+      ) : null}
 
       <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
         <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
@@ -229,48 +209,6 @@ function createStyles(colors: ColorScheme) {
   },
   chipText: { fontSize: 13, color: colors.text },
   chipRemove: { fontSize: 18, color: colors.textMuted, paddingHorizontal: 4 },
-  pillContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.xs,
-  },
-  pill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: `${colors.primary}12`,
-    borderRadius: 100,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
-    borderWidth: 1,
-    borderColor: `${colors.primary}30`,
-  },
-  pillText: {
-    fontSize: 13,
-    color: colors.primary,
-    fontWeight: '500',
-  },
-  pillX: {
-    fontSize: 16,
-    color: colors.primary,
-    lineHeight: 18,
-    fontWeight: '400',
-  },
-  pillAddBtn: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    borderRadius: 100,
-    paddingVertical: 5,
-    paddingHorizontal: 12,
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderColor: colors.primary,
-  },
-  pillAddText: {
-    fontSize: 13,
-    color: colors.primary,
-    fontWeight: '500',
-  },
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.45)',

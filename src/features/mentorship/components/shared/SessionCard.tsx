@@ -50,7 +50,7 @@ export function SessionCard({
         <Button
           variant="primary"
           onPress={() => void Linking.openURL(session.meetingUrl!)}
-          style={styles.join}
+          style={[styles.join, styles.joinGreen]}
         >
           Join session
         </Button>
@@ -102,6 +102,7 @@ function createStyles(colors: ColorScheme) {
   status: { paddingHorizontal: 8, paddingVertical: 2, borderRadius: 6 },
   statusText: { fontSize: 11, fontWeight: '600', textTransform: 'capitalize' },
   join: { marginTop: spacing.sm },
+  joinGreen: { backgroundColor: '#16A34A' },
   actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md, marginTop: spacing.sm },
   link: { color: colors.primary, fontWeight: '600' },
   danger: { color: colors.error },

@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -60,108 +60,99 @@ export function OnboardingShell({
   if (isDesktop) {
     return (
       <View style={[styles.root, { paddingTop: insets.top }]}>
-        <View style={styles.desktopLayout}>
 
-          {/* ── Left sidebar ── */}
-          <View style={styles.sidebar}>
-            <Text style={styles.sidebarTitle}>Profile Setup</Text>
-            <View style={styles.sidebarStepList}>
-              {STEP_META.map((step, i) => {
-                const num = i + 1;
-                const isDone = num < currentStep;
-                const isActive = num === currentStep;
-                const isLast = i === TOTAL - 1;
-                return (
-                  <View key={num} style={styles.sidebarStepWrapper}>
-                    <View style={[styles.sidebarItem, isActive && styles.sidebarItemActive]}>
-                      <View style={[styles.sidebarAccent, isActive && styles.sidebarAccentActive]} />
-                      <View
-                        style={[
-                          styles.sidebarDot,
-                          isDone && styles.sidebarDotDone,
-                          isActive && styles.sidebarDotActive,
-                        ]}
-                      >
-                        {isDone ? (
-                          <Ionicons name="checkmark" size={10} color="#fff" />
-                        ) : (
-                          <Text
-                            style={[
-                              styles.sidebarDotNum,
-                              isActive && styles.sidebarDotNumActive,
-                            ]}
-                          >
-                            {num}
-                          </Text>
-                        )}
-                      </View>
-                      <View style={styles.sidebarTextCol}>
+        {/* ── Top step bar ── */}
+        <View style={styles.desktopTopBar}>
+          <View style={styles.desktopStepRow}>
+            {STEP_META.map((step, i) => {
+              const num = i + 1;
+              const isDone = num < currentStep;
+              const isActive = num === currentStep;
+              const isLast = i === TOTAL - 1;
+              return (
+                <Fragment key={num}>
+                  <View style={styles.desktopStepItem}>
+                    <View
+                      style={[
+                        styles.sidebarDot,
+                        isDone && styles.sidebarDotDone,
+                        isActive && styles.sidebarDotActive,
+                      ]}
+                    >
+                      {isDone ? (
+                        <Ionicons name="checkmark" size={10} color="#fff" />
+                      ) : (
                         <Text
                           style={[
-                            styles.sidebarStepLabel,
-                            isDone && styles.sidebarStepLabelDone,
-                            isActive && styles.sidebarStepLabelActive,
+                            styles.sidebarDotNum,
+                            isActive && styles.sidebarDotNumActive,
                           ]}
                         >
-                          {step.label}
+                          {num}
                         </Text>
-                        <Text style={styles.sidebarStepDesc}>{step.description}</Text>
-                      </View>
+                      )}
                     </View>
-                    {!isLast && (
-                      <View style={styles.sidebarConnectorWrap}>
-                        <View
-                          style={[
-                            styles.sidebarConnector,
-                            isDone && styles.sidebarConnectorDone,
-                          ]}
-                        />
-                      </View>
-                    )}
+                    <Text
+                      style={[
+                        styles.desktopStepLabel,
+                        isDone && styles.sidebarStepLabelDone,
+                        isActive && styles.sidebarStepLabelActive,
+                      ]}
+                    >
+                      {step.label}
+                    </Text>
                   </View>
-                );
-              })}
-            </View>
+                  {!isLast && (
+                    <View
+                      style={[
+                        styles.desktopConnector,
+                        isDone && styles.sidebarConnectorDone,
+                      ]}
+                    />
+                  )}
+                </Fragment>
+              );
+            })}
           </View>
-
-          {/* ── Right: centered form ── */}
-          <ScrollView
-            style={styles.flex}
-            contentContainerStyle={[
-              styles.desktopScrollContent,
-              { paddingBottom: insets.bottom + spacing.xl * 2 },
-            ]}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-            <View style={styles.desktopFormCard}>
-              {onBack && (
-                <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
-                  <Ionicons name="chevron-back" size={16} color="#374151" />
-                  <Text style={styles.backBtnText}>Back</Text>
-                </Pressable>
-              )}
-              <Text style={styles.heading}>{title}</Text>
-              <Text style={styles.headingSubtitle}>{subtitle}</Text>
-              <View style={styles.fields}>{children}</View>
-              <Pressable
-                onPress={onContinue}
-                disabled={isLoading}
-                style={({ pressed }) => [
-                  styles.cta,
-                  isLoading && styles.ctaDisabled,
-                  pressed && !isLoading && styles.ctaPressed,
-                ]}
-              >
-                <Text style={styles.ctaText}>{isLoading ? 'Saving…' : continueLabel}</Text>
-                {!isLoading && (
-                  <Ionicons name="arrow-forward" size={15} color="#fff" style={styles.ctaArrow} />
-                )}
-              </Pressable>
-            </View>
-          </ScrollView>
-
         </View>
+
+        {/* ── Centered form ── */}
+        <ScrollView
+          style={styles.flex}
+          contentContainerStyle={[
+            styles.desktopScrollContent,
+            { paddingBottom: insets.bottom + spacing.xl * 2 },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View style={styles.desktopFormCard}>
+            {onBack && (
+              <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
+                <Ionicons name="chevron-back" size={16} color="#374151" />
+                <Text style={styles.backBtnText}>Back</Text>
+              </Pressable>
+            )}
+            <Text style={styles.heading}>{title}</Text>
+            <Text style={styles.headingSubtitle}>{subtitle}</Text>
+            <View style={styles.fields}>{children}</View>
+            <Pressable
+              onPress={onContinue}
+              disabled={isLoading}
+              style={({ pressed }) => [
+                styles.cta,
+                isLoading && styles.ctaDisabled,
+                pressed && !isLoading && styles.ctaPressed,
+              ]}
+            >
+              <Text style={styles.ctaText}>{isLoading ? 'Saving…' : continueLabel}</Text>
+              {!isLoading && (
+                <Ionicons name="arrow-forward" size={15} color="#fff" style={styles.ctaArrow} />
+              )}
+            </Pressable>
+          </View>
+        </ScrollView>
+
       </View>
     );
   }
@@ -281,9 +272,35 @@ function createStyles(colors: ColorScheme) {
     },
 
     // ── Desktop ──────────────────────────────────────────────────────────────
-    desktopLayout: {
-      flex: 1,
+    desktopTopBar: {
+      borderBottomWidth: 1,
+      borderBottomColor: '#F3F4F6',
+      backgroundColor: '#fff',
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.xl,
+      alignItems: 'center',
+    },
+    desktopStepRow: {
       flexDirection: 'row',
+      alignItems: 'center',
+      width: '100%',
+      maxWidth: 480,
+    },
+    desktopStepItem: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+    },
+    desktopStepLabel: {
+      fontSize: 13,
+      fontWeight: '500',
+      color: '#9CA3AF',
+    },
+    desktopConnector: {
+      flex: 1,
+      height: 1.5,
+      backgroundColor: '#E5E7EB',
+      marginHorizontal: spacing.sm,
     },
     desktopScrollContent: {
       flexGrow: 1,
@@ -323,14 +340,7 @@ function createStyles(colors: ColorScheme) {
       borderRadius: 8,
     },
     sidebarItemActive: {
-      backgroundColor: '#FFFFFF',
-      borderWidth: 1,
-      borderColor: `${colors.primary}28`,
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.07,
-      shadowRadius: 4,
-      elevation: 2,
+      backgroundColor: `${colors.primary}08`,
     },
     sidebarAccent: {
       width: 3,
@@ -396,10 +406,9 @@ function createStyles(colors: ColorScheme) {
       paddingVertical: 2,
     },
     sidebarConnector: {
-      width: 2,
-      height: 28,
-      backgroundColor: '#CBD5E1',
-      borderRadius: 1,
+      width: 1.5,
+      height: 20,
+      backgroundColor: '#E5E7EB',
     },
     sidebarConnectorDone: {
       backgroundColor: DONE_GREEN,
@@ -431,9 +440,8 @@ function createStyles(colors: ColorScheme) {
       paddingHorizontal: 3,
     },
     stepBarConnector: {
-      height: 2,
-      backgroundColor: '#CBD5E1',
-      borderRadius: 1,
+      height: 1.5,
+      backgroundColor: '#E5E7EB',
     },
     stepBarConnectorDone: {
       backgroundColor: colors.primary,
@@ -529,28 +537,19 @@ function createStyles(colors: ColorScheme) {
       justifyContent: 'center',
       backgroundColor: colors.primary,
       borderRadius: 12,
-      height: 54,
+      height: 50,
       marginTop: spacing.lg,
-      shadowColor: colors.primary,
-      shadowOffset: { width: 0, height: 4 },
-      shadowOpacity: 0.28,
-      shadowRadius: 8,
-      elevation: 4,
     },
     ctaDisabled: {
       opacity: 0.5,
-      shadowOpacity: 0,
-      elevation: 0,
     },
     ctaPressed: {
-      opacity: 0.88,
-      shadowOpacity: 0.15,
+      opacity: 0.85,
     },
     ctaText: {
       color: '#fff',
       fontSize: typography.fontSize.md,
-      fontWeight: '700',
-      letterSpacing: 0.2,
+      fontWeight: '600',
     },
     ctaArrow: {
       marginLeft: spacing.sm,

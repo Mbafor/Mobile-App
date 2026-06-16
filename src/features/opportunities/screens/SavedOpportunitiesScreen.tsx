@@ -9,20 +9,28 @@ import {
   RefreshControl,
   StyleSheet,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
-import { SavedOpportunityListRow } from '@/features/opportunities/components/SavedOpportunityListRow';
+import { OpportunityCard } from '@/features/opportunities/components/OpportunityCard';
 import { useSavedOpportunities } from '@/features/opportunities/hooks/useSavedOpportunities';
 import { spacing } from '@/constants/theme';
 import type { Opportunity } from '@/types/domain/opportunity';
+
+const NUM_COLUMNS = 2;
+const GUTTER = spacing.md;
+const GAP = spacing.sm;
 
 export function SavedOpportunitiesScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { width } = useWindowDimensions();
   const { opportunities, isLoading, isRefetching, error, refetch } = useSavedOpportunities();
+
+  const cardWidth = (width - GUTTER * 2 - GAP * (NUM_COLUMNS - 1)) / NUM_COLUMNS;
 
   const handlePress = useCallback(
     (opportunity: Opportunity) => {
@@ -36,9 +44,13 @@ export function SavedOpportunitiesScreen() {
 
   const renderItem = useCallback(
     ({ item }: { item: Opportunity }) => (
-      <SavedOpportunityListRow opportunity={item} onPress={handlePress} />
+      <OpportunityCard
+        opportunity={item}
+        onPress={handlePress}
+        style={{ width: cardWidth, marginRight: 0, marginBottom: GAP }}
+      />
     ),
-    [handlePress],
+    [handlePress, cardWidth],
   );
 
   if (isLoading) {
@@ -61,7 +73,9 @@ export function SavedOpportunitiesScreen() {
       <FlatList
         data={opportunities}
         keyExtractor={(item) => item.id}
+        numColumns={NUM_COLUMNS}
         renderItem={renderItem}
+        columnWrapperStyle={styles.columnWrapper}
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -90,11 +104,12 @@ export function SavedOpportunitiesScreen() {
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-  container: { flex: 1, backgroundColor: colors.background },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  banner: { padding: spacing.md },
-  meta: { paddingHorizontal: spacing.md, paddingVertical: spacing.sm },
-  emptyList: { flexGrow: 1 },
-  listContent: { paddingBottom: spacing.md },
-});
+    container: { flex: 1, backgroundColor: colors.background },
+    centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    banner: { padding: spacing.md },
+    meta: { paddingHorizontal: GUTTER, paddingVertical: spacing.sm },
+    columnWrapper: { paddingHorizontal: GUTTER, gap: GAP },
+    emptyList: { flexGrow: 1 },
+    listContent: { paddingBottom: spacing.lg },
+  });
 }
