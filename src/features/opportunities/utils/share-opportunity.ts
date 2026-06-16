@@ -32,27 +32,81 @@ async function cacheOpportunityImage(
 }
 
 function firstNWords(text: string, n: number): string {
-  const words = text
-    .trim()
-    .split(/\s+/)
-    .filter(Boolean);
-  return words.slice(0, n).join(' ');
+  const words = text.trim().split(/\s+/).filter(Boolean);
+  return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
 }
 
+const LOCATION_LABEL: Record<string, string> = {
+  remote: 'Remote',
+  onsite: 'On-site',
+  hybrid: 'Hybrid',
+};
+
+/**
+ * Builds a richly formatted share message.
+ * Uses *bold* and _italic_ markdown understood by WhatsApp, Telegram, and
+ * many other messaging apps. Sections are separated by blank lines so the
+ * message reads cleanly as plain text too.
+ */
 export function buildShareMessage(opportunity: Opportunity, opportunityLink: string): string {
-  const description = opportunity.description?.trim() ?? '';
-  const snippet = description ? firstNWords(description, 50) : '';
+  const lines: string[] = [];
 
-  const parts: Array<string> = [
-    opportunity.title,
-    opportunity.organization,
-    `Deadline: ${formatDeadline(opportunity.deadline)}`,
-    snippet ? `About: ${snippet}` : '',
-    '',
-    opportunityLink,
-  ];
+  // ── Title ──────────────────────────────────────────────────────────────────
+  lines.push(`🎯 *${opportunity.title}*`);
+  lines.push('');
 
-  return parts.filter((p) => p.trim().length > 0).join('\n');
+  // ── Key details ────────────────────────────────────────────────────────────
+  lines.push(`🏛️ *Organisation:* ${opportunity.organization}`);
+  lines.push(`🗓️ *Deadline:* ${formatDeadline(opportunity.deadline)}`);
+
+  if (opportunity.country) {
+    const locationPart = opportunity.locationType
+      ? `${opportunity.country} · ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`
+      : opportunity.country;
+    lines.push(`🌍 *Location:* ${locationPart}`);
+  } else if (opportunity.locationType) {
+    lines.push(`🌍 *Location:* ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`);
+  }
+
+  if (opportunity.fundingType) {
+    const label =
+      opportunity.fundingType.charAt(0).toUpperCase() +
+      opportunity.fundingType.slice(1).toLowerCase();
+    lines.push(`💰 *Funding:* ${label}`);
+  }
+
+  if (opportunity.category) {
+    const label =
+      opportunity.category.charAt(0).toUpperCase() +
+      opportunity.category.slice(1).toLowerCase();
+    lines.push(`📌 *Category:* ${label}`);
+  }
+
+  // ── Description ────────────────────────────────────────────────────────────
+  const snippet = opportunity.description?.trim()
+    ? firstNWords(opportunity.description.trim(), 50)
+    : '';
+
+  if (snippet) {
+    lines.push('');
+    lines.push('📝 *About*');
+    lines.push(snippet);
+  }
+
+  // ── Tags ───────────────────────────────────────────────────────────────────
+  if (opportunity.tags.length > 0) {
+    lines.push('');
+    lines.push(`🔖 ${opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  ')}`);
+  }
+
+  // ── CTA ────────────────────────────────────────────────────────────────────
+  lines.push('');
+  lines.push('👉 *View & Apply:*');
+  lines.push(opportunityLink);
+  lines.push('');
+  lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
+
+  return lines.join('\n');
 }
 
 /**
