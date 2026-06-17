@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
@@ -52,7 +53,15 @@ export function ParticipantProfileDetail({
         <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={compact ? 56 : 72} />
         <View style={styles.heroMeta}>
           {roleLabel ? <Text style={styles.role}>{roleLabel}</Text> : null}
-          <Text style={styles.name}>{name}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name}>{name}</Text>
+            {mentorProfile?.status === 'approved' ? (
+              <Ionicons name="checkmark-circle" size={18} color="#0B6623" style={styles.verifiedIcon} />
+            ) : null}
+          </View>
+          {mentorProfile?.status === 'approved' ? (
+            <Text style={styles.verifiedLabel}>Verified Mentor</Text>
+          ) : null}
           {profile.email ? <Text style={styles.sub}>{profile.email}</Text> : null}
         </View>
       </View>
@@ -96,7 +105,15 @@ function createStyles(theme: AppTheme) {
     letterSpacing: 0.5,
     color: mentorshipColors.accent,
   },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
   name: { fontSize: 20, fontWeight: '700', color: mentorshipColors.text },
+  verifiedIcon: { marginTop: 2 },
+  verifiedLabel: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: mentorshipColors.accent,
+    letterSpacing: 0.3,
+  },
   sub: { fontSize: 13, color: mentorshipColors.textMuted },
   details: { gap: spacing.sm },
   row: { gap: 2 },
