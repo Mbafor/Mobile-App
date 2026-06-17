@@ -24,7 +24,7 @@ export async function listAvailableMentorsFallback(
   const { data: profileRows, error: profileError } = await supabase
     .from('profiles')
     .select(
-      'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests',
+      'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests, bio',
     )
     .in('id', mentorIds);
 
@@ -69,6 +69,7 @@ export async function listAvailableMentorsFallback(
             degree_level: null,
             interests: [],
             career_interests: [],
+            bio: null,
           },
         ),
         mentor: mapMentorProfileRow(row),

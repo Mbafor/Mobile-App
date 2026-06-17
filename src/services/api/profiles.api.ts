@@ -159,6 +159,18 @@ export const profilesApi = {
     return { data: data ? mapProfileRow(data) : null, error };
   },
 
+  saveBio: async (userId: string, bio: string) => {
+    const trimmed = bio.trim();
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ bio: trimmed.length > 0 ? trimmed : null })
+      .eq('id', userId)
+      .select('*')
+      .single();
+
+    return { data: data ? mapProfileRow(data) : null, error };
+  },
+
   saveFullProfile: async (
     userId: string,
     email: string | undefined,

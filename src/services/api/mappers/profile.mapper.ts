@@ -23,6 +23,7 @@ export function mapProfileRow(row: ProfileRow): Profile {
     isSuperAdmin: row.is_super_admin ?? false,
     avatarUrl: row.avatar_url ?? null,
     welcomeEmailSentAt: row.welcome_email_sent_at ?? null,
+    bio: row.bio ?? null,
   };
 }
 

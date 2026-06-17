@@ -36,6 +36,8 @@ export function useDashboard() {
     savedCount: stats.savedCount,
     appliedCount: stats.appliedCount,
     mentorsCount: stats.mentorsCount,
+    menteeCount: stats.menteeCount,
+    isApprovedMentor: stats.isApprovedMentor,
     isLoading: opportunitiesQuery.isLoading || stats.isLoading,
     isRefetching: opportunitiesQuery.isRefetching || stats.isRefetching,
     error: opportunitiesQuery.error,

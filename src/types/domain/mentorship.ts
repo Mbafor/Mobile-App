@@ -103,6 +103,7 @@ export type MentorshipParticipantProfile = {
   degreeLevel: string | null;
   interests: string[];
   careerInterests: string[];
+  bio: string | null;
 };
 
 export type MenteeSummary = {

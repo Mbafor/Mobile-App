@@ -30,6 +30,7 @@ type ProfileRow = {
   degree_level: string | null;
   interests: string[];
   career_interests: string[];
+  bio?: string | null;
 };
 
 type AvailabilityRow = {
@@ -106,6 +107,7 @@ export function mapParticipantProfileRow(row: ProfileRow): MentorshipParticipant
     degreeLevel: row.degree_level,
     interests: row.interests ?? [],
     careerInterests: row.career_interests ?? [],
+    bio: row.bio ?? null,
   };
 }
 

@@ -16,6 +16,7 @@ import { ProfileAvatar } from '@/features/profile/components/ProfileAvatar';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { mapToUserProfile } from '@/services/api/mappers/profile.mapper';
+import { profilesApi } from '@/services/api';
 import {
   COURSE_MAJOR_OPTIONS,
   INTEREST_OPTIONS,
@@ -69,6 +70,7 @@ export function ProfilePreferencesSection() {
   const [university, setUniversity] = useState('');
   const [degreeLevel, setDegreeLevel] = useState('bachelors');
   const [courseMajor, setCourseMajor] = useState('');
+  const [bio, setBio] = useState('');
   const [interests, setInterests] = useState<string[]>([]);
   const [opportunityTypes, setOpportunityTypes] = useState<string[]>([]);
   const [countriesText, setCountriesText] = useState('');
@@ -82,6 +84,7 @@ export function ProfilePreferencesSection() {
       setUniversity(profile.university ?? '');
       setDegreeLevel(profile.degreeLevel ?? 'bachelors');
       setCourseMajor(profile.courseMajor ?? '');
+      setBio(profile.bio ?? '');
       setInterests(profile.interests ?? []);
       setAvatarUrl(profile.avatarUrl ?? authProfile?.avatarUrl ?? null);
     }
@@ -142,6 +145,9 @@ export function ProfilePreferencesSection() {
     );
 
     if (ok) {
+      if (user?.id) {
+        await profilesApi.saveBio(user.id, bio);
+      }
       await refetch();
       Alert.alert('Saved', 'Your profile and preferences were updated.');
     }
@@ -175,6 +181,15 @@ export function ProfilePreferencesSection() {
         </FormField>
         <FormField label="Country *">
           <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
+        </FormField>
+        <FormField label="Bio">
+          <Input
+            value={bio}
+            onChangeText={setBio}
+            placeholder="A short intro about yourself…"
+            multiline
+            style={styles.bioInput}
+          />
         </FormField>
       </SectionGroup>
 
@@ -247,5 +262,6 @@ function createStyles(colors: ColorScheme) {
     alignItems: 'center',
     paddingVertical: spacing.sm,
   },
+  bioInput: { minHeight: 100, textAlignVertical: 'top' },
 });
 }

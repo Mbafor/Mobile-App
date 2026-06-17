@@ -80,10 +80,10 @@ export function ParticipantProfileDetail({
         <TagList label="Skills & focus areas" items={skills.slice(0, 12)} />
       ) : null}
 
-      {mentorProfile?.bio ? (
+      {(mentorProfile?.bio || profile.bio) ? (
         <View style={styles.bioBlock}>
           <Text style={styles.bioLabel}>About</Text>
-          <Text style={styles.bio}>{mentorProfile.bio}</Text>
+          <Text style={styles.bio}>{mentorProfile?.bio ?? profile.bio}</Text>
         </View>
       ) : null}
     </View>

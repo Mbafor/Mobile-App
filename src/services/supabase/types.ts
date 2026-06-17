@@ -161,6 +161,7 @@ export type Database = {
           is_super_admin: boolean;
           avatar_url: string | null;
           welcome_email_sent_at: string | null;
+          bio: string | null;
           created_at: string;
           updated_at: string;
         };
@@ -178,6 +179,7 @@ export type Database = {
           is_admin?: boolean;
           avatar_url?: string | null;
           welcome_email_sent_at?: string | null;
+          bio?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -195,6 +197,7 @@ export type Database = {
           is_admin?: boolean;
           avatar_url?: string | null;
           welcome_email_sent_at?: string | null;
+          bio?: string | null;
           created_at?: string;
           updated_at?: string;
         };

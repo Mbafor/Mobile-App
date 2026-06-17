@@ -108,6 +108,7 @@ export function parseAvailableMentors(data: unknown): AvailableMentor[] {
           degree_level: (profileRow?.degree_level as string | null) ?? null,
           interests: coerceStringArray(profileRow?.interests),
           career_interests: coerceStringArray(profileRow?.career_interests),
+          bio: (profileRow?.bio as string | null) ?? null,
         }),
         mentor: mapMentorProfileRow({
           user_id: String(mentorRow.user_id ?? mentorUserId),

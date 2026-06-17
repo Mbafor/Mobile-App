@@ -15,6 +15,7 @@ import {
 } from 'react-native';
 import { useRouter } from 'expo-router';
 
+import { useQuery } from '@tanstack/react-query';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
 import { ProfilePreferencesSection } from '@/features/settings/components/ProfilePreferencesSection';
@@ -22,6 +23,7 @@ import { NotificationHeaderButton } from '@/features/notifications/components/No
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { getOAuthAvatarUrl, getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
+import { mentorshipDataApi } from '@/services/api';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
@@ -58,6 +60,19 @@ export function ProfileViewScreen() {
     profile?.fullName ?? authProfile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? '';
   const email = userEmail ?? '';
   const initial = displayName.charAt(0).toUpperCase() || '?';
+
+  const mentorProfileQuery = useQuery({
+    queryKey: ['mentorship', 'myMentorProfile', user?.id ?? ''],
+    queryFn: async () => {
+      if (!user?.id) return null;
+      const result = await mentorshipDataApi.getMentorProfile(user.id);
+      return result.success ? result.data : null;
+    },
+    enabled: Boolean(user?.id),
+  });
+  const mentorProfile = mentorProfileQuery.data ?? null;
+  const isVerifiedMentor = mentorProfile?.status === 'approved';
+  const bioText = mentorProfile?.bio ?? profile?.bio ?? null;
 
   const goToDashboard = () => router.push(ROUTES.MAIN.DASHBOARD as any);
 
@@ -127,12 +142,25 @@ export function ProfileViewScreen() {
           </View>
 
           {displayName ? (
-            <Text style={[styles.name, getWebFontStyle('bold')]}>{displayName}</Text>
+            <View style={styles.nameRow}>
+              <Text style={[styles.name, getWebFontStyle('bold')]}>{displayName}</Text>
+              {isVerifiedMentor ? (
+                <Ionicons name="checkmark-circle" size={22} color="#0B6623" style={styles.verifiedIcon} />
+              ) : null}
+            </View>
+          ) : null}
+
+          {isVerifiedMentor ? (
+            <Text style={styles.verifiedLabel}>Verified Mentor</Text>
           ) : null}
 
           {/* Email — shown directly below profile image / name */}
           {email ? (
             <Text style={styles.email}>{email}</Text>
+          ) : null}
+
+          {bioText ? (
+            <Text style={styles.bio}>{bioText}</Text>
           ) : null}
         </View>
 
@@ -314,15 +342,35 @@ function createStyles(colors: ColorScheme) {
   },
   avatarImg: { width: 108, height: 108, borderRadius: 54 },
   avatarInitial: { fontSize: 42, fontWeight: '800', color: colors.primary },
+  nameRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    justifyContent: 'center',
+  },
   name: {
     fontSize: 24,
     fontWeight: '800',
     color: colors.text,
     letterSpacing: -0.5,
   },
+  verifiedIcon: { marginTop: 2 },
+  verifiedLabel: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.primary,
+    letterSpacing: 0.3,
+  },
   email: {
     fontSize: 15,
     color: colors.textMuted,
+  },
+  bio: {
+    fontSize: 15,
+    lineHeight: 22,
+    color: colors.text,
+    textAlign: 'center',
+    maxWidth: 340,
   },
 
   // ─── Sections ─────────────────────────────────────────────────────────────

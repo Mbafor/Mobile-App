@@ -90,7 +90,7 @@ export const mentorshipDataApi = {
       const { data, error } = await supabase
         .from('profiles')
         .select(
-          'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests',
+          'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests, bio',
         )
         .eq('id', userId)
         .maybeSingle();
@@ -120,7 +120,7 @@ export const mentorshipDataApi = {
       const { data: profiles, error: profileError } = await supabase
         .from('profiles')
         .select(
-          'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests',
+          'id, full_name, email, avatar_url, country, university, course_major, degree_level, interests, career_interests, bio',
         )
         .in('id', studentIds);
 
@@ -145,6 +145,7 @@ export const mentorshipDataApi = {
             degreeLevel: null,
             interests: [],
             careerInterests: [],
+            bio: null,
           },
           progressPercent,
         };

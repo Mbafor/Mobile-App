@@ -81,6 +81,8 @@ export function DashboardScreen() {
     totalOpportunities,
     appliedCount,
     mentorsCount,
+    menteeCount,
+    isApprovedMentor,
   } = useDashboard();
 
   useEffect(() => {
@@ -240,9 +242,9 @@ export function DashboardScreen() {
                       />
                       <Text style={styles.heroStatText}>
                         <Text style={styles.heroStatValue}>
-                          {dashboardLoading ? '-' : mentorsCount}
+                          {dashboardLoading ? '-' : isApprovedMentor ? menteeCount : mentorsCount}
                         </Text>{' '}
-                        Connected Mentors
+                        {isApprovedMentor ? 'Connected Mentees' : 'Connected Mentors'}
                       </Text>
                     </View>
                     <View style={styles.heroStatItem}>
