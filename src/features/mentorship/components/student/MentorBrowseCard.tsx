@@ -53,7 +53,10 @@ export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProp
       />
 
       <View style={styles.info}>
-        <Text style={styles.name} numberOfLines={1}>{name}</Text>
+        <View style={styles.nameRow}>
+          <Text style={styles.name} numberOfLines={1}>{name}</Text>
+          <Ionicons name="checkmark-circle" size={15} color="#0B6623" />
+        </View>
 
         {credential ? (
           <Text style={styles.credential} numberOfLines={1}>{credential}</Text>
@@ -87,11 +90,13 @@ function createStyles(colors: ColorScheme) {
   rowPressed: { backgroundColor: colors.surface },
 
   info: { flex: 1, gap: 3, minWidth: 0 },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 5 },
 
   name: {
     fontSize: 16,
     fontWeight: '700',
     color: colors.text,
+    flexShrink: 1,
   },
   credential: {
     fontSize: 14,

@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
@@ -25,6 +26,7 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
   }
 
   const name = profile.fullName?.trim() || 'Your coach';
+  const isVerified = mentor?.status === 'approved';
   const interests = [
     ...new Set([
       ...profile.interests,
@@ -39,7 +41,12 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
         <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={56} />
         <View style={styles.meta}>
           <Text style={styles.label}>Your coach</Text>
-          <Text style={styles.name}>{name}</Text>
+          <View style={styles.nameRow}>
+            <Text style={styles.name}>{name}</Text>
+            {isVerified ? (
+              <Ionicons name="checkmark-circle" size={17} color="#0B6623" style={styles.verifiedIcon} />
+            ) : null}
+          </View>
           {profile.university ? <Text style={styles.sub}>{profile.university}</Text> : null}
           {profile.courseMajor ? (
             <Text style={styles.sub}>{profile.courseMajor}</Text>
@@ -76,7 +83,9 @@ function createStyles(theme: AppTheme) {
     color: mentorshipColors.textMuted,
     letterSpacing: 0.4,
   },
-  name: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 6 },
+  name: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text, flexShrink: 1 },
+  verifiedIcon: { marginTop: 1 },
   sub: { fontSize: 13, color: mentorshipColors.textMuted },
   link: { fontSize: 13, fontWeight: '600', color: mentorshipColors.accent },
 });

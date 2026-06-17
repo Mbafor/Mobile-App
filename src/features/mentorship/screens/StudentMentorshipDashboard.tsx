@@ -159,6 +159,7 @@ export function StudentMentorshipDashboard() {
   const onWaitingList = openRequest?.status === 'waiting_list' && waitingList;
   const canRequest = !hasCoach && !openRequest;
   const coachName = coach?.profile?.fullName?.trim() || 'Your coach';
+  const isVerifiedCoach = coach?.mentor?.status === 'approved';
 
   const navItems = STUDENT_NAV_ITEMS;
   const sectionTitle = STUDENT_SECTION_TITLES[activeSection] ?? 'Mentorship';
@@ -280,6 +281,7 @@ export function StudentMentorshipDashboard() {
                 sessions={myUpcoming}
                 coachName={coachName}
                 coachEmail={coach?.profile?.email ?? null}
+                isVerifiedMentor={isVerifiedCoach}
                 onCancel={handleCancelSession}
               />
             )}
@@ -299,6 +301,7 @@ export function StudentMentorshipDashboard() {
             sessions={myUpcoming}
             coachName={coachName}
             coachEmail={coach?.profile?.email ?? null}
+            isVerifiedMentor={isVerifiedCoach}
             onCancel={handleCancelSession}
           />
         );

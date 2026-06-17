@@ -182,15 +182,6 @@ export function ProfilePreferencesSection() {
         <FormField label="Country *">
           <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
         </FormField>
-        <FormField label="Bio">
-          <Input
-            value={bio}
-            onChangeText={setBio}
-            placeholder="A short intro about yourself…"
-            multiline
-            style={styles.bioInput}
-          />
-        </FormField>
       </SectionGroup>
 
       <SectionGroup title="Academic info">
@@ -242,6 +233,18 @@ export function ProfilePreferencesSection() {
         </FormField>
         <FormField label="Funding preference *">
           <FundingPicker value={funding} onChange={setFunding} />
+        </FormField>
+      </SectionGroup>
+
+      <SectionGroup title="Bio">
+        <FormField label="About you">
+          <Input
+            value={bio}
+            onChangeText={setBio}
+            placeholder="A short intro about yourself…"
+            multiline
+            style={styles.bioInput}
+          />
         </FormField>
       </SectionGroup>
 

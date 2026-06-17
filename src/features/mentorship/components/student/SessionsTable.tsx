@@ -17,6 +17,7 @@ type SessionsTableProps = {
   coachName: string;
   coachEmail?: string | null;
   title?: string;
+  isVerifiedMentor?: boolean;
   onCancel?: (sessionId: string) => void;
 };
 
@@ -25,6 +26,7 @@ export function SessionsTable({
   coachName,
   coachEmail,
   title,
+  isVerifiedMentor = false,
   onCancel,
 }: SessionsTableProps) {
   const styles = useAppThemedStyles(createStyles);
@@ -51,7 +53,12 @@ export function SessionsTable({
             sessions.map((session) => (
               <View key={session.id} style={styles.row}>
                 <View style={[styles.cell, { width: 220 }]}>
-                  <Text style={styles.primaryText}>{coachName}</Text>
+                  <View style={styles.nameRow}>
+                    <Text style={styles.primaryText}>{coachName}</Text>
+                    {isVerifiedMentor ? (
+                      <Ionicons name="checkmark-circle" size={14} color="#0B6623" />
+                    ) : null}
+                  </View>
                   {coachEmail ? (
                     <Text variant="caption" muted numberOfLines={1}>
                       {coachEmail}
@@ -177,7 +184,8 @@ function createStyles(theme: AppTheme) {
     minHeight: 72,
   },
   cell: { justifyContent: 'center', paddingHorizontal: spacing.sm, paddingVertical: spacing.sm },
-  primaryText: { color: mentorshipColors.text, fontSize: 14, fontWeight: '500' },
+  nameRow: { flexDirection: 'row', alignItems: 'center', gap: 4 },
+  primaryText: { color: mentorshipColors.text, fontSize: 14, fontWeight: '500', flexShrink: 1 },
   notesText: { color: mentorshipColors.text, fontSize: 13 },
   statusPill: {
     flexDirection: 'row',

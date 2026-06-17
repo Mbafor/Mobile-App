@@ -158,10 +158,6 @@ export function ProfileViewScreen() {
           {email ? (
             <Text style={styles.email}>{email}</Text>
           ) : null}
-
-          {bioText ? (
-            <Text style={styles.bio}>{bioText}</Text>
-          ) : null}
         </View>
 
         {/* Academic info */}
@@ -220,6 +216,14 @@ export function ProfileViewScreen() {
             <Text muted style={styles.emptyText}>
               Tap Edit to fill in your profile details.
             </Text>
+          </View>
+        ) : null}
+
+        {/* Bio — shown at the very bottom of the profile */}
+        {bioText ? (
+          <View style={styles.section}>
+            <Text style={styles.sectionLabel}>Bio</Text>
+            <Text style={styles.bio}>{bioText}</Text>
           </View>
         ) : null}
       </ScrollView>
@@ -369,8 +373,6 @@ function createStyles(colors: ColorScheme) {
     fontSize: 15,
     lineHeight: 22,
     color: colors.text,
-    textAlign: 'center',
-    maxWidth: 340,
   },
 
   // ─── Sections ─────────────────────────────────────────────────────────────
