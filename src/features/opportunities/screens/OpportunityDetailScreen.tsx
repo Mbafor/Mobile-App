@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useLocalSearchParams, useRouter } from 'expo-router';
+import Head from 'expo-router/head';
 import { useMemo } from 'react';
 import {
   ActivityIndicator,
@@ -28,6 +29,52 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
+
+function PromoCard({
+  icon,
+  iconColor,
+  iconBg,
+  badge,
+  title,
+  body,
+  ctaLabel,
+  onPress,
+}: {
+  icon: keyof typeof Ionicons.glyphMap;
+  iconColor: string;
+  iconBg: string;
+  badge?: string;
+  title: string;
+  body: string;
+  ctaLabel: string;
+  onPress: () => void;
+}) {
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.promoCard, pressed && { opacity: 0.82 }]}
+      onPress={onPress}
+      accessibilityRole="button"
+    >
+      <View style={styles.promoCardTop}>
+        <View style={[styles.promoIconBox, { backgroundColor: iconBg }]}>
+          <Ionicons name={icon} size={17} color={iconColor} />
+        </View>
+        {badge ? (
+          <View style={[styles.promoBadge, { backgroundColor: iconBg }]}>
+            <Text style={[styles.promoBadgeText, { color: iconColor }]}>{badge}</Text>
+          </View>
+        ) : null}
+      </View>
+      <Text style={styles.promoTitle}>{title}</Text>
+      <Text style={styles.promoBody}>{body}</Text>
+      <View style={styles.promoCta}>
+        <Text style={[styles.promoCtaText, { color: iconColor }]}>{ctaLabel}</Text>
+        <Ionicons name="arrow-forward" size={12} color={iconColor} />
+      </View>
+    </Pressable>
+  );
+}
 
 function DeadlineBadge({ deadline }: { deadline: string }) {
   const styles = useThemedStyles(createStyles);
@@ -191,9 +238,80 @@ export function OpportunityDetailScreen() {
     );
   }, [opportunity, opportunityLink]);
 
+  const defaultOgImage = `${process.env.EXPO_PUBLIC_LANDING_URL ?? 'https://voila-africa.com'}/og-image.png`;
+  const ogImage = opportunity?.imageUrl ?? defaultOgImage;
+
+  const ogTitle = useMemo(
+    () => (opportunity ? `${opportunity.title} | Voila` : 'Voila'),
+    [opportunity],
+  );
+
+  const ogDescription = useMemo(() => {
+    const raw = opportunity?.description?.trim() ?? '';
+    if (!raw) return 'Discover scholarships, internships and fellowships on Voila.';
+    return raw.length > 155 ? `${raw.slice(0, 152)}...` : raw;
+  }, [opportunity]);
+
+  const promoSection = useMemo(
+    () => (
+      <View style={styles.promoSection}>
+        <PromoCard
+          icon="document-text-outline"
+          iconColor="#0B6623"
+          iconBg="#E8F5ED"
+          badge="FREE"
+          title="Free CV Builder"
+          body="Build a polished, professional CV in minutes — designed for African students."
+          ctaLabel="Build your CV"
+          onPress={() => router.push('/(main)/(tabs)/cv-builder')}
+        />
+        <PromoCard
+          icon="people-outline"
+          iconColor="#1D6FA4"
+          iconBg="#E3F0FA"
+          badge="1:1"
+          title="Expert Mentorship"
+          body="Book sessions with mentors who know your field and career goals."
+          ctaLabel="Find a mentor"
+          onPress={() => router.push('/(main)/(tabs)/mentorship')}
+        />
+        <PromoCard
+          icon="logo-whatsapp"
+          iconColor="#25D366"
+          iconBg="#E6FBF0"
+          title="Join Our WhatsApp Channel"
+          body="Daily updates on new scholarships and internships — straight to your phone."
+          ctaLabel="Join the channel"
+          onPress={() => {
+            const url = process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL;
+            if (url) Linking.openURL(url);
+          }}
+        />
+      </View>
+    ),
+    [router, styles],
+  );
+
+  const headTags = (
+    <Head>
+      <title>{ogTitle}</title>
+      <meta property="og:title" content={ogTitle} />
+      <meta property="og:description" content={ogDescription} />
+      <meta property="og:image" content={ogImage} />
+      {opportunityLink ? <meta property="og:url" content={opportunityLink} /> : null}
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={ogTitle} />
+      <meta name="twitter:description" content={ogDescription} />
+      <meta name="twitter:image" content={ogImage} />
+      {opportunityLink ? <link rel="canonical" href={opportunityLink} /> : null}
+    </Head>
+  );
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
+        {headTags}
         <ActivityIndicator size="large" color={colors.primary} />
       </View>
     );
@@ -202,6 +320,7 @@ export function OpportunityDetailScreen() {
   if (error || !opportunity) {
     return (
       <View style={styles.root}>
+        {headTags}
         <PageHeader title="Opportunity Details" />
         <View style={styles.errorBody}>
           <ErrorMessage
@@ -316,9 +435,16 @@ export function OpportunityDetailScreen() {
           </View>
         )}
 
+        {/* Voila services promo — mobile */}
+        {!isDesktop && (
+          <View style={styles.mobilePromoWrapper}>
+            {promoSection}
+          </View>
+        )}
+
         {/* Share Section at the bottom on mobile */}
         {!isDesktop && (
-          <View style={[styles.mobileShareWrapper, relatedOpportunities.length > 0 && styles.mobileShareBorder]}>
+          <View style={[styles.mobileShareWrapper, styles.mobileShareBorder]}>
             {shareSection}
           </View>
         )}
@@ -328,6 +454,7 @@ export function OpportunityDetailScreen() {
 
   return (
     <View style={styles.root}>
+      {headTags}
       <PageHeader title="Opportunity Details" />
 
       {isDesktop ? (
@@ -346,6 +473,8 @@ export function OpportunityDetailScreen() {
                   <View style={styles.sidebarDivider} />
                 </>
               )}
+              {promoSection}
+              <View style={styles.sidebarDivider} />
               <View style={styles.desktopShareWrapper}>
                 {shareSection}
               </View>
@@ -541,6 +670,70 @@ function createStyles(colors: ColorScheme) {
     height: 1,
     backgroundColor: colors.border,
     marginVertical: spacing.lg,
+  },
+
+  // ─── Voila service promo cards ─────────────────────────────────────────────
+  promoSection: {
+    gap: spacing.sm,
+    paddingVertical: spacing.sm,
+  },
+  promoCard: {
+    padding: spacing.md,
+    borderRadius: 14,
+    backgroundColor: colors.surface,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: colors.border,
+    gap: spacing.xs + 1,
+  },
+  promoCardTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    marginBottom: 2,
+  },
+  promoIconBox: {
+    width: 32,
+    height: 32,
+    borderRadius: 9,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  promoBadge: {
+    paddingHorizontal: 7,
+    paddingVertical: 2,
+    borderRadius: 999,
+  },
+  promoBadgeText: {
+    fontSize: 10,
+    fontWeight: '700' as const,
+    letterSpacing: 0.5,
+  },
+  promoTitle: {
+    fontSize: 14,
+    fontWeight: '700' as const,
+    color: colors.text,
+    letterSpacing: -0.1,
+  },
+  promoBody: {
+    fontSize: 12,
+    color: colors.textMuted,
+    lineHeight: 17,
+  },
+  promoCta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 3,
+    marginTop: 2,
+  },
+  promoCtaText: {
+    fontSize: 12,
+    fontWeight: '700' as const,
+  },
+  mobilePromoWrapper: {
+    marginTop: spacing.lg,
+    paddingTop: spacing.lg,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
 
   // ─── Related opportunity card ───────────────────────────────────────────────
