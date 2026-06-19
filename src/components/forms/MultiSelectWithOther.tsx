@@ -40,6 +40,7 @@ export function MultiSelectWithOther({
   const [open, setOpen] = useState(false);
   const [draftSelected, setDraftSelected] = useState<string[]>([]);
   const [draftOtherText, setDraftOtherText] = useState('');
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     const parsed = parseMultiSelectValues(values, predefinedValues);
@@ -70,25 +71,33 @@ export function MultiSelectWithOther({
   };
 
   const apply = () => {
-    onChange(
-      serializeMultiSelectValues(draftSelected, draftOtherText, predefinedValues),
-    );
+    onChange(serializeMultiSelectValues(draftSelected, draftOtherText, predefinedValues));
+    setOpen(false);
+    setSearch('');
+  };
+
+  const openModal = () => {
+    const parsed = parseMultiSelectValues(values, predefinedValues);
+    setDraftSelected(parsed.selected);
+    setDraftOtherText(parsed.otherText);
+    setSearch('');
+    setOpen(true);
+  };
+
+  const closeModal = () => {
+    setSearch('');
     setOpen(false);
   };
+
+  const filteredOptions = search.trim()
+    ? options.filter((o) => o.label.toLowerCase().includes(search.toLowerCase()))
+    : options;
 
   const showOtherInput = draftSelected.includes(OTHER_OPTION_VALUE);
 
   return (
     <View>
-      <Pressable
-        style={styles.trigger}
-        onPress={() => {
-          const parsed = parseMultiSelectValues(values, predefinedValues);
-          setDraftSelected(parsed.selected);
-          setDraftOtherText(parsed.otherText);
-          setOpen(true);
-        }}
-      >
+      <Pressable style={styles.trigger} onPress={openModal}>
         <Text
           style={[
             styles.triggerText,
@@ -115,28 +124,46 @@ export function MultiSelectWithOther({
         </View>
       ) : null}
 
-      <Modal visible={open} transparent animationType="slide" onRequestClose={() => setOpen(false)}>
-        <Pressable style={styles.overlay} onPress={() => setOpen(false)}>
+      <Modal visible={open} transparent animationType="slide" onRequestClose={closeModal}>
+        <Pressable style={styles.overlay} onPress={closeModal}>
           <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
             <Text variant="title" style={styles.sheetTitle}>
               Select options
             </Text>
-            <ScrollView style={styles.list}>
-              {options.map((option) => {
-                const isSelected = draftSelected.includes(option.value);
-                return (
-                  <Pressable
-                    key={option.value}
-                    style={[styles.option, isSelected && styles.optionSelected]}
-                    onPress={() => toggleOption(option.value)}
-                  >
-                    <Text style={styles.checkbox}>{isSelected ? '☑' : '☐'}</Text>
-                    <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
-                      {option.label}
-                    </Text>
-                  </Pressable>
-                );
-              })}
+
+            <View style={styles.searchRow}>
+              <Input
+                value={search}
+                onChangeText={setSearch}
+                placeholder="Search..."
+                autoCapitalize="none"
+                autoCorrect={false}
+                style={styles.searchInput}
+              />
+            </View>
+
+            <ScrollView style={styles.list} keyboardShouldPersistTaps="handled">
+              {filteredOptions.length === 0 ? (
+                <Text muted style={styles.noResults}>
+                  No results for "{search}"
+                </Text>
+              ) : (
+                filteredOptions.map((option) => {
+                  const isSelected = draftSelected.includes(option.value);
+                  return (
+                    <Pressable
+                      key={option.value}
+                      style={[styles.option, isSelected && styles.optionSelected]}
+                      onPress={() => toggleOption(option.value)}
+                    >
+                      <Text style={styles.checkbox}>{isSelected ? '☑' : '☐'}</Text>
+                      <Text style={[styles.optionText, isSelected && styles.optionTextSelected]}>
+                        {option.label}
+                      </Text>
+                    </Pressable>
+                  );
+                })
+              )}
             </ScrollView>
 
             {showOtherInput ? (
@@ -159,7 +186,7 @@ export function MultiSelectWithOther({
             ) : null}
 
             {syncOnChange ? (
-              <Pressable style={styles.doneBtn} onPress={() => setOpen(false)}>
+              <Pressable style={styles.doneBtn} onPress={closeModal}>
                 <Text style={styles.doneBtnText}>Done</Text>
               </Pressable>
             ) : (
@@ -176,79 +203,88 @@ export function MultiSelectWithOther({
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-  trigger: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    borderWidth: 1,
-    borderColor: colors.border,
-    borderRadius: 8,
-    padding: spacing.md,
-    backgroundColor: colors.background,
-  },
-  triggerText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
-  placeholder: { color: colors.textMuted },
-  chevron: { color: colors.textMuted, fontSize: 12, marginLeft: spacing.sm },
-  chips: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: spacing.xs,
-    marginTop: spacing.sm,
-  },
-  chip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    backgroundColor: colors.surface,
-    borderRadius: 16,
-    paddingVertical: 4,
-    paddingLeft: spacing.sm,
-    paddingRight: spacing.xs,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  chipText: { fontSize: 13, color: colors.text },
-  chipRemove: { fontSize: 18, color: colors.textMuted, paddingHorizontal: 4 },
-  overlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
-    justifyContent: 'flex-end',
-  },
-  sheet: {
-    backgroundColor: colors.background,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    maxHeight: '80%',
-    paddingBottom: spacing.lg,
-  },
-  sheetTitle: { padding: spacing.md, paddingBottom: spacing.sm },
-  list: { maxHeight: 320 },
-  option: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.md,
-    paddingHorizontal: spacing.md,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.border,
-  },
-  optionSelected: { backgroundColor: colors.surface },
-  checkbox: { fontSize: 18, color: colors.primary },
-  optionText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
-  optionTextSelected: { fontWeight: '600', color: colors.primary },
-  otherBlock: {
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    gap: spacing.xs,
-  },
-  doneBtn: {
-    marginHorizontal: spacing.md,
-    marginTop: spacing.md,
-    backgroundColor: colors.primary,
-    padding: spacing.md,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  doneBtnText: { color: colors.background, fontWeight: '600' },
-});
+    trigger: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      padding: spacing.md,
+      backgroundColor: colors.background,
+    },
+    triggerText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
+    placeholder: { color: colors.textMuted },
+    chevron: { color: colors.textMuted, fontSize: 12, marginLeft: spacing.sm },
+    chips: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.xs,
+      marginTop: spacing.sm,
+    },
+    chip: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: 4,
+      backgroundColor: colors.surface,
+      borderRadius: 16,
+      paddingVertical: 4,
+      paddingLeft: spacing.sm,
+      paddingRight: spacing.xs,
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+    chipText: { fontSize: 13, color: colors.text },
+    chipRemove: { fontSize: 18, color: colors.textMuted, paddingHorizontal: 4 },
+    overlay: {
+      flex: 1,
+      backgroundColor: 'rgba(0,0,0,0.45)',
+      justifyContent: 'flex-end',
+    },
+    sheet: {
+      backgroundColor: colors.background,
+      borderTopLeftRadius: 16,
+      borderTopRightRadius: 16,
+      maxHeight: '82%',
+      paddingBottom: spacing.lg,
+    },
+    sheetTitle: { padding: spacing.md, paddingBottom: spacing.sm },
+    searchRow: {
+      paddingHorizontal: spacing.md,
+      paddingBottom: spacing.sm,
+    },
+    searchInput: {},
+    list: { maxHeight: 300 },
+    noResults: {
+      paddingVertical: spacing.lg,
+      textAlign: 'center',
+    },
+    option: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      gap: spacing.sm,
+      paddingVertical: spacing.md,
+      paddingHorizontal: spacing.md,
+      borderBottomWidth: 1,
+      borderBottomColor: colors.border,
+    },
+    optionSelected: { backgroundColor: colors.surface },
+    checkbox: { fontSize: 18, color: colors.primary },
+    optionText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
+    optionTextSelected: { fontWeight: '600', color: colors.primary },
+    otherBlock: {
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.sm,
+      gap: spacing.xs,
+    },
+    doneBtn: {
+      marginHorizontal: spacing.md,
+      marginTop: spacing.md,
+      backgroundColor: colors.primary,
+      padding: spacing.md,
+      borderRadius: 8,
+      alignItems: 'center',
+    },
+    doneBtnText: { color: colors.background, fontWeight: '600' },
+  });
 }
