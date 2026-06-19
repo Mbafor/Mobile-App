@@ -421,6 +421,10 @@ export function OpportunityDetailScreen() {
               {isApplied ? 'Applied ✓' : 'Mark applied'}
             </Button>
           </View>
+          {/* Share links — directly below the action buttons */}
+          <View style={styles.inlineShareWrapper}>
+            {shareSection}
+          </View>
         </View>
 
         {/* Related opportunities at the bottom on mobile */}
@@ -442,12 +446,6 @@ export function OpportunityDetailScreen() {
           </View>
         )}
 
-        {/* Share Section at the bottom on mobile */}
-        {!isDesktop && (
-          <View style={[styles.mobileShareWrapper, styles.mobileShareBorder]}>
-            {shareSection}
-          </View>
-        )}
       </View>
     </ScrollView>
   );
@@ -474,10 +472,6 @@ export function OpportunityDetailScreen() {
                 </>
               )}
               {promoSection}
-              <View style={styles.sidebarDivider} />
-              <View style={styles.desktopShareWrapper}>
-                {shareSection}
-              </View>
             </ScrollView>
           </View>
         </View>
@@ -620,6 +614,13 @@ function createStyles(colors: ColorScheme) {
   secondaryRow: { flexDirection: 'row', gap: spacing.sm },
   flexBtn: { flex: 1 },
 
+  // Share section — inline below the action buttons
+  inlineShareWrapper: {
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
+
   // Social Sharing Layout
   shareSectionInner: {
     alignItems: 'flex-start',
@@ -654,18 +655,6 @@ function createStyles(colors: ColorScheme) {
     paddingBottom: spacing.sm,
   },
 
-  desktopShareWrapper: {
-    marginTop: spacing.sm,
-  },
-  mobileShareWrapper: {
-    marginTop: spacing.lg,
-    paddingBottom: spacing.xl,
-  },
-  mobileShareBorder: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    paddingTop: spacing.lg,
-  },
   sidebarDivider: {
     height: 1,
     backgroundColor: colors.border,
