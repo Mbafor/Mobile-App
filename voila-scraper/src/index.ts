@@ -1,6 +1,6 @@
 import { checkDuplicate, saveOpportunity, expirePastOpportunities } from './db';
-import { classify } from './classifier';
-import type { ScraperStats } from './types';
+import { classifyBatch } from './classifier';
+import type { RawOpportunity, ScraperStats } from './types';
 
 import { scrape as scrapeOFA } from './scrapers/opportunitiesforafricans';
 import { scrape as scrapeASA } from './scrapers/afterschoolafrica';
@@ -43,20 +43,17 @@ export async function runScraper(): Promise<RunResult> {
   let totalSkipped = 0;
   let errors = 0;
 
+  // -----------------------------------------------------------------------
+  // Phase 1: Scrape all sources
+  // -----------------------------------------------------------------------
+  const allRaw: RawOpportunity[] = [];
+
   for (const { name, scrape } of SOURCES) {
     console.log(`\n[info] Starting source: ${name}`);
     try {
       const result = await scrape(checkDuplicate);
 
-      for (const raw of result.opportunities) {
-        try {
-          const classified = classify(raw);
-          await saveOpportunity(classified);
-        } catch (err) {
-          console.error(`[error] Failed to save "${raw.title}": ${String(err)}`);
-          errors++;
-        }
-      }
+      allRaw.push(...result.opportunities);
 
       const stats: ScraperStats = {
         scraped: result.scraped,
@@ -76,6 +73,23 @@ export async function runScraper(): Promise<RunResult> {
       console.error(`[error] Source "${name}" failed: ${String(err)}`);
       errors++;
       sourceStats[name] = { scraped: 0, newCount: 0, skipped: 0, pagesVisited: 0 };
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Phase 2: Batch classify all new opportunities in one API call
+  // -----------------------------------------------------------------------
+  const classified = await classifyBatch(allRaw);
+
+  // -----------------------------------------------------------------------
+  // Phase 3: Save results to Supabase
+  // -----------------------------------------------------------------------
+  for (const opp of classified) {
+    try {
+      await saveOpportunity(opp);
+    } catch (err) {
+      console.error(`[error] Failed to save "${opp.title}": ${String(err)}`);
+      errors++;
     }
   }
 

@@ -3,13 +3,13 @@ import { runScraper } from './index';
 import { startHealthServer, updateHealth } from './health';
 
 // Boot message
-console.log('Voila Scraper started — running daily at midnight UTC');
+console.log('Voila Scraper started — running every Monday and Thursday at midnight UTC');
 
 // Start health check server
 startHealthServer();
 
-// Schedule: every day at midnight UTC
-cron.schedule('0 0 * * *', async () => {
+// Schedule: Monday and Thursday at midnight UTC
+cron.schedule('0 0 * * 1,4', async () => {
   console.log(`[cron] Triggered at ${new Date().toISOString()}`);
   try {
     const result = await runScraper();

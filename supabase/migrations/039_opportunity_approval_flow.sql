@@ -27,6 +27,12 @@ alter table public.opportunities add column if not exists funding_type  text;
 alter table public.opportunities add column if not exists degree_levels text[] default '{}';
 alter table public.opportunities add column if not exists location_type text;
 
+-- Unique constraint on apply_url — needed for upsert ON CONFLICT.
+-- ADD COLUMN IF NOT EXISTS skips the `unique` keyword when the column already
+-- exists, so we add the constraint explicitly here (safe to rerun).
+alter table public.opportunities drop constraint if exists opportunities_apply_url_key;
+alter table public.opportunities add constraint opportunities_apply_url_key unique (apply_url);
+
 -- Status constraint (drop first so rerunning is safe)
 alter table public.opportunities drop constraint if exists opportunities_status_check;
 alter table public.opportunities
