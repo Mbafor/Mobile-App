@@ -283,8 +283,12 @@ export function OpportunityDetailScreen() {
           body="Daily updates on new scholarships and internships — straight to your phone."
           ctaLabel="Join the channel"
           onPress={() => {
-            const url = process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL;
-            if (url) Linking.openURL(url);
+            const url =
+              process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
+              'https://whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C';
+            Linking.openURL(url).catch(() => {
+              Linking.openURL('https://www.whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C');
+            });
           }}
         />
       </View>
