@@ -31,7 +31,7 @@ export const EMPTY_OPPORTUNITY_FORM: OpportunityFormValues = {
 };
 
 export function opportunityToFormValues(opportunity: Opportunity): OpportunityFormValues {
-  const deadlineDate = opportunity.deadline.slice(0, 10);
+  const deadlineDate = (opportunity.deadline ?? '').slice(0, 10);
 
   return {
     title: opportunity.title,

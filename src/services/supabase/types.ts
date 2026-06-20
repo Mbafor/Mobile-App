@@ -141,6 +141,18 @@ export type Database = {
         Returns: Json;
       };
       get_super_admin_opportunities_analytics: { Args: Record<string, never>; Returns: Json };
+      approve_opportunity: {
+        Args: { p_opportunity_id: string; p_notes?: string | null };
+        Returns: undefined;
+      };
+      reject_opportunity: {
+        Args: { p_opportunity_id: string; p_notes?: string | null };
+        Returns: undefined;
+      };
+      expire_past_opportunities: {
+        Args: Record<string, never>;
+        Returns: undefined;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

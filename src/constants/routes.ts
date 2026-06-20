@@ -62,6 +62,8 @@ export const ROUTES = {
     OPPORTUNITY_PENDING: '/(main)/(tabs)/super-admin/opportunities/pending',
     opportunityEdit: (id: string) =>
       `/(main)/(tabs)/super-admin/opportunities/${id}/edit` as const,
+    pendingReview: (id: string) =>
+      `/(main)/(tabs)/super-admin/opportunities/${id}/review` as const,
   },
   ADMIN: {
     HOME: '/(main)/(tabs)/admin',

@@ -1,5 +1,12 @@
 import { useRouter, type Href } from 'expo-router';
-import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  FlatList,
+  Pressable,
+  StyleSheet,
+  View,
+} from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -17,18 +24,35 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { formatDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 
-export function AdminPendingQueueScreen() {
+type Props = {
+  pendingReviewFn?: (id: string) => string;
+};
+
+export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pendingReview }: Props) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
-  const { data: pending, isLoading, error, refetch, isRefetching } = usePendingOpportunities();
+
+  const {
+    data,
+    isLoading,
+    error,
+    refetch,
+    isRefetching,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = usePendingOpportunities();
+
   const approveMutation = useApproveOpportunityMutation();
   const rejectMutation = useRejectOpportunityMutation();
 
+  const pending = data?.pages.flatMap((p) => p.items) ?? [];
+
   const handleApprove = (item: Opportunity) => {
     Alert.alert(
-      'Approve opportunity',
-      `Make "${item.title}" visible to students?`,
+      'Quick approve',
+      `Make "${item.title}" visible to students without editing?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
@@ -67,7 +91,7 @@ export function AdminPendingQueueScreen() {
       <View style={styles.hero}>
         <Text style={styles.heroTitle}>Pending review</Text>
         <Text muted style={styles.heroSub}>
-          Scraped opportunities waiting for approval. Approved listings go live for students immediately.
+          Scraped opportunities waiting for approval. Tap a card to review and edit before approving.
         </Text>
       </View>
 
@@ -79,22 +103,32 @@ export function AdminPendingQueueScreen() {
         </View>
       ) : (
         <FlatList
-          data={pending ?? []}
+          data={pending}
           keyExtractor={(item) => item.id}
           refreshing={isRefetching}
           onRefresh={() => void refetch()}
           contentContainerStyle={styles.list}
+          onEndReached={() => { if (hasNextPage) void fetchNextPage(); }}
+          onEndReachedThreshold={0.4}
           ListEmptyComponent={
             <View style={styles.empty}>
               <Text style={styles.emptyTitle}>All caught up</Text>
               <Text muted>No scraped opportunities are waiting for review.</Text>
             </View>
           }
+          ListFooterComponent={
+            isFetchingNextPage ? (
+              <View style={styles.loadingMore}>
+                <ActivityIndicator size="small" color={colors.primary} />
+                <Text muted style={styles.loadingMoreText}>Loading more…</Text>
+              </View>
+            ) : null
+          }
           renderItem={({ item }) => (
             <View style={styles.card}>
               <Pressable
                 style={styles.cardBody}
-                onPress={() => router.push(ROUTES.ADMIN.pendingReview(item.id) as Href)}
+                onPress={() => router.push(pendingReviewFn(item.id) as Href)}
               >
                 <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
                 <Text muted style={styles.cardOrg}>{item.organization}</Text>
@@ -105,6 +139,11 @@ export function AdminPendingQueueScreen() {
                       <Text style={styles.tagText}>{item.category}</Text>
                     </View>
                   ) : null}
+                  {item.country ? (
+                    <View style={styles.tag}>
+                      <Text style={styles.tagText}>{item.country}</Text>
+                    </View>
+                  ) : null}
                   {item.source ? (
                     <View style={[styles.tag, styles.sourceTag]}>
                       <Text style={styles.tagText}>{item.source}</Text>
@@ -113,7 +152,7 @@ export function AdminPendingQueueScreen() {
                 </View>
 
                 <Text variant="caption" muted style={styles.deadline}>
-                  Deadline: {formatDeadline(item.deadline)}
+                  Deadline: {item.deadline ? formatDeadline(item.deadline) : 'Not set'}
                 </Text>
 
                 <Text variant="caption" style={styles.tapHint}>Tap to review & edit →</Text>
@@ -154,9 +193,17 @@ function createStyles(colors: ColorScheme) {
     heroTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
     heroSub: { lineHeight: 20 },
     padded: { padding: spacing.md },
-    list: { padding: spacing.md, gap: spacing.sm },
+    list: { padding: spacing.md, gap: spacing.sm, paddingBottom: spacing.xl * 2 },
     empty: { alignItems: 'center', paddingVertical: spacing.xl, gap: spacing.xs },
     emptyTitle: { fontSize: 17, fontWeight: '600' },
+    loadingMore: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: spacing.sm,
+      paddingVertical: spacing.md,
+    },
+    loadingMoreText: { fontSize: 13 },
     card: {
       borderRadius: 12,
       borderWidth: 1,

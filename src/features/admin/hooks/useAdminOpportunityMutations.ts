@@ -117,7 +117,7 @@ export function useUpdateAndApproveMutation(id: string) {
     },
     onSuccess: () => {
       Alert.alert('Approved', 'The opportunity is now live for students.');
-      router.replace(ROUTES.ADMIN.PENDING as Href);
+      router.back();
       refreshPendingAndLive(queryClient);
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });

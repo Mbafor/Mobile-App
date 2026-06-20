@@ -152,15 +152,22 @@ export const adminApi = {
     return { data: (data ?? []).map(mapOpportunityRow), error: null };
   },
 
-  listPending: async () => {
-    const { data, error } = await supabase
+  listPending: async (page = 0, pageSize = 25) => {
+    const from = page * pageSize;
+    const to = from + pageSize - 1;
+    const { data, error, count } = await supabase
       .from('opportunities')
-      .select('*')
+      .select('*', { count: 'exact' })
       .eq('status', 'pending')
-      .order('scraped_at', { ascending: true });
+      .order('scraped_at', { ascending: true })
+      .range(from, to);
 
-    if (error) return { data: null, error };
-    return { data: (data ?? []).map(mapOpportunityRow), error: null };
+    if (error) return { data: null, error, hasMore: false };
+    return {
+      data: (data ?? []).map(mapOpportunityRow),
+      error: null,
+      hasMore: count != null ? from + pageSize < count : (data ?? []).length === pageSize,
+    };
   },
 
   approveOpportunity: async (id: string, notes?: string) => {

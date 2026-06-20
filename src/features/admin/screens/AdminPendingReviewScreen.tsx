@@ -3,7 +3,6 @@ import { ActivityIndicator, Alert, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
-import { ROUTES } from '@/constants/routes';
 import { OpportunityForm } from '@/features/admin/components/OpportunityForm';
 import { useAdminOpportunity } from '@/features/admin/hooks/useAdminOpportunities';
 import {
@@ -13,7 +12,6 @@ import {
 import { useCanManageOpportunities } from '@/features/admin/hooks/useCanManageOpportunities';
 import { opportunityToFormValues } from '@/features/admin/types/opportunity-form';
 import { useTheme } from '@/hooks/useTheme';
-import type { Href } from 'expo-router';
 
 export function AdminPendingReviewScreen() {
   const { colors } = useTheme();
@@ -58,7 +56,7 @@ export function AdminPendingReviewScreen() {
           onPress: () => {
             rejectMutation.mutate(
               { id: opportunityId! },
-              { onSuccess: () => router.replace(ROUTES.ADMIN.PENDING as Href) },
+              { onSuccess: () => router.back() },
             );
           },
         },

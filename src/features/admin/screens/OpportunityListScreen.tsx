@@ -37,7 +37,7 @@ export function OpportunityListScreen({
   const router = useRouter();
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
   const { data: pending } = usePendingOpportunities();
-  const pendingCount = pending?.length ?? 0;
+  const pendingCount = pending?.pages.reduce((sum, p) => sum + p.items.length, 0) ?? 0;
   const deleteMutation = useDeleteOpportunityMutation();
 
   const confirmDelete = async (id: string, oppTitle: string) => {
