@@ -32,6 +32,10 @@ export function updateHealth(result: RunResult): void {
   };
 }
 
+app.get('/', (_req: Request, res: Response) => {
+  res.redirect('/health');
+});
+
 app.get('/health', (_req: Request, res: Response) => {
   res.json({
     status: 'ok',
