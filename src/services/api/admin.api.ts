@@ -22,10 +22,10 @@ function formToRow(values: OpportunityFormValues): OpportunityInsert {
   const funding = values.fundingType.trim();
   const fundingType = funding && funding !== 'any' ? funding : null;
 
-  const deadline = parseDeadlineToIso(values.deadline);
-  if (new Date(deadline).getTime() <= Date.now()) {
-    throw new Error('Deadline must be in the future so students can see this listing.');
-  }
+  // Deadline is optional on updates (scraped opportunities may have none).
+  // createOpportunity enforces presence + future-date separately.
+  const deadlineRaw = values.deadline.trim();
+  const deadline = deadlineRaw ? parseDeadlineToIso(deadlineRaw) : null;
 
   return {
     title: values.title.trim(),
@@ -215,12 +215,25 @@ export const adminApi = {
         };
       }
 
+      const baseRow = formToRow(values);
+
+      // Manual creates must have a deadline set in the future.
+      if (!baseRow.deadline) {
+        return { data: null, error: new Error('Deadline is required when creating an opportunity.') };
+      }
+      if (new Date(baseRow.deadline).getTime() <= Date.now()) {
+        return { data: null, error: new Error('Deadline must be in the future so students can see this listing.') };
+      }
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
 
+      // Admin-created opportunities skip the scraper queue — publish immediately.
       const row = {
-        ...formToRow(values),
+        ...baseRow,
+        status: 'approved' as const,
+        is_active: true,
         ...(user?.id ? { created_by: user.id } : {}),
       };
       const { data, error } = await supabase

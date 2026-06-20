@@ -10,6 +10,7 @@ import type { Opportunity } from '@/types/domain/opportunity';
 import { calendarDaysUntilDeadline } from '@/utils/formatting/deadline';
 
 function isActive(opportunity: Opportunity): boolean {
+  if (!opportunity.deadline) return true;
   return new Date(opportunity.deadline).getTime() > Date.now();
 }
 
@@ -26,7 +27,7 @@ function buildPayload(
     title,
     body,
     opportunityId: opportunity.id,
-    dedupeKey: buildDedupeKey(type, opportunity.id, opportunity.deadline),
+    dedupeKey: buildDedupeKey(type, opportunity.id, opportunity.deadline ?? undefined),
   };
 }
 
@@ -68,7 +69,7 @@ export function buildDeadlineReminderCandidates(
         'deadline_reminder',
         o,
         'Deadline in 3 days',
-        `${o.title} closes on ${new Date(o.deadline).toLocaleDateString()}.`,
+        `${o.title} closes on ${o.deadline ? new Date(o.deadline).toLocaleDateString() : 'an upcoming date'}.`,
       ),
     );
 }

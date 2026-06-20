@@ -7,7 +7,7 @@ export type Opportunity = {
   organization: string;
   imageUrl: string | null;
   applyUrl: string | null;
-  deadline: string;
+  deadline: string | null;
   tags: string[];
   country: string | null;
   category: string | null;

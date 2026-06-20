@@ -76,7 +76,7 @@ function PromoCard({
   );
 }
 
-function DeadlineBadge({ deadline }: { deadline: string }) {
+function DeadlineBadge({ deadline }: { deadline: string | null }) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const days = daysUntilDeadline(deadline);

@@ -35,6 +35,7 @@ function matchesQuery(item: TrackerItem, query: string): boolean {
 
 function matchesDeadlineRange(opportunity: Opportunity, range: DeadlineRangeFilter): boolean {
   if (range === 'any') return true;
+  if (!opportunity.deadline) return false;
   const now = Date.now();
   const deadline = new Date(opportunity.deadline).getTime();
   if (deadline <= now) return false;

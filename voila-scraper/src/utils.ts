@@ -1,7 +1,9 @@
 import axios, { AxiosError } from 'axios';
 import * as cheerio from 'cheerio';
 
-export const USER_AGENT = 'Voila-Bot/1.0 (voila-africa.com)';
+export const USER_AGENT =
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36';
+export const BOT_USER_AGENT = 'Voila-Bot/1.0 (voila-africa.com)';
 const MIN_DELAY_MS = 2000;
 const MAX_DELAY_MS = 3000;
 
@@ -14,12 +16,23 @@ export function randomDelay(): Promise<void> {
   return sleep(ms);
 }
 
-export async function fetchPage(url: string): Promise<string | null> {
+export async function fetchPage(url: string, useBot = false): Promise<string | null> {
   try {
     const res = await axios.get<string>(url, {
-      headers: { 'User-Agent': USER_AGENT },
+      headers: {
+        'User-Agent': useBot ? BOT_USER_AGENT : USER_AGENT,
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Accept-Encoding': 'gzip, deflate, br',
+      },
       timeout: 15000,
+      responseType: 'text',
     });
+    const ct = (res.headers['content-type'] ?? '') as string;
+    if (ct.includes('image/') || ct.includes('application/octet-stream')) {
+      console.warn(`[warn] Non-HTML response (${ct}) from ${url} — likely bot challenge, skipping`);
+      return null;
+    }
     return res.data;
   } catch (err) {
     const axiosErr = err as AxiosError;
@@ -53,11 +66,11 @@ export async function checkRobots(siteUrl: string): Promise<boolean> {
 
     const robotsUrl = new URL('/robots.txt', siteUrl).href;
     const res = await axios.get<string>(robotsUrl, {
-      headers: { 'User-Agent': USER_AGENT },
+      headers: { 'User-Agent': BOT_USER_AGENT },
       timeout: 8000,
     });
     const robots = robotsParser(robotsUrl, res.data);
-    const allowed = robots.isAllowed(siteUrl, USER_AGENT);
+    const allowed = robots.isAllowed(siteUrl, BOT_USER_AGENT);
     return allowed !== false;
   } catch {
     return true;

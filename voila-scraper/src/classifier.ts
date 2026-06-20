@@ -26,138 +26,115 @@ type FundingType = 'fully_funded' | 'partially_funded' | 'self_funded';
 type LocationType = 'remote' | 'onsite' | 'hybrid';
 type DegreeLevel = 'high_school' | 'bachelors' | 'masters' | 'phd' | 'professional';
 
-interface ClassifyJson {
-  description: string;
-  category: Category;
-  country: string;
-  tags: Tag[];
-  funding_type: FundingType;
-  degree_levels: DegreeLevel[];
-  location_type: LocationType;
-}
+// ---------------------------------------------------------------------------
+// Description batch — plain text only, no JSON, so no parse failures
+// ---------------------------------------------------------------------------
 
-const SYSTEM_PROMPT = `You are an assistant for Voila, a platform that helps African youth discover life-changing opportunities. Given a raw opportunity listing, return ONLY a JSON object with these exact fields:
+const DESCRIPTION_PROMPT = `You write opportunity summaries for Voila, a platform that connects African youth to life-changing opportunities.
 
-- description: a clean, engaging rewrite of the opportunity description in around 120 words. Do NOT copy the raw text. Rewrite it in Voila's voice — clear, energetic, and youth-friendly. Tell the reader: what the opportunity is, who it's for, what they get, and why it matters. Write in third person, present tense, no hype or filler.
-- category: one of ${CATEGORIES.map(c => `"${c}"`).join(', ')}
-- country: the primary target country (e.g. "Kenya", "United Kingdom", "Ghana") or "Global" if open to all
-- tags: array of 1-3 tags from [${TAGS.map(t => `"${t}"`).join(', ')}]
-- funding_type: one of "fully_funded", "partially_funded", "self_funded"
-- degree_levels: array of applicable levels from ["high_school", "bachelors", "masters", "phd", "professional"] (empty array if not specified)
-- location_type: one of "remote", "onsite", "hybrid"
+Given the raw details of an opportunity, write a narrative summary of 3–4 short paragraphs that reads like a story. Follow this structure:
 
-Return ONLY valid JSON, no explanation or markdown.`;
+1. Open with a vivid scene or compelling hook that captures the spirit of the opportunity and draws the reader in.
+2. Explain what the opportunity is, where it takes place, and who it is designed for — paint a picture of what participation looks like.
+3. Describe what participants will gain: skills, networks, exposure, funding, or impact. Make it concrete and aspirational.
+4. Close with one powerful sentence on why this opportunity matters and what it could mean for the right person.
 
-function buildUserText(raw: RawOpportunity): string {
-  return `Title: ${raw.title}\n\nOrganization: ${raw.organization}\n\nDescription: ${raw.description.slice(0, 1500)}`;
-}
+Rules: flowing sentences only, no bullet points, no headings, no markdown. Third person, present tense. Clear, warm, and energetic — written for a young African professional or student reading on their phone.`;
 
-function buildRecord(raw: RawOpportunity, json: ClassifyJson): OpportunityRecord {
-  return {
-    title: raw.title,
-    organization: raw.organization,
-    description: json.description || raw.description,
-    deadline: raw.deadline || null,
-    apply_url: raw.applyUrl,
-    image_url: raw.imageUrl,
-    category: json.category,
-    country: json.country,
-    tags: json.tags,
-    funding_type: json.funding_type,
-    degree_levels: json.degree_levels,
-    location_type: json.location_type,
-    source: raw.source,
-    status: 'pending',
-    is_active: false,
-  };
+function buildDescriptionUserText(raw: RawOpportunity): string {
+  return [
+    `Title: ${raw.title}`,
+    `Organization: ${raw.organization}`,
+    `Details: ${raw.description.slice(0, 1500)}`,
+  ].join('\n\n');
 }
 
 const sleep = (ms: number): Promise<void> => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function classifyBatch(raws: RawOpportunity[]): Promise<OpportunityRecord[]> {
-  if (raws.length === 0) return [];
+async function runBatch(
+  requests: Anthropic.Messages.MessageCreateParamsNonStreaming[],
+  customIds: string[],
+): Promise<Map<string, string>> {
+  const batch = await client.messages.batches.create({
+    requests: requests.map((params, i) => ({
+      custom_id: customIds[i]!,
+      params,
+    })),
+  });
 
-  console.log(`[classifier] Creating batch for ${raws.length} opportunities...`);
+  console.log(`[classifier] Batch ${batch.id} submitted (${requests.length} items). Polling…`);
 
-  let batch: Anthropic.Messages.MessageBatch;
-  try {
-    batch = await client.messages.batches.create({
-      requests: raws.map((raw, i) => ({
-        custom_id: `opp-${i}`,
-        params: {
-          model: 'claude-haiku-4-5-20251001',
-          max_tokens: 512,
-          system: SYSTEM_PROMPT,
-          messages: [{ role: 'user' as const, content: buildUserText(raw) }],
-        },
-      })),
-    });
-  } catch (err) {
-    console.warn(`[classifier] Batch creation failed, falling back to keyword classification: ${String(err)}`);
-    return raws.map(classifyWithKeywords);
-  }
-
-  console.log(`[classifier] Batch ${batch.id} submitted. Polling for results...`);
-
-  // Poll until ended
+  let current = batch;
   for (let attempt = 0; attempt < MAX_POLL_ATTEMPTS; attempt++) {
     await sleep(POLL_INTERVAL_MS);
     try {
-      batch = await client.messages.batches.retrieve(batch.id);
+      current = await client.messages.batches.retrieve(batch.id);
     } catch (err) {
       console.warn(`[classifier] Poll attempt ${attempt + 1} failed: ${String(err)}`);
       continue;
     }
-
-    const counts = batch.request_counts;
-    console.log(`[classifier] Batch ${batch.id}: processing=${counts.processing} succeeded=${counts.succeeded} errored=${counts.errored}`);
-
-    if (batch.processing_status === 'ended') break;
+    const c = current.request_counts;
+    console.log(`[classifier] Batch ${batch.id}: processing=${c.processing} succeeded=${c.succeeded} errored=${c.errored}`);
+    if (current.processing_status === 'ended') break;
   }
 
-  if (batch.processing_status !== 'ended') {
-    console.warn(`[classifier] Batch did not complete within timeout — using keyword fallback for all ${raws.length} items`);
-    return raws.map(classifyWithKeywords);
-  }
-
-  // Collect text results by custom_id
   const resultMap = new Map<string, string>();
-  try {
-    for await (const item of await client.messages.batches.results(batch.id)) {
-      if (item.result.type === 'succeeded') {
-        const block = item.result.message.content[0];
-        if (block?.type === 'text') {
-          resultMap.set(item.custom_id, block.text);
-        }
-      } else {
-        console.warn(`[classifier] Item ${item.custom_id} ${item.result.type} — using keyword fallback`);
-      }
-    }
-  } catch (err) {
-    console.warn(`[classifier] Failed to stream batch results: ${String(err)} — using keyword fallback for all`);
-    return raws.map(classifyWithKeywords);
+  if (current.processing_status !== 'ended') {
+    console.warn(`[classifier] Batch did not complete within timeout — skipping AI output`);
+    return resultMap;
   }
 
-  console.log(`[classifier] Batch complete — ${resultMap.size}/${raws.length} items classified by Claude`);
+  for await (const item of await client.messages.batches.results(batch.id)) {
+    if (item.result.type === 'succeeded') {
+      const block = item.result.message.content[0];
+      if (block?.type === 'text') {
+        resultMap.set(item.custom_id, block.text.trim());
+      }
+    } else {
+      console.warn(`[classifier] Item ${item.custom_id} ${item.result.type}`);
+    }
+  }
 
-  // Map results back in order, falling back to keywords for any missing item
+  return resultMap;
+}
+
+// ---------------------------------------------------------------------------
+// Main export
+// ---------------------------------------------------------------------------
+
+export async function classifyBatch(raws: RawOpportunity[]): Promise<OpportunityRecord[]> {
+  if (raws.length === 0) return [];
+
+  console.log(`[classifier] Generating AI descriptions for ${raws.length} opportunities…`);
+
+  let descriptionMap = new Map<string, string>();
+  try {
+    descriptionMap = await runBatch(
+      raws.map((raw) => ({
+        model: 'claude-haiku-4-5-20251001',
+        max_tokens: 600,
+        system: DESCRIPTION_PROMPT,
+        messages: [{ role: 'user' as const, content: buildDescriptionUserText(raw) }],
+      })),
+      raws.map((_, i) => `desc-${i}`),
+    );
+  } catch (err) {
+    console.warn(`[classifier] Description batch failed: ${String(err)} — falling back to raw descriptions`);
+  }
+
+  console.log(`[classifier] ${descriptionMap.size}/${raws.length} AI descriptions generated`);
+
   return raws.map((raw, i) => {
-    const text = resultMap.get(`opp-${i}`);
-    if (!text) {
-      return classifyWithKeywords(raw);
-    }
-    try {
-      const json = JSON.parse(text.trim()) as ClassifyJson;
-      return buildRecord(raw, json);
-    } catch {
-      console.warn(`[classifier] JSON parse failed for "${raw.title}" — using keyword fallback`);
-      return classifyWithKeywords(raw);
-    }
+    const aiDescription = descriptionMap.get(`desc-${i}`);
+    return {
+      ...classifyWithKeywords(raw),
+      description: aiDescription || raw.description,
+    };
   });
 }
 
 // ---------------------------------------------------------------------------
-// Keyword-based fallback
+// Keyword-based classification for metadata
 // ---------------------------------------------------------------------------
 
 function lower(text: string): string {

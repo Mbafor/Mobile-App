@@ -6,6 +6,7 @@ import { scrape as scrapeOFA } from './scrapers/opportunitiesforafricans';
 import { scrape as scrapeASA } from './scrapers/afterschoolafrica';
 import { scrape as scrapeS4D } from './scrapers/scholars4dev';
 import { scrape as scrapeIdealist } from './scrapers/idealist';
+import { scrape as scrapeOD } from './scrapers/opportunitydesk';
 
 interface SourceConfig {
   name: string;
@@ -17,6 +18,7 @@ const SOURCES: SourceConfig[] = [
   { name: 'After School Africa',        scrape: scrapeASA },
   { name: 'Scholars4Dev',               scrape: scrapeS4D },
   { name: 'Idealist API',               scrape: scrapeIdealist },
+  { name: 'Opportunity Desk',           scrape: scrapeOD },
 ];
 
 export interface RunResult {
@@ -102,6 +104,7 @@ ${pad('Opportunities for Africans')} — New: ${sourceStats['Opportunities for A
 ${pad('After School Africa')}        — New: ${sourceStats['After School Africa']?.newCount ?? 0} | Skipped: ${sourceStats['After School Africa']?.skipped ?? 0}
 ${pad('Scholars4Dev')}               — New: ${sourceStats['Scholars4Dev']?.newCount ?? 0} | Skipped: ${sourceStats['Scholars4Dev']?.skipped ?? 0}
 ${pad('Idealist API')}               — New: ${sourceStats['Idealist API']?.newCount ?? 0} | Skipped: ${sourceStats['Idealist API']?.skipped ?? 0}
+${pad('Opportunity Desk')}           — New: ${sourceStats['Opportunity Desk']?.newCount ?? 0} | Skipped: ${sourceStats['Opportunity Desk']?.skipped ?? 0}
 ------------------------------------------
 Total New: ${totalNew} | Total Skipped: ${totalSkipped} | Errors: ${errors}
 All pending. Awaiting admin review.

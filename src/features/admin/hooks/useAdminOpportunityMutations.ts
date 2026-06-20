@@ -26,6 +26,7 @@ export function useApproveOpportunityMutation() {
       if (error) throw error;
     },
     onSuccess: () => {
+      Alert.alert('Approved', 'The opportunity is now live for students.');
       refreshPendingAndLive(queryClient);
     },
     onError: (error) => {
@@ -43,6 +44,7 @@ export function useRejectOpportunityMutation() {
       if (error) throw error;
     },
     onSuccess: () => {
+      Alert.alert('Rejected', 'The opportunity has been removed from the queue.');
       refreshPendingAndLive(queryClient);
     },
     onError: (error) => {

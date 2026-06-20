@@ -253,7 +253,7 @@ export type Database = {
           organization: string;
           image_url: string | null;
           apply_url: string | null;
-          deadline: string;
+          deadline: string | null;
           tags: string[];
           country: string | null;
           category: string | null;
@@ -278,7 +278,7 @@ export type Database = {
           organization: string;
           image_url?: string | null;
           apply_url?: string | null;
-          deadline: string;
+          deadline?: string | null;
           tags?: string[];
           country?: string | null;
           category?: string | null;
@@ -298,7 +298,7 @@ export type Database = {
           organization?: string;
           image_url?: string | null;
           apply_url?: string | null;
-          deadline?: string;
+          deadline?: string | null;
           tags?: string[];
           country?: string | null;
           category?: string | null;

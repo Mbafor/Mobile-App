@@ -30,6 +30,7 @@ function matchesDeadlineRange(
   range: DeadlineRangeFilter,
 ): boolean {
   if (range === 'any') return true;
+  if (!opportunity.deadline) return false;
 
   const now = Date.now();
   const deadline = new Date(opportunity.deadline).getTime();

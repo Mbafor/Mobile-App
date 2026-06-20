@@ -5,6 +5,7 @@ const CLOSING_SOON_DAYS = 14;
 const SECTION_LIMIT = 10;
 
 function isActive(opportunity: Opportunity): boolean {
+  if (!opportunity.deadline) return true;
   return new Date(opportunity.deadline).getTime() > Date.now();
 }
 
@@ -47,11 +48,12 @@ export function buildClosingSoon(opportunities: Opportunity[]): Opportunity[] {
 
   return [...opportunities]
     .filter((item) => {
+      if (!item.deadline) return false;
       const deadline = new Date(item.deadline).getTime();
       return deadline > now && deadline <= horizon;
     })
     .sort(
-      (a, b) => new Date(a.deadline).getTime() - new Date(b.deadline).getTime(),
+      (a, b) => new Date(a.deadline!).getTime() - new Date(b.deadline!).getTime(),
     )
     .slice(0, SECTION_LIMIT);
 }
