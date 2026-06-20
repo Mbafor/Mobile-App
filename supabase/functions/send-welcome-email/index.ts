@@ -38,26 +38,35 @@ serve(async (req) => {
       to: email,
       subject: 'Welcome to Voila',
       html: emailShell({
-        headline: `Welcome, ${firstName}! 👋`,
+        headline: `Welcome, ${firstName}`,
         bodyHtml: `
-          <p>
-            You're now part of <strong>Voila</strong> — your home for discovering global
-            opportunities matched to your interests and ambitions.
-          </p>
-          <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-top: 16px;">
-            <p style="margin: 0 0 12px; font-weight: 600; color: #1a1a1a;">Here's what you can do:</p>
-            <ul style="margin: 0; padding-left: 20px; line-height: 2;">
-              <li>Browse opportunities matched to your profile</li>
-              <li>Save listings and never miss a deadline</li>
-              <li>Connect with mentors and book sessions</li>
-            </ul>
+          <p>You are now part of Voila &mdash; a platform built to help students and young professionals discover opportunities and connect with mentors.</p>
+
+          <p style="margin-top:16px;">Here is what you can do on the platform:</p>
+
+          <div style="margin-top:12px;">
+            <p style="margin:0 0 8px; padding-left:12px; border-left:2px solid #0B6623;">
+              Browse scholarships, fellowships, internships, and more matched to your profile.
+            </p>
+            <p style="margin:8px 0; padding-left:12px; border-left:2px solid #0B6623;">
+              Save opportunities and get reminders before their deadlines.
+            </p>
+            <p style="margin:8px 0; padding-left:12px; border-left:2px solid #0B6623;">
+              Connect with a mentor and book one-on-one coaching sessions.
+            </p>
+            <p style="margin:8px 0; padding-left:12px; border-left:2px solid #0B6623;">
+              Build and download your CV directly on the platform.
+            </p>
           </div>
-          <p style="margin-top: 16px; font-size: 14px;">
-            Questions? Reply to this email or contact support@voila-africa.com.
+
+          <p style="margin-top:20px; font-size:13px; color:#666666;">
+            If you have any questions, reply to this email or write to
+            <a href="mailto:support@voila-africa.com" style="color:#0B6623;">support@voila-africa.com</a>.
           </p>
         `,
-        ctaLabel: 'Open Platform',
-        ctaHref: webBase,
+        ctaLabel: 'Go to Voila',
+        ctaHref: `${webBase}/dashboard`,
+        footerNote: 'You are receiving this because you created an account on Voila.',
       }),
     });
 

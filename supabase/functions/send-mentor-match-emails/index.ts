@@ -120,18 +120,21 @@ serve(async (req) => {
       ];
 
       const firstName = recipient.full_name?.split(' ')[0] ?? 'there';
-      const subject =
-        notification.type === 'mentor_assigned'
-          ? `🎉 Meet your new coach — ${name}`
-          : `🎉 New mentee assigned — ${name}`;
+      const isMentor = notification.type === 'mentor_assigned';
+
+      const subject = isMentor
+        ? `You have been matched with ${name} — Voila`
+        : `New mentee matched to you — Voila`;
 
       const html = emailShell({
-        headline:
-          notification.type === 'mentor_assigned'
-            ? `You have a new coach, ${firstName}!`
-            : `You have a new mentee, ${firstName}!`,
+        headline: isMentor
+          ? `You have a new coach, ${firstName}`
+          : `You have a new mentee, ${firstName}`,
         bodyHtml: `
           <p>${notification.body}</p>
+          <p style="margin-top:8px; font-size:13px; color:#666666;">
+            You can view their profile and start a conversation directly on Voila.
+          </p>
           ${profileCardHtml({
             name,
             avatarUrl: counterpart?.avatar_url ?? null,
@@ -145,10 +148,9 @@ serve(async (req) => {
             ],
           })}
         `,
-        ctaLabel: 'View Profile',
+        ctaLabel: 'Open Mentorship',
         ctaHref: `${webBase}/mentorship`,
-        footerNote:
-          'You are receiving this because you were matched on Voila mentorship.',
+        footerNote: 'You are receiving this because you were matched on Voila mentorship.',
       });
 
       const result = await sendResendEmail({

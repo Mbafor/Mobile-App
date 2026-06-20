@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
+import { appWebBase, emailShell, infoBox, sendResendEmail } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -70,24 +70,24 @@ serve(async (req) => {
 
       const opportunityUrl = item.opportunity_id
         ? `${webBase}/opportunity/${item.opportunity_id}`
-        : webBase;
+        : `${webBase}/dashboard`;
 
       const result = await sendResendEmail({
         apiKey: resendApiKey,
         to: item.email,
-        subject: `⏰ Deadline in 3 days: ${item.title}`,
+        subject: `Deadline in 3 days: ${item.title}`,
         html: emailShell({
-          headline: `Don't miss your deadline, ${firstName}!`,
+          headline: `Deadline approaching, ${firstName}`,
           bodyHtml: `
-            <p>An opportunity you saved is closing in <strong>3 days</strong>.</p>
-            <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-top: 16px;">
-              <p style="margin: 0 0 4px; font-size: 13px; color: #888;">Opportunity</p>
-              <p style="margin: 0 0 12px; font-size: 17px; font-weight: 600;">${item.title}</p>
-              <p style="margin: 0 0 4px; font-size: 13px; color: #888;">Organisation</p>
-              <p style="margin: 0 0 12px;">${item.organization}</p>
-              <p style="margin: 0 0 4px; font-size: 13px; color: #888;">Deadline</p>
-              <p style="margin: 0; font-weight: 600; color: #C0392B;">${deadline}</p>
-            </div>
+            <p>
+              An opportunity you saved on Voila closes in <strong>3 days</strong>.
+              Make sure you submit your application before the deadline.
+            </p>
+            ${infoBox([
+              { label: 'Opportunity', value: item.title },
+              { label: 'Organisation', value: item.organization },
+              { label: 'Deadline', value: deadline },
+            ])}
           `,
           ctaLabel: 'View Opportunity',
           ctaHref: opportunityUrl,

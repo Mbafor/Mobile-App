@@ -1,6 +1,4 @@
 const BRAND = '#0B6623';
-const MUTED = '#555555';
-const LIGHT_BG = '#F3F7F4';
 
 export const EMAIL_FROM = Deno.env.get('RESEND_EMAIL_FROM') ?? 'Voila <noreply@voila-africa.com>';
 
@@ -17,32 +15,68 @@ export function emailShell(params: {
 }): string {
   const cta =
     params.ctaLabel && params.ctaHref
-      ? `<a href="${params.ctaHref}"
-          style="display: inline-block; background: ${BRAND}; color: white; padding: 14px 28px;
-          border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 15px;
-          margin: 8px 0 24px;">
-          ${params.ctaLabel}
-        </a>`
+      ? `<div style="margin-top:28px;">
+           <a href="${params.ctaHref}"
+              style="display:inline-block; background:${BRAND}; color:#ffffff;
+                     padding:13px 28px; text-decoration:none; font-size:14px;
+                     font-weight:600; letter-spacing:0.2px;">
+             ${params.ctaLabel}
+           </a>
+         </div>`
       : '';
 
   return `
-    <div style="font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      max-width: 520px; margin: 0 auto; padding: 32px 24px; color: #1a1a1a;">
-      <div style="width: 48px; height: 48px; background: ${BRAND}; border-radius: 12px;
-        display: inline-flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-        <span style="color: white; font-size: 22px; font-weight: 700;">O</span>
+    <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+         background:#f0f0f0; padding:40px 16px;">
+      <div style="max-width:520px; margin:0 auto; background:#ffffff;">
+
+        <!-- Header -->
+        <div style="padding:18px 32px; border-bottom:3px solid ${BRAND};">
+          <span style="font-size:14px; font-weight:700; color:${BRAND}; letter-spacing:3px;">VOILA</span>
+        </div>
+
+        <!-- Body -->
+        <div style="padding:36px 32px;">
+          <h1 style="margin:0 0 20px; font-size:21px; font-weight:600; color:#111111; line-height:1.35;">
+            ${params.headline}
+          </h1>
+          <div style="font-size:14px; color:#444444; line-height:1.75;">
+            ${params.bodyHtml}
+          </div>
+          ${cta}
+        </div>
+
+        <!-- Footer -->
+        <div style="padding:16px 32px 24px; border-top:1px solid #e8e8e8;">
+          <p style="margin:0; font-size:11px; color:#aaaaaa; line-height:1.6;">
+            ${params.footerNote ?? 'Voila &mdash; Helping students find global opportunities'}
+          </p>
+        </div>
+
       </div>
-      <h1 style="font-size: 22px; font-weight: 600; margin: 0 0 12px; line-height: 1.3;">
-        ${params.headline}
-      </h1>
-      <div style="color: ${MUTED}; line-height: 1.65; margin-bottom: 20px;">
-        ${params.bodyHtml}
-      </div>
-      ${cta}
-      <hr style="border: none; border-top: 1px solid #eee; margin: 24px 0;" />
-      <p style="color: #aaa; font-size: 12px; margin: 0; line-height: 1.5;">
-        ${params.footerNote ?? 'Voila · Helping students find global opportunities'}
-      </p>
+    </div>
+  `;
+}
+
+export function infoBox(rows: { label: string; value: string }[]): string {
+  const items = rows
+    .filter((r) => r.value.trim())
+    .map(
+      (r) => `
+      <div style="margin-bottom:14px;">
+        <p style="margin:0 0 2px; font-size:11px; color:#888888; text-transform:uppercase; letter-spacing:0.6px;">
+          ${r.label}
+        </p>
+        <p style="margin:0; font-size:14px; color:#111111; font-weight:500; line-height:1.4;">
+          ${r.value}
+        </p>
+      </div>`,
+    )
+    .join('');
+
+  return `
+    <div style="border-left:3px solid ${BRAND}; padding:16px 20px; margin:20px 0; background:#f8f8f8;">
+      ${items}
     </div>
   `;
 }
@@ -54,41 +88,39 @@ export function profileCardHtml(params: {
   interests: string[];
   extraLines: { label: string; value: string }[];
 }): string {
-  const avatar = params.avatarUrl
-    ? `<img src="${params.avatarUrl}" alt="" width="72" height="72"
-        style="border-radius: 50%; object-fit: cover; display: block; margin-bottom: 16px;" />`
-    : `<div style="width: 72px; height: 72px; border-radius: 50%; background: ${BRAND};
-        color: white; font-size: 28px; font-weight: 700; line-height: 72px; text-align: center;
-        margin-bottom: 16px;">
-        ${params.name.charAt(0).toUpperCase()}
-      </div>`;
+  const initial = params.name.charAt(0).toUpperCase();
+
+  const bio = params.bio?.trim()
+    ? `<p style="margin:10px 0 0; font-size:13px; color:#444444; line-height:1.6;">
+        ${params.bio.trim().slice(0, 240)}${params.bio.length > 240 ? '&hellip;' : ''}
+       </p>`
+    : '';
 
   const interests =
     params.interests.length > 0
-      ? `<p style="margin: 12px 0 0; font-size: 14px; color: ${MUTED};">
-          <strong>Interests:</strong> ${params.interests.slice(0, 8).join(', ')}
-        </p>`
+      ? `<p style="margin:10px 0 0; font-size:12px; color:#666666;">
+           <span style="font-weight:600;">Interests:</span>
+           ${params.interests.slice(0, 6).join(', ')}
+         </p>`
       : '';
 
   const extras = params.extraLines
     .filter((l) => l.value.trim())
     .map(
-      (l) => `<p style="margin: 8px 0 0; font-size: 14px; color: ${MUTED};">
-        <strong>${l.label}:</strong> ${l.value}
+      (l) => `<p style="margin:6px 0 0; font-size:12px; color:#666666;">
+        <span style="font-weight:600;">${l.label}:</span> ${l.value}
       </p>`,
     )
     .join('');
 
-  const bio = params.bio?.trim()
-    ? `<p style="margin: 12px 0 0; font-size: 14px; color: #333; line-height: 1.55;">
-        ${params.bio.trim().slice(0, 280)}${params.bio.length > 280 ? '…' : ''}
-      </p>`
-    : '';
-
   return `
-    <div style="background: ${LIGHT_BG}; border-radius: 12px; padding: 20px; margin-bottom: 20px;">
-      ${avatar}
-      <p style="margin: 0; font-size: 18px; font-weight: 600;">${params.name}</p>
+    <div style="border:1px solid #e0e0e0; padding:20px; margin:20px 0;">
+      <div style="width:44px; height:44px; background:${BRAND}; color:#ffffff;
+           font-size:18px; font-weight:700; line-height:44px; text-align:center;
+           margin-bottom:12px;">
+        ${initial}
+      </div>
+      <p style="margin:0; font-size:16px; font-weight:600; color:#111111;">${params.name}</p>
       ${bio}
       ${interests}
       ${extras}

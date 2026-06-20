@@ -49,3 +49,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/send-mentor-match-emails/deno.json"
 entrypoint = "./functions/send-mentor-match-emails/index.ts"
+
+[functions.send-session-booking-emails]
+enabled = true
+verify_jwt = false
+import_map = "./functions/send-session-booking-emails/deno.json"
+entrypoint = "./functions/send-session-booking-emails/index.ts"

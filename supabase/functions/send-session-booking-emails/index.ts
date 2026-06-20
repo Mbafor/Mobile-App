@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
+import { appWebBase, emailShell, infoBox, sendResendEmail } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -16,6 +16,24 @@ type SessionNotification = {
   body: string;
   metadata: Record<string, unknown> | null;
 };
+
+function formatSessionTime(isoString: string | undefined): string {
+  if (!isoString) return '';
+  try {
+    return new Date(isoString).toLocaleString('en-GB', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      timeZone: 'UTC',
+      timeZoneName: 'short',
+    });
+  } catch {
+    return isoString;
+  }
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -49,10 +67,11 @@ serve(async (req) => {
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
     );
 
+    // Handle both booking confirmations and 15-minute reminders
     const { data: pending, error } = await supabase
       .from('notifications')
       .select('id, user_id, type, title, body, metadata')
-      .eq('type', 'session_booked')
+      .in('type', ['session_booked', 'session_reminder'])
       .is('email_sent_at', null)
       .order('created_at', { ascending: true })
       .limit(80);
@@ -86,33 +105,74 @@ serve(async (req) => {
       const meta = (notification.metadata ?? {}) as Record<string, unknown>;
       const meetingUrl =
         typeof meta.meeting_url === 'string' && meta.meeting_url ? meta.meeting_url : null;
-      const sessionId = typeof meta.session_id === 'string' ? meta.session_id : null;
+      const sessionTime =
+        typeof meta.session_time === 'string' ? meta.session_time : undefined;
+      const otherPartyName =
+        typeof meta.other_party_name === 'string' ? meta.other_party_name : '';
 
-      const ctaHref = meetingUrl ?? `${webBase}/mentorship`;
-      const ctaLabel = meetingUrl ? 'Join Meeting' : 'Open Mentorship';
-      const isConfirmed = notification.title.toLowerCase().includes('confirmed');
+      let emailHtml: string;
+      let subject: string;
+
+      if (notification.type === 'session_reminder') {
+        // 15-minute reminder
+        subject = 'Your session starts in 15 minutes';
+        emailHtml = emailShell({
+          headline: `Your session starts in 15 minutes, ${firstName}`,
+          bodyHtml: `
+            <p>
+              Your mentorship session is about to begin. Make sure you are ready and have a
+              stable internet connection before joining.
+            </p>
+            ${infoBox([
+              ...(otherPartyName ? [{ label: 'Session with', value: otherPartyName }] : []),
+              ...(sessionTime ? [{ label: 'Scheduled time', value: formatSessionTime(sessionTime) }] : []),
+              ...(meetingUrl ? [{ label: 'Meeting link', value: `<a href="${meetingUrl}" style="color:#0B6623;">${meetingUrl}</a>` }] : []),
+            ])}
+            ${
+              !meetingUrl
+                ? `<p style="margin-top:16px; font-size:13px; color:#666666;">
+                     Open the Voila app to find your session link.
+                   </p>`
+                : ''
+            }
+          `,
+          ctaLabel: meetingUrl ? 'Join Session Now' : 'Open Voila',
+          ctaHref: meetingUrl ?? `${webBase}/mentorship`,
+          footerNote: 'You are receiving this because you have a mentorship session scheduled on Voila.',
+        });
+      } else {
+        // session_booked — booking confirmation
+        const isConfirmed = notification.title.toLowerCase().includes('confirmed');
+        subject = isConfirmed ? 'Session confirmed — Voila' : 'Session update — Voila';
+
+        emailHtml = emailShell({
+          headline: isConfirmed
+            ? `Session confirmed, ${firstName}`
+            : `Session update, ${firstName}`,
+          bodyHtml: `
+            <p>${notification.body}</p>
+            ${infoBox([
+              ...(otherPartyName ? [{ label: 'Session with', value: otherPartyName }] : []),
+              ...(sessionTime ? [{ label: 'Scheduled time', value: formatSessionTime(sessionTime) }] : []),
+              ...(meetingUrl
+                ? [{ label: 'Meeting link', value: `<a href="${meetingUrl}" style="color:#0B6623;">${meetingUrl}</a>` }]
+                : []),
+            ])}
+            <p style="margin-top:16px; font-size:13px; color:#666666;">
+              You will receive another reminder 15 minutes before your session starts.
+            </p>
+          `,
+          ctaLabel: meetingUrl ? 'Join Meeting' : 'Open Mentorship',
+          ctaHref: meetingUrl ?? `${webBase}/mentorship`,
+          footerNote: 'You are receiving this because of a mentorship session on Voila.',
+        });
+      }
 
       const result = await sendResendEmail({
         apiKey: resendApiKey,
         to: recipient.email,
-        subject: isConfirmed ? '✅ Session confirmed with join link' : '📅 Session update',
-        html: emailShell({
-          headline: isConfirmed
-            ? `Your session is confirmed, ${firstName}!`
-            : `Session update for you, ${firstName}`,
-          bodyHtml: `
-            <p>${notification.body}</p>
-            ${
-              meetingUrl
-                ? `<p><strong>Session link:</strong> <a href="${meetingUrl}">${meetingUrl}</a></p>`
-                : ''
-            }
-            ${sessionId ? `<p><strong>Session ID:</strong> ${sessionId}</p>` : ''}
-          `,
-          ctaLabel,
-          ctaHref,
-          footerNote: 'You are receiving this because of a mentorship session update on Voila.',
-        }),
+        subject,
+        html: emailHtml,
       });
 
       if (result.ok) {

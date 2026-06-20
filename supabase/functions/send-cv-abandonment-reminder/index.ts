@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
+import { appWebBase, emailShell, infoBox, sendResendEmail } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -95,21 +95,22 @@ serve(async (req) => {
       const firstName = profile.full_name ? profile.full_name.split(' ')[0] : 'there';
       const reminderNumber = (cv.reminder_count ?? 0) + 1;
 
+      // One email per day over 3 days
       const messages = {
         1: {
-          subject: '📄 Your CV is waiting for you — Voila',
-          headline: `Your CV is ready, ${firstName}!`,
-          body: "You started building your CV on Voila. It's saved and ready — come back and finish the remaining sections.",
+          subject: 'Your CV is waiting — Voila',
+          headline: `Your CV is ready to finish, ${firstName}`,
+          body: 'You started building your CV on Voila. It is saved and ready for you to continue. Complete the remaining sections to unlock your download.',
         },
         2: {
-          subject: "⏰ Don't forget your CV — Voila",
-          headline: `Still interested, ${firstName}?`,
-          body: 'Your CV is still saved on Voila. Continue building it today and get closer to downloading.',
+          subject: 'Continue your CV — Voila',
+          headline: `Still building your CV, ${firstName}?`,
+          body: 'Your CV is still saved on Voila. Come back today, finish the remaining sections, and get one step closer to downloading it.',
         },
         3: {
-          subject: '📋 Last reminder — Your CV on Voila',
-          headline: `Last chance, ${firstName}`,
-          body: "This is your final reminder. Your CV is waiting on Voila — we won't send any more emails about this.",
+          subject: 'Final reminder — Your CV on Voila',
+          headline: `Last reminder, ${firstName}`,
+          body: 'This is the last email we will send about your CV. It is still saved on Voila and ready for you to complete. After this, we will not send any more reminders.',
         },
       } as const;
 
@@ -126,15 +127,10 @@ serve(async (req) => {
           headline: message.headline,
           bodyHtml: `
             <p>${message.body}</p>
-            <div style="background: #F3F7F4; border-radius: 12px; padding: 20px; margin-top: 16px;">
-              <p style="margin: 0 0 4px; font-size: 13px; color: #888;">Your CV</p>
-              <p style="margin: 0; font-size: 17px; font-weight: 600;">${cv.title}</p>
-              ${
-                reminderNumber === 3
-                  ? '<p style="margin: 12px 0 0; font-size: 13px; color: #C0392B;">This is your last reminder.</p>'
-                  : ''
-              }
-            </div>
+            ${infoBox([
+              { label: 'Your CV', value: cv.title },
+              { label: 'Reminder', value: `${reminderNumber} of 3` },
+            ])}
           `,
           ctaLabel: 'Continue Building CV',
           ctaHref: cvUrl,
