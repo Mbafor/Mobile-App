@@ -241,7 +241,7 @@ export function DesktopSidebar() {
           accessibilityLabel={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           <Ionicons
-            name={collapsed ? 'menu-outline' : 'close-outline'}
+            name="menu-outline"
             size={20}
             color={colors.textMuted}
           />
@@ -307,8 +307,9 @@ function createStyles(colors: ColorScheme) {
   },
   toggleContainer: {
     paddingHorizontal: spacing.sm,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.xs,
+    paddingTop: spacing.xs,
+    paddingBottom: 2,
+    alignItems: 'flex-end',
   },
   toggleButton: {
     flexDirection: 'row',

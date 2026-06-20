@@ -104,6 +104,31 @@ export function useUpdateOpportunityMutation(id: string) {
   });
 }
 
+export function useUpdateAndApproveMutation(id: string) {
+  const queryClient = useQueryClient();
+  const router = useRouter();
+
+  return useMutation({
+    mutationFn: async (values: OpportunityFormValues) => {
+      const { error: updateError } = await adminApi.updateOpportunity(id, values);
+      if (updateError) throw updateError;
+      const { error: approveError } = await adminApi.approveOpportunity(id);
+      if (approveError) throw approveError;
+    },
+    onSuccess: () => {
+      Alert.alert('Approved', 'The opportunity is now live for students.');
+      router.replace(ROUTES.ADMIN.PENDING as Href);
+      refreshPendingAndLive(queryClient);
+      void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
+      void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
+    },
+    onError: (error) => {
+      Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
+    },
+  });
+}
+
 export function useDeleteOpportunityMutation() {
   const queryClient = useQueryClient();
 

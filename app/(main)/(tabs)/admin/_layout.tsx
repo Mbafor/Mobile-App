@@ -41,6 +41,10 @@ export default function AdminTabLayout() {
         name="[id]/edit"
         options={{ title: 'Edit opportunity', headerBackTitle: 'Back' }}
       />
+      <Stack.Screen
+        name="[id]/review"
+        options={{ title: 'Review opportunity', headerBackTitle: 'Pending' }}
+      />
     </Stack>
   );
 }

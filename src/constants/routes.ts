@@ -70,5 +70,6 @@ export const ROUTES = {
     PASTE: '/(main)/(tabs)/admin/paste',
     PENDING: '/(main)/(tabs)/admin/pending',
     edit: (id: string) => `/(main)/(tabs)/admin/${id}/edit` as const,
+    pendingReview: (id: string) => `/(main)/(tabs)/admin/${id}/review` as const,
   },
 } as const;

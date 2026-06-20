@@ -1,6 +1,7 @@
 import { useRef, useState, type ReactNode } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import {
   Alert,
   Keyboard,
@@ -41,6 +42,7 @@ type OpportunityFormProps = {
   submitLabel: string;
   loading?: boolean;
   onSubmit: (values: OpportunityFormValues) => void | Promise<void>;
+  secondaryAction?: { label: string; onPress: () => void; destructive?: boolean };
 };
 
 function normalizeTags(tags: string[], category: string): string[] {
@@ -56,8 +58,10 @@ export function OpportunityForm({
   submitLabel,
   loading,
   onSubmit,
+  secondaryAction,
 }: OpportunityFormProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const scrollRef = useRef<ScrollView>(null);
   const [title, setTitle] = useState(initialValues.title);
   const [organization, setOrganization] = useState(initialValues.organization);
@@ -238,6 +242,17 @@ export function OpportunityForm({
         >
           {submitLabel}
         </Button>
+        {secondaryAction ? (
+          <Button
+            variant="ghost"
+            onPress={secondaryAction.onPress}
+            disabled={isBusy}
+            fullWidth
+            textStyle={secondaryAction.destructive ? { color: colors.error } : undefined}
+          >
+            {secondaryAction.label}
+          </Button>
+        ) : null}
       </View>
     </KeyboardAvoidingView>
   );

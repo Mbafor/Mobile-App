@@ -1,3 +1,4 @@
+import { useRouter, type Href } from 'expo-router';
 import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -5,6 +6,7 @@ import { Screen } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import type { ColorScheme } from '@/constants/theme/types';
+import { ROUTES } from '@/constants/routes';
 import { usePendingOpportunities } from '@/features/admin/hooks/useAdminOpportunities';
 import {
   useApproveOpportunityMutation,
@@ -18,6 +20,7 @@ import type { Opportunity } from '@/types/domain/opportunity';
 export function AdminPendingQueueScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const router = useRouter();
   const { data: pending, isLoading, error, refetch, isRefetching } = usePendingOpportunities();
   const approveMutation = useApproveOpportunityMutation();
   const rejectMutation = useRejectOpportunityMutation();
@@ -89,7 +92,10 @@ export function AdminPendingQueueScreen() {
           }
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <View style={styles.cardBody}>
+              <Pressable
+                style={styles.cardBody}
+                onPress={() => router.push(ROUTES.ADMIN.pendingReview(item.id) as Href)}
+              >
                 <Text style={styles.cardTitle} numberOfLines={2}>{item.title}</Text>
                 <Text muted style={styles.cardOrg}>{item.organization}</Text>
 
@@ -109,14 +115,16 @@ export function AdminPendingQueueScreen() {
                 <Text variant="caption" muted style={styles.deadline}>
                   Deadline: {formatDeadline(item.deadline)}
                 </Text>
-              </View>
+
+                <Text variant="caption" style={styles.tapHint}>Tap to review & edit →</Text>
+              </Pressable>
 
               <View style={styles.actions}>
                 <Pressable
                   style={[styles.actionBtn, styles.approveBtn]}
                   onPress={() => handleApprove(item)}
                 >
-                  <Text style={styles.approveBtnText}>Approve</Text>
+                  <Text style={styles.approveBtnText}>Quick approve</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.actionBtn, styles.rejectBtn]}
@@ -170,6 +178,7 @@ function createStyles(colors: ColorScheme) {
     sourceTag: { backgroundColor: colors.primary + '18' },
     tagText: { fontSize: 11, fontWeight: '600', color: colors.textMuted },
     deadline: { marginTop: 4 },
+    tapHint: { marginTop: 6, color: colors.primary, fontSize: 12 },
     actions: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.xs },
     actionBtn: {
       flex: 1,
