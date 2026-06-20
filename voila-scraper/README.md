@@ -6,77 +6,185 @@ Automated opportunity scraper for [Voila Africa](https://voila-africa.com). Scra
 
 | Source | Method |
 |--------|--------|
-| Idealist.org | REST API (requires API key) |
 | Opportunities for Africans | Web scraping |
 | After School Africa | Web scraping |
 | Scholars4Dev | Web scraping |
+| Idealist.org | REST API (skipped until you set `IDEALIST_API_KEY`) |
 
 ---
 
-## Setup
+## Before you deploy — run the Supabase migration
 
-### 1. Run the Supabase migration
+This must be done once before the scraper can write to your database.
 
-Open your Supabase project → SQL Editor → paste and run `migration.sql`.
+1. Open your Supabase project → **SQL Editor**
+2. Paste the entire contents of `migration.sql` and click **Run**
+3. You should see: `Success. No rows returned`
 
-This creates the `opportunities` table, indexes, and admin RPC functions.
+This adds the scraper columns (`apply_url`, `status`, `is_active`, `category`, etc.) to the existing `opportunities` table and creates the `approve_opportunity` / `reject_opportunity` RPCs.
 
-### 2. Install dependencies
+---
+
+## Deploy to Railway
+
+### Step 1 — Push your Mobile-App repo to GitHub
+
+Railway deploys from GitHub. Make sure your latest code is pushed:
+
+```bash
+git add .
+git commit -m "add voila scraper"
+git push
+```
+
+---
+
+### Step 2 — Create a Railway project
+
+1. Go to [railway.app](https://railway.app) and sign in
+2. Click **New Project**
+3. Select **Deploy from GitHub repo**
+4. Find and select your **Mobile-App** repository
+5. Click **Deploy Now**
+
+Railway will immediately start a build. It will **fail** at this point — that is expected because the root directory and environment variables are not configured yet.
+
+---
+
+### Step 3 — Point Railway at the voila-scraper folder
+
+1. Click the service card that Railway just created
+2. Go to **Settings** → scroll to **Source**
+3. Under **Root Directory**, type exactly: `voila-scraper`
+4. Click **Save**
+
+Railway will rebuild from that folder. It now sees `voila-scraper/package.json` as the project root.
+
+---
+
+### Step 4 — Add environment variables
+
+1. In the same service, go to the **Variables** tab
+2. Click **New Variable** and add each of the following:
+
+| Variable name | Where to find the value |
+|---|---|
+| `SUPABASE_URL` | Supabase Dashboard → Settings → API → **Project URL** |
+| `SUPABASE_SERVICE_KEY` | Supabase Dashboard → Settings → API → **service_role** key (not the anon key) |
+| `PORT` | `3000` — Railway also injects this automatically, but set it explicitly |
+
+**Optional — add later once you have the key:**
+
+| Variable name | Value |
+|---|---|
+| `IDEALIST_API_KEY` | Your Idealist Open Network API key — scraper skips Idealist until this is set |
+
+> Always use the **service_role** key, not the anon key. The anon key is blocked by RLS and the scraper cannot write to the database.
+
+After adding the variables, Railway triggers a new deployment automatically.
+
+---
+
+### Step 5 — Verify the build succeeded
+
+1. Click the **Deployments** tab
+2. Wait for the build to finish — usually under 2 minutes
+3. Click the deployment row to open the build log
+4. The last lines should look like this:
+
+```
+> voila-scraper@1.0.0 build
+> tsc
+
+> voila-scraper@1.0.0 start
+> node dist/cron.js
+
+[cron] Voila scraper started — next run at midnight UTC
+[health] Health server listening on port 3000
+```
+
+If you see a red **Failed** badge, click it and read the error — it is almost always a missing or wrong environment variable.
+
+---
+
+### Step 6 — Set the health check
+
+1. Go to **Settings** → scroll to **Health Check**
+2. Set **Path** to `/health`
+3. Set **Timeout** to `30` seconds
+4. Click **Save**
+
+Railway now pings `/health` every few minutes. If the scraper crashes, Railway restarts it automatically.
+
+---
+
+### Step 7 — Generate a public URL and confirm it is running
+
+1. Go to **Settings** → **Networking** → click **Generate Domain**
+2. Railway gives you a URL like `https://voila-scraper-production.up.railway.app`
+3. Open it in your browser — you should see:
+
+```json
+{
+  "status": "ok",
+  "lastRun": null,
+  "nextRun": "2025-01-16T00:00:00.000Z",
+  "lastRunSummary": null
+}
+```
+
+`lastRun` is `null` until the first midnight UTC run completes. The scraper is live.
+
+---
+
+### Step 8 — Trigger a manual scrape to confirm the database connection
+
+You do not need to wait until midnight to test. Run a one-shot scrape locally against the live database:
 
 ```bash
 cd voila-scraper
-npm install
-```
-
-### 3. Configure environment variables
-
-```bash
 cp .env.example .env
+# Open .env and paste in the same SUPABASE_URL and SUPABASE_SERVICE_KEY values
+npm install
+npm run dev:scrape
 ```
 
-Fill in `.env`:
+You should see output like:
 
 ```
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_SERVICE_KEY=your-service-role-key-here   # NOT the anon key — must bypass RLS
-IDEALIST_API_KEY=your-idealist-api-key-here
-PORT=3000
+[expire] Expired 0 past opportunities
+[OpportunitiesForAfricans] Scraped 12 new, skipped 3 duplicates
+[AfterSchoolAfrica] Scraped 8 new, skipped 5 duplicates
+[Scholars4Dev] Scraped 6 new, skipped 9 duplicates
+[summary] Total new: 26 | Skipped: 17 | Pages visited: 36
 ```
 
-> **Important:** Use the `service_role` key from Supabase → Settings → API. The anon key will be rejected by RLS.
-
-### 4. Get an Idealist API key
-
-Register at [https://www.idealist.org/en/api](https://www.idealist.org/en/api) and request Open Network API access. If you don't have a key yet, the Idealist scraper is skipped automatically (the other 3 sources still run).
+Then open your Supabase Dashboard → Table Editor → `opportunities` table — you should see rows with `status = pending`.
 
 ---
 
-## Running
-
-### Manual run (for testing)
+## Running locally
 
 ```bash
-npm run scrape:now
+cd voila-scraper
+cp .env.example .env
+# Fill in SUPABASE_URL, SUPABASE_SERVICE_KEY in .env
+
+npm install
+
+# One-shot scrape (does not start the cron):
+npm run dev:scrape
+
+# Long-running cron (midnight UTC daily):
+npm run dev
 ```
-
-Runs a full scrape immediately without waiting for midnight. Use this to test each scraper.
-
-### Production (daily cron)
-
-```bash
-npm start
-```
-
-Starts the long-running process with the midnight UTC cron job and health endpoint at `GET /health`.
 
 ---
 
 ## Health endpoint
 
-While running, check status at:
-
 ```
-GET http://localhost:3000/health
+GET /health
 ```
 
 Response:
@@ -89,52 +197,27 @@ Response:
 }
 ```
 
-Railway and Render use this URL for health checks.
-
----
-
-## Deploy to Railway or Render
-
-### Railway
-
-1. Create a new Railway project → connect this repo (or push `voila-scraper/` as its own repo)
-2. Set **Start Command**: `npm start`
-3. Add environment variables in the Railway dashboard:
-   - `SUPABASE_URL`
-   - `SUPABASE_SERVICE_KEY`
-   - `IDEALIST_API_KEY`
-   - `PORT` (Railway injects this automatically, but you can set it too)
-4. Add a health check path: `/health`
-
-### Render
-
-1. Create a new **Web Service** → connect repo
-2. **Build Command**: `npm install`
-3. **Start Command**: `npm start`
-4. Add environment variables in Render dashboard (same as above)
-5. Health Check Path: `/health`
-
 ---
 
 ## Admin review flow
 
-Scraped opportunities land in Supabase with:
+Scraped opportunities are invisible to the Voila app until an admin approves them.
+
+Every new opportunity lands with:
 - `status = "pending"`
 - `is_active = false`
 
-They are invisible to the Voila app until an admin approves them.
-
-**Approve** via Supabase RPC:
+**Approve** (makes the opportunity live):
 ```sql
-select approve_opportunity('<opportunity_uuid>', '<admin_user_id>', 'Looks good');
+select public.approve_opportunity('<opportunity_uuid>', '<admin_user_id>', 'Looks good');
 ```
 
-**Reject** via Supabase RPC:
+**Reject:**
 ```sql
-select reject_opportunity('<opportunity_uuid>', '<admin_user_id>', 'Not relevant for Africa');
+select public.reject_opportunity('<opportunity_uuid>', '<admin_user_id>', 'Not relevant');
 ```
 
-Or use the Voila admin dashboard in the mobile app — it queries `status = "pending"` opportunities and provides an approval/rejection UI.
+You can also approve/reject from the Voila admin dashboard in the mobile app.
 
 ---
 
@@ -144,20 +227,21 @@ Or use the Voila admin dashboard in the mobile app — it queries `status = "pen
 voila-scraper/
   src/
     scrapers/
-      idealist.ts               # Idealist API integration
+      idealist.ts               # Idealist API (skipped if no API key)
       opportunitiesforafricans.ts
       afterschoolafrica.ts
       scholars4dev.ts
     types.ts                    # Shared TypeScript types
     config.ts                   # Env var loading
-    utils.ts                    # HTTP, HTML parsing, date parsing helpers
-    classifier.ts               # Keyword classification for all fields
-    db.ts                       # Supabase upsert, duplicate check, expire RPC
-    health.ts                   # Express health endpoint
-    index.ts                    # Orchestrator — runs all scrapers, classifies, saves
-    cron.ts                     # node-cron scheduler (entry point)
-  migration.sql                 # Run in Supabase SQL Editor first
-  .env.example
+    utils.ts                    # HTTP, HTML parsing, date helpers
+    classifier.ts               # Keyword-based field classification
+    db.ts                       # Supabase client, duplicate check, upsert
+    health.ts                   # Express /health endpoint
+    index.ts                    # Orchestrator — scrape, classify, save
+    cron.ts                     # node-cron entry point (daily midnight UTC)
+  migration.sql                 # Run once in Supabase SQL Editor
+  railway.json                  # Railway deployment config (auto-detected)
+  .env.example                  # Copy to .env for local development
   package.json
   tsconfig.json
   README.md
@@ -165,21 +249,12 @@ voila-scraper/
 
 ---
 
-## Adjusting web scrapers
+## If a scraper stops finding listings
 
-The web scrapers (`opportunitiesforafricans.ts`, `afterschoolafrica.ts`, `scholars4dev.ts`) use CSS selectors based on common WordPress patterns. If a site updates its HTML structure, you'll see warnings like:
+The web scrapers use CSS selectors based on common WordPress patterns. If a site redesigns, you will see:
 
 ```
 [warn] HTTP 200 but no listings found at https://... — structure may have changed
 ```
 
-To fix: inspect the site's HTML in your browser DevTools and update the CSS selectors in `extractListingUrls()` for that scraper. The scraper will never crash — it logs and continues.
-
----
-
-## Adjusting the Idealist API
-
-The `idealist.ts` scraper uses `https://www.idealist.org/api/v1/listings`. If Idealist updates their API:
-1. Check their current developer docs at [https://www.idealist.org/en/api](https://www.idealist.org/en/api)
-2. Update `API_BASE`, query params, and the `IdealistListing` interface in `src/scrapers/idealist.ts`
-3. The response shape mapping is in `mapListing()` — update field names there
+Open the site in your browser → DevTools → inspect the listing cards → update the CSS selectors in `extractListingUrls()` for that scraper file. The scraper never crashes — it logs and continues with the other sources.
