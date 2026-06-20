@@ -17,7 +17,7 @@ export default function AdminHomeScreen() {
         edit: (id) => ROUTES.ADMIN.edit(id) as Href,
       }}
       title="Manage opportunities"
-      subtitle="Add and maintain listings students see in the app. Analytics are available in Super Admin."
+      subtitle="Add and maintain listings students see in the app."
     />
   );
 }
