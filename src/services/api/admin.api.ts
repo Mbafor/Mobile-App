@@ -145,10 +145,40 @@ export const adminApi = {
     const { data, error } = await supabase
       .from('opportunities')
       .select('*')
+      .eq('status', 'approved')
       .order('created_at', { ascending: false });
 
     if (error) return { data: null, error };
     return { data: (data ?? []).map(mapOpportunityRow), error: null };
+  },
+
+  listPending: async () => {
+    const { data, error } = await supabase
+      .from('opportunities')
+      .select('*')
+      .eq('status', 'pending')
+      .order('scraped_at', { ascending: true });
+
+    if (error) return { data: null, error };
+    return { data: (data ?? []).map(mapOpportunityRow), error: null };
+  },
+
+  approveOpportunity: async (id: string, notes?: string) => {
+    const { error } = await supabase.rpc('approve_opportunity', {
+      p_opportunity_id: id,
+      p_notes: notes ?? null,
+    });
+    if (error) return { error: formatAdminError(error) };
+    return { error: null };
+  },
+
+  rejectOpportunity: async (id: string, notes?: string) => {
+    const { error } = await supabase.rpc('reject_opportunity', {
+      p_opportunity_id: id,
+      p_notes: notes ?? null,
+    });
+    if (error) return { error: formatAdminError(error) };
+    return { error: null };
   },
 
   getOpportunity: async (id: string) => {

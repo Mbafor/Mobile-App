@@ -7,6 +7,8 @@ export const opportunitiesApi = {
     const { data, error } = await supabase
       .from('opportunities')
       .select('*')
+      .eq('status', 'approved')
+      .eq('is_active', true)
       .order('created_at', { ascending: false });
 
     if (error) return { data: null, error };

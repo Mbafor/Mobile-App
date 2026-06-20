@@ -26,6 +26,10 @@ export default function AdminTabLayout() {
     >
       <Stack.Screen name="index" options={{ title: 'Opportunities' }} />
       <Stack.Screen
+        name="pending"
+        options={{ title: 'Pending review', headerBackTitle: 'Back' }}
+      />
+      <Stack.Screen
         name="create"
         options={{ title: 'Create opportunity', headerBackTitle: 'Back' }}
       />

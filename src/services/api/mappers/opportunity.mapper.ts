@@ -18,6 +18,9 @@ export function mapOpportunityRow(row: OpportunityRow): Opportunity {
     fundingType: row.funding_type,
     degreeLevels: row.degree_levels ?? [],
     locationType: row.location_type as Opportunity['locationType'],
+    status: row.status ?? 'approved',
+    isActive: row.is_active ?? true,
+    source: row.source ?? null,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
   };

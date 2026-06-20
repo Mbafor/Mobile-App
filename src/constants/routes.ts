@@ -59,6 +59,7 @@ export const ROUTES = {
     OPPORTUNITIES: '/(main)/(tabs)/super-admin/opportunities',
     OPPORTUNITY_CREATE: '/(main)/(tabs)/super-admin/opportunities/create',
     OPPORTUNITY_PASTE: '/(main)/(tabs)/super-admin/opportunities/paste',
+    OPPORTUNITY_PENDING: '/(main)/(tabs)/super-admin/opportunities/pending',
     opportunityEdit: (id: string) =>
       `/(main)/(tabs)/super-admin/opportunities/${id}/edit` as const,
   },
@@ -67,6 +68,7 @@ export const ROUTES = {
     OPPORTUNITIES: '/(main)/(tabs)/admin',
     CREATE: '/(main)/(tabs)/admin/create',
     PASTE: '/(main)/(tabs)/admin/paste',
+    PENDING: '/(main)/(tabs)/admin/pending',
     edit: (id: string) => `/(main)/(tabs)/admin/${id}/edit` as const,
   },
 } as const;

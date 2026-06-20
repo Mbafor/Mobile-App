@@ -10,7 +10,7 @@ import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
-import { useAdminOpportunities } from '@/features/admin/hooks/useAdminOpportunities';
+import { useAdminOpportunities, usePendingOpportunities } from '@/features/admin/hooks/useAdminOpportunities';
 import { useDeleteOpportunityMutation } from '@/features/admin/hooks/useAdminOpportunityMutations';
 import { formatDeadline } from '@/utils/formatting';
 
@@ -18,6 +18,7 @@ export type OpportunityListRoutes = {
   create: Href;
   paste: Href;
   edit: (id: string) => Href;
+  pending?: Href;
 };
 
 type OpportunityListScreenProps = {
@@ -35,6 +36,8 @@ export function OpportunityListScreen({
   const { colors } = useTheme();
   const router = useRouter();
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
+  const { data: pending } = usePendingOpportunities();
+  const pendingCount = pending?.length ?? 0;
   const deleteMutation = useDeleteOpportunityMutation();
 
   const confirmDelete = async (id: string, oppTitle: string) => {
@@ -75,6 +78,17 @@ export function OpportunityListScreen({
           </Button>
           <Button onPress={() => router.push(routes.create)}>Create new</Button>
         </View>
+        {routes.pending && pendingCount > 0 ? (
+          <Pressable
+            style={styles.pendingBanner}
+            onPress={() => routes.pending && router.push(routes.pending)}
+          >
+            <Text style={styles.pendingBannerText}>
+              {pendingCount} scraped {pendingCount === 1 ? 'opportunity' : 'opportunities'} pending review
+            </Text>
+            <Text style={styles.pendingBannerLink}>Review →</Text>
+          </Pressable>
+        ) : null}
       </View>
 
       {error ? (
@@ -140,6 +154,18 @@ function createStyles(colors: ColorScheme) {
   heroTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
   heroSub: { lineHeight: 20, marginBottom: spacing.sm },
   heroActions: { flexDirection: 'row', gap: spacing.sm, justifyContent: 'flex-end' },
+  pendingBanner: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    backgroundColor: colors.primary + '15',
+    borderRadius: 8,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 10,
+    marginTop: spacing.xs,
+  },
+  pendingBannerText: { fontSize: 13, color: colors.primary, fontWeight: '500', flex: 1 },
+  pendingBannerLink: { fontSize: 13, color: colors.primary, fontWeight: '700' },
   padded: { padding: spacing.md },
   list: { paddingHorizontal: spacing.md, paddingBottom: spacing.xl, gap: spacing.sm },
   thumb: {

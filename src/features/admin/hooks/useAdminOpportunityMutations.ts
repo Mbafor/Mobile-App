@@ -11,6 +11,46 @@ function refreshOpportunityFeeds(queryClient: ReturnType<typeof useQueryClient>)
   void queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
 }
 
+function refreshPendingAndLive(queryClient: ReturnType<typeof useQueryClient>) {
+  void queryClient.invalidateQueries({ queryKey: queryKeys.admin.pendingOpportunities });
+  void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
+  refreshOpportunityFeeds(queryClient);
+}
+
+export function useApproveOpportunityMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
+      const { error } = await adminApi.approveOpportunity(id, notes);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      refreshPendingAndLive(queryClient);
+    },
+    onError: (error) => {
+      Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
+    },
+  });
+}
+
+export function useRejectOpportunityMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
+      const { error } = await adminApi.rejectOpportunity(id, notes);
+      if (error) throw error;
+    },
+    onSuccess: () => {
+      refreshPendingAndLive(queryClient);
+    },
+    onError: (error) => {
+      Alert.alert('Could not reject', error instanceof Error ? error.message : 'Please try again.');
+    },
+  });
+}
+
 export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME as Href) {
   const queryClient = useQueryClient();
   const router = useRouter();

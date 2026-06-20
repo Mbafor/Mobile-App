@@ -248,6 +248,13 @@ export type Database = {
           funding_type: string | null;
           degree_levels: string[];
           location_type: string | null;
+          status: string;
+          is_active: boolean;
+          source: string | null;
+          scraped_at: string | null;
+          reviewed_at: string | null;
+          reviewed_by: string | null;
+          admin_notes: string | null;
           created_by: string | null;
           created_at: string;
           updated_at: string;
@@ -266,6 +273,9 @@ export type Database = {
           funding_type?: string | null;
           degree_levels?: string[];
           location_type?: string | null;
+          status?: string;
+          is_active?: boolean;
+          source?: string | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -283,6 +293,9 @@ export type Database = {
           funding_type?: string | null;
           degree_levels?: string[];
           location_type?: string | null;
+          status?: string;
+          is_active?: boolean;
+          source?: string | null;
           created_at?: string;
           updated_at?: string;
         };

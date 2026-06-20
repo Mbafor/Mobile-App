@@ -4,6 +4,20 @@ import { queryKeys } from '@/constants/query-keys';
 import { useCanManageOpportunities } from '@/features/admin/hooks/useCanManageOpportunities';
 import { adminApi } from '@/services/api';
 
+export function usePendingOpportunities() {
+  const { isReady } = useCanManageOpportunities();
+
+  return useQuery({
+    queryKey: queryKeys.admin.pendingOpportunities,
+    queryFn: async () => {
+      const { data, error } = await adminApi.listPending();
+      if (error) throw error;
+      return data ?? [];
+    },
+    enabled: isReady,
+  });
+}
+
 export function useAdminOpportunities() {
   const { isReady } = useCanManageOpportunities();
 

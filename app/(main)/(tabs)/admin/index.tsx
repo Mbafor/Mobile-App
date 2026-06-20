@@ -13,6 +13,7 @@ export default function AdminHomeScreen() {
       routes={{
         create: ROUTES.ADMIN.CREATE as Href,
         paste: ROUTES.ADMIN.PASTE as Href,
+        pending: ROUTES.ADMIN.PENDING as Href,
         edit: (id) => ROUTES.ADMIN.edit(id) as Href,
       }}
       title="Manage opportunities"

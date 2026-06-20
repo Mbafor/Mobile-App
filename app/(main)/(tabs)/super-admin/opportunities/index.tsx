@@ -13,6 +13,7 @@ export default function SuperAdminOpportunitiesIndex() {
       routes={{
         create: ROUTES.SUPER_ADMIN.OPPORTUNITY_CREATE as Href,
         paste: ROUTES.SUPER_ADMIN.OPPORTUNITY_PASTE as Href,
+        pending: ROUTES.SUPER_ADMIN.OPPORTUNITY_PENDING as Href,
         edit: (id) => ROUTES.SUPER_ADMIN.opportunityEdit(id) as Href,
       }}
       title="Manage opportunities"

@@ -14,6 +14,9 @@ export type Opportunity = {
   fundingType: string | null;
   degreeLevels: string[];
   locationType: LocationType | null;
+  status: string;
+  isActive: boolean;
+  source: string | null;
   createdAt: string;
   updatedAt: string;
 };
