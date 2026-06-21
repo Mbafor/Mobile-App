@@ -6,6 +6,7 @@ import AnimatedStat from "./components/AnimatedStat";
 import FaqItem from "./components/FaqItem";
 import ScrollReveal from "./components/ScrollReveal";
 import OpportunityCarousel from "./components/OpportunityCarousel";
+import TestimonialCarousel from "./components/TestimonialCarousel";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voila-africa.com";
@@ -160,17 +161,52 @@ const TESTIMONIALS = [
   {
     quote: '"Voila helped me find a paid internship and connect with a mentor who understood my ambitions."',
     name: "Amina",
-    role: "Computer Science student",
+    role: "Computer Science student, Ghana",
   },
   {
     quote: '"The personalised opportunity feed saved me hours of searching and showed me roles I would have missed."',
     name: "Chidi",
-    role: "Business student",
+    role: "Business student, Nigeria",
   },
   {
     quote: '"I mentor young talent through Voila because the platform makes it easy to share real career advice."',
     name: "Ngozi",
-    role: "Career mentor",
+    role: "Career mentor, Nigeria",
+  },
+  {
+    quote: '"I applied for three scholarships I found on Voila. I got one. That one changed my life."',
+    name: "Kwame",
+    role: "Engineering student, Ghana",
+  },
+  {
+    quote: '"Before Voila I had no idea how many fellowships existed for students like me. Now I have three applications in progress."',
+    name: "Fatima",
+    role: "Public Health student, Senegal",
+  },
+  {
+    quote: '"The CV builder helped me put together a professional resume in one evening. I landed a UN internship interview the next week."',
+    name: "Tendai",
+    role: "International Relations student, Zimbabwe",
+  },
+  {
+    quote: '"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award."',
+    name: "Aisha",
+    role: "Law student, Kenya",
+  },
+  {
+    quote: '"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities."',
+    name: "Emeka",
+    role: "Finance student, Nigeria",
+  },
+  {
+    quote: '"As a first-generation student I had no network. Voila gave me mentors and a feed that felt built just for me."',
+    name: "Sena",
+    role: "Architecture student, Togo",
+  },
+  {
+    quote: '"I found a fully funded master\'s scholarship through Voila that I never would have discovered on my own. Genuinely life-changing."',
+    name: "Lebo",
+    role: "Data Science student, South Africa",
   },
 ];
 
@@ -192,8 +228,6 @@ const FAQS = [
     answer: "Yes! You can use our CV builder and export your resume using any of our professional templates at no cost.",
   },
 ];
-
-const AVATAR_BG = ["#0B6623", "#2D6040", "#3D7A50", "#8BC99A"];
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -254,14 +288,6 @@ function ArrowIcon({ className }: { className?: string }) {
     </svg>
   );
 }
-function StarIcon() {
-  return (
-    <svg className="w-3.5 h-3.5 fill-amber-400" viewBox="0 0 24 24">
-      <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-    </svg>
-  );
-}
-
 // ── Shared ────────────────────────────────────────────────────────────────────
 
 function Eyebrow({ label }: { label: string }) {
@@ -567,40 +593,16 @@ function MentorshipSection() {
 
 function TestimonialsSection() {
   return (
-    <section className="bg-[#F4F7F5] py-20 md:py-28">
-      <div className="mx-auto max-w-[1200px] px-6 text-center">
+    <section className="bg-[#F4F7F5] py-20 md:py-28 overflow-hidden">
+      <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
         <div className="flex justify-center">
           <Eyebrow label="Success stories" />
         </div>
-        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-10 mx-auto">
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mx-auto">
           Students and mentors finding momentum together.
         </h2>
-        <div className="flex flex-col md:flex-row gap-4">
-          {TESTIMONIALS.map((t) => (
-            <div
-              key={t.name}
-              className="flex-1 p-8 bg-white rounded-2xl border border-border shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all duration-150 flex flex-col gap-4"
-            >
-              <div className="flex gap-0.5">
-                {[1, 2, 3, 4, 5].map((s) => <StarIcon key={s} />)}
-              </div>
-              <p className="text-[#1A1A1A] text-base leading-[26px] italic flex-1">{t.quote}</p>
-              <div className="flex items-center gap-3 mt-2">
-                <div
-                  className="w-[42px] h-[42px] rounded-full flex items-center justify-center"
-                  style={{ backgroundColor: AVATAR_BG[t.name.charCodeAt(0) % AVATAR_BG.length] }}
-                >
-                  <span className="text-white font-bold text-base">{t.name.charAt(0)}</span>
-                </div>
-                <div>
-                  <p className="font-bold text-[#1A1A1A] text-base">{t.name}</p>
-                  <p className="text-muted text-sm mt-px">{t.role}</p>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
       </div>
+      <TestimonialCarousel testimonials={TESTIMONIALS} />
     </section>
   );
 }

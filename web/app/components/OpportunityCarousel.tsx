@@ -33,6 +33,8 @@ function CalendarIcon() {
   );
 }
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.voila-africa.com';
+
 export default function OpportunityCarousel({ opportunities }: { opportunities: OpportunityCardData[] }) {
   const doubled = [...opportunities, ...opportunities];
 
@@ -46,7 +48,7 @@ export default function OpportunityCarousel({ opportunities }: { opportunities: 
           return (
             <a
               key={`${opp.id}-${i}`}
-              href={`/opportunity/${opp.id}`}
+              href={`${APP_URL}/opportunity/${opp.id}`}
               className="flex-shrink-0 w-[280px] rounded-2xl border border-[#E0E0E0] bg-white shadow-sm overflow-hidden transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
             >
               {opp.image_url ? (
