@@ -18,3 +18,16 @@ html {
 * {
   box-sizing: border-box;
 }
+
+@keyframes scroll-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.opp-scroll-track {
+  animation: scroll-left 22s linear infinite;
+}
+
+.opp-scroll-track:hover {
+  animation-play-state: paused;
+}

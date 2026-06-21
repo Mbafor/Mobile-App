@@ -1,13 +1,39 @@
 import Image from "next/image";
+import { createClient } from "@supabase/supabase-js";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AnimatedStat from "./components/AnimatedStat";
 import FaqItem from "./components/FaqItem";
 import ScrollReveal from "./components/ScrollReveal";
+import OpportunityCarousel from "./components/OpportunityCarousel";
 
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com";
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://voila-africa.com";
 const SIGNUP_URL = `${APP_URL}/welcome`;
+
+const SUPABASE_URL = process.env.EXPO_PUBLIC_SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL || "";
+const SUPABASE_KEY =
+  process.env.SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.NEXT_PRIVATE_SUPABASE_SERVICE_ROLE_KEY ||
+  process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY ||
+  "";
+
+async function getRecentOpportunities() {
+  if (!SUPABASE_URL || !SUPABASE_KEY) return [];
+  try {
+    const sb = createClient(SUPABASE_URL, SUPABASE_KEY);
+    const { data } = await sb
+      .from("opportunities")
+      .select("id,title,organization,image_url,category,deadline")
+      .eq("status", "approved")
+      .eq("is_active", true)
+      .order("created_at", { ascending: false })
+      .limit(5);
+    return data ?? [];
+  } catch {
+    return [];
+  }
+}
 
 function JsonLd() {
   const schema = {
@@ -122,9 +148,9 @@ const HOW_IT_WORKS = [
 ];
 
 const TRUST_STATS = [
-  { value: "24K+", label: "Students supported" },
-  { value: "7.5K+", label: "Mentors onboarded" },
-  { value: "15K+", label: "Opportunities listed" },
+  { value: "1K+", label: "Students supported" },
+  { value: "25+", label: "Mentors onboarded" },
+  { value: "300+", label: "Opportunities listed" },
   { value: "98%", label: "Student satisfaction" },
 ];
 
@@ -354,6 +380,39 @@ function TrustSection() {
             </span>
           ))}
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ── Recent Opportunities ──────────────────────────────────────────────────────
+
+async function RecentOpportunitiesSection() {
+  const opportunities = await getRecentOpportunities();
+  if (!opportunities.length) return null;
+
+  return (
+    <section className="bg-white py-20 md:py-28 overflow-hidden">
+      <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
+        <div className="flex justify-center">
+          <Eyebrow label="Live on platform" />
+        </div>
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
+          Recently added opportunities
+        </h2>
+        <p className="text-muted text-base leading-7 mx-auto max-w-[600px]">
+          Fresh scholarships, internships, and fellowships added daily — sign up to get a personalised feed.
+        </p>
+      </div>
+      <OpportunityCarousel opportunities={opportunities} />
+      <div className="flex justify-center mt-10 px-6">
+        <a
+          href={SIGNUP_URL}
+          className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white font-bold text-base px-6 py-3.5 rounded-xl transition-colors duration-150"
+        >
+          Browse all opportunities
+          <ArrowIcon className="w-4 h-4" />
+        </a>
       </div>
     </section>
   );
@@ -608,6 +667,7 @@ export default function LandingPage() {
       <main>
         <Hero />
         <TrustSection />
+        <RecentOpportunitiesSection />
         <FeaturesSection />
         <HowItWorksSection />
         <MentorshipSection />
