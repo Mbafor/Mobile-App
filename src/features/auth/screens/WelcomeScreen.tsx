@@ -2,7 +2,7 @@ import { useRouter, type Href } from 'expo-router';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, ImageBackground } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
@@ -103,7 +103,20 @@ export function WelcomeScreen() {
     clearError,
   } = useAuthActions();
 
+  const isHydrating = useAuthStore((s) => s.isHydrating);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
+
   useAuthRedirect('guest');
+
+  // While restoring the persisted session, show a spinner instead of flashing
+  // the login form at a user who is already signed in.
+  if (isHydrating || isAuthenticated) {
+    return (
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0B6623' }}>
+        <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" />
+      </View>
+    );
+  }
 
   const switchMode = (next: AuthMode) => {
     setMode(next);
