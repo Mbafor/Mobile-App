@@ -7,6 +7,7 @@ export const ROUTES = {
     WELCOME: '/(auth)/welcome',
     EMAIL: '/(auth)/email',
     VERIFY_OTP: '/(auth)/verify-otp',
+    RESET_PASSWORD: '/(auth)/reset-password',
   },
   ONBOARDING: {
     BASIC_INFO: '/(onboarding)/basic-information',

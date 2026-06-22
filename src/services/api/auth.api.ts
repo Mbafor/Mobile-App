@@ -74,6 +74,14 @@ export const authApi = {
     callback: (event: AuthChangeEvent, session: Session | null) => void,
   ) => supabase.auth.onAuthStateChange(callback),
 
+  resetPasswordForEmail: (email: string, redirectTo?: string) =>
+    supabase.auth.resetPasswordForEmail(email.trim().toLowerCase(), {
+      redirectTo,
+    }),
+
+  updatePassword: (password: string) =>
+    supabase.auth.updateUser({ password }),
+
   deleteAccount: () => supabase.rpc('delete_own_account'),
 };
 

@@ -292,7 +292,7 @@ export function OnboardingShell({
             const isActive = num === currentStep;
             const isLast = i === TOTAL - 1;
             return (
-              <View key={num} style={styles.stepBarRow}>
+              <Fragment key={num}>
                 <View style={styles.stepBarItem}>
                   <View
                     style={[
@@ -332,7 +332,7 @@ export function OnboardingShell({
                     />
                   </View>
                 )}
-              </View>
+              </Fragment>
             );
           })}
         </View>
@@ -618,17 +618,14 @@ function createStyles(colors: ColorScheme) {
     stepBar: {
       flexDirection: 'row',
       alignItems: 'center',
-    },
-    stepBarRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      flex: 1,
+      justifyContent: 'center',
     },
     stepBarItem: {
+      flex: 1,
       alignItems: 'center',
     },
     stepBarConnectorWrap: {
-      flex: 1,
+      flex: 0.6,
       paddingHorizontal: 3,
     },
     stepBarConnector: {

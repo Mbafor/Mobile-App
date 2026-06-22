@@ -11,19 +11,26 @@ type Props = {
   value: string;
   onChange: (value: string) => void;
   autoFocus?: boolean;
+  onComplete?: () => void;
 };
 
-export function OtpInput({ value, onChange, autoFocus }: Props) {
+export function OtpInput({ value, onChange, autoFocus, onComplete }: Props) {
   const styles = useThemedStyles(createStyles);
   const inputRef = useRef<TextInput>(null);
   const digits = Array.from({ length: OTP_LENGTH }, (_, i) => value[i] ?? '');
+
+  const handleChange = (t: string) => {
+    const cleaned = t.replace(/\D/g, '').slice(0, OTP_LENGTH);
+    onChange(cleaned);
+    if (cleaned.length === OTP_LENGTH) onComplete?.();
+  };
 
   return (
     <Pressable style={styles.wrap} onPress={() => inputRef.current?.focus()}>
       <TextInput
         ref={inputRef}
         value={value}
-        onChangeText={(t) => onChange(t.replace(/\D/g, '').slice(0, OTP_LENGTH))}
+        onChangeText={handleChange}
         keyboardType="numeric"
         textContentType="oneTimeCode"
         autoComplete="one-time-code"

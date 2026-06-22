@@ -3,10 +3,12 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
 import { Input, Text } from '@/components/ui';
@@ -34,6 +36,8 @@ export function SelectWithOther({
   placeholder = 'Select an option',
 }: SelectWithOtherProps) {
   const styles = useThemedStyles(createStyles);
+  const { width } = useWindowDimensions();
+  const isDesktop = Platform.OS === 'web' && width >= 768;
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState('');
   const [otherText, setOtherText] = useState('');
@@ -96,9 +100,9 @@ export function SelectWithOther({
         />
       ) : null}
 
-      <Modal visible={open} transparent animationType="slide" onRequestClose={closeModal}>
-        <Pressable style={styles.overlay} onPress={closeModal}>
-          <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+      <Modal visible={open} transparent animationType={isDesktop ? 'fade' : 'slide'} onRequestClose={closeModal}>
+        <Pressable style={[styles.overlay, isDesktop && styles.overlayDesktop]} onPress={closeModal}>
+          <Pressable style={[styles.sheet, isDesktop && styles.sheetDesktop]} onPress={(e) => e.stopPropagation()}>
             <Text variant="title" style={styles.sheetTitle}>
               Select
             </Text>
@@ -195,12 +199,23 @@ function createStyles(colors: ColorScheme) {
       backgroundColor: 'rgba(0,0,0,0.45)',
       justifyContent: 'flex-end',
     },
+    overlayDesktop: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: spacing.xl,
+    },
     sheet: {
       backgroundColor: colors.background,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       maxHeight: '75%',
       paddingBottom: spacing.lg,
+    },
+    sheetDesktop: {
+      borderRadius: 16,
+      width: '100%',
+      maxWidth: 520,
+      maxHeight: '80%',
     },
     sheetTitle: { padding: spacing.md, paddingBottom: spacing.sm },
     searchRow: {

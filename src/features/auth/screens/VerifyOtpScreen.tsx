@@ -110,7 +110,7 @@ export function VerifyOtpScreen() {
       <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
 
       <View style={styles.otpWrap}>
-        <OtpInput value={code} onChange={setCode} autoFocus />
+        <OtpInput value={code} onChange={setCode} autoFocus onComplete={handleVerify} />
       </View>
 
       {error ? <ErrorMessage message={error} /> : null}

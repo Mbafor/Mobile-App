@@ -4,6 +4,7 @@ import {
   Alert,
   Image,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -40,6 +41,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
   const { width: screenWidth } = useWindowDimensions();
   const [sharing, setSharing] = useState(false);
   const [imageError, setImageError] = useState(false);
+  const isDesktop = Platform.OS === 'web' && screenWidth >= 768;
 
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const link = buildOpportunityWebLink(opportunity.id);
@@ -72,13 +74,13 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
     <Modal
       visible={visible}
       transparent
-      animationType="slide"
+      animationType={isDesktop ? 'fade' : 'slide'}
       onRequestClose={onClose}
     >
-      <View style={styles.overlay}>
+      <View style={[styles.overlay, isDesktop && styles.overlayDesktop]}>
         <Pressable style={styles.backdrop} onPress={onClose} />
 
-        <View style={[styles.sheet, { backgroundColor: colors.background, width: sheetWidth }]}>
+        <View style={[styles.sheet, { backgroundColor: colors.background, width: sheetWidth }, isDesktop && styles.sheetDesktop]}>
           <View style={[styles.handle, { backgroundColor: colors.border }]} />
 
           {/* ── Sheet header ── */}
@@ -287,6 +289,10 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     alignItems: 'center',
   },
+  overlayDesktop: {
+    justifyContent: 'center',
+    padding: 32,
+  },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -296,6 +302,10 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 24,
     paddingBottom: 32,
     maxHeight: '90%',
+  },
+  sheetDesktop: {
+    borderRadius: 16,
+    maxHeight: '85%',
   },
   handle: {
     alignSelf: 'center',

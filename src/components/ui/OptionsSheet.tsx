@@ -1,4 +1,4 @@
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Platform, Pressable, StyleSheet, View, useWindowDimensions } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
@@ -21,10 +21,13 @@ type OptionsSheetProps = {
 
 export function OptionsSheet({ visible, title, options, onClose }: OptionsSheetProps) {
   const styles = useThemedStyles(createStyles);
+  const { width } = useWindowDimensions();
+  const isDesktop = Platform.OS === 'web' && width >= 768;
+
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose}>
-        <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+      <Pressable style={[styles.backdrop, isDesktop && styles.backdropDesktop]} onPress={onClose}>
+        <Pressable style={[styles.sheet, isDesktop && styles.sheetDesktop]} onPress={(e) => e.stopPropagation()}>
           {title ? (
             <Text style={styles.title} numberOfLines={2}>
               {title}
@@ -70,11 +73,20 @@ function createStyles(colors: ColorScheme) {
     justifyContent: 'flex-end',
     padding: spacing.md,
   },
+  backdropDesktop: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   sheet: {
     backgroundColor: colors.background,
     borderRadius: 14,
     overflow: 'hidden',
     marginBottom: spacing.sm,
+  },
+  sheetDesktop: {
+    width: '100%',
+    maxWidth: 400,
+    marginBottom: 0,
   },
   title: {
     paddingHorizontal: spacing.lg,

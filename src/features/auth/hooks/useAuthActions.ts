@@ -2,7 +2,11 @@ import { useCallback, useState } from 'react';
 
 import { env } from '@/config/env';
 import { applyAuthSession } from '@/features/auth/utils/apply-auth-session';
-import { signInWithAppleNative, signInWithOAuthProvider } from '@/features/auth/utils/oauth';
+import {
+  signInWithAppleNative,
+  signInWithOAuthProvider,
+  getPasswordResetRedirectUri,
+} from '@/features/auth/utils/oauth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { authApi, type OtpVerificationType } from '@/services/api';
 import { profilesApi } from '@/services/api';
@@ -230,6 +234,31 @@ export function useAuthActions() {
     [run],
   );
 
+  const sendPasswordReset = useCallback(
+    (email: string) =>
+      run(async () => {
+        const normalized = email.trim().toLowerCase();
+        const redirectTo = getPasswordResetRedirectUri();
+        const { error } = await authApi.resetPasswordForEmail(normalized, redirectTo);
+        if (error) throw error;
+        return true;
+      }),
+    [run],
+  );
+
+  const updatePassword = useCallback(
+    (newPassword: string) =>
+      run(async () => {
+        if (!isValidPassword(newPassword)) {
+          throw new Error('Password must be at least 8 characters.');
+        }
+        const { error } = await authApi.updatePassword(newPassword);
+        if (error) throw error;
+        return true;
+      }),
+    [run],
+  );
+
   const clearError = useCallback(() => setError(null), []);
 
   return {
@@ -243,5 +272,7 @@ export function useAuthActions() {
     signOut,
     signInWithGoogle,
     signInWithApple,
+    sendPasswordReset,
+    updatePassword,
   };
 }

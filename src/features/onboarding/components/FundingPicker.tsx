@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
-import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Modal, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 
 import { Input, Text } from '@/components/ui';
 import { FUNDING_OPTIONS } from '@/constants/onboarding';
@@ -22,6 +22,8 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
   const { colors } = useTheme();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const { width } = useWindowDimensions();
+  const isDesktop = Platform.OS === 'web' && width >= 768;
 
   const options = excludeAny
     ? FUNDING_OPTIONS.filter((o) => o.value !== 'any')
@@ -56,11 +58,11 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
       <Modal
         visible={open}
         transparent
-        animationType="slide"
+        animationType={isDesktop ? 'fade' : 'slide'}
         onRequestClose={closeModal}
       >
-        <Pressable style={styles.overlay} onPress={closeModal}>
-          <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+        <Pressable style={[styles.overlay, isDesktop && styles.overlayDesktop]} onPress={closeModal}>
+          <Pressable style={[styles.sheet, isDesktop && styles.sheetDesktop]} onPress={(e) => e.stopPropagation()}>
             <View style={styles.sheetHeader}>
               <Text style={styles.sheetTitle}>Funding preference</Text>
               <Pressable onPress={closeModal} hitSlop={12}>
@@ -138,12 +140,23 @@ function createStyles(colors: ColorScheme) {
       backgroundColor: 'rgba(0,0,0,0.45)',
       justifyContent: 'flex-end',
     },
+    overlayDesktop: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: spacing.xl,
+    },
     sheet: {
       backgroundColor: colors.background,
       borderTopLeftRadius: 16,
       borderTopRightRadius: 16,
       paddingBottom: spacing.xl,
       maxHeight: '65%',
+    },
+    sheetDesktop: {
+      borderRadius: 16,
+      width: '100%',
+      maxWidth: 520,
+      maxHeight: '75%',
     },
     sheetHeader: {
       flexDirection: 'row',

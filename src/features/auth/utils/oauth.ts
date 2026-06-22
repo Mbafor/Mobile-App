@@ -21,6 +21,17 @@ export function getAuthRedirectUri(): string {
   });
 }
 
+export function getPasswordResetRedirectUri(): string {
+  if (Platform.OS === 'web' && typeof window !== 'undefined') {
+    return `${window.location.origin}/(auth)/reset-password`;
+  }
+  return makeRedirectUri({
+    scheme: 'Voila',
+    path: '(auth)/reset-password',
+    preferLocalhost: false,
+  });
+}
+
 /** True when the URL looks like an OAuth or magic-link callback. */
 export function urlHasAuthCallbackParams(url: string): boolean {
   return /[?&#](code|access_token|error)=/.test(url);
