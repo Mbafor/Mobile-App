@@ -115,7 +115,11 @@ export function useOnboardingActions() {
         // can see before router.replace() fires in the calling screen.
         useAuthStore.getState().setProfile({ ...refreshed, onboardingComplete: true });
 
-        void sendWelcomeEmailIfNeeded(userId, email, currentProfile.fullName);
+        try {
+          await sendWelcomeEmailIfNeeded(userId, email, currentProfile.fullName);
+        } catch {
+          // non-critical — onboarding is complete regardless of email delivery
+        }
 
         return true;
       }),

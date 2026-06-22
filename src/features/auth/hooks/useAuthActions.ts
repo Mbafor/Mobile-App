@@ -101,13 +101,13 @@ export function useAuthActions() {
         if (signUp.error) {
           const msg = signUp.error.message.toLowerCase();
           if (msg.includes('already registered') || msg.includes('already been registered')) {
-            throw new Error('Incorrect password. Try again or reset your password.');
+            throw new Error('Wrong password. Reset your password to continue.');
           }
           throw signUp.error;
         }
 
         // Sign-up succeeded → no account existed with this email
-        throw new Error('No account found. Please sign up first.');
+        throw new Error('No account found. Create your account to get started.');
       }),
     [run],
   );

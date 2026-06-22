@@ -12,6 +12,7 @@ import {
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Text } from '@/components/ui';
 import { spacing, typography } from '@/constants/theme';
@@ -24,7 +25,6 @@ type Props = PropsWithChildren<{
   subtitle?: string;
   onBack?: () => void;
   backgroundColor?: string;
-  backTextColor?: string;
 }>;
 
 export function AuthScreenLayout({
@@ -33,7 +33,6 @@ export function AuthScreenLayout({
   onBack,
   children,
   backgroundColor,
-  backTextColor,
 }: Props) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
@@ -60,7 +59,7 @@ export function AuthScreenLayout({
           <View style={styles.desktopCard}>
             {onBack && (
               <Pressable onPress={onBack} hitSlop={12} style={styles.desktopBack}>
-                <Text style={[styles.backText, { color: colors.textMuted }]}>← Back</Text>
+                <Text style={{ color: colors.textMuted }}>← Back</Text>
               </Pressable>
             )}
             <Text variant="title" style={styles.desktopTitle}>{title}</Text>
@@ -82,17 +81,7 @@ export function AuthScreenLayout({
         { paddingTop: insets.top, backgroundColor: backgroundColor ?? colors.primary },
       ]}
     >
-      <View style={styles.mobileHero}>
-        {onBack ? (
-          <Pressable onPress={onBack} hitSlop={12}>
-            <Text style={[styles.backText, { color: backTextColor ?? colors.background }]}>
-              ← Back
-            </Text>
-          </Pressable>
-        ) : (
-          <View style={styles.backSpacer} />
-        )}
-      </View>
+      <View style={styles.mobileHero} />
 
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -103,6 +92,12 @@ export function AuthScreenLayout({
           contentContainerStyle={[styles.scroll, { paddingBottom: insets.bottom + spacing.lg }]}
         >
           <View style={styles.card}>
+            {onBack ? (
+              <Pressable onPress={onBack} hitSlop={12} style={styles.backBtn}>
+                <Ionicons name="chevron-back" size={16} color={colors.text} />
+                <Text style={styles.backBtnText}>Back</Text>
+              </Pressable>
+            ) : null}
             <Text variant="title">{title}</Text>
             {subtitle ? <Text muted style={styles.subtitle}>{subtitle}</Text> : null}
             {children}
@@ -118,16 +113,33 @@ function createStyles(colors: ColorScheme) {
     // ── Mobile ──────────────────────────────────────────────────────────────
     root: { flex: 1, backgroundColor: colors.primary },
     flex: { flex: 1 },
-    mobileHero: { paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
-    backSpacer: { height: 28, marginBottom: spacing.sm },
-    backText: { marginBottom: spacing.sm },
+    mobileHero: { height: spacing.lg },
     scroll: { flexGrow: 1 },
     card: {
       backgroundColor: colors.background,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      padding: spacing.lg,
+      paddingTop: spacing.lg,
+      paddingHorizontal: spacing.lg,
+      paddingBottom: spacing.lg,
       minHeight: 360,
+    },
+    backBtn: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 20,
+      paddingVertical: 6,
+      paddingHorizontal: 12,
+      marginBottom: spacing.md,
+    },
+    backBtnText: {
+      fontSize: typography.fontSize.sm,
+      color: colors.text,
+      fontWeight: '500',
+      marginLeft: 2,
     },
 
     // ── Desktop ─────────────────────────────────────────────────────────────

@@ -93,7 +93,7 @@ export function EmailOtpScreen() {
       subtitle="Enter your email and password. We will send a 6-digit code to confirm your email when needed."
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
       backgroundColor={colors.background}
-      backTextColor={colors.text}
+
     >
       <FormField label="Email address">
         <Input

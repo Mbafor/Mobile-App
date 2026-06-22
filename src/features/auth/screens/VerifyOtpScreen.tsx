@@ -105,7 +105,7 @@ export function VerifyOtpScreen() {
       subtitle={`Enter the 6-digit code sent to ${email}`}
       onBack={() => router.replace(backRoute)}
       backgroundColor={colors.background}
-      backTextColor={colors.text}
+
     >
       <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
 

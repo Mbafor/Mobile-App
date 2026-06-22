@@ -109,7 +109,7 @@ export function ResetPasswordScreen() {
       <AuthScreenLayout
         title="Password updated"
         backgroundColor={colors.background}
-        backTextColor={colors.text}
+
       >
         <View style={styles.centerBlock}>
           <View style={styles.successIcon}>
@@ -137,7 +137,7 @@ export function ResetPasswordScreen() {
       <AuthScreenLayout
         title="Link expired"
         backgroundColor={colors.background}
-        backTextColor={colors.text}
+
         onBack={() => router.replace(ROUTES.AUTH.EMAIL as Href)}
       >
         <View style={styles.centerBlock}>
@@ -166,7 +166,7 @@ export function ResetPasswordScreen() {
       <AuthScreenLayout
         title="Reset password"
         backgroundColor={colors.background}
-        backTextColor={colors.text}
+
       >
         <View style={styles.centerBlock}>
           <Text muted style={styles.loadingText}>Verifying your reset link…</Text>
@@ -181,7 +181,6 @@ export function ResetPasswordScreen() {
       title="Set new password"
       subtitle="Choose a strong password with at least 8 characters."
       backgroundColor={colors.background}
-      backTextColor={colors.text}
     >
       <FormField label="New password">
         <View style={styles.passwordRow}>
