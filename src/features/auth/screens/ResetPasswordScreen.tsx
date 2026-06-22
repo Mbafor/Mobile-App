@@ -116,15 +116,15 @@ export function ResetPasswordScreen() {
             <Ionicons name="checkmark-circle" size={56} color={colors.primary} />
           </View>
           <Text style={styles.successText}>
-            Your password has been changed. You can now sign in with your new password.
+            Your password has been changed. Sign in with your new password.
           </Text>
           <Button
             variant="primary"
-            onPress={() => router.replace(ROUTES.MAIN.DASHBOARD as Href)}
+            onPress={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
             style={styles.btn}
             textStyle={styles.btnText}
           >
-            Go to dashboard
+            Sign in
           </Button>
         </View>
       </AuthScreenLayout>

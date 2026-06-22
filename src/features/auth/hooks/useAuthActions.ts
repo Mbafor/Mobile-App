@@ -16,8 +16,7 @@ import { isValidPassword } from '@/utils/validation';
 
 export type EmailPasswordSignInResult =
   | { needsOtp: false }
-  | { needsOtp: true; otpType: OtpVerificationType }
-  | { needsSignUp: true };
+  | { needsOtp: true; otpType: OtpVerificationType };
 
 function mapAuthError(e: unknown): string {
   const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
@@ -37,11 +36,8 @@ function mapAuthError(e: unknown): string {
   if (message.includes('redirect_uri_mismatch')) {
     return 'Google sign-in redirect mismatch. Add your app redirect URL in Supabase → Authentication → URL Configuration (see docs/SUPABASE_AUTH_SETUP.md).';
   }
-  if (message.toLowerCase().includes('invalid login credentials')) {
-    return 'Incorrect email or password. If you are new, we will create your account when you continue.';
-  }
   if (message.toLowerCase().includes('user already registered')) {
-    return 'An account with this email already exists. Enter your password or use the code we sent to your email.';
+    return 'An account with this email already exists.';
   }
   return message;
 }
@@ -99,8 +95,19 @@ export function useAuthActions() {
           return { needsOtp: true, otpType: 'signup' };
         }
 
-        // Wrong credentials or no account — let the create-account form handle it explicitly
-        return { needsSignUp: true };
+        // Probe sign-up to distinguish wrong password (account exists) vs no account
+        const signUp = await authApi.signUpWithPassword(normalized, password);
+
+        if (signUp.error) {
+          const msg = signUp.error.message.toLowerCase();
+          if (msg.includes('already registered') || msg.includes('already been registered')) {
+            throw new Error('Incorrect password. Try again or reset your password.');
+          }
+          throw signUp.error;
+        }
+
+        // Sign-up succeeded → no account existed with this email
+        throw new Error('No account found. Please sign up first.');
       }),
     [run],
   );

@@ -90,6 +90,7 @@ function GoogleLogo({ size = 18 }: { size?: number }) {
 // ─── Screen ───────────────────────────────────────────────────────────────────
 export function WelcomeScreen() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === 'web';
@@ -181,11 +182,6 @@ export function WelcomeScreen() {
     }
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
-    if ('needsSignUp' in result) {
-      // Wrong credentials or no account — switch to Create Account tab (email already in state)
-      switchMode('signup');
-      return;
-    }
     if (result.needsOtp) {
       router.push(`/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}&source=welcome` as Href);
       return;
