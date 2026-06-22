@@ -11,8 +11,10 @@ export async function sendWelcomeEmailIfNeeded(
   const { data: profile } = await profilesApi.getByUserId(userId);
   if (!profile || profile.welcomeEmailSentAt) return;
 
-  const { error } = await notificationsEmailApi.sendWelcome(email, fullName ?? null);
-  if (error) return;
+  // Atomically claim the send slot. Only the first concurrent caller that
+  // actually writes the timestamp (claimed = true) proceeds to send.
+  const { claimed } = await profilesApi.markWelcomeEmailSent(userId);
+  if (!claimed) return;
 
-  await profilesApi.markWelcomeEmailSent(userId);
+  await notificationsEmailApi.sendWelcome(email, fullName ?? null);
 }

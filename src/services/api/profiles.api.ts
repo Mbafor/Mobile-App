@@ -134,12 +134,15 @@ export const profilesApi = {
   },
 
   markWelcomeEmailSent: async (userId: string) => {
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('profiles')
       .update({ welcome_email_sent_at: new Date().toISOString() })
-      .eq('id', userId);
+      .eq('id', userId)
+      .is('welcome_email_sent_at', null)
+      .select('id');
 
-    return { error };
+    // claimed = true only if we actually wrote the timestamp (won the race)
+    return { claimed: Boolean(data && data.length > 0), error };
   },
 
   markOnboardingComplete: async (userId: string) => {

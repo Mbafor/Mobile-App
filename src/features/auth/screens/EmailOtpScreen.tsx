@@ -107,7 +107,7 @@ export function EmailOtpScreen() {
       </FormField>
 
       <FormField label="Password">
-        <View style={styles.passwordRow}>
+        <View style={styles.passwordWrap}>
           <Input
             value={password}
             onChangeText={setPassword}
@@ -131,7 +131,7 @@ export function EmailOtpScreen() {
         </View>
       </FormField>
 
-      <Pressable onPress={handleForgotPassword} style={styles.forgotRow}>
+      <Pressable onPress={handleForgotPassword} style={styles.forgotRow} hitSlop={8}>
         <Text style={styles.forgotText}>Forgot password?</Text>
       </Pressable>
 
@@ -166,35 +166,31 @@ function createStyles(colors: ColorScheme) {
       color: colors.background,
       fontWeight: '500',
     },
-    passwordRow: {
-      flexDirection: 'row',
-      alignItems: 'center',
+    passwordWrap: {
+      position: 'relative',
     },
     passwordInput: {
-      flex: 1,
-      borderTopRightRadius: 0,
-      borderBottomRightRadius: 0,
-      borderRightWidth: 0,
+      paddingRight: 48,
     },
     eyeBtn: {
-      height: 48,
-      paddingHorizontal: spacing.md,
+      position: 'absolute',
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: 48,
       justifyContent: 'center',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderTopRightRadius: 8,
-      borderBottomRightRadius: 8,
-      backgroundColor: colors.background,
     },
     forgotRow: {
       alignSelf: 'flex-end',
-      marginTop: spacing.xs,
+      marginTop: spacing.sm,
+      paddingVertical: 4,
     },
     forgotText: {
       fontSize: 13,
       color: colors.primary,
-      fontWeight: '500',
+      fontWeight: '600',
+      textDecorationLine: 'underline',
     },
   });
 }
