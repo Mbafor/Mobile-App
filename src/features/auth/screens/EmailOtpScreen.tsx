@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
-import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -11,7 +11,7 @@ import { FormField } from '@/components/forms';
 import { Button, Input, Text } from '@/components/ui';
 import { AuthScreenLayout } from '@/features/auth/components';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
-import { spacing } from '@/constants/theme';
+import { spacing, typography } from '@/constants/theme';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { ROUTES } from '@/constants/routes';
@@ -33,24 +33,24 @@ export function EmailOtpScreen() {
     const target = email.trim().toLowerCase();
     if (!target || !isValidEmail(target)) {
       Alert.alert(
-        'Enter your email',
-        'Please type your email address in the field above, then tap "Forgot password?".',
+        'Enter your email first',
+        'Type your email address in the field above, then tap "Forgot password?".',
       );
       return;
     }
     Alert.alert(
-      'Reset Password',
-      `Send a password reset link to ${target}?`,
+      'Reset password',
+      `Send a reset link to ${target}?`,
       [
         { text: 'Cancel', style: 'cancel' },
         {
-          text: 'Send',
+          text: 'Send link',
           onPress: async () => {
             const result = await sendPasswordReset(target);
             if (result) {
               Alert.alert(
-                'Email sent',
-                `A password reset link has been sent to ${target}. Check your inbox.`,
+                'Check your inbox',
+                `A password reset link has been sent to ${target}.`,
               );
             }
           },
@@ -106,21 +106,24 @@ export function EmailOtpScreen() {
         />
       </FormField>
 
+      {/* Password field with eye toggle — border lives on the wrapper View */}
       <FormField label="Password">
-        <View style={styles.passwordWrap}>
-          <Input
+        <View style={styles.passwordField}>
+          <TextInput
             value={password}
             onChangeText={setPassword}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="password"
             placeholder="At least 8 characters"
+            placeholderTextColor={colors.textMuted}
             style={styles.passwordInput}
           />
           <Pressable
             onPress={() => setShowPassword((v) => !v)}
             style={styles.eyeBtn}
             hitSlop={8}
+            accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
           >
             <Ionicons
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
@@ -131,7 +134,8 @@ export function EmailOtpScreen() {
         </View>
       </FormField>
 
-      <Pressable onPress={handleForgotPassword} style={styles.forgotRow} hitSlop={8}>
+      {/* Forgot password link — always visible beneath the password field */}
+      <Pressable onPress={handleForgotPassword} style={styles.forgotWrap} hitSlop={12}>
         <Text style={styles.forgotText}>Forgot password?</Text>
       </Pressable>
 
@@ -166,31 +170,43 @@ function createStyles(colors: ColorScheme) {
       color: colors.background,
       fontWeight: '500',
     },
-    passwordWrap: {
-      position: 'relative',
+
+    // Password field: border on the container, raw TextInput inside
+    passwordField: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      backgroundColor: colors.background,
+      overflow: 'hidden',
     },
     passwordInput: {
-      paddingRight: 48,
+      flex: 1,
+      paddingVertical: spacing.md,
+      paddingLeft: spacing.md,
+      paddingRight: spacing.xs,
+      fontSize: typography.fontSize.md,
+      color: colors.text,
+      // Remove browser default focus ring — border is on the parent View
+      ...Platform.select({ web: { outlineWidth: 0 } as object }),
     },
     eyeBtn: {
-      position: 'absolute',
-      right: 0,
-      top: 0,
-      bottom: 0,
-      width: 48,
+      paddingHorizontal: spacing.sm,
+      paddingVertical: spacing.md,
       justifyContent: 'center',
       alignItems: 'center',
     },
-    forgotRow: {
-      alignSelf: 'flex-end',
+
+    // Forgot password — full-width row so it's always easy to tap
+    forgotWrap: {
       marginTop: spacing.sm,
-      paddingVertical: 4,
+      alignSelf: 'flex-end',
     },
     forgotText: {
       fontSize: 13,
       color: colors.primary,
       fontWeight: '600',
-      textDecorationLine: 'underline',
     },
   });
 }
