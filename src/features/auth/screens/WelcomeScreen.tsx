@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, TextInput, View, Text as RNText, useWindowDimensions, ScrollView, ImageBackground } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, StyleSheet, TextInput, View, Text as RNText, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Circle, Ellipse, Line, Path, Rect, Svg } from 'react-native-svg';
@@ -110,6 +110,7 @@ export function WelcomeScreen() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formError, setFormError] = useState('');
+  const [resetSent, setResetSent] = useState(false);
   const [googleButtonHover, setGoogleButtonHover] = useState(false);
 
   const {
@@ -140,6 +141,7 @@ export function WelcomeScreen() {
   const switchMode = (next: AuthMode) => {
     setMode(next);
     setFormError('');
+    setResetSent(false);
     setConfirmPassword('');
     clearError();
   };
@@ -147,25 +149,16 @@ export function WelcomeScreen() {
   // ── Handlers ───────────────────────────────────────────────────────────────
 
   const handleForgotPassword = async () => {
+    setFormError('');
+    setResetSent(false);
+    clearError();
     const target = email.trim().toLowerCase();
     if (!target || !isValidEmail(target)) {
-      Alert.alert('Enter your email first', 'Type your email address above, then tap "Forgot password?".');
+      setFormError('Enter your email address above, then tap "Forgot password?".');
       return;
     }
-    Alert.alert(
-      'Reset password',
-      `Send a reset link to ${target}?`,
-      [
-        { text: 'Cancel', style: 'cancel' },
-        {
-          text: 'Send link',
-          onPress: async () => {
-            const result = await sendPasswordReset(target);
-            if (result) Alert.alert('Check your inbox', `A password reset link has been sent to ${target}.`);
-          },
-        },
-      ],
-    );
+    const result = await sendPasswordReset(target);
+    if (result) setResetSent(true);
   };
 
   const handleEmailSignIn = async () => {
@@ -305,6 +298,15 @@ export function WelcomeScreen() {
       <Pressable onPress={handleForgotPassword} style={styles.forgotPasswordRow} hitSlop={12}>
         <Text style={styles.forgotPasswordText}>Forgot password?</Text>
       </Pressable>
+
+      {resetSent ? (
+        <View style={styles.resetSentBanner}>
+          <Ionicons name="checkmark-circle-outline" size={16} color={colors.primary} />
+          <Text style={styles.resetSentText}>
+            Reset link sent to {email.trim()}. Check your inbox.
+          </Text>
+        </View>
+      ) : null}
 
       <Button
         onPress={handleEmailSignIn}
@@ -924,13 +926,29 @@ function createStyles(colors: ColorScheme) {
   forgotPasswordRow: {
     alignSelf: 'flex-end',
     marginTop: spacing.xs,
-    marginBottom: spacing.sm,
     paddingVertical: 4,
   },
   forgotPasswordText: {
     fontSize: 13,
     color: colors.primary,
     fontWeight: '600',
+  },
+  resetSentBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.xs,
+    backgroundColor: colors.primary + '18',
+    borderRadius: 8,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.xs,
+  },
+  resetSentText: {
+    flex: 1,
+    color: colors.primary,
+    fontSize: typography.fontSize.sm,
+    fontWeight: '500',
+    lineHeight: 20,
   },
   });
 }

@@ -23,11 +23,11 @@ export function getAuthRedirectUri(): string {
 
 export function getPasswordResetRedirectUri(): string {
   if (Platform.OS === 'web' && typeof window !== 'undefined') {
-    return `${window.location.origin}/(auth)/reset-password`;
+    return `${window.location.origin}/reset-password`;
   }
   return makeRedirectUri({
     scheme: 'Voila',
-    path: '(auth)/reset-password',
+    path: 'reset-password',
     preferLocalhost: false,
   });
 }
