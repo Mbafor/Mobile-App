@@ -74,6 +74,14 @@ export function EmailOtpScreen() {
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
 
+    if ('needsSignUp' in result) {
+      // No account found — redirect to create-account tab with email pre-filled
+      router.replace(
+        `/(auth)/welcome?email=${encodeURIComponent(normalized)}&switchToSignup=1` as Href,
+      );
+      return;
+    }
+
     if (result.needsOtp) {
       router.push(
         `/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}` as Href,

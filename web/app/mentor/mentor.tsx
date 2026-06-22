@@ -174,18 +174,18 @@ export default function MentorPage() {
                 <label className="space-y-2 text-sm">
                   <span className="font-semibold">LinkedIn</span>
                   <input
-                    type="url"
+                    type="text"
                     name="linkedin"
-                    placeholder="https://linkedin.com/in/yourname"
+                    placeholder="linkedin.com/in/yourname or any link"
                     className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
                 <label className="space-y-2 text-sm">
                   <span className="font-semibold">Portfolio or website</span>
                   <input
-                    type="url"
+                    type="text"
                     name="portfolio"
-                    placeholder="https://yourportfolio.com"
+                    placeholder="yourportfolio.com or any link"
                     className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
@@ -246,12 +246,14 @@ export default function MentorPage() {
                 />
               </label>
 
-              <button
-                type="submit"
-                className="inline-flex w-full items-center justify-center rounded-3xl bg-primary px-6 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#0a5a1e]"
-              >
-                Submit application
-              </button>
+              <div className="flex justify-end">
+                <button
+                  type="submit"
+                  className="inline-flex cursor-pointer items-center justify-center rounded-3xl bg-primary px-8 py-3.5 text-sm font-semibold text-white shadow-md transition hover:bg-[#0a5a1e] active:scale-95"
+                >
+                  Submit application
+                </button>
+              </div>
             </form>
 
           </div>

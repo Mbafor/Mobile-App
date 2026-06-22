@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
@@ -17,6 +17,7 @@ type Props = {
 export function OtpInput({ value, onChange, autoFocus, onComplete }: Props) {
   const styles = useThemedStyles(createStyles);
   const inputRef = useRef<TextInput>(null);
+  const [focused, setFocused] = useState(false);
   const digits = Array.from({ length: OTP_LENGTH }, (_, i) => value[i] ?? '');
 
   const handleChange = (t: string) => {
@@ -38,13 +39,22 @@ export function OtpInput({ value, onChange, autoFocus, onComplete }: Props) {
         autoFocus={autoFocus}
         style={styles.hidden}
         caretHidden
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
       <View style={styles.row}>
-        {digits.map((d, i) => (
-          <View key={i} style={[styles.box, d !== '' && styles.boxFilled]}>
-            <Text style={styles.digit}>{d}</Text>
-          </View>
-        ))}
+        {digits.map((d, i) => {
+          const isActive = focused && i === value.length;
+          return (
+            <View key={i} style={[styles.box, d !== '' && styles.boxFilled, isActive && styles.boxActive]}>
+              {d !== '' ? (
+                <Text style={styles.digit}>{d}</Text>
+              ) : isActive ? (
+                <View style={styles.cursor} />
+              ) : null}
+            </View>
+          );
+        })}
       </View>
     </Pressable>
   );
@@ -67,6 +77,8 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.surface,
   },
   boxFilled: { borderColor: colors.primary, backgroundColor: '#E8F0EB' },
+  boxActive: { borderColor: colors.primary, borderWidth: 2 },
   digit: { fontSize: typography.fontSize.xl, fontWeight: '700', color: colors.text },
+  cursor: { width: 2, height: 24, backgroundColor: colors.primary, borderRadius: 1 },
 });
 }

@@ -16,7 +16,8 @@ import { isValidPassword } from '@/utils/validation';
 
 export type EmailPasswordSignInResult =
   | { needsOtp: false }
-  | { needsOtp: true; otpType: OtpVerificationType };
+  | { needsOtp: true; otpType: OtpVerificationType }
+  | { needsSignUp: true };
 
 function mapAuthError(e: unknown): string {
   const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
@@ -98,33 +99,8 @@ export function useAuthActions() {
           return { needsOtp: true, otpType: 'signup' };
         }
 
-        const signUp = await authApi.signUpWithPassword(normalized, password);
-
-        if (!signUp.error && signUp.data.session) {
-          await applyAuthSession(signUp.data.session);
-          await profilesApi.syncEmailFromAuth(normalized);
-          return { needsOtp: false };
-        }
-
-        if (signUp.error) {
-          const msg = signUp.error.message.toLowerCase();
-          if (msg.includes('already registered') || msg.includes('already been registered')) {
-            const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
-            if (resendError) {
-              const otpFallback = await authApi.signInWithOtp(normalized, {
-                shouldCreateUser: false,
-              });
-              if (otpFallback.error) throw otpFallback.error;
-              return { needsOtp: true, otpType: 'email' };
-            }
-            return { needsOtp: true, otpType: 'signup' };
-          }
-          throw signUp.error;
-        }
-
-        const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
-        if (resendError) throw resendError;
-        return { needsOtp: true, otpType: 'signup' };
+        // Wrong credentials or no account — let the create-account form handle it explicitly
+        return { needsSignUp: true };
       }),
     [run],
   );

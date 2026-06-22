@@ -39,6 +39,14 @@ create policy "Anon can insert mentor applications"
   on public.mentor_applications for insert
   with check (true);
 
-create policy "Admin can manage mentor applications"
-  on public.mentor_applications for select, update, delete
+create policy "Admin can select mentor applications"
+  on public.mentor_applications for select
+  using (auth.role() = 'authenticated');
+
+create policy "Admin can update mentor applications"
+  on public.mentor_applications for update
+  using (auth.role() = 'authenticated');
+
+create policy "Admin can delete mentor applications"
+  on public.mentor_applications for delete
   using (auth.role() = 'authenticated');

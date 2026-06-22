@@ -1,8 +1,9 @@
-import { useRouter, type Href } from 'expo-router';
+import { useRouter, useLocalSearchParams, type Href } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, View, Text as RNText, useWindowDimensions, ScrollView, ImageBackground } from 'react-native';
+import { ActivityIndicator, Alert, Platform, Pressable, StyleSheet, TextInput, View, Text as RNText, useWindowDimensions, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Circle, Ellipse, Line, Path, Rect, Svg } from 'react-native-svg';
@@ -96,12 +97,17 @@ export function WelcomeScreen() {
 
   const isSplitLayout = isWeb && !isWebMobile;
 
+  // Pre-fill from redirect params (e.g. from EmailOtpScreen when no account found)
+  const params = useLocalSearchParams<{ email?: string; switchToSignup?: string }>();
+
   // Shared form state
-  const [mode, setMode] = useState<AuthMode>('signin');
+  const [mode, setMode] = useState<AuthMode>(params.switchToSignup ? 'signup' : 'signin');
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState(params.email ?? '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formError, setFormError] = useState('');
   const [googleButtonHover, setGoogleButtonHover] = useState(false);
 
@@ -109,6 +115,7 @@ export function WelcomeScreen() {
     signInWithGoogle,
     signInWithEmailPassword,
     signUpWithEmailPasswordAndName,
+    sendPasswordReset,
     isLoading,
     error,
     clearError,
@@ -138,6 +145,28 @@ export function WelcomeScreen() {
 
   // ── Handlers ───────────────────────────────────────────────────────────────
 
+  const handleForgotPassword = async () => {
+    const target = email.trim().toLowerCase();
+    if (!target || !isValidEmail(target)) {
+      Alert.alert('Enter your email first', 'Type your email address above, then tap "Forgot password?".');
+      return;
+    }
+    Alert.alert(
+      'Reset password',
+      `Send a reset link to ${target}?`,
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Send link',
+          onPress: async () => {
+            const result = await sendPasswordReset(target);
+            if (result) Alert.alert('Check your inbox', `A password reset link has been sent to ${target}.`);
+          },
+        },
+      ],
+    );
+  };
+
   const handleEmailSignIn = async () => {
     setFormError('');
     clearError();
@@ -152,6 +181,11 @@ export function WelcomeScreen() {
     }
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
+    if ('needsSignUp' in result) {
+      // Wrong credentials or no account — switch to Create Account tab (email already in state)
+      switchMode('signup');
+      return;
+    }
     if (result.needsOtp) {
       router.push(`/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}&source=welcome` as Href);
       return;
@@ -254,16 +288,27 @@ export function WelcomeScreen() {
       </FormField>
 
       <FormField label="Password">
-        <Input
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="current-password"
-          placeholder="At least 8 characters"
-          editable={!isLoading}
-        />
+        <View style={styles.pwdField}>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoComplete="current-password"
+            placeholder="At least 8 characters"
+            placeholderTextColor={colors.textMuted}
+            editable={!isLoading}
+            style={styles.pwdInput}
+          />
+          <Pressable onPress={() => setShowPassword(v => !v)} style={styles.eyeToggleBtn} hitSlop={8}>
+            <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textMuted} />
+          </Pressable>
+        </View>
       </FormField>
+
+      <Pressable onPress={handleForgotPassword} style={styles.forgotPasswordRow} hitSlop={12}>
+        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+      </Pressable>
 
       <Button
         onPress={handleEmailSignIn}
@@ -331,27 +376,41 @@ export function WelcomeScreen() {
       </FormField>
 
       <FormField label="Password">
-        <Input
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="new-password"
-          placeholder="At least 8 characters"
-          editable={!isLoading}
-        />
+        <View style={styles.pwdField}>
+          <TextInput
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoComplete="new-password"
+            placeholder="At least 8 characters"
+            placeholderTextColor={colors.textMuted}
+            editable={!isLoading}
+            style={styles.pwdInput}
+          />
+          <Pressable onPress={() => setShowPassword(v => !v)} style={styles.eyeToggleBtn} hitSlop={8}>
+            <Ionicons name={showPassword ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textMuted} />
+          </Pressable>
+        </View>
       </FormField>
 
       <FormField label="Confirm password">
-        <Input
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-          autoCapitalize="none"
-          autoComplete="new-password"
-          placeholder="Re-enter your password"
-          editable={!isLoading}
-        />
+        <View style={styles.pwdField}>
+          <TextInput
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+            secureTextEntry={!showConfirmPassword}
+            autoCapitalize="none"
+            autoComplete="new-password"
+            placeholder="Re-enter your password"
+            placeholderTextColor={colors.textMuted}
+            editable={!isLoading}
+            style={styles.pwdInput}
+          />
+          <Pressable onPress={() => setShowConfirmPassword(v => !v)} style={styles.eyeToggleBtn} hitSlop={8}>
+            <Ionicons name={showConfirmPassword ? 'eye-off-outline' : 'eye-outline'} size={20} color={colors.textMuted} />
+          </Pressable>
+        </View>
       </FormField>
 
       <Button
@@ -839,6 +898,43 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 18,
     paddingHorizontal: spacing.md,
     marginTop: spacing.xs,
+  },
+
+  pwdField: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: 8,
+    backgroundColor: colors.background,
+    overflow: 'hidden',
+  },
+  pwdInput: {
+    flex: 1,
+    paddingVertical: spacing.md,
+    paddingLeft: spacing.md,
+    paddingRight: spacing.xs,
+    fontSize: typography.fontSize.md,
+    color: colors.text,
+    ...Platform.select({ web: { outlineWidth: 0 } as object }),
+  },
+  eyeToggleBtn: {
+    paddingHorizontal: spacing.sm,
+    paddingVertical: spacing.md,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+  },
+  forgotPasswordRow: {
+    alignSelf: 'flex-end',
+    marginTop: spacing.xs,
+    marginBottom: spacing.sm,
+    paddingVertical: 4,
+  },
+  forgotPasswordText: {
+    fontSize: 13,
+    color: colors.primary,
+    fontWeight: '600',
   },
   });
 }
