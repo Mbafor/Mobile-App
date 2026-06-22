@@ -175,20 +175,21 @@ function createStyles(colors: ColorScheme) {
     passwordField: {
       flexDirection: 'row',
       alignItems: 'center',
-      borderWidth: 1,
-      borderColor: colors.border,
-      borderRadius: 8,
-      backgroundColor: colors.background,
-      overflow: 'hidden',
     },
     passwordInput: {
       flex: 1,
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderRadius: 8,
+      borderTopRightRadius: 0,
+      borderBottomRightRadius: 0,
+      borderRightWidth: 0,
       paddingVertical: spacing.md,
       paddingLeft: spacing.md,
       paddingRight: spacing.xs,
       fontSize: typography.fontSize.md,
       color: colors.text,
-      // Remove browser default focus ring — border is on the parent View
+      backgroundColor: colors.background,
       ...Platform.select({ web: { outlineWidth: 0 } as object }),
     },
     eyeBtn: {
@@ -196,6 +197,11 @@ function createStyles(colors: ColorScheme) {
       paddingVertical: spacing.md,
       justifyContent: 'center',
       alignItems: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+      borderTopRightRadius: 8,
+      borderBottomRightRadius: 8,
+      backgroundColor: colors.background,
     },
 
     // Forgot password — full-width row so it's always easy to tap
