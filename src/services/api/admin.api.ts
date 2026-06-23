@@ -177,8 +177,6 @@ export const adminApi = {
       p_notes: notes ?? null,
     });
     if (error) return { error: formatAdminError(error) };
-    // Fire and forget — don't block the admin approval flow on email delivery.
-    void notificationsEmailApi.sendNewOpportunityEmails(id).catch(() => {});
     return { error: null };
   },
 

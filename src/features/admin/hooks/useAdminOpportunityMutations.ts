@@ -6,6 +6,7 @@ import { queryKeys } from '@/constants/query-keys';
 import { ROUTES } from '@/constants/routes';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
 import { adminApi } from '@/services/api';
+import { supabase } from '@/services/supabase/client';
 
 function refreshOpportunityFeeds(queryClient: ReturnType<typeof useQueryClient>) {
   void queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.all });
@@ -25,9 +26,10 @@ export function useApproveOpportunityMutation() {
       const { error } = await adminApi.approveOpportunity(id, notes);
       if (error) throw error;
     },
-    onSuccess: () => {
+    onSuccess: (_data, { id }) => {
       Alert.alert('Approved', 'The opportunity is now live for students.');
       refreshPendingAndLive(queryClient);
+      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
     },
     onError: (error) => {
       Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
@@ -71,6 +73,7 @@ export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
       refreshOpportunityFeeds(queryClient);
+      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: data.id } });
     },
     onError: (error) => {
       const message =
@@ -124,6 +127,7 @@ export function useUpdateAndApproveMutation(id: string) {
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
+      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
     },
     onError: (error) => {
       Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
