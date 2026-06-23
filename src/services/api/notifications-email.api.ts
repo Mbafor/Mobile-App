@@ -7,4 +7,11 @@ export const notificationsEmailApi = {
     });
     return { data, error };
   },
+
+  sendNewOpportunityEmails: async (opportunityId: string) => {
+    const { data, error } = await supabase.functions.invoke('send-new-opportunity-emails', {
+      body: { opportunity_id: opportunityId },
+    });
+    return { data, error };
+  },
 };
