@@ -104,7 +104,7 @@ function createStyles(colors: ColorScheme) {
   logoImg: {
     width: 90,
     height: 28,
-    transform: [{ scale: 1.75 }],
+    transform: [{ scale: 2.2 }],
   },
   right: {
     flexDirection: 'row',
