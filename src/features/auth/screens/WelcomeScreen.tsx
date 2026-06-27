@@ -329,7 +329,7 @@ export function WelcomeScreen() {
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
-          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+          Facing challenges? Contact <Text style={styles.supportText}>support@voila-africa.com</Text>
         </Text>
       </Pressable>
     </>
@@ -726,8 +726,8 @@ function createStyles(colors: ColorScheme) {
   },
 
   heroLogoImg: {
-    width: 160,
-    height: 50,
+    width: 190,
+    height: 80,
     marginBottom: spacing.xs,
     transform: [{ scale: 2.0 }],
   },
