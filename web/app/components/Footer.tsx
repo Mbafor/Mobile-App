@@ -14,7 +14,7 @@ export default function Footer() {
                 alt="Voila"
                 width={100}
                 height={32}
-                className="object-contain"
+                className="object-contain scale-[1.65]"
               />
             </div>
             <p className="text-muted text-sm leading-[22px] max-w-[280px]">

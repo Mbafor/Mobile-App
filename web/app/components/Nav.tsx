@@ -48,7 +48,7 @@ export default function Nav() {
             alt="Voila"
             width={100}
             height={32}
-            className="object-contain"
+            className="object-contain scale-[1.35]"
             priority
           />
         </a>
@@ -56,10 +56,10 @@ export default function Nav() {
         <button
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
-          className={`ml-auto inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors duration-150 md:hidden bg-transparent ${scrolled ? "text-primary" : "text-white"}`}
+          className={`ml-auto inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-150 md:hidden bg-transparent ${scrolled ? "text-primary" : "text-white"}`}
           aria-label="Toggle navigation menu"
         >
-          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 7h16" />
             <path d="M4 12h16" />
             <path d="M4 17h16" />

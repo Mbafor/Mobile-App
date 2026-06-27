@@ -46,11 +46,13 @@ export function DesktopWebNavigation({
               <Ionicons name="menu-outline" size={20} color={colors.text} />
             </Pressable>
           ) : null}
-          <Image
-            source={require('@/assets/images/main_logo.png')}
-            style={styles.logoImg}
-            resizeMode="contain"
-          />
+          {!onMenuToggle && (
+            <Image
+              source={require('@/assets/images/main_logo.png')}
+              style={styles.logoImg}
+              resizeMode="contain"
+            />
+          )}
         </View>
 
         {/* Push actions to far right */}
@@ -102,6 +104,7 @@ function createStyles(colors: ColorScheme) {
   logoImg: {
     width: 90,
     height: 28,
+    transform: [{ scale: 1.75 }],
   },
   right: {
     flexDirection: 'row',

@@ -81,6 +81,6 @@ function createStyles(colors: ColorScheme) {
     link: { color: colors.textMuted, fontSize: 13 },
     linkPressable: { padding: 4, borderRadius: 6 },
     linkPressableHover: { backgroundColor: colors.surface },
-    logoImg: { width: 80, height: 24 },
+    logoImg: { width: 80, height: 24, transform: [{ scale: 1.45 }] },
   });
 }

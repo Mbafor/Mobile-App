@@ -712,6 +712,7 @@ function createStyles(colors: ColorScheme) {
     width: 160,
     height: 50,
     marginBottom: spacing.xs,
+    transform: [{ scale: 2.0 }],
   },
 
   logoMark: {
