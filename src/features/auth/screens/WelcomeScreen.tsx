@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, TextInput, View, ScrollView, ImageBackground } from 'react-native';
+import { ActivityIndicator, Image, Linking, Platform, Pressable, StyleSheet, TextInput, View, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Circle, Ellipse, Line, Path, Rect, Svg } from 'react-native-svg';
@@ -326,6 +326,12 @@ export function WelcomeScreen() {
       <Text style={styles.hint}>
         Sign in with your email, password, and a one-time code to confirm your account.
       </Text>
+
+      <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
+        <Text style={styles.supportText}>
+          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+        </Text>
+      </Pressable>
     </>
   );
 
@@ -429,6 +435,12 @@ export function WelcomeScreen() {
       <Text style={styles.hint}>
         By creating an account you agree to our Terms of Service and Privacy Policy.
       </Text>
+
+      <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
+        <Text style={styles.supportText}>
+          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+        </Text>
+      </Pressable>
     </>
   );
 
@@ -906,6 +918,22 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 18,
     paddingHorizontal: spacing.md,
     marginTop: spacing.xs,
+  },
+
+  supportRow: {
+    alignItems: 'center',
+    marginTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  supportText: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.xs,
+    textAlign: 'center',
+    lineHeight: 18,
+  },
+  supportEmail: {
+    color: colors.primary,
+    fontWeight: '500',
   },
 
   pwdField: {

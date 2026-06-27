@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
-import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Linking, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -161,6 +161,12 @@ export function EmailOtpScreen() {
           Continue
         </Button>
       </View>
+
+      <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
+        <Text style={styles.supportText}>
+          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+        </Text>
+      </Pressable>
     </AuthScreenLayout>
   );
 }
@@ -220,6 +226,22 @@ function createStyles(colors: ColorScheme) {
       fontSize: 13,
       color: colors.primary,
       fontWeight: '600',
+    },
+
+    supportRow: {
+      alignItems: 'center',
+      marginTop: spacing.md,
+      paddingHorizontal: spacing.md,
+    },
+    supportText: {
+      color: colors.textMuted,
+      fontSize: typography.fontSize.xs,
+      textAlign: 'center',
+      lineHeight: 18,
+    },
+    supportEmail: {
+      color: colors.primary,
+      fontWeight: '500',
     },
   });
 }
