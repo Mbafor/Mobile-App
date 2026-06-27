@@ -16,7 +16,9 @@ import { isValidPassword } from '@/utils/validation';
 
 export type EmailPasswordSignInResult =
   | { needsOtp: false }
-  | { needsOtp: true; otpType: OtpVerificationType };
+  | { needsOtp: true; otpType: OtpVerificationType }
+  | { accountExists: true }
+  | { accountNotFound: true };
 
 function mapAuthError(e: unknown): string {
   const message = e instanceof Error ? e.message : parseSupabaseError(e as Error).message;
@@ -90,24 +92,28 @@ export function useAuthActions() {
         }
 
         if (signIn.error && isEmailNotConfirmed(signIn.error.message)) {
-          const { error: resendError } = await authApi.resendSignupConfirmation(normalized);
-          if (resendError) throw resendError;
+          // Best-effort resend — don't block if it fails (rate limit, transient error).
+          // The user may still have the original code; they can resend from the OTP screen.
+          await authApi.resendSignupConfirmation(normalized).catch(() => null);
           return { needsOtp: true, otpType: 'signup' };
         }
 
-        // Probe sign-up to distinguish wrong password (account exists) vs no account
+        // Supabase returns the same "Invalid login credentials" for both wrong password and
+        // no account. Probe with signUp to tell them apart:
+        //   • "already registered" → account exists, password is wrong
+        //   • no error            → no account existed; Supabase just created one and sent OTP
         const signUp = await authApi.signUpWithPassword(normalized, password);
 
         if (signUp.error) {
           const msg = signUp.error.message.toLowerCase();
           if (msg.includes('already registered') || msg.includes('already been registered')) {
-            throw new Error('Wrong password. Reset your password to continue.');
+            throw new Error('Incorrect password. Try again or reset your password.');
           }
           throw signUp.error;
         }
 
-        // Sign-up succeeded → no account existed with this email
-        throw new Error('No account found. Create your account to get started.');
+        // No account existed — return a sentinel so callers can auto-switch to signup.
+        return { accountNotFound: true };
       }),
     [run],
   );
@@ -203,7 +209,7 @@ export function useAuthActions() {
         if (error) {
           const msg = error.message.toLowerCase();
           if (msg.includes('already registered') || msg.includes('already been registered')) {
-            return { accountExists: true as const };
+            return { accountExists: true };
           }
           throw error;
         }

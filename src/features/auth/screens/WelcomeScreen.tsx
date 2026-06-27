@@ -175,6 +175,11 @@ export function WelcomeScreen() {
     }
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
+    if ('accountNotFound' in result) {
+      switchMode('signup');
+      setFormError('No account found for this email. Fill in your details below to create one.');
+      return;
+    }
     if (result.needsOtp) {
       router.push(`/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}&source=welcome` as Href);
       return;

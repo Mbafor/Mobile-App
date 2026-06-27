@@ -74,6 +74,13 @@ export function EmailOtpScreen() {
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
 
+    if ('accountNotFound' in result) {
+      router.replace(
+        `/(auth)/welcome?email=${encodeURIComponent(normalized)}&switchToSignup=true` as Href,
+      );
+      return;
+    }
+
     if (result.needsOtp) {
       router.push(
         `/(auth)/verify-otp?email=${encodeURIComponent(normalized)}&otpType=${result.otpType}` as Href,
