@@ -160,7 +160,6 @@ export default function MainTabsLayout() {
       return (
         <View style={styles.webRoot}>
           <DesktopWebNavigation
-            brand="Voila"
             rightSlot={<AppHeaderActions />}
           />
           <View style={styles.desktopBody}>
@@ -190,7 +189,6 @@ export default function MainTabsLayout() {
     return (
       <View style={styles.webRoot}>
         <DesktopWebNavigation
-          brand="Voila"
           compact
           onMenuToggle={() => navigation.dispatch(DrawerActions.toggleDrawer())}
           rightSlot={<AppHeaderActions />}

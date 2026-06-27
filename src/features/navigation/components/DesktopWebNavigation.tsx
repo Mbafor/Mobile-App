@@ -3,11 +3,9 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 
-import { Text } from '@/components/ui';
 import { spacing, webTransition } from '@/constants/theme';
-import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
 /** Kept for backward compat — used by useMainTabNavItems and AppDrawerContent. */
@@ -20,7 +18,6 @@ export type DesktopNavItem = {
 };
 
 type DesktopWebNavigationProps = {
-  brand: string;
   /** When provided, a hamburger button is shown that calls this. Omit for desktop (sidebar handles it). */
   onMenuToggle?: () => void;
   rightSlot?: ReactNode;
@@ -29,7 +26,6 @@ type DesktopWebNavigationProps = {
 };
 
 export function DesktopWebNavigation({
-  brand,
   onMenuToggle,
   rightSlot,
   compact = false,
@@ -50,9 +46,11 @@ export function DesktopWebNavigation({
               <Ionicons name="menu-outline" size={20} color={colors.text} />
             </Pressable>
           ) : null}
-          <Text style={[styles.brand, getWebFontStyle('bold')]} numberOfLines={1}>
-            {brand}
-          </Text>
+          <Image
+            source={require('@/assets/images/main_logo.png')}
+            style={styles.logoImg}
+            resizeMode="contain"
+          />
         </View>
 
         {/* Push actions to far right */}
@@ -101,12 +99,9 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.surface,
   },
   menuButtonHover: Platform.OS === 'web' ? { backgroundColor: colors.background } : {},
-  brand: {
-    fontSize: 17,
-    fontWeight: '700',
-    color: colors.text,
-    letterSpacing: -0.2,
-    flexShrink: 1,
+  logoImg: {
+    width: 90,
+    height: 28,
   },
   right: {
     flexDirection: 'row',

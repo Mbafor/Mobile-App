@@ -3,7 +3,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { ActivityIndicator, Platform, Pressable, StyleSheet, TextInput, View, Text as RNText, ScrollView, ImageBackground } from 'react-native';
+import { ActivityIndicator, Image, Platform, Pressable, StyleSheet, TextInput, View, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { Circle, Ellipse, Line, Path, Rect, Svg } from 'react-native-svg';
@@ -439,12 +439,11 @@ export function WelcomeScreen() {
 
   const heroContent = (
     <View style={styles.heroContent}>
-      <View style={styles.logoMark}>
-        <RNText style={styles.logoText}>O</RNText>
-      </View>
-      <View style={styles.badge}>
-        <Text style={styles.badgeText}>Voila</Text>
-      </View>
+      <Image
+        source={require('@/assets/images/white_logo.png')}
+        style={styles.heroLogoImg}
+        resizeMode="contain"
+      />
       <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
       <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
     </View>
@@ -564,12 +563,11 @@ export function WelcomeScreen() {
             paddingTop: insets.top + spacing.lg,
             paddingHorizontal: spacing.lg,
           }]}>
-            <View style={styles.logoMark}>
-              <RNText style={styles.logoText}>O</RNText>
-            </View>
-            <View style={styles.badge}>
-              <Text style={styles.badgeText}>Voila</Text>
-            </View>
+            <Image
+              source={require('@/assets/images/white_logo.png')}
+              style={styles.heroLogoImg}
+              resizeMode="contain"
+            />
             <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>Find your next{'\n'}opportunity</Text>
             <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>Matched to your interests and ambitions, globally.</Text>
           </View>
@@ -708,6 +706,12 @@ function createStyles(colors: ColorScheme) {
   heroContent: {
     alignItems: 'center',
     gap: spacing.sm,
+  },
+
+  heroLogoImg: {
+    width: 160,
+    height: 50,
+    marginBottom: spacing.xs,
   },
 
   logoMark: {

@@ -8,11 +8,14 @@ export default function Footer() {
       <div className="mx-auto max-w-[1200px] px-6">
         <div className="flex flex-wrap gap-10 justify-between mb-10">
           <div className="flex-[2] min-w-[240px] flex flex-col gap-3">
-            <div className="flex items-center gap-2 mb-1">
-              <div className="w-[34px] h-[34px] rounded-[9px] bg-forest flex items-center justify-center">
-                <span className="text-accent text-base font-bold">O</span>
-              </div>
-              <span className="text-[#1A1A1A] font-bold text-lg">Voila</span>
+            <div className="flex items-center mb-1">
+              <Image
+                src="/images/main_logo.png"
+                alt="Voila"
+                width={100}
+                height={32}
+                className="object-contain"
+              />
             </div>
             <p className="text-muted text-sm leading-[22px] max-w-[280px]">
               Building career confidence for African students and young professionals.

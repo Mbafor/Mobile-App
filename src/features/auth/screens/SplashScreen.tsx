@@ -1,4 +1,4 @@
-import { ActivityIndicator, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
 import Svg, { Circle, Ellipse, Line } from 'react-native-svg';
 
 import { Text } from '@/components/ui';
@@ -76,8 +76,12 @@ export function SplashScreen() {
         </View>
       </View>
 
-      {/* Brand name */}
-      <Text style={styles.brand}>Voila</Text>
+      {/* Brand logo */}
+      <Image
+        source={require('@/assets/images/white_logo.png')}
+        style={styles.logoImg}
+        resizeMode="contain"
+      />
 
       {/* Status */}
       <View style={styles.statusWrap}>
@@ -136,11 +140,9 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
 
-  brand: {
-    color: '#fff',
-    fontSize: 26,
-    fontWeight: '500',
-    letterSpacing: 0.3,
+  logoImg: {
+    width: 160,
+    height: 50,
   },
 
   statusWrap: {

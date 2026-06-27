@@ -6,7 +6,7 @@ import {
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -20,7 +20,11 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.scroll}>
       <View style={styles.brand}>
-        <Text variant="title">Voila</Text>
+        <Image
+          source={require('@/assets/images/main_logo.png')}
+          style={styles.logoImg}
+          resizeMode="contain"
+        />
       </View>
 
       {/* Grouped sections: Main, Career Tools, Account, Administration */}
@@ -120,6 +124,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   scroll: { paddingTop: spacing.lg, paddingBottom: spacing.xl },
   brand: { paddingHorizontal: spacing.md, paddingBottom: spacing.md, gap: spacing.xs },
+  logoImg: { width: 120, height: 36 },
   brandHint: { fontSize: 13, lineHeight: 18 },
   sectionLabel: {
     fontSize: 11,

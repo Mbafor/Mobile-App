@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Image, Pressable, StyleSheet, View } from 'react-native';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ColorScheme } from '@/constants/theme/types';
@@ -14,7 +14,11 @@ export function DesktopFooter() {
 
   return (
     <View style={styles.footer}>
-      <Text style={styles.brand}>Voila</Text>
+      <Image
+        source={require('@/assets/images/main_logo.png')}
+        style={styles.logoImg}
+        resizeMode="contain"
+      />
       <View style={styles.linksRow}>
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
@@ -77,6 +81,6 @@ function createStyles(colors: ColorScheme) {
     link: { color: colors.textMuted, fontSize: 13 },
     linkPressable: { padding: 4, borderRadius: 6 },
     linkPressableHover: { backgroundColor: colors.surface },
-    brand: { color: colors.text, fontWeight: '700', fontSize: 14 },
+    logoImg: { width: 80, height: 24 },
   });
 }

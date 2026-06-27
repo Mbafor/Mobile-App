@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const SIGNUP_URL =
   (process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com") + "/welcome";
@@ -41,11 +42,15 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="/" className="flex items-center gap-2" aria-label="Voila home">
-          <div className={`w-9 h-9 rounded-[10px] flex items-center justify-center ${scrolled ? "bg-surface border-border" : "bg-white border-white"}`}>
-            <span className={`${scrolled ? "text-primary" : "text-primary"} font-bold text-lg leading-none`}>O</span>
-          </div>
-          <span className={`${scrolled ? "text-[#1A1A1A]" : "text-white"} font-bold text-base tracking-tight`}>Voila</span>
+        <a href="/" className="flex items-center" aria-label="Voila home">
+          <Image
+            src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
+            alt="Voila"
+            width={100}
+            height={32}
+            className="object-contain"
+            priority
+          />
         </a>
 
         <button
