@@ -498,7 +498,7 @@ export function WelcomeScreen() {
                       Continue with email
                     </Button>
                     <Text style={styles.hint}>
-                      Sign in with your email, password, and a one-time code to confirm your account.
+                      A one-time verification code will be sent to your email. Kindly check your email to confirm your account.
                     </Text>
                   </>
                 ) : (

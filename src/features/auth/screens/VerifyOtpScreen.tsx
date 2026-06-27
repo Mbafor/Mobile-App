@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Button, Text } from '@/components/ui';
@@ -107,6 +108,16 @@ export function VerifyOtpScreen() {
       backgroundColor={colors.background}
 
     >
+      <View style={styles.emailSentBanner}>
+        <View style={styles.emailSentIcon}>
+          <Ionicons name="mail-outline" size={22} color={colors.primary} />
+        </View>
+        <View style={styles.emailSentTextWrap}>
+          <Text style={styles.emailSentTitle}>Check your email</Text>
+          <Text style={styles.emailSentSub}>Your verification code has been sent</Text>
+        </View>
+      </View>
+
       <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
 
       <View style={styles.otpWrap}>
@@ -140,6 +151,42 @@ export function VerifyOtpScreen() {
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
+  emailSentBanner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    backgroundColor: `${colors.primary}18`,
+    borderRadius: 14,
+    borderWidth: 1,
+    borderColor: `${colors.primary}35`,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.md,
+    marginBottom: spacing.md,
+  },
+  emailSentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: `${colors.primary}20`,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  emailSentTextWrap: {
+    flex: 1,
+    gap: 2,
+  },
+  emailSentTitle: {
+    color: colors.primary,
+    fontWeight: '700',
+    fontSize: typography.fontSize.md,
+  },
+  emailSentSub: {
+    color: colors.primary,
+    fontSize: typography.fontSize.sm,
+    lineHeight: 20,
+    opacity: 0.8,
+  },
   panelSub: {
     color: colors.textMuted,
     fontSize: typography.fontSize.sm,
