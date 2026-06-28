@@ -3,7 +3,7 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
-import { Platform, StyleSheet, View } from 'react-native';
+import { Linking, Platform, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
@@ -13,8 +13,12 @@ import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { DesktopWebNavigation, DesktopSidebar, DesktopFooter } from '@/features/navigation/components';
+import { DesktopWebNavigation, DesktopSidebar, DesktopFooter, WhatsAppCommunityBanner } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
+
+const WHATSAPP_URL =
+  process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
+  'https://whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C';
 
 type TabIconName = keyof typeof Ionicons.glyphMap;
 
@@ -178,6 +182,7 @@ export default function MainTabsLayout() {
               >
                 {tabs}
                 <FloatingHelpButton />
+                <WhatsAppCommunityBanner />
               </View>
               <DesktopFooter />
             </View>
@@ -196,6 +201,16 @@ export default function MainTabsLayout() {
         <View style={styles.webContent}>
           {tabs}
           <FloatingHelpButton />
+          <WhatsAppCommunityBanner />
+        </View>
+        <View style={styles.mobileWebFooter}>
+          <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
+          <Text
+            style={styles.mobileWebFooterLink}
+            onPress={() => Linking.openURL(WHATSAPP_URL)}
+          >
+            Join our WhatsApp community
+          </Text>
         </View>
       </View>
     );
@@ -205,6 +220,16 @@ export default function MainTabsLayout() {
     <View style={styles.mobileRoot}>
       {tabs}
       <FloatingHelpButton />
+      <WhatsAppCommunityBanner />
+      <View style={styles.mobileFooter}>
+        <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
+        <Text
+          style={styles.mobileFooterLink}
+          onPress={() => Linking.openURL(WHATSAPP_URL)}
+        >
+          Join our WhatsApp community
+        </Text>
+      </View>
     </View>
   );
 }
@@ -217,5 +242,33 @@ function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
     desktopBody: { flex: 1, flexDirection: 'row' },
     desktopContent: { flex: 1, flexDirection: 'column' },
     contentMain: { flex: 1 },
+    mobileWebFooter: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 6,
+      paddingVertical: 10,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+      backgroundColor: colors.background,
+    },
+    mobileWebFooterLink: {
+      fontSize: 12,
+      color: colors.textMuted,
+    },
+    mobileFooter: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 6,
+      paddingVertical: 10,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+      backgroundColor: colors.background,
+    },
+    mobileFooterLink: {
+      fontSize: 12,
+      color: colors.textMuted,
+    },
   });
 }

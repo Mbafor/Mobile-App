@@ -1,10 +1,15 @@
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ColorScheme } from '@/constants/theme/types';
 import { webPressableStyle } from '@/utils/web/pressable';
 import { ROUTES } from '@/constants/routes';
 import { useRouter } from 'expo-router';
+
+const WHATSAPP_URL =
+  process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
+  'https://whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C';
 
 const SITE_URL = 'https://voila-africa.com';
 
@@ -14,11 +19,6 @@ export function DesktopFooter() {
 
   return (
     <View style={styles.footer}>
-      <Image
-        source={require('@/assets/images/main_logo.png')}
-        style={styles.logoImg}
-        resizeMode="contain"
-      />
       <View style={styles.linksRow}>
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
@@ -53,6 +53,16 @@ export function DesktopFooter() {
         >
           <Text style={styles.link}>Report an issue</Text>
         </Pressable>
+        <Text style={styles.sep}>·</Text>
+        <Pressable
+          style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
+          onPress={() => Linking.openURL(WHATSAPP_URL)}
+        >
+          <View style={styles.whatsappLink}>
+            <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
+            <Text style={styles.link}>Join our WhatsApp community</Text>
+          </View>
+        </Pressable>
       </View>
     </View>
   );
@@ -81,6 +91,6 @@ function createStyles(colors: ColorScheme) {
     link: { color: colors.textMuted, fontSize: 13 },
     linkPressable: { padding: 4, borderRadius: 6 },
     linkPressableHover: { backgroundColor: colors.surface },
-    logoImg: { width: 80, height: 24, transform: [{ scale: 1.45 }] },
+    whatsappLink: { flexDirection: 'row', alignItems: 'center', gap: 5 },
   });
 }
