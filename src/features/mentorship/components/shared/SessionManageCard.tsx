@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import { Alert, Linking, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
@@ -97,7 +98,7 @@ export function SessionManageCard({
           {canJoin ? (
             <Pressable
               style={styles.primaryBtn}
-              onPress={() => void Linking.openURL(session.meetingUrl!)}
+              onPress={() => void openExternalUrl(session.meetingUrl!)}
             >
               <Text style={styles.primaryBtnText}>Join now</Text>
             </Pressable>

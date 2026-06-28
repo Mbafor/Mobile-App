@@ -1,4 +1,4 @@
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -6,6 +6,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { webPressableStyle } from '@/utils/web/pressable';
 import { ROUTES } from '@/constants/routes';
 import { useRouter } from 'expo-router';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 const WHATSAPP_URL =
   process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
@@ -23,7 +24,7 @@ export function DesktopFooter() {
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
           onPress={() => {
-            if (typeof window !== 'undefined') window.open(`${SITE_URL}/about`, '_blank');
+            if (typeof window !== 'undefined') window.open(`${SITE_URL}/about`, '_blank', 'noopener,noreferrer');
           }}
         >
           <Text style={styles.link}>About</Text>
@@ -32,7 +33,7 @@ export function DesktopFooter() {
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
           onPress={() => {
-            if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank');
+            if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank', 'noopener,noreferrer');
           }}
         >
           <Text style={styles.link}>Become a Mentor</Text>
@@ -41,7 +42,7 @@ export function DesktopFooter() {
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
           onPress={() => {
-            if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank');
+            if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank', 'noopener,noreferrer');
           }}
         >
           <Text style={styles.link}>Become an Opportunity admin</Text>
@@ -56,7 +57,7 @@ export function DesktopFooter() {
         <Text style={styles.sep}>·</Text>
         <Pressable
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
-          onPress={() => Linking.openURL(WHATSAPP_URL)}
+          onPress={() => void openExternalUrl(WHATSAPP_URL)}
         >
           <View style={styles.whatsappLink}>
             <Ionicons name="logo-whatsapp" size={14} color="#25D366" />

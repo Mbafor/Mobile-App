@@ -8,7 +8,6 @@ import { useMemo } from 'react';
 import {
   ActivityIndicator,
   Image,
-  Linking,
   Platform,
   Pressable,
   ScrollView,
@@ -29,6 +28,7 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 function PromoCard({
   icon,
@@ -196,7 +196,7 @@ export function OpportunityDetailScreen() {
             ]}
             onPress={() => {
               const text = buildShareMessage(opportunity, opportunityLink);
-              Linking.openURL(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+              void openExternalUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
             }}
             accessibilityRole="button"
             accessibilityLabel="Share on WhatsApp"
@@ -211,7 +211,7 @@ export function OpportunityDetailScreen() {
               pressed && { opacity: 0.75 },
             ]}
             onPress={() => {
-              Linking.openURL(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(opportunityLink)}`);
+              void openExternalUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(opportunityLink)}`);
             }}
             accessibilityRole="button"
             accessibilityLabel="Share on LinkedIn"
@@ -226,7 +226,7 @@ export function OpportunityDetailScreen() {
               pressed && { opacity: 0.75 },
             ]}
             onPress={() => {
-              Linking.openURL(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(opportunityLink)}`);
+              void openExternalUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(opportunityLink)}`);
             }}
             accessibilityRole="button"
             accessibilityLabel="Share on Facebook"
@@ -286,9 +286,7 @@ export function OpportunityDetailScreen() {
             const url =
               process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
               'https://whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C';
-            Linking.openURL(url).catch(() => {
-              Linking.openURL('https://www.whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C');
-            });
+            openExternalUrl(url).catch(() => void openExternalUrl('https://www.whatsapp.com/channel/0029VbBtgba6xCSPUQdGPO2C'));
           }}
         />
       </View>

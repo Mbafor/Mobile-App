@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { Ionicons } from '@expo/vector-icons';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -30,7 +31,7 @@ export function WhatsAppCommunityBanner() {
 
   const join = async () => {
     await dismiss();
-    await Linking.openURL(WHATSAPP_URL);
+    await openExternalUrl(WHATSAPP_URL);
   };
 
   if (!visible) return null;

@@ -1,4 +1,5 @@
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { ColorScheme } from '@/constants/theme/types';
 import { colors as themeColors } from '@/constants/theme/colors';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -49,7 +50,7 @@ export function SessionCard({
       {canJoin ? (
         <Button
           variant="primary"
-          onPress={() => void Linking.openURL(session.meetingUrl!)}
+          onPress={() => void openExternalUrl(session.meetingUrl!)}
           style={[styles.join, styles.joinGreen]}
         >
           Join session

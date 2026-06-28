@@ -1,4 +1,5 @@
-import { Linking, Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
@@ -91,7 +92,7 @@ export function SessionsTable({
                     style={[styles.joinBtn, !session.meetingUrl ? styles.joinBtnDisabled : null]}
                     onPress={() => {
                       if (session.meetingUrl) {
-                        void Linking.openURL(session.meetingUrl);
+                        void openExternalUrl(session.meetingUrl);
                       } else {
                         Alert.alert('No meeting link yet', 'Your coach will share a meeting link soon.');
                       }

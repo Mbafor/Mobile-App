@@ -3,7 +3,7 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
-import { Linking, Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
@@ -15,6 +15,7 @@ import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
 import { DesktopWebNavigation, DesktopSidebar, DesktopFooter, WhatsAppCommunityBanner } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 const WHATSAPP_URL =
   process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
@@ -207,7 +208,7 @@ export default function MainTabsLayout() {
           <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
           <Text
             style={styles.mobileWebFooterLink}
-            onPress={() => Linking.openURL(WHATSAPP_URL)}
+            onPress={() => void openExternalUrl(WHATSAPP_URL)}
           >
             Join our WhatsApp community
           </Text>
@@ -225,7 +226,7 @@ export default function MainTabsLayout() {
         <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
         <Text
           style={styles.mobileFooterLink}
-          onPress={() => Linking.openURL(WHATSAPP_URL)}
+          onPress={() => void openExternalUrl(WHATSAPP_URL)}
         >
           Join our WhatsApp community
         </Text>

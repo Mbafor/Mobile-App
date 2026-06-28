@@ -1,4 +1,5 @@
-import { Linking, Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
@@ -86,7 +87,7 @@ export function UpcomingSessionsPanel({
                 {canJoin && session.meetingUrl ? (
                   <Pressable
                     style={styles.meetBtn}
-                    onPress={() => void Linking.openURL(session.meetingUrl!)}
+                    onPress={() => void openExternalUrl(session.meetingUrl!)}
                   >
                     <Text style={styles.meetBtnText}>Join now</Text>
                   </Pressable>

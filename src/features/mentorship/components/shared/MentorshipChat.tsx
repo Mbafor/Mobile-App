@@ -9,7 +9,6 @@ import {
   FlatList,
   Image,
   KeyboardAvoidingView,
-  Linking,
   Platform,
   Pressable,
   StyleSheet,
@@ -36,6 +35,7 @@ import {
 } from '@/features/mentorship/utils/pick-mentorship-attachment';
 import { spacing } from '@/constants/theme';
 import type { MentorshipMessage } from '@/types/domain/mentorship';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 type MentorshipChatProps = {
   messages: MentorshipMessage[];
@@ -219,14 +219,14 @@ export function MentorshipChat({
                 >
                   <View style={[styles.bubble, mine ? styles.bubbleMine : styles.bubbleTheirs]}>
                     {showImage ? (
-                      <Pressable onPress={() => void Linking.openURL(item.attachmentUrl!)}>
+                      <Pressable onPress={() => void openExternalUrl(item.attachmentUrl!)}>
                         <Image source={{ uri: item.attachmentUrl }} style={styles.image} />
                       </Pressable>
                     ) : null}
                     {showFile ? (
                       <Pressable
                         style={[styles.fileChip, mine && styles.fileChipMine]}
-                        onPress={() => void Linking.openURL(item.attachmentUrl!)}
+                        onPress={() => void openExternalUrl(item.attachmentUrl!)}
                       >
                         <Ionicons
                           name="document-text-outline"

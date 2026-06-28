@@ -1,4 +1,5 @@
 import * as Linking from 'expo-linking';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
@@ -90,7 +91,7 @@ function TrackerCardComponent({
       Alert.alert('Invalid link', 'Could not open the application URL.');
       return;
     }
-    await Linking.openURL(applyUrl);
+    await openExternalUrl(applyUrl);
   }, [applyUrl]);
 
   const panGesture = Gesture.Pan()

@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Linking from 'expo-linking';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { Alert } from 'react-native';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -124,7 +125,7 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
       return;
     }
 
-    await Linking.openURL(url);
+    await openExternalUrl(url);
   };
 
   return {

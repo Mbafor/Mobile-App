@@ -1,4 +1,5 @@
-import { Linking, Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
@@ -38,7 +39,7 @@ export function CoachSessionsTable({
       Alert.alert('No meeting link yet', 'Add or edit a meeting link before joining.');
       return;
     }
-    void Linking.openURL(session.meetingUrl);
+    void openExternalUrl(session.meetingUrl);
   };
 
   return (

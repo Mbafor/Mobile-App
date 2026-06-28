@@ -124,7 +124,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   scroll: { paddingTop: spacing.lg, paddingBottom: spacing.xl },
   brand: { paddingHorizontal: spacing.md, paddingBottom: spacing.md, gap: spacing.xs },
-  logoImg: { width: 120, height: 36, transform: [{ scale: 5 }] },
+  logoImg: { width: 120, height: 36, transform: [{ scale: 3 }] },
   brandHint: { fontSize: 13, lineHeight: 18 },
   sectionLabel: {
     fontSize: 11,
