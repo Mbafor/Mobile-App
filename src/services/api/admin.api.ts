@@ -4,7 +4,6 @@ import type { OpportunityFormValues } from '@/features/admin/types/opportunity-f
 import { parseDeadlineToIso } from '@/features/admin/utils/deadline';
 import { supabase } from '@/services/supabase/client';
 import type { Database } from '@/services/supabase/types';
-import { notificationsEmailApi } from '@/services/api/notifications-email.api';
 
 type OpportunityInsert = Database['public']['Tables']['opportunities']['Insert'];
 
@@ -253,9 +252,6 @@ export const adminApi = {
           ),
         };
       }
-
-      // Fire and forget — don't block the admin create flow on email delivery.
-      void notificationsEmailApi.sendNewOpportunityEmails(inserted.id).catch(() => {});
 
       return { data: mapOpportunityRow(inserted), error: null };
     } catch (e) {
