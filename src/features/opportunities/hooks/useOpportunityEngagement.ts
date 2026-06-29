@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import * as Linking from 'expo-linking';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
-import { Alert } from 'react-native';
+import { Alert, Platform } from 'react-native';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useSavedOpportunityIds } from '@/features/opportunities/hooks/useSavedOpportunityIds';
@@ -119,13 +119,17 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
       return;
     }
 
-    const canOpen = await Linking.canOpenURL(url);
-    if (!canOpen) {
-      Alert.alert('Invalid link', 'Could not open the application URL.');
-      return;
+    // On web, canOpenURL is always true for https:// and awaiting it would expire
+    // Safari's user-gesture context, causing window.open to be blocked.
+    if (Platform.OS !== 'web') {
+      const canOpen = await Linking.canOpenURL(url);
+      if (!canOpen) {
+        Alert.alert('Invalid link', 'Could not open the application URL.');
+        return;
+      }
     }
 
-    await openExternalUrl(url);
+    void openExternalUrl(url);
   };
 
   return {

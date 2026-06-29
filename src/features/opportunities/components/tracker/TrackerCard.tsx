@@ -4,7 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
-import { Alert, Image, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Alert, Image, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -86,12 +86,16 @@ function TrackerCardComponent({
       Alert.alert('No apply link', 'This opportunity does not have an application URL yet.');
       return;
     }
-    const canOpen = await Linking.canOpenURL(applyUrl);
-    if (!canOpen) {
-      Alert.alert('Invalid link', 'Could not open the application URL.');
-      return;
+    // Skip canOpenURL on web — always true for https:// and awaiting it would
+    // expire Safari's user-gesture context, causing window.open to be blocked.
+    if (Platform.OS !== 'web') {
+      const canOpen = await Linking.canOpenURL(applyUrl);
+      if (!canOpen) {
+        Alert.alert('Invalid link', 'Could not open the application URL.');
+        return;
+      }
     }
-    await openExternalUrl(applyUrl);
+    void openExternalUrl(applyUrl);
   }, [applyUrl]);
 
   const panGesture = Gesture.Pan()

@@ -1,4 +1,5 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
@@ -21,13 +22,36 @@ serve(async (req) => {
     }
 
     const body = await req.json();
-    const { email, full_name } = body;
+    const { email, full_name, user_id } = body;
 
     if (!email) {
       return new Response(JSON.stringify({ error: 'Missing email' }), {
         status: 400,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
+    }
+
+    // Server-side atomic dedup: if user_id is supplied, claim the send slot in the
+    // DB before sending. This prevents double emails even when the client races.
+    if (user_id) {
+      const supabase = createClient(
+        Deno.env.get('SUPABASE_URL') ?? '',
+        Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? '',
+      );
+
+      const { data: claimed } = await supabase
+        .from('profiles')
+        .update({ welcome_email_sent_at: new Date().toISOString() })
+        .eq('id', user_id)
+        .is('welcome_email_sent_at', null)
+        .select('id');
+
+      // Another caller already claimed the slot — skip silently.
+      if (!claimed || claimed.length === 0) {
+        return new Response(JSON.stringify({ success: true, skipped: true }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
     }
 
     const firstName = full_name ? full_name.split(' ')[0] : 'there';

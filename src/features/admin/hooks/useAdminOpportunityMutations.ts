@@ -5,6 +5,7 @@ import { Alert } from 'react-native';
 import { queryKeys } from '@/constants/query-keys';
 import { ROUTES } from '@/constants/routes';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
+import { useAuth } from '@/features/auth/hooks/useAuth';
 import { adminApi } from '@/services/api';
 import { supabase } from '@/services/supabase/client';
 
@@ -20,6 +21,7 @@ function refreshPendingAndLive(queryClient: ReturnType<typeof useQueryClient>) {
 
 export function useApproveOpportunityMutation() {
   const queryClient = useQueryClient();
+  const { isSuperAdmin } = useAuth();
 
   return useMutation({
     mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
@@ -29,7 +31,9 @@ export function useApproveOpportunityMutation() {
     onSuccess: (_data, { id }) => {
       Alert.alert('Approved', 'The opportunity is now live for students.');
       refreshPendingAndLive(queryClient);
-      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
+      if (isSuperAdmin) {
+        void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
+      }
     },
     onError: (error) => {
       Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
@@ -58,6 +62,7 @@ export function useRejectOpportunityMutation() {
 export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME as Href) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { isSuperAdmin } = useAuth();
 
   return useMutation({
     mutationFn: async (values: OpportunityFormValues) => {
@@ -73,7 +78,9 @@ export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
       refreshOpportunityFeeds(queryClient);
-      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: data.id } });
+      if (isSuperAdmin) {
+        void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: data.id } });
+      }
     },
     onError: (error) => {
       const message =
@@ -112,6 +119,7 @@ export function useUpdateOpportunityMutation(id: string) {
 export function useUpdateAndApproveMutation(id: string) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { isSuperAdmin } = useAuth();
 
   return useMutation({
     mutationFn: async (values: OpportunityFormValues) => {
@@ -127,7 +135,9 @@ export function useUpdateAndApproveMutation(id: string) {
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.analytics });
-      void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
+      if (isSuperAdmin) {
+        void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
+      }
     },
     onError: (error) => {
       Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');

@@ -30,8 +30,10 @@ export function WhatsAppCommunityBanner() {
   };
 
   const join = async () => {
+    // Open the URL first — before any await — so mobile Safari's popup blocker
+    // does not expire the user-gesture context and block window.open.
+    void openExternalUrl(WHATSAPP_URL);
     await dismiss();
-    await openExternalUrl(WHATSAPP_URL);
   };
 
   if (!visible) return null;

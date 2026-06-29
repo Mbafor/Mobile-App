@@ -8,13 +8,12 @@ export async function sendWelcomeEmailIfNeeded(
 ): Promise<void> {
   if (!email?.trim()) return;
 
+  // Cheap local short-circuit — avoids the network call when already sent.
   const { data: profile } = await profilesApi.getByUserId(userId);
   if (!profile || profile.welcomeEmailSentAt) return;
 
-  // Atomically claim the send slot. Only the first concurrent caller that
-  // actually writes the timestamp (claimed = true) proceeds to send.
-  const { claimed } = await profilesApi.markWelcomeEmailSent(userId);
-  if (!claimed) return;
-
-  await notificationsEmailApi.sendWelcome(email, fullName ?? null);
+  // The edge function owns the authoritative atomic claim (UPDATE WHERE IS NULL).
+  // Passing user_id lets the server dedup concurrent calls and prevents double-sends
+  // even if this client-side check races (e.g. double-tap, strict-mode re-mount).
+  await notificationsEmailApi.sendWelcome(userId, email, fullName ?? null);
 }
