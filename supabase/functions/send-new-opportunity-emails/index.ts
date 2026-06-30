@@ -36,10 +36,10 @@ serve(async (req) => {
       { global: { headers: { Authorization: authHeader } } },
     );
 
-    const { data: canManage, error: permError } = await supabaseUser.rpc(
-      'current_user_can_manage_opportunities',
+    const { data: isSuperAdmin, error: permError } = await supabaseUser.rpc(
+      'current_user_is_super_admin',
     );
-    if (permError || !canManage) {
+    if (permError || !isSuperAdmin) {
       return new Response(JSON.stringify({ error: 'Forbidden' }), {
         status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
