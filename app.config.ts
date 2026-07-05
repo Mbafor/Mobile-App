@@ -7,6 +7,10 @@ const config: ExpoConfig = {
   scheme: 'Voila',
   orientation: 'portrait',
   userInterfaceStyle: 'automatic',
+  icon: './assets/icon.png',
+  web: {
+    favicon: './assets/favicon.png',
+  },
   // Disabled for Expo Go — turn on for EAS dev/production builds.
   newArchEnabled: false,
   experiments: {
@@ -47,6 +51,10 @@ const config: ExpoConfig = {
   },
   android: {
     package: 'com.Voila.app',
+    adaptiveIcon: {
+      foregroundImage: './assets/adaptive-icon.png',
+      backgroundColor: '#FFFFFF',
+    },
   },
 };
 
