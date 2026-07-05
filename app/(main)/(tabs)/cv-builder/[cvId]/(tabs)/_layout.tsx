@@ -4,7 +4,6 @@ import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { spacing } from '@/constants/theme';
-import { useHideMainTabBar } from '@/features/cv-builder/hooks/useHideMainTabBar';
 import { useTheme } from '@/hooks/useTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
 
@@ -22,7 +21,6 @@ export default function CVHubTabsLayout() {
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
   const { colors, cvDocsTheme } = useTheme();
-  useHideMainTabBar();
 
   const tabBarHeight = 65 + insets.bottom;
 

@@ -1,4 +1,4 @@
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons, MaterialIcons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -240,11 +240,7 @@ export function DesktopSidebar() {
           accessibilityRole="button"
           accessibilityLabel={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
-          <Ionicons
-            name="menu-outline"
-            size={20}
-            color={colors.textMuted}
-          />
+          <MaterialIcons name="view-sidebar" size={20} color={colors.textMuted} />
         </Pressable>
       </View>
 
@@ -309,7 +305,7 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.xs,
     paddingBottom: 2,
-    alignItems: 'flex-end',
+    alignItems: 'flex-start',
   },
   toggleButton: {
     flexDirection: 'row',
