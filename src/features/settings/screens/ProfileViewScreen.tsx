@@ -18,19 +18,12 @@ import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
 
-const FUNDING_LABELS: Record<string, string> = {
-  any: 'Any funding',
-  fully_funded: 'Fully funded',
-  partially_funded: 'Partially funded',
-  self_funded: 'Self-funded',
-};
-
 export function ProfileViewScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
-  const { profile, preferences } = useProfileData();
+  const { profile } = useProfileData();
 
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const avatarUrl = profile?.avatarUrl ?? authProfile?.avatarUrl ?? getOAuthAvatarUrl(oauthMeta);
@@ -50,26 +43,8 @@ export function ProfileViewScreen() {
   });
   const mentorProfile = mentorProfileQuery.data ?? null;
   const isVerifiedMentor = mentorProfile?.status === 'approved';
-  const bioText = mentorProfile?.bio ?? profile?.bio ?? null;
 
   const goToDashboard = () => router.push(ROUTES.MAIN.DASHBOARD as any);
-
-  const personalInfoValue = [displayName, profile?.country].filter(Boolean).join(' · ');
-  const academicInfoValue = [profile?.university, profile?.degreeLevel, profile?.courseMajor]
-    .filter(Boolean)
-    .join(' · ');
-  const interestsValue = (profile?.interests ?? []).join(', ');
-  const preferencesValue = [
-    (preferences?.opportunityTypes ?? []).join(', '),
-    (preferences?.preferredCountries ?? []).length > 0
-      ? (preferences?.preferredCountries ?? []).join(', ')
-      : null,
-    preferences?.fundingPreference
-      ? (FUNDING_LABELS[preferences.fundingPreference] ?? preferences.fundingPreference)
-      : null,
-  ]
-    .filter(Boolean)
-    .join(' · ');
 
   return (
     <View style={styles.root}>
@@ -130,35 +105,25 @@ export function ProfileViewScreen() {
         </View>
 
         {/* ── Editable sections ── */}
-        <View style={styles.sectionList}>
+        <View>
           <ProfileSectionRow
             label="Personal Info"
-            value={personalInfoValue || 'Add your name and country'}
-            placeholder={!personalInfoValue}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_PERSONAL_INFO as any)}
           />
           <ProfileSectionRow
             label="Academic Info"
-            value={academicInfoValue || 'Add your academic details'}
-            placeholder={!academicInfoValue}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_ACADEMIC_INFO as any)}
           />
           <ProfileSectionRow
             label="Interests"
-            value={interestsValue || 'Add your interests'}
-            placeholder={!interestsValue}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_INTERESTS as any)}
           />
           <ProfileSectionRow
             label="Opportunity Preferences"
-            value={preferencesValue || 'Add your preferences'}
-            placeholder={!preferencesValue}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_PREFERENCES as any)}
           />
           <ProfileSectionRow
             label="Bio"
-            value={bioText || 'Add a short bio'}
-            placeholder={!bioText}
             showDivider={false}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_BIO as any)}
           />
@@ -231,8 +196,6 @@ function createStyles(colors: ColorScheme) {
     alignItems: 'center',
     paddingBottom: spacing.xl,
     marginBottom: spacing.md,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
     gap: spacing.sm,
   },
   avatarWrap: {
@@ -271,12 +234,6 @@ function createStyles(colors: ColorScheme) {
   email: {
     fontSize: 15,
     color: colors.textMuted,
-  },
-
-  // ─── Section list ─────────────────────────────────────────────────────────
-  sectionList: {
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
   },
 });
 }

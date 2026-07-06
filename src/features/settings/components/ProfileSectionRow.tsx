@@ -10,19 +10,11 @@ import { webPressableStyle } from '@/utils/web/pressable';
 
 type ProfileSectionRowProps = {
   label: string;
-  value: string;
-  placeholder?: boolean;
   onPress: () => void;
   showDivider?: boolean;
 };
 
-export function ProfileSectionRow({
-  label,
-  value,
-  placeholder,
-  onPress,
-  showDivider = true,
-}: ProfileSectionRowProps) {
+export function ProfileSectionRow({ label, onPress, showDivider = true }: ProfileSectionRowProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
 
@@ -37,12 +29,6 @@ export function ProfileSectionRow({
     >
       <View style={styles.body}>
         <Text style={styles.label}>{label}</Text>
-        <Text
-          style={[styles.value, placeholder && styles.placeholder]}
-          numberOfLines={1}
-        >
-          {value}
-        </Text>
       </View>
       <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
     </Pressable>
@@ -56,16 +42,14 @@ function createStyles(colors: ColorScheme) {
       alignItems: 'center',
       gap: spacing.md,
       paddingVertical: spacing.md,
-      minHeight: 64,
+      minHeight: 56,
     },
     hover: Platform.OS === 'web' ? { backgroundColor: colors.surface } : {},
     divider: {
       borderBottomWidth: StyleSheet.hairlineWidth,
       borderBottomColor: colors.border,
     },
-    body: { flex: 1, gap: 2, minWidth: 0 },
-    label: { fontSize: 13, fontWeight: '700', color: colors.primary, letterSpacing: 0.3 },
-    value: { fontSize: 15, color: colors.text, fontWeight: '500' },
-    placeholder: { color: colors.textMuted, fontWeight: '400' },
+    body: { flex: 1, minWidth: 0 },
+    label: { fontSize: 16, color: colors.text, fontWeight: '500' },
   });
 }

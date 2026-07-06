@@ -92,8 +92,6 @@ function createStyles(colors: ColorScheme) {
     },
     group: {
       marginBottom: spacing.xl,
-      borderTopWidth: StyleSheet.hairlineWidth,
-      borderTopColor: colors.border,
     },
   });
 }
