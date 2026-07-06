@@ -101,11 +101,6 @@ export function NotificationPreferencesSection() {
 
   return (
     <View style={styles.wrap}>
-      <Text muted style={styles.intro}>
-        Control push alerts and reminder types. In-app history is always available in the
-        Notifications tab.
-      </Text>
-
       {permission === 'denied' ? (
         <Text muted variant="caption" style={styles.warning}>
           System notifications are denied. Turn them on in device settings to use push.
@@ -191,7 +186,6 @@ export function NotificationPreferencesSection() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   wrap: { gap: spacing.xs },
-  intro: { marginBottom: spacing.sm, lineHeight: 22 },
   warning: { marginBottom: spacing.sm },
   toggleGroup: {
     backgroundColor: colors.background,

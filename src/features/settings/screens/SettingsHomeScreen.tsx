@@ -1,14 +1,12 @@
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import type { ReactNode } from 'react';
-import { useRouter } from 'expo-router';
+import { useState } from 'react';
+import { Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { useRouter, type Href } from 'expo-router';
 
 import { PageHeader } from '@/components/layout/PageHeader';
-import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
-import { AccountSection } from '@/features/settings/components/AccountSection';
-import { NotificationPreferencesSection } from '@/features/settings/components/NotificationPreferencesSection';
-import { PrivacySection } from '@/features/settings/components/PrivacySection';
-import { SettingsLogoutFooter } from '@/features/settings/components/SettingsLogoutFooter';
+import { SettingsRow } from '@/features/settings/components/SettingsRow';
+import { performLogout } from '@/features/auth/utils/perform-logout';
+import { confirmAction } from '@/utils/confirm-action';
 import type { ColorScheme } from '@/constants/theme/types';
 import { spacing } from '@/constants/theme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -16,44 +14,67 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 export function SettingsHomeScreen() {
   const router = useRouter();
   const styles = useThemedStyles(createStyles);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
-  function SettingsSection({ title, children }: { title: string; children: ReactNode }) {
-    return (
-      <View style={styles.section}>
-        <Text style={styles.sectionLabel}>{title}</Text>
-        <View style={styles.sectionContent}>{children}</View>
-      </View>
-    );
-  }
+  const handleLogout = async () => {
+    const confirmed = await confirmAction('Log out', 'Are you sure you want to log out?');
+    if (!confirmed) return;
+
+    setIsLoggingOut(true);
+    const result = await performLogout();
+    setIsLoggingOut(false);
+
+    if (!result.ok) {
+      Alert.alert('Log out failed', result.error);
+    }
+  };
 
   return (
-    <KeyboardAvoidingView
-      style={styles.root}
-      behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-    >
-      <PageHeader title="Settings" onBack={() => router.push(ROUTES.MAIN.DASHBOARD as any)} />
+    <View style={styles.root}>
+      <PageHeader title="Settings" onBack={() => router.push(ROUTES.MAIN.DASHBOARD as Href)} />
 
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
-        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <SettingsSection title="Notifications">
-          <NotificationPreferencesSection />
-        </SettingsSection>
+        <View style={styles.group}>
+          <SettingsRow
+            label="Notifications"
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
+          />
+          <SettingsRow
+            label="Privacy"
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_PRIVACY as Href)}
+          />
+          <SettingsRow
+            label="Change Password"
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_CHANGE_PASSWORD as Href)}
+          />
+          <SettingsRow
+            label="Support"
+            showDivider={false}
+            onPress={() => router.push(ROUTES.MAIN.HELP.INDEX as Href)}
+          />
+        </View>
 
-        <SettingsSection title="Privacy">
-          <PrivacySection />
-        </SettingsSection>
-
-        <SettingsSection title="Account">
-          <AccountSection />
-        </SettingsSection>
-
-        <SettingsLogoutFooter />
+        <View style={styles.group}>
+          <SettingsRow
+            label="Log out"
+            destructive
+            showChevron={false}
+            loading={isLoggingOut}
+            onPress={() => void handleLogout()}
+          />
+          <SettingsRow
+            label="Delete Account"
+            destructive
+            showDivider={false}
+            onPress={() => router.push(ROUTES.MAIN.SETTINGS_DELETE_ACCOUNT as Href)}
+          />
+        </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+    </View>
   );
 }
 
@@ -63,25 +84,14 @@ function createStyles(colors: ColorScheme) {
     scroll: { flex: 1 },
     content: {
       paddingHorizontal: spacing.lg,
-      paddingTop: spacing.md,
+      paddingTop: spacing.lg,
       paddingBottom: spacing.xl * 2,
       maxWidth: 1200,
       width: '100%',
       alignSelf: 'center',
     },
-    section: {
-      marginBottom: spacing.lg,
-    },
-    sectionLabel: {
-      fontSize: 12,
-      fontWeight: '700',
-      letterSpacing: 0.6,
-      textTransform: 'uppercase',
-      color: colors.textMuted,
-      marginBottom: spacing.sm,
-      paddingHorizontal: spacing.xs,
-    },
-    sectionContent: {
+    group: {
+      marginBottom: spacing.xl,
       borderTopWidth: StyleSheet.hairlineWidth,
       borderTopColor: colors.border,
     },

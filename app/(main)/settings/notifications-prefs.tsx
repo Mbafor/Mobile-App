@@ -1,5 +1,1 @@
-import { Redirect } from 'expo-router';
-
-export default function SettingsNotificationsRedirect() {
-  return <Redirect href="/(main)/settings" />;
-}
+export { NotificationsScreen as default } from '@/features/settings/screens/NotificationsScreen';

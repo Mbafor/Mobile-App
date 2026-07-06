@@ -2,23 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useState } from 'react';
-import {
-  Image,
-  KeyboardAvoidingView,
-  Modal,
-  Platform,
-  Pressable,
-  ScrollView,
-  StyleSheet,
-  View,
-} from 'react-native';
+import { Image, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
 import { useQuery } from '@tanstack/react-query';
-import { PageHeader } from '@/components/layout/PageHeader';
 import { Text } from '@/components/ui';
-import { ProfilePreferencesSection } from '@/features/settings/components/ProfilePreferencesSection';
+import { ProfileSectionRow } from '@/features/settings/components/ProfileSectionRow';
 import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
@@ -28,16 +17,6 @@ import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { webPressableStyle } from '@/utils/web/pressable';
-
-function InfoRow({ label, value }: { label: string; value: string }) {
-  const styles = useThemedStyles(createStyles);
-  return (
-    <View style={styles.infoRow}>
-      <Text style={styles.infoKey}>{label}</Text>
-      <Text style={styles.infoVal}>{value}</Text>
-    </View>
-  );
-}
 
 const FUNDING_LABELS: Record<string, string> = {
   any: 'Any funding',
@@ -52,7 +31,6 @@ export function ProfileViewScreen() {
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
   const { profile, preferences } = useProfileData();
-  const [editOpen, setEditOpen] = useState(false);
 
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const avatarUrl = profile?.avatarUrl ?? authProfile?.avatarUrl ?? getOAuthAvatarUrl(oauthMeta);
@@ -76,23 +54,27 @@ export function ProfileViewScreen() {
 
   const goToDashboard = () => router.push(ROUTES.MAIN.DASHBOARD as any);
 
-  const hasAcademic =
-    !!profile?.university || !!profile?.country || !!profile?.courseMajor || !!profile?.degreeLevel;
-  const hasInterests = (profile?.interests?.length ?? 0) > 0;
-  const hasPreferences =
-    (preferences?.opportunityTypes?.length ?? 0) > 0 ||
-    (preferences?.preferredCountries?.length ?? 0) > 0 ||
-    !!preferences?.fundingPreference;
-
-  const fundingLabel = preferences?.fundingPreference
-    ? (FUNDING_LABELS[preferences.fundingPreference] ?? preferences.fundingPreference)
-    : null;
+  const personalInfoValue = [displayName, profile?.country].filter(Boolean).join(' · ');
+  const academicInfoValue = [profile?.university, profile?.degreeLevel, profile?.courseMajor]
+    .filter(Boolean)
+    .join(' · ');
+  const interestsValue = (profile?.interests ?? []).join(', ');
+  const preferencesValue = [
+    (preferences?.opportunityTypes ?? []).join(', '),
+    (preferences?.preferredCountries ?? []).length > 0
+      ? (preferences?.preferredCountries ?? []).join(', ')
+      : null,
+    preferences?.fundingPreference
+      ? (FUNDING_LABELS[preferences.fundingPreference] ?? preferences.fundingPreference)
+      : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 
   return (
     <View style={styles.root}>
-      {/* ── Header: back-arrow → Dashboard | "Profile" | 🔔 Edit ── */}
+      {/* ── Header: back-arrow → Dashboard | "Profile" | 🔔 ── */}
       <View style={styles.header}>
-        {/* Left: back arrow → Dashboard */}
         <View style={styles.headerLeft}>
           <Pressable
             onPress={goToDashboard}
@@ -107,25 +89,15 @@ export function ProfileViewScreen() {
           </Pressable>
         </View>
 
-        {/* Center: title */}
         <Text style={[styles.headerTitle, getWebFontStyle('semibold')]} numberOfLines={1}>
           Profile
         </Text>
 
-        {/* Right: notification bell + Edit */}
         <View style={styles.headerRight}>
           <NotificationHeaderButton />
-          <Pressable
-            onPress={() => setEditOpen(true)}
-            style={styles.editBtn}
-            accessibilityRole="button"
-          >
-            <Text style={[styles.editBtnText, getWebFontStyle('semibold')]}>Edit</Text>
-          </Pressable>
         </View>
       </View>
 
-      {/* ── Read-only profile content ── */}
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -154,104 +126,44 @@ export function ProfileViewScreen() {
             <Text style={styles.verifiedLabel}>Verified Mentor</Text>
           ) : null}
 
-          {/* Email — shown directly below profile image / name */}
-          {email ? (
-            <Text style={styles.email}>{email}</Text>
-          ) : null}
+          {email ? <Text style={styles.email}>{email}</Text> : null}
         </View>
 
-        {/* Academic info */}
-        {hasAcademic ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Academic</Text>
-            {profile?.university ? (
-              <InfoRow label="University" value={profile.university} />
-            ) : null}
-            {profile?.degreeLevel ? (
-              <InfoRow label="Degree" value={profile.degreeLevel} />
-            ) : null}
-            {profile?.courseMajor ? (
-              <InfoRow label="Course / Major" value={profile.courseMajor} />
-            ) : null}
-            {profile?.country ? (
-              <InfoRow label="Country" value={profile.country} />
-            ) : null}
-          </View>
-        ) : null}
-
-        {/* Interests */}
-        {hasInterests ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Interests</Text>
-            <Text style={styles.infoVal}>
-              {(profile?.interests ?? []).join('  ·  ')}
-            </Text>
-          </View>
-        ) : null}
-
-        {/* Opportunity Preferences */}
-        {hasPreferences ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Opportunity Preferences</Text>
-            {(preferences?.opportunityTypes?.length ?? 0) > 0 ? (
-              <InfoRow
-                label="Opportunity types"
-                value={(preferences?.opportunityTypes ?? []).join('  ·  ')}
-              />
-            ) : null}
-            {(preferences?.preferredCountries?.length ?? 0) > 0 ? (
-              <InfoRow
-                label="Preferred countries"
-                value={(preferences?.preferredCountries ?? []).join('  ·  ')}
-              />
-            ) : null}
-            {fundingLabel ? (
-              <InfoRow label="Funding" value={fundingLabel} />
-            ) : null}
-          </View>
-        ) : null}
-
-        {!hasAcademic && !hasInterests && !hasPreferences ? (
-          <View style={styles.emptyHint}>
-            <Text muted style={styles.emptyText}>
-              Tap Edit to fill in your profile details.
-            </Text>
-          </View>
-        ) : null}
-
-        {/* Bio — shown at the very bottom of the profile */}
-        {bioText ? (
-          <View style={styles.section}>
-            <Text style={styles.sectionLabel}>Bio</Text>
-            <Text style={styles.bio}>{bioText}</Text>
-          </View>
-        ) : null}
+        {/* ── Editable sections ── */}
+        <View style={styles.sectionList}>
+          <ProfileSectionRow
+            label="Personal Info"
+            value={personalInfoValue || 'Add your name and country'}
+            placeholder={!personalInfoValue}
+            onPress={() => router.push(ROUTES.MAIN.PROFILE_PERSONAL_INFO as any)}
+          />
+          <ProfileSectionRow
+            label="Academic Info"
+            value={academicInfoValue || 'Add your academic details'}
+            placeholder={!academicInfoValue}
+            onPress={() => router.push(ROUTES.MAIN.PROFILE_ACADEMIC_INFO as any)}
+          />
+          <ProfileSectionRow
+            label="Interests"
+            value={interestsValue || 'Add your interests'}
+            placeholder={!interestsValue}
+            onPress={() => router.push(ROUTES.MAIN.PROFILE_INTERESTS as any)}
+          />
+          <ProfileSectionRow
+            label="Opportunity Preferences"
+            value={preferencesValue || 'Add your preferences'}
+            placeholder={!preferencesValue}
+            onPress={() => router.push(ROUTES.MAIN.PROFILE_PREFERENCES as any)}
+          />
+          <ProfileSectionRow
+            label="Bio"
+            value={bioText || 'Add a short bio'}
+            placeholder={!bioText}
+            showDivider={false}
+            onPress={() => router.push(ROUTES.MAIN.PROFILE_BIO as any)}
+          />
+        </View>
       </ScrollView>
-
-      {/* ── Edit modal ── */}
-      <Modal
-        visible={editOpen}
-        animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setEditOpen(false)}
-      >
-        <View style={styles.modalRoot}>
-          <PageHeader title="Edit Profile" onBack={() => setEditOpen(false)} />
-          <KeyboardAvoidingView
-            style={styles.modalFlex}
-            behavior={Platform.OS === 'ios' ? 'padding' : undefined}
-          >
-            <ScrollView
-              style={styles.modalScroll}
-              contentContainerStyle={styles.modalContent}
-              keyboardShouldPersistTaps="handled"
-              showsVerticalScrollIndicator={false}
-            >
-              <ProfilePreferencesSection />
-            </ScrollView>
-          </KeyboardAvoidingView>
-        </View>
-      </Modal>
     </View>
   );
 }
@@ -302,15 +214,6 @@ function createStyles(colors: ColorScheme) {
     borderColor: colors.border,
   },
   backBtnHover: Platform.OS === 'web' ? { backgroundColor: colors.border } : {},
-  editBtn: {
-    paddingHorizontal: spacing.sm,
-    paddingVertical: spacing.xs,
-  },
-  editBtnText: {
-    fontSize: 15,
-    color: colors.primary,
-    fontWeight: '600',
-  },
 
   // ─── Content ──────────────────────────────────────────────────────────────
   scroll: { flex: 1 },
@@ -327,7 +230,7 @@ function createStyles(colors: ColorScheme) {
   identity: {
     alignItems: 'center',
     paddingBottom: spacing.xl,
-    marginBottom: spacing.lg,
+    marginBottom: spacing.md,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
     gap: spacing.sm,
@@ -369,62 +272,11 @@ function createStyles(colors: ColorScheme) {
     fontSize: 15,
     color: colors.textMuted,
   },
-  bio: {
-    fontSize: 15,
-    lineHeight: 22,
-    color: colors.text,
-  },
 
-  // ─── Sections ─────────────────────────────────────────────────────────────
-  section: {
-    marginBottom: spacing.xl,
-  },
-  sectionLabel: {
-    fontSize: 13,
-    fontWeight: '700',
-    letterSpacing: 0.4,
-    color: colors.primary,
-    marginBottom: spacing.md,
-    paddingBottom: spacing.xs,
-    borderBottomWidth: 2,
-    borderBottomColor: `${colors.primary}20`,
-    alignSelf: 'flex-start',
-    paddingRight: spacing.md,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    paddingVertical: spacing.sm + 2,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
-    gap: spacing.md,
-  },
-  infoKey: {
-    width: 150,
-    fontSize: 13,
-    color: colors.textMuted,
-    flexShrink: 0,
-    paddingTop: 1,
-  },
-  infoVal: {
-    flex: 1,
-    fontSize: 15,
-    color: colors.text,
-    fontWeight: '500',
-    lineHeight: 22,
-  },
-  emptyHint: { alignItems: 'center', paddingTop: spacing.xl },
-  emptyText: { fontSize: 15, textAlign: 'center' },
-
-  // ─── Edit modal ───────────────────────────────────────────────────────────
-  modalRoot: { flex: 1, backgroundColor: colors.background },
-  modalFlex: { flex: 1 },
-  modalScroll: { flex: 1 },
-  modalContent: {
-    padding: spacing.md,
-    paddingBottom: spacing.xl * 2,
-    maxWidth: 1200,
-    width: '100%',
-    alignSelf: 'center',
+  // ─── Section list ─────────────────────────────────────────────────────────
+  sectionList: {
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
 });
 }

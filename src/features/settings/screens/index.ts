@@ -1,5 +1,11 @@
 export { SettingsHomeScreen } from '@/features/settings/screens/SettingsHomeScreen';
-export { ProfileScreen } from '@/features/settings/screens/ProfileScreen';
-export { EditProfilePreferencesScreen } from '@/features/settings/screens/EditProfilePreferencesScreen';
-export { PrivacySettingsScreen } from '@/features/settings/screens/PrivacySettingsScreen';
-export { NotificationPreferencesScreen } from '@/features/settings/screens/NotificationPreferencesScreen';
+export { ProfileViewScreen } from '@/features/settings/screens/ProfileViewScreen';
+export { PersonalInfoEditScreen } from '@/features/settings/screens/PersonalInfoEditScreen';
+export { AcademicInfoEditScreen } from '@/features/settings/screens/AcademicInfoEditScreen';
+export { InterestsEditScreen } from '@/features/settings/screens/InterestsEditScreen';
+export { OpportunityPreferencesEditScreen } from '@/features/settings/screens/OpportunityPreferencesEditScreen';
+export { BioEditScreen } from '@/features/settings/screens/BioEditScreen';
+export { PrivacyScreen } from '@/features/settings/screens/PrivacyScreen';
+export { NotificationsScreen } from '@/features/settings/screens/NotificationsScreen';
+export { ChangePasswordScreen } from '@/features/settings/screens/ChangePasswordScreen';
+export { DeleteAccountScreen } from '@/features/settings/screens/DeleteAccountScreen';
