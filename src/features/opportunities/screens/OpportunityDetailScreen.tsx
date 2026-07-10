@@ -487,7 +487,7 @@ export function OpportunityDetailScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
   errorBody: { padding: spacing.lg, gap: spacing.md },
 
   // Desktop two-column layout

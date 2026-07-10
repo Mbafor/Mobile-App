@@ -201,7 +201,7 @@ function createStyles(theme: AppTheme) {
   const { colors, mentorshipColors, cvDocsTheme } = theme;
   return StyleSheet.create({
   page: { flex: 1, backgroundColor: cvDocsTheme.pageBg },
-  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
+  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, backgroundColor: cvDocsTheme.pageBg },
   searchStrip: {
     paddingVertical: spacing.sm,
     backgroundColor: cvDocsTheme.barBg,

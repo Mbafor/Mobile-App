@@ -67,7 +67,7 @@ export function SuperAdminOverviewScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2 },
-  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
+  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, backgroundColor: colors.background },
   subtitle: { marginBottom: spacing.md },
   section: { fontWeight: '700', fontSize: 16, marginTop: spacing.md, marginBottom: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },

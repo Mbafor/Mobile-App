@@ -171,7 +171,7 @@ function createStyles(colors: ColorScheme) {
     width: '100%',
     alignSelf: 'center',
   },
-  centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
   banner: { padding: spacing.md },
   toolbar: {
     flexDirection: 'row',

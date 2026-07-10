@@ -182,7 +182,7 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-    centered: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
     hero: {
       padding: spacing.md,
       gap: spacing.xs,

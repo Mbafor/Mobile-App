@@ -122,7 +122,7 @@ export function CVSectionEditScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   flex: { flex: 1, backgroundColor: colors.surface },
-  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg },
+  centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, backgroundColor: colors.surface },
   toolbar: {
     flexDirection: 'row',
     alignItems: 'center',

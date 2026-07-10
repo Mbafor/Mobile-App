@@ -109,7 +109,7 @@ export function PlatformAnalyticsPanel() {
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.lg },
+  centered: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.lg, backgroundColor: colors.background },
   scroll: { padding: spacing.md, paddingBottom: spacing.xl * 2, gap: spacing.sm },
   pageTitle: { fontSize: 22, fontWeight: '700', color: colors.text },
   subtitle: { marginBottom: spacing.md, lineHeight: 22 },

@@ -41,13 +41,6 @@ export function SettingsHomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.group}>
-          <Text variant="caption" muted style={styles.groupLabel}>
-            Appearance
-          </Text>
-          <AppearanceSection />
-        </View>
-
-        <View style={styles.group}>
           <SettingsRow
             label="Notifications"
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
@@ -65,6 +58,13 @@ export function SettingsHomeScreen() {
             showDivider={false}
             onPress={() => router.push(ROUTES.MAIN.HELP.INDEX as Href)}
           />
+        </View>
+
+        <View style={styles.group}>
+          <Text variant="caption" muted style={styles.groupLabel}>
+            Appearance
+          </Text>
+          <AppearanceSection />
         </View>
 
         <View style={styles.group}>
