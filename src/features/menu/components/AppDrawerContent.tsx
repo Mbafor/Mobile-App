@@ -14,14 +14,18 @@ import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavIte
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const styles = useThemedStyles(createStyles);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const tabNavItems = useMainTabNavItems();
 
   return (
     <DrawerContentScrollView {...props} contentContainerStyle={styles.scroll}>
       <View style={styles.brand}>
         <Image
-          source={require('@/assets/images/main_logo.png')}
+          source={
+            isDark
+              ? require('@/assets/images/white_logo.png')
+              : require('@/assets/images/main_logo.png')
+          }
           style={styles.logoImg}
           resizeMode="contain"
         />
@@ -123,7 +127,12 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   scroll: { paddingTop: spacing.lg, paddingBottom: spacing.xl },
-  brand: { paddingHorizontal: spacing.md, paddingBottom: spacing.md, gap: spacing.xs },
+  brand: {
+    paddingHorizontal: spacing.md,
+    paddingBottom: spacing.md,
+    gap: spacing.xs,
+    alignItems: 'flex-end',
+  },
   logoImg: { width: 120, height: 36, transform: [{ scale: 3 }] },
   brandHint: { fontSize: 13, lineHeight: 18 },
   sectionLabel: {

@@ -31,7 +31,7 @@ export function DesktopWebNavigation({
   compact = false,
 }: DesktopWebNavigationProps) {
   const styles = useThemedStyles(createStyles);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   return (
     <View style={styles.root}>
       <View style={styles.row}>
@@ -48,7 +48,11 @@ export function DesktopWebNavigation({
           ) : null}
           {!onMenuToggle && (
             <Image
-              source={require('@/assets/images/main_logo.png')}
+              source={
+                isDark
+                  ? require('@/assets/images/white_logo.png')
+                  : require('@/assets/images/main_logo.png')
+              }
               style={styles.logoImg}
               resizeMode="contain"
             />

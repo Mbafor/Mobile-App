@@ -5,11 +5,13 @@ import { useRouter, type Href } from 'expo-router';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { ROUTES } from '@/constants/routes';
 import { SettingsRow } from '@/features/settings/components/SettingsRow';
+import { AppearanceSection } from '@/features/settings/components/AppearanceSection';
 import { performLogout } from '@/features/auth/utils/perform-logout';
 import { confirmAction } from '@/utils/confirm-action';
 import type { ColorScheme } from '@/constants/theme/types';
 import { spacing } from '@/constants/theme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { Text } from '@/components/ui';
 
 export function SettingsHomeScreen() {
   const router = useRouter();
@@ -38,6 +40,13 @@ export function SettingsHomeScreen() {
         contentContainerStyle={styles.content}
         showsVerticalScrollIndicator={false}
       >
+        <View style={styles.group}>
+          <Text variant="caption" muted style={styles.groupLabel}>
+            Appearance
+          </Text>
+          <AppearanceSection />
+        </View>
+
         <View style={styles.group}>
           <SettingsRow
             label="Notifications"
@@ -92,6 +101,12 @@ function createStyles(colors: ColorScheme) {
     },
     group: {
       marginBottom: spacing.xl,
+    },
+    groupLabel: {
+      textTransform: 'uppercase',
+      letterSpacing: 0.4,
+      fontWeight: '700',
+      marginBottom: spacing.xs,
     },
   });
 }

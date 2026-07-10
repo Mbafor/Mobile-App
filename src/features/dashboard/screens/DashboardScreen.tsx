@@ -205,7 +205,7 @@ export function DashboardScreen() {
             ListHeaderComponent={
               <View style={[styles.listHeader, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
                 <LinearGradient
-                  colors={['#F3F7F5', '#E4EDE7']}
+                  colors={[colors.surfaceElevated, colors.surface]}
                   start={{ x: 0, y: 0 }}
                   end={{ x: 1, y: 1 }}
                   style={styles.heroCard}
@@ -331,7 +331,7 @@ function createStyles(colors: ColorScheme) {
     padding: spacing.md + 4,
     marginBottom: spacing.lg,
     borderWidth: 1,
-    borderColor: 'rgba(26, 61, 37, 0.08)',
+    borderColor: colors.border,
   },
   heroSubtitle: {
     fontSize: 11,
@@ -354,7 +354,7 @@ function createStyles(colors: ColorScheme) {
   },
   heroStatsList: {
     borderTopWidth: 1,
-    borderTopColor: 'rgba(26, 61, 37, 0.08)',
+    borderTopColor: colors.border,
     paddingTop: spacing.md,
     gap: spacing.sm,
   },
