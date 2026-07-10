@@ -145,7 +145,7 @@ function createStyles(colors: ColorScheme) {
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: colors.border,
   },
-  optionActive: { backgroundColor: '#E8F0EB' },
+  optionActive: { backgroundColor: colors.surface },
   optionText: { flex: 1, fontSize: 14, color: colors.text },
   optionTextActive: { fontWeight: '600', color: colors.primary },
 });

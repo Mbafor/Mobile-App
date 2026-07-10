@@ -76,7 +76,7 @@ function createStyles(colors: ColorScheme) {
     justifyContent: 'center',
     backgroundColor: colors.surface,
   },
-  boxFilled: { borderColor: colors.primary, backgroundColor: '#E8F0EB' },
+  boxFilled: { borderColor: colors.primary, backgroundColor: colors.surface },
   boxActive: { borderColor: colors.primary, borderWidth: 2 },
   digit: { fontSize: typography.fontSize.xl, fontWeight: '700', color: colors.text },
   cursor: { width: 2, height: 24, backgroundColor: colors.primary, borderRadius: 1 },

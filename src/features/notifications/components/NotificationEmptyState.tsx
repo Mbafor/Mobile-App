@@ -42,7 +42,7 @@ function createStyles(colors: ColorScheme) {
     width: 72,
     height: 72,
     borderRadius: 36,
-    backgroundColor: '#E8F0EB',
+    backgroundColor: colors.surface,
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: spacing.lg,

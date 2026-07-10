@@ -111,7 +111,7 @@ function createStyles(colors: ColorScheme) {
     borderBottomColor: colors.border,
   },
   unread: {
-    backgroundColor: '#F8FBF9',
+    backgroundColor: colors.surface,
   },
   pressed: { opacity: 0.88 },
   body: { flex: 1, minWidth: 0 },
