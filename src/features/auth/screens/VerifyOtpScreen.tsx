@@ -201,7 +201,7 @@ function createStyles(colors: ColorScheme) {
     height: 50,
   },
   verifyBtnText: {
-    color: '#fff',
+    color: colors.textOnPrimary,
     fontWeight: '500',
     fontSize: typography.fontSize.md,
   },

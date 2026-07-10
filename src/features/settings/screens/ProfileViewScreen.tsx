@@ -92,7 +92,7 @@ export function ProfileViewScreen() {
             <View style={styles.nameRow}>
               <Text style={[styles.name, getWebFontStyle('bold')]}>{displayName}</Text>
               {isVerifiedMentor ? (
-                <Ionicons name="checkmark-circle" size={22} color="#0B6623" style={styles.verifiedIcon} />
+                <Ionicons name="checkmark-circle" size={22} color={colors.primary} style={styles.verifiedIcon} />
               ) : null}
             </View>
           ) : null}

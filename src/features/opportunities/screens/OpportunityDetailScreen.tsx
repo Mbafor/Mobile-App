@@ -257,7 +257,7 @@ export function OpportunityDetailScreen() {
       <View style={styles.promoSection}>
         <PromoCard
           icon="document-text-outline"
-          iconColor="#0B6623"
+          iconColor={colors.primary}
           iconBg="#E8F5ED"
           badge="FREE"
           title="Free CV Builder"
@@ -291,7 +291,7 @@ export function OpportunityDetailScreen() {
         />
       </View>
     ),
-    [router, styles],
+    [router, styles, colors],
   );
 
   const headTags = (
@@ -533,7 +533,7 @@ function createStyles(colors: ColorScheme) {
   heroInitial: {
     fontSize: 72,
     fontWeight: '800',
-    color: 'rgba(255,255,255,0.9)',
+    color: `${colors.textOnPrimary}E6`,
     letterSpacing: -3,
   },
 
@@ -741,7 +741,7 @@ function createStyles(colors: ColorScheme) {
     alignItems: 'center',
     justifyContent: 'center',
   },
-  relatedThumbLetter: { color: colors.background, fontWeight: '700', fontSize: 18 },
+  relatedThumbLetter: { color: colors.textOnPrimary, fontWeight: '700', fontSize: 18 },
   relatedBody: { flex: 1, gap: 2 },
   relatedTitle: { fontSize: 13, fontWeight: '600', color: colors.text, lineHeight: 18 },
   relatedOrg: { fontSize: 12, color: colors.textMuted },

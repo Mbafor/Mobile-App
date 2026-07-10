@@ -151,7 +151,7 @@ function createStyles(colors: ColorScheme) {
   },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.35)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-start',
     alignItems: 'flex-end',
     paddingTop: 56,

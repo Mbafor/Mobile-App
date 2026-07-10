@@ -69,7 +69,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
     padding: spacing.md,
   },
@@ -108,7 +108,7 @@ function createStyles(colors: ColorScheme) {
   },
   optionPressed: { backgroundColor: colors.surface },
   optionLabel: { fontSize: 16, fontWeight: '500', color: colors.text },
-  optionDestructive: { color: '#C5221F' },
+  optionDestructive: { color: colors.error },
   cancel: {
     marginTop: spacing.sm,
     backgroundColor: colors.background,

@@ -239,7 +239,7 @@ function createStyles(colors: ColorScheme) {
       borderWidth: 1,
       borderColor: colors.error,
     },
-    approveBtnText: { color: '#ffffff', fontWeight: '600', fontSize: 14 },
+    approveBtnText: { color: colors.textOnPrimary, fontWeight: '600', fontSize: 14 },
     rejectBtnText: { color: colors.error, fontWeight: '600', fontSize: 14 },
   });
 }

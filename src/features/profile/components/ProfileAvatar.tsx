@@ -1,6 +1,7 @@
 import * as ImagePicker from 'expo-image-picker';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 
@@ -30,6 +31,7 @@ export function ProfileAvatar({
   onAvatarUpdated,
 }: ProfileAvatarProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const [uploading, setUploading] = useState(false);
 
   const handlePress = async () => {
@@ -79,7 +81,7 @@ export function ProfileAvatar({
         )}
         {uploading ? (
           <View style={styles.overlay}>
-            <ActivityIndicator color="#fff" />
+            <ActivityIndicator color={colors.textOnPrimary} />
           </View>
         ) : null}
       </Pressable>
@@ -113,7 +115,7 @@ function createStyles(colors: ColorScheme) {
   overlay: {
     ...StyleSheet.absoluteFillObject,
     borderRadius: AVATAR_SIZE / 2,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     alignItems: 'center',
     justifyContent: 'center',
   },

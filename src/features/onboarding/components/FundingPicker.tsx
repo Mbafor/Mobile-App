@@ -137,7 +137,7 @@ function createStyles(colors: ColorScheme) {
     placeholder: { color: colors.textMuted },
     overlay: {
       flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.45)',
+      backgroundColor: colors.overlay,
       justifyContent: 'flex-end',
     },
     overlayDesktop: {

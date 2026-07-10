@@ -22,7 +22,6 @@ import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
 import { spacing } from '@/constants/theme';
-import { colors as themeColors } from '@/constants/theme/colors';
 import { superAdminApi, type SuperAdminMentorRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
@@ -117,7 +116,7 @@ export function SuperAdminMentorsScreen() {
         header: 'Status',
         minWidth: 100,
         render: (row) => (
-          <Text variant="caption" style={statusStyle(row.status)}>
+          <Text variant="caption" style={statusStyle(row.status, colors.success, colors.error)}>
             {row.status}
           </Text>
         ),
@@ -174,7 +173,7 @@ export function SuperAdminMentorsScreen() {
         ),
       },
     ],
-    [approveMutation, deleteMutation],
+    [approveMutation, deleteMutation, colors],
   );
 
   return (
@@ -256,10 +255,10 @@ export function SuperAdminMentorsScreen() {
   );
 }
 
-function statusStyle(status: string) {
-  if (status === 'approved') return { color: themeColors.success, fontWeight: '600' as const };
+function statusStyle(status: string, successColor: string, errorColor: string) {
+  if (status === 'approved') return { color: successColor, fontWeight: '600' as const };
   if (status === 'pending') return { color: '#B45309', fontWeight: '600' as const };
-  if (status === 'suspended') return { color: themeColors.error, fontWeight: '600' as const };
+  if (status === 'suspended') return { color: errorColor, fontWeight: '600' as const };
   return undefined;
 }
 

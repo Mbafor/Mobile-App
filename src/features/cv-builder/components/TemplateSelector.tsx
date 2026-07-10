@@ -279,7 +279,7 @@ function createStyles(theme: AppTheme) {
   mockWrap: {
     width: 96,
     padding: spacing.sm,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: cvDocsTheme.canvasBg,
     borderRightWidth: StyleSheet.hairlineWidth,
     borderRightColor: colors.border,
   },

@@ -56,7 +56,7 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: 3,
   },
   badgeText: {
-    color: '#FFF',
+    color: colors.textOnPrimary,
     fontSize: 9,
     fontWeight: '700',
     lineHeight: 12,

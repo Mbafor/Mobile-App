@@ -64,6 +64,6 @@ function createStyles(colors: ColorScheme) {
     borderRadius: 8,
     backgroundColor: colors.primary,
   },
-  btnText: { color: colors.background, fontWeight: '700', fontSize: 12 },
+  btnText: { color: colors.textOnPrimary, fontWeight: '700', fontSize: 12 },
 });
 }

@@ -105,7 +105,7 @@ export function CoachSessionsTable({
                             ]}
                             onPress={() => handleJoinMeeting(session)}
                           >
-                            <Ionicons name="videocam-outline" size={14} color="#fff" />
+                            <Ionicons name="videocam-outline" size={14} color={mentorshipColors.textOnAccent} />
                             <Text style={styles.joinBtnText}>Join Meeting</Text>
                           </Pressable>
                           <Pressable

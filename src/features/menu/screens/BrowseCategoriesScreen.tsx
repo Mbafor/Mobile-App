@@ -303,7 +303,7 @@ function createStyles(colors: ColorScheme) {
   resultImageLetter: {
     fontSize: 40,
     fontWeight: '700',
-    color: 'rgba(255,255,255,0.9)',
+    color: `${colors.textOnPrimary}E6`,
   },
   resultBody: {
     padding: spacing.md,

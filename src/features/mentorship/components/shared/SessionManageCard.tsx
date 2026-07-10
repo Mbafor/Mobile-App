@@ -222,14 +222,14 @@ function createStyles(theme: AppTheme) {
     paddingHorizontal: spacing.md,
     paddingVertical: spacing.xs,
     borderRadius: 8,
-    backgroundColor: '#16A34A',
+    backgroundColor: colors.success,
   },
   primaryBtnText: { color: mentorshipColors.textOnAccent, fontWeight: '600', fontSize: 13 },
   confirm: { color: mentorshipColors.accent, fontWeight: '600', fontSize: 13 },
   danger: { color: mentorshipColors.danger, fontWeight: '600', fontSize: 13 },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
   modalCard: {

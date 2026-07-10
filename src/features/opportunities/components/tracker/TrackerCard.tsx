@@ -257,7 +257,7 @@ function createStyles(colors: ColorScheme) {
   imageLetter: {
     fontSize: 22,
     fontWeight: '700',
-    color: colors.background,
+    color: colors.textOnPrimary,
   },
   cardBody: {
     paddingHorizontal: spacing.md,
@@ -316,7 +316,7 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.primary,
   },
   advanceBtnText: {
-    color: colors.background,
+    color: colors.textOnPrimary,
     fontSize: 12,
     fontWeight: '700',
   },

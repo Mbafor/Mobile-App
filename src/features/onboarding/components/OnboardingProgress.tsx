@@ -1,10 +1,11 @@
 import { Fragment } from 'react';
-import { colors } from '@/constants/theme/colors';
+import type { ColorScheme } from '@/constants/theme/types';
 import { Platform, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { ONBOARDING_STEPS } from '@/constants/onboarding';
 import { spacing } from '@/constants/theme';
+import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 const STEP_LABELS = ['Basic info', 'Academic', 'Preferences'] as const;
 const TOTAL = ONBOARDING_STEPS.TOTAL;
@@ -22,6 +23,7 @@ export function OnboardingProgress({ currentStep }: Props) {
 /* ── Web: dot stepper with labels ──────────────────────────────────────────── */
 
 function WebStepper({ currentStep }: Props) {
+  const web = useThemedStyles(createWebStyles);
   return (
     <View style={web.container}>
       {STEP_LABELS.map((label, i) => {
@@ -61,6 +63,7 @@ function WebStepper({ currentStep }: Props) {
 /* ── Mobile: segmented progress bar ────────────────────────────────────────── */
 
 function NativeStepper({ currentStep }: Props) {
+  const native = useThemedStyles(createNativeStyles);
   return (
     <View style={native.container}>
       <View style={native.header}>
@@ -85,7 +88,8 @@ function NativeStepper({ currentStep }: Props) {
 
 /* ── Styles ─────────────────────────────────────────────────────────────────── */
 
-const web = StyleSheet.create({
+function createWebStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -145,9 +149,11 @@ const web = StyleSheet.create({
   connectorDone: {
     backgroundColor: colors.success,
   },
-});
+  });
+}
 
-const native = StyleSheet.create({
+function createNativeStyles(colors: ColorScheme) {
+  return StyleSheet.create({
   container: {
     gap: spacing.xs,
     marginBottom: spacing.lg,
@@ -174,4 +180,5 @@ const native = StyleSheet.create({
   segmentActive: {
     backgroundColor: colors.primary,
   },
-});
+  });
+}

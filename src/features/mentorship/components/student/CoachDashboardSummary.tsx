@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
@@ -17,6 +18,7 @@ type CoachDashboardSummaryProps = {
 
 export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachDashboardSummaryProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   if (!profile) {
     return (
       <View style={styles.card}>
@@ -44,7 +46,7 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
           <View style={styles.nameRow}>
             <Text style={styles.name}>{name}</Text>
             {isVerified ? (
-              <Ionicons name="checkmark-circle" size={17} color="#0B6623" style={styles.verifiedIcon} />
+              <Ionicons name="checkmark-circle" size={17} color={mentorshipColors.accent} style={styles.verifiedIcon} />
             ) : null}
           </View>
           {profile.university ? <Text style={styles.sub}>{profile.university}</Text> : null}

@@ -12,16 +12,18 @@ import {
   getMentorInterestTags,
 } from '@/features/mentorship/utils/mentor-card-tags';
 import type { AvailableMentor } from '@/types/domain/mentorship';
-import { colors } from '@/constants/theme/colors';
 
 type MentorBrowseCardProps = {
   mentor: AvailableMentor;
   onViewProfile: () => void;
 };
 
-function availabilityText(mentor: AvailableMentor): { label: string; color: string } {
+function availabilityText(
+  mentor: AvailableMentor,
+  mutedColor: string,
+): { label: string; color: string } {
   if (!mentor.isAcceptingStudents) {
-    return { label: 'Not accepting students', color: colors.textMuted };
+    return { label: 'Not accepting students', color: mutedColor };
   }
   if (!mentor.hasCapacity) {
     return { label: 'Currently full', color: '#B00020' };
@@ -38,7 +40,7 @@ export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProp
   const interests = getMentorInterestTags(mentor);
   const allTags = [...academicFocus, ...interests].slice(0, 4);
   const credential = [profile.university, profile.degreeLevel].filter(Boolean).join(' · ');
-  const availability = availabilityText(mentor);
+  const availability = availabilityText(mentor, colors.textMuted);
 
   return (
     <Pressable
@@ -55,7 +57,7 @@ export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProp
       <View style={styles.info}>
         <View style={styles.nameRow}>
           <Text style={styles.name} numberOfLines={1}>{name}</Text>
-          <Ionicons name="checkmark-circle" size={15} color="#0B6623" />
+          <Ionicons name="checkmark-circle" size={15} color={colors.primary} />
         </View>
 
         {credential ? (

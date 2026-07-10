@@ -142,7 +142,7 @@ export function ResetPasswordScreen() {
       >
         <View style={styles.centerBlock}>
           <View style={styles.expiredIcon}>
-            <Ionicons name="time-outline" size={48} color="#9CA3AF" />
+            <Ionicons name="time-outline" size={48} color={colors.textMuted} />
           </View>
           <Text style={styles.expiredText}>
             This password reset link has expired or already been used. Request a new one from the sign-in screen.
@@ -299,7 +299,7 @@ function createStyles(colors: ColorScheme) {
       width: '100%',
     },
     btnText: {
-      color: colors.background,
+      color: colors.textOnPrimary,
       fontWeight: '500',
     },
   });

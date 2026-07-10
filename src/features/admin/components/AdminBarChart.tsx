@@ -47,6 +47,8 @@ export function AdminBarChart({ title, data }: AdminBarChartProps) {
         yAxisThickness={0}
         xAxisThickness={1}
         xAxisColor={colors.border}
+        yAxisTextStyle={{ color: colors.textMuted }}
+        xAxisLabelTextStyle={{ color: colors.textMuted }}
         noOfSections={4}
         maxValue={maxValue}
         isAnimated

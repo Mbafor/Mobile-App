@@ -14,6 +14,7 @@ export type ColorScheme = {
   border: string;
   error: string;
   success: string;
+  overlay: string;
 };
 
 export type MentorshipColorScheme = {

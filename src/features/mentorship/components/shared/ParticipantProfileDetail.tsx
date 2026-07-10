@@ -2,6 +2,7 @@ import { StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 import { Text } from '@/components/ui';
@@ -34,6 +35,7 @@ export function ParticipantProfileDetail({
   compact = false,
 }: ParticipantProfileDetailProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const name = profile.fullName?.trim() || 'Unknown';
   const interests = [...new Set([...profile.interests, ...(mentorProfile?.mentoringInterests ?? [])])];
   const career = [
@@ -56,7 +58,7 @@ export function ParticipantProfileDetail({
           <View style={styles.nameRow}>
             <Text style={styles.name}>{name}</Text>
             {mentorProfile?.status === 'approved' ? (
-              <Ionicons name="checkmark-circle" size={18} color="#0B6623" style={styles.verifiedIcon} />
+              <Ionicons name="checkmark-circle" size={18} color={mentorshipColors.accent} style={styles.verifiedIcon} />
             ) : null}
           </View>
           {mentorProfile?.status === 'approved' ? (

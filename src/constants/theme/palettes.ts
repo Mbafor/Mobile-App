@@ -16,7 +16,8 @@ export const lightColors: ColorScheme = {
   textOnPrimary: '#FFFFFF',
   border: '#E0E0E0',
   error: '#B00020',
-  success: '#0B6623',
+  success: '#16A34A',
+  overlay: 'rgba(0,0,0,0.45)',
 };
 
 export const darkColors: ColorScheme = {
@@ -30,7 +31,8 @@ export const darkColors: ColorScheme = {
   textOnPrimary: '#FFFFFF',
   border: '#2E3530',
   error: '#FF6B7A',
-  success: '#0B6623',
+  success: '#22C55E',
+  overlay: 'rgba(0,0,0,0.45)',
 };
 
 export function createMentorshipColors(colors: ColorScheme): MentorshipColorScheme {

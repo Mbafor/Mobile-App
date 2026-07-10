@@ -2,6 +2,7 @@ import { Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Text } from '@/components/ui';
@@ -31,6 +32,7 @@ export function SessionsTable({
   onCancel,
 }: SessionsTableProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   return (
     <View style={styles.wrap}>
       {title ? <Text style={styles.heading}>{title}</Text> : null}
@@ -57,7 +59,7 @@ export function SessionsTable({
                   <View style={styles.nameRow}>
                     <Text style={styles.primaryText}>{coachName}</Text>
                     {isVerifiedMentor ? (
-                      <Ionicons name="checkmark-circle" size={14} color="#0B6623" />
+                      <Ionicons name="checkmark-circle" size={14} color={mentorshipColors.accent} />
                     ) : null}
                   </View>
                   {coachEmail ? (
@@ -98,7 +100,7 @@ export function SessionsTable({
                       }
                     }}
                   >
-                    <Ionicons name="videocam-outline" size={14} color="#fff" />
+                    <Ionicons name="videocam-outline" size={14} color={mentorshipColors.textOnAccent} />
                     <Text style={styles.joinBtnText}>Join now</Text>
                   </Pressable>
                   {onCancel && canStudentCancelSession(session) ? (

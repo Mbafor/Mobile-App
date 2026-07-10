@@ -72,8 +72,6 @@ const TOTAL = STEP_META.length;
 const DESKTOP_BREAKPOINT = 768;
 const DOT_SIZE = 20;
 const DESK_DOT_SIZE = 26;
-const DONE_GREEN = '#16A34A';
-const LEFT_BG = '#F0F7F1';
 
 // ─── Props ────────────────────────────────────────────────────────────────────
 
@@ -155,7 +153,7 @@ export function OnboardingShell({
                   key={idx}
                   style={[styles.iconBadge, BADGE_POSITIONS[idx] as object]}
                 >
-                  <Ionicons name={icon} size={18} color={DONE_GREEN} />
+                  <Ionicons name={icon} size={18} color={colors.primary} />
                 </View>
               ))}
             </View>
@@ -201,7 +199,7 @@ export function OnboardingShell({
                       ]}
                     >
                       {isDone ? (
-                        <Ionicons name="checkmark" size={13} color="#fff" />
+                        <Ionicons name="checkmark" size={13} color={colors.textOnPrimary} />
                       ) : (
                         <Text
                           style={[
@@ -249,7 +247,7 @@ export function OnboardingShell({
             <View style={styles.deskFormCard}>
               {onBack && (
                 <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
-                  <Ionicons name="chevron-back" size={16} color="#374151" />
+                  <Ionicons name="chevron-back" size={16} color={colors.textMuted} />
                   <Text style={styles.backBtnText}>Back</Text>
                 </Pressable>
               )}
@@ -268,7 +266,7 @@ export function OnboardingShell({
                   {isLoading ? 'Saving…' : continueLabel}
                 </Text>
                 {!isLoading && (
-                  <Ionicons name="arrow-forward" size={16} color="#fff" style={styles.ctaArrow} />
+                  <Ionicons name="arrow-forward" size={16} color={colors.textOnPrimary} style={styles.ctaArrow} />
                 )}
               </Pressable>
             </View>
@@ -302,7 +300,7 @@ export function OnboardingShell({
                     ]}
                   >
                     {isDone ? (
-                      <Ionicons name="checkmark" size={9} color="#fff" />
+                      <Ionicons name="checkmark" size={9} color={colors.textOnPrimary} />
                     ) : (
                       <Text
                         style={[styles.stepBarNum, isActive && styles.stepBarNumActive]}
@@ -354,7 +352,7 @@ export function OnboardingShell({
         >
           {onBack && (
             <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
-              <Ionicons name="chevron-back" size={16} color="#374151" />
+              <Ionicons name="chevron-back" size={16} color={colors.textMuted} />
               <Text style={styles.backBtnText}>Back</Text>
             </Pressable>
           )}
@@ -372,7 +370,7 @@ export function OnboardingShell({
           >
             <Text style={styles.ctaText}>{isLoading ? 'Saving…' : continueLabel}</Text>
             {!isLoading && (
-              <Ionicons name="arrow-forward" size={15} color="#fff" style={styles.ctaArrow} />
+              <Ionicons name="arrow-forward" size={15} color={colors.textOnPrimary} style={styles.ctaArrow} />
             )}
           </Pressable>
         </ScrollView>
@@ -392,13 +390,13 @@ function createStyles(colors: ColorScheme) {
     dRoot: {
       flex: 1,
       flexDirection: 'row',
-      backgroundColor: '#fff',
+      backgroundColor: colors.background,
     },
 
     // ── Left panel ────────────────────────────────────────────────────────────
     leftPanel: {
       width: '38%',
-      backgroundColor: LEFT_BG,
+      backgroundColor: colors.surface,
       overflow: 'hidden',
       justifyContent: 'center',
       alignItems: 'center',
@@ -464,14 +462,14 @@ function createStyles(colors: ColorScheme) {
     panelHeading: {
       fontSize: 26,
       fontWeight: '800',
-      color: '#14532D',
+      color: colors.text,
       textAlign: 'center',
       lineHeight: 36,
       letterSpacing: -0.3,
     },
     panelDesc: {
       fontSize: 13.5,
-      color: '#4A7C5A',
+      color: colors.textMuted,
       textAlign: 'center',
       lineHeight: 21,
       maxWidth: 300,
@@ -495,7 +493,7 @@ function createStyles(colors: ColorScheme) {
       width: 42,
       height: 42,
       borderRadius: 21,
-      backgroundColor: '#fff',
+      backgroundColor: colors.surfaceElevated,
       alignItems: 'center',
       justifyContent: 'center',
       shadowColor: '#000',
@@ -512,15 +510,15 @@ function createStyles(colors: ColorScheme) {
       marginTop: spacing.xs,
     },
     dotBase: {
-      backgroundColor: DONE_GREEN,
+      backgroundColor: colors.primary,
     },
 
     // ── Right panel ───────────────────────────────────────────────────────────
     rightPanel: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.background,
       borderLeftWidth: 1,
-      borderLeftColor: '#E9F0EA',
+      borderLeftColor: colors.border,
     },
 
     // Step indicator at top of right panel
@@ -530,7 +528,7 @@ function createStyles(colors: ColorScheme) {
       paddingHorizontal: spacing.xl + spacing.md,
       paddingVertical: spacing.md + 4,
       borderBottomWidth: 1,
-      borderBottomColor: '#F0F4F1',
+      borderBottomColor: colors.border,
     },
     deskStepItem: {
       flexDirection: 'row',
@@ -541,9 +539,9 @@ function createStyles(colors: ColorScheme) {
       width: DESK_DOT_SIZE,
       height: DESK_DOT_SIZE,
       borderRadius: DESK_DOT_SIZE / 2,
-      backgroundColor: '#E9F0EA',
+      backgroundColor: colors.surface,
       borderWidth: 1.5,
-      borderColor: '#C8DCC9',
+      borderColor: colors.border,
       alignItems: 'center',
       justifyContent: 'center',
     },
@@ -552,39 +550,39 @@ function createStyles(colors: ColorScheme) {
       borderColor: colors.primary,
     },
     deskDotDone: {
-      backgroundColor: DONE_GREEN,
-      borderColor: DONE_GREEN,
+      backgroundColor: colors.success,
+      borderColor: colors.success,
     },
     deskDotNum: {
       fontSize: 11,
       fontWeight: '700',
-      color: '#9CA3AF',
+      color: colors.textMuted,
     },
     deskDotNumActive: {
-      color: '#fff',
+      color: colors.textOnPrimary,
     },
     deskStepLabel: {
       fontSize: 13,
       fontWeight: '500',
-      color: '#9CA3AF',
+      color: colors.textMuted,
     },
     deskStepLabelActive: {
       color: colors.primary,
       fontWeight: '700',
     },
     deskStepLabelDone: {
-      color: DONE_GREEN,
+      color: colors.success,
       fontWeight: '600',
     },
     deskConnector: {
       flex: 1,
       height: 2,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.border,
       marginHorizontal: spacing.sm,
       borderRadius: 1,
     },
     deskConnectorDone: {
-      backgroundColor: DONE_GREEN,
+      backgroundColor: colors.success,
     },
 
     // Form scroll + card
@@ -603,7 +601,7 @@ function createStyles(colors: ColorScheme) {
     // ── Mobile root ───────────────────────────────────────────────────────────
     root: {
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: colors.background,
     },
 
     // ── Mobile step bar ───────────────────────────────────────────────────────
@@ -612,8 +610,8 @@ function createStyles(colors: ColorScheme) {
       paddingTop: spacing.md,
       paddingBottom: spacing.md,
       borderBottomWidth: 1,
-      borderBottomColor: '#F3F4F6',
-      backgroundColor: '#fff',
+      borderBottomColor: colors.border,
+      backgroundColor: colors.background,
     },
     stepBar: {
       flexDirection: 'row',
@@ -630,7 +628,7 @@ function createStyles(colors: ColorScheme) {
     },
     stepBarConnector: {
       height: 1.5,
-      backgroundColor: '#E5E7EB',
+      backgroundColor: colors.border,
     },
     stepBarConnectorDone: {
       backgroundColor: colors.primary,
@@ -639,9 +637,9 @@ function createStyles(colors: ColorScheme) {
       width: DOT_SIZE,
       height: DOT_SIZE,
       borderRadius: DOT_SIZE / 2,
-      backgroundColor: '#F3F4F6',
+      backgroundColor: colors.surface,
       borderWidth: 1.5,
-      borderColor: '#D1D5DB',
+      borderColor: colors.border,
       alignItems: 'center',
       justifyContent: 'center',
       marginBottom: 4,
@@ -657,15 +655,15 @@ function createStyles(colors: ColorScheme) {
     stepBarNum: {
       fontSize: 9,
       fontWeight: '700',
-      color: '#9CA3AF',
+      color: colors.textMuted,
     },
     stepBarNumActive: {
-      color: '#fff',
+      color: colors.textOnPrimary,
     },
     stepBarLabel: {
       fontSize: 10,
       fontWeight: '500',
-      color: '#9CA3AF',
+      color: colors.textMuted,
       textAlign: 'center',
     },
     stepBarLabelActive: {
@@ -673,7 +671,7 @@ function createStyles(colors: ColorScheme) {
       fontWeight: '700',
     },
     stepBarLabelDone: {
-      color: DONE_GREEN,
+      color: colors.success,
     },
 
     // ── Mobile scroll body ────────────────────────────────────────────────────
@@ -686,14 +684,14 @@ function createStyles(colors: ColorScheme) {
     heading: {
       fontSize: 24,
       fontWeight: '700',
-      color: '#111827',
+      color: colors.text,
       letterSpacing: -0.3,
       lineHeight: 32,
       marginBottom: spacing.xs,
     },
     headingSubtitle: {
       fontSize: typography.fontSize.sm,
-      color: '#6B7280',
+      color: colors.textMuted,
       lineHeight: 22,
       marginBottom: spacing.lg,
     },
@@ -708,15 +706,15 @@ function createStyles(colors: ColorScheme) {
       paddingHorizontal: 10,
       borderRadius: 8,
       borderWidth: 1,
-      borderColor: '#E5E7EB',
-      backgroundColor: '#F9FAFB',
+      borderColor: colors.border,
+      backgroundColor: colors.surface,
       marginBottom: spacing.lg,
       gap: 4,
     },
     backBtnText: {
       fontSize: 13,
       fontWeight: '500',
-      color: '#374151',
+      color: colors.textMuted,
     },
 
     // ── CTA button ────────────────────────────────────────────────────────────
@@ -746,7 +744,7 @@ function createStyles(colors: ColorScheme) {
       opacity: 0.85,
     },
     ctaText: {
-      color: '#fff',
+      color: colors.textOnPrimary,
       fontSize: typography.fontSize.md,
       fontWeight: '600',
     },

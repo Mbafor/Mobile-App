@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useCallback } from 'react';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
@@ -31,6 +32,7 @@ export function SwipeableNotificationRow({
   onDelete,
 }: Props) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const isUnread = !notification.readAt;
   const avatarSource = resolveAvatarSource(notification, {
     opportunityImages: enrichment?.opportunityImages ?? new Map(),
@@ -42,12 +44,12 @@ export function SwipeableNotificationRow({
       <View style={styles.actions}>
         {isUnread ? (
           <RectButton style={[styles.actionBtn, styles.readBtn]} onPress={onMarkRead}>
-            <Ionicons name="checkmark-done-outline" size={22} color="#FFFFFF" />
+            <Ionicons name="checkmark-done-outline" size={22} color={colors.textOnPrimary} />
             <Text style={styles.actionLabel}>Read</Text>
           </RectButton>
         ) : null}
         <RectButton style={[styles.actionBtn, styles.deleteBtn]} onPress={onDelete}>
-          <Ionicons name="trash-outline" size={22} color="#FFFFFF" />
+          <Ionicons name="trash-outline" size={22} color={colors.textOnPrimary} />
           <Text style={styles.actionLabel}>Delete</Text>
         </RectButton>
       </View>
@@ -161,7 +163,7 @@ function createStyles(colors: ColorScheme) {
   readBtn: { backgroundColor: colors.success },
   deleteBtn: { backgroundColor: colors.error },
   actionLabel: {
-    color: '#FFFFFF',
+    color: colors.textOnPrimary,
     fontSize: 11,
     fontWeight: '600',
   },

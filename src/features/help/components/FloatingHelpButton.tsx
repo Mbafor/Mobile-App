@@ -1,6 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet } from 'react-native';
 
@@ -10,6 +11,7 @@ import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 export function FloatingHelpButton() {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const router = useRouter();
   const isDesktopWeb = useWebDesktop();
 
@@ -25,7 +27,7 @@ export function FloatingHelpButton() {
       accessibilityLabel="Help & Support"
       hitSlop={8}
     >
-      <Ionicons name="help" size={22} color="#FFFFFF" />
+      <Ionicons name="help" size={22} color={colors.textOnPrimary} />
     </Pressable>
   );
 }

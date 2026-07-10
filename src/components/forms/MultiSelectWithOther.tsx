@@ -242,7 +242,7 @@ function createStyles(colors: ColorScheme) {
     chipRemove: { fontSize: 18, color: colors.textMuted, paddingHorizontal: 4 },
     overlay: {
       flex: 1,
-      backgroundColor: 'rgba(0,0,0,0.45)',
+      backgroundColor: colors.overlay,
       justifyContent: 'flex-end',
     },
     overlayDesktop: {
@@ -300,6 +300,6 @@ function createStyles(colors: ColorScheme) {
       borderRadius: 8,
       alignItems: 'center',
     },
-    doneBtnText: { color: colors.background, fontWeight: '600' },
+    doneBtnText: { color: colors.textOnPrimary, fontWeight: '600' },
   });
 }

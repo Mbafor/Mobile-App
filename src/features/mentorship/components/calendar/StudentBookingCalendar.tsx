@@ -263,7 +263,7 @@ function createStyles(theme: AppTheme) {
   return StyleSheet.create({
   wrap: { gap: spacing.sm },
   hint: { fontSize: 13 },
-  required: { color: '#B00020' },
+  required: { color: colors.error },
   empty: { padding: spacing.lg, textAlign: 'center' },
   legend: { flexDirection: 'row', gap: spacing.md },
   legendItem: { flexDirection: 'row', alignItems: 'center', gap: 6 },
@@ -272,7 +272,7 @@ function createStyles(theme: AppTheme) {
   loader: { marginVertical: spacing.lg },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'center',
     alignItems: 'center',
     padding: spacing.lg,

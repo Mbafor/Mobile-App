@@ -377,7 +377,7 @@ function createStyles(colors: ColorScheme) {
   list: { paddingBottom: spacing.md },
   modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
   modalSheet: {

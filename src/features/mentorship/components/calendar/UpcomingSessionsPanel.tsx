@@ -17,7 +17,6 @@ import {
 } from '@/features/mentorship/utils/session-rules';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
-import { mentorshipColors } from '@/features/mentorship/constants/theme';
 
 type UpcomingSessionsPanelProps = {
   sessions: MentorshipSession[];
@@ -29,12 +28,12 @@ type UpcomingSessionsPanelProps = {
   onConfirm?: (sessionId: string) => void;
 };
 
-function statusColor(status: string): string {
+function statusColor(status: string, mutedColor: string): string {
   if (status === 'cancelled') return calendarColors.cancelled;
   if (status === 'completed') return calendarColors.completed;
   if (isPendingSessionStatus(status)) return calendarColors.booked;
   if (status === 'confirmed') return calendarColors.booked;
-  return mentorshipColors.textMuted;
+  return mutedColor;
 }
 
 function statusLabel(status: string): string {
@@ -51,6 +50,7 @@ export function UpcomingSessionsPanel({
   onConfirm,
 }: UpcomingSessionsPanelProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { mentorshipColors } = useTheme();
   const upcoming = sessions
     .filter((s) => isActiveSessionStatus(s.status))
     .sort((a, b) => new Date(a.scheduledStart).getTime() - new Date(b.scheduledStart).getTime());
@@ -74,7 +74,7 @@ export function UpcomingSessionsPanel({
                 {formatSessionDateTime(session.scheduledStart, session.timezone)}
               </Text>
               <View style={styles.statusRow}>
-                <View style={[styles.statusPill, { backgroundColor: statusColor(session.status) }]}>
+                <View style={[styles.statusPill, { backgroundColor: statusColor(session.status, mentorshipColors.textMuted) }]}>
                   <Text style={styles.statusText}>{statusLabel(session.status)}</Text>
                 </View>
               </View>

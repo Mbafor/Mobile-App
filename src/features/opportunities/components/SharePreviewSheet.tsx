@@ -78,7 +78,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
       onRequestClose={onClose}
     >
       <View style={[styles.overlay, isDesktop && styles.overlayDesktop]}>
-        <Pressable style={styles.backdrop} onPress={onClose} />
+        <Pressable style={[styles.backdrop, { backgroundColor: colors.overlay }]} onPress={onClose} />
 
         <View style={[styles.sheet, { backgroundColor: colors.background, width: sheetWidth }, isDesktop && styles.sheetDesktop]}>
           <View style={[styles.handle, { backgroundColor: colors.border }]} />
@@ -109,7 +109,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
               ) : (
                 <View style={[styles.imagePlaceholder, { width: imageWidth, height: imageHeight, backgroundColor: `${colors.primary}18` }]}>
                   <View style={[styles.placeholderIconWrap, { backgroundColor: colors.primary }]}>
-                    <Text style={styles.placeholderLetter}>
+                    <Text style={[styles.placeholderLetter, { color: colors.textOnPrimary }]}>
                       {opportunity.organization.charAt(0).toUpperCase()}
                     </Text>
                   </View>
@@ -231,7 +231,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                 {/* Link */}
                 <View style={[styles.linkBox, { backgroundColor: `${colors.primary}08`, borderColor: `${colors.primary}20` }]}>
                   <View style={[styles.linkIconWrap, { backgroundColor: colors.primary }]}>
-                    <Ionicons name="link" size={12} color="#fff" />
+                    <Ionicons name="link" size={12} color={colors.textOnPrimary} />
                   </View>
                   <View style={styles.linkTextWrap}>
                     <Text style={[styles.linkLabel, { color: colors.textMuted }]}>View full opportunity at</Text>
@@ -270,9 +270,9 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
               <Ionicons
                 name={sharing ? 'hourglass-outline' : 'share-social-outline'}
                 size={18}
-                color="#fff"
+                color={colors.textOnPrimary}
               />
-              <Text style={styles.shareBtnText}>
+              <Text style={[styles.shareBtnText, { color: colors.textOnPrimary }]}>
                 {sharing ? 'Opening share…' : 'Share opportunity'}
               </Text>
             </Pressable>
@@ -295,7 +295,6 @@ const styles = StyleSheet.create({
   },
   backdrop: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   sheet: {
     borderTopLeftRadius: 24,
@@ -358,7 +357,6 @@ const styles = StyleSheet.create({
   placeholderLetter: {
     fontSize: 30,
     fontWeight: '800',
-    color: '#fff',
   },
   cardBody: {
     padding: spacing.md,
@@ -544,7 +542,6 @@ const styles = StyleSheet.create({
     elevation: 4,
   },
   shareBtnText: {
-    color: '#fff',
     fontSize: 15,
     fontWeight: '700',
     letterSpacing: -0.1,

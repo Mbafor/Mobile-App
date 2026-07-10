@@ -132,7 +132,7 @@ export function WelcomeScreen() {
   // the login form at a user who is already signed in.
   if (isHydrating || isAuthenticated) {
     return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#0B6623' }}>
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.forest }}>
         <ActivityIndicator color="rgba(255,255,255,0.5)" size="large" />
       </View>
     );
@@ -850,7 +850,7 @@ function createStyles(colors: ColorScheme) {
 
   // ── Buttons ────────────────────────────────────────────────────
   googleBtn: {
-    backgroundColor: '#fff',
+    backgroundColor: colors.surfaceElevated,
     borderRadius: 14,
     borderWidth: 1,
     borderColor: colors.border,
@@ -886,7 +886,7 @@ function createStyles(colors: ColorScheme) {
   },
 
   emailBtnText: {
-    color: '#fff',
+    color: colors.textOnPrimary,
     fontWeight: '500',
   },
 

@@ -150,7 +150,7 @@ function createStyles(theme: AppTheme) {
   delete: { color: mentorshipColors.danger, fontWeight: '600' },
   modalBackdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.45)',
+    backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
   modalCard: {

@@ -99,7 +99,7 @@ function createStyles(theme: AppTheme) {
   menuLabel: { fontWeight: '600', fontSize: 14, color: mentorshipColors.text },
   backdrop: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.4)',
+    backgroundColor: colors.overlay,
     flexDirection: 'row',
   },
   panel: {

@@ -81,7 +81,7 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.primary,
   },
   systemInitial: {
-    color: '#FFFFFF',
+    color: colors.textOnPrimary,
     fontWeight: '700',
     fontSize: 18,
   },

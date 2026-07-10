@@ -7,10 +7,8 @@ import { PieChart } from 'react-native-gifted-charts';
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import type { ChartDatum } from '@/features/admin/types/analytics';
-import { lightColors } from '@/constants/theme/palettes';
 
-const SLICE_COLORS = [
-  lightColors.primary,
+const OTHER_SLICE_COLORS = [
   '#5C6BC0',
   '#26A69A',
   '#FFA726',
@@ -28,6 +26,7 @@ type AdminPieChartProps = {
 export function AdminPieChart({ title, data }: AdminPieChartProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const sliceColors = [colors.primary, ...OTHER_SLICE_COLORS];
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>
@@ -40,7 +39,7 @@ export function AdminPieChart({ title, data }: AdminPieChartProps) {
   const pieData = data.map((item, index) => ({
     value: item.value,
     text: String(item.value),
-    color: SLICE_COLORS[index % SLICE_COLORS.length],
+    color: sliceColors[index % sliceColors.length],
   }));
 
   return (
@@ -61,7 +60,7 @@ export function AdminPieChart({ title, data }: AdminPieChartProps) {
               <View
                 style={[
                   styles.swatch,
-                  { backgroundColor: SLICE_COLORS[index % SLICE_COLORS.length] },
+                  { backgroundColor: sliceColors[index % sliceColors.length] },
                 ]}
               />
               <Text style={styles.legendText} numberOfLines={1}>

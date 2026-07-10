@@ -1,8 +1,8 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { ColorScheme } from '@/constants/theme/types';
-import { colors as themeColors } from '@/constants/theme/colors';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
@@ -26,6 +26,7 @@ export function SessionCard({
   showActions,
 }: SessionCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const canJoin =
     session.meetingUrl &&
     session.status !== 'cancelled' &&
@@ -36,7 +37,7 @@ export function SessionCard({
     <View style={styles.card}>
       <View style={styles.row}>
         <Text style={styles.title}>{session.title ?? 'Mentorship session'}</Text>
-        <View style={[styles.status, statusStyle(session.status)]}>
+        <View style={[styles.status, statusStyle(session.status, colors.surface)]}>
           <Text style={styles.statusText}>{session.status}</Text>
         </View>
       </View>
@@ -80,10 +81,10 @@ export function SessionCard({
   );
 }
 
-function statusStyle(status: string) {
+function statusStyle(status: string, surfaceColor: string) {
   if (status === 'confirmed') return { backgroundColor: '#E8F5EE' };
   if (status === 'cancelled') return { backgroundColor: '#FDECEC' };
-  if (status === 'completed') return { backgroundColor: themeColors.surface };
+  if (status === 'completed') return { backgroundColor: surfaceColor };
   return { backgroundColor: '#FFF4E5' };
 }
 
