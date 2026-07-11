@@ -5,6 +5,7 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Text } from '@/components/ui';
 import { getSectionMeta } from '@/features/cv-builder/constants/section-meta';
@@ -28,6 +29,7 @@ export function CVReorderSectionsModal({
 }: CVReorderSectionsModalProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [draftOrder, setDraftOrder] = useState<CVSectionId[]>([]);
 
@@ -65,13 +67,13 @@ export function CVReorderSectionsModal({
     <Modal visible={visible} animationType="slide" onRequestClose={onClose}>
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.toolbar}>
-          <Text variant="title">Reorder sections</Text>
+          <Text variant="title">{t('cvBuilder.reorderModal.title')}</Text>
           <Pressable onPress={onClose} hitSlop={12}>
             <Ionicons name="close" size={24} color={colors.text} />
           </Pressable>
         </View>
         <Text muted style={styles.subtitle}>
-          Move sections up or down. Personal information stays at the top.
+          {t('cvBuilder.reorderModal.subtitle')}
         </Text>
         <ScrollView contentContainerStyle={styles.list}>
           {draftOrder.map((id, index) => (
@@ -105,7 +107,7 @@ export function CVReorderSectionsModal({
           ))}
         </ScrollView>
         <View style={[styles.footer, { paddingBottom: insets.bottom + spacing.md }]}>
-          <Button onPress={() => void handleDone()}>Save order</Button>
+          <Button onPress={() => void handleDone()}>{t('cvBuilder.reorderModal.saveOrder')}</Button>
         </View>
       </View>
     </Modal>

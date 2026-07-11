@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Modal,
@@ -47,6 +48,7 @@ export function MentorChooser({
 }: MentorChooserProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({ enabled: true });
   const [search, setSearch] = useState('');
@@ -79,8 +81,8 @@ export function MentorChooser({
   if (error) {
     return (
       <View style={styles.centered}>
-        <Text muted>Could not load coaches.</Text>
-        <Button onPress={() => void refetch()}>Retry</Button>
+        <Text muted>{t('mentorship.student.chooser.loadError')}</Text>
+        <Button onPress={() => void refetch()}>{t('mentorship.retry')}</Button>
       </View>
     );
   }
@@ -89,16 +91,16 @@ export function MentorChooser({
     return (
       <View style={styles.waitingWrap}>
         <Text style={[styles.waitingTitle, getWebFontStyle('bold')]}>
-          No coaches available right now
+          {t('mentorship.student.chooser.noCoachesTitle')}
         </Text>
         <Text muted style={styles.waitingBody}>
           {platformHasNoCoaches(mentors)
-            ? 'There are no coaches on the platform yet. Join the waiting list and we will notify you when a coach is available.'
-            : 'Every coach is currently full. Join the waiting list to be notified when a slot opens.'}
+            ? t('mentorship.student.chooser.noCoachesPlatform')
+            : t('mentorship.student.chooser.noCoachesFull')}
         </Text>
         {onJoinWaitingList ? (
           <Button fullWidth onPress={onJoinWaitingList} loading={isSelecting}>
-            Join waiting list
+            {t('mentorship.student.chooser.joinWaitingList')}
           </Button>
         ) : null}
       </View>
@@ -123,7 +125,7 @@ export function MentorChooser({
         <SearchField
           value={search}
           onChangeText={setSearch}
-          placeholder="Search by name or expertise…"
+          placeholder={t('mentorship.student.chooser.searchPlaceholder')}
         />
       </View>
 
@@ -143,7 +145,7 @@ export function MentorChooser({
               style={styles.filterTab}
             >
               <Text style={[styles.filterTabText, active && styles.filterTabTextActive]}>
-                {chip.label}
+                {t(`mentorship.student.browseFilters.${chip.id}`)}
               </Text>
               {active ? <View style={styles.filterTabUnderline} /> : null}
             </Pressable>
@@ -156,7 +158,7 @@ export function MentorChooser({
       {/* Recommended */}
       {recommended.length > 0 ? (
         <View style={styles.section}>
-          <Text style={styles.sectionLabel}>Recommended for you</Text>
+          <Text style={styles.sectionLabel}>{t('mentorship.student.chooser.recommended')}</Text>
           {renderList(recommended)}
           <View style={styles.divider} />
         </View>
@@ -165,15 +167,15 @@ export function MentorChooser({
       {/* All coaches */}
       <View style={styles.section}>
         {recommended.length > 0 ? (
-          <Text style={styles.sectionLabel}>All coaches</Text>
+          <Text style={styles.sectionLabel}>{t('mentorship.student.chooser.allCoaches')}</Text>
         ) : null}
 
         {showEmptySearch ? (
           <Text muted style={styles.emptyText}>
-            No coaches match your search. Try a different keyword or filter.
+            {t('mentorship.student.chooser.emptySearch')}
           </Text>
         ) : listMentors.length === 0 ? (
-          <Text muted style={styles.emptyText}>No coaches to display.</Text>
+          <Text muted style={styles.emptyText}>{t('mentorship.student.chooser.emptyList')}</Text>
         ) : (
           renderList(listMentors)
         )}
@@ -195,12 +197,12 @@ export function MentorChooser({
                 style={styles.modalBackBtn}
                 hitSlop={12}
                 accessibilityRole="button"
-                accessibilityLabel="Go back"
+                accessibilityLabel={t('mentorship.student.chooser.goBack')}
               >
                 <Ionicons name="arrow-back" size={20} color={colors.text} />
               </Pressable>
               <Text style={[styles.modalHeaderTitle, getWebFontStyle('semibold')]}>
-                Coach Profile
+                {t('mentorship.student.chooser.coachProfile')}
               </Text>
               {/* spacer for symmetry */}
               <View style={styles.modalHeaderSpacer} />
@@ -222,7 +224,7 @@ export function MentorChooser({
 
               {!profileMentor.mentor.bio?.trim() ? (
                 <Text muted style={styles.noBio}>
-                  This coach has not added a bio yet.
+                  {t('mentorship.student.chooser.noBio')}
                 </Text>
               ) : null}
             </ScrollView>
@@ -238,11 +240,11 @@ export function MentorChooser({
                   }}
                   loading={isSelecting}
                 >
-                  Choose this coach
+                  {t('mentorship.student.chooser.chooseCoach')}
                 </Button>
               ) : (
                 <Text style={styles.atCapacityText}>
-                  This coach is currently at capacity
+                  {t('mentorship.student.chooser.atCapacity')}
                 </Text>
               )}
             </View>

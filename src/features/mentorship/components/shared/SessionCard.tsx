@@ -1,4 +1,5 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -27,6 +28,7 @@ export function SessionCard({
 }: SessionCardProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const canJoin =
     session.meetingUrl &&
     session.status !== 'cancelled' &&
@@ -36,7 +38,7 @@ export function SessionCard({
   return (
     <View style={styles.card}>
       <View style={styles.row}>
-        <Text style={styles.title}>{session.title ?? 'Mentorship session'}</Text>
+        <Text style={styles.title}>{session.title ?? t('mentorship.session.titleFallback')}</Text>
         <View style={[styles.status, statusStyle(session.status, colors.surface)]}>
           <Text style={styles.statusText}>{session.status}</Text>
         </View>
@@ -54,7 +56,7 @@ export function SessionCard({
           onPress={() => void openExternalUrl(session.meetingUrl!)}
           style={[styles.join, styles.joinGreen]}
         >
-          Join session
+          {t('mentorship.session.joinSession')}
         </Button>
       ) : null}
 
@@ -62,17 +64,17 @@ export function SessionCard({
         <View style={styles.actions}>
           {onConfirm && session.status === 'proposed' ? (
             <Button variant="secondary" onPress={onConfirm}>
-              Confirm
+              {t('mentorship.session.confirm')}
             </Button>
           ) : null}
           {onReschedule ? (
             <Pressable onPress={onReschedule}>
-              <Text style={styles.link}>Reschedule</Text>
+              <Text style={styles.link}>{t('mentorship.session.reschedule')}</Text>
             </Pressable>
           ) : null}
           {onCancel && session.status !== 'cancelled' && session.status !== 'completed' ? (
             <Pressable onPress={onCancel}>
-              <Text style={[styles.link, styles.danger]}>Cancel</Text>
+              <Text style={[styles.link, styles.danger]}>{t('mentorship.session.cancel')}</Text>
             </Pressable>
           ) : null}
         </View>

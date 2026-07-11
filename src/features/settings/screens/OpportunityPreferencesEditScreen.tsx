@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -12,7 +13,7 @@ import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { userPreferencesApi } from '@/services/api';
 import {
-  OPPORTUNITY_TYPE_OPTIONS,
+  getOpportunityTypeOptions,
   PREDEFINED_OPPORTUNITY_TYPES,
 } from '@/constants/onboarding-options';
 import { spacing } from '@/constants/theme';
@@ -22,6 +23,7 @@ import { parseSupabaseError } from '@/utils/errors';
 
 export function OpportunityPreferencesEditScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const { preferences, refetch } = useProfileData();
@@ -45,13 +47,13 @@ export function OpportunityPreferencesEditScreen() {
 
     if (!user?.id) return;
     if (opportunityTypes.length === 0) {
-      Alert.alert('Required field', 'Select at least one opportunity type.');
+      Alert.alert(t('settings.opportunityPreferences.requiredTitle'), t('settings.opportunityPreferences.requiredTypes'));
       return;
     }
 
     const preferredCountries = parseListInput(countriesText);
     if (preferredCountries.length === 0) {
-      Alert.alert('Required field', 'Add at least one preferred country.');
+      Alert.alert(t('settings.opportunityPreferences.requiredTitle'), t('settings.opportunityPreferences.requiredCountries'));
       return;
     }
 
@@ -83,31 +85,31 @@ export function OpportunityPreferencesEditScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <FormField label="Opportunity types *">
+        <FormField label={t('settings.opportunityPreferences.typesLabel')}>
           <MultiSelectWithOther
-            options={OPPORTUNITY_TYPE_OPTIONS}
+            options={getOpportunityTypeOptions()}
             predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
             values={opportunityTypes}
             onChange={setOpportunityTypes}
-            placeholder="Types you are looking for"
+            placeholder={t('settings.opportunityPreferences.typesPlaceholder')}
           />
         </FormField>
-        <FormField label="Preferred countries (comma-separated) *">
+        <FormField label={t('settings.opportunityPreferences.countriesLabel')}>
           <Input
             value={countriesText}
             onChangeText={setCountriesText}
-            placeholder="e.g. UK, Germany, Canada"
+            placeholder={t('settings.opportunityPreferences.countriesPlaceholder')}
             multiline
           />
         </FormField>
-        <FormField label="Funding preference *">
+        <FormField label={t('settings.opportunityPreferences.fundingLabel')}>
           <FundingPicker value={funding} onChange={setFunding} />
         </FormField>
 
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isSaving} disabled={isSaving}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

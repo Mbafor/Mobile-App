@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, RefreshControl, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -15,6 +16,7 @@ import { spacing } from '@/constants/theme';
 export default function SavedScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
 
   const { items, isLoading, isRefetching, error, refetch } = useTrackerOpportunities();
@@ -41,7 +43,7 @@ export default function SavedScreen() {
       {error ? (
         <View style={styles.banner}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Failed to load saved items'}
+            message={error instanceof Error ? error.message : t('opportunities.saved.loadError')}
           />
         </View>
       ) : null}
@@ -61,13 +63,13 @@ export default function SavedScreen() {
         }
         ListHeaderComponent={
           <Text variant="caption" muted style={styles.meta}>
-            {savedItems.length} saved {savedItems.length === 1 ? 'opportunity' : 'opportunities'}
+            {t('opportunities.saved.count', { count: savedItems.length })}
           </Text>
         }
         ListEmptyComponent={
           <EmptyState
-            title="Nothing saved yet"
-            description="Save opportunities from the dashboard or details to see them here."
+            title={t('opportunities.saved.empty.title')}
+            description={t('opportunities.saved.empty.description')}
           />
         }
         contentContainerStyle={

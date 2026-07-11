@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, Text, TextArea } from '@/components/ui';
@@ -31,6 +32,7 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
   const { colors } = useTheme();
   const cvUi = useCvUi();
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const meta = getSectionMeta(section);
 
   switch (section) {
@@ -41,11 +43,11 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
           <View style={styles.profileNote}>
             <Ionicons name="person-circle-outline" size={20} color={colors.primary} />
             <Text muted style={styles.profileNoteText}>
-              Empty name, email, and location are filled from your profile when you open this CV.
+              {t('cvBuilder.editors.personal.profileNote')}
             </Text>
           </View>
           <View style={cvUi.surfaceCard}>
-            <FormField label="Full name">
+            <FormField label={t('cvBuilder.editors.personal.fullNameLabel')}>
               <Input
                 value={content.personalInfo.fullName}
                 onChangeText={(v) =>
@@ -54,10 +56,10 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, fullName: v },
                   }))
                 }
-                placeholder="Your full name"
+                placeholder={t('cvBuilder.editors.personal.fullNamePlaceholder')}
               />
             </FormField>
-            <FormField label="Email">
+            <FormField label={t('cvBuilder.editors.personal.emailLabel')}>
               <Input
                 value={content.personalInfo.email}
                 onChangeText={(v) =>
@@ -66,12 +68,12 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, email: v },
                   }))
                 }
-                placeholder="you@email.com"
+                placeholder={t('cvBuilder.editors.personal.emailPlaceholder')}
                 keyboardType="email-address"
                 autoCapitalize="none"
               />
             </FormField>
-            <FormField label="Phone">
+            <FormField label={t('cvBuilder.editors.personal.phoneLabel')}>
               <Input
                 value={content.personalInfo.phone}
                 onChangeText={(v) =>
@@ -80,11 +82,11 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, phone: v },
                   }))
                 }
-                placeholder="+44 …"
+                placeholder={t('cvBuilder.editors.personal.phonePlaceholder')}
                 keyboardType="phone-pad"
               />
             </FormField>
-            <FormField label="Location">
+            <FormField label={t('cvBuilder.editors.personal.locationLabel')}>
               <Input
                 value={content.personalInfo.location}
                 onChangeText={(v) =>
@@ -93,10 +95,10 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, location: v },
                   }))
                 }
-                placeholder="City, country"
+                placeholder={t('cvBuilder.editors.personal.locationPlaceholder')}
               />
             </FormField>
-            <FormField label="LinkedIn">
+            <FormField label={t('cvBuilder.editors.personal.linkedInLabel')}>
               <Input
                 value={content.personalInfo.linkedIn}
                 onChangeText={(v) =>
@@ -105,11 +107,11 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, linkedIn: v },
                   }))
                 }
-                placeholder="linkedin.com/in/…"
+                placeholder={t('cvBuilder.editors.personal.linkedInPlaceholder')}
                 autoCapitalize="none"
               />
             </FormField>
-            <FormField label="Website">
+            <FormField label={t('cvBuilder.editors.personal.websiteLabel')}>
               <Input
                 value={content.personalInfo.website}
                 onChangeText={(v) =>
@@ -118,7 +120,7 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
                     personalInfo: { ...p.personalInfo, website: v },
                   }))
                 }
-                placeholder="https://…"
+                placeholder={t('cvBuilder.editors.personal.websitePlaceholder')}
                 autoCapitalize="none"
               />
             </FormField>
@@ -131,11 +133,11 @@ export function CVSectionContent({ section, content, onChange }: CVSectionConten
         <View style={cvUi.sectionGap}>
           <CVSectionHeader title={meta.title} description={meta.description} />
           <View style={cvUi.surfaceCard}>
-            <FormField label="Professional summary">
+            <FormField label={t('cvBuilder.editors.summary.label')}>
               <TextArea
                 value={content.summary}
                 onChangeText={(v) => onChange((p) => ({ ...p, summary: v }))}
-                placeholder="Write your professional summary here…"
+                placeholder={t('cvBuilder.editors.summary.placeholder')}
                 minHeight={160}
               />
             </FormField>

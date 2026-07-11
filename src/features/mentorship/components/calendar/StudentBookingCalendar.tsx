@@ -7,6 +7,7 @@ import {
   type OnEventResponse,
 } from '@howljs/calendar-kit';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -69,6 +70,7 @@ export function StudentBookingCalendar({
 }: StudentBookingCalendarProps) {
   const { mentorshipColors } = useTheme();
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const calendarTheme = useMemo(
     () => createMentorshipCalendarTheme(mentorshipColors),
     [mentorshipColors],
@@ -91,12 +93,12 @@ export function StudentBookingCalendar({
         const session = sessions.find((s) => s.id === meta.sessionId);
         if (session && canStudentCancelSession(session)) {
           Alert.alert(
-            'Cancel session?',
+            t('mentorship.calendar.cancelTitle'),
             formatSessionDateTime(session.scheduledStart, session.timezone),
             [
-              { text: 'Keep it', style: 'cancel' },
+              { text: t('mentorship.calendar.keepIt'), style: 'cancel' },
               {
-                text: 'Cancel session',
+                text: t('mentorship.calendar.cancelSession'),
                 style: 'destructive',
                 onPress: () => onCancel?.(session.id),
               },
@@ -112,8 +114,8 @@ export function StudentBookingCalendar({
       );
       if (hasActive) {
         Alert.alert(
-          'Session already booked',
-          'You already have an active session. Cancel it before booking a new one.',
+          t('mentorship.calendar.alreadyBookedTitle'),
+          t('mentorship.calendar.alreadyBookedMessage'),
         );
         return;
       }
@@ -131,13 +133,13 @@ export function StudentBookingCalendar({
         notes: '',
       });
     },
-    [slots, timezone, sessions, onCancel],
+    [slots, timezone, sessions, onCancel, t],
   );
 
   const confirmBook = async () => {
     if (!pending) return;
     if (!pending.notes.trim()) {
-      Alert.alert('Notes required', 'Please add a short note for your coach before confirming.');
+      Alert.alert(t('mentorship.calendar.notesRequiredTitle'), t('mentorship.calendar.notesRequiredMessage'));
       return;
     }
     try {
@@ -149,9 +151,9 @@ export function StudentBookingCalendar({
         notes: pending.notes.trim(),
       });
       setPending(null);
-      Alert.alert('Session requested', 'Your coach has been notified.');
+      Alert.alert(t('mentorship.calendar.sessionRequestedTitle'), t('mentorship.calendar.sessionRequestedMessage'));
     } catch (e) {
-      Alert.alert('Booking failed', e instanceof Error ? e.message : 'Try again.');
+      Alert.alert(t('mentorship.calendar.bookingFailedTitle'), e instanceof Error ? e.message : t('mentorship.calendar.tryAgain'));
     }
   };
 
@@ -160,7 +162,7 @@ export function StudentBookingCalendar({
   if (!slots.length && !loading) {
     return (
       <Text muted style={styles.empty}>
-        Your coach has not opened any time slots yet. Message them to arrange a time.
+        {t('mentorship.calendar.noSlots')}
       </Text>
     );
   }
@@ -168,11 +170,11 @@ export function StudentBookingCalendar({
   return (
     <View style={styles.wrap}>
       <Text muted style={styles.hint}>
-        Tap a green slot to book. Blue slots are already taken. You can only book one session at a time.
+        {t('mentorship.calendar.studentHint')}
       </Text>
       <View style={styles.legend}>
-        <LegendDot styles={styles} color={calendarColors.available} label="Available" />
-        <LegendDot styles={styles} color={calendarColors.booked} label="Booked" />
+        <LegendDot styles={styles} color={calendarColors.available} label={t('mentorship.calendar.available')} />
+        <LegendDot styles={styles} color={calendarColors.booked} label={t('mentorship.calendar.booked')} />
       </View>
 
       {loading ? (
@@ -200,22 +202,22 @@ export function StudentBookingCalendar({
 
           {/* Card sits as a sibling so taps inside never reach the backdrop */}
           <View style={styles.modalCard}>
-            <Text style={styles.modalTitle}>Book a session?</Text>
+            <Text style={styles.modalTitle}>{t('mentorship.calendar.bookTitle')}</Text>
             {pending ? (
               <>
                 <Text muted style={styles.modalBody}>
-                  Book a session with {coachName} on {pending.label}?
+                  {t('mentorship.calendar.bookConfirm', { name: coachName, label: pending.label })}
                 </Text>
                 <View style={styles.notesWrap}>
                   <Text variant="caption" muted>
-                    Short notes <Text style={styles.required}>*</Text>
+                    {t('mentorship.calendar.shortNotes')} <Text style={styles.required}>*</Text>
                   </Text>
                   <Input
                     value={pending.notes}
                     onChangeText={(value) =>
                       setPending((prev) => (prev ? { ...prev, notes: value } : prev))
                     }
-                    placeholder="What do you want to work on in this session?"
+                    placeholder={t('mentorship.calendar.notesPlaceholder')}
                     multiline
                     numberOfLines={3}
                     maxLength={220}
@@ -226,10 +228,10 @@ export function StudentBookingCalendar({
             ) : null}
             <View style={styles.modalActions}>
               <Button variant="ghost" onPress={() => setPending(null)}>
-                Cancel
+                {t('mentorship.calendar.cancel')}
               </Button>
               <Button onPress={() => void confirmBook()} loading={isBooking}>
-                Confirm
+                {t('mentorship.calendar.confirm')}
               </Button>
             </View>
           </View>

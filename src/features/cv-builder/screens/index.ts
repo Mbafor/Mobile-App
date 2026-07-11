@@ -4,4 +4,3 @@ export { CVSectionEditScreen } from '@/features/cv-builder/screens/CVSectionEdit
 export { CVTemplatesScreen } from '@/features/cv-builder/screens/CVTemplatesScreen';
 export { CVTipsScreen } from '@/features/cv-builder/screens/CVTipsScreen';
 export { CVSectionSettingsScreen } from '@/features/cv-builder/screens/CVSectionSettingsScreen';
-export { CVBuilderPlaceholderScreen } from '@/features/cv-builder/screens/CVBuilderPlaceholderScreen';

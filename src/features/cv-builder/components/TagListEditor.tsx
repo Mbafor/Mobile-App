@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, Text } from '@/components/ui';
@@ -24,11 +25,14 @@ export function TagListEditor({
   description,
   tags,
   onChange,
-  placeholder = 'Type and add an item',
-  addLabel = 'Add item',
+  placeholder,
+  addLabel,
 }: TagListEditorProps) {
   const cvUi = useCvUi();
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
+  const resolvedPlaceholder = placeholder ?? t('cvBuilder.editors.typeAndAdd');
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.editors.addItemDefault');
   const [draft, setDraft] = useState('');
 
   const addTag = () => {
@@ -53,7 +57,7 @@ export function TagListEditor({
             <Pressable
               onPress={() => removeTag(tag)}
               hitSlop={8}
-              accessibilityLabel={`Remove ${tag}`}
+              accessibilityLabel={t('cvBuilder.editors.removeItem', { item: tag })}
             >
               <Text style={styles.remove}>×</Text>
             </Pressable>
@@ -62,18 +66,18 @@ export function TagListEditor({
       ))}
 
       <View style={cvUi.surfaceCard}>
-        <FormField label={tags.length === 0 ? addLabel : 'Add another'}>
+        <FormField label={tags.length === 0 ? resolvedAddLabel : t('cvBuilder.editors.addAnother')}>
           <Input
             value={draft}
             onChangeText={setDraft}
-            placeholder={placeholder}
+            placeholder={resolvedPlaceholder}
             onSubmitEditing={addTag}
             returnKeyType="done"
           />
         </FormField>
       </View>
 
-      <CVAddButton label={addLabel} onPress={addTag} disabled={!draft.trim()} />
+      <CVAddButton label={resolvedAddLabel} onPress={addTag} disabled={!draft.trim()} />
     </View>
   );
 }

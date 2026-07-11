@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
@@ -15,22 +16,25 @@ type WaitingListCardProps = {
 
 export function WaitingListCard({ status, onCancel, isCancelling }: WaitingListCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <View style={styles.card}>
       <View style={styles.badge}>
-        <Text style={styles.badgeText}>Waiting list</Text>
+        <Text style={styles.badgeText}>{t('mentorship.student.waitingList.badge')}</Text>
       </View>
       <Text variant="title" style={styles.position}>
-        Queue position #{status.position}
+        {t('mentorship.student.waitingList.position', { position: status.position })}
       </Text>
       <Text muted>
-        {status.totalInQueue} students in queue · joined{' '}
-        {new Date(status.enteredAt).toLocaleDateString()}
+        {t('mentorship.student.waitingList.queueInfo', {
+          count: status.totalInQueue,
+          date: new Date(status.enteredAt).toLocaleDateString(),
+        })}
       </Text>
       <Text style={styles.estimate}>{status.estimatedWaitLabel}</Text>
       {onCancel ? (
         <Button variant="secondary" onPress={onCancel} loading={isCancelling} style={styles.btn}>
-          Leave waiting list
+          {t('mentorship.student.waitingList.leave')}
         </Button>
       ) : null}
     </View>

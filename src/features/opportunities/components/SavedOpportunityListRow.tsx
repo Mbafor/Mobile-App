@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
@@ -16,6 +17,7 @@ type SavedOpportunityListRowProps = {
 
 function SavedOpportunityListRowComponent({ opportunity, onPress }: SavedOpportunityListRowProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const { toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
 
   return (
@@ -27,7 +29,9 @@ function SavedOpportunityListRowComponent({ opportunity, onPress }: SavedOpportu
           disabled={isSaving}
           style={[styles.unsaveBtn, isSaving && styles.unsaveBtnDisabled]}
         >
-          <Text style={styles.unsaveText}>{isSaving ? 'Removing…' : 'Unsave'}</Text>
+          <Text style={styles.unsaveText}>
+            {isSaving ? t('opportunities.saved.removing') : t('opportunities.saved.unsave')}
+          </Text>
         </Pressable>
       </View>
     </View>

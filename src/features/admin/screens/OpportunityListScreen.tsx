@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { confirmAction } from '@/utils/confirm-action';
 
@@ -29,12 +30,13 @@ type OpportunityListScreenProps = {
 
 export function OpportunityListScreen({
   routes,
-  title = 'Opportunities',
-  subtitle = 'Create, paste, edit, or remove listings shown to students.',
+  title,
+  subtitle,
 }: OpportunityListScreenProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { data: opportunities, isLoading, error, refetch, isRefetching } = useAdminOpportunities();
   const { data: pending } = usePendingOpportunities();
   const pendingCount = pending?.pages.reduce((sum, p) => sum + p.items.length, 0) ?? 0;
@@ -42,8 +44,8 @@ export function OpportunityListScreen({
 
   const confirmDelete = async (id: string, oppTitle: string) => {
     const confirmed = await confirmAction(
-      'Delete opportunity',
-      `Delete "${oppTitle}"? This cannot be undone.`,
+      t('admin.opportunityList.deleteConfirmTitle'),
+      t('admin.opportunityList.deleteConfirmMessage', { title: oppTitle }),
     );
     if (!confirmed) return;
 
@@ -51,8 +53,8 @@ export function OpportunityListScreen({
       await deleteMutation.mutateAsync(id);
     } catch (e) {
       Alert.alert(
-        'Delete failed',
-        e instanceof Error ? e.message : 'Could not delete this opportunity.',
+        t('admin.opportunityList.deleteFailedTitle'),
+        e instanceof Error ? e.message : t('admin.opportunityList.deleteFailedMessage'),
       );
     }
   };
@@ -68,15 +70,15 @@ export function OpportunityListScreen({
   return (
     <Screen padded={false}>
       <View style={styles.hero}>
-        <Text style={styles.heroTitle}>{title}</Text>
+        <Text style={styles.heroTitle}>{title ?? t('admin.opportunityList.homeTitle')}</Text>
         <Text muted style={styles.heroSub}>
-          {subtitle}
+          {subtitle ?? t('admin.opportunityList.homeSubtitle')}
         </Text>
         <View style={styles.heroActions}>
           <Button variant="secondary" onPress={() => router.push(routes.paste)}>
-            Paste JSON
+            {t('admin.opportunityList.pasteJson')}
           </Button>
-          <Button onPress={() => router.push(routes.create)}>Create new</Button>
+          <Button onPress={() => router.push(routes.create)}>{t('admin.opportunityList.createNew')}</Button>
         </View>
         {routes.pending && pendingCount > 0 ? (
           <Pressable
@@ -84,9 +86,9 @@ export function OpportunityListScreen({
             onPress={() => routes.pending && router.push(routes.pending)}
           >
             <Text style={styles.pendingBannerText}>
-              {pendingCount} scraped {pendingCount === 1 ? 'opportunity' : 'opportunities'} pending review
+              {t('admin.opportunityList.pendingBanner', { count: pendingCount })}
             </Text>
-            <Text style={styles.pendingBannerLink}>Review →</Text>
+            <Text style={styles.pendingBannerLink}>{t('admin.opportunityList.reviewLink')}</Text>
           </Pressable>
         ) : null}
       </View>
@@ -94,7 +96,7 @@ export function OpportunityListScreen({
       {error ? (
         <View style={styles.padded}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Failed to load opportunities'}
+            message={error instanceof Error ? error.message : t('admin.opportunityList.failedToLoad')}
           />
         </View>
       ) : (
@@ -106,7 +108,7 @@ export function OpportunityListScreen({
           contentContainerStyle={styles.list}
           ListEmptyComponent={
             <Text muted style={styles.padded}>
-              No opportunities yet. Create one or paste JSON to get started.
+              {t('admin.opportunityList.emptyList')}
             </Text>
           }
           renderItem={({ item }) => (
@@ -122,15 +124,15 @@ export function OpportunityListScreen({
                 <Text style={styles.rowTitle}>{item.title}</Text>
                 <Text muted>{item.organization}</Text>
                 <Text variant="caption" muted style={styles.deadline}>
-                  Deadline: {formatDeadline(item.deadline)}
+                  {t('admin.opportunityList.deadline', { date: formatDeadline(item.deadline) })}
                 </Text>
               </View>
               <View style={styles.rowActions}>
                 <Pressable onPress={() => router.push(routes.edit(item.id))}>
-                  <Text style={styles.link}>Edit</Text>
+                  <Text style={styles.link}>{t('admin.opportunityList.edit')}</Text>
                 </Pressable>
                 <Pressable onPress={() => void confirmDelete(item.id, item.title)}>
-                  <Text style={styles.danger}>Delete</Text>
+                  <Text style={styles.danger}>{t('admin.opportunityList.delete')}</Text>
                 </Pressable>
               </View>
             </View>

@@ -1,4 +1,5 @@
 import { formatExperienceDates, hasText } from '@/features/cv-builder/components/preview/preview-shared';
+import i18n from '@/i18n';
 import type {
   CVAchievementEntry,
   CVCertificationEntry,
@@ -18,7 +19,7 @@ export function getContactItems(content: CVContent): string[] {
 }
 
 export function getDisplayName(content: CVContent): string {
-  return content.personalInfo.fullName.trim() || 'Your Name';
+  return content.personalInfo.fullName.trim() || i18n.t('cvBuilder.pdf.yourNameFallback');
 }
 
 export function parseBulletLines(text?: string): string[] {
@@ -36,8 +37,8 @@ export function splitSkills(skills: string[]): { technical: string[]; soft: stri
 }
 
 export function formatEducationTitle(entry: CVEducationEntry): string {
-  const field = hasText(entry.fieldOfStudy) ? ` in ${entry.fieldOfStudy}` : '';
-  return `${entry.degree}${field}`;
+  if (!hasText(entry.fieldOfStudy)) return entry.degree;
+  return i18n.t('cvBuilder.pdf.degreeInField', { degree: entry.degree, field: entry.fieldOfStudy });
 }
 
 export function formatEducationDates(entry: CVEducationEntry): string {

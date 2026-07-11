@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 
@@ -9,6 +10,7 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 export function NotificationsScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
 
   return (
@@ -16,7 +18,7 @@ export function NotificationsScreen() {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <PageHeader title="Notifications" onBack={() => router.back()} />
+      <PageHeader title={t('settings.notifications.title')} onBack={() => router.back()} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}

@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -41,6 +42,7 @@ export function BookingCalendarGrid({
   isBooking,
 }: BookingCalendarGridProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const slots = useMemo(() => buildBookingSlots(rules, sessions), [rules, sessions]);
   const [pendingSlot, setPendingSlot] = useState<BookingSlot | null>(null);
   const [notes, setNotes] = useState('');
@@ -49,7 +51,7 @@ export function BookingCalendarGrid({
     if (!pendingSlot) return;
     const trimmed = notes.trim();
     if (trimmed.length < 8) {
-      Alert.alert('Add a note', 'Please write at least a short reason for this session (8+ characters).');
+      Alert.alert(t('mentorship.student.booking.addNoteTitle'), t('mentorship.student.booking.addNoteMessage'));
       return;
     }
     try {
@@ -59,16 +61,16 @@ export function BookingCalendarGrid({
       });
       setPendingSlot(null);
       setNotes('');
-      Alert.alert('Session requested', 'Your coach will see your note and confirm the booking.');
+      Alert.alert(t('mentorship.student.booking.sessionRequestedTitle'), t('mentorship.student.booking.gridConfirmMessage'));
     } catch (e) {
-      Alert.alert('Booking failed', e instanceof Error ? e.message : 'Try again.');
+      Alert.alert(t('mentorship.student.booking.bookingFailedTitle'), e instanceof Error ? e.message : t('mentorship.student.booking.tryAgain'));
     }
   };
 
   if (rules.length === 0) {
     return (
       <Text muted style={styles.empty}>
-        Your coach has not set availability yet. Message them to arrange a time.
+        {t('mentorship.student.booking.noAvailability')}
       </Text>
     );
   }
@@ -76,13 +78,13 @@ export function BookingCalendarGrid({
   return (
     <View style={styles.wrap}>
       <Text muted style={styles.hint}>
-        Tap an available slot. Add a short note so your coach knows what you want to discuss.
+        {t('mentorship.student.booking.gridHint')}
       </Text>
 
       <MentorshipMobileList
         data={slots}
         keyExtractor={(row) => row.id}
-        emptyMessage="No upcoming slots in the next 4 weeks."
+        emptyMessage={t('mentorship.student.booking.emptySlots')}
         renderCard={(row) => (
           <View style={styles.slotCard}>
             <View style={styles.slotTop}>
@@ -102,13 +104,15 @@ export function BookingCalendarGrid({
                     row.status === 'available' && styles.badgeTextOpen,
                   ]}
                 >
-                  {row.status === 'booked' ? 'Booked' : 'Available'}
+                  {row.status === 'booked'
+                    ? t('mentorship.student.booking.booked')
+                    : t('mentorship.student.booking.available')}
                 </Text>
               </View>
             </View>
             <Text style={styles.time}>{row.timeLabel}</Text>
             <Text variant="caption" muted>
-              {row.timezone} · local time
+              {t('mentorship.student.booking.localTime', { timezone: row.timezone })}
             </Text>
             {row.status === 'available' ? (
               <Pressable
@@ -119,7 +123,7 @@ export function BookingCalendarGrid({
                 }}
                 disabled={isBooking}
               >
-                <Text style={styles.bookBtnText}>Book session</Text>
+                <Text style={styles.bookBtnText}>{t('mentorship.student.booking.bookSession')}</Text>
               </Pressable>
             ) : null}
           </View>
@@ -134,26 +138,26 @@ export function BookingCalendarGrid({
       >
         <Pressable style={styles.modalBackdrop} onPress={() => setPendingSlot(null)}>
           <Pressable style={styles.modalCard} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Book session</Text>
+            <Text style={styles.modalTitle}>{t('mentorship.student.booking.bookSession')}</Text>
             {pendingSlot ? (
               <Text muted style={styles.modalSub}>
                 {pendingSlot.dayLabel} {pendingSlot.dateLabel} · {pendingSlot.timeLabel}
               </Text>
             ) : null}
-            <Text style={styles.notesLabel}>Why are you booking? (required)</Text>
+            <Text style={styles.notesLabel}>{t('mentorship.student.booking.whyBooking')}</Text>
             <TextArea
               value={notes}
               onChangeText={setNotes}
-              placeholder="e.g. Review my CV and discuss internship applications…"
+              placeholder={t('mentorship.student.booking.notesPlaceholder')}
               minHeight={100}
               maxLength={500}
             />
             <View style={styles.modalActions}>
               <Button variant="ghost" onPress={() => setPendingSlot(null)}>
-                Cancel
+                {t('mentorship.student.booking.cancel')}
               </Button>
               <Button onPress={() => void confirmBook()} loading={isBooking}>
-                Request session
+                {t('mentorship.student.booking.requestSession')}
               </Button>
             </View>
           </Pressable>

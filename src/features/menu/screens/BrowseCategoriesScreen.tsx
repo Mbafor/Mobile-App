@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -46,10 +47,11 @@ function OpportunityResultCard({
   onPress: (o: Opportunity) => void;
 }) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
-      ? `${formatDeadline(opportunity.deadline)} · ${daysLeft}d left`
+      ? `${formatDeadline(opportunity.deadline)} · ${t('opportunities.common.daysLeft', { days: daysLeft })}`
       : formatDeadline(opportunity.deadline);
 
   return (
@@ -101,6 +103,7 @@ function OpportunityResultCard({
 export function BrowseCategoriesScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
@@ -136,7 +139,7 @@ export function BrowseCategoriesScreen() {
   const renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
-        <Text style={styles.discoverLabel}>Find opportunities by focus area</Text>
+        <Text style={styles.discoverLabel}>{t('menu.browse.focusArea')}</Text>
         <View style={styles.grid}>
           {BROWSE_CATEGORY_LIST.map((category, i) => {
             const accent = CARD_ACCENTS[i % CARD_ACCENTS.length];
@@ -161,7 +164,7 @@ export function BrowseCategoriesScreen() {
             );
           })}
         </View>
-        <Text style={styles.sectionHeading}>All active opportunities</Text>
+        <Text style={styles.sectionHeading}>{t('menu.browse.allActive')}</Text>
       </View>
     );
   };
@@ -209,7 +212,7 @@ export function BrowseCategoriesScreen() {
                           page === 1 && styles.pageBtnTextDisabled,
                         ]}
                       >
-                        Previous
+                        {t('menu.pagination.previous')}
                       </Text>
                     </Pressable>
 
@@ -231,7 +234,7 @@ export function BrowseCategoriesScreen() {
                           page === totalPages && styles.pageBtnTextDisabled,
                         ]}
                       >
-                        Next
+                        {t('menu.pagination.next')}
                       </Text>
                       <Ionicons
                         name="chevron-forward"

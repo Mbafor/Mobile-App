@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -11,7 +12,7 @@ import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGua
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { useOnboardingStore } from '@/features/onboarding/store/onboarding.store';
 import {
-  OPPORTUNITY_TYPE_OPTIONS,
+  getOpportunityTypeOptions,
   PREDEFINED_OPPORTUNITY_TYPES,
 } from '@/constants/onboarding-options';
 import { ONBOARDING_STEPS } from '@/constants/onboarding';
@@ -22,6 +23,7 @@ import type { FundingPreference } from '@/types/domain/user-preferences';
 
 export function OpportunityPreferencesScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   useOnboardingGuard();
 
   const draft = useOnboardingStore((s) => s.draft.preferences);
@@ -52,24 +54,24 @@ export function OpportunityPreferencesScreen() {
   const handleFinish = async () => {
     clearError();
     if (!hasCompletedBasicInfo(profile)) {
-      Alert.alert('Complete earlier steps', 'Please fill in your basic information first.', [
-        { text: 'Go to step 1', onPress: () => router.replace(ROUTES.ONBOARDING.BASIC_INFO) },
+      Alert.alert(t('onboarding.preferences.incompleteTitle'), t('onboarding.preferences.incompleteBasic'), [
+        { text: t('onboarding.preferences.gotoStep1'), onPress: () => router.replace(ROUTES.ONBOARDING.BASIC_INFO) },
       ]);
       return;
     }
     if (!hasCompletedAcademicInfo(profile)) {
-      Alert.alert('Complete earlier steps', 'Please fill in your academic information first.', [
-        { text: 'Go to step 2', onPress: () => router.replace(ROUTES.ONBOARDING.ACADEMIC) },
+      Alert.alert(t('onboarding.preferences.incompleteTitle'), t('onboarding.preferences.incompleteAcademic'), [
+        { text: t('onboarding.preferences.gotoStep2'), onPress: () => router.replace(ROUTES.ONBOARDING.ACADEMIC) },
       ]);
       return;
     }
     if (opportunityTypes.length === 0) {
-      Alert.alert('Required fields', 'Please select at least one opportunity type.');
+      Alert.alert(t('onboarding.preferences.requiredTitle'), t('onboarding.preferences.requiredTypes'));
       return;
     }
     const preferredCountries = parseListInput(countriesText);
     if (preferredCountries.length === 0) {
-      Alert.alert('Required fields', 'Add at least one preferred country (comma-separated).');
+      Alert.alert(t('onboarding.preferences.requiredTitle'), t('onboarding.preferences.requiredCountries'));
       return;
     }
     const prefs = { opportunityTypes, preferredCountries, fundingPreference: funding };
@@ -81,31 +83,31 @@ export function OpportunityPreferencesScreen() {
   return (
     <OnboardingShell
       currentStep={ONBOARDING_STEPS.PREFERENCES}
-      title="Opportunity preferences"
-      subtitle="We'll use this to personalise your recommendations."
+      title={t('onboarding.preferences.title')}
+      subtitle={t('onboarding.preferences.subtitle')}
       onBack={() => router.back()}
       onContinue={() => void handleFinish()}
-      continueLabel="Finish setup"
+      continueLabel={t('onboarding.preferences.finish')}
       isLoading={isLoading || loadingProfile}
     >
-      <FormField label="Opportunity types *">
+      <FormField label={t('onboarding.preferences.typesLabel')}>
         <MultiSelectWithOther
-          options={OPPORTUNITY_TYPE_OPTIONS}
+          options={getOpportunityTypeOptions()}
           predefinedValues={PREDEFINED_OPPORTUNITY_TYPES}
           values={opportunityTypes}
           onChange={setOpportunityTypes}
-          placeholder="Select opportunity types"
+          placeholder={t('onboarding.preferences.typesPlaceholder')}
         />
       </FormField>
-      <FormField label="Preferred countries (comma-separated) *">
+      <FormField label={t('onboarding.preferences.countriesLabel')}>
         <Input
           value={countriesText}
           onChangeText={setCountriesText}
-          placeholder="e.g. UK, Germany, Canada"
+          placeholder={t('onboarding.preferences.countriesPlaceholder')}
           multiline
         />
       </FormField>
-      <FormField label="Funding preference *">
+      <FormField label={t('onboarding.preferences.fundingLabel')}>
         <FundingPicker value={funding} onChange={setFunding} />
       </FormField>
       {error ? <ErrorMessage message={error} /> : null}

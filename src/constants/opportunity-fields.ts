@@ -4,41 +4,55 @@
  */
 import type { SelectOption } from '@/constants/onboarding-options';
 import {
-  INTEREST_OPTIONS,
-  OPPORTUNITY_TYPE_OPTIONS,
+  getInterestOptions,
+  getOpportunityTypeOptions,
   PREDEFINED_INTERESTS,
   PREDEFINED_OPPORTUNITY_TYPES,
 } from '@/constants/onboarding-options';
-import { DEGREE_LEVELS, FUNDING_OPTIONS } from '@/constants/onboarding';
-import { COUNTRY_OPTIONS, PREDEFINED_COUNTRIES } from '@/constants/countries';
+import {
+  DEGREE_LEVEL_VALUES,
+  getDegreeLevels,
+  getFundingOptions,
+  type DegreeLevelValue,
+} from '@/constants/onboarding';
+import { getCountryOptions, PREDEFINED_COUNTRIES } from '@/constants/countries';
+import i18n from '@/i18n';
+import type { FundingPreference } from '@/types/domain/user-preferences';
 import type { LocationType } from '@/types/domain/opportunity';
 
-/** Same labels as user "opportunity types" preference & browse categories. */
-export const OPPORTUNITY_CATEGORY_OPTIONS = OPPORTUNITY_TYPE_OPTIONS;
+/** Same labels as user "opportunity types" preference & browse categories. Call at render time. */
+export function getOpportunityCategoryOptions(): SelectOption[] {
+  return getOpportunityTypeOptions();
+}
 export const PREDEFINED_OPPORTUNITY_CATEGORIES = PREDEFINED_OPPORTUNITY_TYPES;
 
-/** Same labels as user profile "interests" — stored in opportunity `tags`. */
-export const OPPORTUNITY_TAG_OPTIONS = INTEREST_OPTIONS;
+/** Same labels as user profile "interests" — stored in opportunity `tags`. Call at render time. */
+export function getOpportunityTagOptions(): SelectOption[] {
+  return getInterestOptions();
+}
 export const PREDEFINED_OPPORTUNITY_TAGS = PREDEFINED_INTERESTS;
 
-/** Profile countries + Global for remote/worldwide listings. */
-export const OPPORTUNITY_COUNTRY_OPTIONS: SelectOption[] = [
-  ...COUNTRY_OPTIONS,
-  { label: 'Global', value: 'Global' },
-];
+/** Profile countries + Global for remote/worldwide listings. Call at render time. */
+export function getOpportunityCountryOptions(): SelectOption[] {
+  return [...getCountryOptions(), { label: i18n.t('shared.options.global'), value: 'Global' }];
+}
 
 export const PREDEFINED_OPPORTUNITY_COUNTRIES = [
   ...PREDEFINED_COUNTRIES,
   'Global',
 ] as const;
 
-/** Same values as profile degree level & search filters. */
-export const OPPORTUNITY_DEGREE_OPTIONS = DEGREE_LEVELS;
+/** Same values as profile degree level & search filters. Call at render time. */
+export function getOpportunityDegreeOptions(): { value: DegreeLevelValue; label: string }[] {
+  return getDegreeLevels();
+}
 
-export const OPPORTUNITY_DEGREE_VALUES = DEGREE_LEVELS.map((d) => d.value);
+export const OPPORTUNITY_DEGREE_VALUES = DEGREE_LEVEL_VALUES;
 
-/** Funding on listings (excludes user pref "any"). */
-export const OPPORTUNITY_FUNDING_OPTIONS = FUNDING_OPTIONS.filter((o) => o.value !== 'any');
+/** Funding on listings (excludes user pref "any"). Call at render time. */
+export function getOpportunityFundingOptions(): { value: FundingPreference; label: string }[] {
+  return getFundingOptions().filter((o) => o.value !== 'any');
+}
 
 export const OPPORTUNITY_LOCATION_OPTIONS: { value: LocationType; label: string }[] = [
   { value: 'remote', label: 'Remote' },

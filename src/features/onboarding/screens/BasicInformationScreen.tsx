@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -15,6 +16,7 @@ import { ROUTES } from '@/constants/routes';
 
 export function BasicInformationScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   useOnboardingGuard();
 
   const draft = useOnboardingStore((s) => s.draft.basic);
@@ -37,7 +39,7 @@ export function BasicInformationScreen() {
   const handleContinue = async () => {
     clearError();
     if (!fullName.trim() || !country.trim()) {
-      Alert.alert('Required fields', 'Please enter your full name and country.');
+      Alert.alert(t('onboarding.basic.requiredTitle'), t('onboarding.basic.requiredMessage'));
       return;
     }
     setBasic({ fullName, country });
@@ -48,21 +50,21 @@ export function BasicInformationScreen() {
   return (
     <OnboardingShell
       currentStep={ONBOARDING_STEPS.BASIC}
-      title="Basic information"
-      subtitle="Tell us a bit about yourself to personalise your experience."
+      title={t('onboarding.basic.title')}
+      subtitle={t('onboarding.basic.subtitle')}
       onContinue={() => void handleContinue()}
       isLoading={isLoading || loadingProfile}
     >
-      <FormField label="Full name *">
+      <FormField label={t('onboarding.basic.fullNameLabel')}>
         <Input
           value={fullName}
           onChangeText={setFullName}
-          placeholder="e.g. Jane Doe"
+          placeholder={t('onboarding.basic.fullNamePlaceholder')}
           autoComplete="name"
         />
       </FormField>
-      <FormField label="Country *">
-        <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
+      <FormField label={t('onboarding.basic.countryLabel')}>
+        <CountrySelect value={country} onChange={setCountry} placeholder={t('onboarding.basic.countryPlaceholder')} />
       </FormField>
       {error ? <ErrorMessage message={error} /> : null}
     </OnboardingShell>

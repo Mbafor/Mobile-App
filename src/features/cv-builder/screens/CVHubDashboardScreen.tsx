@@ -12,6 +12,7 @@ import {
   Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { SearchField, Text } from '@/components/ui';
@@ -37,6 +38,7 @@ export function CVHubDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const {
     cv,
@@ -70,7 +72,7 @@ export function CVHubDashboardScreen() {
         meta.title.toLowerCase().includes(q) || meta.description.toLowerCase().includes(q)
       );
     });
-  }, [enabledSections, sectionQuery]);
+  }, [enabledSections, sectionQuery, t]);
 
   const openSection = (sectionId: CVSectionId) => {
     if (!cv) return;
@@ -103,7 +105,7 @@ export function CVHubDashboardScreen() {
   if (error || !cv) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'CV not found'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('cvBuilder.hub.cvNotFound')} />
       </View>
     );
   }
@@ -130,7 +132,7 @@ export function CVHubDashboardScreen() {
             variant="docs"
             value={sectionQuery}
             onChangeText={setSectionQuery}
-            placeholder="Search sections"
+            placeholder={t('cvBuilder.hub.searchSectionsPlaceholder')}
           />
         </View>
 
@@ -145,14 +147,14 @@ export function CVHubDashboardScreen() {
         >
           <View style={styles.canvas}>
             <View style={styles.panelHeader}>
-              <Text style={styles.panelTitle}>Outline</Text>
+              <Text style={styles.panelTitle}>{t('cvBuilder.hub.outline')}</Text>
               <Pressable onPress={() => setReorderOpen(true)} hitSlop={8}>
-                <Text style={styles.panelAction}>Reorder</Text>
+                <Text style={styles.panelAction}>{t('cvBuilder.hub.reorder')}</Text>
               </Pressable>
             </View>
 
             {filteredSections.length === 0 ? (
-              <Text style={styles.emptySections}>No sections match your search.</Text>
+              <Text style={styles.emptySections}>{t('cvBuilder.hub.noSectionsMatch')}</Text>
             ) : (
               filteredSections.map((sectionId, index) => (
                 <CVSectionRow
@@ -168,7 +170,7 @@ export function CVHubDashboardScreen() {
 
           <View style={styles.footerActions}>
             <Pressable style={styles.previewCta} onPress={openPreview}>
-              <Text style={styles.previewCtaText}>Open live PDF preview</Text>
+              <Text style={styles.previewCtaText}>{t('cvBuilder.hub.openPreview')}</Text>
             </Pressable>
             <CVPdfDownloadButton
               data={content}
@@ -178,7 +180,7 @@ export function CVHubDashboardScreen() {
               onPress={handleDownloadRequest}
               loading={isDownloading}
               disabled={isDownloading}
-              label="Download PDF"
+              label={t('cvBuilder.hub.downloadPdf')}
             />
           </View>
 

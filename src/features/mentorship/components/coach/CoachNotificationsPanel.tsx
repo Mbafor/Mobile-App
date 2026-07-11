@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { StyleSheet, View } from 'react-native';
@@ -22,6 +23,7 @@ export function CoachNotificationsPanel({
   currentUserId,
 }: CoachNotificationsPanelProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const recentMentees = useMemo(
     () =>
       mentees.filter((m) => {
@@ -54,21 +56,21 @@ export function CoachNotificationsPanel({
 
   const items = [
     recentMentees.length > 0 && {
-      title: 'New mentees',
-      body: `${recentMentees.length} student(s) assigned in the last 7 days`,
+      title: t('mentorship.coach.notifications.newMentees'),
+      body: t('mentorship.coach.notifications.studentsAssigned', { count: recentMentees.length }),
     },
     unreadThreads.length > 0 && {
-      title: 'New messages',
-      body: `${unreadThreads.length} conversation(s) awaiting your reply`,
+      title: t('mentorship.coach.notifications.newMessages'),
+      body: t('mentorship.coach.notifications.conversationsAwaiting', { count: unreadThreads.length }),
     },
     upcomingReminders.length > 0 && {
-      title: 'Session reminders',
-      body: `${upcomingReminders.length} session(s) in the next 24 hours`,
+      title: t('mentorship.coach.notifications.sessionReminders'),
+      body: t('mentorship.coach.notifications.sessionsIn24h', { count: upcomingReminders.length }),
     },
   ].filter(Boolean) as { title: string; body: string }[];
 
   if (items.length === 0) {
-    return <Text muted>You are all caught up.</Text>;
+    return <Text muted>{t('mentorship.coach.notifications.allCaughtUp')}</Text>;
   }
 
   return (

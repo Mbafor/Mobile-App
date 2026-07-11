@@ -1,4 +1,5 @@
 import { Alert, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
@@ -16,17 +17,18 @@ type MenteeCardProps = {
 
 export function MenteeCard({ mentee, onRemove, isRemoving }: MenteeCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const { profile, mentorship, progressPercent } = mentee;
-  const name = profile.fullName ?? 'Student';
+  const name = profile.fullName ?? t('mentorship.coach.studentFallback');
 
   const confirmRemove = () => {
     Alert.alert(
-      'Remove student',
-      `Remove ${name} from your mentorship roster?`,
+      t('mentorship.coach.menteeCard.removeTitle'),
+      t('mentorship.coach.menteeCard.removeMessage', { name }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('mentorship.coach.menteeCard.cancel'), style: 'cancel' },
         {
-          text: 'Remove',
+          text: t('mentorship.coach.menteeCard.remove'),
           style: 'destructive',
           onPress: () =>
             onRemove(mentorship.id),
@@ -49,11 +51,13 @@ export function MenteeCard({ mentee, onRemove, isRemoving }: MenteeCardProps) {
         <View style={[styles.progressFill, { width: `${progressPercent}%` }]} />
       </View>
       <Text variant="caption" muted>
-        {progressPercent}% of 3-month mentorship · ends{' '}
-        {new Date(mentorship.endsAt).toLocaleDateString()}
+        {t('mentorship.coach.menteeCard.progress', {
+          percent: progressPercent,
+          date: new Date(mentorship.endsAt).toLocaleDateString(),
+        })}
       </Text>
       <Button variant="ghost" onPress={confirmRemove} loading={isRemoving} textStyle={styles.remove}>
-        Remove student
+        {t('mentorship.coach.menteeCard.removeButton')}
       </Button>
     </View>
   );

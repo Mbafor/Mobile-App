@@ -4,6 +4,7 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -19,11 +20,10 @@ import { TextArea } from '@/components/ui/TextArea';
 import { useSubmitFeedback } from '@/features/help/hooks/useHelpSubmissions';
 import { spacing } from '@/constants/theme';
 
-const STAR_LABELS = ['', 'Poor', 'Fair', 'Good', 'Great', 'Excellent'];
-
 export default function FeedbackScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { mutate, isPending } = useSubmitFeedback();
   const [rating, setRating] = useState(0);
@@ -31,7 +31,7 @@ export default function FeedbackScreen() {
 
   const handleSubmit = () => {
     if (rating === 0) {
-      Alert.alert('Rating required', 'Please select a star rating before submitting.');
+      Alert.alert(t('help.feedbackForm.ratingRequired'), t('help.feedbackForm.ratingRequiredMessage'));
       return;
     }
     mutate({ rating, comment: comment.trim() }, {
@@ -51,12 +51,12 @@ export default function FeedbackScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.intro}>
-          Your feedback helps us build a better experience for every student.
+          {t('help.feedbackForm.intro')}
         </Text>
 
         {/* Star rating */}
         <View style={styles.ratingSection}>
-          <Text style={styles.label}>How would you rate your experience?</Text>
+          <Text style={styles.label}>{t('help.feedbackForm.ratingQuestion')}</Text>
           <View style={styles.stars}>
             {[1, 2, 3, 4, 5].map((star) => (
               <Pressable
@@ -64,7 +64,7 @@ export default function FeedbackScreen() {
                 onPress={() => setRating(star)}
                 hitSlop={6}
                 accessibilityRole="button"
-                accessibilityLabel={`${star} star`}
+                accessibilityLabel={t('help.feedbackForm.starA11y', { count: star })}
               >
                 <Ionicons
                   name={star <= rating ? 'star' : 'star-outline'}
@@ -75,25 +75,25 @@ export default function FeedbackScreen() {
             ))}
           </View>
           {rating > 0 ? (
-            <Text style={styles.ratingLabel}>{STAR_LABELS[rating]}</Text>
+            <Text style={styles.ratingLabel}>{t(`help.feedbackForm.stars.${rating}`)}</Text>
           ) : null}
         </View>
 
         {/* Comment */}
         <View style={styles.field}>
           <Text style={styles.label}>
-            Comment <Text style={styles.optional}>(optional)</Text>
+            {t('help.feedbackForm.comment')} <Text style={styles.optional}>{t('help.common.optional')}</Text>
           </Text>
           <TextArea
             value={comment}
             onChangeText={setComment}
-            placeholder="Tell us what you liked or what could be better…"
+            placeholder={t('help.feedbackForm.commentPlaceholder')}
             minHeight={130}
           />
         </View>
 
         <Button onPress={handleSubmit} loading={isPending} fullWidth>
-          Send Feedback
+          {t('help.feedbackForm.submit')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

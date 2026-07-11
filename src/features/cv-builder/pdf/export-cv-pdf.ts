@@ -5,6 +5,7 @@ import { Platform } from 'react-native';
 import { createResumeDocumentElement } from '@/features/cv-builder/pdf/resume/ResumeDocument';
 import { shareCvPdf } from '@/features/cv-builder/pdf/share-cv-pdf';
 import type { CVContent } from '@/types/domain/cv';
+import i18n from '@/i18n';
 
 export type ExportCvPdfResult =
   | { ok: true; uri: string }
@@ -38,17 +39,17 @@ function blobToBase64(blob: Blob): Promise<string> {
     reader.onloadend = () => {
       const result = reader.result;
       if (typeof result !== 'string') {
-        reject(new Error('Could not read PDF blob'));
+        reject(new Error(i18n.t('cvBuilder.pdfErrors.couldNotReadBlob')));
         return;
       }
       const base64 = result.split(',')[1];
       if (!base64) {
-        reject(new Error('Could not encode PDF'));
+        reject(new Error(i18n.t('cvBuilder.pdfErrors.couldNotEncode')));
         return;
       }
       resolve(base64);
     };
-    reader.onerror = () => reject(new Error('Could not read PDF blob'));
+    reader.onerror = () => reject(new Error(i18n.t('cvBuilder.pdfErrors.couldNotReadBlob')));
     reader.readAsDataURL(blob);
   });
 }
@@ -61,7 +62,7 @@ export async function exportCvToPdf(options: ExportCvPdfOptions): Promise<Export
     const uri = await writePdfBlobToUri(blob, options.fileName);
     return { ok: true, uri };
   } catch (e) {
-    const message = e instanceof Error ? e.message : 'Failed to generate PDF';
+    const message = e instanceof Error ? e.message : i18n.t('cvBuilder.pdfErrors.failedToGenerate');
     return { ok: false, error: message };
   }
 }
@@ -76,7 +77,7 @@ export async function exportAndShareCvPdf(
 
   const share = await shareCvPdf(result.uri, sanitizeFileName(options.fileName));
   if (!share.ok) {
-    return { ok: false, error: share.error ?? 'Sharing is unavailable.' };
+    return { ok: false, error: share.error ?? i18n.t('cvBuilder.pdfErrors.sharingUnavailable') };
   }
 
   return { ok: true };

@@ -1,3 +1,4 @@
+import i18n from '@/i18n';
 import type { MentorshipSession } from '@/types/domain/mentorship';
 
 const MS_24H = 24 * 60 * 60 * 1000;
@@ -24,5 +25,5 @@ export function canJoinGoogleMeet(session: MentorshipSession): boolean {
 }
 
 export function studentCancelBlockedMessage(_session: MentorshipSession): string {
-  return 'This session cannot be cancelled.';
+  return i18n.t('mentorship.session.cancelBlocked');
 }

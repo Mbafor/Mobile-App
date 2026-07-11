@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -41,10 +42,11 @@ function OpportunityResultCard({
   onPress: (o: Opportunity) => void;
 }) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
-      ? `${formatDeadline(opportunity.deadline)} · ${daysLeft}d left`
+      ? `${formatDeadline(opportunity.deadline)} · ${t('opportunities.common.daysLeft', { days: daysLeft })}`
       : formatDeadline(opportunity.deadline);
 
   return (
@@ -96,6 +98,7 @@ function OpportunityResultCard({
 export function CategoryOpportunitiesScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { category: categorySlug } = useLocalSearchParams<{ category: string }>();
@@ -159,19 +162,19 @@ export function CategoryOpportunitiesScreen() {
         ListHeaderComponent={
           <View style={styles.metaRow}>
             <Text variant="caption" muted style={styles.meta}>
-              {results.length} {results.length === 1 ? 'opportunity' : 'opportunities'}
+              {t('menu.category.count', { count: results.length })}
             </Text>
             {totalPages > 1 && (
               <Text variant="caption" muted>
-                Page {page} of {totalPages}
+                {t('menu.category.pageOf', { page, total: totalPages })}
               </Text>
             )}
           </View>
         }
         ListEmptyComponent={
           <EmptyState
-            title="No opportunities"
-            description={`Nothing active in ${categoryName} right now. Check back later.`}
+            title={t('menu.category.empty.title')}
+            description={t('menu.category.empty.description', { category: categoryName })}
           />
         }
         contentContainerStyle={[
@@ -195,7 +198,7 @@ export function CategoryOpportunitiesScreen() {
                 <Text
                   style={[styles.pageBtnText, page === 1 && styles.pageBtnTextDisabled]}
                 >
-                  Previous
+                  {t('menu.pagination.previous')}
                 </Text>
               </Pressable>
 
@@ -214,7 +217,7 @@ export function CategoryOpportunitiesScreen() {
                     page === totalPages && styles.pageBtnTextDisabled,
                   ]}
                 >
-                  Next
+                  {t('menu.pagination.next')}
                 </Text>
                 <Ionicons
                   name="chevron-forward"

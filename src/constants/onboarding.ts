@@ -1,19 +1,38 @@
+import i18n from '@/i18n';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
-export const DEGREE_LEVELS = [
-  { value: 'high_school', label: 'High school' },
-  { value: 'bachelors', label: "Bachelor's" },
-  { value: 'masters', label: "Master's" },
-  { value: 'phd', label: 'PhD / Doctorate' },
-  { value: 'professional', label: 'Professional / Other' },
+export const DEGREE_LEVEL_VALUES = [
+  'high_school',
+  'bachelors',
+  'masters',
+  'phd',
+  'professional',
 ] as const;
 
-export const FUNDING_OPTIONS: { value: FundingPreference; label: string }[] = [
-  { value: 'any', label: 'Any funding' },
-  { value: 'fully_funded', label: 'Fully funded only' },
-  { value: 'partially_funded', label: 'Partially funded' },
-  { value: 'self_funded', label: 'Self-funded' },
+export type DegreeLevelValue = (typeof DEGREE_LEVEL_VALUES)[number];
+
+/** Translated display options — call at render time, not at module scope. */
+export function getDegreeLevels(): { value: DegreeLevelValue; label: string }[] {
+  return DEGREE_LEVEL_VALUES.map((value) => ({
+    value,
+    label: i18n.t(`shared.options.degreeLevels.${value}`),
+  }));
+}
+
+export const FUNDING_VALUES: FundingPreference[] = [
+  'any',
+  'fully_funded',
+  'partially_funded',
+  'self_funded',
 ];
+
+/** Translated display options — call at render time, not at module scope. */
+export function getFundingOptions(): { value: FundingPreference; label: string }[] {
+  return FUNDING_VALUES.map((value) => ({
+    value,
+    label: i18n.t(`shared.options.funding.${value}`),
+  }));
+}
 
 export const ONBOARDING_STEPS = {
   BASIC: 1,

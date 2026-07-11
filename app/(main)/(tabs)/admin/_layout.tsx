@@ -1,6 +1,7 @@
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { Stack } from 'expo-router';
 import { Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
@@ -11,6 +12,7 @@ const isWeb = Platform.OS === 'web';
 export default function AdminTabLayout() {
   useRequireAdmin();
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   return (
     <Stack
@@ -24,26 +26,26 @@ export default function AdminTabLayout() {
         headerRight: () => <AppHeaderActions />,
       }}
     >
-      <Stack.Screen name="index" options={{ title: 'Opportunities' }} />
+      <Stack.Screen name="index" options={{ title: t('admin.titles.home') }} />
       <Stack.Screen
         name="pending"
-        options={{ title: 'Pending review', headerBackTitle: 'Back' }}
+        options={{ title: t('admin.titles.pending'), headerBackTitle: t('admin.backTitle') }}
       />
       <Stack.Screen
         name="create"
-        options={{ title: 'Create opportunity', headerBackTitle: 'Back' }}
+        options={{ title: t('admin.titles.create'), headerBackTitle: t('admin.backTitle') }}
       />
       <Stack.Screen
         name="paste"
-        options={{ title: 'Paste opportunities', headerBackTitle: 'Back' }}
+        options={{ title: t('admin.titles.paste'), headerBackTitle: t('admin.backTitle') }}
       />
       <Stack.Screen
         name="[id]/edit"
-        options={{ title: 'Edit opportunity', headerBackTitle: 'Back' }}
+        options={{ title: t('admin.titles.edit'), headerBackTitle: t('admin.backTitle') }}
       />
       <Stack.Screen
         name="[id]/review"
-        options={{ title: 'Review opportunity', headerBackTitle: 'Pending' }}
+        options={{ title: t('admin.titles.review'), headerBackTitle: t('admin.titles.reviewBackTitle') }}
       />
     </Stack>
   );

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { StyleSheet, View } from 'react-native';
@@ -18,13 +19,14 @@ export function MentorshipMobileList<T>({
   data,
   keyExtractor,
   renderCard,
-  emptyMessage = 'Nothing here yet.',
+  emptyMessage,
 }: MentorshipMobileListProps<T>) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text muted>{emptyMessage}</Text>
+        <Text muted>{emptyMessage ?? t('mentorship.list.empty')}</Text>
       </View>
     );
   }

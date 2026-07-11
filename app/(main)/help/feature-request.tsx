@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   KeyboardAvoidingView,
@@ -19,6 +20,7 @@ import { spacing } from '@/constants/theme';
 
 export default function FeatureRequestScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { mutate, isPending } = useSubmitFeatureRequest();
   const [title, setTitle] = useState('');
@@ -26,11 +28,11 @@ export default function FeatureRequestScreen() {
 
   const handleSubmit = () => {
     if (!title.trim()) {
-      Alert.alert('Title required', 'Please enter a short title for your request.');
+      Alert.alert(t('help.common.titleRequired'), t('help.feature.titleRequiredMessage'));
       return;
     }
     if (!description.trim()) {
-      Alert.alert('Description required', 'Please describe the feature you have in mind.');
+      Alert.alert(t('help.common.descriptionRequired'), t('help.feature.descriptionRequiredMessage'));
       return;
     }
     mutate({ title: title.trim(), description: description.trim() }, {
@@ -50,31 +52,31 @@ export default function FeatureRequestScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.intro}>
-          Have an idea that would make Voila better? We'd love to hear it.
+          {t('help.feature.intro')}
         </Text>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Title <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>{t('help.common.title')} <Text style={styles.required}>*</Text></Text>
           <Input
             value={title}
             onChangeText={setTitle}
-            placeholder="e.g. Dark mode support"
+            placeholder={t('help.feature.titlePlaceholder')}
             maxLength={120}
           />
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Description <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>{t('help.common.description')} <Text style={styles.required}>*</Text></Text>
           <TextArea
             value={description}
             onChangeText={setDescription}
-            placeholder="Describe the feature and why it would be useful…"
+            placeholder={t('help.feature.descriptionPlaceholder')}
             minHeight={140}
           />
         </View>
 
         <Button onPress={handleSubmit} loading={isPending} fullWidth>
-          Submit Request
+          {t('help.feature.submit')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

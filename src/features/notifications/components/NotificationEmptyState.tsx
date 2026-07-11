@@ -2,28 +2,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
-const COPY = {
-  title: 'All caught up',
-  subtitle: 'When you get matches, messages, or deadline reminders, they will show up here.',
-};
 
 export function NotificationEmptyState() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   return (
     <View style={styles.wrap}>
       <View style={styles.iconCircle}>
         <Ionicons name="notifications-outline" size={36} color={colors.primary} />
       </View>
       <Text variant="title" style={styles.title}>
-        {COPY.title}
+        {t('notifications.empty.title')}
       </Text>
       <Text muted style={styles.subtitle}>
-        {COPY.subtitle}
+        {t('notifications.empty.subtitle')}
       </Text>
     </View>
   );

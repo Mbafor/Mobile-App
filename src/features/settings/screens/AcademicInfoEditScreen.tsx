@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -11,13 +12,14 @@ import { DegreeLevelPicker } from '@/features/onboarding/components/DegreeLevelP
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import {
-  COURSE_MAJOR_OPTIONS,
+  getCourseMajorOptions,
   PREDEFINED_COURSE_MAJORS,
 } from '@/constants/onboarding-options';
 import { spacing } from '@/constants/theme';
 
 export function AcademicInfoEditScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { profile, refetch } = useProfileData();
   const { saveAcademicInfo, isLoading, error, clearError } = useOnboardingActions();
@@ -38,7 +40,7 @@ export function AcademicInfoEditScreen() {
     clearError();
 
     if (!university.trim() || !courseMajor.trim()) {
-      Alert.alert('Required fields', 'Please enter your university and course/major.');
+      Alert.alert(t('settings.academicInfo.requiredTitle'), t('settings.academicInfo.requiredMessage'));
       return;
     }
 
@@ -67,26 +69,26 @@ export function AcademicInfoEditScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <FormField label="University *">
-          <Input value={university} onChangeText={setUniversity} placeholder="Institution" />
+        <FormField label={t('settings.academicInfo.universityLabel')}>
+          <Input value={university} onChangeText={setUniversity} placeholder={t('settings.academicInfo.universityPlaceholder')} />
         </FormField>
-        <FormField label="Degree level *">
+        <FormField label={t('settings.academicInfo.degreeLabel')}>
           <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
         </FormField>
-        <FormField label="Course / major *">
+        <FormField label={t('settings.academicInfo.courseLabel')}>
           <SelectWithOther
-            options={COURSE_MAJOR_OPTIONS}
+            options={getCourseMajorOptions()}
             predefinedValues={PREDEFINED_COURSE_MAJORS}
             value={courseMajor}
             onChange={setCourseMajor}
-            placeholder="Select course or major"
+            placeholder={t('settings.academicInfo.coursePlaceholder')}
           />
         </FormField>
 
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isLoading} disabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

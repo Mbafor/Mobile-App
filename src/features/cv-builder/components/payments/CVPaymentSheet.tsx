@@ -3,6 +3,7 @@ import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Text } from '@/components/ui';
 import type { PaymentProduct } from '@/features/cv-builder/constants/payments';
@@ -25,6 +26,7 @@ export function CVPaymentSheet({
 }: CVPaymentSheetProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors, cvDocsTheme } = useTheme();
+  const { t } = useTranslation();
   if (!product) return null;
 
   return (
@@ -44,21 +46,21 @@ export function CVPaymentSheet({
           </Text>
 
           <View style={styles.priceRow}>
-            <Text style={styles.priceLabel}>Total</Text>
+            <Text style={styles.priceLabel}>{t('cvBuilder.payments.total')}</Text>
             <Text style={styles.priceValue}>GHS {product.amountGhs}</Text>
           </View>
 
           <View style={styles.trustRow}>
             <Ionicons name="shield-checkmark-outline" size={14} color={cvDocsTheme.textSecondary} />
-            <Text style={styles.trustText}>Secured by Paystack</Text>
+            <Text style={styles.trustText}>{t('cvBuilder.payments.securedByPaystack')}</Text>
           </View>
 
           <View style={styles.actions}>
             <Button onPress={onPay} loading={loading}>
-              Pay GHS {product.amountGhs}
+              {t('cvBuilder.payments.pay', { amount: product.amountGhs })}
             </Button>
             <Button variant="ghost" onPress={onClose} disabled={loading}>
-              Cancel
+              {t('cvBuilder.payments.cancel')}
             </Button>
           </View>
         </Pressable>

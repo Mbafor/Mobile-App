@@ -1,9 +1,10 @@
-import { Ionicons, MaterialIcons } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
 import { Text } from '@/components/ui';
@@ -13,6 +14,9 @@ import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { webPressableStyle } from '@/utils/web/pressable';
+import { DESKTOP_HEADER_HEIGHT } from '@/features/navigation/components/DesktopHeader';
+
+const TOGGLE_SIZE = 28;
 
 type SidebarItem = {
   key: string;
@@ -31,10 +35,11 @@ type SidebarSection = {
 
 export function DesktopSidebar() {
   const styles = useThemedStyles(createStyles);
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
   const { isAdmin, isSuperAdmin } = useAuth();
+  const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
   const [scrollY, setScrollY] = useState(0);
@@ -48,7 +53,7 @@ export function DesktopSidebar() {
   const mainItems: SidebarItem[] = [
     {
       key: 'home',
-      label: 'Home',
+      label: t('navigation.tabs.home'),
       icon: 'home-outline',
       iconActive: 'home',
       onPress: () => {
@@ -59,7 +64,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'dashboard',
-      label: 'Dashboard',
+      label: t('navigation.tabs.dashboard'),
       icon: 'grid-outline',
       iconActive: 'grid',
       onPress: () => router.push(ROUTES.MAIN.DASHBOARD as Href),
@@ -67,7 +72,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'tracker',
-      label: 'Tracker',
+      label: t('navigation.tabs.tracker'),
       icon: 'clipboard-outline',
       iconActive: 'clipboard',
       onPress: () => router.push('/(main)/(tabs)/tracker' as Href),
@@ -75,7 +80,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'browse',
-      label: 'Browse',
+      label: t('navigation.tabs.browse'),
       icon: 'compass-outline',
       iconActive: 'compass',
       onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
@@ -83,7 +88,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'mentorship',
-      label: 'Mentorship',
+      label: t('navigation.tabs.mentorship'),
       icon: 'people-outline',
       iconActive: 'people',
       onPress: () => router.push(ROUTES.MAIN.MENTORSHIP as Href),
@@ -91,7 +96,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'cv-builder',
-      label: 'CV Builder',
+      label: t('navigation.tabs.cvBuilder'),
       icon: 'document-text-outline',
       iconActive: 'document-text',
       onPress: () => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href),
@@ -99,7 +104,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'notifications',
-      label: 'Notifications',
+      label: t('navigation.tabs.notifications'),
       icon: 'notifications-outline',
       iconActive: 'notifications',
       onPress: () => router.push(ROUTES.MAIN.NOTIFICATIONS as Href),
@@ -107,7 +112,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'profile',
-      label: 'Profile',
+      label: t('navigation.tabs.profile'),
       icon: 'person-outline',
       iconActive: 'person',
       onPress: () => router.push(ROUTES.MAIN.DRAWER.PROFILE as Href),
@@ -115,7 +120,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'settings',
-      label: 'Settings',
+      label: t('navigation.tabs.settings'),
       icon: 'settings-outline',
       iconActive: 'settings',
       onPress: () => router.push(ROUTES.MAIN.SETTINGS as Href),
@@ -127,7 +132,7 @@ export function DesktopSidebar() {
     ? [
         {
           key: 'admin',
-          label: 'Admin',
+          label: t('navigation.tabs.admin'),
           icon: 'shield-outline',
           iconActive: 'shield',
           onPress: () => router.push(ROUTES.ADMIN.HOME as Href),
@@ -140,7 +145,7 @@ export function DesktopSidebar() {
     ? [
         {
           key: 'super-admin',
-          label: 'Super Admin',
+          label: t('navigation.tabs.superAdmin'),
           icon: 'planet-outline',
           iconActive: 'planet',
           onPress: () => router.push(ROUTES.SUPER_ADMIN.HOME as Href),
@@ -152,13 +157,13 @@ export function DesktopSidebar() {
   const sections: SidebarSection[] = [
     {
       key: 'main',
-      label: 'Main',
+      label: t('navigation.sections.main'),
       items: [
         mainItems.find((i) => i.key === 'home')!,
         mainItems.find((i) => i.key === 'dashboard')!,
         {
           key: 'saved',
-          label: 'Saved',
+          label: t('navigation.tabs.saved'),
           icon: 'bookmark-outline',
           iconActive: 'bookmark',
           onPress: () => router.push(ROUTES.MAIN.SAVED as Href),
@@ -169,7 +174,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'career',
-      label: 'Career Tools',
+      label: t('navigation.sections.careerTools'),
       items: [
         mainItems.find((i) => i.key === 'tracker')!,
         mainItems.find((i) => i.key === 'mentorship')!,
@@ -178,7 +183,7 @@ export function DesktopSidebar() {
     },
     {
       key: 'account',
-      label: 'Account',
+      label: t('navigation.sections.account'),
       items: [
         mainItems.find((i) => i.key === 'notifications')!,
         mainItems.find((i) => i.key === 'profile')!,
@@ -189,7 +194,7 @@ export function DesktopSidebar() {
       ? [
           {
             key: 'admin',
-            label: 'Administration',
+            label: t('navigation.sections.administration'),
             items: [...adminItems, ...superAdminItems],
           },
         ]
@@ -233,16 +238,32 @@ export function DesktopSidebar() {
 
   return (
     <View style={[styles.sidebar, collapsed && styles.sidebarCollapsed]}>
-      <View style={styles.toggleContainer}>
-        <Pressable
-          style={webPressableStyle(styles.toggleButton, styles.itemHover)}
-          onPress={() => setCollapsed((value) => !value)}
-          accessibilityRole="button"
-          accessibilityLabel={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        >
-          <MaterialIcons name="view-sidebar" size={20} color={colors.textMuted} />
-        </Pressable>
+      <View style={styles.logoBox}>
+        <Image
+          source={
+            collapsed
+              ? require('@/assets/images/sec_logo.png')
+              : isDark
+                ? require('@/assets/images/white_logo.png')
+                : require('@/assets/images/main_logo.png')
+          }
+          style={collapsed ? styles.logoImgCollapsed : styles.logoImg}
+          resizeMode="contain"
+        />
       </View>
+
+      <Pressable
+        style={webPressableStyle(styles.toggleButton, styles.toggleButtonHover)}
+        onPress={() => setCollapsed((value) => !value)}
+        accessibilityRole="button"
+        accessibilityLabel={collapsed ? t('navigation.sidebar.expand') : t('navigation.sidebar.collapse')}
+      >
+        <Ionicons
+          name={collapsed ? 'chevron-forward' : 'chevron-back'}
+          size={14}
+          color={colors.textMuted}
+        />
+      </Pressable>
 
       <ScrollView
         ref={scrollRef}
@@ -269,7 +290,7 @@ export function DesktopSidebar() {
           disabled={!canScrollUp}
           style={[styles.scrollBtn, !canScrollUp && styles.scrollBtnDisabled]}
           accessibilityRole="button"
-          accessibilityLabel="Scroll up"
+          accessibilityLabel={t('navigation.sidebar.scrollUp')}
         >
           <Ionicons name="chevron-up" size={13} color={colors.textMuted} />
         </Pressable>
@@ -280,7 +301,7 @@ export function DesktopSidebar() {
           disabled={!canScrollDown}
           style={[styles.scrollBtn, !canScrollDown && styles.scrollBtnDisabled]}
           accessibilityRole="button"
-          accessibilityLabel="Scroll down"
+          accessibilityLabel={t('navigation.sidebar.scrollDown')}
         >
           <Ionicons name="chevron-down" size={13} color={colors.textMuted} />
         </Pressable>
@@ -297,24 +318,49 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: colors.background,
     borderRightWidth: 1,
     borderRightColor: colors.border,
+    position: 'relative',
   },
   sidebarCollapsed: {
     width: 72,
   },
-  toggleContainer: {
-    paddingHorizontal: spacing.sm,
-    paddingTop: spacing.xs,
-    paddingBottom: 2,
-    alignItems: 'flex-start',
-  },
-  toggleButton: {
-    flexDirection: 'row',
+  logoBox: {
+    height: DESKTOP_HEADER_HEIGHT,
     alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.sm,
+    justifyContent: 'center',
     paddingHorizontal: spacing.sm,
-    borderRadius: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.border,
   },
+  logoImg: {
+    width: 40,
+    height: 40,
+  },
+  logoImgCollapsed: {
+    width: 32,
+    height: 32,
+  },
+  // Floating circular badge that straddles the sidebar's right border.
+  toggleButton: {
+    position: 'absolute',
+    top: '50%',
+    right: -(TOGGLE_SIZE / 2),
+    marginTop: -(TOGGLE_SIZE / 2),
+    width: TOGGLE_SIZE,
+    height: TOGGLE_SIZE,
+    borderRadius: TOGGLE_SIZE / 2,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.background,
+    borderWidth: 1,
+    borderColor: colors.border,
+    zIndex: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 3,
+    elevation: 2,
+  },
+  toggleButtonHover: { backgroundColor: colors.surface },
   scroll: {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.md,

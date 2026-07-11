@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
@@ -12,13 +13,6 @@ import {
   type TrackerSavedDateRange,
 } from '@/types/domain/tracker';
 
-const SAVED_DATE_OPTIONS: { value: TrackerSavedDateRange; label: string }[] = [
-  { value: 'any', label: 'Any time' },
-  { value: '7d', label: 'Last 7 days' },
-  { value: '30d', label: 'Last 30 days' },
-  { value: '90d', label: 'Last 90 days' },
-];
-
 type TrackerFiltersPanelProps = {
   filters: TrackerFilters;
   onChange: (filters: TrackerFilters) => void;
@@ -26,6 +20,7 @@ type TrackerFiltersPanelProps = {
 };
 
 export function TrackerFiltersPanel({ filters, onChange, onClose }: TrackerFiltersPanelProps) {
+  const { t } = useTranslation();
   const patch = (partial: Partial<TrackerFilters>) => onChange({ ...filters, ...partial });
 
   const stageOptions = TRACKER_STAGE_ORDER.map((s) => ({
@@ -33,38 +28,45 @@ export function TrackerFiltersPanel({ filters, onChange, onClose }: TrackerFilte
     label: TRACKER_STAGE_LABELS[s],
   }));
 
+  const savedDateOptions: { value: TrackerSavedDateRange; label: string }[] = [
+    { value: 'any', label: t('opportunities.tracker.filters.dates.any') },
+    { value: '7d', label: t('opportunities.tracker.filters.dates.d7') },
+    { value: '30d', label: t('opportunities.tracker.filters.dates.d30') },
+    { value: '90d', label: t('opportunities.tracker.filters.dates.d90') },
+  ];
+
   return (
     <View style={styles.panel}>
       <View style={styles.header}>
-        <Text variant="title">Filters</Text>
+        <Text variant="title">{t('opportunities.tracker.filters.title')}</Text>
         <Button variant="ghost" onPress={() => onChange(EMPTY_TRACKER_FILTERS)}>
-          Clear all
+          {t('opportunities.tracker.filters.clearAll')}
         </Button>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <FilterDropdownGroup
-          label="Stage"
+          label={t('opportunities.tracker.filters.stage')}
           options={stageOptions}
           selected={filters.stages}
           onChange={(stages) => patch({ stages })}
         />
         <FilterDropdownGroup
-          label="Category / tag"
+          label={t('opportunities.tracker.filters.categoryTag')}
           options={FILTER_CATEGORIES}
           selected={filters.categories}
           onChange={(categories) => patch({ categories })}
         />
         <FilterDropdownGroup
-          label="Deadline"
+          label={t('opportunities.tracker.filters.deadline')}
           options={FILTER_DEADLINE_RANGES}
           selected={filters.deadlineRange === 'any' ? [] : [filters.deadlineRange]}
           onChange={(selected) => patch({ deadlineRange: selected[0] ?? 'any' })}
           single
         />
         <FilterDropdownGroup<TrackerSavedDateRange>
-          label="Date saved"
-          options={SAVED_DATE_OPTIONS}
+          label={t('opportunities.tracker.filters.dateSaved')}
+          options={savedDateOptions}
           selected={filters.savedDateRange === 'any' ? [] : [filters.savedDateRange]}
           onChange={(selected) => patch({ savedDateRange: selected[0] ?? 'any' })}
           single
@@ -73,7 +75,7 @@ export function TrackerFiltersPanel({ filters, onChange, onClose }: TrackerFilte
 
       {onClose ? (
         <Button onPress={onClose} style={styles.applyBtn}>
-          Show results
+          {t('opportunities.tracker.filters.showResults')}
         </Button>
       ) : null}
     </View>

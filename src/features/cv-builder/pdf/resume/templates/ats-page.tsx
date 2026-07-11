@@ -14,6 +14,7 @@ import {
   PdfSkillsSplit,
   PdfSummarySection,
 } from '@/features/cv-builder/pdf/resume/resume-sections';
+import i18n from '@/i18n';
 
 import type { CVContent } from '@/types/domain/cv';
 
@@ -113,7 +114,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.education.length ? (
         <PdfSection
-          title="EDUCATION"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.education')}
           titleStyle={styles.sectionTitle}
         >
           <PdfEducationAtsBlocks
@@ -125,7 +126,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.skills.length ? (
         <PdfSection
-          title="SKILLS"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.skills')}
           titleStyle={styles.sectionTitle}
         >
           <PdfSkillsSplit
@@ -138,7 +139,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.experience.length ? (
         <PdfSection
-          title="PROFESSIONAL EXPERIENCE"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.experience')}
           titleStyle={styles.sectionTitle}
         >
           <PdfExperienceBlocks
@@ -150,7 +151,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.projects.length ? (
         <PdfSection
-          title="KEY PROJECTS"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.keyProjects')}
           titleStyle={styles.sectionTitle}
         >
           <PdfProjectBlocks
@@ -164,7 +165,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.certifications.some((c) => c.name.trim()) ? (
         <PdfSection
-          title="CERTIFICATIONS"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.certifications')}
           titleStyle={styles.sectionTitle}
         >
           <PdfCertBullets
@@ -176,7 +177,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.languages.length ? (
         <PdfSection
-          title="LANGUAGES"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.languages')}
           titleStyle={styles.sectionTitle}
         >
           <PdfLanguageLines
@@ -188,7 +189,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.achievements.length ? (
         <PdfSection
-          title="ACHIEVEMENTS"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.achievements')}
           titleStyle={styles.sectionTitle}
         >
           <PdfAchievementBlocks
@@ -200,7 +201,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.voluntaryExperience.length ? (
         <PdfSection
-          title="VOLUNTEER EXPERIENCE"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.volunteer')}
           titleStyle={styles.sectionTitle}
         >
           <PdfExperienceBlocks
@@ -212,7 +213,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.references.length ? (
         <PdfSection
-          title="REFERENCES"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.references')}
           titleStyle={styles.sectionTitle}
         >
           <PdfReferenceBlocks
@@ -224,7 +225,7 @@ export function AtsResumePage({ data }: { data: CVContent }) {
 
       {data.hobbies.length ? (
         <PdfSection
-          title="INTERESTS"
+          title={i18n.t('cvBuilder.pdf.sections.allCaps.interests')}
           titleStyle={styles.sectionTitle}
         >
           <PdfHobbiesLine

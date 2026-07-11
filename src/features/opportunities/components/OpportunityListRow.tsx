@@ -1,4 +1,5 @@
 import { memo } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
@@ -15,6 +16,7 @@ type OpportunityListRowProps = {
 
 function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRowProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const daysLeft = daysUntilDeadline(opportunity.deadline);
 
   return (
@@ -35,7 +37,7 @@ function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRo
         </Text>
         <Text variant="caption" style={styles.deadline}>
           {formatDeadline(opportunity.deadline)}
-          {daysLeft > 0 ? ` · ${daysLeft}d left` : ''}
+          {daysLeft > 0 ? ` · ${t('opportunities.common.daysLeft', { days: daysLeft })}` : ''}
         </Text>
         {opportunity.tags.length > 0 ? (
           <Text variant="caption" muted numberOfLines={1}>

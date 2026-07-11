@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -13,6 +14,7 @@ import { opportunityToFormValues } from '@/features/admin/types/opportunity-form
 
 export function AdminEditOpportunityScreen() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const opportunityId = typeof id === 'string' ? id : id?.[0];
   const { isReady } = useCanManageOpportunities();
@@ -33,7 +35,7 @@ export function AdminEditOpportunityScreen() {
     return (
       <Screen>
         <ErrorMessage
-          message={error instanceof Error ? error.message : 'Opportunity not found'}
+          message={error instanceof Error ? error.message : t('admin.errors.opportunityNotFound')}
         />
       </Screen>
     );
@@ -45,7 +47,7 @@ export function AdminEditOpportunityScreen() {
       <OpportunityForm
         key={opportunity.id}
         initialValues={opportunityToFormValues(opportunity)}
-        submitLabel="Save changes"
+        submitLabel={t('admin.editScreen.submitLabel')}
         loading={updateMutation.isPending}
         onSubmit={async (values) => {
           await updateMutation.mutateAsync(values);

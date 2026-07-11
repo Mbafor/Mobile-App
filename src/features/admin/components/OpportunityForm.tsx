@@ -11,6 +11,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import {
   CountrySelect,
@@ -21,11 +22,11 @@ import {
 import { Button, Input, Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import {
-  OPPORTUNITY_CATEGORY_OPTIONS,
-  OPPORTUNITY_DEGREE_OPTIONS,
+  getOpportunityCategoryOptions,
+  getOpportunityDegreeOptions,
+  getOpportunityTagOptions,
   OPPORTUNITY_DEGREE_VALUES,
   OPPORTUNITY_LOCATION_SELECT_OPTIONS,
-  OPPORTUNITY_TAG_OPTIONS,
   PREDEFINED_OPPORTUNITY_CATEGORIES,
   PREDEFINED_OPPORTUNITY_COUNTRIES,
   PREDEFINED_OPPORTUNITY_LOCATIONS,
@@ -62,6 +63,7 @@ export function OpportunityForm({
 }: OpportunityFormProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const scrollRef = useRef<ScrollView>(null);
   const [title, setTitle] = useState(initialValues.title);
   const [organization, setOrganization] = useState(initialValues.organization);
@@ -84,7 +86,7 @@ export function OpportunityForm({
 
   const showValidationError = (message: string) => {
     setError(message);
-    Alert.alert('Check required fields', message);
+    Alert.alert(t('admin.form.checkRequiredFieldsTitle'), message);
     scrollRef.current?.scrollToEnd({ animated: true });
   };
 
@@ -118,7 +120,7 @@ export function OpportunityForm({
     try {
       await onSubmit(payload);
     } catch (e) {
-      const message = e instanceof Error ? e.message : 'Something went wrong';
+      const message = e instanceof Error ? e.message : t('admin.form.genericSubmitError');
       setError(message);
       scrollRef.current?.scrollTo({ y: 0, animated: true });
     } finally {
@@ -139,70 +141,70 @@ export function OpportunityForm({
         keyboardShouldPersistTaps="always"
         showsVerticalScrollIndicator
       >
-        <Field label="Title *">
-          <Input value={title} onChangeText={setTitle} placeholder="Opportunity title" />
+        <Field label={t('admin.form.titleLabel')}>
+          <Input value={title} onChangeText={setTitle} placeholder={t('admin.form.titlePlaceholder')} />
         </Field>
-        <Field label="Organization *">
-          <Input value={organization} onChangeText={setOrganization} placeholder="Organization name" />
+        <Field label={t('admin.form.organizationLabel')}>
+          <Input value={organization} onChangeText={setOrganization} placeholder={t('admin.form.organizationPlaceholder')} />
         </Field>
-        <Field label="Description">
+        <Field label={t('admin.form.descriptionLabel')}>
           <Input
             value={description}
             onChangeText={setDescription}
-            placeholder="Full description"
+            placeholder={t('admin.form.descriptionPlaceholder')}
             multiline
             style={styles.multiline}
           />
         </Field>
-        <Field label="Image URL">
+        <Field label={t('admin.form.imageUrlLabel')}>
           <Input value={imageUrl} onChangeText={setImageUrl} placeholder="https://..." autoCapitalize="none" />
         </Field>
-        <Field label="Deadline * (YYYY-MM-DD)">
+        <Field label={t('admin.form.deadlineLabel')}>
           <Input value={deadline} onChangeText={setDeadline} placeholder="2026-12-31" autoCapitalize="none" />
         </Field>
-        <Field label="Apply URL">
+        <Field label={t('admin.form.applyUrlLabel')}>
           <Input
             value={applyUrl}
             onChangeText={setApplyUrl}
-            placeholder="https://apply.example.com"
+            placeholder={t('admin.form.applyUrlPlaceholder')}
             autoCapitalize="none"
           />
         </Field>
 
-        <Text style={styles.section}>Classification (matches user onboarding options)</Text>
+        <Text style={styles.section}>{t('admin.form.classificationSection')}</Text>
 
-        <FormField label="Category *">
+        <FormField label={t('admin.form.categoryLabel')}>
           <SelectWithOther
-            options={OPPORTUNITY_CATEGORY_OPTIONS}
+            options={getOpportunityCategoryOptions()}
             predefinedValues={PREDEFINED_OPPORTUNITY_CATEGORIES}
             value={category}
             onChange={setCategory}
-            placeholder="Select opportunity type"
+            placeholder={t('admin.form.categoryPlaceholder')}
           />
         </FormField>
 
-        <FormField label="Interest tags *">
+        <FormField label={t('admin.form.tagsLabel')}>
           <MultiSelectWithOther
-            options={OPPORTUNITY_TAG_OPTIONS}
+            options={getOpportunityTagOptions()}
             predefinedValues={PREDEFINED_OPPORTUNITY_TAGS}
             values={tags}
             onChange={setTags}
             syncOnChange
-            placeholder="Select at least one interest tag"
+            placeholder={t('admin.form.tagsPlaceholder')}
           />
         </FormField>
 
-        <FormField label="Country *">
+        <FormField label={t('admin.form.countryLabel')}>
           <CountrySelect
             value={country}
             onChange={setCountry}
-            placeholder="Select country"
-            extraOptions={[{ label: 'Global', value: 'Global' }]}
+            placeholder={t('admin.form.countryPlaceholder')}
+            extraOptions={[{ label: t('admin.form.countryGlobalOption'), value: 'Global' }]}
             extraPredefined={['Global']}
           />
         </FormField>
 
-        <FormField label="Funding type *">
+        <FormField label={t('admin.form.fundingTypeLabel')}>
           <FundingPicker
             value={fundingType === 'any' ? 'fully_funded' : fundingType}
             onChange={setFundingType}
@@ -210,24 +212,24 @@ export function OpportunityForm({
           />
         </FormField>
 
-        <FormField label="Education level *">
+        <FormField label={t('admin.form.degreeLevelLabel')}>
           <MultiSelectWithOther
-            options={[...OPPORTUNITY_DEGREE_OPTIONS]}
+            options={getOpportunityDegreeOptions()}
             predefinedValues={OPPORTUNITY_DEGREE_VALUES}
             values={degreeLevels}
             onChange={setDegreeLevels}
             syncOnChange
-            placeholder="Select education levels"
+            placeholder={t('admin.form.degreeLevelPlaceholder')}
           />
         </FormField>
 
-        <FormField label="Location type *">
+        <FormField label={t('admin.form.locationTypeLabel')}>
           <SelectWithOther
             options={OPPORTUNITY_LOCATION_SELECT_OPTIONS}
             predefinedValues={PREDEFINED_OPPORTUNITY_LOCATIONS}
             value={locationType}
             onChange={(v) => setLocationType(v as LocationType | '')}
-            placeholder="Select location type"
+            placeholder={t('admin.form.locationTypePlaceholder')}
           />
         </FormField>
       </ScrollView>

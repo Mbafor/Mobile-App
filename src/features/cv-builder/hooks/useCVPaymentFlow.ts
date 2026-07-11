@@ -1,6 +1,7 @@
 import * as WebBrowser from 'expo-web-browser';
 import { useCallback, useRef, useState } from 'react';
 import { Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import type { PaymentProduct } from '@/features/cv-builder/constants/payments';
 import { resolveTemplateId, type CVTemplateId } from '@/features/cv-builder/constants/templates';
@@ -23,6 +24,7 @@ type PendingPayment = {
 };
 
 export function useCVPaymentFlow(cvId: string | undefined) {
+  const { t } = useTranslation();
   const payments = useCVPayments(cvId);
   const [sheetVisible, setSheetVisible] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -70,10 +72,10 @@ export function useCVPaymentFlow(cvId: string | undefined) {
 
   const handleCheckoutFailure = useCallback((message: string, cancelled?: boolean) => {
     if (!cancelled) {
-      Alert.alert('Payment failed', message);
+      Alert.alert(t('cvBuilder.paymentFlow.paymentFailedTitle'), message);
     }
     setSheetVisible(true);
-  }, []);
+  }, [t]);
 
   const handleCheckoutSuccess = useCallback(
     async (reference: string) => {
@@ -86,7 +88,7 @@ export function useCVPaymentFlow(cvId: string | undefined) {
       if (!verified.ok) {
         setBusy(false);
         Alert.alert(
-          verified.cancelled ? 'Payment cancelled' : 'Payment failed',
+          verified.cancelled ? t('cvBuilder.paymentFlow.paymentCancelledTitle') : t('cvBuilder.paymentFlow.paymentFailedTitle'),
           verified.error,
         );
         setSheetVisible(true);
@@ -109,14 +111,14 @@ export function useCVPaymentFlow(cvId: string | undefined) {
 
       if (!record.ok) {
         Alert.alert(
-          'Payment received',
-          'Your payment succeeded but we could not save the record. Please contact support if you are charged again.',
+          t('cvBuilder.paymentFlow.paymentReceivedTitle'),
+          t('cvBuilder.paymentFlow.paymentReceivedMessage'),
         );
       }
 
       await runSuccess();
     },
-    [payments, runSuccess],
+    [payments, runSuccess, t],
   );
 
   const handlePayPress = useCallback(async () => {
@@ -125,7 +127,7 @@ export function useCVPaymentFlow(cvId: string | undefined) {
 
     const email = payments.userEmail;
     if (!email) {
-      Alert.alert('Sign in required', 'Please sign in with an email address to pay.');
+      Alert.alert(t('cvBuilder.paymentFlow.signInRequiredTitle'), t('cvBuilder.paymentFlow.signInRequiredMessage'));
       return;
     }
 
@@ -140,7 +142,7 @@ export function useCVPaymentFlow(cvId: string | undefined) {
 
     if (!init.ok) {
       setBusy(false);
-      Alert.alert('Payment unavailable', init.error);
+      Alert.alert(t('cvBuilder.paymentFlow.paymentUnavailableTitle'), init.error);
       return;
     }
 
@@ -154,7 +156,7 @@ export function useCVPaymentFlow(cvId: string | undefined) {
     setBusy(false);
 
     if (result.type === 'cancel' || result.type === 'dismiss') {
-      handleCheckoutFailure('Payment was cancelled', true);
+      handleCheckoutFailure(t('cvBuilder.paystack.paymentCancelled'), true);
       return;
     }
 
@@ -164,8 +166,8 @@ export function useCVPaymentFlow(cvId: string | undefined) {
       return;
     }
 
-    handleCheckoutFailure('Payment did not complete. Please try again.');
-  }, [payments.userEmail, handleCheckoutSuccess, handleCheckoutFailure]);
+    handleCheckoutFailure(t('cvBuilder.paymentFlow.paymentIncomplete'));
+  }, [payments.userEmail, handleCheckoutSuccess, handleCheckoutFailure, t]);
 
   return {
     ...payments,

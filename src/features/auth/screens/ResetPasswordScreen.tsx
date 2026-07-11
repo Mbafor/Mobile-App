@@ -2,6 +2,7 @@ import * as Linking from 'expo-linking';
 import * as QueryParams from 'expo-auth-session/build/QueryParams';
 import { useRouter, type Href } from 'expo-router';
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -22,6 +23,7 @@ type ScreenState = 'loading' | 'ready' | 'success' | 'expired';
 export function ResetPasswordScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { updatePassword, isLoading, error, clearError } = useAuthActions();
 
@@ -96,7 +98,7 @@ export function ResetPasswordScreen() {
   const handleSubmit = async () => {
     clearError();
     if (newPassword !== confirmPassword) {
-      Alert.alert('Passwords do not match', 'Please make sure both passwords are the same.');
+      Alert.alert(t('auth.reset.mismatchTitle'), t('auth.reset.mismatchBody'));
       return;
     }
     const result = await updatePassword(newPassword);
@@ -107,7 +109,7 @@ export function ResetPasswordScreen() {
   if (screenState === 'success') {
     return (
       <AuthScreenLayout
-        title="Password updated"
+        title={t('auth.reset.successTitle')}
         backgroundColor={colors.background}
 
       >
@@ -116,7 +118,7 @@ export function ResetPasswordScreen() {
             <Ionicons name="checkmark-circle" size={56} color={colors.primary} />
           </View>
           <Text style={styles.successText}>
-            Your password has been changed. Sign in with your new password.
+            {t('auth.reset.successBody')}
           </Text>
           <Button
             variant="primary"
@@ -124,7 +126,7 @@ export function ResetPasswordScreen() {
             style={styles.btn}
             textStyle={styles.btnText}
           >
-            Sign in
+            {t('auth.reset.signIn')}
           </Button>
         </View>
       </AuthScreenLayout>
@@ -135,7 +137,7 @@ export function ResetPasswordScreen() {
   if (screenState === 'expired') {
     return (
       <AuthScreenLayout
-        title="Link expired"
+        title={t('auth.reset.expiredTitle')}
         backgroundColor={colors.background}
 
         onBack={() => router.replace(ROUTES.AUTH.EMAIL as Href)}
@@ -145,7 +147,7 @@ export function ResetPasswordScreen() {
             <Ionicons name="time-outline" size={48} color={colors.textMuted} />
           </View>
           <Text style={styles.expiredText}>
-            This password reset link has expired or already been used. Request a new one from the sign-in screen.
+            {t('auth.reset.expiredBody')}
           </Text>
           <Button
             variant="primary"
@@ -153,7 +155,7 @@ export function ResetPasswordScreen() {
             style={styles.btn}
             textStyle={styles.btnText}
           >
-            Back to sign in
+            {t('auth.reset.backToSignIn')}
           </Button>
         </View>
       </AuthScreenLayout>
@@ -164,12 +166,12 @@ export function ResetPasswordScreen() {
   if (screenState === 'loading') {
     return (
       <AuthScreenLayout
-        title="Reset password"
+        title={t('auth.reset.loadingTitle')}
         backgroundColor={colors.background}
 
       >
         <View style={styles.centerBlock}>
-          <Text muted style={styles.loadingText}>Verifying your reset link…</Text>
+          <Text muted style={styles.loadingText}>{t('auth.reset.verifying')}</Text>
         </View>
       </AuthScreenLayout>
     );
@@ -178,11 +180,11 @@ export function ResetPasswordScreen() {
   // ── Form ─────────────────────────────────────────────────────────────────────
   return (
     <AuthScreenLayout
-      title="Set new password"
-      subtitle="Choose a strong password with at least 8 characters."
+      title={t('auth.reset.formTitle')}
+      subtitle={t('auth.reset.formSubtitle')}
       backgroundColor={colors.background}
     >
-      <FormField label="New password">
+      <FormField label={t('auth.reset.newPasswordLabel')}>
         <View style={styles.passwordRow}>
           <Input
             value={newPassword}
@@ -190,7 +192,7 @@ export function ResetPasswordScreen() {
             secureTextEntry={!showNew}
             autoCapitalize="none"
             autoComplete="new-password"
-            placeholder="At least 8 characters"
+            placeholder={t('auth.fields.passwordPlaceholder')}
             style={styles.passwordInput}
             autoFocus
           />
@@ -204,7 +206,7 @@ export function ResetPasswordScreen() {
         </View>
       </FormField>
 
-      <FormField label="Confirm password">
+      <FormField label={t('auth.reset.confirmPasswordLabel')}>
         <View style={styles.passwordRow}>
           <Input
             value={confirmPassword}
@@ -212,7 +214,7 @@ export function ResetPasswordScreen() {
             secureTextEntry={!showConfirm}
             autoCapitalize="none"
             autoComplete="new-password"
-            placeholder="Repeat your new password"
+            placeholder={t('auth.reset.confirmPasswordPlaceholder')}
             style={styles.passwordInput}
           />
           <Pressable onPress={() => setShowConfirm((v) => !v)} style={styles.eyeBtn} hitSlop={8}>
@@ -236,7 +238,7 @@ export function ResetPasswordScreen() {
           style={styles.btn}
           textStyle={styles.btnText}
         >
-          Update password
+          {t('auth.reset.updatePassword')}
         </Button>
       </View>
     </AuthScreenLayout>

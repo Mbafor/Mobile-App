@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useCallback, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { TemplateSelector } from '@/features/cv-builder/components/TemplateSelector';
@@ -21,6 +22,7 @@ export function CVTemplatesScreen() {
   const { colors } = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
   const { cv, templateId, saveState } = useCVBuilderContext();
   const payment = useCVPaymentContext();
   const { selectCVTemplate } = useSelectCVTemplate();
@@ -70,8 +72,7 @@ export function CVTemplatesScreen() {
           </View>
           <View style={styles.heroCopy}>
             <Text muted style={styles.heroSubtitle}>
-              Choose a layout to open the live PDF editor preview. Download is GHS 100 per template
-              — unlock once, keep forever.
+              {t('cvBuilder.templatesScreen.subtitle')}
             </Text>
           </View>
         </View>

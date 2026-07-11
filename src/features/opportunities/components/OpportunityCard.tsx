@@ -1,4 +1,5 @@
 import { memo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
@@ -21,13 +22,14 @@ type OpportunityCardProps = {
 
 function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const { isSaved, toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
   const [shareVisible, setShareVisible] = useState(false);
 
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
     daysLeft <= 14
-      ? `${formatDeadline(opportunity.deadline)} · ${daysLeft}d left`
+      ? `${formatDeadline(opportunity.deadline)} · ${t('opportunities.common.daysLeft', { days: daysLeft })}`
       : formatDeadline(opportunity.deadline);
 
   const handleSavePress = (event?: { stopPropagation?: () => void }) => {
@@ -81,7 +83,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
               handleSavePress();
             }}
             hitSlop={8}
-            accessibilityLabel={isSaved ? 'Unsave' : 'Save'}
+            accessibilityLabel={isSaved ? t('opportunities.card.unsave') : t('opportunities.card.save')}
             disabled={isSaving}
           >
             <Text style={styles.actionIcon}>{isSaved ? '★' : '☆'}</Text>
@@ -92,7 +94,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
               setShareVisible(true);
             }}
             hitSlop={8}
-            accessibilityLabel="Share"
+            accessibilityLabel={t('opportunities.card.share')}
           >
             <Text style={styles.actionIcon}>↗</Text>
           </Pressable>

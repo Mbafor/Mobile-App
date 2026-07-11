@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
@@ -24,6 +25,7 @@ const CONFIRM_WORD = 'DELETE';
 export function DeleteAccountScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { userEmail } = useAuth();
 
@@ -39,19 +41,19 @@ export function DeleteAccountScreen() {
 
     if (!canDelete) {
       Alert.alert(
-        'Confirm deletion',
-        `Enter your password and type ${CONFIRM_WORD} to confirm.`,
+        t('settings.deleteAccount.confirmPromptTitle'),
+        t('settings.deleteAccount.confirmPromptBody', { word: CONFIRM_WORD }),
       );
       return;
     }
 
     const confirmed = await new Promise<boolean>((resolve) => {
       Alert.alert(
-        'Delete account',
-        'This permanently deletes your account and all data. This cannot be undone.',
+        t('settings.deleteAccount.dialogTitle'),
+        t('settings.deleteAccount.dialogBody'),
         [
-          { text: 'Cancel', style: 'cancel', onPress: () => resolve(false) },
-          { text: 'Delete', style: 'destructive', onPress: () => resolve(true) },
+          { text: t('common.cancel'), style: 'cancel', onPress: () => resolve(false) },
+          { text: t('settings.deleteAccount.delete'), style: 'destructive', onPress: () => resolve(true) },
         ],
       );
     });
@@ -62,7 +64,7 @@ export function DeleteAccountScreen() {
     const { error: reauthError } = await authApi.signInWithPassword(userEmail, password);
     if (reauthError) {
       setIsDeleting(false);
-      setError('Incorrect password.');
+      setError(t('settings.deleteAccount.incorrectPassword'));
       return;
     }
 
@@ -90,7 +92,7 @@ export function DeleteAccountScreen() {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <PageHeader title="Delete Account" onBack={() => router.back()} />
+      <PageHeader title={t('settings.deleteAccount.title')} onBack={() => router.back()} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -100,22 +102,21 @@ export function DeleteAccountScreen() {
         <View style={styles.warningBox}>
           <Ionicons name="warning" size={22} color={colors.error} />
           <Text style={styles.warningText}>
-            Deleting your account permanently removes your profile, preferences, mentorship
-            history, saved opportunities, and CVs. This cannot be undone.
+            {t('settings.deleteAccount.warning')}
           </Text>
         </View>
 
-        <FormField label="Password *">
+        <FormField label={t('settings.deleteAccount.passwordLabel')}>
           <Input
             value={password}
             onChangeText={setPassword}
-            placeholder="Enter your password"
+            placeholder={t('settings.deleteAccount.passwordPlaceholder')}
             secureTextEntry
             autoCapitalize="none"
           />
         </FormField>
 
-        <FormField label={`Type ${CONFIRM_WORD} to confirm *`}>
+        <FormField label={t('settings.deleteAccount.confirmLabel', { word: CONFIRM_WORD })}>
           <Input
             value={confirmText}
             onChangeText={setConfirmText}
@@ -132,7 +133,7 @@ export function DeleteAccountScreen() {
           loading={isDeleting}
           disabled={isDeleting || !canDelete}
         >
-          Delete my account
+          {t('settings.deleteAccount.submit')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

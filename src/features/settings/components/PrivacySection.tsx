@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -7,12 +8,10 @@ import { spacing } from '@/constants/theme';
 
 export function PrivacySection() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <View style={styles.wrap}>
-      <Text style={styles.body}>
-        We protect your profile, preferences, and activity, and never share them without your
-        consent.
-      </Text>
+      <Text style={styles.body}>{t('settings.privacy.body')}</Text>
     </View>
   );
 }

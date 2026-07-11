@@ -1,6 +1,7 @@
 import { StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -13,11 +14,12 @@ type AdminTopListProps = {
 
 export function AdminTopList({ title, items }: AdminTopListProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <View style={styles.wrap}>
       <Text style={styles.title}>{title}</Text>
       {items.length === 0 ? (
-        <Text muted>No data yet</Text>
+        <Text muted>{t('admin.charts.noData')}</Text>
       ) : (
         items.map((item, index) => (
           <View key={item.opportunityId} style={styles.row}>
@@ -26,7 +28,7 @@ export function AdminTopList({ title, items }: AdminTopListProps) {
               <Text style={styles.name} numberOfLines={2}>
                 {item.title}
               </Text>
-              <Text muted>{item.count} users</Text>
+              <Text muted>{t('admin.topList.usersCount', { count: item.count })}</Text>
             </View>
           </View>
         ))

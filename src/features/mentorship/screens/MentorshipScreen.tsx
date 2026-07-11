@@ -2,6 +2,7 @@ import { ActivityIndicator, StyleSheet, View } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -13,13 +14,14 @@ import { spacing } from '@/constants/theme';
 export function MentorshipScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { isCoach, isLoading, error } = useMentorshipRole();
 
   if (isLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text muted>Loading mentorship…</Text>
+        <Text muted>{t('mentorship.loading')}</Text>
       </View>
     );
   }
@@ -27,7 +29,7 @@ export function MentorshipScreen() {
   if (error) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load role'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('mentorship.loadRoleError')} />
       </View>
     );
   }

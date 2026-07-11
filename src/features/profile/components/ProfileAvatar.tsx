@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -32,12 +33,13 @@ export function ProfileAvatar({
 }: ProfileAvatarProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [uploading, setUploading] = useState(false);
 
   const handlePress = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (!permission.granted) {
-      Alert.alert('Permission required', 'Allow photo library access to upload a profile picture.');
+      Alert.alert(t('profile.avatar.permissionTitle'), t('profile.avatar.permissionMessage'));
       return;
     }
 
@@ -54,7 +56,7 @@ export function ProfileAvatar({
     try {
       const { publicUrl, error } = await avatarApi.uploadFromUri(userId, result.assets[0].uri);
       if (error || !publicUrl) {
-        Alert.alert('Upload failed', error?.message ?? 'Could not save your photo. Try again.');
+        Alert.alert(t('profile.avatar.uploadFailed'), error?.message ?? t('profile.avatar.uploadError'));
         return;
       }
       onAvatarUpdated(publicUrl);
@@ -69,7 +71,7 @@ export function ProfileAvatar({
         onPress={() => void handlePress()}
         disabled={uploading}
         style={styles.pressable}
-        accessibilityLabel="Change profile photo"
+        accessibilityLabel={t('profile.avatar.changePhoto')}
         accessibilityRole="button"
       >
         {avatarUrl ? (
@@ -86,7 +88,7 @@ export function ProfileAvatar({
         ) : null}
       </Pressable>
       <Text muted variant="caption" style={styles.hint}>
-        Tap to change photo
+        {t('profile.avatar.tapToChange')}
       </Text>
     </View>
   );

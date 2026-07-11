@@ -1,5 +1,6 @@
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ActivityIndicator, Alert, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -16,6 +17,7 @@ import { useTheme } from '@/hooks/useTheme';
 export function AdminPendingReviewScreen() {
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { id } = useLocalSearchParams<{ id: string }>();
   const opportunityId = typeof id === 'string' ? id : id?.[0];
 
@@ -38,7 +40,7 @@ export function AdminPendingReviewScreen() {
     return (
       <Screen>
         <ErrorMessage
-          message={error instanceof Error ? error.message : 'Opportunity not found'}
+          message={error instanceof Error ? error.message : t('admin.errors.opportunityNotFound')}
         />
       </Screen>
     );
@@ -46,12 +48,12 @@ export function AdminPendingReviewScreen() {
 
   const handleReject = () => {
     Alert.alert(
-      'Reject opportunity',
-      `Remove "${opportunity.title}" from the queue? It will not be shown to students.`,
+      t('admin.pendingReview.rejectConfirmTitle'),
+      t('admin.pendingReview.rejectConfirmMessage', { title: opportunity.title }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('admin.pendingQueue.cancel'), style: 'cancel' },
         {
-          text: 'Reject',
+          text: t('admin.pendingReview.reject'),
           style: 'destructive',
           onPress: () => {
             rejectMutation.mutate(
@@ -71,13 +73,13 @@ export function AdminPendingReviewScreen() {
       <OpportunityForm
         key={opportunity.id}
         initialValues={opportunityToFormValues(opportunity)}
-        submitLabel="Save & Approve"
+        submitLabel={t('admin.pendingReview.saveAndApprove')}
         loading={isBusy}
         onSubmit={async (values) => {
           await approveMutation.mutateAsync(values);
         }}
         secondaryAction={{
-          label: 'Reject',
+          label: t('admin.pendingReview.reject'),
           onPress: handleReject,
           destructive: true,
         }}

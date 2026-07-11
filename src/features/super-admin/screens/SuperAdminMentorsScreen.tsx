@@ -11,6 +11,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
@@ -29,6 +30,7 @@ const PAGE_SIZE = 15;
 export function SuperAdminMentorsScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [status, setStatus] = useState<string | null>(null);
   const [page, setPage] = useState(0);
@@ -60,9 +62,9 @@ export function SuperAdminMentorsScreen() {
     onSuccess: () => {
       invalidate();
       setNewMentorEmail('');
-      Alert.alert('Mentor created', 'Coach profile is approved and ready.');
+      Alert.alert(t('superAdmin.mentors.createSuccessTitle'), t('superAdmin.mentors.createSuccessMessage'));
     },
-    onError: (e: Error) => Alert.alert('Failed to create mentor', e.message),
+    onError: (e: Error) => Alert.alert(t('superAdmin.mentors.createFailedTitle'), e.message),
   });
 
   const approveMutation = useMutation({
@@ -73,9 +75,9 @@ export function SuperAdminMentorsScreen() {
     },
     onSuccess: () => {
       invalidate();
-      Alert.alert('Approved', 'Mentor has been approved.');
+      Alert.alert(t('superAdmin.mentors.approveSuccessTitle'), t('superAdmin.mentors.approveSuccessMessage'));
     },
-    onError: (e: Error) => Alert.alert('Failed to approve mentor', e.message),
+    onError: (e: Error) => Alert.alert(t('superAdmin.mentors.approveFailedTitle'), e.message),
   });
 
   const deleteMutation = useMutation({
@@ -86,23 +88,23 @@ export function SuperAdminMentorsScreen() {
     },
     onSuccess: () => {
       invalidate();
-      Alert.alert('Deleted', 'Mentor profile has been removed.');
+      Alert.alert(t('superAdmin.mentors.deleteSuccessTitle'), t('superAdmin.mentors.deleteSuccessMessage'));
     },
-    onError: (e: Error) => Alert.alert('Failed to delete mentor', e.message),
+    onError: (e: Error) => Alert.alert(t('superAdmin.mentors.deleteFailedTitle'), e.message),
   });
 
   const columns = useMemo<AdminTableColumn<SuperAdminMentorRow>[]>(
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('superAdmin.mentors.columns.name'),
         flex: 2,
         minWidth: 140,
         render: (row) => <Text style={styles.cellText}>{row.full_name ?? '—'}</Text>,
       },
       {
         key: 'email',
-        header: 'Email',
+        header: t('superAdmin.mentors.columns.email'),
         flex: 2,
         minWidth: 180,
         render: (row) => (
@@ -113,7 +115,7 @@ export function SuperAdminMentorsScreen() {
       },
       {
         key: 'status',
-        header: 'Status',
+        header: t('superAdmin.mentors.columns.status'),
         minWidth: 100,
         render: (row) => (
           <Text variant="caption" style={statusStyle(row.status, colors.success, colors.error)}>
@@ -123,7 +125,7 @@ export function SuperAdminMentorsScreen() {
       },
       {
         key: 'mentees',
-        header: 'Mentees',
+        header: t('superAdmin.mentors.columns.mentees'),
         minWidth: 80,
         render: (row) => (
           <Text variant="caption">{row.active_mentees}/{row.max_students}</Text>
@@ -131,7 +133,7 @@ export function SuperAdminMentorsScreen() {
       },
       {
         key: 'actions',
-        header: 'Actions',
+        header: t('superAdmin.mentors.columns.actions'),
         minWidth: 160,
         render: (row) => (
           <View style={styles.rowActions}>
@@ -141,7 +143,7 @@ export function SuperAdminMentorsScreen() {
                 onPress={() => approveMutation.mutate(row.user_id)}
               >
                 <Text style={styles.link}>
-                  {approveMutation.isPending ? 'Approving…' : 'Approve'}
+                  {approveMutation.isPending ? t('superAdmin.mentors.approving') : t('superAdmin.mentors.approve')}
                 </Text>
               </Pressable>
             ) : null}
@@ -149,15 +151,16 @@ export function SuperAdminMentorsScreen() {
               disabled={deleteMutation.isPending}
               onPress={() => {
                 const hasActiveMentees = row.active_mentees > 0;
+                const email = row.email ?? t('superAdmin.mentors.thisUser');
                 Alert.alert(
-                  'Delete mentor',
+                  t('superAdmin.mentors.deleteConfirmTitle'),
                   hasActiveMentees
-                    ? `Remove coach profile for ${row.email ?? 'this user'}?\n\nThis will end ${row.active_mentees} active mentorship${row.active_mentees !== 1 ? 's' : ''}, cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.`
-                    : `Remove coach profile for ${row.email ?? 'this user'}?\n\nAny pending requests from students who chose this coach will be cancelled. This cannot be undone.`,
+                    ? t('superAdmin.mentors.deleteConfirmActiveMessage', { email, count: row.active_mentees })
+                    : t('superAdmin.mentors.deleteConfirmMessage', { email }),
                   [
-                    { text: 'Cancel', style: 'cancel' },
+                    { text: t('superAdmin.admins.cancel'), style: 'cancel' },
                     {
-                      text: 'Delete',
+                      text: t('superAdmin.mentors.delete'),
                       style: 'destructive',
                       onPress: () => deleteMutation.mutate(row.user_id),
                     },
@@ -166,30 +169,30 @@ export function SuperAdminMentorsScreen() {
               }}
             >
               <Text style={[styles.danger, deleteMutation.isPending && styles.dimmed]}>
-                {deleteMutation.isPending ? 'Deleting…' : 'Delete'}
+                {deleteMutation.isPending ? t('superAdmin.mentors.deleting') : t('superAdmin.mentors.delete')}
               </Text>
             </Pressable>
           </View>
         ),
       },
     ],
-    [approveMutation, deleteMutation, colors],
+    [approveMutation, deleteMutation, colors, t, styles],
   );
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <Text style={styles.pageTitle}>Manage mentors</Text>
+      <Text style={styles.pageTitle}>{t('superAdmin.mentors.pageTitle')}</Text>
       <Text muted style={styles.intro}>
-        Create approved mentor profiles by email, approve pending applications, or remove mentors.
+        {t('superAdmin.mentors.intro')}
       </Text>
 
       <View style={styles.addCard}>
-        <Text style={styles.cardLabel}>Create mentor</Text>
+        <Text style={styles.cardLabel}>{t('superAdmin.mentors.createCardLabel')}</Text>
         <View style={styles.addRow}>
           <Input
             value={newMentorEmail}
             onChangeText={setNewMentorEmail}
-            placeholder="user@email.com"
+            placeholder={t('superAdmin.mentors.emailPlaceholder')}
             style={styles.emailInput}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -198,7 +201,7 @@ export function SuperAdminMentorsScreen() {
             onPress={() => {
               const email = newMentorEmail.trim();
               if (!email.includes('@') || !email.includes('.')) {
-                Alert.alert('Invalid email', 'Please enter a valid email address.');
+                Alert.alert(t('superAdmin.mentors.invalidEmailTitle'), t('superAdmin.mentors.invalidEmailMessage'));
                 return;
               }
               createMutation.mutate(email);
@@ -206,18 +209,18 @@ export function SuperAdminMentorsScreen() {
             loading={createMutation.isPending}
             disabled={!newMentorEmail.trim() || createMutation.isPending}
           >
-            Add
+            {t('superAdmin.mentors.add')}
           </Button>
         </View>
         <Text variant="caption" muted>
-          The user must already have an account. They'll be immediately approved as a mentor.
+          {t('superAdmin.mentors.addHint')}
         </Text>
       </View>
 
       <SearchFilterBar
         value={search}
-        onChangeText={(t) => { setSearch(t); setPage(0); }}
-        placeholder="Search mentors…"
+        onChangeText={(text) => { setSearch(text); setPage(0); }}
+        placeholder={t('superAdmin.mentors.searchPlaceholder')}
       />
 
       <View style={styles.filters}>
@@ -228,17 +231,17 @@ export function SuperAdminMentorsScreen() {
             onPress={() => { setStatus(s); setPage(0); }}
           >
             <Text style={status === s ? styles.filterActiveText : undefined}>
-              {s ?? 'All'}
+              {s ?? t('superAdmin.mentors.filters.all')}
             </Text>
           </Pressable>
         ))}
       </View>
 
       {isLoading ? <ActivityIndicator color={colors.primary} style={styles.loader} /> : null}
-      {error ? <ErrorMessage message={error instanceof Error ? error.message : 'Error'} /> : null}
+      {error ? <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.mentors.genericError')} /> : null}
 
       {data?.items.length === 0 && !isLoading ? (
-        <EmptyState title="No mentors" description="Try adjusting filters or add a mentor by email." />
+        <EmptyState title={t('superAdmin.mentors.emptyTitle')} description={t('superAdmin.mentors.emptyDescription')} />
       ) : null}
 
       {data && data.items.length > 0 ? (

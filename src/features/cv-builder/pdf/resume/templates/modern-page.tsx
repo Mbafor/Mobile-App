@@ -14,6 +14,7 @@ import {
   PdfSkillsSplit,
   PdfSummarySection,
 } from '@/features/cv-builder/pdf/resume/resume-sections';
+import i18n from '@/i18n';
 import type { CVContent } from '@/types/domain/cv';
 
 const styles = StyleSheet.create({
@@ -39,61 +40,61 @@ export function ModernResumePage({ data }: { data: CVContent }) {
 
       <PdfSummarySection
         content={data}
-        title="PROFESSIONAL PROFILE"
+        title={i18n.t('cvBuilder.pdf.sections.allCaps.profile')}
         titleStyle={styles.sectionTitle}
         bodyStyle={styles.summary}
       />
 
       {data.experience.length ? (
-        <PdfSection title="PROFESSIONAL EXPERIENCE" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.experience')} titleStyle={styles.sectionTitle}>
           <PdfExperienceBlocks entries={data.experience} bodyStyle={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.projects.length ? (
-        <PdfSection title="PROJECTS" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.projects')} titleStyle={styles.sectionTitle}>
           <PdfProjectBlocks entries={data.projects} bodyStyle={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.education.length ? (
-        <PdfSection title="EDUCATION" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.education')} titleStyle={styles.sectionTitle}>
           <PdfEducationStandardBlocks entries={data.education} bodyStyle={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.skills.length ? (
-        <PdfSection title="SKILLS" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.skills')} titleStyle={styles.sectionTitle}>
           <PdfSkillsSplit skills={data.skills} labelStyle={styles.skillLabel} textStyle={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.certifications.some((c) => c.name.trim()) ? (
-        <PdfSection title="CERTIFICATIONS" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.certifications')} titleStyle={styles.sectionTitle}>
           <PdfCertBullets entries={data.certifications} style={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.languages.length ? (
-        <PdfSection title="LANGUAGES" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.languages')} titleStyle={styles.sectionTitle}>
           <PdfLanguageLines entries={data.languages} style={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.achievements.length ? (
-        <PdfSection title="ACHIEVEMENTS" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.achievements')} titleStyle={styles.sectionTitle}>
           <PdfAchievementBlocks entries={data.achievements} style={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.references.length ? (
-        <PdfSection title="REFERENCES" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.references')} titleStyle={styles.sectionTitle}>
           <PdfReferenceBlocks entries={data.references} style={styles.body} />
         </PdfSection>
       ) : null}
 
       {data.hobbies.length ? (
-        <PdfSection title="INTERESTS" titleStyle={styles.sectionTitle}>
+        <PdfSection title={i18n.t('cvBuilder.pdf.sections.allCaps.interests')} titleStyle={styles.sectionTitle}>
           <PdfHobbiesLine hobbies={data.hobbies} style={styles.body} />
         </PdfSection>
       ) : null}

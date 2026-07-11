@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -14,6 +15,7 @@ type MatchedBannerProps = {
 export function MatchedBanner({ endsAt }: MatchedBannerProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const endLabel = new Date(endsAt).toLocaleDateString(undefined, {
     month: '2-digit',
     day: '2-digit',
@@ -24,7 +26,7 @@ export function MatchedBanner({ endsAt }: MatchedBannerProps) {
     <View style={styles.banner}>
       <Ionicons name="checkmark-circle" size={20} color={mentorshipColors.accent} />
       <Text style={styles.text}>
-        You are matched with a coach until {endLabel}
+        {t('mentorship.matched', { date: endLabel })}
       </Text>
     </View>
   );

@@ -1,5 +1,6 @@
 import { parseDeadlineToIso } from '@/features/admin/utils/deadline';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
+import i18n from '@/i18n';
 
 export type OpportunityFormValidation =
   | { ok: true; values: OpportunityFormValues; deadlineIso: string }
@@ -9,35 +10,34 @@ export function validateOpportunityForm(
   values: OpportunityFormValues,
 ): OpportunityFormValidation {
   if (!values.title.trim() || !values.organization.trim() || !values.deadline.trim()) {
-    return { ok: false, message: 'Title, organization, and deadline are required.' };
+    return { ok: false, message: i18n.t('admin.form.validation.requiredFields') };
   }
 
   if (!values.category.trim()) {
-    return { ok: false, message: 'Select an opportunity category.' };
+    return { ok: false, message: i18n.t('admin.form.validation.category') };
   }
 
   if (!values.country.trim()) {
-    return { ok: false, message: 'Select a country.' };
+    return { ok: false, message: i18n.t('admin.form.validation.country') };
   }
 
   if (values.tags.length === 0) {
     return {
       ok: false,
-      message:
-        'Select at least one interest tag (open Interest tags, choose options, then tap Apply).',
+      message: i18n.t('admin.form.validation.tags'),
     };
   }
 
   if (values.degreeLevels.length === 0) {
-    return { ok: false, message: 'Select at least one education level.' };
+    return { ok: false, message: i18n.t('admin.form.validation.degreeLevels') };
   }
 
   if (!values.locationType) {
-    return { ok: false, message: 'Select a location type (remote, on-site, or hybrid).' };
+    return { ok: false, message: i18n.t('admin.form.validation.locationType') };
   }
 
   if (!values.fundingType || values.fundingType === 'any') {
-    return { ok: false, message: 'Select a funding type for this listing.' };
+    return { ok: false, message: i18n.t('admin.form.validation.fundingType') };
   }
 
   let deadlineIso: string;
@@ -46,7 +46,7 @@ export function validateOpportunityForm(
   } catch (e) {
     return {
       ok: false,
-      message: e instanceof Error ? e.message : 'Invalid deadline — use YYYY-MM-DD',
+      message: e instanceof Error ? e.message : i18n.t('admin.form.validation.invalidDeadline'),
     };
   }
 
@@ -54,7 +54,7 @@ export function validateOpportunityForm(
   if (deadlineMs <= Date.now()) {
     return {
       ok: false,
-      message: 'Deadline must be in the future so students can see this listing.',
+      message: i18n.t('admin.form.validation.deadlineInFuture'),
     };
   }
 

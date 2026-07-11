@@ -3,6 +3,8 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 
 import { Text } from '@/components/ui';
 import { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
@@ -21,26 +23,28 @@ type MentorBrowseCardProps = {
 function availabilityText(
   mentor: AvailableMentor,
   mutedColor: string,
+  t: TFunction,
 ): { label: string; color: string } {
   if (!mentor.isAcceptingStudents) {
-    return { label: 'Not accepting students', color: mutedColor };
+    return { label: t('mentorship.student.browseCard.notAccepting'), color: mutedColor };
   }
   if (!mentor.hasCapacity) {
-    return { label: 'Currently full', color: '#B00020' };
+    return { label: t('mentorship.student.browseCard.full'), color: '#B00020' };
   }
-  return { label: 'Available', color: '#1B7F4E' };
+  return { label: t('mentorship.student.browseCard.available'), color: '#1B7F4E' };
 }
 
 export function MentorBrowseCard({ mentor, onViewProfile }: MentorBrowseCardProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { profile } = mentor;
-  const name = profile.fullName?.trim() || 'Coach';
+  const name = profile.fullName?.trim() || t('mentorship.student.browseCard.nameFallback');
   const academicFocus = getMentorAcademicFocus(mentor);
   const interests = getMentorInterestTags(mentor);
   const allTags = [...academicFocus, ...interests].slice(0, 4);
   const credential = [profile.university, profile.degreeLevel].filter(Boolean).join(' · ');
-  const availability = availabilityText(mentor, colors.textMuted);
+  const availability = availabilityText(mentor, colors.textMuted, t);
 
   return (
     <Pressable

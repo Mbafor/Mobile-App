@@ -5,6 +5,7 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { usePathname, useRouter, type Href } from 'expo-router';
 import type { PropsWithChildren } from 'react';
 import { Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
@@ -13,7 +14,7 @@ import { webPressableStyle } from '@/utils/web/pressable';
 
 type NavItem = {
   href: Href;
-  label: string;
+  labelKey: string;
   icon: keyof typeof Ionicons.glyphMap;
   segment: string;
 };
@@ -21,37 +22,37 @@ type NavItem = {
 const NAV: NavItem[] = [
   {
     href: ROUTES.SUPER_ADMIN.HOME as Href,
-    label: 'Overview',
+    labelKey: 'overview',
     icon: 'grid-outline',
     segment: 'super-admin/index',
   },
   {
     href: ROUTES.SUPER_ADMIN.ANALYTICS as Href,
-    label: 'Analytics',
+    labelKey: 'analytics',
     icon: 'stats-chart-outline',
     segment: 'analytics',
   },
   {
     href: ROUTES.SUPER_ADMIN.ADMINS as Href,
-    label: 'Admins',
+    labelKey: 'admins',
     icon: 'shield-outline',
     segment: 'admins',
   },
   {
     href: ROUTES.SUPER_ADMIN.MENTORS as Href,
-    label: 'Mentors',
+    labelKey: 'mentors',
     icon: 'school-outline',
     segment: 'mentors',
   },
   {
     href: ROUTES.SUPER_ADMIN.MENTEES as Href,
-    label: 'Mentees',
+    labelKey: 'mentees',
     icon: 'people-outline',
     segment: 'mentees',
   },
   {
     href: ROUTES.SUPER_ADMIN.OPPORTUNITIES as Href,
-    label: 'Opportunities',
+    labelKey: 'opportunities',
     icon: 'briefcase-outline',
     segment: 'opportunities',
   },
@@ -69,6 +70,7 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
   const { colors } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.root}>
@@ -83,7 +85,7 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
             const active = isActive(item, pathname);
             return (
               <Pressable
-                key={item.label}
+                key={item.labelKey}
                 style={Platform.OS === 'web'
                   ? webPressableStyle(
                       [styles.tab, active && styles.tabActive],
@@ -99,7 +101,7 @@ export function SuperAdminShell({ children }: PropsWithChildren) {
                   color={active ? colors.primary : colors.textMuted}
                 />
                 <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
-                  {item.label}
+                  {t(`superAdmin.nav.${item.labelKey}`)}
                 </Text>
               </Pressable>
             );

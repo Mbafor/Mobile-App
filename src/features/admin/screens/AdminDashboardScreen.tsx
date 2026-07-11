@@ -9,6 +9,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -35,6 +36,7 @@ export function AdminDashboardScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const { isReady } = useRequireAdmin();
   const { data: analytics, isLoading, error, refetch, isRefetching } = useAdminAnalytics();
 
@@ -59,58 +61,58 @@ export function AdminDashboardScreen() {
         }
       >
         <Text muted style={styles.subtitle}>
-          Live metrics
+          {t('admin.dashboard.subtitle')}
         </Text>
 
         {error ? (
-          <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load analytics'} />
+          <ErrorMessage message={error instanceof Error ? error.message : t('admin.dashboard.failedToLoadAnalytics')} />
         ) : null}
 
         {analytics ? (
           <>
-            <Text style={styles.sectionTitle}>Users</Text>
+            <Text style={styles.sectionTitle}>{t('admin.dashboard.sections.users')}</Text>
             <View style={styles.statsGrid}>
-              <AdminStatCard label="Total users" value={analytics.users.total} />
-              <AdminStatCard label="New this week" value={analytics.users.newThisWeek} />
-              <AdminStatCard label="New this month" value={analytics.users.newThisMonth} />
-              <AdminStatCard label="Onboarding done" value={analytics.users.onboardingComplete} />
-              <AdminStatCard label="Onboarding pending" value={analytics.users.onboardingIncomplete} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalUsers')} value={analytics.users.total} />
+              <AdminStatCard label={t('admin.dashboard.stats.newThisWeek')} value={analytics.users.newThisWeek} />
+              <AdminStatCard label={t('admin.dashboard.stats.newThisMonth')} value={analytics.users.newThisMonth} />
+              <AdminStatCard label={t('admin.dashboard.stats.onboardingDone')} value={analytics.users.onboardingComplete} />
+              <AdminStatCard label={t('admin.dashboard.stats.onboardingPending')} value={analytics.users.onboardingIncomplete} />
             </View>
 
-            <Text style={styles.sectionTitle}>Opportunities</Text>
+            <Text style={styles.sectionTitle}>{t('admin.dashboard.sections.opportunities')}</Text>
             <View style={styles.statsGrid}>
-              <AdminStatCard label="Total posted" value={analytics.opportunities.total} />
-              <AdminStatCard label="Closing in 7 days" value={analytics.opportunities.closingIn7Days} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalPosted')} value={analytics.opportunities.total} />
+              <AdminStatCard label={t('admin.dashboard.stats.closingIn7Days')} value={analytics.opportunities.closingIn7Days} />
             </View>
-            <AdminBarChart title="By category" data={analytics.opportunities.byCategory} />
-            <AdminPieChart title="By country" data={analytics.opportunities.byCountry} />
+            <AdminBarChart title={t('admin.dashboard.charts.byCategory')} data={analytics.opportunities.byCategory} />
+            <AdminPieChart title={t('admin.dashboard.charts.byCountry')} data={analytics.opportunities.byCountry} />
             <AdminBarChart
-              title="By funding type"
+              title={t('admin.dashboard.charts.byFundingType')}
               data={formatFundingChart(analytics.opportunities.byFundingType)}
             />
 
-            <Text style={styles.sectionTitle}>Engagement</Text>
+            <Text style={styles.sectionTitle}>{t('admin.dashboard.sections.engagement')}</Text>
             <View style={styles.statsGrid}>
-              <AdminStatCard label="Total saves" value={analytics.engagement.totalSaves} />
-              <AdminStatCard label="Total applied" value={analytics.engagement.totalApplied} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalSaves')} value={analytics.engagement.totalSaves} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalApplied')} value={analytics.engagement.totalApplied} />
             </View>
-            <AdminTopList title="Top 5 most saved" items={analytics.engagement.topSaved} />
-            <AdminTopList title="Top 5 most applied" items={analytics.engagement.topApplied} />
+            <AdminTopList title={t('admin.dashboard.topLists.mostSaved')} items={analytics.engagement.topSaved} />
+            <AdminTopList title={t('admin.dashboard.topLists.mostApplied')} items={analytics.engagement.topApplied} />
 
-            <Text style={styles.sectionTitle}>Notifications</Text>
+            <Text style={styles.sectionTitle}>{t('admin.dashboard.sections.notifications')}</Text>
             <View style={styles.statsGrid}>
-              <AdminStatCard label="Total sent" value={analytics.notifications.totalSent} />
-              <AdminStatCard label="Total unread" value={analytics.notifications.totalUnread} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalSent')} value={analytics.notifications.totalSent} />
+              <AdminStatCard label={t('admin.dashboard.stats.totalUnread')} value={analytics.notifications.totalUnread} />
             </View>
           </>
         ) : null}
 
         <View style={styles.actions}>
           <Button onPress={() => router.push(ROUTES.ADMIN.OPPORTUNITIES as Href)}>
-            Manage opportunities
+            {t('admin.dashboard.actions.manageOpportunities')}
           </Button>
           <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.CREATE as Href)}>
-            Create opportunity
+            {t('admin.dashboard.actions.createOpportunity')}
           </Button>
         </View>
       </ScrollView>

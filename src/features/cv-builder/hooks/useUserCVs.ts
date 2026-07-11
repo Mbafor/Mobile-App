@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -8,6 +9,7 @@ export function useUserCVs() {
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const query = useQuery({
     queryKey: queryKeys.cv.list(userId),
@@ -25,8 +27,8 @@ export function useUserCVs() {
 
   const createMutation = useMutation({
     mutationFn: async (title?: string) => {
-      if (!userId) throw new Error('Not signed in');
-      const { data, error } = await createCV(userId, title ?? 'My CV');
+      if (!userId) throw new Error(t('cvBuilder.errors.notSignedIn'));
+      const { data, error } = await createCV(userId, title ?? t('cvBuilder.myCvDefault'));
       if (error) throw error;
       return data!;
     },

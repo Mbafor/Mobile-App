@@ -12,5 +12,3 @@ export function formatMaxAttachmentSize(bytes: number): string {
   }
   return `${Math.round(bytes / 1024)} KB`;
 }
-
-export const MENTORSHIP_ATTACHMENT_SIZE_HINT = `Photos up to ${formatMaxAttachmentSize(MENTORSHIP_ATTACHMENT_LIMITS.imageMaxBytes)}, files up to ${formatMaxAttachmentSize(MENTORSHIP_ATTACHMENT_LIMITS.fileMaxBytes)}`;

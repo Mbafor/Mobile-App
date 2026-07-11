@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -7,11 +8,12 @@ import { spacing } from '@/constants/theme';
 
 export function AuthDivider() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <View style={styles.row}>
       <View style={styles.line} />
       <Text variant="caption" muted>
-        or
+        {t('auth.common.or')}
       </Text>
       <View style={styles.line} />
     </View>

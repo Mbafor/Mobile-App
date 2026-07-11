@@ -2,6 +2,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter, type Href } from 'expo-router';
 import { Alert } from 'react-native';
 
+import { useTranslation } from 'react-i18next';
+
 import { queryKeys } from '@/constants/query-keys';
 import { ROUTES } from '@/constants/routes';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
@@ -22,6 +24,7 @@ function refreshPendingAndLive(queryClient: ReturnType<typeof useQueryClient>) {
 export function useApproveOpportunityMutation() {
   const queryClient = useQueryClient();
   const { isSuperAdmin } = useAuth();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
@@ -29,20 +32,24 @@ export function useApproveOpportunityMutation() {
       if (error) throw error;
     },
     onSuccess: (_data, { id }) => {
-      Alert.alert('Approved', 'The opportunity is now live for students.');
+      Alert.alert(t('admin.mutations.approvedTitle'), t('admin.mutations.approvedMessage'));
       refreshPendingAndLive(queryClient);
       if (isSuperAdmin) {
         void supabase.functions.invoke('send-new-opportunity-emails', { body: { opportunity_id: id } });
       }
     },
     onError: (error) => {
-      Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(
+        t('admin.mutations.couldNotApprove'),
+        error instanceof Error ? error.message : t('admin.mutations.tryAgain'),
+      );
     },
   });
 }
 
 export function useRejectOpportunityMutation() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async ({ id, notes }: { id: string; notes?: string }) => {
@@ -50,11 +57,14 @@ export function useRejectOpportunityMutation() {
       if (error) throw error;
     },
     onSuccess: () => {
-      Alert.alert('Rejected', 'The opportunity has been removed from the queue.');
+      Alert.alert(t('admin.mutations.rejectedTitle'), t('admin.mutations.rejectedMessage'));
       refreshPendingAndLive(queryClient);
     },
     onError: (error) => {
-      Alert.alert('Could not reject', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(
+        t('admin.mutations.couldNotReject'),
+        error instanceof Error ? error.message : t('admin.mutations.tryAgain'),
+      );
     },
   });
 }
@@ -63,16 +73,17 @@ export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME
   const queryClient = useQueryClient();
   const router = useRouter();
   const { isSuperAdmin } = useAuth();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (values: OpportunityFormValues) => {
       const { data, error } = await adminApi.createOpportunity(values);
       if (error) throw error;
-      if (!data) throw new Error('Opportunity was not saved. Please try again.');
+      if (!data) throw new Error(t('admin.mutations.opportunityNotSaved'));
       return data;
     },
     onSuccess: (data) => {
-      Alert.alert('Posted', `"${data.title}" is live for students to browse.`);
+      Alert.alert(t('admin.mutations.postedTitle'), t('admin.mutations.postedMessage', { title: data.title }));
       router.replace(listRoute);
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.stats });
@@ -84,8 +95,8 @@ export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : 'Could not create this opportunity.';
-      Alert.alert('Could not create', message);
+        error instanceof Error ? error.message : t('admin.mutations.couldNotCreateFallback');
+      Alert.alert(t('admin.mutations.couldNotCreate'), message);
     },
   });
 }
@@ -93,6 +104,7 @@ export function useCreateOpportunityMutation(listRoute: Href = ROUTES.ADMIN.HOME
 export function useUpdateOpportunityMutation(id: string) {
   const queryClient = useQueryClient();
   const router = useRouter();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (values: OpportunityFormValues) => {
@@ -101,7 +113,7 @@ export function useUpdateOpportunityMutation(id: string) {
       return data;
     },
     onSuccess: () => {
-      Alert.alert('Saved', 'Changes are live for students.');
+      Alert.alert(t('admin.mutations.savedTitle'), t('admin.mutations.savedMessage'));
       router.back();
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunities });
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
@@ -110,8 +122,8 @@ export function useUpdateOpportunityMutation(id: string) {
     },
     onError: (error) => {
       const message =
-        error instanceof Error ? error.message : 'Could not save changes.';
-      Alert.alert('Could not save', message);
+        error instanceof Error ? error.message : t('admin.mutations.couldNotSaveFallback');
+      Alert.alert(t('admin.mutations.couldNotSave'), message);
     },
   });
 }
@@ -120,6 +132,7 @@ export function useUpdateAndApproveMutation(id: string) {
   const queryClient = useQueryClient();
   const router = useRouter();
   const { isSuperAdmin } = useAuth();
+  const { t } = useTranslation();
 
   return useMutation({
     mutationFn: async (values: OpportunityFormValues) => {
@@ -129,7 +142,7 @@ export function useUpdateAndApproveMutation(id: string) {
       if (approveError) throw approveError;
     },
     onSuccess: () => {
-      Alert.alert('Approved', 'The opportunity is now live for students.');
+      Alert.alert(t('admin.mutations.approvedTitle'), t('admin.mutations.approvedMessage'));
       router.back();
       refreshPendingAndLive(queryClient);
       void queryClient.invalidateQueries({ queryKey: queryKeys.admin.opportunity(id) });
@@ -140,7 +153,10 @@ export function useUpdateAndApproveMutation(id: string) {
       }
     },
     onError: (error) => {
-      Alert.alert('Could not approve', error instanceof Error ? error.message : 'Please try again.');
+      Alert.alert(
+        t('admin.mutations.couldNotApprove'),
+        error instanceof Error ? error.message : t('admin.mutations.tryAgain'),
+      );
     },
   });
 }

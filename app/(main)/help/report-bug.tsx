@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import * as ImagePicker from 'expo-image-picker';
 import { useRouter } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Image,
@@ -28,6 +29,7 @@ import { spacing } from '@/constants/theme';
 export default function ReportBugScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { mutate, isPending } = useSubmitBug();
   const [title, setTitle] = useState('');
@@ -38,7 +40,7 @@ export default function ReportBugScreen() {
   const pickScreenshot = async () => {
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== 'granted') {
-      Alert.alert('Permission required', 'Allow photo access to attach a screenshot.');
+      Alert.alert(t('help.bug.permissionTitle'), t('help.bug.permissionMessage'));
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -53,11 +55,11 @@ export default function ReportBugScreen() {
 
   const handleSubmit = async () => {
     if (!title.trim()) {
-      Alert.alert('Title required', 'Please enter a short title for the bug.');
+      Alert.alert(t('help.common.titleRequired'), t('help.bug.titleRequiredMessage'));
       return;
     }
     if (!description.trim()) {
-      Alert.alert('Description required', 'Please describe what went wrong.');
+      Alert.alert(t('help.common.descriptionRequired'), t('help.bug.descriptionRequiredMessage'));
       return;
     }
 
@@ -87,27 +89,27 @@ export default function ReportBugScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.field}>
-          <Text style={styles.label}>Title <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>{t('help.common.title')} <Text style={styles.required}>*</Text></Text>
           <Input
             value={title}
             onChangeText={setTitle}
-            placeholder="e.g. App crashes on login"
+            placeholder={t('help.bug.titlePlaceholder')}
             maxLength={120}
           />
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Description <Text style={styles.required}>*</Text></Text>
+          <Text style={styles.label}>{t('help.common.description')} <Text style={styles.required}>*</Text></Text>
           <TextArea
             value={description}
             onChangeText={setDescription}
-            placeholder="Describe what happened and the steps to reproduce it…"
+            placeholder={t('help.bug.descriptionPlaceholder')}
             minHeight={140}
           />
         </View>
 
         <View style={styles.field}>
-          <Text style={styles.label}>Screenshot <Text style={styles.optional}>(optional)</Text></Text>
+          <Text style={styles.label}>{t('help.bug.screenshot')} <Text style={styles.optional}>{t('help.common.optional')}</Text></Text>
           {screenshotUri ? (
             <View style={styles.previewWrap}>
               <Image source={{ uri: screenshotUri }} style={styles.preview} resizeMode="cover" />
@@ -125,13 +127,13 @@ export default function ReportBugScreen() {
               style={({ pressed }) => [styles.imagePicker, pressed && styles.imagePickerPressed]}
             >
               <Ionicons name="image-outline" size={24} color={colors.primary} />
-              <Text style={styles.imagePickerText}>Attach screenshot</Text>
+              <Text style={styles.imagePickerText}>{t('help.bug.attachScreenshot')}</Text>
             </Pressable>
           )}
         </View>
 
         <Button onPress={() => void handleSubmit()} loading={busy} fullWidth>
-          Submit Report
+          {t('help.bug.submit')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

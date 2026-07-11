@@ -2,10 +2,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
-import { MENTORSHIP_ATTACHMENT_SIZE_HINT } from '@/features/mentorship/constants/attachments';
+import {
+  MENTORSHIP_ATTACHMENT_LIMITS,
+  formatMaxAttachmentSize,
+} from '@/features/mentorship/constants/attachments';
 import { spacing } from '@/constants/theme';
 
 export type AttachMenuAction = 'library' | 'camera' | 'document';
@@ -16,22 +20,26 @@ type AttachMenuSheetProps = {
   onSelect: (action: AttachMenuAction) => void;
 };
 
-const OPTIONS: { key: AttachMenuAction; label: string; icon: keyof typeof Ionicons.glyphMap }[] = [
-  { key: 'library', label: 'Photo library', icon: 'images-outline' },
-  { key: 'camera', label: 'Take photo', icon: 'camera-outline' },
-  { key: 'document', label: 'Document (PDF, Excel, Word…)', icon: 'document-attach-outline' },
+const OPTIONS: { key: AttachMenuAction; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { key: 'library', icon: 'images-outline' },
+  { key: 'camera', icon: 'camera-outline' },
+  { key: 'document', icon: 'document-attach-outline' },
 ];
 
 export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
         <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
-          <Text style={styles.title}>Attach</Text>
+          <Text style={styles.title}>{t('mentorship.chat.attachSheet.title')}</Text>
           <Text variant="caption" muted style={styles.hint}>
-            {MENTORSHIP_ATTACHMENT_SIZE_HINT}
+            {t('mentorship.chat.attachSheet.sizeHint', {
+              image: formatMaxAttachmentSize(MENTORSHIP_ATTACHMENT_LIMITS.imageMaxBytes),
+              file: formatMaxAttachmentSize(MENTORSHIP_ATTACHMENT_LIMITS.fileMaxBytes),
+            })}
           </Text>
           {OPTIONS.map((opt) => (
             <Pressable
@@ -43,11 +51,11 @@ export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetP
               }}
             >
               <Ionicons name={opt.icon} size={22} color={mentorshipColors.accent} />
-              <Text style={styles.optionLabel}>{opt.label}</Text>
+              <Text style={styles.optionLabel}>{t(`mentorship.chat.attachSheet.${opt.key}`)}</Text>
             </Pressable>
           ))}
           <Pressable style={styles.cancelBtn} onPress={onClose}>
-            <Text style={styles.cancelText}>Cancel</Text>
+            <Text style={styles.cancelText}>{t('mentorship.chat.attachSheet.cancel')}</Text>
           </Pressable>
         </Pressable>
       </Pressable>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, StyleSheet, View } from 'react-native';
@@ -18,6 +19,7 @@ import type { PushPermissionStatus } from '@/types/domain/notification';
 
 export function NotificationPreferencesSection() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const { user } = useAuth();
   const { preferences, isLoading, setPreference, isSaving } = useNotificationPreferences();
   const [permission, setPermission] = useState<PushPermissionStatus>('undetermined');
@@ -42,8 +44,8 @@ export function NotificationPreferencesSection() {
       await setPreference(key, value);
     } catch (e) {
       Alert.alert(
-        'Could not save',
-        e instanceof Error ? e.message : `Failed to update ${label}. Please try again.`,
+        t('settings.notifications.couldNotSave'),
+        e instanceof Error ? e.message : t('settings.notifications.updateFailed', { label }),
       );
     }
   };
@@ -57,8 +59,8 @@ export function NotificationPreferencesSection() {
         await pushTokensApi.removeAllForUser(user.id);
       } catch (e) {
         Alert.alert(
-          'Could not save',
-          e instanceof Error ? e.message : 'Failed to update push notifications.',
+          t('settings.notifications.couldNotSave'),
+          e instanceof Error ? e.message : t('settings.notifications.pushUpdateFailed'),
         );
       }
       return;
@@ -69,16 +71,16 @@ export function NotificationPreferencesSection() {
 
     if (status === 'unavailable') {
       Alert.alert(
-        'Not available',
-        'Push notifications require a physical device with a development or production build.',
+        t('settings.notifications.notAvailableTitle'),
+        t('settings.notifications.notAvailableBody'),
       );
       return;
     }
 
     if (status !== 'granted') {
       Alert.alert(
-        'Permission required',
-        'Enable notifications in your device settings to receive push alerts.',
+        t('settings.notifications.permissionRequiredTitle'),
+        t('settings.notifications.permissionRequiredBody'),
       );
       await setPreference('pushEnabled', false);
       return;
@@ -87,14 +89,14 @@ export function NotificationPreferencesSection() {
     await setPreference('pushEnabled', true);
     const result = await registerExpoPushToken(user.id);
     if (result.error) {
-      Alert.alert('Push setup failed', result.error);
+      Alert.alert(t('settings.notifications.pushSetupFailed'), result.error);
       await setPreference('pushEnabled', false);
       await pushTokensApi.removeAllForUser(user.id);
     }
   };
 
   if (isLoading || !preferences) {
-    return <Text muted>Loading notification preferences…</Text>;
+    return <Text muted>{t('settings.notifications.loading')}</Text>;
   }
 
   const pushToggleDisabled = permission === 'unavailable';
@@ -103,30 +105,30 @@ export function NotificationPreferencesSection() {
     <View style={styles.wrap}>
       {permission === 'denied' ? (
         <Text muted variant="caption" style={styles.warning}>
-          System notifications are denied. Turn them on in device settings to use push.
+          {t('settings.notifications.systemDenied')}
         </Text>
       ) : null}
 
 
       <View style={styles.toggleGroup}>
       <PreferenceToggleRow
-        label="Push notifications"
-        description="Receive alerts on this device"
+        label={t('settings.notifications.items.push.label')}
+        description={t('settings.notifications.items.push.description')}
         value={preferences.pushEnabled}
         onValueChange={handlePushToggle}
         loading={isSaving}
         disabled={pushToggleDisabled}
       />
       <PreferenceToggleRow
-        label="New matching opportunities"
-        description="When a new listing matches your interests"
+        label={t('settings.notifications.items.newMatches.label')}
+        description={t('settings.notifications.items.newMatches.description')}
         value={preferences.newMatches}
         onValueChange={(v) => void handlePreferenceToggle('newMatches', v, 'new matches')}
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Deadline reminders"
-        description="3 days before an opportunity closes"
+        label={t('settings.notifications.items.deadline.label')}
+        description={t('settings.notifications.items.deadline.description')}
         value={preferences.deadlineReminders}
         onValueChange={(v) =>
           void handlePreferenceToggle('deadlineReminders', v, 'deadline reminders')
@@ -134,8 +136,8 @@ export function NotificationPreferencesSection() {
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Saved opportunity reminders"
-        description="1 day before a saved opportunity deadline"
+        label={t('settings.notifications.items.saved.label')}
+        description={t('settings.notifications.items.saved.description')}
         value={preferences.savedReminders}
         onValueChange={(v) =>
           void handlePreferenceToggle('savedReminders', v, 'saved reminders')
@@ -143,8 +145,8 @@ export function NotificationPreferencesSection() {
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Mentorship assignments"
-        description="When you are matched with a coach or mentee"
+        label={t('settings.notifications.items.mentorshipAssignments.label')}
+        description={t('settings.notifications.items.mentorshipAssignments.description')}
         value={preferences.mentorshipAssignments}
         onValueChange={(v) =>
           void handlePreferenceToggle('mentorshipAssignments', v, 'mentorship assignments')
@@ -152,8 +154,8 @@ export function NotificationPreferencesSection() {
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Waiting list updates"
-        description="Queue position and match availability"
+        label={t('settings.notifications.items.waitingList.label')}
+        description={t('settings.notifications.items.waitingList.description')}
         value={preferences.waitingListUpdates}
         onValueChange={(v) =>
           void handlePreferenceToggle('waitingListUpdates', v, 'waiting list')
@@ -161,8 +163,8 @@ export function NotificationPreferencesSection() {
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Session reminders"
-        description="24 hours before mentorship sessions"
+        label={t('settings.notifications.items.session.label')}
+        description={t('settings.notifications.items.session.description')}
         value={preferences.sessionReminders}
         onValueChange={(v) =>
           void handlePreferenceToggle('sessionReminders', v, 'session reminders')
@@ -170,8 +172,8 @@ export function NotificationPreferencesSection() {
         loading={isSaving}
       />
       <PreferenceToggleRow
-        label="Mentorship messages"
-        description="New chat messages from your coach or mentees"
+        label={t('settings.notifications.items.mentorshipMessages.label')}
+        description={t('settings.notifications.items.mentorshipMessages.description')}
         value={preferences.mentorshipMessages}
         onValueChange={(v) =>
           void handlePreferenceToggle('mentorshipMessages', v, 'mentorship messages')

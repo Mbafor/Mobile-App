@@ -3,6 +3,7 @@ import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui/Text';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
@@ -38,8 +39,9 @@ export function CVDocumentListItem({
 }: CVDocumentListItemProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors, cvDocsTheme } = useTheme();
+  const { t } = useTranslation();
   const busy = isRenaming || isDeleting;
-  const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? 'CV';
+  const templateLabel = getTemplateDefinition(cv.templateId)?.label ?? t('cvBuilder.dashboard.templateFallback');
 
   return (
     <View style={styles.row}>
@@ -56,7 +58,7 @@ export function CVDocumentListItem({
             {cv.title}
           </Text>
           <Text style={styles.meta} numberOfLines={1}>
-            {templateLabel} · Updated {formatUpdatedAt(cv.updatedAt)}
+            {t('cvBuilder.dashboard.updatedOn', { template: templateLabel, date: formatUpdatedAt(cv.updatedAt) })}
           </Text>
         </View>
       </Pressable>
@@ -70,7 +72,7 @@ export function CVDocumentListItem({
           }}
           hitSlop={12}
           style={styles.menuBtn}
-          accessibilityLabel="CV options"
+          accessibilityLabel={t('cvBuilder.dashboard.optionsLabel')}
           accessibilityRole="button"
         >
           <Ionicons name="ellipsis-vertical" size={20} color={cvDocsTheme.textSecondary} />

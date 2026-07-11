@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Screen } from '@/components/layout';
 import { Button, Text } from '@/components/ui';
@@ -31,34 +32,36 @@ const EXAMPLE = `[
   }
 ]`;
 
-const FIELD_REFERENCE: { label: string; note?: string; values: string[] }[] = [
+const FIELD_REFERENCE: { key: string; hasNote: boolean; values: string[] }[] = [
   {
-    label: 'category',
+    key: 'category',
+    hasNote: false,
     values: PREDEFINED_OPPORTUNITY_CATEGORIES,
   },
   {
-    label: 'tags (array)',
+    key: 'tags',
+    hasNote: false,
     values: PREDEFINED_OPPORTUNITY_TAGS,
   },
   {
-    label: 'fundingType',
+    key: 'fundingType',
+    hasNote: true,
     values: ['fully_funded', 'partially_funded', 'self_funded'],
-    note: 'Aliases: "fully funded", "partial", "self funded"',
   },
   {
-    label: 'degreeLevels (array)',
+    key: 'degreeLevels',
+    hasNote: true,
     values: ['high_school', 'bachelors', 'masters', 'phd', 'professional'],
-    note: 'Aliases: "Undergraduate"→bachelors, "PhD"→phd, "Masters"→masters',
   },
   {
-    label: 'locationType',
+    key: 'locationType',
+    hasNote: true,
     values: ['remote', 'onsite', 'hybrid'],
-    note: 'Aliases: "on-site"→onsite, "online"→remote, "in-person"→onsite',
   },
   {
-    label: 'country',
-    values: ['Ghana', 'South Africa', 'Nigeria', 'United States', 'United Kingdom', 'Global', '... any country name'],
-    note: 'Case-insensitive. Use "Global" for worldwide opportunities.',
+    key: 'country',
+    hasNote: true,
+    values: ['Ghana', 'South Africa', 'Nigeria', 'United States', 'United Kingdom', 'Global'],
   },
 ];
 
@@ -68,22 +71,31 @@ type OpportunityPasteScreenProps = {
 
 function FieldReference() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
     <View style={styles.refContainer}>
       <Pressable onPress={() => setOpen((v) => !v)} style={styles.refHeader}>
-        <Text style={styles.refTitle}>Field reference {open ? '▲' : '▼'}</Text>
+        <Text style={styles.refTitle}>{t('admin.pasteScreen.fieldReference')} {open ? '▲' : '▼'}</Text>
       </Pressable>
       {open && (
         <View style={styles.refBody}>
-          {FIELD_REFERENCE.map((field) => (
-            <View key={field.label} style={styles.refRow}>
-              <Text style={styles.refLabel}>{field.label}</Text>
-              <Text style={styles.refValues}>{field.values.join(' | ')}</Text>
-              {field.note ? <Text style={styles.refNote}>{field.note}</Text> : null}
-            </View>
-          ))}
+          {FIELD_REFERENCE.map((field) => {
+            const values =
+              field.key === 'country'
+                ? [...field.values, t('admin.pasteScreen.fieldValues.countryOther')]
+                : field.values;
+            return (
+              <View key={field.key} style={styles.refRow}>
+                <Text style={styles.refLabel}>{t(`admin.pasteScreen.fieldLabels.${field.key}`)}</Text>
+                <Text style={styles.refValues}>{values.join(' | ')}</Text>
+                {field.hasNote ? (
+                  <Text style={styles.refNote}>{t(`admin.pasteScreen.fieldNotes.${field.key}`)}</Text>
+                ) : null}
+              </View>
+            );
+          })}
         </View>
       )}
     </View>
@@ -92,6 +104,7 @@ function FieldReference() {
 
 export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [raw, setRaw] = useState('');
   const [importing, setImporting] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -99,11 +112,14 @@ export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) 
   const handleImport = async () => {
     const { items, errors } = parseOpportunityPaste(raw);
     if (errors.length > 0 && items.length === 0) {
-      Alert.alert('Could not parse', errors.join('\n'));
+      Alert.alert(t('admin.pasteScreen.couldNotParseTitle'), errors.join('\n'));
       return;
     }
     if (items.length === 0) {
-      Alert.alert('Nothing to import', 'Add at least one valid opportunity object.');
+      Alert.alert(
+        t('admin.pasteScreen.nothingToImportTitle'),
+        t('admin.pasteScreen.nothingToImportMessage'),
+      );
       return;
     }
 
@@ -114,18 +130,23 @@ export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) 
     for (let i = 0; i < items.length; i++) {
       const { data, error } = await adminApi.createOpportunity(items[i]);
       if (error || !data) {
-        fail.push(`Row ${i + 1}: ${error?.message ?? 'Failed to create'}`);
+        fail.push(
+          t('admin.pasteScreen.rowCreateFailed', {
+            row: i + 1,
+            error: error?.message ?? t('admin.pasteScreen.rowCreateFailedFallback'),
+          }),
+        );
       } else {
         ok += 1;
       }
     }
 
     setImporting(false);
-    setResult(`Imported ${ok} of ${items.length} opportunities.`);
+    setResult(t('admin.pasteScreen.importedSummary', { ok, total: items.length }));
     if (fail.length > 0) {
-      Alert.alert('Import finished with issues', fail.slice(0, 5).join('\n'));
+      Alert.alert(t('admin.pasteScreen.importFinishedIssuesTitle'), fail.slice(0, 5).join('\n'));
     } else {
-      Alert.alert('Success', `${ok} opportunities are now live.`);
+      Alert.alert(t('admin.pasteScreen.successTitle'), t('admin.pasteScreen.successMessage', { count: ok }));
       onDone?.();
     }
   };
@@ -133,16 +154,20 @@ export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) 
   return (
     <Screen padded={false}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.title}>Paste opportunities (JSON)</Text>
+        <Text style={styles.title}>{t('admin.pasteScreen.title')}</Text>
 
         <Text muted style={styles.hint}>
-          Paste a JSON object or array. Required: <Text style={styles.bold}>title</Text>,{' '}
-          <Text style={styles.bold}>organization</Text>,{' '}
-          <Text style={styles.bold}>deadline</Text> (YYYY-MM-DD).{'\n'}
-          Optional: description, applyUrl, imageUrl, category, country, tags, fundingType,
-          degreeLevels, locationType.{'\n'}
-          Dropdown values are matched automatically — "South Africa", "Undergraduate", "on-site"
-          all resolve to the correct option.
+          {t('admin.pasteScreen.hint')
+            .split(/<bold>(.*?)<\/bold>/g)
+            .map((part, index) =>
+              index % 2 === 1 ? (
+                <Text key={index} style={styles.bold}>
+                  {part}
+                </Text>
+              ) : (
+                part
+              ),
+            )}
         </Text>
 
         <FieldReference />
@@ -157,10 +182,10 @@ export function OpportunityPasteScreen({ onDone }: OpportunityPasteScreenProps) 
 
         <View style={styles.actions}>
           <Button variant="ghost" onPress={() => setRaw(EXAMPLE)}>
-            Load example
+            {t('admin.pasteScreen.loadExample')}
           </Button>
           <Button onPress={() => void handleImport()} loading={importing} disabled={!raw.trim()}>
-            Import opportunities
+            {t('admin.pasteScreen.importButton')}
           </Button>
         </View>
 

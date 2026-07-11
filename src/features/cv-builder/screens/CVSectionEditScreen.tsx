@@ -14,6 +14,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -28,6 +29,7 @@ export function CVSectionEditScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const params = useLocalSearchParams<{ sectionId?: string }>();
   const sectionId = (typeof params.sectionId === 'string'
@@ -42,7 +44,7 @@ export function CVSectionEditScreen() {
   if (!sectionId) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message="Unknown section." />
+        <ErrorMessage message={t('cvBuilder.sectionEdit.unknownSection')} />
       </View>
     );
   }
@@ -67,7 +69,7 @@ export function CVSectionEditScreen() {
   if (error) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'Could not load CV'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('cvBuilder.sectionEdit.couldNotLoad')} />
       </View>
     );
   }
@@ -94,7 +96,7 @@ export function CVSectionEditScreen() {
           disabled={localSaving || saveState === 'saving'}
           style={styles.saveBtn}
         >
-          <Text style={styles.saveBtnText}>{localSaving ? '…' : 'Save'}</Text>
+          <Text style={styles.saveBtnText}>{localSaving ? '…' : t('cvBuilder.sectionEdit.save')}</Text>
         </Pressable>
       </View>
 

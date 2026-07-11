@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Modal,
@@ -34,6 +35,7 @@ type MenuItem = {
 export function ProfileHeaderMenu() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { profile, user } = useAuth();
   const [open, setOpen] = useState(false);
@@ -52,7 +54,10 @@ export function ProfileHeaderMenu() {
 
   const handleLogout = async () => {
     close();
-    const confirmed = await confirmAction('Log out', 'Are you sure you want to log out?');
+    const confirmed = await confirmAction(
+      t('menu.logoutConfirm.title'),
+      t('menu.logoutConfirm.message'),
+    );
     if (!confirmed) return;
 
     setIsLoggingOut(true);
@@ -60,33 +65,33 @@ export function ProfileHeaderMenu() {
     setIsLoggingOut(false);
 
     if (!result.ok) {
-      Alert.alert('Log out failed', result.error);
+      Alert.alert(t('menu.logoutFailed'), result.error);
     }
   };
 
   const items: MenuItem[] = [
     {
-      label: 'Profile',
+      label: t('menu.items.profile'),
       icon: 'person-outline',
       onPress: () => navigate(ROUTES.MAIN.DRAWER.PROFILE as Href),
     },
     {
-      label: 'Settings',
+      label: t('menu.items.settings'),
       icon: 'settings-outline',
       onPress: () => navigate(ROUTES.MAIN.SETTINGS as Href),
     },
     {
-      label: 'Refer a Friend',
+      label: t('menu.items.referFriend'),
       icon: 'gift-outline',
       onPress: () => navigate(ROUTES.MAIN.DRAWER.REFER as Href),
     },
     {
-      label: 'Help & Support',
+      label: t('menu.items.helpSupport'),
       icon: 'help-circle-outline',
       onPress: () => navigate(ROUTES.MAIN.HELP.INDEX as Href),
     },
     {
-      label: isLoggingOut ? 'Logging out…' : 'Log out',
+      label: isLoggingOut ? t('menu.items.loggingOut') : t('menu.items.logout'),
       icon: 'log-out-outline',
       onPress: () => void handleLogout(),
       destructive: true,
@@ -99,7 +104,7 @@ export function ProfileHeaderMenu() {
         onPress={() => setOpen(true)}
         style={styles.avatarBtn}
         accessibilityRole="button"
-        accessibilityLabel="Account menu"
+        accessibilityLabel={t('menu.accountMenu')}
         hitSlop={8}
       >
         <UserAvatarDisplay displayName={displayName} avatarUrl={avatarUrl} size={34} />

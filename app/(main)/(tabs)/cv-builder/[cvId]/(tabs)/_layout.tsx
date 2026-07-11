@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Tabs } from 'expo-router';
 import { Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
@@ -21,6 +22,7 @@ export default function CVHubTabsLayout() {
   const insets = useSafeAreaInsets();
   const isDesktop = useWebDesktop();
   const { colors, cvDocsTheme } = useTheme();
+  const { t } = useTranslation();
 
   const tabBarHeight = 65 + insets.bottom;
 
@@ -49,35 +51,35 @@ export default function CVHubTabsLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Dashboard',
+          title: t('cvBuilder.tabs.dashboard'),
           tabBarIcon: tabBarIcon('grid-outline', 'grid'),
         }}
       />
       <Tabs.Screen
         name="tips"
         options={{
-          title: 'Tips',
+          title: t('cvBuilder.tabs.tips'),
           tabBarIcon: tabBarIcon('bulb-outline', 'bulb'),
         }}
       />
       <Tabs.Screen
         name="templates"
         options={{
-          title: 'Templates',
+          title: t('cvBuilder.tabs.templates'),
           tabBarIcon: tabBarIcon('color-palette-outline', 'color-palette'),
         }}
       />
       <Tabs.Screen
         name="preview"
         options={{
-          title: 'Preview',
+          title: t('cvBuilder.tabs.preview'),
           href: null,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Sections',
+          title: t('cvBuilder.tabs.sections'),
           tabBarIcon: tabBarIcon('list-outline', 'list'),
         }}
       />

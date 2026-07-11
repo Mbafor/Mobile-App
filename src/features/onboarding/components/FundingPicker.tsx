@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -6,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { Modal, Platform, Pressable, ScrollView, StyleSheet, View, useWindowDimensions } from 'react-native';
 
 import { Input, Text } from '@/components/ui';
-import { FUNDING_OPTIONS } from '@/constants/onboarding';
+import { getFundingOptions } from '@/constants/onboarding';
 import { spacing, typography } from '@/constants/theme';
 import type { FundingPreference } from '@/types/domain/user-preferences';
 
@@ -20,20 +21,21 @@ type FundingPickerProps = {
 export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === 'web' && width >= 768;
 
   const options = excludeAny
-    ? FUNDING_OPTIONS.filter((o) => o.value !== 'any')
-    : FUNDING_OPTIONS;
+    ? getFundingOptions().filter((o) => o.value !== 'any')
+    : getFundingOptions();
 
   const filteredOptions = search.trim()
     ? options.filter((o) => o.label.toLowerCase().includes(search.toLowerCase()))
     : options;
 
-  const selectedLabel = options.find((o) => o.value === value)?.label ?? 'Select funding type';
+  const selectedLabel = options.find((o) => o.value === value)?.label ?? t('onboarding.funding.trigger');
   const hasValue = Boolean(value);
 
   const openModal = () => {
@@ -64,7 +66,7 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
         <Pressable style={[styles.overlay, isDesktop && styles.overlayDesktop]} onPress={closeModal}>
           <Pressable style={[styles.sheet, isDesktop && styles.sheetDesktop]} onPress={(e) => e.stopPropagation()}>
             <View style={styles.sheetHeader}>
-              <Text style={styles.sheetTitle}>Funding preference</Text>
+              <Text style={styles.sheetTitle}>{t('onboarding.funding.sheetTitle')}</Text>
               <Pressable onPress={closeModal} hitSlop={12}>
                 <Ionicons name="close" size={22} color={colors.textMuted} />
               </Pressable>
@@ -74,7 +76,7 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
               <Input
                 value={search}
                 onChangeText={setSearch}
-                placeholder="Search..."
+                placeholder={t('onboarding.funding.searchPlaceholder')}
                 autoCapitalize="none"
                 autoCorrect={false}
               />
@@ -83,7 +85,7 @@ export function FundingPicker({ value, onChange, excludeAny }: FundingPickerProp
             <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
               {filteredOptions.length === 0 ? (
                 <Text muted style={styles.noResults}>
-                  No results for "{search}"
+                  {t('onboarding.funding.noResults', { query: search })}
                 </Text>
               ) : (
                 filteredOptions.map((option) => {

@@ -1,4 +1,5 @@
 import { Pressable, ScrollView, StyleSheet, View, Alert } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
@@ -31,12 +32,13 @@ export function CoachSessionsTable({
 }: CoachSessionsTableProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const isCompletedTable = isCompleted ?? title?.toLowerCase() === 'completed';
   const showUpcomingActions = !isCompletedTable;
 
   const handleJoinMeeting = (session: MentorshipSession) => {
     if (!session.meetingUrl) {
-      Alert.alert('No meeting link yet', 'Add or edit a meeting link before joining.');
+      Alert.alert(t('mentorship.coach.sessionsTable.noMeetingTitle'), t('mentorship.coach.sessionsTable.noMeetingMessage'));
       return;
     }
     void openExternalUrl(session.meetingUrl);
@@ -49,21 +51,21 @@ export function CoachSessionsTable({
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View>
             <View style={styles.tableHeader}>
-              <HeaderCell label="Mentee Details" width={220} />
-              <HeaderCell label="Session Type" width={150} />
-              <HeaderCell label="Date & Time" width={220} />
-              <HeaderCell label="Short Notes" width={230} />
-              <HeaderCell label="Status" width={130} />
-              <HeaderCell label="Actions" width={230} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colMentee')} width={220} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colType')} width={150} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colDateTime')} width={220} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colNotes')} width={230} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colStatus')} width={130} />
+              <HeaderCell label={t('mentorship.coach.sessionsTable.colActions')} width={230} />
             </View>
 
             {sessions.length === 0 ? (
               <View style={styles.emptyRow}>
-                <Text muted>No sessions in this category.</Text>
+                <Text muted>{t('mentorship.coach.sessionsTable.empty')}</Text>
               </View>
             ) : (
               sessions.map((session) => {
-                const mentee = getMenteeDetails?.(session) ?? { name: 'Mentee', email: null };
+                const mentee = getMenteeDetails?.(session) ?? { name: t('mentorship.coach.menteeFallback'), email: null };
                 return (
                   <View key={session.id} style={styles.row}>
                     <View style={[styles.cell, { width: 220 }]}>
@@ -74,21 +76,21 @@ export function CoachSessionsTable({
                         </Text>
                       ) : null}
                     </View>
-                    <CellText width={150} text={session.title?.trim() || 'Mentorship session'} />
+                    <CellText width={150} text={session.title?.trim() || t('mentorship.coach.sessionsTable.sessionTitleFallback')} />
                     <CellText
                       width={220}
                       text={formatSessionDateTime(session.scheduledStart, session.timezone)}
                     />
                     <View style={[styles.cell, { width: 230 }]}>
                       {session.notes?.trim() ? (
-                        <Pressable onPress={() => Alert.alert('Session note', session.notes!.trim())}>
+                        <Pressable onPress={() => Alert.alert(t('mentorship.coach.sessionsTable.noteTitle'), session.notes!.trim())}>
                           <Text numberOfLines={1} ellipsizeMode="tail" style={styles.notesText}>
                             {session.notes}
                           </Text>
                         </Pressable>
                       ) : (
                         <Text variant="caption" muted>
-                          No note
+                          {t('mentorship.coach.sessionsTable.noNote')}
                         </Text>
                       )}
                     </View>
@@ -106,7 +108,7 @@ export function CoachSessionsTable({
                             onPress={() => handleJoinMeeting(session)}
                           >
                             <Ionicons name="videocam-outline" size={14} color={mentorshipColors.textOnAccent} />
-                            <Text style={styles.joinBtnText}>Join Meeting</Text>
+                            <Text style={styles.joinBtnText}>{t('mentorship.coach.sessionsTable.join')}</Text>
                           </Pressable>
                           <Pressable
                             style={styles.iconBtn}
@@ -124,7 +126,9 @@ export function CoachSessionsTable({
                               }
                             }}
                             accessibilityLabel={
-                              session.status === 'confirmed' ? 'Edit link' : 'Confirm session'
+                              session.status === 'confirmed'
+                                ? t('mentorship.coach.sessionsTable.editLink')
+                                : t('mentorship.coach.sessionsTable.confirm')
                             }
                           >
                             <Ionicons
@@ -137,7 +141,7 @@ export function CoachSessionsTable({
                             style={styles.iconBtn}
                             hitSlop={12}
                             onPress={() => onCancel?.(session.id)}
-                            accessibilityLabel="Cancel session"
+                            accessibilityLabel={t('mentorship.coach.sessionsTable.cancel')}
                             accessibilityRole="button"
                           >
                             <Ionicons
@@ -149,7 +153,7 @@ export function CoachSessionsTable({
                         </>
                       ) : (
                         <Pressable style={styles.secondaryAction}>
-                          <Text style={styles.secondaryActionText}>View details</Text>
+                          <Text style={styles.secondaryActionText}>{t('mentorship.coach.sessionsTable.viewDetails')}</Text>
                         </Pressable>
                       )}
                     </View>
@@ -186,11 +190,12 @@ function CellText({ width, text }: { width: number; text: string }) {
 
 function StatusPill({ completed }: { completed: boolean }) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <View style={[styles.statusPill, completed ? styles.completedPill : styles.upcomingPill]}>
       <View style={[styles.dot, completed ? styles.completedDot : styles.upcomingDot]} />
       <Text style={[styles.statusText, completed ? styles.completedText : styles.upcomingText]}>
-        {completed ? 'Completed' : 'Confirmed'}
+        {completed ? t('mentorship.coach.sessionsTable.statusCompleted') : t('mentorship.coach.sessionsTable.statusConfirmed')}
       </Text>
     </View>
   );

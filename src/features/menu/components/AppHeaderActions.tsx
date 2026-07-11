@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { spacing } from '@/constants/theme';
@@ -14,6 +15,7 @@ import { ProfileHeaderMenu } from '@/features/menu/components/ProfileHeaderMenu'
 export function AppHeaderActions() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { isSearchVisible, setSearchVisible } = useAppStore();
 
@@ -28,7 +30,7 @@ export function AppHeaderActions() {
         onPress={handleSearchPress}
         style={styles.searchBtn}
         accessibilityRole="button"
-        accessibilityLabel="Search opportunities"
+        accessibilityLabel={t('navigation.search')}
         hitSlop={12}
       >
         <Ionicons

@@ -10,6 +10,7 @@ import {
   PdfReferenceBlocks,
   PdfSkillsGrid,
 } from '@/features/cv-builder/pdf/resume/resume-sections';
+import i18n from '@/i18n';
 import type { CVContent } from '@/types/domain/cv';
 
 const styles = StyleSheet.create({
@@ -65,25 +66,25 @@ export function ExecutiveResumePage({ data }: { data: CVContent }) {
 
       <View style={styles.bodyWrap}>
         {hasText(data.summary) ? (
-          <RailSection title="Summary">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.summary')}>
             <Text style={styles.body}>{data.summary}</Text>
           </RailSection>
         ) : null}
 
         {data.experience.length ? (
-          <RailSection title="Experience">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.experience')}>
             <PdfExperienceBlocks entries={data.experience} bodyStyle={styles.body} />
           </RailSection>
         ) : null}
 
         {data.projects.length ? (
-          <RailSection title="Projects">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.projects')}>
             <PdfProjectBlocks entries={data.projects} bodyStyle={styles.body} />
           </RailSection>
         ) : null}
 
         {data.education.length ? (
-          <RailSection title="Education">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.education')}>
             {data.education.map((entry) => (
               <View key={entry.id} style={{ marginBottom: 6 }}>
                 <Text style={styles.eduTitle}>{formatEducationTitle(entry)}</Text>
@@ -96,13 +97,13 @@ export function ExecutiveResumePage({ data }: { data: CVContent }) {
         ) : null}
 
         {data.skills.length ? (
-          <RailSection title="Skills">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.skills')}>
             <PdfSkillsGrid skills={data.skills} textStyle={styles.body} />
           </RailSection>
         ) : null}
 
         {data.references.length ? (
-          <RailSection title="References">
+          <RailSection title={i18n.t('cvBuilder.pdf.sections.titleCase.references')}>
             <PdfReferenceBlocks entries={data.references} style={styles.body} />
           </RailSection>
         ) : null}

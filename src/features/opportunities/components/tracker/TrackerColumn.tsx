@@ -1,4 +1,5 @@
 import { memo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ScrollView, StyleSheet, View, type LayoutChangeEvent } from 'react-native';
@@ -10,14 +11,6 @@ import { spacing } from '@/constants/theme';
 import { TRACKER_STAGE_LABELS, type TrackerStage } from '@/types/domain/tracker';
 
 const COLUMN_WIDTH = 288;
-
-const EMPTY_MESSAGES: Record<TrackerStage, string> = {
-  saved: 'Save opportunities from the dashboard to start tracking them here.',
-  applied: 'Drag cards here when you have submitted an application.',
-  interview: 'Track opportunities that invited you to interview.',
-  offer: 'Celebrate offers here — you have earned it!',
-  closed: 'Archive declined or passed opportunities here.',
-};
 
 type TrackerColumnProps = {
   stage: TrackerStage;
@@ -45,6 +38,7 @@ function TrackerColumnComponent({
   onDragEnd,
 }: TrackerColumnProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const viewRef = useRef<View>(null);
 
   const handleLayout = (_e: LayoutChangeEvent) => {
@@ -77,7 +71,7 @@ function TrackerColumnComponent({
         {items.length === 0 ? (
           <View style={styles.empty}>
             <Text variant="caption" muted style={styles.emptyText}>
-              {EMPTY_MESSAGES[stage]}
+              {t(`opportunities.tracker.empty.${stage}`)}
             </Text>
           </View>
         ) : (

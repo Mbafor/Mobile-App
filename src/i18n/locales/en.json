@@ -1,0 +1,2011 @@
+{
+  "common": {
+    "appName": "Voila",
+    "user": "User",
+    "save": "Save",
+    "cancel": "Cancel"
+  },
+  "settings": {
+    "language": {
+      "sectionLabel": "Language",
+      "system": "System",
+      "systemHint": "Match your device language",
+      "enHint": "Always use English",
+      "frHint": "Always use French"
+    },
+    "appearance": {
+      "sectionLabel": "Appearance",
+      "system": "System",
+      "systemHint": "Match your device settings",
+      "light": "Light",
+      "lightHint": "Always use light mode",
+      "dark": "Dark",
+      "darkHint": "Always use dark mode"
+    },
+    "home": {
+      "title": "Settings",
+      "notifications": "Notifications",
+      "privacy": "Privacy",
+      "changePassword": "Change Password",
+      "support": "Support",
+      "logout": "Log out",
+      "deleteAccount": "Delete Account",
+      "logoutConfirmTitle": "Log out",
+      "logoutConfirmMessage": "Are you sure you want to log out?",
+      "logoutFailed": "Log out failed"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "loading": "Loading notification preferences…",
+      "systemDenied": "System notifications are denied. Turn them on in device settings to use push.",
+      "couldNotSave": "Could not save",
+      "updateFailed": "Failed to update {{label}}. Please try again.",
+      "pushUpdateFailed": "Failed to update push notifications.",
+      "notAvailableTitle": "Not available",
+      "notAvailableBody": "Push notifications require a physical device with a development or production build.",
+      "permissionRequiredTitle": "Permission required",
+      "permissionRequiredBody": "Enable notifications in your device settings to receive push alerts.",
+      "pushSetupFailed": "Push setup failed",
+      "items": {
+        "push": { "label": "Push notifications", "description": "Receive alerts on this device" },
+        "newMatches": { "label": "New matching opportunities", "description": "When a new listing matches your interests" },
+        "deadline": { "label": "Deadline reminders", "description": "3 days before an opportunity closes" },
+        "saved": { "label": "Saved opportunity reminders", "description": "1 day before a saved opportunity deadline" },
+        "mentorshipAssignments": { "label": "Mentorship assignments", "description": "When you are matched with a coach or mentee" },
+        "waitingList": { "label": "Waiting list updates", "description": "Queue position and match availability" },
+        "session": { "label": "Session reminders", "description": "24 hours before mentorship sessions" },
+        "mentorshipMessages": { "label": "Mentorship messages", "description": "New chat messages from your coach or mentees" }
+      }
+    },
+    "privacy": {
+      "title": "Privacy",
+      "body": "We protect your profile, preferences, and activity, and never share them without your consent."
+    },
+    "changePassword": {
+      "title": "Change Password",
+      "currentLabel": "Current password *",
+      "currentPlaceholder": "Enter current password",
+      "newLabel": "New password *",
+      "newPlaceholder": "At least 8 characters",
+      "confirmLabel": "Confirm new password *",
+      "confirmPlaceholder": "Re-enter new password",
+      "requiredTitle": "Required fields",
+      "requiredMessage": "Please fill in all password fields.",
+      "weakTitle": "Weak password",
+      "weakMessage": "New password must be at least 8 characters.",
+      "mismatchTitle": "Passwords do not match",
+      "mismatchMessage": "New password and confirmation must match.",
+      "incorrectCurrent": "Current password is incorrect.",
+      "updatedTitle": "Password updated",
+      "updatedMessage": "Your password was changed successfully."
+    },
+    "deleteAccount": {
+      "title": "Delete Account",
+      "warning": "Deleting your account permanently removes your profile, preferences, mentorship history, saved opportunities, and CVs. This cannot be undone.",
+      "passwordLabel": "Password *",
+      "passwordPlaceholder": "Enter your password",
+      "confirmLabel": "Type {{word}} to confirm *",
+      "confirmPromptTitle": "Confirm deletion",
+      "confirmPromptBody": "Enter your password and type {{word}} to confirm.",
+      "dialogTitle": "Delete account",
+      "dialogBody": "This permanently deletes your account and all data. This cannot be undone.",
+      "delete": "Delete",
+      "incorrectPassword": "Incorrect password.",
+      "submit": "Delete my account"
+    },
+    "profile": {
+      "title": "Profile",
+      "backToDashboard": "Back to dashboard",
+      "verifiedMentor": "Verified Mentor",
+      "personalInfo": "Personal Info",
+      "academicInfo": "Academic Info",
+      "interests": "Interests",
+      "opportunityPreferences": "Opportunity Preferences",
+      "bio": "Bio"
+    },
+    "personalInfo": {
+      "fullNameLabel": "Full name *",
+      "fullNamePlaceholder": "Your name",
+      "countryLabel": "Country *",
+      "countryPlaceholder": "Select your country",
+      "requiredTitle": "Required fields",
+      "requiredMessage": "Please enter your name and country."
+    },
+    "academicInfo": {
+      "universityLabel": "University *",
+      "universityPlaceholder": "Institution",
+      "degreeLabel": "Degree level *",
+      "courseLabel": "Course / major *",
+      "coursePlaceholder": "Select course or major",
+      "requiredTitle": "Required fields",
+      "requiredMessage": "Please enter your university and course/major."
+    },
+    "interests": {
+      "label": "Interests *",
+      "placeholder": "Select interests",
+      "requiredTitle": "Required field",
+      "requiredMessage": "Select at least one interest."
+    },
+    "opportunityPreferences": {
+      "typesLabel": "Opportunity types *",
+      "typesPlaceholder": "Types you are looking for",
+      "countriesLabel": "Preferred countries (comma-separated) *",
+      "countriesPlaceholder": "e.g. UK, Germany, Canada",
+      "fundingLabel": "Funding preference *",
+      "requiredTitle": "Required field",
+      "requiredTypes": "Select at least one opportunity type.",
+      "requiredCountries": "Add at least one preferred country."
+    },
+    "bio": {
+      "label": "About you",
+      "placeholder": "A short intro about yourself…"
+    }
+  },
+  "onboarding": {
+    "shell": {
+      "continue": "Continue",
+      "back": "Back",
+      "saving": "Saving…",
+      "steps": {
+        "basic": "Basic Info",
+        "academic": "Academic",
+        "preferences": "Preferences"
+      },
+      "panels": {
+        "basic": {
+          "heading": "Let's get to know you",
+          "description": "Tell us a little about yourself so we can personalize your experience and recommend opportunities that fit your profile."
+        },
+        "academic": {
+          "heading": "Build your academic profile",
+          "description": "Help us understand your educational background so we can find opportunities that match your level and interests."
+        },
+        "preferences": {
+          "heading": "Let's tailor opportunities for you",
+          "description": "Choose the types of opportunities you're interested in and we'll recommend the most relevant ones."
+        }
+      }
+    },
+    "basic": {
+      "title": "Basic information",
+      "subtitle": "Tell us a bit about yourself to personalise your experience.",
+      "fullNameLabel": "Full name *",
+      "fullNamePlaceholder": "e.g. Jane Doe",
+      "countryLabel": "Country *",
+      "countryPlaceholder": "Select your country",
+      "requiredTitle": "Required fields",
+      "requiredMessage": "Please enter your full name and country."
+    },
+    "academic": {
+      "title": "Academic information",
+      "subtitle": "Help us tailor opportunities to your studies and goals.",
+      "universityLabel": "University *",
+      "universityPlaceholder": "Your institution",
+      "degreeLabel": "Degree level *",
+      "degreePlaceholder": "Select degree level",
+      "courseLabel": "Course / Major *",
+      "coursePlaceholder": "Select course / major",
+      "interestsLabel": "Interests *",
+      "interestsPlaceholder": "Select interests",
+      "careerLabel": "Career interests (comma-separated)",
+      "careerPlaceholder": "e.g. software engineering, academia",
+      "requiredTitle": "Required fields",
+      "requiredMessageFields": "Please enter your university and course/major.",
+      "requiredMessageInterest": "Please select at least one interest."
+    },
+    "preferences": {
+      "title": "Opportunity preferences",
+      "subtitle": "We'll use this to personalise your recommendations.",
+      "finish": "Finish setup",
+      "typesLabel": "Opportunity types *",
+      "typesPlaceholder": "Select opportunity types",
+      "countriesLabel": "Preferred countries (comma-separated) *",
+      "countriesPlaceholder": "e.g. UK, Germany, Canada",
+      "fundingLabel": "Funding preference *",
+      "incompleteTitle": "Complete earlier steps",
+      "incompleteBasic": "Please fill in your basic information first.",
+      "incompleteAcademic": "Please fill in your academic information first.",
+      "gotoStep1": "Go to step 1",
+      "gotoStep2": "Go to step 2",
+      "requiredTitle": "Required fields",
+      "requiredTypes": "Please select at least one opportunity type.",
+      "requiredCountries": "Add at least one preferred country (comma-separated)."
+    },
+    "funding": {
+      "trigger": "Select funding type",
+      "sheetTitle": "Funding preference",
+      "searchPlaceholder": "Search...",
+      "noResults": "No results for \"{{query}}\""
+    },
+    "progress": {
+      "stepOf": "Step {{current}} of {{total}}",
+      "steps": {
+        "basic": "Basic info",
+        "academic": "Academic",
+        "preferences": "Preferences"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "error": "Failed to load dashboard",
+    "sections": {
+      "recommendedFull": "Recommended For You",
+      "recommendedShort": "For You",
+      "recent": "Recently Uploaded",
+      "closing": "Closing Soon"
+    },
+    "greeting": {
+      "morning": "Good morning, {{name}}.",
+      "afternoon": "Good afternoon, {{name}}.",
+      "evening": "Good evening, {{name}}.",
+      "night": "Good night, {{name}}."
+    },
+    "hero": {
+      "eyebrow": "YOUR DASHBOARD",
+      "subheadline": "Here is what is moving today...",
+      "stats": {
+        "opportunities": "Available Opportunities",
+        "mentees": "Connected Mentees",
+        "mentors": "Connected Mentors",
+        "applications": "Submitted Applications"
+      }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "or",
+      "back": "Back",
+      "backArrow": "← Back",
+      "continue": "Continue",
+      "continueWithGoogle": "Continue with Google",
+      "continueWithApple": "Continue with Apple",
+      "forgotPassword": "Forgot password?",
+      "supportPrefix": "Facing challenges? Contact"
+    },
+    "fields": {
+      "email": "Email address",
+      "emailPlaceholder": "you@university.edu",
+      "password": "Password",
+      "passwordPlaceholder": "At least 8 characters",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password"
+    },
+    "welcome": {
+      "signInTab": "Sign in",
+      "createAccountTab": "Create account",
+      "heroTitle": "Find your next\nopportunity",
+      "heroTagline": "Matched to your interests and ambitions, globally.",
+      "signInTitle": "Sign in to explore",
+      "signUpTitle": "Create your account",
+      "signInSubtitle": "Save listings, get personalised recommendations, and never miss a deadline.",
+      "signUpSubtitle": "Join thousands of African students finding scholarships and opportunities.",
+      "fullNameLabel": "Full name",
+      "fullNamePlaceholder": "Your full name",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Re-enter your password",
+      "resetSent": "Reset link sent to {{email}}. Check your inbox.",
+      "createAccount": "Create account",
+      "continueWithEmail": "Continue with email",
+      "signInHint": "Sign in with your email, password, and a one-time code to confirm your account.",
+      "signUpHint": "By creating an account you agree to our Terms of Service and Privacy Policy.",
+      "emailCodeHint": "A one-time verification code will be sent to your email. Kindly check your email to confirm your account.",
+      "errors": {
+        "emailForForgot": "Enter your email address above, then tap \"Forgot password?\".",
+        "invalidEmail": "Enter a valid email address.",
+        "shortPassword": "Password must be at least 8 characters.",
+        "noAccount": "No account found for this email. Fill in your details below to create one.",
+        "enterName": "Enter your full name.",
+        "passwordMismatch": "Passwords do not match.",
+        "accountExists": "This email already has an account. Please sign in."
+      }
+    },
+    "email": {
+      "title": "Sign in",
+      "subtitle": "Enter your email and password. We will send a 6-digit code to confirm your email when needed.",
+      "forgotEmailFirstTitle": "Enter your email first",
+      "forgotEmailFirstBody": "Type your email address in the field above, then tap \"Forgot password?\".",
+      "resetTitle": "Reset password",
+      "resetConfirm": "Send a reset link to {{email}}?",
+      "sendLink": "Send link",
+      "resetSentTitle": "Check your inbox",
+      "resetSentBody": "A password reset link has been sent to {{email}}.",
+      "invalidEmailTitle": "Invalid email",
+      "invalidEmailBody": "Enter a valid email address.",
+      "shortPasswordTitle": "Password too short",
+      "shortPasswordBody": "Use at least 8 characters."
+    },
+    "verify": {
+      "title": "Confirm your email",
+      "subtitle": "Enter the 6-digit code sent to {{email}}",
+      "bannerTitle": "Check your email",
+      "bannerSub": "Your verification code has been sent",
+      "expires": "Expires in 10 minutes.",
+      "signingIn": "Signing you in…",
+      "verify": "Verify & continue",
+      "resendPrefix": "Resend code in",
+      "resend": "Resend code",
+      "enterCodeTitle": "Enter code",
+      "enterCodeBody": "Please enter the 6-digit code from your email.",
+      "codeSentTitle": "Code sent",
+      "codeSentBody": "A new code has been sent to your email."
+    },
+    "reset": {
+      "successTitle": "Password updated",
+      "successBody": "Your password has been changed. Sign in with your new password.",
+      "signIn": "Sign in",
+      "expiredTitle": "Link expired",
+      "expiredBody": "This password reset link has expired or already been used. Request a new one from the sign-in screen.",
+      "backToSignIn": "Back to sign in",
+      "loadingTitle": "Reset password",
+      "verifying": "Verifying your reset link…",
+      "formTitle": "Set new password",
+      "formSubtitle": "Choose a strong password with at least 8 characters.",
+      "newPasswordLabel": "New password",
+      "confirmPasswordLabel": "Confirm password",
+      "confirmPasswordPlaceholder": "Repeat your new password",
+      "mismatchTitle": "Passwords do not match",
+      "mismatchBody": "Please make sure both passwords are the same.",
+      "updatePassword": "Update password"
+    },
+    "splash": {
+      "loading": "Loading your session…",
+      "redirecting": "Redirecting…"
+    }
+  },
+  "opportunities": {
+    "common": {
+      "daysLeft": "{{days}}d left"
+    },
+    "saved": {
+      "unsave": "Unsave",
+      "removing": "Removing…",
+      "loadError": "Failed to load saved items",
+      "count_one": "{{count}} saved opportunity",
+      "count_other": "{{count}} saved opportunities",
+      "empty": {
+        "title": "Nothing saved yet",
+        "description": "Save opportunities from the dashboard or details to see them here."
+      }
+    },
+    "card": {
+      "save": "Save",
+      "unsave": "Unsave",
+      "share": "Share"
+    },
+    "section": {
+      "viewAll": "All opportunities →",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "Check back soon for new listings."
+    },
+    "search": {
+      "placeholder": "Search",
+      "filters": "Filters",
+      "failed": "Search failed",
+      "resultCount_one": "{{count}} result",
+      "resultCount_other": "{{count}} results",
+      "emptyTitle": "No matches",
+      "emptyDescription": "Try a different search or adjust your filters."
+    },
+    "filtersPanel": {
+      "title": "Filters",
+      "clearAll": "Clear all",
+      "showResults": "Show results",
+      "country": "Country",
+      "category": "Category",
+      "fundingType": "Funding type",
+      "degreeLevel": "Degree level",
+      "locationType": "Remote / on-site",
+      "deadline": "Deadline"
+    },
+    "dropdown": {
+      "all": "All",
+      "selected": "{{count}} selected"
+    },
+    "detail": {
+      "header": "Opportunity Details",
+      "notFound": "Opportunity not found or has expired.",
+      "goBack": "Go back",
+      "about": "About this opportunity",
+      "noDescription": "No description provided for this opportunity.",
+      "applyNow": "Apply Now",
+      "save": "Save",
+      "saved": "✓ Saved",
+      "markApplied": "Mark applied",
+      "applied": "Applied ✓",
+      "youMightAlsoLike": "You might also like",
+      "deadlinePassed": "Deadline passed",
+      "shareVia": "Share opportunity via",
+      "shareWhatsapp": "Share on WhatsApp",
+      "shareLinkedin": "Share on LinkedIn",
+      "shareFacebook": "Share on Facebook",
+      "ogDescriptionDefault": "Discover scholarships, internships and fellowships on Voila.",
+      "promos": {
+        "cvBadge": "FREE",
+        "cvTitle": "Free CV Builder",
+        "cvBody": "Build a polished, professional CV in minutes — designed for African students.",
+        "cvCta": "Build your CV",
+        "mentorTitle": "Expert Mentorship",
+        "mentorBody": "Book sessions with mentors who know your field and career goals.",
+        "mentorCta": "Find a mentor",
+        "whatsappTitle": "Join Our WhatsApp Channel",
+        "whatsappBody": "Daily updates on new scholarships and internships — straight to your phone.",
+        "whatsappCta": "Join the channel"
+      }
+    },
+    "share": {
+      "title": "Share opportunity",
+      "close": "Close",
+      "failedTitle": "Share failed",
+      "failedBody": "Could not open the share sheet.",
+      "deadlineLabel": "APPLICATION DEADLINE",
+      "aboutLabel": "ABOUT THIS OPPORTUNITY",
+      "closesToday": "Closes today",
+      "viewAt": "View full opportunity at",
+      "sharedViaPrefix": "Shared via",
+      "sharedViaSuffix": "· Discover opportunities made for you",
+      "opening": "Opening share…",
+      "shareButton": "Share opportunity",
+      "location": {
+        "remote": "Remote",
+        "onsite": "On-site",
+        "hybrid": "Hybrid"
+      }
+    },
+    "tracker": {
+      "searchPlaceholder": "Search title or company…",
+      "export": "Export .xlsx",
+      "cardCount_one": "{{count}} card",
+      "cardCount_other": "{{count}} cards",
+      "filteredSuffix": " (filtered)",
+      "nothingToExportTitle": "Nothing to export",
+      "nothingToExportBody": "Add items to your tracker first.",
+      "exportFailedTitle": "Export failed",
+      "exportFailedBody": "Could not create the spreadsheet.",
+      "loadFailed": "Failed to load your tracker",
+      "apply": "Apply",
+      "notesPlaceholder": "Add a short note…",
+      "moveTo": "Move to {{stage}}",
+      "applyAccessibility": "Apply for this opportunity",
+      "noApplyLinkTitle": "No apply link",
+      "noApplyLinkBody": "This opportunity does not have an application URL yet.",
+      "invalidLinkTitle": "Invalid link",
+      "invalidLinkBody": "Could not open the application URL.",
+      "empty": {
+        "saved": "Save opportunities from the dashboard to start tracking them here.",
+        "applied": "Drag cards here when you have submitted an application.",
+        "interview": "Track opportunities that invited you to interview.",
+        "offer": "Celebrate offers here — you have earned it!",
+        "closed": "Archive declined or passed opportunities here."
+      },
+      "filters": {
+        "title": "Filters",
+        "clearAll": "Clear all",
+        "showResults": "Show results",
+        "stage": "Stage",
+        "categoryTag": "Category / tag",
+        "deadline": "Deadline",
+        "dateSaved": "Date saved",
+        "dates": {
+          "any": "Any time",
+          "d7": "Last 7 days",
+          "d30": "Last 30 days",
+          "d90": "Last 90 days"
+        }
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_one": "{{count}} unread",
+    "unread_other": "{{count}} unread",
+    "markAllRead": "Mark all read",
+    "loadError": "Could not load notifications.",
+    "groups": {
+      "today": "Today",
+      "yesterday": "Yesterday",
+      "week": "This week",
+      "earlier": "Earlier"
+    },
+    "empty": {
+      "title": "All caught up",
+      "subtitle": "When you get matches, messages, or deadline reminders, they will show up here."
+    },
+    "permissionBanner": {
+      "title": "Push notifications are off",
+      "subtitle": "Enable notifications in your device settings to receive alerts on this device."
+    },
+    "actions": {
+      "read": "Read",
+      "delete": "Delete"
+    },
+    "headerButton": {
+      "label": "Notifications",
+      "labelUnread_one": "Notifications, {{count}} unread",
+      "labelUnread_other": "Notifications, {{count}} unread"
+    }
+  },
+  "navigation": {
+    "tabs": {
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "saved": "Saved",
+      "tracker": "Tracker",
+      "browse": "Browse",
+      "mentorship": "Mentorship",
+      "cvBuilder": "CV Builder",
+      "notifications": "Notifications",
+      "profile": "Profile",
+      "settings": "Settings",
+      "more": "More",
+      "admin": "Admin",
+      "superAdmin": "Super Admin"
+    },
+    "headerTitles": {
+      "tracker": "My Tracker",
+      "browse": "Browse by Category",
+      "category": "Category",
+      "opportunity": "Opportunity"
+    },
+    "sections": {
+      "main": "Main",
+      "careerTools": "Career Tools",
+      "account": "Account",
+      "administration": "Administration"
+    },
+    "sidebar": {
+      "expand": "Expand sidebar",
+      "collapse": "Collapse sidebar",
+      "scrollUp": "Scroll up",
+      "scrollDown": "Scroll down",
+      "openMenu": "Open menu"
+    },
+    "footer": {
+      "about": "About",
+      "becomeMentor": "Become a Mentor",
+      "becomeOpportunityAdmin": "Become an Opportunity admin",
+      "reportIssue": "Report an issue"
+    },
+    "whatsapp": {
+      "community": "Join our WhatsApp community",
+      "join": "Join",
+      "dismiss": "Dismiss"
+    },
+    "search": "Search opportunities",
+    "rootTitles": {
+      "signingIn": "Signing in",
+      "payment": "Payment"
+    }
+  },
+  "menu": {
+    "accountMenu": "Account menu",
+    "items": {
+      "profile": "Profile",
+      "settings": "Settings",
+      "referFriend": "Refer a Friend",
+      "helpSupport": "Help & Support",
+      "logout": "Log out",
+      "loggingOut": "Logging out…"
+    },
+    "logoutConfirm": {
+      "title": "Log out",
+      "message": "Are you sure you want to log out?"
+    },
+    "logoutFailed": "Log out failed",
+    "pagination": {
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "refer": {
+      "heroTitle": "Invite your friends",
+      "heroSubtitle": "Share opportunities with friends and help them discover something valuable.",
+      "messageLabel": "Invite Message",
+      "shareButton": "Share Invite",
+      "shareHelper": "Share through WhatsApp, Messages, Email and more.",
+      "shareErrorTitle": "Unable to share",
+      "shareErrorMessage": "Please try again."
+    },
+    "browse": {
+      "focusArea": "Find opportunities by focus area",
+      "allActive": "All active opportunities"
+    },
+    "category": {
+      "count_one": "{{count}} opportunity",
+      "count_other": "{{count}} opportunities",
+      "pageOf": "Page {{page}} of {{total}}",
+      "empty": {
+        "title": "No opportunities",
+        "description": "Nothing active in {{category}} right now. Check back later."
+      }
+    }
+  },
+  "profile": {
+    "avatar": {
+      "changePhoto": "Change profile photo",
+      "tapToChange": "Tap to change photo",
+      "permissionTitle": "Permission required",
+      "permissionMessage": "Allow photo library access to upload a profile picture.",
+      "uploadFailed": "Upload failed",
+      "uploadError": "Could not save your photo. Try again."
+    }
+  },
+  "help": {
+    "title": "Help & Support",
+    "backTitle": "Help",
+    "index": {
+      "intro": "How can we help you? Choose an option below.",
+      "reportBug": {
+        "label": "Report a Bug",
+        "subtitle": "Found something broken? Let us know."
+      },
+      "featureRequest": {
+        "label": "Feature Request",
+        "subtitle": "Suggest an improvement or new feature."
+      },
+      "feedback": {
+        "label": "Leave Feedback",
+        "subtitle": "Rate your experience and share your thoughts."
+      },
+      "contact": {
+        "label": "Contact Support",
+        "subtitle": "Email us at {{email}}"
+      }
+    },
+    "titles": {
+      "reportBug": "Report a Bug",
+      "featureRequest": "Feature Request",
+      "feedback": "Leave Feedback"
+    },
+    "common": {
+      "title": "Title",
+      "description": "Description",
+      "optional": "(optional)",
+      "titleRequired": "Title required",
+      "descriptionRequired": "Description required"
+    },
+    "bug": {
+      "titlePlaceholder": "e.g. App crashes on login",
+      "titleRequiredMessage": "Please enter a short title for the bug.",
+      "descriptionPlaceholder": "Describe what happened and the steps to reproduce it…",
+      "descriptionRequiredMessage": "Please describe what went wrong.",
+      "screenshot": "Screenshot",
+      "attachScreenshot": "Attach screenshot",
+      "permissionTitle": "Permission required",
+      "permissionMessage": "Allow photo access to attach a screenshot.",
+      "submit": "Submit Report"
+    },
+    "feature": {
+      "intro": "Have an idea that would make Voila better? We'd love to hear it.",
+      "titlePlaceholder": "e.g. Dark mode support",
+      "titleRequiredMessage": "Please enter a short title for your request.",
+      "descriptionPlaceholder": "Describe the feature and why it would be useful…",
+      "descriptionRequiredMessage": "Please describe the feature you have in mind.",
+      "submit": "Submit Request"
+    },
+    "feedbackForm": {
+      "intro": "Your feedback helps us build a better experience for every student.",
+      "ratingQuestion": "How would you rate your experience?",
+      "ratingRequired": "Rating required",
+      "ratingRequiredMessage": "Please select a star rating before submitting.",
+      "starA11y_one": "{{count}} star",
+      "starA11y_other": "{{count}} stars",
+      "comment": "Comment",
+      "commentPlaceholder": "Tell us what you liked or what could be better…",
+      "submit": "Send Feedback",
+      "stars": {
+        "1": "Poor",
+        "2": "Fair",
+        "3": "Good",
+        "4": "Great",
+        "5": "Excellent"
+      }
+    },
+    "submit": {
+      "bugSuccessTitle": "Reported",
+      "bugSuccessMessage": "Thanks for the report! We'll look into it.",
+      "featureSuccessTitle": "Submitted",
+      "featureSuccessMessage": "Thanks for the suggestion! We love hearing from you.",
+      "feedbackSuccessTitle": "Thank you!",
+      "feedbackSuccessMessage": "Your feedback means a lot to us.",
+      "errorTitle": "Could not submit"
+    },
+    "contactHint": {
+      "prefix": "Facing any challenges? Contact us at ",
+      "suffix": "."
+    }
+  },
+  "mentorship": {
+    "loading": "Loading mentorship…",
+    "loadRoleError": "Failed to load role",
+    "loadError": "Failed to load",
+    "retry": "Retry",
+    "sectionFallback": "Mentorship",
+    "drawer": {
+      "open": "Open mentorship sections",
+      "sections": "Sections",
+      "title": "Mentorship"
+    },
+    "nav": {
+      "student": {
+        "dashboard": "Dashboard",
+        "coach": "My Coach",
+        "messages": "Messages",
+        "book": "Book session",
+        "sessions": "Upcoming sessions"
+      },
+      "coach": {
+        "dashboard": "Dashboard",
+        "messages": "Messages",
+        "availability": "Availability",
+        "sessions": "Sessions",
+        "notifications": "Notifications"
+      }
+    },
+    "sections": {
+      "student": {
+        "dashboard": "Dashboard",
+        "coach": "My Coach",
+        "messages": "Messages",
+        "book": "Book a Session",
+        "sessions": "Upcoming Sessions"
+      },
+      "coach": {
+        "dashboard": "Mentees",
+        "messages": "Messages",
+        "availability": "Calendar & Availability",
+        "sessions": "Session Management",
+        "notifications": "Notifications"
+      }
+    },
+    "student": {
+      "coachNameFallback": "Your coach",
+      "selectCoachTitle": "Select a coach",
+      "selectCoachMessage": "Please choose a coach from the list before continuing.",
+      "leaveConfirmTitle": "Leave mentorship",
+      "leaveConfirmMessage": "You can request a new coach after leaving. This cannot be undone.",
+      "cancelSessionTitle": "Cancel session",
+      "cancelSessionMessage": "Cancel this session?",
+      "cancelErrorTitle": "Cannot cancel",
+      "requestCoach": "Request a Coach",
+      "leaveHint": "End your current mentorship. You may request a new coach later.",
+      "leave": "Leave mentorship",
+      "emptyTitle": "No active mentorship",
+      "emptyDescription": "Request a coach to get started.",
+      "chooseToViewProfile": "Choose a coach to view their profile.",
+      "chooseToMessage": "Choose a coach to start messaging.",
+      "chatEmptyHint": "Send a message to your coach about goals, sessions, or feedback.",
+      "chooseToBook": "Choose a coach to book sessions.",
+      "upcomingSessions": "Upcoming sessions",
+      "noSessions": "No sessions yet.",
+      "browseFilters": {
+        "all": "All",
+        "technology": "Technology",
+        "business": "Business",
+        "career": "Career",
+        "scholarships": "Scholarships",
+        "research": "Research",
+        "entrepreneurship": "Entrepreneurship"
+      },
+      "waitingList": {
+        "badge": "Waiting list",
+        "position": "Queue position #{{position}}",
+        "queueInfo_one": "{{count}} student in queue · joined {{date}}",
+        "queueInfo_other": "{{count}} students in queue · joined {{date}}",
+        "leave": "Leave waiting list"
+      },
+      "coachSummary": {
+        "loading": "Loading coach details…",
+        "coachLabel": "Your coach",
+        "interests": "Interests & focus",
+        "viewProfile": "View full profile →"
+      },
+      "chooser": {
+        "loadError": "Could not load coaches.",
+        "noCoachesTitle": "No coaches available right now",
+        "noCoachesPlatform": "There are no coaches on the platform yet. Join the waiting list and we will notify you when a coach is available.",
+        "noCoachesFull": "Every coach is currently full. Join the waiting list to be notified when a slot opens.",
+        "joinWaitingList": "Join waiting list",
+        "searchPlaceholder": "Search by name or expertise…",
+        "recommended": "Recommended for you",
+        "allCoaches": "All coaches",
+        "emptySearch": "No coaches match your search. Try a different keyword or filter.",
+        "emptyList": "No coaches to display.",
+        "goBack": "Go back",
+        "coachProfile": "Coach Profile",
+        "noBio": "This coach has not added a bio yet.",
+        "chooseCoach": "Choose this coach",
+        "atCapacity": "This coach is currently at capacity"
+      },
+      "browseCard": {
+        "nameFallback": "Coach",
+        "notAccepting": "Not accepting students",
+        "full": "Currently full",
+        "available": "Available"
+      },
+      "sessionsTable": {
+        "colCoach": "Coach Details",
+        "colType": "Session Type",
+        "colDateTime": "Date & Time",
+        "colNotes": "My Notes",
+        "colStatus": "Status",
+        "colActions": "Actions",
+        "empty": "No upcoming sessions scheduled.",
+        "sessionTitleFallback": "Mentorship session",
+        "noteTitle": "My note",
+        "noNote": "No note",
+        "noMeetingTitle": "No meeting link yet",
+        "noMeetingMessage": "Your coach will share a meeting link soon.",
+        "join": "Join now",
+        "cancel": "Cancel",
+        "statusPending": "Pending",
+        "statusConfirmed": "Confirmed"
+      },
+      "booking": {
+        "noAvailability": "Your coach has not set availability yet. Message them to arrange a time.",
+        "sessionRequestedTitle": "Session requested",
+        "bookingFailedTitle": "Booking failed",
+        "tryAgain": "Try again.",
+        "panelHint": "Tap a slot to request your next session (coach confirms).",
+        "panelConfirmMessage": "Your coach will confirm the booking.",
+        "gridHint": "Tap an available slot. Add a short note so your coach knows what you want to discuss.",
+        "emptySlots": "No upcoming slots in the next 4 weeks.",
+        "booked": "Booked",
+        "available": "Available",
+        "localTime": "{{timezone}} · local time",
+        "bookSession": "Book session",
+        "gridConfirmMessage": "Your coach will see your note and confirm the booking.",
+        "addNoteTitle": "Add a note",
+        "addNoteMessage": "Please write at least a short reason for this session (8+ characters).",
+        "whyBooking": "Why are you booking? (required)",
+        "notesPlaceholder": "e.g. Review my CV and discuss internship applications…",
+        "cancel": "Cancel",
+        "requestSession": "Request session"
+      },
+      "coachProfileCard": {
+        "endsOn": "Mentorship ends {{date}}"
+      }
+    },
+    "coach": {
+      "confirmSessionTitle": "Confirm session",
+      "confirmSessionMessage": "Are you sure you want to confirm this session? The Jitsi link will be ready to join.",
+      "sessionConfirmedTitle": "Session confirmed",
+      "sessionConfirmedMessage": "Session is confirmed. The Jitsi link is ready to join.",
+      "errorTitle": "Error",
+      "confirmSessionError": "Could not confirm session.",
+      "cancelSessionTitle": "Cancel session",
+      "cancelSessionMessage": "Cancel this session? The student will be notified and the slot will become available.",
+      "studentFallback": "Student",
+      "menteeFallback": "Mentee",
+      "upcoming": "Upcoming",
+      "completed": "Completed",
+      "toggleCompleted": "Toggle completed sessions",
+      "capacity": "{{active}} / {{max}} active mentees",
+      "menteeCard": {
+        "removeTitle": "Remove student",
+        "removeMessage": "Remove {{name}} from your mentorship roster?",
+        "cancel": "Cancel",
+        "remove": "Remove",
+        "progress": "{{percent}}% of 3-month mentorship · ends {{date}}",
+        "removeButton": "Remove student"
+      },
+      "messages": {
+        "none": "No students to message.",
+        "students": "Students",
+        "noMessages": "No messages yet",
+        "back": "← All students",
+        "emptyHint": "Message this student about goals, sessions, or feedback."
+      },
+      "menteesTable": {
+        "colProfile": "Profile",
+        "colName": "Name",
+        "colCourse": "Course",
+        "colUniversity": "University",
+        "colEndsOn": "Ends On",
+        "colActions": "Actions",
+        "empty": "No active mentees. Students from the waiting list will appear here when assigned.",
+        "actionsFor": "Actions for {{name}}",
+        "viewProfile": "View profile",
+        "message": "Message",
+        "delete": "Delete",
+        "deleting": "Deleting…",
+        "removeTitle": "Remove student",
+        "removeMessage": "Are you sure you want to remove {{name}} from mentorship?",
+        "removeFallbackName": "this student",
+        "studentProfile": "Student profile",
+        "close": "Close"
+      },
+      "sessionsTable": {
+        "colMentee": "Mentee Details",
+        "colType": "Session Type",
+        "colDateTime": "Date & Time",
+        "colNotes": "Short Notes",
+        "colStatus": "Status",
+        "colActions": "Actions",
+        "empty": "No sessions in this category.",
+        "sessionTitleFallback": "Mentorship session",
+        "noMeetingTitle": "No meeting link yet",
+        "noMeetingMessage": "Add or edit a meeting link before joining.",
+        "noteTitle": "Session note",
+        "noNote": "No note",
+        "join": "Join Meeting",
+        "editLink": "Edit link",
+        "confirm": "Confirm session",
+        "cancel": "Cancel session",
+        "viewDetails": "View details",
+        "statusCompleted": "Completed",
+        "statusConfirmed": "Confirmed"
+      },
+      "availability": {
+        "invalidTimesTitle": "Invalid times",
+        "invalidTimesMessage": "End time must be after start time.",
+        "hint": "Recurring weekly slots students can book.",
+        "add": "+ Add",
+        "empty": "No availability yet. Add your first weekly slot.",
+        "delete": "Delete",
+        "addSlot": "Add weekly slot",
+        "dayFallback": "Day",
+        "to": "to",
+        "timezone": "Timezone",
+        "cancel": "Cancel",
+        "save": "Save",
+        "dayOfWeek": "Day of week",
+        "emptyPublished": "No availability published yet.",
+        "timezoneHint": "Timezone (e.g. UTC)",
+        "addAvailability": "Add availability"
+      },
+      "notifications": {
+        "newMentees": "New mentees",
+        "studentsAssigned_one": "{{count}} student assigned in the last 7 days",
+        "studentsAssigned_other": "{{count}} students assigned in the last 7 days",
+        "newMessages": "New messages",
+        "conversationsAwaiting_one": "{{count}} conversation awaiting your reply",
+        "conversationsAwaiting_other": "{{count}} conversations awaiting your reply",
+        "sessionReminders": "Session reminders",
+        "sessionsIn24h_one": "{{count}} session in the next 24 hours",
+        "sessionsIn24h_other": "{{count}} sessions in the next 24 hours",
+        "allCaughtUp": "You are all caught up."
+      }
+    },
+    "roles": {
+      "mentee": "Mentee"
+    },
+    "days": {
+      "0": "Sunday",
+      "1": "Monday",
+      "2": "Tuesday",
+      "3": "Wednesday",
+      "4": "Thursday",
+      "5": "Friday",
+      "6": "Saturday"
+    },
+    "chat": {
+      "them": "Them",
+      "someone": "Someone",
+      "typing": "{{name}} is typing…",
+      "emptyHintDefault": "Send a message to start the conversation.",
+      "documentFallback": "Document",
+      "messageFailedTitle": "Message failed",
+      "messageFailedBody": "Could not send your message. Try again.",
+      "cannotAttachTitle": "Cannot attach",
+      "cannotAttachBody": "No active mentorship conversation.",
+      "conversation": "Mentorship conversation",
+      "noMessages": "No messages yet",
+      "attach": "Attach photo or file",
+      "messagePlaceholder": "Message…",
+      "send": "Send message",
+      "attachSheet": {
+        "title": "Attach",
+        "sizeHint": "Photos up to {{image}}, files up to {{file}}",
+        "library": "Photo library",
+        "camera": "Take photo",
+        "document": "Document (PDF, Excel, Word…)",
+        "cancel": "Cancel"
+      }
+    },
+    "session": {
+      "coachPrefix": "Coach: {{name}}",
+      "note": "Session note",
+      "titleFallback": "Mentorship session",
+      "linkAdded": "Meeting link added",
+      "statusPending": "pending",
+      "join": "Join now",
+      "awaitingLink": "Waiting for coach to confirm and share the session link",
+      "confirm": "Confirm",
+      "editLink": "Edit link",
+      "addLink": "Add meeting link",
+      "cancelTitle": "Cancel session",
+      "cancelMessage": "Cancel this session?",
+      "cancelMessageCoach": "Cancel this session? The student will be notified.",
+      "no": "No",
+      "yes": "Yes",
+      "cancel": "Cancel",
+      "invalidLinkTitle": "Invalid link",
+      "invalidLinkMessage": "Enter a valid Zoom or meeting URL (https://…).",
+      "linkSavedTitle": "Link saved",
+      "linkSavedMessage": "Your mentee can join when the session starts.",
+      "errorTitle": "Error",
+      "saveLinkError": "Could not save link.",
+      "meetingLinkTitle": "Meeting link",
+      "meetingLinkHint": "Share this with your mentee before the session starts.",
+      "saveLink": "Save link",
+      "joinSession": "Join session",
+      "reschedule": "Reschedule",
+      "cancelBlocked": "This session cannot be cancelled."
+    },
+    "calendar": {
+      "cancelTitle": "Cancel session?",
+      "keepIt": "Keep it",
+      "cancelSession": "Cancel session",
+      "alreadyBookedTitle": "Session already booked",
+      "alreadyBookedMessage": "You already have an active session. Cancel it before booking a new one.",
+      "notesRequiredTitle": "Notes required",
+      "notesRequiredMessage": "Please add a short note for your coach before confirming.",
+      "sessionRequestedTitle": "Session requested",
+      "sessionRequestedMessage": "Your coach has been notified.",
+      "bookingFailedTitle": "Booking failed",
+      "tryAgain": "Try again.",
+      "noSlots": "Your coach has not opened any time slots yet. Message them to arrange a time.",
+      "studentHint": "Tap a green slot to book. Blue slots are already taken. You can only book one session at a time.",
+      "available": "Available",
+      "booked": "Booked",
+      "completed": "Completed",
+      "bookTitle": "Book a session?",
+      "bookConfirm": "Book a session with {{name}} on {{label}}?",
+      "shortNotes": "Short notes",
+      "notesPlaceholder": "What do you want to work on in this session?",
+      "cancel": "Cancel",
+      "confirm": "Confirm",
+      "week": "Week",
+      "day": "Day",
+      "coachHint": "Tap empty cells to add availability, or tap a green slot to remove it",
+      "availabilityErrorTitle": "Availability",
+      "bookedSessionTitle": "Booked session",
+      "bookedSessionMessage": "Confirmed and pending sessions cannot be edited on the calendar.",
+      "upcomingHeading": "Upcoming sessions",
+      "noUpcoming": "No upcoming sessions.",
+      "participantFallback": "Participant",
+      "statusPending": "Pending",
+      "confirmSession": "Confirm session",
+      "join": "Join now"
+    },
+    "profile": {
+      "nameFallback": "Unknown",
+      "verifiedMentor": "Verified Mentor",
+      "country": "Country",
+      "university": "University",
+      "major": "Major / program",
+      "degreeLevel": "Degree level",
+      "academicFocus": "Academic focus",
+      "careerInterests": "Career interests",
+      "interests": "Interests",
+      "skills": "Skills & focus areas",
+      "about": "About"
+    },
+    "matched": "You are matched with a coach until {{date}}",
+    "list": {
+      "empty": "Nothing here yet.",
+      "noData": "No data to display."
+    },
+    "actions": {
+      "selectCoachError": "Please select a coach from the list before continuing.",
+      "coachConnectedTitle": "Coach connected",
+      "coachConnectedMessage": "Your mentorship is active. You can message your coach and book sessions from the dashboard.",
+      "couldNotConnect": "Could not connect",
+      "waitingListTitle": "On the waiting list",
+      "waitingListMessage": "You are #{{position}} in the queue. We will notify you when a coach has capacity.",
+      "requestFailed": "Request failed",
+      "cancelledTitle": "Cancelled",
+      "cancelledMessage": "Your mentorship request was cancelled.",
+      "cancelFailed": "Cancel failed",
+      "leftTitle": "Left mentorship",
+      "leftMessage": "You can request a new coach when ready.",
+      "couldNotLeave": "Could not leave",
+      "studentRemovedTitle": "Student removed",
+      "studentRemovedMessage": "Their slot is now available for the waiting list.",
+      "removeFailed": "Remove failed"
+    },
+    "messageErrors": {
+      "notSignedIn": "Not signed in",
+      "uploadFailed": "Failed to upload attachment",
+      "empty": "Message cannot be empty."
+    },
+    "availabilityErrors": {
+      "missingMentor": "Missing mentor"
+    },
+    "attachment": {
+      "permissionTitle": "Permission required",
+      "libraryPermission": "Allow photo library access to share images.",
+      "cameraPermission": "Allow camera access to take a photo.",
+      "genericError": "Could not attach this file. Try again.",
+      "tooLargeTitle": "File too large",
+      "uploadFailedTitle": "Upload failed",
+      "tooLarge": "File is too large. Maximum size is {{size}}.",
+      "readError": "Could not read the selected file."
+    },
+    "calendarEvents": {
+      "cancelled": "Cancelled",
+      "completed": "Completed",
+      "bookedWithPeer": "Booked · {{peer}}",
+      "booked": "Booked",
+      "sessionWithPeer": "Session · {{peer}}",
+      "session": "Session",
+      "available": "Available"
+    }
+  },
+  "admin": {
+    "backTitle": "Back",
+    "titles": {
+      "home": "Opportunities",
+      "pending": "Pending review",
+      "create": "Create opportunity",
+      "paste": "Paste opportunities",
+      "edit": "Edit opportunity",
+      "review": "Review opportunity",
+      "reviewBackTitle": "Pending"
+    },
+    "dashboard": {
+      "subtitle": "Live metrics",
+      "failedToLoadAnalytics": "Failed to load analytics",
+      "sections": {
+        "users": "Users",
+        "opportunities": "Opportunities",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Total users",
+        "newThisWeek": "New this week",
+        "newThisMonth": "New this month",
+        "onboardingDone": "Onboarding done",
+        "onboardingPending": "Onboarding pending",
+        "totalPosted": "Total posted",
+        "closingIn7Days": "Closing in 7 days",
+        "totalSaves": "Total saves",
+        "totalApplied": "Total applied",
+        "totalSent": "Total sent",
+        "totalUnread": "Total unread"
+      },
+      "charts": {
+        "byCategory": "By category",
+        "byCountry": "By country",
+        "byFundingType": "By funding type"
+      },
+      "topLists": {
+        "mostSaved": "Top 5 most saved",
+        "mostApplied": "Top 5 most applied"
+      },
+      "actions": {
+        "manageOpportunities": "Manage opportunities",
+        "createOpportunity": "Create opportunity"
+      }
+    },
+    "analytics": {
+      "pageTitle": "Platform analytics",
+      "subtitle": "Users, opportunities, engagement, and notifications across Voila."
+    },
+    "charts": {
+      "noData": "No data yet"
+    },
+    "topList": {
+      "usersCount": "{{count}} users"
+    },
+    "opportunityList": {
+      "homeTitle": "Manage opportunities",
+      "homeSubtitle": "Add and maintain listings students see in the app.",
+      "pasteJson": "Paste JSON",
+      "createNew": "Create new",
+      "pendingBanner_one": "{{count}} scraped opportunity pending review",
+      "pendingBanner_other": "{{count}} scraped opportunities pending review",
+      "reviewLink": "Review →",
+      "failedToLoad": "Failed to load opportunities",
+      "emptyList": "No opportunities yet. Create one or paste JSON to get started.",
+      "deadline": "Deadline: {{date}}",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteConfirmTitle": "Delete opportunity",
+      "deleteConfirmMessage": "Delete \"{{title}}\"? This cannot be undone.",
+      "deleteFailedTitle": "Delete failed",
+      "deleteFailedMessage": "Could not delete this opportunity."
+    },
+    "pendingQueue": {
+      "heroTitle": "Pending review",
+      "heroSubtitle": "Scraped opportunities waiting for approval. Tap a card to review and edit before approving.",
+      "failedToLoad": "Failed to load pending opportunities",
+      "emptyTitle": "All caught up",
+      "emptyMessage": "No scraped opportunities are waiting for review.",
+      "loadingMore": "Loading more…",
+      "deadline": "Deadline: {{date}}",
+      "deadlineNotSet": "Not set",
+      "tapToReview": "Tap to review & edit →",
+      "quickApprove": "Quick approve",
+      "reject": "Reject",
+      "quickApproveConfirmTitle": "Quick approve",
+      "quickApproveConfirmMessage": "Make \"{{title}}\" visible to students without editing?",
+      "cancel": "Cancel",
+      "approve": "Approve",
+      "rejectConfirmTitle": "Reject opportunity",
+      "rejectConfirmMessage": "Remove \"{{title}}\" from the queue? It will not be shown to students."
+    },
+    "pendingReview": {
+      "saveAndApprove": "Save & Approve",
+      "reject": "Reject",
+      "rejectConfirmTitle": "Reject opportunity",
+      "rejectConfirmMessage": "Remove \"{{title}}\" from the queue? It will not be shown to students."
+    },
+    "createScreen": {
+      "hint": "Fill all required fields, then tap Create. Students only see listings with a future deadline (YYYY-MM-DD after today).",
+      "submitLabel": "Create opportunity"
+    },
+    "editScreen": {
+      "submitLabel": "Save changes"
+    },
+    "pasteScreen": {
+      "title": "Paste opportunities (JSON)",
+      "hint": "Paste a JSON object or array. Required: <bold>title</bold>, <bold>organization</bold>, <bold>deadline</bold> (YYYY-MM-DD).\nOptional: description, applyUrl, imageUrl, category, country, tags, fundingType, degreeLevels, locationType.\nDropdown values are matched automatically — \"South Africa\", \"Undergraduate\", \"on-site\" all resolve to the correct option.",
+      "fieldReference": "Field reference",
+      "loadExample": "Load example",
+      "importButton": "Import opportunities",
+      "couldNotParseTitle": "Could not parse",
+      "nothingToImportTitle": "Nothing to import",
+      "nothingToImportMessage": "Add at least one valid opportunity object.",
+      "importedSummary": "Imported {{ok}} of {{total}} opportunities.",
+      "importFinishedIssuesTitle": "Import finished with issues",
+      "successTitle": "Success",
+      "successMessage": "{{count}} opportunities are now live.",
+      "rowParseError": "Row {{row}}: expected an object.",
+      "rowMissingFieldsError": "Row {{row}}: title, organization, and deadline are required.",
+      "rowCreateFailed": "Row {{row}}: {{error}}",
+      "rowCreateFailedFallback": "Failed to create",
+      "emptyPasteError": "Paste JSON for one opportunity or an array of opportunities.",
+      "invalidJsonError": "Invalid JSON. Paste a single object or an array of opportunity objects.",
+      "fieldLabels": {
+        "category": "category",
+        "tags": "tags (array)",
+        "fundingType": "fundingType",
+        "degreeLevels": "degreeLevels (array)",
+        "locationType": "locationType",
+        "country": "country"
+      },
+      "fieldNotes": {
+        "fundingType": "Aliases: \"fully funded\", \"partial\", \"self funded\"",
+        "degreeLevels": "Aliases: \"Undergraduate\"→bachelors, \"PhD\"→phd, \"Masters\"→masters",
+        "locationType": "Aliases: \"on-site\"→onsite, \"online\"→remote, \"in-person\"→onsite",
+        "country": "Case-insensitive. Use \"Global\" for worldwide opportunities."
+      },
+      "fieldValues": {
+        "countryOther": "... any country name"
+      }
+    },
+    "form": {
+      "titleLabel": "Title *",
+      "titlePlaceholder": "Opportunity title",
+      "organizationLabel": "Organization *",
+      "organizationPlaceholder": "Organization name",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Full description",
+      "imageUrlLabel": "Image URL",
+      "deadlineLabel": "Deadline * (YYYY-MM-DD)",
+      "applyUrlLabel": "Apply URL",
+      "applyUrlPlaceholder": "https://apply.example.com",
+      "classificationSection": "Classification (matches user onboarding options)",
+      "categoryLabel": "Category *",
+      "categoryPlaceholder": "Select opportunity type",
+      "tagsLabel": "Interest tags *",
+      "tagsPlaceholder": "Select at least one interest tag",
+      "countryLabel": "Country *",
+      "countryPlaceholder": "Select country",
+      "countryGlobalOption": "Global",
+      "fundingTypeLabel": "Funding type *",
+      "degreeLevelLabel": "Education level *",
+      "degreeLevelPlaceholder": "Select education levels",
+      "locationTypeLabel": "Location type *",
+      "locationTypePlaceholder": "Select location type",
+      "checkRequiredFieldsTitle": "Check required fields",
+      "genericSubmitError": "Something went wrong",
+      "validation": {
+        "requiredFields": "Title, organization, and deadline are required.",
+        "category": "Select an opportunity category.",
+        "country": "Select a country.",
+        "tags": "Select at least one interest tag (open Interest tags, choose options, then tap Apply).",
+        "degreeLevels": "Select at least one education level.",
+        "locationType": "Select a location type (remote, on-site, or hybrid).",
+        "fundingType": "Select a funding type for this listing.",
+        "invalidDeadline": "Invalid deadline — use YYYY-MM-DD",
+        "deadlineInFuture": "Deadline must be in the future so students can see this listing.",
+        "deadlineRequired": "Deadline is required",
+        "invalidDeadlineGeneric": "Invalid deadline"
+      }
+    },
+    "table": {
+      "noRecords": "No records found."
+    },
+    "mutations": {
+      "approvedTitle": "Approved",
+      "approvedMessage": "The opportunity is now live for students.",
+      "rejectedTitle": "Rejected",
+      "rejectedMessage": "The opportunity has been removed from the queue.",
+      "tryAgain": "Please try again.",
+      "couldNotApprove": "Could not approve",
+      "couldNotReject": "Could not reject",
+      "postedTitle": "Posted",
+      "postedMessage": "\"{{title}}\" is live for students to browse.",
+      "couldNotCreate": "Could not create",
+      "couldNotCreateFallback": "Could not create this opportunity.",
+      "opportunityNotSaved": "Opportunity was not saved. Please try again.",
+      "savedTitle": "Saved",
+      "savedMessage": "Changes are live for students.",
+      "couldNotSave": "Could not save",
+      "couldNotSaveFallback": "Could not save changes."
+    },
+    "errors": {
+      "missingOpportunityId": "Missing opportunity id",
+      "opportunityNotFound": "Opportunity not found"
+    }
+  },
+  "superAdmin": {
+    "titles": {
+      "overview": "Overview",
+      "analytics": "Analytics",
+      "admins": "Manage admins",
+      "mentors": "Manage mentors",
+      "mentees": "Mentees"
+    },
+    "nav": {
+      "overview": "Overview",
+      "analytics": "Analytics",
+      "admins": "Admins",
+      "mentors": "Mentors",
+      "mentees": "Mentees",
+      "opportunities": "Opportunities"
+    },
+    "overview": {
+      "subtitle": "Quick snapshot. Open Analytics for full charts, users, engagement, and notifications.",
+      "failedToLoad": "Failed to load",
+      "sections": {
+        "mentorship": "Mentorship",
+        "platform": "Platform"
+      },
+      "stats": {
+        "approvedMentors": "Approved mentors",
+        "pendingMentors": "Pending mentors",
+        "activeMentorships": "Active mentorships",
+        "waitingList": "Waiting list",
+        "totalUsers": "Total users",
+        "opportunityAdmins": "Opportunity admins",
+        "activeOpportunities": "Active opportunities",
+        "pendingPush": "Pending push"
+      }
+    },
+    "pagination": {
+      "range": "{{start}}–{{end}} of {{total}}",
+      "prev": "Prev",
+      "pageOfTotal": "{{page}} / {{totalPages}}",
+      "next": "Next"
+    },
+    "searchFilterBar": {
+      "defaultPlaceholder": "Search…"
+    },
+    "admins": {
+      "pageTitle": "Manage admins",
+      "intro": "Opportunity admins can create and manage listings. Super admins retain full platform access.",
+      "addCardLabel": "Add opportunity admin",
+      "emailPlaceholder": "existing-user@email.com",
+      "add": "Add",
+      "addHint": "The user must already have signed up. Promoting grants the Admin tab and opportunity tools.",
+      "searchPlaceholder": "Search by name or email…",
+      "genericError": "Error",
+      "emptySearch": "No admins match your search.",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "role": "Role",
+        "posts": "Posts",
+        "actions": "Actions"
+      },
+      "roleLabels": {
+        "superAdmin": "Super Admin",
+        "opportunityAdmin": "Opportunity Admin"
+      },
+      "remove": "Remove",
+      "removing": "Removing…",
+      "removeConfirmTitle": "Remove admin",
+      "removeConfirmMessage": "Revoke admin access for {{email}}?",
+      "thisUser": "this user",
+      "cancel": "Cancel",
+      "invalidEmailTitle": "Invalid email",
+      "invalidEmailMessage": "Please enter a valid email address.",
+      "promoteSuccessTitle": "Success",
+      "promoteSuccessMessage": "User promoted to opportunity admin.",
+      "promoteFailedTitle": "Failed to add admin",
+      "revokeSuccessTitle": "Done",
+      "revokeSuccessMessage": "Admin access has been revoked.",
+      "revokeFailedTitle": "Failed to remove admin"
+    },
+    "mentors": {
+      "pageTitle": "Manage mentors",
+      "intro": "Create approved mentor profiles by email, approve pending applications, or remove mentors.",
+      "createCardLabel": "Create mentor",
+      "emailPlaceholder": "user@email.com",
+      "add": "Add",
+      "addHint": "The user must already have an account. They'll be immediately approved as a mentor.",
+      "searchPlaceholder": "Search mentors…",
+      "genericError": "Error",
+      "emptyTitle": "No mentors",
+      "emptyDescription": "Try adjusting filters or add a mentor by email.",
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "status": "Status",
+        "mentees": "Mentees",
+        "actions": "Actions"
+      },
+      "filters": {
+        "all": "All"
+      },
+      "approve": "Approve",
+      "approving": "Approving…",
+      "delete": "Delete",
+      "deleting": "Deleting…",
+      "deleteConfirmTitle": "Delete mentor",
+      "deleteConfirmActiveMessage_one": "Remove coach profile for {{email}}?\n\nThis will end {{count}} active mentorship, cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.",
+      "deleteConfirmActiveMessage_other": "Remove coach profile for {{email}}?\n\nThis will end {{count}} active mentorships, cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.",
+      "deleteConfirmMessage": "Remove coach profile for {{email}}?\n\nAny pending requests from students who chose this coach will be cancelled. This cannot be undone.",
+      "thisUser": "this user",
+      "invalidEmailTitle": "Invalid email",
+      "invalidEmailMessage": "Please enter a valid email address.",
+      "createSuccessTitle": "Mentor created",
+      "createSuccessMessage": "Coach profile is approved and ready.",
+      "createFailedTitle": "Failed to create mentor",
+      "approveSuccessTitle": "Approved",
+      "approveSuccessMessage": "Mentor has been approved.",
+      "approveFailedTitle": "Failed to approve mentor",
+      "deleteSuccessTitle": "Deleted",
+      "deleteSuccessMessage": "Mentor profile has been removed.",
+      "deleteFailedTitle": "Failed to delete mentor"
+    },
+    "mentees": {
+      "searchPlaceholder": "Search mentees…",
+      "genericError": "Error",
+      "emptyTitle": "No active mentees",
+      "emptyDescription": "No mentorships match your search.",
+      "studentFallback": "Student",
+      "coachLabel": "Coach: {{name}}"
+    },
+    "opportunities": {
+      "homeSubtitle": "Same tools as opportunity admins: create listings manually or paste JSON in bulk.",
+      "createHint": "Create a listing with the same form opportunity admins use."
+    }
+  },
+  "cvBuilder": {
+    "tabs": {
+      "dashboard": "Dashboard",
+      "tips": "Tips",
+      "templates": "Templates",
+      "preview": "Preview",
+      "sections": "Sections"
+    },
+    "sections": {
+      "personal": { "title": "Personal Information", "description": "Name, email, phone, and location" },
+      "summary": { "title": "Professional Summary", "description": "A short overview of your background" },
+      "experience": { "title": "Experience", "description": "Your work history and achievements", "addLabel": "Add work experience" },
+      "projects": { "title": "Projects", "description": "Key projects, tech stack, and outcomes", "addLabel": "Add project" },
+      "education": { "title": "Education", "description": "Schools, degrees, and academic highlights", "addLabel": "Add education" },
+      "skills": { "title": "Skills", "description": "Technical and soft skills", "addLabel": "Add skill" },
+      "certifications": { "title": "Certificates", "description": "Licences and professional credentials", "addLabel": "Add certification" },
+      "achievements": { "title": "Achievements", "description": "Awards, honours, and notable accomplishments", "addLabel": "Add achievement" },
+      "hobbies": { "title": "Hobbies", "description": "Interests that add personality", "addLabel": "Add hobby" },
+      "languages": { "title": "Languages", "description": "Languages and proficiency levels", "addLabel": "Add language" },
+      "voluntary": { "title": "Volunteer", "description": "Community and unpaid roles", "addLabel": "Add voluntary role" },
+      "references": { "title": "References", "description": "Professional references available on request", "addLabel": "Add reference" }
+    },
+    "status": {
+      "completed": "Completed",
+      "optional": "Optional",
+      "addDetails": "Add details",
+      "inProgress": "In progress",
+      "fraction": "{{filled}}/{{total}}"
+    },
+    "progress": {
+      "ready": "Your CV is ready to preview and download.",
+      "almostThere": "Almost there! Finish the remaining sections.",
+      "greatStart": "Great start! Keep going to build your perfect CV.",
+      "begin": "Begin with personal information and work experience."
+    },
+    "dashboard": {
+      "appTitle": "CV Builder",
+      "newButton": "New",
+      "searchPlaceholder": "Search CVs",
+      "loadingCvs": "Loading your CVs…",
+      "failedToLoad": "Failed to load your CVs",
+      "noResults": "No results",
+      "documentsCount_one": "{{count}} document",
+      "documentsCount_other": "{{count}} documents",
+      "noMatchesTitle": "No matches",
+      "noMatchesDescription": "Nothing matches \"{{query}}\". Try another search.",
+      "emptyTitle": "No CVs yet",
+      "emptyDescription": "Tap \"New\" to create a blank CV — like starting a new document.",
+      "signInRequiredTitle": "Sign in required",
+      "signInRequiredMessage": "Please sign in to create a CV.",
+      "untitledCv": "Untitled CV {{count}}",
+      "couldNotCreateTitle": "Could not create CV",
+      "genericError": "Something went wrong",
+      "titleRequiredTitle": "Title required",
+      "titleRequiredMessage": "Enter a name for your CV.",
+      "couldNotRenameTitle": "Could not rename",
+      "deleteConfirmTitle": "Delete CV",
+      "deleteConfirmMessage": "Delete \"{{title}}\"? This cannot be undone.",
+      "couldNotDeleteTitle": "Could not delete",
+      "templateFallback": "CV",
+      "updatedOn": "{{template}} · Updated {{date}}",
+      "optionsLabel": "CV options",
+      "menu": {
+        "rename": "Rename",
+        "edit": "Edit",
+        "delete": "Delete"
+      }
+    },
+    "hub": {
+      "cvNotFound": "CV not found",
+      "searchSectionsPlaceholder": "Search sections",
+      "outline": "Outline",
+      "reorder": "Reorder",
+      "noSectionsMatch": "No sections match your search.",
+      "openPreview": "Open live PDF preview",
+      "downloadPdf": "Download PDF",
+      "backToDocuments": "Back to all documents",
+      "previewLabel": "Preview",
+      "percentComplete": "{{percent}}% complete · {{message}}"
+    },
+    "reorderModal": {
+      "title": "Reorder sections",
+      "subtitle": "Move sections up or down. Personal information stays at the top.",
+      "saveOrder": "Save order"
+    },
+    "renameModal": {
+      "heading": "Rename CV",
+      "placeholder": "CV title",
+      "cancel": "Cancel",
+      "save": "Save"
+    },
+    "saveIndicator": {
+      "idle": "Saves automatically when you change section",
+      "saving": "Saving…",
+      "saved": "All changes saved",
+      "errorFallback": "Save failed — try switching section again"
+    },
+    "editors": {
+      "entryFallback": "Entry {{index}}",
+      "remove": "Remove",
+      "removeItem": "Remove {{item}}",
+      "addAnother": "Add another",
+      "addItemDefault": "Add item",
+      "typeAndAdd": "Type and add an item",
+      "addEntryDefault": "Add entry",
+      "personal": {
+        "profileNote": "Empty name, email, and location are filled from your profile when you open this CV.",
+        "fullNameLabel": "Full name",
+        "fullNamePlaceholder": "Your full name",
+        "emailLabel": "Email",
+        "emailPlaceholder": "you@email.com",
+        "phoneLabel": "Phone",
+        "phonePlaceholder": "+44 …",
+        "locationLabel": "Location",
+        "locationPlaceholder": "City, country",
+        "linkedInLabel": "LinkedIn",
+        "linkedInPlaceholder": "linkedin.com/in/…",
+        "websiteLabel": "Website",
+        "websitePlaceholder": "https://…"
+      },
+      "summary": {
+        "label": "Professional summary",
+        "placeholder": "Write your professional summary here…"
+      },
+      "experience": {
+        "entryFallback": "Entry {{index}}",
+        "companyLabel": "Company / organisation *",
+        "companyPlaceholder": "Company name",
+        "roleLabel": "Role *",
+        "rolePlaceholder": "Job title",
+        "locationLabel": "Location",
+        "locationPlaceholder": "City, country",
+        "startDateLabel": "Start date",
+        "startDatePlaceholder": "e.g. Jan 2022",
+        "currentlyWorking": "Currently working here",
+        "endDateLabel": "End date",
+        "endDatePlaceholder": "e.g. Dec 2024",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Key responsibilities and achievements — one bullet per line"
+      },
+      "education": {
+        "entryFallback": "Education {{index}}",
+        "schoolLabel": "School *",
+        "schoolPlaceholder": "University or school",
+        "degreeLabel": "Degree *",
+        "degreePlaceholder": "e.g. BSc",
+        "fieldOfStudyLabel": "Field of study",
+        "fieldOfStudyPlaceholder": "e.g. Computer Science",
+        "startDateLabel": "Start date",
+        "startDatePlaceholder": "e.g. 2019",
+        "endDateLabel": "End date",
+        "endDatePlaceholder": "e.g. 2023",
+        "gpaLabel": "GPA",
+        "gpaPlaceholder": "e.g. 3.8 / 4.0",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Honours, coursework, or activities"
+      },
+      "certifications": {
+        "entryFallback": "Certification {{index}}",
+        "nameLabel": "Name *",
+        "namePlaceholder": "Certification name",
+        "issuerLabel": "Issuer",
+        "issuerPlaceholder": "Issuing organisation",
+        "yearLabel": "Year",
+        "yearPlaceholder": "e.g. 2024",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Skills covered or credential ID (optional)"
+      },
+      "achievements": {
+        "entryFallback": "Achievement {{index}}",
+        "titleLabel": "Title *",
+        "titlePlaceholder": "Award or honour",
+        "dateLabel": "Date",
+        "datePlaceholder": "e.g. 2025",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "What you achieved and why it matters"
+      },
+      "languages": {
+        "entryFallback": "Language {{index}}",
+        "languageLabel": "Language *",
+        "languagePlaceholder": "e.g. English",
+        "proficiencyLabel": "Proficiency",
+        "proficiencyPlaceholder": "e.g. Fluent, Native"
+      },
+      "projects": {
+        "entryFallback": "Project {{index}}",
+        "nameLabel": "Project name *",
+        "namePlaceholder": "e.g. Portfolio App",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "What you built and the impact — one bullet per line",
+        "technologiesLabel": "Technologies",
+        "technologiesPlaceholder": "React, TypeScript, Supabase",
+        "linkLabel": "Link",
+        "linkPlaceholder": "https://…",
+        "startDateLabel": "Start date",
+        "startDatePlaceholder": "e.g. 2024",
+        "endDateLabel": "End date",
+        "endDatePlaceholder": "Present"
+      },
+      "references": {
+        "entryFallback": "Reference {{index}}",
+        "nameLabel": "Name *",
+        "namePlaceholder": "Full name",
+        "positionLabel": "Position",
+        "positionPlaceholder": "Job title",
+        "companyLabel": "Company *",
+        "companyPlaceholder": "Organisation",
+        "emailLabel": "Email",
+        "emailPlaceholder": "email@company.com",
+        "phoneLabel": "Phone",
+        "phonePlaceholder": "+44 …"
+      }
+    },
+    "sectionEdit": {
+      "unknownSection": "Unknown section.",
+      "couldNotLoad": "Could not load CV",
+      "save": "Save"
+    },
+    "sectionSettings": {
+      "pageTitle": "Sections",
+      "subtitle": "Turn sections on or off and change their order. Personal information is always included.",
+      "reorderButton": "Reorder sections",
+      "required": "Required",
+      "shownOnCv": "Shown on CV",
+      "hidden": "Hidden"
+    },
+    "templatesScreen": {
+      "subtitle": "Choose a layout to open the live PDF editor preview. Download is GHS 100 per template — unlock once, keep forever."
+    },
+    "tipsScreen": {
+      "subtitle": "Tap a tip to expand the full explanation."
+    },
+    "tips": {
+      "summary": {
+        "title": "Write a strong summary",
+        "body": "Your summary is the first thing recruiters read — make it count. In 2–3 sentences, highlight who you are, your top skills, and what you bring to the table. Avoid generic phrases like \"hardworking team player.\" Instead, be specific: mention your field, a key achievement, and your career goal. Think of it as your elevator pitch on paper."
+      },
+      "experience": {
+        "title": "Quantify experience",
+        "body": "Numbers make your experience credible and memorable. Instead of vague claims, attach real figures to your work. \"Led a team of 5 and reduced bug reports by 30%\" is far more convincing than \"Led a team and improved product quality.\" Ask yourself: How many? How much? How often? Even estimates count — \"Served 50+ customers daily\" beats \"Served many customers.\" Recruiters skim CVs fast; numbers make you stand out instantly."
+      },
+      "skills": {
+        "title": "Match skills to the job",
+        "body": "A generic skills list won't get you far. Before submitting your CV, read the job description carefully and mirror the exact keywords and skills they mention. If they ask for \"project management\" and you write \"task coordination,\" an ATS (Applicant Tracking System) might filter you out before a human even sees your CV. Tailor your skills section for every application — move the most relevant skills to the top, drop the ones that don't apply, and use the employer's own language. A targeted CV always beats a one-size-fits-all one"
+      },
+      "length": {
+        "title": "Keep it concise",
+        "body": "Recruiters spend an average of 7 seconds scanning a CV — every word needs to earn its place. One page is ideal if you have less than 3 years of experience; two pages maximum if you have more. Cut old part-time jobs that are no longer relevant, trim lengthy bullet points to one line, and remove skills everyone assumes you have (like \"Microsoft Word\"). If it doesn't add value, it's just noise. A tight, focused CV signals good communication skills before you even walk through the door."
+      },
+      "proofread": {
+        "title": "Proofread before sending",
+        "body": "A single typo can undo hours of hard work. Spell-checkers miss more than they catch — \"manger\" instead of \"manager\" is technically correct spelling. Read your CV out loud to catch awkward phrasing, then read it backwards line by line to spot spelling errors your brain would otherwise autocorrect. Change the font temporarily to trick your eyes into seeing it fresh. Finally, send it to a friend or mentor for a second pair of eyes. You only get one first impression — make sure it's clean."
+      }
+    },
+    "templateDefs": {
+      "ats": { "label": "ATS Elite", "description": "Single-column, ATS-optimized layout" },
+      "modern": { "label": "Modern", "description": "Blue accents with structured sections" },
+      "tech": { "label": "Tech", "description": "Navy sidebar with timeline experience" },
+      "executive": { "label": "Executive", "description": "Top banner with left-rail section headers" },
+      "minimal": { "label": "Minimal", "description": "Swiss two-column professional layout" }
+    },
+    "pdfButton": {
+      "generating": "Generating…"
+    },
+    "editorPreview": {
+      "cvNotFound": "CV not found",
+      "goBack": "Go back",
+      "livePdfPreview": "{{template}} · live PDF preview",
+      "sectionsPanelTitle": "Sections",
+      "nativeHint": "Open this CV on web for the inline PDF preview canvas. Download still uses the same PDF template on all platforms."
+    },
+    "pdf": {
+      "yourNameFallback": "Your Name",
+      "documentTitleFallback": "CV",
+      "gpaLabel": "GPA",
+      "technicalLabel": "Technical: ",
+      "softSkillsLabel": "Soft Skills: ",
+      "degreeInField": "{{degree}} in {{field}}",
+      "sections": {
+        "allCaps": {
+          "summary": "PROFESSIONAL SUMMARY",
+          "profile": "PROFESSIONAL PROFILE",
+          "education": "EDUCATION",
+          "skills": "SKILLS",
+          "experience": "PROFESSIONAL EXPERIENCE",
+          "keyProjects": "KEY PROJECTS",
+          "projects": "PROJECTS",
+          "certifications": "CERTIFICATIONS",
+          "languages": "LANGUAGES",
+          "achievements": "ACHIEVEMENTS",
+          "volunteer": "VOLUNTEER EXPERIENCE",
+          "references": "REFERENCES",
+          "interests": "INTERESTS"
+        },
+        "titleCase": {
+          "summary": "Summary",
+          "experience": "Experience",
+          "projects": "Projects",
+          "education": "Education",
+          "skills": "Skills",
+          "references": "References"
+        }
+      }
+    },
+    "download": {
+      "exportFailedTitle": "PDF export failed",
+      "couldNotGenerate": "Could not generate PDF.",
+      "readyTitle": "PDF ready",
+      "readyMessage": "Your download should start automatically. Check your browser downloads folder."
+    },
+    "pdfErrors": {
+      "incompleteHtml": "PDF export requires a complete HTML document.",
+      "missingPageContent": "PDF export HTML is missing CV page content.",
+      "appUiMarkup": "PDF export must not include app UI markup.",
+      "couldNotReadBlob": "Could not read PDF blob",
+      "couldNotEncode": "Could not encode PDF",
+      "failedToGenerate": "Failed to generate PDF",
+      "sharingUnavailable": "Sharing is unavailable.",
+      "sharingNotAvailableDevice": "Sharing is not available on this device.",
+      "failedToShare": "Failed to share PDF",
+      "failedToDownload": "Failed to download PDF",
+      "saveFileName": "Save {{fileName}}"
+    },
+    "payments": {
+      "unlockTitle": "Unlock {{template}} downloads",
+      "unlockDescription": "Pay once to download PDFs with the {{template}} layout. Only this template is unlocked — others stay separate.",
+      "total": "Total",
+      "securedByPaystack": "Secured by Paystack",
+      "pay": "Pay GHS {{amount}}",
+      "cancel": "Cancel"
+    },
+    "paystack": {
+      "secureCheckout": "Secure checkout",
+      "loadingPaystack": "Loading Paystack…",
+      "loadFailed": "Could not load Paystack checkout. Check your connection and try again.",
+      "paymentCancelled": "Payment was cancelled",
+      "popupTitle": "Complete payment in the popup window",
+      "popupHint": "If the Paystack window did not open, allow pop-ups and try again.",
+      "popupBlocked": "Allow pop-ups for this site to complete payment."
+    },
+    "paymentFlow": {
+      "paymentFailedTitle": "Payment failed",
+      "paymentCancelledTitle": "Payment cancelled",
+      "paymentReceivedTitle": "Payment received",
+      "paymentReceivedMessage": "Your payment succeeded but we could not save the record. Please contact support if you are charged again.",
+      "signInRequiredTitle": "Sign in required",
+      "signInRequiredMessage": "Please sign in with an email address to pay.",
+      "paymentUnavailableTitle": "Payment unavailable",
+      "paymentIncomplete": "Payment did not complete. Please try again."
+    },
+    "errors": {
+      "notSignedIn": "Not signed in",
+      "missingCvId": "Missing CV id",
+      "cvNotFound": "CV not found",
+      "failedToSave": "Failed to save"
+    },
+    "myCvDefault": "My CV"
+  },
+  "shared": {
+    "options": {
+      "other": "Other",
+      "global": "Global",
+      "degreeLevels": {
+        "high_school": "High school",
+        "bachelors": "Bachelor's",
+        "masters": "Master's",
+        "phd": "PhD / Doctorate",
+        "professional": "Professional / Other"
+      },
+      "funding": {
+        "any": "Any funding",
+        "fully_funded": "Fully funded only",
+        "partially_funded": "Partially funded",
+        "self_funded": "Self-funded"
+      },
+      "courseMajors": {
+        "computerScience": "Computer Science",
+        "engineering": "Engineering",
+        "businessAdministration": "Business Administration",
+        "medicineHealthSciences": "Medicine & Health Sciences",
+        "law": "Law",
+        "education": "Education",
+        "economics": "Economics",
+        "architecture": "Architecture",
+        "agriculture": "Agriculture",
+        "socialSciences": "Social Sciences",
+        "artsHumanities": "Arts & Humanities",
+        "mathematicsStatistics": "Mathematics & Statistics",
+        "environmentalScience": "Environmental Science",
+        "psychology": "Psychology",
+        "mediaCommunication": "Media & Communication"
+      },
+      "interests": {
+        "technologyInnovation": "Technology & Innovation",
+        "researchAcademia": "Research & Academia",
+        "entrepreneurship": "Entrepreneurship",
+        "leadershipManagement": "Leadership & Management",
+        "creativeArtsDesign": "Creative Arts & Design",
+        "communitySocialImpact": "Community & Social Impact",
+        "financeInvestment": "Finance & Investment",
+        "healthcareWellness": "Healthcare & Wellness",
+        "sustainabilityEnvironment": "Sustainability & Environment",
+        "dataAnalytics": "Data & Analytics",
+        "policyGovernance": "Policy & Governance",
+        "marketingBranding": "Marketing & Branding"
+      },
+      "opportunityTypes": {
+        "internship": "Internship",
+        "scholarship": "Scholarship",
+        "fellowship": "Fellowship",
+        "graduateProgramme": "Graduate Programme",
+        "jobFullTime": "Job (Full-time)",
+        "jobPartTime": "Job (Part-time)",
+        "volunteer": "Volunteer",
+        "researchOpportunity": "Research Opportunity",
+        "exchangeProgramme": "Exchange Programme",
+        "bootcampTraining": "Bootcamp & Training",
+        "grantFunding": "Grant & Funding",
+        "competitionAward": "Competition & Award"
+      },
+      "countries": {
+        "afghanistan": "Afghanistan",
+        "albania": "Albania",
+        "algeria": "Algeria",
+        "angola": "Angola",
+        "argentina": "Argentina",
+        "australia": "Australia",
+        "austria": "Austria",
+        "bangladesh": "Bangladesh",
+        "belgium": "Belgium",
+        "benin": "Benin",
+        "botswana": "Botswana",
+        "brazil": "Brazil",
+        "burkinaFaso": "Burkina Faso",
+        "burundi": "Burundi",
+        "capeVerde": "Cabo Verde",
+        "cameroon": "Cameroon",
+        "canada": "Canada",
+        "centralAfricanRepublic": "Central African Republic",
+        "chad": "Chad",
+        "chile": "Chile",
+        "china": "China",
+        "colombia": "Colombia",
+        "comoros": "Comoros",
+        "congoDrc": "Democratic Republic of the Congo",
+        "congoRepublic": "Republic of the Congo",
+        "czechRepublic": "Czech Republic",
+        "denmark": "Denmark",
+        "djibouti": "Djibouti",
+        "egypt": "Egypt",
+        "equatorialGuinea": "Equatorial Guinea",
+        "eritrea": "Eritrea",
+        "eswatini": "Eswatini",
+        "ethiopia": "Ethiopia",
+        "finland": "Finland",
+        "france": "France",
+        "gabon": "Gabon",
+        "gambia": "Gambia",
+        "germany": "Germany",
+        "ghana": "Ghana",
+        "greece": "Greece",
+        "guinea": "Guinea",
+        "guineaBissau": "Guinea-Bissau",
+        "hongKong": "Hong Kong",
+        "hungary": "Hungary",
+        "india": "India",
+        "indonesia": "Indonesia",
+        "iran": "Iran",
+        "iraq": "Iraq",
+        "ireland": "Ireland",
+        "israel": "Israel",
+        "italy": "Italy",
+        "ivoryCoast": "Ivory Coast",
+        "japan": "Japan",
+        "jordan": "Jordan",
+        "kenya": "Kenya",
+        "lesotho": "Lesotho",
+        "liberia": "Liberia",
+        "libya": "Libya",
+        "madagascar": "Madagascar",
+        "malawi": "Malawi",
+        "malaysia": "Malaysia",
+        "mali": "Mali",
+        "mauritania": "Mauritania",
+        "mauritius": "Mauritius",
+        "mexico": "Mexico",
+        "morocco": "Morocco",
+        "mozambique": "Mozambique",
+        "namibia": "Namibia",
+        "netherlands": "Netherlands",
+        "newZealand": "New Zealand",
+        "niger": "Niger",
+        "nigeria": "Nigeria",
+        "norway": "Norway",
+        "pakistan": "Pakistan",
+        "philippines": "Philippines",
+        "poland": "Poland",
+        "portugal": "Portugal",
+        "romania": "Romania",
+        "russia": "Russia",
+        "rwanda": "Rwanda",
+        "saoTomeAndPrincipe": "São Tomé and Príncipe",
+        "saudiArabia": "Saudi Arabia",
+        "senegal": "Senegal",
+        "seychelles": "Seychelles",
+        "sierraLeone": "Sierra Leone",
+        "singapore": "Singapore",
+        "somalia": "Somalia",
+        "southAfrica": "South Africa",
+        "southKorea": "South Korea",
+        "southSudan": "South Sudan",
+        "spain": "Spain",
+        "sudan": "Sudan",
+        "sweden": "Sweden",
+        "switzerland": "Switzerland",
+        "taiwan": "Taiwan",
+        "tanzania": "Tanzania",
+        "thailand": "Thailand",
+        "togo": "Togo",
+        "tunisia": "Tunisia",
+        "turkey": "Turkey",
+        "uganda": "Uganda",
+        "ukraine": "Ukraine",
+        "unitedArabEmirates": "United Arab Emirates",
+        "unitedKingdom": "United Kingdom",
+        "unitedStates": "United States",
+        "vietnam": "Vietnam",
+        "zambia": "Zambia",
+        "zimbabwe": "Zimbabwe"
+      }
+    }
+  }
+}

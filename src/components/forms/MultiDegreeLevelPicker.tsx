@@ -1,9 +1,10 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 import { Text } from '@/components/ui';
-import { OPPORTUNITY_DEGREE_OPTIONS } from '@/constants/opportunity-fields';
+import { getOpportunityDegreeOptions } from '@/constants/opportunity-fields';
 import { spacing } from '@/constants/theme';
 
 type MultiDegreeLevelPickerProps = {
@@ -13,6 +14,7 @@ type MultiDegreeLevelPickerProps = {
 
 export function MultiDegreeLevelPicker({ values, onChange }: MultiDegreeLevelPickerProps) {
   const styles = useThemedStyles(createStyles);
+  useTranslation();
   const toggle = (level: string) => {
     onChange(
       values.includes(level) ? values.filter((v) => v !== level) : [...values, level],
@@ -21,7 +23,7 @@ export function MultiDegreeLevelPicker({ values, onChange }: MultiDegreeLevelPic
 
   return (
     <View style={styles.wrap}>
-      {OPPORTUNITY_DEGREE_OPTIONS.map((level) => {
+      {getOpportunityDegreeOptions().map((level) => {
         const selected = values.includes(level.value);
         return (
           <Pressable

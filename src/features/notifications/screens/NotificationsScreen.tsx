@@ -2,6 +2,7 @@ import { useRouter } from 'expo-router';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { RefreshControl, SectionList, StyleSheet, View } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -22,6 +23,7 @@ import type { AppNotification, PushPermissionStatus } from '@/types/domain/notif
 
 export function NotificationsScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const userId = user?.id;
@@ -61,18 +63,18 @@ export function NotificationsScreen() {
   const listSections = useMemo(
     () =>
       sections.map((group) => ({
-        title: group.label,
+        title: t(`notifications.groups.${group.key}`),
         key: group.key,
         data: group.items,
       })),
-    [sections],
+    [sections, t],
   );
 
   if (isLoading) {
     return (
       <Screen padded={false}>
         <View style={styles.header}>
-          <Text variant="title">Notifications</Text>
+          <Text variant="title">{t('notifications.title')}</Text>
         </View>
         <NotificationSkeletonList />
       </Screen>
@@ -83,10 +85,10 @@ export function NotificationsScreen() {
     <Screen padded={false}>
       <View style={styles.header}>
         <View>
-          <Text variant="title">Notifications</Text>
+          <Text variant="title">{t('notifications.title')}</Text>
           {unreadCount > 0 ? (
             <Text muted variant="caption" style={styles.subtitle}>
-              {unreadCount} unread
+              {t('notifications.unread', { count: unreadCount })}
             </Text>
           ) : null}
         </View>
@@ -97,7 +99,7 @@ export function NotificationsScreen() {
             loading={isMarkingRead}
             disabled={isMarkingRead}
           >
-            Mark all read
+            {t('notifications.markAllRead')}
           </Button>
         ) : null}
       </View>
@@ -111,7 +113,7 @@ export function NotificationsScreen() {
       {error ? (
         <View style={styles.padded}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Could not load notifications.'}
+            message={error instanceof Error ? error.message : t('notifications.loadError')}
           />
         </View>
       ) : null}

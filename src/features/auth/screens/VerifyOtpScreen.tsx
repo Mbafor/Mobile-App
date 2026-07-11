@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -26,6 +27,7 @@ function parseOtpType(value: string | string[] | undefined): OtpVerificationType
 export function VerifyOtpScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const params = useLocalSearchParams<{ email?: string; otpType?: string; source?: string }>();
   const email =
@@ -79,7 +81,7 @@ export function VerifyOtpScreen() {
   const handleVerify = async () => {
     clearError();
     if (code.length !== 6) {
-      Alert.alert('Enter code', 'Please enter the 6-digit code from your email.');
+      Alert.alert(t('auth.verify.enterCodeTitle'), t('auth.verify.enterCodeBody'));
       return;
     }
     const result = await verifyEmailOtp(email, code, otpType);
@@ -92,7 +94,7 @@ export function VerifyOtpScreen() {
     const ok = await resendEmailOtp(email, otpType);
     if (ok) {
       setResendIn(RESEND_COOLDOWN_SEC);
-      Alert.alert('Code sent', 'A new code has been sent to your email.');
+      Alert.alert(t('auth.verify.codeSentTitle'), t('auth.verify.codeSentBody'));
     }
   };
 
@@ -102,8 +104,8 @@ export function VerifyOtpScreen() {
 
   return (
     <AuthScreenLayout
-      title="Confirm your email"
-      subtitle={`Enter the 6-digit code sent to ${email}`}
+      title={t('auth.verify.title')}
+      subtitle={t('auth.verify.subtitle', { email })}
       onBack={() => router.replace(backRoute)}
       backgroundColor={colors.background}
 
@@ -113,12 +115,12 @@ export function VerifyOtpScreen() {
           <Ionicons name="mail-outline" size={22} color={colors.primary} />
         </View>
         <View style={styles.emailSentTextWrap}>
-          <Text style={styles.emailSentTitle}>Check your email</Text>
-          <Text style={styles.emailSentSub}>Your verification code has been sent</Text>
+          <Text style={styles.emailSentTitle}>{t('auth.verify.bannerTitle')}</Text>
+          <Text style={styles.emailSentSub}>{t('auth.verify.bannerSub')}</Text>
         </View>
       </View>
 
-      <Text style={styles.panelSub}>Expires in 10 minutes.</Text>
+      <Text style={styles.panelSub}>{t('auth.verify.expires')}</Text>
 
       <View style={styles.otpWrap}>
         <OtpInput value={code} onChange={setCode} autoFocus onComplete={handleVerify} />
@@ -133,16 +135,16 @@ export function VerifyOtpScreen() {
         style={styles.verifyBtn}
         textStyle={styles.verifyBtnText}
       >
-        {waiting ? 'Signing you in…' : 'Verify & continue'}
+        {waiting ? t('auth.verify.signingIn') : t('auth.verify.verify')}
       </Button>
 
       <Pressable onPress={handleResend} disabled={resendIn > 0 || isLoading} style={styles.resend}>
         {resendIn > 0 ? (
           <Text style={styles.resendMuted}>
-            Resend code in <Text style={styles.resendTimer}>{resendIn}s</Text>
+            {t('auth.verify.resendPrefix')} <Text style={styles.resendTimer}>{resendIn}s</Text>
           </Text>
         ) : (
-          <Text style={styles.resendActive}>Resend code</Text>
+          <Text style={styles.resendActive}>{t('auth.verify.resend')}</Text>
         )}
       </Pressable>
     </AuthScreenLayout>

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -6,25 +7,26 @@ import { spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
-const OPTIONS: { value: ThemeMode; label: string; description: string }[] = [
-  { value: 'system', label: 'System', description: 'Match your device settings' },
-  { value: 'light', label: 'Light', description: 'Always use light mode' },
-  { value: 'dark', label: 'Dark', description: 'Always use dark mode' },
-];
-
 export function AppearanceSection() {
   const { mode, setMode } = useTheme();
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
+
+  const options: { value: ThemeMode; label: string; description: string }[] = [
+    { value: 'system', label: t('settings.appearance.system'), description: t('settings.appearance.systemHint') },
+    { value: 'light', label: t('settings.appearance.light'), description: t('settings.appearance.lightHint') },
+    { value: 'dark', label: t('settings.appearance.dark'), description: t('settings.appearance.darkHint') },
+  ];
 
   return (
     <View>
-      {OPTIONS.map((option, index) => {
+      {options.map((option, index) => {
         const selected = mode === option.value;
         return (
           <Pressable
             key={option.value}
             onPress={() => setMode(option.value)}
-            style={[styles.row, index === OPTIONS.length - 1 && styles.rowLast]}
+            style={[styles.row, index === options.length - 1 && styles.rowLast]}
             accessibilityRole="radio"
             accessibilityState={{ selected }}
           >

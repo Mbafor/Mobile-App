@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useRef, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Animated,
   Image,
@@ -22,38 +23,35 @@ import type { ColorScheme } from '@/constants/theme/types';
 // ─── Step metadata ────────────────────────────────────────────────────────────
 
 const STEP_META = [
-  { label: 'Basic Info', description: 'Name & location' },
-  { label: 'Academic', description: 'University & studies' },
-  { label: 'Preferences', description: 'Opportunity interests' },
+  { labelKey: 'onboarding.shell.steps.basic' },
+  { labelKey: 'onboarding.shell.steps.academic' },
+  { labelKey: 'onboarding.shell.steps.preferences' },
 ] as const;
 
-// Per-step left-panel content: heading, description, illustration, floating icons
+// Per-step left-panel content: heading + description keys, illustration, floating icons
 const STEP_PANEL: {
-  heading: string;
-  description: string;
+  headingKey: string;
+  descriptionKey: string;
   illustration: number;
   icons: (keyof typeof Ionicons.glyphMap)[];
 }[] = [
   {
-    heading: "Let's get to know you",
-    description:
-      'Tell us a little about yourself so we can personalize your experience and recommend opportunities that fit your profile.',
+    headingKey: 'onboarding.shell.panels.basic.heading',
+    descriptionKey: 'onboarding.shell.panels.basic.description',
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/basic-info.png') as number,
     icons: ['person-outline', 'location-outline', 'mail-outline', 'phone-portrait-outline'],
   },
   {
-    heading: 'Build your academic profile',
-    description:
-      'Help us understand your educational background so we can find opportunities that match your level and interests.',
+    headingKey: 'onboarding.shell.panels.academic.heading',
+    descriptionKey: 'onboarding.shell.panels.academic.description',
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/acadmic.png') as number,
     icons: ['school-outline', 'book-outline', 'business-outline', 'document-outline'],
   },
   {
-    heading: "Let's tailor opportunities for you",
-    description:
-      "Choose the types of opportunities you're interested in and we'll recommend the most relevant ones.",
+    headingKey: 'onboarding.shell.panels.preferences.heading',
+    descriptionKey: 'onboarding.shell.panels.preferences.description',
     // eslint-disable-next-line @typescript-eslint/no-require-imports
     illustration: require('@/assets/images/preferences.png') as number,
     icons: ['globe-outline', 'briefcase-outline', 'school-outline', 'cash-outline'],
@@ -95,11 +93,13 @@ export function OnboardingShell({
   subtitle,
   onBack,
   onContinue,
-  continueLabel = 'Continue',
+  continueLabel,
   isLoading = false,
 }: OnboardingShellProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
+  const resolvedContinueLabel = continueLabel ?? t('onboarding.shell.continue');
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isWeb = Platform.OS === 'web';
@@ -138,8 +138,8 @@ export function OnboardingShell({
 
           {/* Animated content */}
           <Animated.View style={[styles.leftContent, { opacity: panelFade }]}>
-            <Text style={styles.panelHeading}>{panelMeta.heading}</Text>
-            <Text style={styles.panelDesc}>{panelMeta.description}</Text>
+            <Text style={styles.panelHeading}>{t(panelMeta.headingKey)}</Text>
+            <Text style={styles.panelDesc}>{t(panelMeta.descriptionKey)}</Text>
 
             {/* Illustration + floating icon badges */}
             <View style={styles.illustrationWrap}>
@@ -218,7 +218,7 @@ export function OnboardingShell({
                         isActive && styles.deskStepLabelActive,
                       ]}
                     >
-                      {step.label}
+                      {t(step.labelKey)}
                     </Text>
                   </View>
                   {!isLast && (
@@ -248,7 +248,7 @@ export function OnboardingShell({
               {onBack && (
                 <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
                   <Ionicons name="chevron-back" size={16} color={colors.textMuted} />
-                  <Text style={styles.backBtnText}>Back</Text>
+                  <Text style={styles.backBtnText}>{t('onboarding.shell.back')}</Text>
                 </Pressable>
               )}
               <View style={styles.fields}>{children}</View>
@@ -263,7 +263,7 @@ export function OnboardingShell({
                 ]}
               >
                 <Text style={styles.ctaText}>
-                  {isLoading ? 'Saving…' : continueLabel}
+                  {isLoading ? t('onboarding.shell.saving') : resolvedContinueLabel}
                 </Text>
                 {!isLoading && (
                   <Ionicons name="arrow-forward" size={16} color={colors.textOnPrimary} style={styles.ctaArrow} />
@@ -317,7 +317,7 @@ export function OnboardingShell({
                     ]}
                     numberOfLines={1}
                   >
-                    {step.label}
+                    {t(step.labelKey)}
                   </Text>
                 </View>
                 {!isLast && (
@@ -353,7 +353,7 @@ export function OnboardingShell({
           {onBack && (
             <Pressable onPress={onBack} style={styles.backBtn} hitSlop={12}>
               <Ionicons name="chevron-back" size={16} color={colors.textMuted} />
-              <Text style={styles.backBtnText}>Back</Text>
+              <Text style={styles.backBtnText}>{t('onboarding.shell.back')}</Text>
             </Pressable>
           )}
           <Text style={styles.heading}>{title}</Text>
@@ -368,7 +368,7 @@ export function OnboardingShell({
               pressed && !isLoading && styles.ctaPressed,
             ]}
           >
-            <Text style={styles.ctaText}>{isLoading ? 'Saving…' : continueLabel}</Text>
+            <Text style={styles.ctaText}>{isLoading ? t('onboarding.shell.saving') : resolvedContinueLabel}</Text>
             {!isLoading && (
               <Ionicons name="arrow-forward" size={15} color={colors.textOnPrimary} style={styles.ctaArrow} />
             )}

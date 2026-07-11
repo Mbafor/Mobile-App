@@ -1,5 +1,6 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -29,6 +30,7 @@ type PersistPatch = {
 
 export function useCVBuilder(cvId: string | undefined) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const { user, profile: authProfile, userEmail } = useAuth();
   const [content, setContent] = useState<CVContent>(EMPTY_CV_CONTENT);
   const [templateId, setTemplateId] = useState<string>(DEFAULT_TEMPLATE_ID);
@@ -43,10 +45,10 @@ export function useCVBuilder(cvId: string | undefined) {
   const query = useQuery({
     queryKey: queryKeys.cv.detail(cvId ?? ''),
     queryFn: async () => {
-      if (!cvId) throw new Error('Missing CV id');
+      if (!cvId) throw new Error(t('cvBuilder.errors.missingCvId'));
       const { data, error } = await getCVById(cvId);
       if (error) throw error;
-      if (!data) throw new Error('CV not found');
+      if (!data) throw new Error(t('cvBuilder.errors.cvNotFound'));
       return data;
     },
     enabled: Boolean(cvId),
@@ -106,7 +108,7 @@ export function useCVBuilder(cvId: string | undefined) {
       const { data, error } = await updateCV(cvId, payload);
       if (error || !data) {
         setSaveState('error');
-        setSaveError(error?.message ?? 'Failed to save');
+        setSaveError(error?.message ?? t('cvBuilder.errors.failedToSave'));
         return false;
       }
 
@@ -118,7 +120,7 @@ export function useCVBuilder(cvId: string | undefined) {
       }
       return true;
     },
-    [cvId, queryClient],
+    [cvId, queryClient, t],
   );
 
   const updateContent = useCallback((updater: (prev: CVContent) => CVContent) => {

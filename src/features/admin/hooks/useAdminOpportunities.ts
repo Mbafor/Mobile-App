@@ -1,4 +1,5 @@
 import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { queryKeys } from '@/constants/query-keys';
 import { useCanManageOpportunities } from '@/features/admin/hooks/useCanManageOpportunities';
@@ -39,14 +40,15 @@ export function useAdminOpportunities() {
 
 export function useAdminOpportunity(id: string | undefined) {
   const { isReady } = useCanManageOpportunities();
+  const { t } = useTranslation();
 
   return useQuery({
     queryKey: queryKeys.admin.opportunity(id ?? ''),
     queryFn: async () => {
-      if (!id) throw new Error('Missing opportunity id');
+      if (!id) throw new Error(t('admin.errors.missingOpportunityId'));
       const { data, error } = await adminApi.getOpportunity(id);
       if (error) throw error;
-      if (!data) throw new Error('Opportunity not found');
+      if (!data) throw new Error(t('admin.errors.opportunityNotFound'));
       return data;
     },
     enabled: isReady && Boolean(id),

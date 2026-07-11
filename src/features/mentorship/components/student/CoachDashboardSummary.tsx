@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
@@ -19,15 +20,16 @@ type CoachDashboardSummaryProps = {
 export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachDashboardSummaryProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   if (!profile) {
     return (
       <View style={styles.card}>
-        <Text muted>Loading coach details…</Text>
+        <Text muted>{t('mentorship.student.coachSummary.loading')}</Text>
       </View>
     );
   }
 
-  const name = profile.fullName?.trim() || 'Your coach';
+  const name = profile.fullName?.trim() || t('mentorship.student.coachNameFallback');
   const isVerified = mentor?.status === 'approved';
   const interests = [
     ...new Set([
@@ -42,7 +44,7 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
       <View style={styles.row}>
         <UserAvatarDisplay displayName={name} avatarUrl={profile.avatarUrl ?? null} size={56} />
         <View style={styles.meta}>
-          <Text style={styles.label}>Your coach</Text>
+          <Text style={styles.label}>{t('mentorship.student.coachSummary.coachLabel')}</Text>
           <View style={styles.nameRow}>
             <Text style={styles.name}>{name}</Text>
             {isVerified ? (
@@ -56,10 +58,10 @@ export function CoachDashboardSummary({ profile, mentor, onViewProfile }: CoachD
         </View>
       </View>
       {interests.length > 0 ? (
-        <TagList label="Interests & focus" items={interests.slice(0, 6)} />
+        <TagList label={t('mentorship.student.coachSummary.interests')} items={interests.slice(0, 6)} />
       ) : null}
       {onViewProfile ? (
-        <Text style={styles.link}>View full profile →</Text>
+        <Text style={styles.link}>{t('mentorship.student.coachSummary.viewProfile')}</Text>
       ) : null}
     </Pressable>
   );

@@ -7,6 +7,7 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -32,6 +33,7 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const {
     data,
@@ -51,12 +53,12 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
 
   const handleApprove = (item: Opportunity) => {
     Alert.alert(
-      'Quick approve',
-      `Make "${item.title}" visible to students without editing?`,
+      t('admin.pendingQueue.quickApproveConfirmTitle'),
+      t('admin.pendingQueue.quickApproveConfirmMessage', { title: item.title }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('admin.pendingQueue.cancel'), style: 'cancel' },
         {
-          text: 'Approve',
+          text: t('admin.pendingQueue.approve'),
           onPress: () => approveMutation.mutate({ id: item.id }),
         },
       ],
@@ -65,12 +67,12 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
 
   const handleReject = (item: Opportunity) => {
     Alert.alert(
-      'Reject opportunity',
-      `Remove "${item.title}" from the queue? It will not be shown to students.`,
+      t('admin.pendingQueue.rejectConfirmTitle'),
+      t('admin.pendingQueue.rejectConfirmMessage', { title: item.title }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('admin.pendingQueue.cancel'), style: 'cancel' },
         {
-          text: 'Reject',
+          text: t('admin.pendingQueue.reject'),
           style: 'destructive',
           onPress: () => rejectMutation.mutate({ id: item.id }),
         },
@@ -89,16 +91,16 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
   return (
     <Screen padded={false}>
       <View style={styles.hero}>
-        <Text style={styles.heroTitle}>Pending review</Text>
+        <Text style={styles.heroTitle}>{t('admin.pendingQueue.heroTitle')}</Text>
         <Text muted style={styles.heroSub}>
-          Scraped opportunities waiting for approval. Tap a card to review and edit before approving.
+          {t('admin.pendingQueue.heroSubtitle')}
         </Text>
       </View>
 
       {error ? (
         <View style={styles.padded}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Failed to load pending opportunities'}
+            message={error instanceof Error ? error.message : t('admin.pendingQueue.failedToLoad')}
           />
         </View>
       ) : (
@@ -112,15 +114,15 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
           onEndReachedThreshold={0.4}
           ListEmptyComponent={
             <View style={styles.empty}>
-              <Text style={styles.emptyTitle}>All caught up</Text>
-              <Text muted>No scraped opportunities are waiting for review.</Text>
+              <Text style={styles.emptyTitle}>{t('admin.pendingQueue.emptyTitle')}</Text>
+              <Text muted>{t('admin.pendingQueue.emptyMessage')}</Text>
             </View>
           }
           ListFooterComponent={
             isFetchingNextPage ? (
               <View style={styles.loadingMore}>
                 <ActivityIndicator size="small" color={colors.primary} />
-                <Text muted style={styles.loadingMoreText}>Loading more…</Text>
+                <Text muted style={styles.loadingMoreText}>{t('admin.pendingQueue.loadingMore')}</Text>
               </View>
             ) : null
           }
@@ -152,10 +154,12 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
                 </View>
 
                 <Text variant="caption" muted style={styles.deadline}>
-                  Deadline: {item.deadline ? formatDeadline(item.deadline) : 'Not set'}
+                  {t('admin.pendingQueue.deadline', {
+                    date: item.deadline ? formatDeadline(item.deadline) : t('admin.pendingQueue.deadlineNotSet'),
+                  })}
                 </Text>
 
-                <Text variant="caption" style={styles.tapHint}>Tap to review & edit →</Text>
+                <Text variant="caption" style={styles.tapHint}>{t('admin.pendingQueue.tapToReview')}</Text>
               </Pressable>
 
               <View style={styles.actions}>
@@ -163,13 +167,13 @@ export function AdminPendingQueueScreen({ pendingReviewFn = ROUTES.ADMIN.pending
                   style={[styles.actionBtn, styles.approveBtn]}
                   onPress={() => handleApprove(item)}
                 >
-                  <Text style={styles.approveBtnText}>Quick approve</Text>
+                  <Text style={styles.approveBtnText}>{t('admin.pendingQueue.quickApprove')}</Text>
                 </Pressable>
                 <Pressable
                   style={[styles.actionBtn, styles.rejectBtn]}
                   onPress={() => handleReject(item)}
                 >
-                  <Text style={styles.rejectBtnText}>Reject</Text>
+                  <Text style={styles.rejectBtnText}>{t('admin.pendingQueue.reject')}</Text>
                 </Pressable>
               </View>
             </View>

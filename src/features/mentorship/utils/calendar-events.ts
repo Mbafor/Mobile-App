@@ -1,5 +1,6 @@
 import type { EventItem } from '@howljs/calendar-kit';
 
+import i18n from '@/i18n';
 import { calendarColors } from '@/features/mentorship/constants/calendar-colors';
 import {
   anchorDateForSlot,
@@ -26,10 +27,16 @@ function sessionColor(status: string): string {
 }
 
 function sessionTitle(session: MentorshipSession, peerName?: string): string {
-  if (session.status === 'cancelled') return 'Cancelled';
-  if (session.status === 'completed') return 'Completed';
-  if (isPendingSessionStatus(session.status)) return peerName ? `Booked · ${peerName}` : 'Booked';
-  return peerName ? `Session · ${peerName}` : 'Session';
+  if (session.status === 'cancelled') return i18n.t('mentorship.calendarEvents.cancelled');
+  if (session.status === 'completed') return i18n.t('mentorship.calendarEvents.completed');
+  if (isPendingSessionStatus(session.status)) {
+    return peerName
+      ? i18n.t('mentorship.calendarEvents.bookedWithPeer', { peer: peerName })
+      : i18n.t('mentorship.calendarEvents.booked');
+  }
+  return peerName
+    ? i18n.t('mentorship.calendarEvents.sessionWithPeer', { peer: peerName })
+    : i18n.t('mentorship.calendarEvents.session');
 }
 
 export function buildAvailabilityEvents(slots: AvailabilitySlot[]): EventItem[] {
@@ -45,7 +52,7 @@ export function buildAvailabilityEvents(slots: AvailabilitySlot[]): EventItem[] 
     const key = slotKey(slot.dayOfWeek, slot.startTime, slot.endTime);
     return {
       id: `avail-${slot.id}`,
-      title: 'Available',
+      title: i18n.t('mentorship.calendarEvents.available'),
       start: { dateTime: start.toISOString(), timeZone: slot.timezone || tz },
       end: { dateTime: end.toISOString(), timeZone: slot.timezone || tz },
       color: calendarColors.available,

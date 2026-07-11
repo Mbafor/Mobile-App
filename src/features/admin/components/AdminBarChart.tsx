@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { BarChart } from 'react-native-gifted-charts';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -18,11 +19,12 @@ const CHART_WIDTH = Dimensions.get('window').width - spacing.md * 4;
 export function AdminBarChart({ title, data }: AdminBarChartProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>
         <Text style={styles.title}>{title}</Text>
-        <Text muted>No data yet</Text>
+        <Text muted>{t('admin.charts.noData')}</Text>
       </View>
     );
   }

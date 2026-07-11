@@ -17,6 +17,7 @@ import {
   referenceBlock,
   splitSkills,
 } from '@/features/cv-builder/pdf/resume/resume-shared';
+import i18n from '@/i18n';
 import type {
   CVAchievementEntry,
   CVCertificationEntry,
@@ -123,7 +124,7 @@ export function PdfHeaderBlock({
 
 export function PdfSummarySection({
   content,
-  title = 'PROFESSIONAL SUMMARY',
+  title,
   titleStyle,
   bodyStyle,
 }: {
@@ -134,7 +135,7 @@ export function PdfSummarySection({
 }) {
   if (!hasText(content.summary)) return null;
   return (
-    <PdfSection title={title} titleStyle={titleStyle}>
+    <PdfSection title={title ?? i18n.t('cvBuilder.pdf.sections.allCaps.summary')} titleStyle={titleStyle}>
       <Text style={bodyStyle}>{content.summary}</Text>
     </PdfSection>
   );
@@ -183,7 +184,7 @@ export function PdfEducationAtsBlocks({
       {entries.map((entry) => {
         const schoolLine = [
           entry.school,
-          entry.gpa ? `• GPA: ${entry.gpa}` : '',
+          entry.gpa ? `• ${i18n.t('cvBuilder.pdf.gpaLabel')}: ${entry.gpa}` : '',
         ]
           .filter(hasText)
           .join(' ');
@@ -244,13 +245,13 @@ export function PdfSkillsSplit({ skills, labelStyle, textStyle }: { skills: stri
     <View>
       {technical.length ? (
         <Text style={textStyle}>
-          <Text style={labelStyle}>Technical: </Text>
+          <Text style={labelStyle}>{i18n.t('cvBuilder.pdf.technicalLabel')}</Text>
           {technical.join(', ')}
         </Text>
       ) : null}
       {soft.length ? (
         <Text style={textStyle}>
-          <Text style={labelStyle}>Soft Skills: </Text>
+          <Text style={labelStyle}>{i18n.t('cvBuilder.pdf.softSkillsLabel')}</Text>
           {soft.join(', ')}
         </Text>
       ) : null}

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -12,15 +13,7 @@ import { formatAvailabilityRule, formatDayOfWeek } from '@/features/mentorship/u
 import type { MentorAvailabilityRule } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
-const DAYS: { key: string; label: string }[] = [
-  { key: '0', label: 'Sunday' },
-  { key: '1', label: 'Monday' },
-  { key: '2', label: 'Tuesday' },
-  { key: '3', label: 'Wednesday' },
-  { key: '4', label: 'Thursday' },
-  { key: '5', label: 'Friday' },
-  { key: '6', label: 'Saturday' },
-];
+const DAY_KEYS = ['0', '1', '2', '3', '4', '5', '6'];
 
 type AvailabilityManagerProps = {
   rules: MentorAvailabilityRule[];
@@ -31,6 +24,7 @@ type AvailabilityManagerProps = {
 
 export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: AvailabilityManagerProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
   const [dayOfWeek, setDayOfWeek] = useState('1');
   const [startTime, setStartTime] = useState('09:00');
@@ -42,7 +36,7 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
 
   const addRule = () => {
     if (startTime >= endTime) {
-      Alert.alert('Invalid times', 'End time must be after start time.');
+      Alert.alert(t('mentorship.coach.availability.invalidTimesTitle'), t('mentorship.coach.availability.invalidTimesMessage'));
       return;
     }
     onSave({
@@ -59,17 +53,17 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
     <View style={styles.wrap}>
       <View style={styles.header}>
         <Text muted style={styles.hint}>
-          Recurring weekly slots students can book.
+          {t('mentorship.coach.availability.hint')}
         </Text>
         <Pressable style={styles.addBtn} onPress={() => setModalOpen(true)}>
-          <Text style={styles.addBtnText}>+ Add</Text>
+          <Text style={styles.addBtnText}>{t('mentorship.coach.availability.add')}</Text>
         </Pressable>
       </View>
 
       <MentorshipMobileList
         data={rules}
         keyExtractor={(r) => r.id}
-        emptyMessage="No availability yet. Add your first weekly slot."
+        emptyMessage={t('mentorship.coach.availability.empty')}
         renderCard={(rule) => (
           <View style={styles.ruleCard}>
             <Text style={styles.ruleDay}>{formatDayOfWeek(rule.dayOfWeek)}</Text>
@@ -81,7 +75,7 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
             </Text>
             <View style={styles.ruleActions}>
               <Pressable onPress={() => onDelete(rule.id)}>
-                <Text style={styles.delete}>Delete</Text>
+                <Text style={styles.delete}>{t('mentorship.coach.availability.delete')}</Text>
               </Pressable>
             </View>
           </View>
@@ -91,25 +85,25 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
       <Modal visible={modalOpen} animationType="slide" transparent onRequestClose={() => setModalOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setModalOpen(false)}>
           <Pressable style={styles.modalCard} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Add weekly slot</Text>
+            <Text style={styles.modalTitle}>{t('mentorship.coach.availability.addSlot')}</Text>
             <Text variant="caption" muted>
               {formatAvailabilityRule(Number(dayOfWeek), startTime, endTime, timezone)}
             </Text>
             <Pressable style={styles.dayPicker} onPress={() => setDaySheetOpen(true)}>
-              <Text>{DAYS.find((d) => d.key === dayOfWeek)?.label ?? 'Day'}</Text>
+              <Text>{t(`mentorship.days.${dayOfWeek}`, { defaultValue: t('mentorship.coach.availability.dayFallback') })}</Text>
             </Pressable>
             <View style={styles.timeRow}>
               <Input value={startTime} onChangeText={setStartTime} placeholder="09:00" style={styles.timeInput} />
-              <Text muted>to</Text>
+              <Text muted>{t('mentorship.coach.availability.to')}</Text>
               <Input value={endTime} onChangeText={setEndTime} placeholder="17:00" style={styles.timeInput} />
             </View>
-            <Input value={timezone} onChangeText={setTimezone} placeholder="Timezone" />
+            <Input value={timezone} onChangeText={setTimezone} placeholder={t('mentorship.coach.availability.timezone')} />
             <View style={styles.modalActions}>
               <Button variant="ghost" onPress={() => setModalOpen(false)}>
-                Cancel
+                {t('mentorship.coach.availability.cancel')}
               </Button>
               <Button onPress={addRule} loading={isSaving}>
-                Save
+                {t('mentorship.coach.availability.save')}
               </Button>
             </View>
           </Pressable>
@@ -118,11 +112,11 @@ export function AvailabilityManager({ rules, onSave, onDelete, isSaving }: Avail
 
       <OptionsSheet
         visible={daySheetOpen}
-        title="Day of week"
-        options={DAYS.map((d) => ({
-          key: d.key,
-          label: d.label,
-          onPress: () => setDayOfWeek(d.key),
+        title={t('mentorship.coach.availability.dayOfWeek')}
+        options={DAY_KEYS.map((k) => ({
+          key: k,
+          label: t(`mentorship.days.${k}`),
+          onPress: () => setDayOfWeek(k),
         }))}
         onClose={() => setDaySheetOpen(false)}
       />

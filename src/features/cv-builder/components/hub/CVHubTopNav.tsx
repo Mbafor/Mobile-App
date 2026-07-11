@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { usePathname, useRouter, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -12,7 +13,7 @@ import { webPressableStyle } from '@/utils/web/pressable';
 
 type TabDef = {
   key: string;
-  label: string;
+  labelKey: string;
   icon: keyof typeof Ionicons.glyphMap;
   iconActive: keyof typeof Ionicons.glyphMap;
   getHref: (cvId: string) => Href;
@@ -21,28 +22,28 @@ type TabDef = {
 const CV_TABS: TabDef[] = [
   {
     key: 'index',
-    label: 'Dashboard',
+    labelKey: 'dashboard',
     icon: 'grid-outline',
     iconActive: 'grid',
     getHref: (cvId) => `/(main)/(tabs)/cv-builder/${cvId}` as Href,
   },
   {
     key: 'tips',
-    label: 'Tips',
+    labelKey: 'tips',
     icon: 'bulb-outline',
     iconActive: 'bulb',
     getHref: (cvId) => `/(main)/(tabs)/cv-builder/${cvId}/tips` as Href,
   },
   {
     key: 'templates',
-    label: 'Templates',
+    labelKey: 'templates',
     icon: 'color-palette-outline',
     iconActive: 'color-palette',
     getHref: (cvId) => `/(main)/(tabs)/cv-builder/${cvId}/templates` as Href,
   },
   {
     key: 'settings',
-    label: 'Sections',
+    labelKey: 'sections',
     icon: 'list-outline',
     iconActive: 'list',
     getHref: (cvId) => `/(main)/(tabs)/cv-builder/${cvId}/settings` as Href,
@@ -62,6 +63,7 @@ type CVHubTopNavProps = { cvId: string };
 export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const pathname = usePathname();
   const router = useRouter();
   const activeKey = getActiveKey(pathname, cvId);
@@ -92,7 +94,7 @@ export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
                 color={active ? colors.primary : colors.textMuted}
               />
               <Text style={[styles.tabLabel, active && styles.tabLabelActive]}>
-                {tab.label}
+                {t(`cvBuilder.tabs.${tab.labelKey}`)}
               </Text>
             </Pressable>
           );

@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -27,6 +28,7 @@ export function FilterDropdownGroup<T extends string>({
 }: FilterDropdownGroupProps<T>) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   const normalized = options.map((opt) =>
@@ -47,10 +49,10 @@ export function FilterDropdownGroup<T extends string>({
 
   const summary =
     selected.length === 0
-      ? 'All'
+      ? t('opportunities.dropdown.all')
       : single
         ? normalized.find((o) => selected.includes(o.value))?.label ?? selected[0]
-        : `${selected.length} selected`;
+        : t('opportunities.dropdown.selected', { count: selected.length });
 
   return (
     <View style={styles.wrap}>

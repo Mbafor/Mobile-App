@@ -5,6 +5,16 @@ import {
   type CVSectionId,
 } from '@/features/cv-builder/constants/sections';
 import type { CVContent, CVLayoutConfig } from '@/types/domain/cv';
+import i18n from '@/i18n';
+
+const completed = () => ({ kind: 'complete' as const, label: i18n.t('cvBuilder.status.completed') });
+const optional = () => ({ kind: 'optional' as const, label: i18n.t('cvBuilder.status.optional') });
+const addDetails = () => ({ kind: 'action_required' as const, label: i18n.t('cvBuilder.status.addDetails') });
+const inProgress = () => ({ kind: 'in_progress' as const, label: i18n.t('cvBuilder.status.inProgress') });
+const fraction = (filled: number, total: number) => ({
+  kind: 'in_progress' as const,
+  label: i18n.t('cvBuilder.status.fraction', { filled, total }),
+});
 
 export type CVSectionStatusKind = 'complete' | 'in_progress' | 'action_required' | 'optional';
 
@@ -75,23 +85,23 @@ function skillsComplete(content: CVContent): boolean {
 function certificationsStatus(content: CVContent): CVSectionStatus {
   const filled = content.certifications.filter((c) => c.name.trim()).length;
   if (filled === 0) {
-    return { kind: 'optional', label: 'Optional' };
+    return optional();
   }
   if (filled >= 1 && content.certifications.every((c) => c.name.trim() && c.year.trim())) {
-    return { kind: 'complete', label: 'Completed' };
+    return completed();
   }
-  return { kind: 'in_progress', label: `${filled}/${content.certifications.length || 1}` };
+  return fraction(filled, content.certifications.length || 1);
 }
 
 function languagesStatus(content: CVContent): CVSectionStatus {
   const filled = content.languages.filter((l) => l.language.trim()).length;
   if (filled === 0) {
-    return { kind: 'action_required', label: 'Add details' };
+    return addDetails();
   }
   if (content.languages.every((l) => l.language.trim() && l.proficiency.trim())) {
-    return { kind: 'complete', label: 'Completed' };
+    return completed();
   }
-  return { kind: 'in_progress', label: `${filled}/${content.languages.length}` };
+  return fraction(filled, content.languages.length);
 }
 
 function listExperienceStatus(
@@ -100,60 +110,53 @@ function listExperienceStatus(
 ): CVSectionStatus {
   const filled = entries.filter((e) => e.company.trim() && e.role.trim()).length;
   if (filled === 0) {
-    return required
-      ? { kind: 'action_required', label: 'Add details' }
-      : { kind: 'optional', label: 'Optional' };
+    return required ? addDetails() : optional();
   }
   const complete = entries.filter(
     (e) => e.company.trim() && e.role.trim() && e.startDate.trim(),
   ).length;
   if (complete >= 1 && complete === entries.length) {
-    return { kind: 'complete', label: 'Completed' };
+    return completed();
   }
-  return { kind: 'in_progress', label: `${filled}/${Math.max(entries.length, 1)}` };
+  return fraction(filled, Math.max(entries.length, 1));
 }
 
 function hobbiesStatus(content: CVContent): CVSectionStatus {
   if (content.hobbies.length === 0) {
-    return { kind: 'optional', label: 'Optional' };
+    return optional();
   }
-  return { kind: 'complete', label: 'Completed' };
+  return completed();
 }
 
 export function getSectionStatus(content: CVContent, sectionId: CVSectionId): CVSectionStatus {
   switch (sectionId) {
     case 'personal':
-      return personalComplete(content)
-        ? { kind: 'complete', label: 'Completed' }
-        : { kind: 'action_required', label: 'Add details' };
+      return personalComplete(content) ? completed() : addDetails();
     case 'summary':
       return summaryComplete(content)
-        ? { kind: 'complete', label: 'Completed' }
+        ? completed()
         : content.summary.trim()
-          ? { kind: 'in_progress', label: 'In progress' }
-          : { kind: 'action_required', label: 'Add details' };
+          ? inProgress()
+          : addDetails();
     case 'experience':
       return listExperienceStatus(content.experience, true);
     case 'education': {
       const filled = content.education.filter((e) => e.school.trim() && e.degree.trim()).length;
-      if (filled === 0) return { kind: 'action_required', label: 'Add details' };
+      if (filled === 0) return addDetails();
       if (
         content.education.length > 0 &&
         content.education.every((e) => e.school.trim() && e.degree.trim() && e.endDate.trim())
       ) {
-        return { kind: 'complete', label: 'Completed' };
+        return completed();
       }
-      return {
-        kind: 'in_progress',
-        label: `${filled}/${Math.max(content.education.length, 1)}`,
-      };
+      return fraction(filled, Math.max(content.education.length, 1));
     }
     case 'skills':
-      if (skillsComplete(content)) return { kind: 'complete', label: 'Completed' };
+      if (skillsComplete(content)) return completed();
       if (content.skills.length > 0) {
-        return { kind: 'in_progress', label: `${content.skills.length}/2` };
+        return fraction(content.skills.length, 2);
       }
-      return { kind: 'action_required', label: 'Add details' };
+      return addDetails();
     case 'certifications':
       return certificationsStatus(content);
     case 'hobbies':
@@ -164,30 +167,30 @@ export function getSectionStatus(content: CVContent, sectionId: CVSectionId): CV
       return listExperienceStatus(content.voluntaryExperience, false);
     case 'projects': {
       const filled = content.projects.filter((p) => p.name.trim()).length;
-      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (filled === 0) return optional();
       if (content.projects.every((p) => p.name.trim() && p.description.trim())) {
-        return { kind: 'complete', label: 'Completed' };
+        return completed();
       }
-      return { kind: 'in_progress', label: `${filled}/${content.projects.length}` };
+      return fraction(filled, content.projects.length);
     }
     case 'achievements': {
       const filled = content.achievements.filter((a) => a.title.trim()).length;
-      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (filled === 0) return optional();
       if (content.achievements.every((a) => a.title.trim())) {
-        return { kind: 'complete', label: 'Completed' };
+        return completed();
       }
-      return { kind: 'in_progress', label: `${filled}/${content.achievements.length}` };
+      return fraction(filled, content.achievements.length);
     }
     case 'references': {
       const filled = content.references.filter((r) => r.name.trim()).length;
-      if (filled === 0) return { kind: 'optional', label: 'Optional' };
+      if (filled === 0) return optional();
       if (content.references.every((r) => r.name.trim() && r.company.trim())) {
-        return { kind: 'complete', label: 'Completed' };
+        return completed();
       }
-      return { kind: 'in_progress', label: `${filled}/${content.references.length}` };
+      return fraction(filled, content.references.length);
     }
     default:
-      return { kind: 'action_required', label: 'Add details' };
+      return addDetails();
   }
 }
 
@@ -205,8 +208,8 @@ export function calculateCVProgress(content: CVContent): number {
 }
 
 export function getProgressMessage(percent: number): string {
-  if (percent >= 100) return 'Your CV is ready to preview and download.';
-  if (percent >= 60) return 'Almost there! Finish the remaining sections.';
-  if (percent >= 30) return 'Great start! Keep going to build your perfect CV.';
-  return 'Begin with personal information and work experience.';
+  if (percent >= 100) return i18n.t('cvBuilder.progress.ready');
+  if (percent >= 60) return i18n.t('cvBuilder.progress.almostThere');
+  if (percent >= 30) return i18n.t('cvBuilder.progress.greatStart');
+  return i18n.t('cvBuilder.progress.begin');
 }

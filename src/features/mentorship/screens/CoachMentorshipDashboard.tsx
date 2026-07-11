@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -11,6 +12,7 @@ import {
   View,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -22,10 +24,7 @@ import { CoachNotificationsPanel } from '@/features/mentorship/components/coach/
 import { CoachSessionsTable } from '@/features/mentorship/components/coach/CoachSessionsTable';
 import { MenteesTable } from '@/features/mentorship/components/coach/MenteesTable';
 import { MentorshipShell } from '@/features/mentorship/components/shared/MentorshipShell';
-import {
-  COACH_NAV_ITEMS,
-  COACH_SECTION_TITLES,
-} from '@/features/mentorship/constants/nav-items';
+import { COACH_NAV_ITEMS } from '@/features/mentorship/constants/nav-items';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useCoachMentorship } from '@/features/mentorship/hooks/useCoachMentorship';
 import { useMentorshipSchedulingRealtime } from '@/features/mentorship/hooks/useMentorshipSchedulingRealtime';
@@ -43,6 +42,7 @@ import { confirmAction } from '@/utils/confirm-action';
 export function CoachMentorshipDashboard() {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
@@ -65,31 +65,37 @@ export function CoachMentorshipDashboard() {
     Object.entries(previewsByMentorshipId).map(([id, msg]) => [id, msg ? [msg] : []]),
   );
 
-  const sectionTitle = COACH_SECTION_TITLES[activeSection] ?? 'Mentorship';
+  const navItems: MentorshipNavItem[] = COACH_NAV_ITEMS.map((item) => ({
+    ...item,
+    label: t(`mentorship.nav.coach.${item.id}`),
+  }));
+  const sectionTitle = t(`mentorship.sections.coach.${activeSection}`, {
+    defaultValue: t('mentorship.sectionFallback'),
+  });
   const isFullHeightSection = activeSection === 'messages';
 
   const handleConfirmSession = async (sessionId: string) => {
     try {
       const ok = await confirmAction(
-        'Confirm session',
-        'Are you sure you want to confirm this session? The Jitsi link will be ready to join.',
+        t('mentorship.coach.confirmSessionTitle'),
+        t('mentorship.coach.confirmSessionMessage'),
       );
       if (!ok) return;
       await confirm(sessionId);
-      Alert.alert('Session confirmed', 'Session is confirmed. The Jitsi link is ready to join.');
+      Alert.alert(t('mentorship.coach.sessionConfirmedTitle'), t('mentorship.coach.sessionConfirmedMessage'));
       void queryClient.invalidateQueries({ queryKey: ['mentorship', 'sessions'] });
     } catch (e) {
-      Alert.alert('Error', e instanceof Error ? e.message : 'Could not confirm session.');
+      Alert.alert(t('mentorship.coach.errorTitle'), e instanceof Error ? e.message : t('mentorship.coach.confirmSessionError'));
     }
   };
 
   const handleCancelSession = async (sessionId: string) => {
     const ok = await confirmAction(
-      'Cancel session',
-      'Cancel this session? The student will be notified and the slot will become available.',
+      t('mentorship.coach.cancelSessionTitle'),
+      t('mentorship.coach.cancelSessionMessage'),
     );
     if (!ok) return;
-    void cancel(sessionId, 'Cancelled by coach').catch((e: Error) => Alert.alert('Error', e.message));
+    void cancel(sessionId, 'Cancelled by coach').catch((e: Error) => Alert.alert(t('mentorship.coach.errorTitle'), e.message));
   };
 
   const handleSetMeetingUrl = async (sessionId: string, url: string) => {
@@ -107,7 +113,7 @@ export function CoachMentorshipDashboard() {
   if (error) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('mentorship.loadError')} />
       </View>
     );
   }
@@ -157,7 +163,7 @@ export function CoachMentorshipDashboard() {
               role="coach"
               getPeerName={(session) => {
                 const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
-                return mentee?.profile.fullName?.trim() || 'Student';
+                return mentee?.profile.fullName?.trim() || t('mentorship.coach.studentFallback');
               }}
               onConfirm={handleConfirmSession}
               onCancel={handleCancelSession}
@@ -172,7 +178,7 @@ export function CoachMentorshipDashboard() {
         return (
           <View style={styles.sectionBody}>
             <CoachSessionsTable
-              title="Upcoming"
+              title={t('mentorship.coach.upcoming')}
               isCompleted={false}
               sessions={sessions.filter(
                 (s) => s.status !== 'cancelled' && s.status !== 'completed',
@@ -180,7 +186,7 @@ export function CoachMentorshipDashboard() {
               getMenteeDetails={(session) => {
                 const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
                 return {
-                  name: mentee?.profile.fullName?.trim() || 'Mentee',
+                  name: mentee?.profile.fullName?.trim() || t('mentorship.coach.menteeFallback'),
                   email: mentee?.profile.email ?? null,
                 };
               }}
@@ -189,12 +195,12 @@ export function CoachMentorshipDashboard() {
               onSetMeetingUrl={handleSetMeetingUrl}
             />
             <View style={styles.completedToggleRow}>
-              <Text style={styles.completedToggleTitle}>Completed</Text>
+              <Text style={styles.completedToggleTitle}>{t('mentorship.coach.completed')}</Text>
               <Pressable
                 hitSlop={10}
                 style={styles.completedToggleBtn}
                 onPress={() => setShowCompletedSessions((v) => !v)}
-                accessibilityLabel="Toggle completed sessions"
+                accessibilityLabel={t('mentorship.coach.toggleCompleted')}
               >
                 <Ionicons
                   name="chevron-down"
@@ -215,7 +221,7 @@ export function CoachMentorshipDashboard() {
                 getMenteeDetails={(session) => {
                   const mentee = mentees.find((m) => m.mentorship.id === session.mentorshipId);
                   return {
-                    name: mentee?.profile.fullName?.trim() || 'Mentee',
+                    name: mentee?.profile.fullName?.trim() || t('mentorship.coach.menteeFallback'),
                     email: mentee?.profile.email ?? null,
                   };
                 }}
@@ -241,7 +247,7 @@ export function CoachMentorshipDashboard() {
 
   return (
     <MentorshipShell
-      navItems={COACH_NAV_ITEMS}
+      navItems={navItems}
       activeSection={activeSection}
       sectionTitle={sectionTitle}
       onSelectSection={setActiveSection}

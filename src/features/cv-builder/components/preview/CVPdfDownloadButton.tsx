@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTranslation } from 'react-i18next';
 
 import { spacing } from '@/constants/theme';
 import type { CVContent } from '@/types/domain/cv';
@@ -23,10 +24,11 @@ export function CVPdfDownloadButton({
   onPress,
   loading = false,
   disabled = false,
-  label = 'Download PDF',
+  label,
   compact = false,
 }: CVPdfDownloadButtonProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   return (
     <Pressable
       onPress={onPress}
@@ -37,7 +39,7 @@ export function CVPdfDownloadButton({
       ]}
     >
       <Text style={compact ? styles.compactText : styles.btnText}>
-        {loading ? 'Generating…' : label}
+        {loading ? t('cvBuilder.pdfButton.generating') : (label ?? t('cvBuilder.hub.downloadPdf'))}
       </Text>
     </Pressable>
   );

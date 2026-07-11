@@ -4,6 +4,7 @@ import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { CVPdfDownloadButton } from '@/features/cv-builder/components/preview/CVPdfDownloadButton';
@@ -35,6 +36,7 @@ export function CVHubDocToolbar({
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const pct = Math.min(100, Math.max(0, progressPercent));
 
   return (
@@ -45,7 +47,7 @@ export function CVHubDocToolbar({
           onPress={() => router.push(ROUTES.MAIN.CV_BUILDER.DASHBOARD as Href)}
           style={styles.docIcon}
           accessibilityRole="button"
-          accessibilityLabel="Back to all documents"
+          accessibilityLabel={t('cvBuilder.hub.backToDocuments')}
           hitSlop={8}
         >
           <Ionicons name="document-text" size={20} color={colors.background} />
@@ -64,12 +66,12 @@ export function CVHubDocToolbar({
               loading={downloadProps.loading}
               disabled={downloadProps.loading}
               compact
-              label="Download PDF"
+              label={t('cvBuilder.hub.downloadPdf')}
             />
           ) : null}
           <Pressable onPress={onPreview} style={styles.previewBtn}>
             <Ionicons name="eye-outline" size={18} color={colors.primary} />
-            <Text style={styles.previewText}>Preview</Text>
+            <Text style={styles.previewText}>{t('cvBuilder.hub.previewLabel')}</Text>
           </Pressable>
         </View>
       </View>
@@ -78,7 +80,7 @@ export function CVHubDocToolbar({
         <View style={{ flex: 100 - pct }} />
       </View>
       <Text style={styles.progressMeta}>
-        {progressPercent}% complete · {getProgressMessage(progressPercent)}
+        {t('cvBuilder.hub.percentComplete', { percent: progressPercent, message: getProgressMessage(progressPercent) })}
       </Text>
       </View>
     </View>

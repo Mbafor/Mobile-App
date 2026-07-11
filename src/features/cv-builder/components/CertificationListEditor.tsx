@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, TextArea } from '@/components/ui';
@@ -20,11 +21,13 @@ type CertificationListEditorProps = {
 export function CertificationListEditor({
   title,
   description,
-  addLabel = 'Add certification',
+  addLabel,
   entries,
   onChange,
 }: CertificationListEditorProps) {
   const cvUi = useCvUi();
+  const { t } = useTranslation();
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.sections.certifications.addLabel');
   const updateEntry = (id: string, patch: Partial<CVCertificationEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };
@@ -41,36 +44,36 @@ export function CertificationListEditor({
         <CVEntryCard
           key={entry.id}
           index={index}
-          title={entry.name.trim() || `Certification ${index + 1}`}
+          title={entry.name.trim() || t('cvBuilder.editors.certifications.entryFallback', { index: index + 1 })}
           onRemove={() => removeEntry(entry.id)}
         >
-          <FormField label="Name *">
+          <FormField label={t('cvBuilder.editors.certifications.nameLabel')}>
             <Input
               value={entry.name}
               onChangeText={(v) => updateEntry(entry.id, { name: v })}
-              placeholder="Certification name"
+              placeholder={t('cvBuilder.editors.certifications.namePlaceholder')}
             />
           </FormField>
-          <FormField label="Issuer">
+          <FormField label={t('cvBuilder.editors.certifications.issuerLabel')}>
             <Input
               value={entry.issuer}
               onChangeText={(v) => updateEntry(entry.id, { issuer: v })}
-              placeholder="Issuing organisation"
+              placeholder={t('cvBuilder.editors.certifications.issuerPlaceholder')}
             />
           </FormField>
-          <FormField label="Year">
+          <FormField label={t('cvBuilder.editors.certifications.yearLabel')}>
             <Input
               value={entry.year}
               onChangeText={(v) => updateEntry(entry.id, { year: v })}
-              placeholder="e.g. 2024"
+              placeholder={t('cvBuilder.editors.certifications.yearPlaceholder')}
               keyboardType="number-pad"
             />
           </FormField>
-          <FormField label="Description">
+          <FormField label={t('cvBuilder.editors.certifications.descriptionLabel')}>
             <TextArea
               value={entry.description}
               onChangeText={(v) => updateEntry(entry.id, { description: v })}
-              placeholder="Skills covered or credential ID (optional)"
+              placeholder={t('cvBuilder.editors.certifications.descriptionPlaceholder')}
               minHeight={80}
             />
           </FormField>
@@ -78,7 +81,7 @@ export function CertificationListEditor({
       ))}
 
       <CVAddButton
-        label={addLabel}
+        label={resolvedAddLabel}
         onPress={() => onChange([...entries, createEmptyCertification()])}
       />
     </View>

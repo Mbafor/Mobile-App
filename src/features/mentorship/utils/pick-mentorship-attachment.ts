@@ -2,6 +2,7 @@ import * as DocumentPicker from 'expo-document-picker';
 import * as ImagePicker from 'expo-image-picker';
 import { Alert, Platform } from 'react-native';
 
+import i18n from '@/i18n';
 import {
   MENTORSHIP_ATTACHMENT_LIMITS,
   formatMaxAttachmentSize,
@@ -26,7 +27,7 @@ function validateSize(size: number | undefined, maxBytes: number): void {
 export async function pickPhotoFromLibrary(): Promise<PickedAttachment | null> {
   const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
   if (!permission.granted) {
-    Alert.alert('Permission required', 'Allow photo library access to share images.');
+    Alert.alert(i18n.t('mentorship.attachment.permissionTitle'), i18n.t('mentorship.attachment.libraryPermission'));
     return null;
   }
 
@@ -54,7 +55,7 @@ export async function pickPhotoFromLibrary(): Promise<PickedAttachment | null> {
 export async function pickPhotoFromCamera(): Promise<PickedAttachment | null> {
   const permission = await ImagePicker.requestCameraPermissionsAsync();
   if (!permission.granted) {
-    Alert.alert('Permission required', 'Allow camera access to take a photo.');
+    Alert.alert(i18n.t('mentorship.attachment.permissionTitle'), i18n.t('mentorship.attachment.cameraPermission'));
     return null;
   }
 
@@ -106,13 +107,15 @@ export function attachmentErrorMessage(e: unknown): string {
     if (e.message.includes('User cancelled')) return '';
     return e.message;
   }
-  return 'Could not attach this file. Try again.';
+  return i18n.t('mentorship.attachment.genericError');
 }
 
 export function showAttachmentError(e: unknown): void {
   const msg = attachmentErrorMessage(e);
   if (!msg) return;
-  const title = e instanceof AttachmentTooLargeError ? 'File too large' : 'Upload failed';
+  const title = e instanceof AttachmentTooLargeError
+    ? i18n.t('mentorship.attachment.tooLargeTitle')
+    : i18n.t('mentorship.attachment.uploadFailedTitle');
   if (Platform.OS === 'web') {
     window.alert(`${title}\n\n${msg}`);
   } else {

@@ -5,6 +5,7 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
@@ -45,6 +46,7 @@ type DashboardSection = {
 export function DashboardScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -53,7 +55,7 @@ export function DashboardScreen() {
   const { isSearchVisible, setSearchVisible } = useAppStore();
   const { profile, user } = useAuth();
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
-  const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? 'User';
+  const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
 
   const {
     query,
@@ -97,12 +99,14 @@ export function DashboardScreen() {
   const isSearchActive =
     isSearchVisible && (query.trim().length > 0 || activeFilterCount > 0);
 
-  const recommendedTitle = isDesktop ? 'Recommended For You' : 'For You';
+  const recommendedTitle = isDesktop
+    ? t('dashboard.sections.recommendedFull')
+    : t('dashboard.sections.recommendedShort');
 
   const sections: DashboardSection[] = [
     { key: 'recommended', title: recommendedTitle, data: recommended },
-    { key: 'recent', title: 'Recently Uploaded', data: recent },
-    { key: 'closing', title: 'Closing Soon', data: closingSoon },
+    { key: 'recent', title: t('dashboard.sections.recent'), data: recent },
+    { key: 'closing', title: t('dashboard.sections.closing'), data: closingSoon },
   ];
 
   const handleCardPress = useCallback(
@@ -155,7 +159,7 @@ export function DashboardScreen() {
       <View style={[styles.pageContent, isDesktop && { paddingHorizontal: spacing.md }]}>
         {isDesktop && (
           <Pressable onPress={handleGoHome} style={styles.titleRow} accessibilityRole="link">
-            <Text style={[styles.pageTitle, getWebFontStyle('bold')]}>Dashboard</Text>
+            <Text style={[styles.pageTitle, getWebFontStyle('bold')]}>{t('dashboard.title')}</Text>
           </Pressable>
         )}
 
@@ -210,12 +214,12 @@ export function DashboardScreen() {
                   end={{ x: 1, y: 1 }}
                   style={styles.heroCard}
                 >
-                  <Text style={styles.heroSubtitle}>YOUR DASHBOARD</Text>
+                  <Text style={styles.heroSubtitle}>{t('dashboard.hero.eyebrow')}</Text>
                   <Text style={styles.heroTitle}>
-                    Good {greeting}, {userName}.
+                    {t(`dashboard.greeting.${greeting}`, { name: userName })}
                   </Text>
                   <Text style={styles.heroSubheadline}>
-                    Here is what is moving today...
+                    {t('dashboard.hero.subheadline')}
                   </Text>
 
                   <View style={styles.heroStatsList}>
@@ -230,7 +234,7 @@ export function DashboardScreen() {
                         <Text style={styles.heroStatValue}>
                           {dashboardLoading ? '-' : totalOpportunities}
                         </Text>{' '}
-                        Available Opportunities
+                        {t('dashboard.hero.stats.opportunities')}
                       </Text>
                     </View>
                     <View style={styles.heroStatItem}>
@@ -244,7 +248,7 @@ export function DashboardScreen() {
                         <Text style={styles.heroStatValue}>
                           {dashboardLoading ? '-' : isApprovedMentor ? menteeCount : mentorsCount}
                         </Text>{' '}
-                        {isApprovedMentor ? 'Connected Mentees' : 'Connected Mentors'}
+                        {isApprovedMentor ? t('dashboard.hero.stats.mentees') : t('dashboard.hero.stats.mentors')}
                       </Text>
                     </View>
                     <View style={styles.heroStatItem}>
@@ -258,7 +262,7 @@ export function DashboardScreen() {
                         <Text style={styles.heroStatValue}>
                           {dashboardLoading ? '-' : appliedCount}
                         </Text>{' '}
-                        Submitted Applications
+                        {t('dashboard.hero.stats.applications')}
                       </Text>
                     </View>
                   </View>
@@ -270,7 +274,7 @@ export function DashboardScreen() {
                       message={
                         dashboardError instanceof Error
                           ? dashboardError.message
-                          : 'Failed to load dashboard'
+                          : t('dashboard.error')
                       }
                     />
                   </View>

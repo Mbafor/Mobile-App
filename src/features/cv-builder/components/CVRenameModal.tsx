@@ -1,6 +1,7 @@
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
@@ -27,6 +28,7 @@ export function CVRenameModal({
   saving,
 }: CVRenameModalProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const trimmed = value.trim();
   const canSave = trimmed.length > 0 && trimmed !== currentTitle.trim();
 
@@ -34,20 +36,20 @@ export function CVRenameModal({
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose}>
         <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
-          <Text style={styles.heading}>Rename CV</Text>
+          <Text style={styles.heading}>{t('cvBuilder.renameModal.heading')}</Text>
           <Input
             value={value}
             onChangeText={onChangeValue}
-            placeholder="CV title"
+            placeholder={t('cvBuilder.renameModal.placeholder')}
             autoFocus
             maxLength={120}
           />
           <View style={styles.actions}>
             <Button variant="secondary" onPress={onClose} disabled={saving} style={styles.btn}>
-              Cancel
+              {t('cvBuilder.renameModal.cancel')}
             </Button>
             <Button onPress={onSave} loading={saving} disabled={!canSave || saving} style={styles.btn}>
-              Save
+              {t('cvBuilder.renameModal.save')}
             </Button>
           </View>
         </Pressable>

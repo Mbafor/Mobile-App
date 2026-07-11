@@ -1,8 +1,7 @@
-import { SelectWithOther } from '@/components/forms';
-import { DEGREE_LEVELS } from '@/constants/onboarding';
+import { useTranslation } from 'react-i18next';
 
-const DEGREE_OPTIONS = DEGREE_LEVELS.map((d) => ({ value: d.value, label: d.label }));
-const DEGREE_VALUES = DEGREE_LEVELS.map((d) => d.value);
+import { SelectWithOther } from '@/components/forms';
+import { DEGREE_LEVEL_VALUES, getDegreeLevels } from '@/constants/onboarding';
 
 type DegreeLevelPickerProps = {
   value: string;
@@ -10,13 +9,14 @@ type DegreeLevelPickerProps = {
 };
 
 export function DegreeLevelPicker({ value, onChange }: DegreeLevelPickerProps) {
+  const { t } = useTranslation();
   return (
     <SelectWithOther
-      options={DEGREE_OPTIONS}
-      predefinedValues={DEGREE_VALUES}
+      options={getDegreeLevels()}
+      predefinedValues={DEGREE_LEVEL_VALUES}
       value={value}
       onChange={onChange}
-      placeholder="Select degree level"
+      placeholder={t('onboarding.academic.degreePlaceholder')}
     />
   );
 }

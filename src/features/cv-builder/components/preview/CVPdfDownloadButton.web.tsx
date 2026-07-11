@@ -2,6 +2,7 @@ import { PDFDownloadLink } from '@react-pdf/renderer';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Pressable, StyleSheet, Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { spacing } from '@/constants/theme';
 import { ResumeDocument } from '@/features/cv-builder/pdf/resume/ResumeDocument';
@@ -26,11 +27,13 @@ export function CVPdfDownloadButton({
   onPress,
   loading = false,
   disabled = false,
-  label = 'Download PDF',
+  label,
   compact = false,
   purchased = false,
 }: CVPdfDownloadButtonProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
+  const resolvedLabel = label ?? t('cvBuilder.hub.downloadPdf');
   const safeFileName = fileName.endsWith('.pdf') ? fileName : `${fileName}.pdf`;
   const buttonStyles = [
     compact ? styles.compactBtn : styles.btn,
@@ -45,7 +48,7 @@ export function CVPdfDownloadButton({
         style={buttonStyles}
       >
         <Text style={compact ? styles.compactText : styles.btnText}>
-          {loading ? 'Generating…' : label}
+          {loading ? t('cvBuilder.pdfButton.generating') : resolvedLabel}
         </Text>
       </Pressable>
     );
@@ -63,7 +66,7 @@ export function CVPdfDownloadButton({
           style={[...buttonStyles, (disabled || loading || pdfLoading) && styles.btnDisabled]}
         >
           <Text style={compact ? styles.compactText : styles.btnText}>
-            {loading || pdfLoading ? 'Generating…' : label}
+            {loading || pdfLoading ? t('cvBuilder.pdfButton.generating') : resolvedLabel}
           </Text>
         </Pressable>
       )}

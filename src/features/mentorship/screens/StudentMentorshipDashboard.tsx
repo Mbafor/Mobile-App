@@ -3,6 +3,8 @@ import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 import {
   ActivityIndicator,
   StyleSheet,
@@ -23,10 +25,7 @@ import { WaitingListCard } from '@/features/mentorship/components/student/Waitin
 import { MatchedBanner } from '@/features/mentorship/components/shared/MatchedBanner';
 import { MentorshipChat } from '@/features/mentorship/components/shared/MentorshipChat';
 import { MentorshipShell } from '@/features/mentorship/components/shared/MentorshipShell';
-import {
-  STUDENT_NAV_ITEMS,
-  STUDENT_SECTION_TITLES,
-} from '@/features/mentorship/constants/nav-items';
+import { STUDENT_NAV_ITEMS } from '@/features/mentorship/constants/nav-items';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useMentorshipActions } from '@/features/mentorship/hooks/useMentorshipActions';
 import { useMentorshipSchedulingRealtime } from '@/features/mentorship/hooks/useMentorshipSchedulingRealtime';
@@ -44,6 +43,7 @@ import { confirmAction } from '@/utils/confirm-action';
 export function StudentMentorshipDashboard() {
   const styles = useAppThemedStyles(createStyles);
   const { colors, mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');
@@ -100,7 +100,7 @@ export function StudentMentorshipDashboard() {
 
   const handleChooseCoach = (mentorUserId: string) => {
     if (!mentorUserId?.trim()) {
-      Alert.alert('Select a coach', 'Please choose a coach from the list before continuing.');
+      Alert.alert(t('mentorship.student.selectCoachTitle'), t('mentorship.student.selectCoachMessage'));
       return;
     }
     setSelectingMentorId(mentorUserId);
@@ -123,18 +123,21 @@ export function StudentMentorshipDashboard() {
   const handleLeave = async () => {
     if (!activeMentorship) return;
     const ok = await confirmAction(
-      'Leave mentorship',
-      'You can request a new coach after leaving. This cannot be undone.',
+      t('mentorship.student.leaveConfirmTitle'),
+      t('mentorship.student.leaveConfirmMessage'),
     );
     if (!ok) return;
     leaveMentorship({ mentorshipId: activeMentorship.id });
   };
 
   const handleCancelSession = async (sessionId: string) => {
-    const ok = await confirmAction('Cancel session', 'Cancel this session?');
+    const ok = await confirmAction(
+      t('mentorship.student.cancelSessionTitle'),
+      t('mentorship.student.cancelSessionMessage'),
+    );
     if (!ok) return;
     void cancel(sessionId, 'Cancelled by student').catch((e: Error) =>
-      Alert.alert('Cannot cancel', e.message),
+      Alert.alert(t('mentorship.student.cancelErrorTitle'), e.message),
     );
   };
 
@@ -149,8 +152,8 @@ export function StudentMentorshipDashboard() {
   if (error) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load'} />
-        <Button onPress={() => void refetch()}>Retry</Button>
+        <ErrorMessage message={error instanceof Error ? error.message : t('mentorship.loadError')} />
+        <Button onPress={() => void refetch()}>{t('mentorship.retry')}</Button>
       </View>
     );
   }
@@ -158,11 +161,16 @@ export function StudentMentorshipDashboard() {
   const hasCoach = Boolean(activeMentorship);
   const onWaitingList = openRequest?.status === 'waiting_list' && waitingList;
   const canRequest = !hasCoach && !openRequest;
-  const coachName = coach?.profile?.fullName?.trim() || 'Your coach';
+  const coachName = coach?.profile?.fullName?.trim() || t('mentorship.student.coachNameFallback');
   const isVerifiedCoach = coach?.mentor?.status === 'approved';
 
-  const navItems = STUDENT_NAV_ITEMS;
-  const sectionTitle = STUDENT_SECTION_TITLES[activeSection] ?? 'Mentorship';
+  const navItems: MentorshipNavItem[] = STUDENT_NAV_ITEMS.map((item) => ({
+    ...item,
+    label: t(`mentorship.nav.student.${item.id}`),
+  }));
+  const sectionTitle = t(`mentorship.sections.student.${activeSection}`, {
+    defaultValue: t('mentorship.sectionFallback'),
+  });
   const isFullHeightSection = activeSection === 'messages';
 
   const renderSection = () => {
@@ -172,7 +180,7 @@ export function StudentMentorshipDashboard() {
           <View style={styles.sectionBody}>
             {canRequest ? (
               <Button fullWidth onPress={handleRequestCoach}>
-                Request a Coach
+                {t('mentorship.student.requestCoach')}
               </Button>
             ) : null}
             {onWaitingList && waitingList ? (
@@ -192,7 +200,7 @@ export function StudentMentorshipDashboard() {
                 />
                 <View style={styles.leaveSection}>
                   <Text muted style={styles.leaveHint}>
-                    End your current mentorship. You may request a new coach later.
+                    {t('mentorship.student.leaveHint')}
                   </Text>
                   <Button
                     variant="secondary"
@@ -200,15 +208,15 @@ export function StudentMentorshipDashboard() {
                     loading={isLeaving}
                     textStyle={{ color: colors.error }}
                   >
-                    Leave mentorship
+                    {t('mentorship.student.leave')}
                   </Button>
                 </View>
               </>
             ) : null}
             {!canRequest && !hasCoach && !onWaitingList ? (
               <EmptyState
-                title="No active mentorship"
-                description="Request a coach to get started."
+                title={t('mentorship.student.emptyTitle')}
+                description={t('mentorship.student.emptyDescription')}
               />
             ) : null}
           </View>
@@ -226,7 +234,7 @@ export function StudentMentorshipDashboard() {
 
       case 'coach':
         if (!hasCoach) {
-          return <Text muted>Choose a coach to view their profile.</Text>;
+          return <Text muted>{t('mentorship.student.chooseToViewProfile')}</Text>;
         }
         return (
           <CoachProfileCard
@@ -238,7 +246,7 @@ export function StudentMentorshipDashboard() {
 
       case 'messages':
         if (!hasCoach || !mentorshipId) {
-          return <Text muted>Choose a coach to start messaging.</Text>;
+          return <Text muted>{t('mentorship.student.chooseToMessage')}</Text>;
         }
         return (
           <MentorshipChat
@@ -251,13 +259,13 @@ export function StudentMentorshipDashboard() {
             peerName={coachName}
             peerAvatarUrl={coach?.profile?.avatarUrl}
             fullScreen
-            emptyHint="Send a message to your coach about goals, sessions, or feedback."
+            emptyHint={t('mentorship.student.chatEmptyHint')}
           />
         );
 
       case 'book':
         if (!hasCoach || !mentorshipId || !mentorId) {
-          return <Text muted>Choose a coach to book sessions.</Text>;
+          return <Text muted>{t('mentorship.student.chooseToBook')}</Text>;
         }
         return (
           <View style={styles.sectionBody}>
@@ -277,7 +285,7 @@ export function StudentMentorshipDashboard() {
               <ActivityIndicator color={mentorshipColors.accent} />
             ) : (
               <SessionsTable
-                title="Upcoming sessions"
+                title={t('mentorship.student.upcomingSessions')}
                 sessions={myUpcoming}
                 coachName={coachName}
                 coachEmail={coach?.profile?.email ?? null}
@@ -291,7 +299,7 @@ export function StudentMentorshipDashboard() {
 
       case 'sessions':
         if (!hasCoach) {
-          return <Text muted>No sessions yet.</Text>;
+          return <Text muted>{t('mentorship.student.noSessions')}</Text>;
         }
         if (sessionsLoading) {
           return <ActivityIndicator color={mentorshipColors.accent} />;

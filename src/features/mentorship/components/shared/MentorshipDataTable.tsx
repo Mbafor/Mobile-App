@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -26,13 +27,14 @@ export function MentorshipDataTable<T>({
   columns,
   data,
   keyExtractor,
-  emptyMessage = 'No data to display.',
+  emptyMessage,
 }: MentorshipDataTableProps<T>) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   if (data.length === 0) {
     return (
       <View style={styles.empty}>
-        <Text muted>{emptyMessage}</Text>
+        <Text muted>{emptyMessage ?? t('mentorship.list.noData')}</Text>
       </View>
     );
   }

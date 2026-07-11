@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 
 import { spacing, webTransition } from '@/constants/theme';
@@ -32,6 +33,7 @@ export function DesktopWebNavigation({
 }: DesktopWebNavigationProps) {
   const styles = useThemedStyles(createStyles);
   const { colors, isDark } = useTheme();
+  const { t } = useTranslation();
   return (
     <View style={styles.root}>
       <View style={styles.row}>
@@ -41,7 +43,7 @@ export function DesktopWebNavigation({
             <Pressable
               onPress={onMenuToggle}
               style={webPressableStyle(styles.menuButton, styles.menuButtonHover)}
-              accessibilityLabel="Open menu"
+              accessibilityLabel={t('navigation.sidebar.openMenu')}
             >
               <Ionicons name="menu-outline" size={20} color={colors.text} />
             </Pressable>

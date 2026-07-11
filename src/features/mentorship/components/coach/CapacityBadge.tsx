@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
@@ -13,12 +14,13 @@ type CapacityBadgeProps = {
 
 export function CapacityBadge({ activeCount, maxStudents = MENTORSHIP_MAX_ACTIVE_MENTEES }: CapacityBadgeProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const atCapacity = activeCount >= maxStudents;
 
   return (
     <View style={[styles.badge, atCapacity && styles.badgeFull]}>
       <Text style={[styles.text, atCapacity && styles.textFull]}>
-        {activeCount} / {maxStudents} active mentees
+        {t('mentorship.coach.capacity', { active: activeCount, max: maxStudents })}
       </Text>
     </View>
   );

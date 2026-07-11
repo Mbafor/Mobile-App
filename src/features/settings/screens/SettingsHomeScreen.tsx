@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 
@@ -6,6 +7,7 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { ROUTES } from '@/constants/routes';
 import { SettingsRow } from '@/features/settings/components/SettingsRow';
 import { AppearanceSection } from '@/features/settings/components/AppearanceSection';
+import { LanguageSection } from '@/features/settings/components/LanguageSection';
 import { performLogout } from '@/features/auth/utils/perform-logout';
 import { confirmAction } from '@/utils/confirm-action';
 import type { ColorScheme } from '@/constants/theme/types';
@@ -15,11 +17,15 @@ import { Text } from '@/components/ui';
 
 export function SettingsHomeScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   const handleLogout = async () => {
-    const confirmed = await confirmAction('Log out', 'Are you sure you want to log out?');
+    const confirmed = await confirmAction(
+      t('settings.home.logoutConfirmTitle'),
+      t('settings.home.logoutConfirmMessage'),
+    );
     if (!confirmed) return;
 
     setIsLoggingOut(true);
@@ -27,13 +33,13 @@ export function SettingsHomeScreen() {
     setIsLoggingOut(false);
 
     if (!result.ok) {
-      Alert.alert('Log out failed', result.error);
+      Alert.alert(t('settings.home.logoutFailed'), result.error);
     }
   };
 
   return (
     <View style={styles.root}>
-      <PageHeader title="Settings" onBack={() => router.push(ROUTES.MAIN.DASHBOARD as Href)} />
+      <PageHeader title={t('settings.home.title')} onBack={() => router.push(ROUTES.MAIN.DASHBOARD as Href)} />
 
       <ScrollView
         style={styles.scroll}
@@ -42,19 +48,19 @@ export function SettingsHomeScreen() {
       >
         <View style={styles.group}>
           <SettingsRow
-            label="Notifications"
+            label={t('settings.home.notifications')}
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
           />
           <SettingsRow
-            label="Privacy"
+            label={t('settings.home.privacy')}
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_PRIVACY as Href)}
           />
           <SettingsRow
-            label="Change Password"
+            label={t('settings.home.changePassword')}
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_CHANGE_PASSWORD as Href)}
           />
           <SettingsRow
-            label="Support"
+            label={t('settings.home.support')}
             showDivider={false}
             onPress={() => router.push(ROUTES.MAIN.HELP.INDEX as Href)}
           />
@@ -62,21 +68,28 @@ export function SettingsHomeScreen() {
 
         <View style={styles.group}>
           <Text variant="caption" muted style={styles.groupLabel}>
-            Appearance
+            {t('settings.appearance.sectionLabel')}
           </Text>
           <AppearanceSection />
         </View>
 
         <View style={styles.group}>
+          <Text variant="caption" muted style={styles.groupLabel}>
+            {t('settings.language.sectionLabel')}
+          </Text>
+          <LanguageSection />
+        </View>
+
+        <View style={styles.group}>
           <SettingsRow
-            label="Log out"
+            label={t('settings.home.logout')}
             destructive
             showChevron={false}
             loading={isLoggingOut}
             onPress={() => void handleLogout()}
           />
           <SettingsRow
-            label="Delete Account"
+            label={t('settings.home.deleteAccount')}
             destructive
             showDivider={false}
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_DELETE_ACCOUNT as Href)}

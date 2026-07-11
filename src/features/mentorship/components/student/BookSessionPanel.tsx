@@ -1,4 +1,5 @@
 import { Alert, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
@@ -29,10 +30,12 @@ export function BookSessionPanel({
   onBook,
   isBooking,
 }: BookSessionPanelProps) {
+  const { t } = useTranslation();
+
   if (rules.length === 0) {
     return (
       <Text muted>
-        Your coach has not set availability yet. Message them to arrange a time.
+        {t('mentorship.student.booking.noAvailability')}
       </Text>
     );
   }
@@ -47,16 +50,16 @@ export function BookSessionPanel({
         timezone: rule.timezone,
         title: 'Mentorship session',
       });
-      Alert.alert('Session requested', 'Your coach will confirm the booking.');
+      Alert.alert(t('mentorship.student.booking.sessionRequestedTitle'), t('mentorship.student.booking.panelConfirmMessage'));
     } catch (e) {
-      Alert.alert('Booking failed', e instanceof Error ? e.message : 'Try again.');
+      Alert.alert(t('mentorship.student.booking.bookingFailedTitle'), e instanceof Error ? e.message : t('mentorship.student.booking.tryAgain'));
     }
   };
 
   return (
     <View style={styles.wrap}>
       <Text muted variant="caption">
-        Tap a slot to request your next session (coach confirms).
+        {t('mentorship.student.booking.panelHint')}
       </Text>
       {rules.map((rule) => (
         <Button

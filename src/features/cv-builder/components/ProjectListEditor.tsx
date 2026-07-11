@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, TextArea } from '@/components/ui';
@@ -22,9 +23,11 @@ export function ProjectListEditor({
   description,
   entries,
   onChange,
-  addLabel = 'Add project',
+  addLabel,
 }: ProjectListEditorProps) {
   const cvUi = useCvUi();
+  const { t } = useTranslation();
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.sections.projects.addLabel');
   const updateEntry = (id: string, patch: Partial<CVProjectEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };
@@ -36,56 +39,56 @@ export function ProjectListEditor({
         <CVEntryCard
           key={entry.id}
           index={index}
-          title={entry.name.trim() || `Project ${index + 1}`}
+          title={entry.name.trim() || t('cvBuilder.editors.projects.entryFallback', { index: index + 1 })}
           onRemove={() => onChange(entries.filter((e) => e.id !== entry.id))}
         >
-          <FormField label="Project name *">
+          <FormField label={t('cvBuilder.editors.projects.nameLabel')}>
             <Input
               value={entry.name}
               onChangeText={(v) => updateEntry(entry.id, { name: v })}
-              placeholder="e.g. Portfolio App"
+              placeholder={t('cvBuilder.editors.projects.namePlaceholder')}
             />
           </FormField>
-          <FormField label="Description">
+          <FormField label={t('cvBuilder.editors.projects.descriptionLabel')}>
             <TextArea
               value={entry.description}
               onChangeText={(v) => updateEntry(entry.id, { description: v })}
-              placeholder="What you built and the impact — one bullet per line"
+              placeholder={t('cvBuilder.editors.projects.descriptionPlaceholder')}
               minHeight={120}
             />
           </FormField>
-          <FormField label="Technologies">
+          <FormField label={t('cvBuilder.editors.projects.technologiesLabel')}>
             <Input
               value={entry.technologies}
               onChangeText={(v) => updateEntry(entry.id, { technologies: v })}
-              placeholder="React, TypeScript, Supabase"
+              placeholder={t('cvBuilder.editors.projects.technologiesPlaceholder')}
             />
           </FormField>
-          <FormField label="Link">
+          <FormField label={t('cvBuilder.editors.projects.linkLabel')}>
             <Input
               value={entry.link}
               onChangeText={(v) => updateEntry(entry.id, { link: v })}
-              placeholder="https://…"
+              placeholder={t('cvBuilder.editors.projects.linkPlaceholder')}
               autoCapitalize="none"
             />
           </FormField>
-          <FormField label="Start date">
+          <FormField label={t('cvBuilder.editors.projects.startDateLabel')}>
             <Input
               value={entry.startDate}
               onChangeText={(v) => updateEntry(entry.id, { startDate: v })}
-              placeholder="e.g. 2024"
+              placeholder={t('cvBuilder.editors.projects.startDatePlaceholder')}
             />
           </FormField>
-          <FormField label="End date">
+          <FormField label={t('cvBuilder.editors.projects.endDateLabel')}>
             <Input
               value={entry.endDate}
               onChangeText={(v) => updateEntry(entry.id, { endDate: v })}
-              placeholder="Present"
+              placeholder={t('cvBuilder.editors.projects.endDatePlaceholder')}
             />
           </FormField>
         </CVEntryCard>
       ))}
-      <CVAddButton label={addLabel} onPress={() => onChange([...entries, createEmptyProject()])} />
+      <CVAddButton label={resolvedAddLabel} onPress={() => onChange([...entries, createEmptyProject()])} />
     </View>
   );
 }

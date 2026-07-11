@@ -2,6 +2,7 @@ import { Alert, ScrollView, Share, StyleSheet, View } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -13,17 +14,18 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 export function ReferFriendScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const handleShare = async () => {
     try {
       await Share.share({ message: REFERRAL_MESSAGE });
     } catch {
-      Alert.alert('Unable to share', 'Please try again.');
+      Alert.alert(t('menu.refer.shareErrorTitle'), t('menu.refer.shareErrorMessage'));
     }
   };
 
   return (
     <View style={styles.root}>
-      <PageHeader title="Refer a Friend" />
+      <PageHeader title={t('menu.items.referFriend')} />
 
       <ScrollView
         style={styles.scroll}
@@ -36,25 +38,25 @@ export function ReferFriendScreen() {
             <Ionicons name="people" size={34} color={colors.primary} />
           </View>
           <Text style={[styles.title, getWebFontStyle('bold')]}>
-            Invite your friends
+            {t('menu.refer.heroTitle')}
           </Text>
           <Text style={styles.subtitle}>
-            Share opportunities with friends and help them discover something valuable.
+            {t('menu.refer.heroSubtitle')}
           </Text>
         </View>
 
         {/* Message preview */}
         <View style={styles.messageSection}>
-          <Text style={styles.sectionLabel}>Invite Message</Text>
+          <Text style={styles.sectionLabel}>{t('menu.refer.messageLabel')}</Text>
           <Text style={styles.message}>{REFERRAL_MESSAGE}</Text>
         </View>
 
         {/* CTA */}
         <Button fullWidth onPress={() => void handleShare()}>
-          Share Invite
+          {t('menu.refer.shareButton')}
         </Button>
         <Text style={styles.helper}>
-          Share through WhatsApp, Messages, Email and more.
+          {t('menu.refer.shareHelper')}
         </Text>
       </ScrollView>
     </View>

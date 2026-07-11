@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -23,6 +24,7 @@ type MentorshipDrawerNavProps = {
 export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDrawerNavProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
 
   return (
@@ -31,10 +33,10 @@ export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDra
         style={styles.menuBtn}
         onPress={() => setOpen(true)}
         accessibilityRole="button"
-        accessibilityLabel="Open mentorship sections"
+        accessibilityLabel={t('mentorship.drawer.open')}
       >
         <Ionicons name="menu" size={20} color={mentorshipColors.text} />
-        <Text style={styles.menuLabel}>Sections</Text>
+        <Text style={styles.menuLabel}>{t('mentorship.drawer.sections')}</Text>
         <Ionicons name="chevron-down" size={14} color={mentorshipColors.textMuted} />
       </Pressable>
 
@@ -42,7 +44,7 @@ export function MentorshipDrawerNav({ items, activeId, onSelect }: MentorshipDra
         <Pressable style={styles.backdrop} onPress={() => setOpen(false)}>
           <Pressable style={styles.panel} onPress={(e) => e.stopPropagation()}>
             <View style={styles.panelHeader}>
-              <Text style={styles.panelTitle}>Mentorship</Text>
+              <Text style={styles.panelTitle}>{t('mentorship.drawer.title')}</Text>
               <Pressable onPress={() => setOpen(false)} hitSlop={12}>
                 <Ionicons name="close" size={22} color={mentorshipColors.textMuted} />
               </Pressable>

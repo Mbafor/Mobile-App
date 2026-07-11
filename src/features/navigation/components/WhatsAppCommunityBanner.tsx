@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,6 +17,7 @@ const WHATSAPP_URL =
 export function WhatsAppCommunityBanner() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -43,13 +45,13 @@ export function WhatsAppCommunityBanner() {
       <View style={styles.card}>
         <View style={styles.left}>
           <Ionicons name="logo-whatsapp" size={22} color="#25D366" />
-          <Text style={styles.message}>Join our WhatsApp community</Text>
+          <Text style={styles.message}>{t('navigation.whatsapp.community')}</Text>
         </View>
         <View style={styles.actions}>
           <Pressable onPress={join} style={({ pressed }) => [styles.joinBtn, pressed && styles.pressed]}>
-            <Text style={styles.joinText}>Join</Text>
+            <Text style={styles.joinText}>{t('navigation.whatsapp.join')}</Text>
           </Pressable>
-          <Pressable onPress={dismiss} hitSlop={10} accessibilityLabel="Dismiss">
+          <Pressable onPress={dismiss} hitSlop={10} accessibilityLabel={t('navigation.whatsapp.dismiss')}>
             <Ionicons name="close" size={20} color={colors.textMuted} />
           </Pressable>
         </View>

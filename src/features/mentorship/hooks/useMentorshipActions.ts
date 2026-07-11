@@ -1,4 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -6,6 +7,7 @@ import { mentorshipApi } from '@/services/api';
 
 export function useMentorshipActions() {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const invalidateAll = () => {
     queryClient.invalidateQueries({ queryKey: ['mentorship'] });
@@ -14,7 +16,7 @@ export function useMentorshipActions() {
   const chooseCoachMutation = useMutation({
     mutationFn: async (mentorUserId: string) => {
       if (!mentorUserId?.trim()) {
-        throw new Error('Please select a coach from the list before continuing.');
+        throw new Error(t('mentorship.actions.selectCoachError'));
       }
       const result = await mentorshipApi.chooseCoach(mentorUserId);
       if (!result.success) throw new Error(result.error.message);
@@ -23,11 +25,11 @@ export function useMentorshipActions() {
     onSuccess: () => {
       invalidateAll();
       Alert.alert(
-        'Coach connected',
-        'Your mentorship is active. You can message your coach and book sessions from the dashboard.',
+        t('mentorship.actions.coachConnectedTitle'),
+        t('mentorship.actions.coachConnectedMessage'),
       );
     },
-    onError: (e: Error) => Alert.alert('Could not connect', e.message),
+    onError: (e: Error) => Alert.alert(t('mentorship.actions.couldNotConnect'), e.message),
   });
 
   const joinWaitingListMutation = useMutation({
@@ -40,12 +42,12 @@ export function useMentorshipActions() {
       invalidateAll();
       if (data.outcome === 'waiting_list') {
         Alert.alert(
-          'On the waiting list',
-          `You are #${data.queuePosition} in the queue. We will notify you when a coach has capacity.`,
+          t('mentorship.actions.waitingListTitle'),
+          t('mentorship.actions.waitingListMessage', { position: data.queuePosition }),
         );
       }
     },
-    onError: (e: Error) => Alert.alert('Request failed', e.message),
+    onError: (e: Error) => Alert.alert(t('mentorship.actions.requestFailed'), e.message),
   });
 
   const cancelRequestMutation = useMutation({
@@ -56,9 +58,9 @@ export function useMentorshipActions() {
     },
     onSuccess: () => {
       invalidateAll();
-      Alert.alert('Cancelled', 'Your mentorship request was cancelled.');
+      Alert.alert(t('mentorship.actions.cancelledTitle'), t('mentorship.actions.cancelledMessage'));
     },
-    onError: (e: Error) => Alert.alert('Cancel failed', e.message),
+    onError: (e: Error) => Alert.alert(t('mentorship.actions.cancelFailed'), e.message),
   });
 
   const leaveMutation = useMutation({
@@ -69,9 +71,9 @@ export function useMentorshipActions() {
     },
     onSuccess: () => {
       invalidateAll();
-      Alert.alert('Left mentorship', 'You can request a new coach when ready.');
+      Alert.alert(t('mentorship.actions.leftTitle'), t('mentorship.actions.leftMessage'));
     },
-    onError: (e: Error) => Alert.alert('Could not leave', e.message),
+    onError: (e: Error) => Alert.alert(t('mentorship.actions.couldNotLeave'), e.message),
   });
 
   const removeMenteeMutation = useMutation({
@@ -82,9 +84,9 @@ export function useMentorshipActions() {
     },
     onSuccess: () => {
       invalidateAll();
-      Alert.alert('Student removed', 'Their slot is now available for the waiting list.');
+      Alert.alert(t('mentorship.actions.studentRemovedTitle'), t('mentorship.actions.studentRemovedMessage'));
     },
-    onError: (e: Error) => Alert.alert('Remove failed', e.message),
+    onError: (e: Error) => Alert.alert(t('mentorship.actions.removeFailed'), e.message),
   });
 
   return {

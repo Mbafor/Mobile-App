@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Screen } from '@/components/layout';
 import { Text } from '@/components/ui';
@@ -13,6 +14,7 @@ import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSup
 export default function SuperAdminCreateOpportunity() {
   useRequireSuperAdmin();
   const { isReady } = useCanManageOpportunities();
+  const { t } = useTranslation();
   const createMutation = useCreateOpportunityMutation(
     ROUTES.SUPER_ADMIN.OPPORTUNITIES as import('expo-router').Href,
   );
@@ -24,12 +26,12 @@ export default function SuperAdminCreateOpportunity() {
       <View style={styles.wrap}>
         <View style={styles.header}>
           <Text muted variant="caption">
-            Create a listing with the same form opportunity admins use.
+            {t('superAdmin.opportunities.createHint')}
           </Text>
         </View>
         <OpportunityForm
           initialValues={EMPTY_OPPORTUNITY_FORM}
-          submitLabel="Create opportunity"
+          submitLabel={t('admin.createScreen.submitLabel')}
           loading={createMutation.isPending}
           onSubmit={async (values) => {
             await createMutation.mutateAsync(values);

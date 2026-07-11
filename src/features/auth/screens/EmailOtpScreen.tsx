@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Linking, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -22,6 +23,7 @@ import { isValidPassword } from '@/utils/validation/password';
 export function EmailOtpScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   useAuthRedirect('guest');
   const { signInWithEmailPassword, sendPasswordReset, isLoading, error, clearError } = useAuthActions();
@@ -33,24 +35,24 @@ export function EmailOtpScreen() {
     const target = email.trim().toLowerCase();
     if (!target || !isValidEmail(target)) {
       Alert.alert(
-        'Enter your email first',
-        'Type your email address in the field above, then tap "Forgot password?".',
+        t('auth.email.forgotEmailFirstTitle'),
+        t('auth.email.forgotEmailFirstBody'),
       );
       return;
     }
     Alert.alert(
-      'Reset password',
-      `Send a reset link to ${target}?`,
+      t('auth.email.resetTitle'),
+      t('auth.email.resetConfirm', { email: target }),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Send link',
+          text: t('auth.email.sendLink'),
           onPress: async () => {
             const result = await sendPasswordReset(target);
             if (result) {
               Alert.alert(
-                'Check your inbox',
-                `A password reset link has been sent to ${target}.`,
+                t('auth.email.resetSentTitle'),
+                t('auth.email.resetSentBody', { email: target }),
               );
             }
           },
@@ -63,11 +65,11 @@ export function EmailOtpScreen() {
     clearError();
     const normalized = email.trim().toLowerCase();
     if (!isValidEmail(normalized)) {
-      Alert.alert('Invalid email', 'Enter a valid email address.');
+      Alert.alert(t('auth.email.invalidEmailTitle'), t('auth.email.invalidEmailBody'));
       return;
     }
     if (!isValidPassword(password)) {
-      Alert.alert('Password too short', 'Use at least 8 characters.');
+      Alert.alert(t('auth.email.shortPasswordTitle'), t('auth.email.shortPasswordBody'));
       return;
     }
 
@@ -96,25 +98,25 @@ export function EmailOtpScreen() {
 
   return (
     <AuthScreenLayout
-      title="Sign in"
-      subtitle="Enter your email and password. We will send a 6-digit code to confirm your email when needed."
+      title={t('auth.email.title')}
+      subtitle={t('auth.email.subtitle')}
       onBack={() => router.replace(ROUTES.AUTH.WELCOME as Href)}
       backgroundColor={colors.background}
 
     >
-      <FormField label="Email address">
+      <FormField label={t('auth.fields.email')}>
         <Input
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
           autoComplete="email"
-          placeholder="you@university.edu"
+          placeholder={t('auth.fields.emailPlaceholder')}
         />
       </FormField>
 
       {/* Password field with eye toggle — border lives on the wrapper View */}
-      <FormField label="Password">
+      <FormField label={t('auth.fields.password')}>
         <View style={styles.passwordField}>
           <TextInput
             value={password}
@@ -122,7 +124,7 @@ export function EmailOtpScreen() {
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="password"
-            placeholder="At least 8 characters"
+            placeholder={t('auth.fields.passwordPlaceholder')}
             placeholderTextColor={colors.textMuted}
             style={styles.passwordInput}
           />
@@ -130,7 +132,7 @@ export function EmailOtpScreen() {
             onPress={() => setShowPassword((v) => !v)}
             style={styles.eyeBtn}
             hitSlop={8}
-            accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
+            accessibilityLabel={showPassword ? t('auth.fields.hidePassword') : t('auth.fields.showPassword')}
           >
             <Ionicons
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
@@ -143,7 +145,7 @@ export function EmailOtpScreen() {
 
       {/* Forgot password link — always visible beneath the password field */}
       <Pressable onPress={handleForgotPassword} style={styles.forgotWrap} hitSlop={12}>
-        <Text style={styles.forgotText}>Forgot password?</Text>
+        <Text style={styles.forgotText}>{t('auth.common.forgotPassword')}</Text>
       </Pressable>
 
       {env.configError ? <ErrorMessage message={env.configError} /> : null}
@@ -158,13 +160,13 @@ export function EmailOtpScreen() {
           style={styles.continueBtn}
           textStyle={styles.continueBtnText}
         >
-          Continue
+          {t('auth.common.continue')}
         </Button>
       </View>
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
-          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+          {t('auth.common.supportPrefix')} <Text style={styles.supportEmail}>support@voila-africa.com</Text>
         </Text>
       </Pressable>
     </AuthScreenLayout>

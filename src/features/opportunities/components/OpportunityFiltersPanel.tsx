@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 
 import { Button, Text } from '@/components/ui';
@@ -29,53 +30,54 @@ export function OpportunityFiltersPanel({
   onChange,
   onClose,
 }: OpportunityFiltersPanelProps) {
+  const { t } = useTranslation();
   const patch = (partial: Partial<OpportunityFilters>) =>
     onChange({ ...filters, ...partial });
 
   return (
     <View style={styles.panel}>
       <View style={styles.header}>
-        <Text variant="title">Filters</Text>
+        <Text variant="title">{t('opportunities.filtersPanel.title')}</Text>
         <Button variant="ghost" onPress={() => onChange(EMPTY_OPPORTUNITY_FILTERS)}>
-          Clear all
+          {t('opportunities.filtersPanel.clearAll')}
         </Button>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
         <FilterDropdownGroup
-          label="Country"
+          label={t('opportunities.filtersPanel.country')}
           options={FILTER_COUNTRIES}
           selected={filters.countries}
           onChange={(countries) => patch({ countries })}
         />
         <FilterDropdownGroup
-          label="Category"
+          label={t('opportunities.filtersPanel.category')}
           options={FILTER_CATEGORIES}
           selected={filters.categories}
           onChange={(categories) => patch({ categories })}
         />
         <FilterDropdownGroup
-          label="Funding type"
+          label={t('opportunities.filtersPanel.fundingType')}
           options={FILTER_FUNDING_TYPES}
           selected={filters.fundingTypes}
           onChange={(fundingTypes) => patch({ fundingTypes })}
           formatLabel={(v) => FUNDING_TYPE_LABELS[v] ?? v}
         />
         <FilterDropdownGroup
-          label="Degree level"
+          label={t('opportunities.filtersPanel.degreeLevel')}
           options={FILTER_DEGREE_LEVELS}
           selected={filters.degreeLevels}
           onChange={(degreeLevels) => patch({ degreeLevels })}
           formatLabel={(v) => v.replace('_', ' ')}
         />
         <FilterDropdownGroup
-          label="Remote / on-site"
+          label={t('opportunities.filtersPanel.locationType')}
           options={FILTER_LOCATION_TYPES}
           selected={filters.locationTypes}
           onChange={(locationTypes) => patch({ locationTypes })}
         />
         <FilterDropdownGroup<DeadlineRangeFilter>
-          label="Deadline"
+          label={t('opportunities.filtersPanel.deadline')}
           options={FILTER_DEADLINE_RANGES}
           selected={filters.deadlineRange === 'any' ? [] : [filters.deadlineRange]}
           onChange={(selected) => patch({ deadlineRange: selected[0] ?? 'any' })}
@@ -85,7 +87,7 @@ export function OpportunityFiltersPanel({
 
       {onClose ? (
         <Button onPress={onClose} style={styles.applyBtn}>
-          Show results
+          {t('opportunities.filtersPanel.showResults')}
         </Button>
       ) : null}
     </View>

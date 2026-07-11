@@ -1,12 +1,13 @@
 import type { LocationType } from '@/types/domain/opportunity';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
 import { EMPTY_OPPORTUNITY_FORM } from '@/features/admin/types/opportunity-form';
+import i18n from '@/i18n';
 import {
   PREDEFINED_OPPORTUNITY_CATEGORIES,
   PREDEFINED_OPPORTUNITY_TAGS,
   PREDEFINED_OPPORTUNITY_COUNTRIES,
 } from '@/constants/opportunity-fields';
-import { DEGREE_LEVELS } from '@/constants/onboarding';
+import { DEGREE_LEVEL_VALUES } from '@/constants/onboarding';
 
 type RawOpportunity = Record<string, unknown>;
 
@@ -113,10 +114,8 @@ const DEGREE_ALIASES: Record<string, string> = {
 function normalizeDegreeLevel(v: string): string {
   const alias = DEGREE_ALIASES[v.toLowerCase().trim()];
   if (alias) return alias;
-  const byValue = DEGREE_LEVELS.find((d) => d.value.toLowerCase() === v.toLowerCase().trim());
-  if (byValue) return byValue.value;
-  const byLabel = DEGREE_LEVELS.find((d) => d.label.toLowerCase() === v.toLowerCase().trim());
-  if (byLabel) return byLabel.value;
+  const byValue = DEGREE_LEVEL_VALUES.find((value) => value.toLowerCase() === v.toLowerCase().trim());
+  if (byValue) return byValue;
   return v;
 }
 
@@ -151,7 +150,7 @@ export function parseOpportunityPaste(raw: string): {
 } {
   const trimmed = raw.trim();
   if (!trimmed) {
-    return { items: [], errors: ['Paste JSON for one opportunity or an array of opportunities.'] };
+    return { items: [], errors: [i18n.t('admin.pasteScreen.emptyPasteError')] };
   }
 
   try {
@@ -162,12 +161,12 @@ export function parseOpportunityPaste(raw: string): {
 
     list.forEach((entry, index) => {
       if (!entry || typeof entry !== 'object') {
-        errors.push(`Row ${index + 1}: expected an object.`);
+        errors.push(i18n.t('admin.pasteScreen.rowParseError', { row: index + 1 }));
         return;
       }
       const form = mapRawToForm(entry as RawOpportunity);
       if (!form.title || !form.organization || !form.deadline) {
-        errors.push(`Row ${index + 1}: title, organization, and deadline are required.`);
+        errors.push(i18n.t('admin.pasteScreen.rowMissingFieldsError', { row: index + 1 }));
         return;
       }
       items.push({ ...EMPTY_OPPORTUNITY_FORM, ...form });
@@ -177,7 +176,7 @@ export function parseOpportunityPaste(raw: string): {
   } catch {
     return {
       items: [],
-      errors: ['Invalid JSON. Paste a single object or an array of opportunity objects.'],
+      errors: [i18n.t('admin.pasteScreen.invalidJsonError')],
     };
   }
 }

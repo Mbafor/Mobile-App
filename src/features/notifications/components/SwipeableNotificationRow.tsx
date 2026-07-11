@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import Animated, { FadeIn, Layout } from 'react-native-reanimated';
@@ -33,6 +34,7 @@ export function SwipeableNotificationRow({
 }: Props) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const isUnread = !notification.readAt;
   const avatarSource = resolveAvatarSource(notification, {
     opportunityImages: enrichment?.opportunityImages ?? new Map(),
@@ -45,16 +47,16 @@ export function SwipeableNotificationRow({
         {isUnread ? (
           <RectButton style={[styles.actionBtn, styles.readBtn]} onPress={onMarkRead}>
             <Ionicons name="checkmark-done-outline" size={22} color={colors.textOnPrimary} />
-            <Text style={styles.actionLabel}>Read</Text>
+            <Text style={styles.actionLabel}>{t('notifications.actions.read')}</Text>
           </RectButton>
         ) : null}
         <RectButton style={[styles.actionBtn, styles.deleteBtn]} onPress={onDelete}>
           <Ionicons name="trash-outline" size={22} color={colors.textOnPrimary} />
-          <Text style={styles.actionLabel}>Delete</Text>
+          <Text style={styles.actionLabel}>{t('notifications.actions.delete')}</Text>
         </RectButton>
       </View>
     ),
-    [isUnread, onDelete, onMarkRead],
+    [isUnread, onDelete, onMarkRead, t],
   );
 
   return (

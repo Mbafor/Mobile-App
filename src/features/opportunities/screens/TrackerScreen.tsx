@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -31,6 +32,7 @@ import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker'
 export function TrackerScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [exporting, setExporting] = useState(false);
@@ -89,7 +91,7 @@ export function TrackerScreen() {
 
   const handleExport = useCallback(async () => {
     if (filteredItems.length === 0) {
-      Alert.alert('Nothing to export', 'Add items to your tracker first.');
+      Alert.alert(t('opportunities.tracker.nothingToExportTitle'), t('opportunities.tracker.nothingToExportBody'));
       return;
     }
     setExporting(true);
@@ -98,8 +100,8 @@ export function TrackerScreen() {
       await exportTrackerToXlsx(filteredItems, label);
     } catch (e) {
       Alert.alert(
-        'Export failed',
-        e instanceof Error ? e.message : 'Could not create the spreadsheet.',
+        t('opportunities.tracker.exportFailedTitle'),
+        e instanceof Error ? e.message : t('opportunities.tracker.exportFailedBody'),
       );
     } finally {
       setExporting(false);
@@ -119,7 +121,7 @@ export function TrackerScreen() {
       {error ? (
         <View style={styles.banner}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Failed to load your tracker'}
+            message={error instanceof Error ? error.message : t('opportunities.tracker.loadFailed')}
           />
         </View>
       ) : null}
@@ -129,7 +131,7 @@ export function TrackerScreen() {
           <SearchField
             value={query}
             onChangeText={setQuery}
-            placeholder="Search title or company…"
+            placeholder={t('opportunities.tracker.searchPlaceholder')}
           />
         </View>
         <Button
@@ -138,14 +140,14 @@ export function TrackerScreen() {
           onPress={() => void handleExport()}
           style={styles.exportBtn}
         >
-          Export .xlsx
+          {t('opportunities.tracker.export')}
         </Button>
       </View>
 
       <View style={styles.countRow}>
         <Text variant="caption" muted>
-          {filteredItems.length} {filteredItems.length === 1 ? 'card' : 'cards'}
-          {query.trim() ? ' (filtered)' : ''}
+          {t('opportunities.tracker.cardCount', { count: filteredItems.length })}
+          {query.trim() ? t('opportunities.tracker.filteredSuffix') : ''}
         </Text>
       </View>
 

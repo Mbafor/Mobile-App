@@ -6,6 +6,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, Image, Linking, Platform, Pressable, StyleSheet, TextInput, View, ScrollView, ImageBackground } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Circle, Ellipse, Line, Path, Rect, Svg } from 'react-native-svg';
 import startImage from '@/assets/images/start.jpg';
 
@@ -91,6 +92,7 @@ function GoogleLogo({ size = 18 }: { size?: number }) {
 export function WelcomeScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const isWeb = Platform.OS === 'web';
@@ -154,7 +156,7 @@ export function WelcomeScreen() {
     clearError();
     const target = email.trim().toLowerCase();
     if (!target || !isValidEmail(target)) {
-      setFormError('Enter your email address above, then tap "Forgot password?".');
+      setFormError(t('auth.welcome.errors.emailForForgot'));
       return;
     }
     const result = await sendPasswordReset(target);
@@ -166,18 +168,18 @@ export function WelcomeScreen() {
     clearError();
     const normalized = email.trim().toLowerCase();
     if (!isValidEmail(normalized)) {
-      setFormError('Enter a valid email address.');
+      setFormError(t('auth.welcome.errors.invalidEmail'));
       return;
     }
     if (!isValidPassword(password)) {
-      setFormError('Password must be at least 8 characters.');
+      setFormError(t('auth.welcome.errors.shortPassword'));
       return;
     }
     const result = await signInWithEmailPassword(normalized, password);
     if (!result) return;
     if ('accountNotFound' in result) {
       switchMode('signup');
-      setFormError('No account found for this email. Fill in your details below to create one.');
+      setFormError(t('auth.welcome.errors.noAccount'));
       return;
     }
     if (result.needsOtp) {
@@ -192,27 +194,27 @@ export function WelcomeScreen() {
     setFormError('');
     clearError();
     if (name.trim().length < 2) {
-      setFormError('Enter your full name.');
+      setFormError(t('auth.welcome.errors.enterName'));
       return;
     }
     const normalized = email.trim().toLowerCase();
     if (!isValidEmail(normalized)) {
-      setFormError('Enter a valid email address.');
+      setFormError(t('auth.welcome.errors.invalidEmail'));
       return;
     }
     if (!isValidPassword(password)) {
-      setFormError('Password must be at least 8 characters.');
+      setFormError(t('auth.welcome.errors.shortPassword'));
       return;
     }
     if (password !== confirmPassword) {
-      setFormError('Passwords do not match.');
+      setFormError(t('auth.welcome.errors.passwordMismatch'));
       return;
     }
     const result = await signUpWithEmailPasswordAndName(name.trim(), normalized, password);
     if (!result) return;
     if ('accountExists' in result) {
       setMode('signin');
-      setFormError('This email already has an account. Please sign in.');
+      setFormError(t('auth.welcome.errors.accountExists'));
       return;
     }
     if (result.needsOtp) {
@@ -230,13 +232,13 @@ export function WelcomeScreen() {
         style={[styles.tab, mode === 'signin' && styles.tabActive]}
         onPress={() => switchMode('signin')}
       >
-        <Text style={[styles.tabText, mode === 'signin' && styles.tabTextActive]}>Sign in</Text>
+        <Text style={[styles.tabText, mode === 'signin' && styles.tabTextActive]}>{t('auth.welcome.signInTab')}</Text>
       </Pressable>
       <Pressable
         style={[styles.tab, mode === 'signup' && styles.tabActive]}
         onPress={() => switchMode('signup')}
       >
-        <Text style={[styles.tabText, mode === 'signup' && styles.tabTextActive]}>Create account</Text>
+        <Text style={[styles.tabText, mode === 'signup' && styles.tabTextActive]}>{t('auth.welcome.createAccountTab')}</Text>
       </Pressable>
     </View>
   );
@@ -259,29 +261,29 @@ export function WelcomeScreen() {
       >
         <View style={styles.googleBtnContent}>
           <View style={{ marginRight: spacing.xs }}><GoogleLogo size={18} /></View>
-          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
+          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>{t('auth.common.continueWithGoogle')}</Text>
         </View>
       </Pressable>
 
       <View style={styles.dividerContainer}>
         <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or</Text>
+        <Text style={styles.dividerText}>{t('auth.common.or')}</Text>
         <View style={styles.dividerLine} />
       </View>
 
-      <FormField label="Email address">
+      <FormField label={t('auth.fields.email')}>
         <Input
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
           autoComplete="email"
-          placeholder="you@university.edu"
+          placeholder={t('auth.fields.emailPlaceholder')}
           editable={!isLoading}
         />
       </FormField>
 
-      <FormField label="Password">
+      <FormField label={t('auth.fields.password')}>
         <View style={styles.pwdField}>
           <TextInput
             value={password}
@@ -289,7 +291,7 @@ export function WelcomeScreen() {
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="current-password"
-            placeholder="At least 8 characters"
+            placeholder={t('auth.fields.passwordPlaceholder')}
             placeholderTextColor={colors.textMuted}
             editable={!isLoading}
             style={styles.pwdInput}
@@ -301,14 +303,14 @@ export function WelcomeScreen() {
       </FormField>
 
       <Pressable onPress={handleForgotPassword} style={styles.forgotPasswordRow} hitSlop={12}>
-        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+        <Text style={styles.forgotPasswordText}>{t('auth.common.forgotPassword')}</Text>
       </Pressable>
 
       {resetSent ? (
         <View style={styles.resetSentBanner}>
           <Ionicons name="checkmark-circle-outline" size={16} color={colors.primary} />
           <Text style={styles.resetSentText}>
-            Reset link sent to {email.trim()}. Check your inbox.
+            {t('auth.welcome.resetSent', { email: email.trim() })}
           </Text>
         </View>
       ) : null}
@@ -320,16 +322,16 @@ export function WelcomeScreen() {
         style={styles.emailBtn}
         textStyle={styles.emailBtnText}
       >
-        Continue
+        {t('auth.common.continue')}
       </Button>
 
       <Text style={styles.hint}>
-        Sign in with your email, password, and a one-time code to confirm your account.
+        {t('auth.welcome.signInHint')}
       </Text>
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
-          Facing challenges? Contact <Text style={styles.supportText}>support@voila-africa.com</Text>
+          {t('auth.common.supportPrefix')} <Text style={styles.supportText}>support@voila-africa.com</Text>
         </Text>
       </Pressable>
     </>
@@ -351,40 +353,40 @@ export function WelcomeScreen() {
       >
         <View style={styles.googleBtnContent}>
           <View style={{ marginRight: spacing.xs }}><GoogleLogo size={18} /></View>
-          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>Continue with Google</Text>
+          <Text style={[styles.googleBtnText, googleButtonHover && styles.googleBtnTextHover]}>{t('auth.common.continueWithGoogle')}</Text>
         </View>
       </Pressable>
 
       <View style={styles.dividerContainer}>
         <View style={styles.dividerLine} />
-        <Text style={styles.dividerText}>or</Text>
+        <Text style={styles.dividerText}>{t('auth.common.or')}</Text>
         <View style={styles.dividerLine} />
       </View>
 
-      <FormField label="Full name">
+      <FormField label={t('auth.welcome.fullNameLabel')}>
         <Input
           value={name}
           onChangeText={setName}
           autoCapitalize="words"
           autoComplete="name"
-          placeholder="Your full name"
+          placeholder={t('auth.welcome.fullNamePlaceholder')}
           editable={!isLoading}
         />
       </FormField>
 
-      <FormField label="Email address">
+      <FormField label={t('auth.fields.email')}>
         <Input
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
           autoComplete="email"
-          placeholder="you@university.edu"
+          placeholder={t('auth.fields.emailPlaceholder')}
           editable={!isLoading}
         />
       </FormField>
 
-      <FormField label="Password">
+      <FormField label={t('auth.fields.password')}>
         <View style={styles.pwdField}>
           <TextInput
             value={password}
@@ -392,7 +394,7 @@ export function WelcomeScreen() {
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="new-password"
-            placeholder="At least 8 characters"
+            placeholder={t('auth.fields.passwordPlaceholder')}
             placeholderTextColor={colors.textMuted}
             editable={!isLoading}
             style={styles.pwdInput}
@@ -403,7 +405,7 @@ export function WelcomeScreen() {
         </View>
       </FormField>
 
-      <FormField label="Confirm password">
+      <FormField label={t('auth.welcome.confirmPasswordLabel')}>
         <View style={styles.pwdField}>
           <TextInput
             value={confirmPassword}
@@ -411,7 +413,7 @@ export function WelcomeScreen() {
             secureTextEntry={!showConfirmPassword}
             autoCapitalize="none"
             autoComplete="new-password"
-            placeholder="Re-enter your password"
+            placeholder={t('auth.welcome.confirmPasswordPlaceholder')}
             placeholderTextColor={colors.textMuted}
             editable={!isLoading}
             style={styles.pwdInput}
@@ -429,16 +431,16 @@ export function WelcomeScreen() {
         style={styles.emailBtn}
         textStyle={styles.emailBtnText}
       >
-        Create account
+        {t('auth.welcome.createAccount')}
       </Button>
 
       <Text style={styles.hint}>
-        By creating an account you agree to our Terms of Service and Privacy Policy.
+        {t('auth.welcome.signUpHint')}
       </Text>
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
-          Facing challenges? Contact <Text style={styles.supportEmail}>support@voila-africa.com</Text>
+          {t('auth.common.supportPrefix')} <Text style={styles.supportEmail}>support@voila-africa.com</Text>
         </Text>
       </Pressable>
     </>
@@ -446,11 +448,9 @@ export function WelcomeScreen() {
 
   // ── Panel title / subtitle helper ──────────────────────────────────────────
 
-  const panelTitle = mode === 'signin' ? 'Sign in to explore' : 'Create your account';
+  const panelTitle = mode === 'signin' ? t('auth.welcome.signInTitle') : t('auth.welcome.signUpTitle');
   const panelSubtitle =
-    mode === 'signin'
-      ? 'Save listings, get personalised recommendations, and never miss a deadline.'
-      : 'Join thousands of African students finding scholarships and opportunities.';
+    mode === 'signin' ? t('auth.welcome.signInSubtitle') : t('auth.welcome.signUpSubtitle');
 
   // ── Hero section (shared across all layouts) ───────────────────────────────
 
@@ -461,8 +461,8 @@ export function WelcomeScreen() {
         style={styles.heroLogoImg}
         resizeMode="contain"
       />
-      <Text style={styles.heroTitle}>Find your next{'\n'}opportunity</Text>
-      <Text style={styles.heroTagline}>Matched to your interests and ambitions, globally.</Text>
+      <Text style={styles.heroTitle}>{t('auth.welcome.heroTitle')}</Text>
+      <Text style={styles.heroTagline}>{t('auth.welcome.heroTagline')}</Text>
     </View>
   );
 
@@ -502,7 +502,7 @@ export function WelcomeScreen() {
                     >
                       <View style={styles.googleBtnContent}>
                         <View style={{ marginRight: spacing.xs }}><GoogleLogo size={18} /></View>
-                        <Text style={styles.googleBtnText}>Continue with Google</Text>
+                        <Text style={styles.googleBtnText}>{t('auth.common.continueWithGoogle')}</Text>
                       </View>
                     </Pressable>
                     <AuthDivider />
@@ -512,10 +512,10 @@ export function WelcomeScreen() {
                       style={styles.emailBtn}
                       textStyle={styles.emailBtnText}
                     >
-                      Continue with email
+                      {t('auth.welcome.continueWithEmail')}
                     </Button>
                     <Text style={styles.hint}>
-                      A one-time verification code will be sent to your email. Kindly check your email to confirm your account.
+                      {t('auth.welcome.emailCodeHint')}
                     </Text>
                   </>
                 ) : (
@@ -585,8 +585,8 @@ export function WelcomeScreen() {
               style={styles.heroLogoImg}
               resizeMode="contain"
             />
-            <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>Find your next{'\n'}opportunity</Text>
-            <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>Matched to your interests and ambitions, globally.</Text>
+            <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>{t('auth.welcome.heroTitle')}</Text>
+            <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>{t('auth.welcome.heroTagline')}</Text>
           </View>
         </ImageBackground>
 

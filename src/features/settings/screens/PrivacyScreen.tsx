@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
 
@@ -9,11 +10,12 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 export function PrivacyScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
 
   return (
     <View style={styles.root}>
-      <PageHeader title="Privacy" onBack={() => router.back()} />
+      <PageHeader title={t('settings.privacy.title')} onBack={() => router.back()} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}

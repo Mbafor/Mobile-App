@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Alert, Modal, Pressable, StyleSheet, View } from 'react-native';
@@ -35,6 +36,7 @@ export function SessionManageCard({
   onSetMeetingUrl,
 }: SessionManageCardProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [zoomOpen, setZoomOpen] = useState(false);
   const [zoomUrl, setZoomUrl] = useState(session.meetingUrl ?? '');
   const [savingUrl, setSavingUrl] = useState(false);
@@ -52,7 +54,7 @@ export function SessionManageCard({
   const saveZoom = async () => {
     const url = zoomUrl.trim();
     if (!url.startsWith('http')) {
-      Alert.alert('Invalid link', 'Enter a valid Zoom or meeting URL (https://…).');
+      Alert.alert(t('mentorship.session.invalidLinkTitle'), t('mentorship.session.invalidLinkMessage'));
       return;
     }
     if (!onSetMeetingUrl) return;
@@ -60,9 +62,9 @@ export function SessionManageCard({
     try {
       await onSetMeetingUrl(session.id, url);
       setZoomOpen(false);
-      Alert.alert('Link saved', 'Your mentee can join when the session starts.');
+      Alert.alert(t('mentorship.session.linkSavedTitle'), t('mentorship.session.linkSavedMessage'));
     } catch (e) {
-      Alert.alert('Error', e instanceof Error ? e.message : 'Could not save link.');
+      Alert.alert(t('mentorship.session.errorTitle'), e instanceof Error ? e.message : t('mentorship.session.saveLinkError'));
     } finally {
       setSavingUrl(false);
     }
@@ -73,26 +75,26 @@ export function SessionManageCard({
       <Text style={styles.datetime}>
         {formatSessionDateTime(session.scheduledStart, session.timezone)}
       </Text>
-      {coachName ? <Text style={styles.coach}>Coach: {coachName}</Text> : null}
+      {coachName ? <Text style={styles.coach}>{t('mentorship.session.coachPrefix', { name: coachName })}</Text> : null}
       {session.notes ? (
         <View style={styles.notesBox}>
-          <Text style={styles.notesLabel}>Session note</Text>
+          <Text style={styles.notesLabel}>{t('mentorship.session.note')}</Text>
           <Text style={styles.notes}>{session.notes}</Text>
         </View>
       ) : (
         <Text variant="caption" muted>
-          {session.title ?? 'Mentorship session'}
+          {session.title ?? t('mentorship.session.titleFallback')}
         </Text>
       )}
       {session.meetingUrl ? (
         <Text variant="caption" style={styles.linkHint} numberOfLines={1}>
-          Meeting link added
+          {t('mentorship.session.linkAdded')}
         </Text>
       ) : null}
 
       <View style={styles.footer}>
         <Text style={styles.status}>
-          {isPendingSessionStatus(session.status) ? 'pending' : session.status}
+          {isPendingSessionStatus(session.status) ? t('mentorship.session.statusPending') : session.status}
         </Text>
         <View style={styles.actions}>
           {canJoin ? (
@@ -100,23 +102,23 @@ export function SessionManageCard({
               style={styles.primaryBtn}
               onPress={() => void openExternalUrl(session.meetingUrl!)}
             >
-              <Text style={styles.primaryBtnText}>Join now</Text>
+              <Text style={styles.primaryBtnText}>{t('mentorship.session.join')}</Text>
             </Pressable>
           ) : null}
           {awaitingLink ? (
             <Text variant="caption" muted style={styles.waiting}>
-              Waiting for coach to confirm and share the session link
+              {t('mentorship.session.awaitingLink')}
             </Text>
           ) : null}
           {role === 'coach' && onConfirm && isPendingSessionStatus(session.status) ? (
             <Pressable onPress={() => onConfirm(session.id)}>
-              <Text style={styles.confirm}>Confirm</Text>
+              <Text style={styles.confirm}>{t('mentorship.session.confirm')}</Text>
             </Pressable>
           ) : null}
           {role === 'coach' && onSetMeetingUrl && isActive ? (
             <Pressable onPress={() => setZoomOpen(true)}>
               <Text style={styles.confirm}>
-                {session.meetingUrl ? 'Edit link' : 'Add meeting link'}
+                {session.meetingUrl ? t('mentorship.session.editLink') : t('mentorship.session.addLink')}
               </Text>
             </Pressable>
           ) : null}
@@ -124,13 +126,13 @@ export function SessionManageCard({
             studentMayCancel ? (
               <Pressable
                 onPress={() => {
-                  Alert.alert('Cancel session', 'Cancel this session?', [
-                    { text: 'No', style: 'cancel' },
-                    { text: 'Yes', style: 'destructive', onPress: () => onCancel(session.id) },
+                  Alert.alert(t('mentorship.session.cancelTitle'), t('mentorship.session.cancelMessage'), [
+                    { text: t('mentorship.session.no'), style: 'cancel' },
+                    { text: t('mentorship.session.yes'), style: 'destructive', onPress: () => onCancel(session.id) },
                   ]);
                 }}
               >
-                <Text style={styles.danger}>Cancel</Text>
+                <Text style={styles.danger}>{t('mentorship.session.cancel')}</Text>
               </Pressable>
             ) : (
               <Text variant="caption" muted style={styles.waiting}>
@@ -141,13 +143,13 @@ export function SessionManageCard({
           {role === 'coach' && onCancel && isActive ? (
             <Pressable
               onPress={() => {
-                Alert.alert('Cancel session', 'Cancel this session? The student will be notified.', [
-                  { text: 'No', style: 'cancel' },
-                  { text: 'Yes', style: 'destructive', onPress: () => onCancel(session.id) },
+                Alert.alert(t('mentorship.session.cancelTitle'), t('mentorship.session.cancelMessageCoach'), [
+                  { text: t('mentorship.session.no'), style: 'cancel' },
+                  { text: t('mentorship.session.yes'), style: 'destructive', onPress: () => onCancel(session.id) },
                 ]);
               }}
             >
-              <Text style={styles.danger}>Cancel</Text>
+              <Text style={styles.danger}>{t('mentorship.session.cancel')}</Text>
             </Pressable>
           ) : null}
         </View>
@@ -156,9 +158,9 @@ export function SessionManageCard({
       <Modal visible={zoomOpen} transparent animationType="slide" onRequestClose={() => setZoomOpen(false)}>
         <Pressable style={styles.modalBackdrop} onPress={() => setZoomOpen(false)}>
           <Pressable style={styles.modalCard} onPress={(e) => e.stopPropagation()}>
-            <Text style={styles.modalTitle}>Meeting link</Text>
+            <Text style={styles.modalTitle}>{t('mentorship.session.meetingLinkTitle')}</Text>
             <Text muted variant="caption">
-              Share this with your mentee before the session starts.
+              {t('mentorship.session.meetingLinkHint')}
             </Text>
             <Input
               value={zoomUrl}
@@ -169,10 +171,10 @@ export function SessionManageCard({
             />
             <View style={styles.modalActions}>
               <Button variant="ghost" onPress={() => setZoomOpen(false)}>
-                Cancel
+                {t('mentorship.session.cancel')}
               </Button>
               <Button onPress={() => void saveZoom()} loading={savingUrl}>
-                Save link
+                {t('mentorship.session.saveLink')}
               </Button>
             </View>
           </Pressable>

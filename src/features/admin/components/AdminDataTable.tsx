@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -26,14 +27,15 @@ export function AdminDataTable<T>({
   columns,
   data,
   keyExtractor,
-  emptyMessage = 'No records found.',
+  emptyMessage,
   footer,
 }: AdminDataTableProps<T>) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   if (data.length === 0) {
     return (
       <View style={styles.emptyWrap}>
-        <Text muted>{emptyMessage}</Text>
+        <Text muted>{emptyMessage ?? t('admin.table.noRecords')}</Text>
       </View>
     );
   }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
@@ -17,6 +18,7 @@ import { useTheme } from '@/hooks/useTheme';
 export function BioEditScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { user } = useAuth();
   const userId = user?.id ?? '';
@@ -87,11 +89,11 @@ export function BioEditScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <FormField label="About you">
+        <FormField label={t('settings.bio.label')}>
           <Input
             value={bio}
             onChangeText={setBio}
-            placeholder="A short intro about yourself…"
+            placeholder={t('settings.bio.placeholder')}
             multiline
             style={styles.bioInput}
           />
@@ -100,7 +102,7 @@ export function BioEditScreen() {
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isSaving} disabled={isSaving}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

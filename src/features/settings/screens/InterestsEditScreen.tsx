@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -9,11 +10,12 @@ import { FormField, MultiSelectWithOther } from '@/components/forms';
 import { Button } from '@/components/ui';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
-import { INTEREST_OPTIONS, PREDEFINED_INTERESTS } from '@/constants/onboarding-options';
+import { getInterestOptions, PREDEFINED_INTERESTS } from '@/constants/onboarding-options';
 import { spacing } from '@/constants/theme';
 
 export function InterestsEditScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { profile, refetch } = useProfileData();
   const { saveAcademicInfo, isLoading, error, clearError } = useOnboardingActions();
@@ -30,7 +32,7 @@ export function InterestsEditScreen() {
     clearError();
 
     if (interests.length === 0) {
-      Alert.alert('Required field', 'Select at least one interest.');
+      Alert.alert(t('settings.interests.requiredTitle'), t('settings.interests.requiredMessage'));
       return;
     }
 
@@ -59,20 +61,20 @@ export function InterestsEditScreen() {
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <FormField label="Interests *">
+        <FormField label={t('settings.interests.label')}>
           <MultiSelectWithOther
-            options={INTEREST_OPTIONS}
+            options={getInterestOptions()}
             predefinedValues={PREDEFINED_INTERESTS}
             values={interests}
             onChange={setInterests}
-            placeholder="Select interests"
+            placeholder={t('settings.interests.placeholder')}
           />
         </FormField>
 
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isLoading} disabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

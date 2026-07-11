@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Pressable, StyleSheet, useWindowDimensions, View } from 'react-native';
@@ -23,6 +24,7 @@ export function CoachMessagesView({
   initialActiveMentorshipId,
 }: CoachMessagesViewProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const { width } = useWindowDimensions();
   const isNarrow = width < 720;
   const [selectedId, setSelectedId] = useState<string | undefined>(() => {
@@ -46,10 +48,10 @@ export function CoachMessagesView({
   });
 
   const activeMentee = mentees.find((m) => m.mentorship.id === activeId);
-  const peerName = activeMentee?.profile.fullName?.trim() || 'Student';
+  const peerName = activeMentee?.profile.fullName?.trim() || t('mentorship.coach.studentFallback');
 
   if (mentees.length === 0) {
-    return <Text muted>No students to message.</Text>;
+    return <Text muted>{t('mentorship.coach.messages.none')}</Text>;
   }
 
   const selectStudent = (id: string) => {
@@ -59,13 +61,13 @@ export function CoachMessagesView({
 
   const threadList = (
     <View style={[styles.sidebar, isNarrow && styles.sidebarNarrow]}>
-      <Text style={styles.sidebarTitle}>Students</Text>
+      <Text style={styles.sidebarTitle}>{t('mentorship.coach.messages.students')}</Text>
       {mentees.map((m) => {
         const id = m.mentorship.id;
         const active = id === activeId;
-        const name = m.profile.fullName?.trim() || 'Student';
+        const name = m.profile.fullName?.trim() || t('mentorship.coach.studentFallback');
         const preview = previewsByMentorshipId[id];
-        const snippet = preview?.body ?? 'No messages yet';
+        const snippet = preview?.body ?? t('mentorship.coach.messages.noMessages');
         const unread = preview && preview.senderId !== currentUserId;
 
         return (
@@ -100,7 +102,7 @@ export function CoachMessagesView({
     <View style={[styles.chatPane, isNarrow && styles.chatPaneNarrow]}>
       {isNarrow ? (
         <Pressable style={styles.backBtn} onPress={() => setShowThreadList(true)}>
-          <Text style={styles.backText}>← All students</Text>
+          <Text style={styles.backText}>{t('mentorship.coach.messages.back')}</Text>
         </Pressable>
       ) : null}
       <MentorshipChat
@@ -113,7 +115,7 @@ export function CoachMessagesView({
         peerName={peerName}
         peerAvatarUrl={activeMentee?.profile.avatarUrl}
         fullScreen
-        emptyHint="Message this student about goals, sessions, or feedback."
+        emptyHint={t('mentorship.coach.messages.emptyHint')}
       />
     </View>
   );

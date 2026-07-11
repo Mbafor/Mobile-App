@@ -1,5 +1,6 @@
 import { Switch, View } from 'react-native';
 import { useTheme } from '@/hooks/useTheme';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, Text, TextArea } from '@/components/ui';
@@ -24,10 +25,12 @@ export function ExperienceListEditor({
   description,
   entries,
   onChange,
-  addLabel = 'Add entry',
+  addLabel,
 }: ExperienceListEditorProps) {
   const { colors } = useTheme();
   const cvUi = useCvUi();
+  const { t } = useTranslation();
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.editors.addEntryDefault');
   const updateEntry = (id: string, patch: Partial<CVExperienceEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };
@@ -51,40 +54,40 @@ export function ExperienceListEditor({
           title={
             entry.role.trim() || entry.company.trim()
               ? [entry.role, entry.company].filter(Boolean).join(' · ')
-              : `Entry ${index + 1}`
+              : t('cvBuilder.editors.experience.entryFallback', { index: index + 1 })
           }
           onRemove={() => removeEntry(entry.id)}
         >
-          <FormField label="Company / organisation *">
+          <FormField label={t('cvBuilder.editors.experience.companyLabel')}>
             <Input
               value={entry.company}
               onChangeText={(v) => updateEntry(entry.id, { company: v })}
-              placeholder="Company name"
+              placeholder={t('cvBuilder.editors.experience.companyPlaceholder')}
             />
           </FormField>
-          <FormField label="Role *">
+          <FormField label={t('cvBuilder.editors.experience.roleLabel')}>
             <Input
               value={entry.role}
               onChangeText={(v) => updateEntry(entry.id, { role: v })}
-              placeholder="Job title"
+              placeholder={t('cvBuilder.editors.experience.rolePlaceholder')}
             />
           </FormField>
-          <FormField label="Location">
+          <FormField label={t('cvBuilder.editors.experience.locationLabel')}>
             <Input
               value={entry.location}
               onChangeText={(v) => updateEntry(entry.id, { location: v })}
-              placeholder="City, country"
+              placeholder={t('cvBuilder.editors.experience.locationPlaceholder')}
             />
           </FormField>
-          <FormField label="Start date">
+          <FormField label={t('cvBuilder.editors.experience.startDateLabel')}>
             <Input
               value={entry.startDate}
               onChangeText={(v) => updateEntry(entry.id, { startDate: v })}
-              placeholder="e.g. Jan 2022"
+              placeholder={t('cvBuilder.editors.experience.startDatePlaceholder')}
             />
           </FormField>
           <View style={cvUi.switchRow}>
-            <Text>Currently working here</Text>
+            <Text>{t('cvBuilder.editors.experience.currentlyWorking')}</Text>
             <Switch
               value={entry.currentlyWorking}
               onValueChange={(v) =>
@@ -97,26 +100,26 @@ export function ExperienceListEditor({
             />
           </View>
           {!entry.currentlyWorking ? (
-            <FormField label="End date">
+            <FormField label={t('cvBuilder.editors.experience.endDateLabel')}>
               <Input
                 value={entry.endDate}
                 onChangeText={(v) => updateEntry(entry.id, { endDate: v })}
-                placeholder="e.g. Dec 2024"
+                placeholder={t('cvBuilder.editors.experience.endDatePlaceholder')}
               />
             </FormField>
           ) : null}
-          <FormField label="Description">
+          <FormField label={t('cvBuilder.editors.experience.descriptionLabel')}>
             <TextArea
               value={entry.description}
               onChangeText={(v) => updateEntry(entry.id, { description: v })}
-              placeholder="Key responsibilities and achievements — one bullet per line"
+              placeholder={t('cvBuilder.editors.experience.descriptionPlaceholder')}
               minHeight={120}
             />
           </FormField>
         </CVEntryCard>
       ))}
 
-      <CVAddButton label={addLabel} onPress={addEntry} />
+      <CVAddButton label={resolvedAddLabel} onPress={addEntry} />
     </View>
   );
 }

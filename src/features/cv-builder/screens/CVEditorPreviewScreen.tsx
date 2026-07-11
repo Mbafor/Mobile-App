@@ -6,6 +6,7 @@ import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo } from 'react';
 import { ActivityIndicator, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -25,6 +26,7 @@ export function CVEditorPreviewScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { cv, content, templateId, layout, isLoading, error } = useCVBuilderContext();
   const payment = useCVPaymentContext();
@@ -58,7 +60,7 @@ export function CVEditorPreviewScreen() {
   if (error || !cv) {
     return (
       <View style={styles.centered}>
-        <ErrorMessage message={error instanceof Error ? error.message : 'CV not found'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('cvBuilder.editorPreview.cvNotFound')} />
       </View>
     );
   }
@@ -71,7 +73,7 @@ export function CVEditorPreviewScreen() {
           style={styles.backBtn}
           hitSlop={8}
           accessibilityRole="button"
-          accessibilityLabel="Go back"
+          accessibilityLabel={t('cvBuilder.editorPreview.goBack')}
         >
           <Ionicons name="chevron-back" size={22} color={colors.text} />
         </Pressable>
@@ -81,7 +83,7 @@ export function CVEditorPreviewScreen() {
             {cv.title}
           </Text>
           <Text muted variant="caption">
-            {templateLabel} · live PDF preview
+            {t('cvBuilder.editorPreview.livePdfPreview', { template: templateLabel })}
           </Text>
         </View>
 
@@ -90,7 +92,7 @@ export function CVEditorPreviewScreen() {
           templateId={templateId}
           fileName={fileName}
           compact
-          label="Download PDF"
+          label={t('cvBuilder.hub.downloadPdf')}
           loading={isDownloading}
           disabled={isDownloading}
           purchased={purchased}
@@ -100,7 +102,7 @@ export function CVEditorPreviewScreen() {
 
       <View style={styles.workspace}>
         <View style={styles.outlinePanel}>
-          <Text style={styles.panelTitle}>Sections</Text>
+          <Text style={styles.panelTitle}>{t('cvBuilder.editorPreview.sectionsPanelTitle')}</Text>
           <ScrollView style={styles.outlineScroll} showsVerticalScrollIndicator={false}>
             {enabledSections.map((sectionId) => {
               const meta = getSectionMeta(sectionId);
@@ -127,8 +129,7 @@ export function CVEditorPreviewScreen() {
       {Platform.OS !== 'web' ? (
         <View style={[styles.nativeHint, { paddingBottom: insets.bottom + spacing.sm }]}>
           <Text muted variant="caption" style={styles.nativeHintText}>
-            Open this CV on web for the inline PDF preview canvas. Download still uses the same PDF
-            template on all platforms.
+            {t('cvBuilder.editorPreview.nativeHint')}
           </Text>
         </View>
       ) : null}

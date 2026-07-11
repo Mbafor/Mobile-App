@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import Head from 'expo-router/head';
 import { useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   Image,
@@ -79,6 +80,7 @@ function PromoCard({
 function DeadlineBadge({ deadline }: { deadline: string | null }) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const days = daysUntilDeadline(deadline);
   const label = formatDeadline(deadline);
   const urgent = days >= 0 && days <= 7;
@@ -96,7 +98,7 @@ function DeadlineBadge({ deadline }: { deadline: string | null }) {
     <View style={[styles.deadlineBadge, { backgroundColor: bg }]}>
       <Ionicons name={iconName} size={13} color={textColor} />
       <Text style={[styles.deadlineText, { color: textColor }]}>
-        {expired ? 'Deadline passed' : `${label}${days > 0 ? ` · ${days}d left` : ''}`}
+        {expired ? t('opportunities.detail.deadlinePassed') : `${label}${days > 0 ? ` · ${t('opportunities.common.daysLeft', { days })}` : ''}`}
       </Text>
     </View>
   );
@@ -111,6 +113,7 @@ function RelatedOpportunityCard({
   onPress: (o: Opportunity) => void;
 }) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   return (
     <Pressable
@@ -130,7 +133,7 @@ function RelatedOpportunityCard({
         <Text style={styles.relatedOrg} numberOfLines={1}>{opportunity.organization}</Text>
         <Text style={styles.relatedDeadline}>
           {formatDeadline(opportunity.deadline)}
-          {daysLeft > 0 ? ` · ${daysLeft}d left` : ''}
+          {daysLeft > 0 ? ` · ${t('opportunities.common.daysLeft', { days: daysLeft })}` : ''}
         </Text>
       </View>
     </Pressable>
@@ -140,6 +143,7 @@ function RelatedOpportunityCard({
 export function OpportunityDetailScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const isDesktop = useWebDesktop();
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -186,7 +190,7 @@ export function OpportunityDetailScreen() {
     if (!opportunity) return null;
     return (
       <View style={styles.shareSectionInner}>
-        <Text style={styles.shareLabel}>Share opportunity via</Text>
+        <Text style={styles.shareLabel}>{t('opportunities.detail.shareVia')}</Text>
         <View style={styles.shareIconsRow}>
           <Pressable
             style={({ pressed }) => [
@@ -199,7 +203,7 @@ export function OpportunityDetailScreen() {
               void openExternalUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
             }}
             accessibilityRole="button"
-            accessibilityLabel="Share on WhatsApp"
+            accessibilityLabel={t('opportunities.detail.shareWhatsapp')}
           >
             <Ionicons name="logo-whatsapp" size={20} color="#25D366" />
           </Pressable>
@@ -214,7 +218,7 @@ export function OpportunityDetailScreen() {
               void openExternalUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(opportunityLink)}`);
             }}
             accessibilityRole="button"
-            accessibilityLabel="Share on LinkedIn"
+            accessibilityLabel={t('opportunities.detail.shareLinkedin')}
           >
             <Ionicons name="logo-linkedin" size={20} color="#0A66C2" />
           </Pressable>
@@ -229,14 +233,14 @@ export function OpportunityDetailScreen() {
               void openExternalUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(opportunityLink)}`);
             }}
             accessibilityRole="button"
-            accessibilityLabel="Share on Facebook"
+            accessibilityLabel={t('opportunities.detail.shareFacebook')}
           >
             <Ionicons name="logo-facebook" size={20} color="#1877F2" />
           </Pressable>
         </View>
       </View>
     );
-  }, [opportunity, opportunityLink]);
+  }, [opportunity, opportunityLink, t]);
 
   const defaultOgImage = `${process.env.EXPO_PUBLIC_LANDING_URL ?? 'https://voila-africa.com'}/og-image.png`;
   const ogImage = opportunity?.imageUrl ?? defaultOgImage;
@@ -248,9 +252,9 @@ export function OpportunityDetailScreen() {
 
   const ogDescription = useMemo(() => {
     const raw = opportunity?.description?.trim() ?? '';
-    if (!raw) return 'Discover scholarships, internships and fellowships on Voila.';
+    if (!raw) return t('opportunities.detail.ogDescriptionDefault');
     return raw.length > 155 ? `${raw.slice(0, 152)}...` : raw;
-  }, [opportunity]);
+  }, [opportunity, t]);
 
   const promoSection = useMemo(
     () => (
@@ -259,10 +263,10 @@ export function OpportunityDetailScreen() {
           icon="document-text-outline"
           iconColor={colors.primary}
           iconBg="#E8F5ED"
-          badge="FREE"
-          title="Free CV Builder"
-          body="Build a polished, professional CV in minutes — designed for African students."
-          ctaLabel="Build your CV"
+          badge={t('opportunities.detail.promos.cvBadge')}
+          title={t('opportunities.detail.promos.cvTitle')}
+          body={t('opportunities.detail.promos.cvBody')}
+          ctaLabel={t('opportunities.detail.promos.cvCta')}
           onPress={() => router.push('/(main)/(tabs)/cv-builder')}
         />
         <PromoCard
@@ -270,18 +274,18 @@ export function OpportunityDetailScreen() {
           iconColor="#1D6FA4"
           iconBg="#E3F0FA"
           badge="1:1"
-          title="Expert Mentorship"
-          body="Book sessions with mentors who know your field and career goals."
-          ctaLabel="Find a mentor"
+          title={t('opportunities.detail.promos.mentorTitle')}
+          body={t('opportunities.detail.promos.mentorBody')}
+          ctaLabel={t('opportunities.detail.promos.mentorCta')}
           onPress={() => router.push('/(main)/(tabs)/mentorship')}
         />
         <PromoCard
           icon="logo-whatsapp"
           iconColor="#25D366"
           iconBg="#E6FBF0"
-          title="Join Our WhatsApp Channel"
-          body="Daily updates on new scholarships and internships — straight to your phone."
-          ctaLabel="Join the channel"
+          title={t('opportunities.detail.promos.whatsappTitle')}
+          body={t('opportunities.detail.promos.whatsappBody')}
+          ctaLabel={t('opportunities.detail.promos.whatsappCta')}
           onPress={() => {
             const url =
               process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
@@ -291,7 +295,7 @@ export function OpportunityDetailScreen() {
         />
       </View>
     ),
-    [router, styles, colors],
+    [router, styles, colors, t],
   );
 
   const headTags = (
@@ -323,13 +327,13 @@ export function OpportunityDetailScreen() {
     return (
       <View style={styles.root}>
         {headTags}
-        <PageHeader title="Opportunity Details" />
+        <PageHeader title={t('opportunities.detail.header')} />
         <View style={styles.errorBody}>
           <ErrorMessage
-            message={error instanceof Error ? error.message : 'Opportunity not found or has expired.'}
+            message={error instanceof Error ? error.message : t('opportunities.detail.notFound')}
           />
           <Button variant="secondary" onPress={() => router.back()}>
-            Go back
+            {t('opportunities.detail.goBack')}
           </Button>
         </View>
       </View>
@@ -391,17 +395,17 @@ export function OpportunityDetailScreen() {
         <View style={styles.divider} />
 
         <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
-          About this opportunity
+          {t('opportunities.detail.about')}
         </Text>
         <Text style={styles.description}>
           {opportunity.description?.trim() ||
-            'No description provided for this opportunity.'}
+            t('opportunities.detail.noDescription')}
         </Text>
 
         {/* Action buttons — inside scroll so user scrolls to find them */}
         <View style={styles.actionSection}>
           <Button fullWidth onPress={() => applyNow(opportunity)}>
-            Apply Now
+            {t('opportunities.detail.applyNow')}
           </Button>
           <View style={styles.secondaryRow}>
             <Button
@@ -411,7 +415,7 @@ export function OpportunityDetailScreen() {
               loading={isSaving}
               disabled={isSaving}
             >
-              {isSaved ? '✓ Saved' : 'Save'}
+              {isSaved ? t('opportunities.detail.saved') : t('opportunities.detail.save')}
             </Button>
             <Button
               variant={isApplied ? 'primary' : 'secondary'}
@@ -420,7 +424,7 @@ export function OpportunityDetailScreen() {
               loading={isApplying}
               disabled={isApplying}
             >
-              {isApplied ? 'Applied ✓' : 'Mark applied'}
+              {isApplied ? t('opportunities.detail.applied') : t('opportunities.detail.markApplied')}
             </Button>
           </View>
           {/* Share links — directly below the action buttons */}
@@ -433,7 +437,7 @@ export function OpportunityDetailScreen() {
         {!isDesktop && relatedOpportunities.length > 0 && (
           <View style={styles.mobileRelatedSection}>
             <Text style={[styles.sidebarHeading, getWebFontStyle('semibold')]}>
-              You might also like
+              {t('opportunities.detail.youMightAlsoLike')}
             </Text>
             {relatedOpportunities.map((o) => (
               <RelatedOpportunityCard key={o.id} opportunity={o} onPress={handleRelatedPress} />
@@ -455,7 +459,7 @@ export function OpportunityDetailScreen() {
   return (
     <View style={styles.root}>
       {headTags}
-      <PageHeader title="Opportunity Details" />
+      <PageHeader title={t('opportunities.detail.header')} />
 
       {isDesktop ? (
         <View style={styles.desktopLayout}>

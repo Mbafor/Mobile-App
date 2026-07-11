@@ -1,4 +1,5 @@
 import type { PropsWithChildren } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -36,6 +37,7 @@ export function AuthScreenLayout({
 }: Props) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === 'web' && width >= DESKTOP_BREAKPOINT;
@@ -59,7 +61,7 @@ export function AuthScreenLayout({
           <View style={styles.desktopCard}>
             {onBack && (
               <Pressable onPress={onBack} hitSlop={12} style={styles.desktopBack}>
-                <Text style={{ color: colors.textMuted }}>← Back</Text>
+                <Text style={{ color: colors.textMuted }}>{t('auth.common.backArrow')}</Text>
               </Pressable>
             )}
             <Text variant="title" style={styles.desktopTitle}>{title}</Text>
@@ -95,7 +97,7 @@ export function AuthScreenLayout({
             {onBack ? (
               <Pressable onPress={onBack} hitSlop={12} style={styles.backBtn}>
                 <Ionicons name="chevron-back" size={16} color={colors.text} />
-                <Text style={styles.backBtnText}>Back</Text>
+                <Text style={styles.backBtnText}>{t('auth.common.back')}</Text>
               </Pressable>
             ) : null}
             <Text variant="title">{title}</Text>

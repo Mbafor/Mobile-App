@@ -6,6 +6,7 @@ import {
   type CVTemplateId,
 } from '@/features/cv-builder/constants/templates';
 import { prepareContentForPdfExport } from '@/features/cv-builder/pdf/prepare-export-content';
+import i18n from '@/i18n';
 import { AtsResumePage } from '@/features/cv-builder/pdf/resume/templates/ats-page';
 import { ExecutiveResumePage } from '@/features/cv-builder/pdf/resume/templates/executive-page';
 import { MinimalResumePage } from '@/features/cv-builder/pdf/resume/templates/minimal-page';
@@ -40,7 +41,7 @@ export function ResumeDocument({ data, templateId }: ResumeDocumentProps) {
   const exportData = prepareContentForPdfExport(data);
 
   return (
-    <Document title={exportData.personalInfo.fullName.trim() || 'CV'}>
+    <Document title={exportData.personalInfo.fullName.trim() || i18n.t('cvBuilder.pdf.documentTitleFallback')}>
       <ResumePage data={exportData} templateId={resolvedTemplateId} />
     </Document>
   );

@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { Button, Text } from '@/components/ui';
 import { CVReorderSectionsModal } from '@/features/cv-builder/components/hub/CVReorderSectionsModal';
@@ -22,6 +23,7 @@ import { isSectionEnabled } from '@/features/cv-builder/utils/section-config';
 export function CVSectionSettingsScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { layout, setSectionEnabled, setSectionOrder, saveLayout, saveState } =
     useCVBuilderContext();
@@ -42,13 +44,13 @@ export function CVSectionSettingsScreen() {
   return (
     <View style={[styles.flex, { paddingTop: Math.max(insets.top, spacing.md) }]}>
       <ScrollView contentContainerStyle={styles.scroll}>
-        <Text style={styles.pageTitle}>Sections</Text>
+        <Text style={styles.pageTitle}>{t('cvBuilder.sectionSettings.pageTitle')}</Text>
         <Text style={styles.subtitle}>
-          Turn sections on or off and change their order. Personal information is always included.
+          {t('cvBuilder.sectionSettings.subtitle')}
         </Text>
 
         <Button variant="secondary" onPress={() => setReorderOpen(true)} style={styles.reorderBtn}>
-          Reorder sections
+          {t('cvBuilder.sectionSettings.reorderButton')}
         </Button>
 
         <View style={styles.list}>
@@ -75,7 +77,11 @@ export function CVSectionSettingsScreen() {
                 <View style={styles.rowCopy}>
                   <Text style={styles.rowTitle}>{meta.title}</Text>
                   <Text style={styles.rowCaption}>
-                    {isPersonal ? 'Required' : enabled ? 'Shown on CV' : 'Hidden'}
+                    {isPersonal
+                      ? t('cvBuilder.sectionSettings.required')
+                      : enabled
+                        ? t('cvBuilder.sectionSettings.shownOnCv')
+                        : t('cvBuilder.sectionSettings.hidden')}
                   </Text>
                 </View>
                 <Switch

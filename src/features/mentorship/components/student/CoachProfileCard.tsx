@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 
@@ -15,6 +16,7 @@ type CoachProfileCardProps = {
 
 export function CoachProfileCard({ profile, mentor, endsAt }: CoachProfileCardProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   if (!profile) {
     return null;
   }
@@ -23,13 +25,15 @@ export function CoachProfileCard({ profile, mentor, endsAt }: CoachProfileCardPr
     <View style={styles.wrap}>
       {endsAt ? (
         <Text style={styles.ends}>
-          Mentorship ends {new Date(endsAt).toLocaleDateString()}
+          {t('mentorship.student.coachProfileCard.endsOn', {
+            date: new Date(endsAt).toLocaleDateString(),
+          })}
         </Text>
       ) : null}
       <ParticipantProfileDetail
         profile={profile}
         mentorProfile={mentor}
-        roleLabel="Your coach"
+        roleLabel={t('mentorship.student.coachSummary.coachLabel')}
       />
     </View>
   );

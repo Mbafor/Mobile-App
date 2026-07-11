@@ -3,6 +3,7 @@ import { DrawerToggleButton } from '@react-navigation/drawer';
 import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -13,7 +14,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { DesktopWebNavigation, DesktopSidebar, DesktopFooter, WhatsAppCommunityBanner } from '@/features/navigation/components';
+import { DesktopWebNavigation, DesktopSidebar, DesktopHeader, DesktopFooter, WhatsAppCommunityBanner } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
@@ -34,6 +35,7 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 export default function MainTabsLayout() {
   const { isAdmin, isSuperAdmin } = useAuth();
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
   const refreshProfile = useRefreshProfile();
   const insets = useSafeAreaInsets();
@@ -81,22 +83,22 @@ export default function MainTabsLayout() {
       <Tabs.Screen
         name="dashboard"
         options={{
-          title: 'Dashboard',
+          title: t('navigation.tabs.dashboard'),
           tabBarIcon: tabBarIcon('home-outline', 'home'),
         }}
       />
       <Tabs.Screen
         name="mentorship"
         options={{
-          title: 'Mentorship',
-          headerTitle: 'Mentorship',
+          title: t('navigation.tabs.mentorship'),
+          headerTitle: t('navigation.tabs.mentorship'),
           tabBarIcon: tabBarIcon('people-outline', 'people'),
         }}
       />
       <Tabs.Screen
         name="cv-builder"
         options={{
-          title: 'CV Builder',
+          title: t('navigation.tabs.cvBuilder'),
           headerShown: false,
           tabBarIcon: tabBarIcon('document-text-outline', 'document-text'),
         }}
@@ -104,22 +106,22 @@ export default function MainTabsLayout() {
       <Tabs.Screen
         name="more"
         options={{
-          title: 'More',
+          title: t('navigation.tabs.more'),
           tabBarIcon: tabBarIcon('ellipsis-horizontal-outline', 'ellipsis-horizontal'),
         }}
       />
       <Tabs.Screen
         name="tracker"
         options={{
-          title: 'Tracker',
-          headerTitle: 'My Tracker',
+          title: t('navigation.tabs.tracker'),
+          headerTitle: t('navigation.headerTitles.tracker'),
           tabBarIcon: tabBarIcon('clipboard-outline', 'clipboard'),
         }}
       />
       <Tabs.Screen
         name="cv-builder"
         options={{
-          title: 'CV Builder',
+          title: t('navigation.tabs.cvBuilder'),
           headerShown: false,
           tabBarIcon: tabBarIcon('document-text-outline', 'document-text'),
         }}
@@ -127,22 +129,22 @@ export default function MainTabsLayout() {
       <Tabs.Screen
         name="browse-categories"
         options={{
-          title: 'Browse',
-          headerTitle: 'Browse by Category',
+          title: t('navigation.tabs.browse'),
+          headerTitle: t('navigation.headerTitles.browse'),
           tabBarIcon: tabBarIcon('grid-outline', 'grid'),
         }}
       />
       <Tabs.Screen
         name="notifications"
         options={{
-          title: 'Notifications',
+          title: t('navigation.tabs.notifications'),
           href: isWeb ? '/(main)/(tabs)/notifications' : null,
         }}
       />
       <Tabs.Screen
         name="admin"
         options={{
-          title: 'Admin',
+          title: t('navigation.tabs.admin'),
           href: isAdmin ? undefined : null,
           headerShown: false,
           tabBarIcon: tabBarIcon('shield-outline', 'shield'),
@@ -151,7 +153,7 @@ export default function MainTabsLayout() {
       <Tabs.Screen
         name="super-admin"
         options={{
-          title: 'Super Admin',
+          title: t('navigation.tabs.superAdmin'),
           href: isSuperAdmin ? undefined : null,
           headerShown: false,
           tabBarIcon: tabBarIcon('planet-outline', 'planet'),
@@ -164,9 +166,6 @@ export default function MainTabsLayout() {
     if (isWebDesktop) {
       return (
         <View style={styles.webRoot}>
-          <DesktopWebNavigation
-            rightSlot={<AppHeaderActions />}
-          />
           <View style={styles.desktopBody}>
             <DesktopSidebar />
             <View
@@ -175,6 +174,7 @@ export default function MainTabsLayout() {
                 Platform.OS === 'web' && ({ overflowY: 'auto' } as object),
               ]}
             >
+              <DesktopHeader rightSlot={<AppHeaderActions />} />
               <View
                 style={[
                   styles.contentMain,
@@ -210,7 +210,7 @@ export default function MainTabsLayout() {
             style={styles.mobileWebFooterLink}
             onPress={() => void openExternalUrl(WHATSAPP_URL)}
           >
-            Join our WhatsApp community
+            {t('navigation.whatsapp.community')}
           </Text>
         </View>
       </View>
@@ -228,7 +228,7 @@ export default function MainTabsLayout() {
           style={styles.mobileFooterLink}
           onPress={() => void openExternalUrl(WHATSAPP_URL)}
         >
-          Join our WhatsApp community
+          {t('navigation.whatsapp.community')}
         </Text>
       </View>
     </View>

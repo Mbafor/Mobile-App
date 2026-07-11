@@ -8,6 +8,7 @@ import {
   type OnEventResponse,
 } from '@howljs/calendar-kit';
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -44,6 +45,7 @@ export function CoachSchedulingCalendar({
 }: CoachSchedulingCalendarProps) {
   const { mentorshipColors } = useTheme();
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   const calendarTheme = useMemo(
     () => createMentorshipCalendarTheme(mentorshipColors),
     [mentorshipColors],
@@ -78,9 +80,9 @@ export function CoachSchedulingCalendar({
         startTime: formatTimeForDb(start),
         endTime: formatTimeForDb(end),
         timezone,
-      }).catch((e: Error) => Alert.alert('Availability', e.message));
+      }).catch((e: Error) => Alert.alert(t('mentorship.calendar.availabilityErrorTitle'), e.message));
     },
-    [slots, sessions, toggleSlot, isToggling, timezone],
+    [slots, sessions, toggleSlot, isToggling, timezone, t],
   );
 
   const onPressEvent = useCallback(
@@ -89,17 +91,17 @@ export function CoachSchedulingCalendar({
       if (meta?.kind === 'available' || event.id?.startsWith('avail-')) {
         const input = toggleInputFromAvailableEvent(event, slots, timezone);
         if (!input || isToggling) return;
-        void toggleSlot(input).catch((e: Error) => Alert.alert('Availability', e.message));
+        void toggleSlot(input).catch((e: Error) => Alert.alert(t('mentorship.calendar.availabilityErrorTitle'), e.message));
         return;
       }
       if (meta?.kind === 'booked') {
         Alert.alert(
-          'Booked session',
-          'Confirmed and pending sessions cannot be edited on the calendar.',
+          t('mentorship.calendar.bookedSessionTitle'),
+          t('mentorship.calendar.bookedSessionMessage'),
         );
       }
     },
-    [slots, timezone, toggleSlot, isToggling],
+    [slots, timezone, toggleSlot, isToggling, t],
   );
 
   const loading = slotsLoading || isLoadingSessions;
@@ -113,7 +115,7 @@ export function CoachSchedulingCalendar({
             onPress={() => setViewMode('week')}
           >
             <Text style={[styles.toggleText, viewMode === 'week' && styles.toggleTextActive]}>
-              Week
+              {t('mentorship.calendar.week')}
             </Text>
           </Pressable>
           <Pressable
@@ -121,19 +123,19 @@ export function CoachSchedulingCalendar({
             onPress={() => setViewMode('day')}
           >
             <Text style={[styles.toggleText, viewMode === 'day' && styles.toggleTextActive]}>
-              Day
+              {t('mentorship.calendar.day')}
             </Text>
           </Pressable>
         </View>
         <Text variant="caption" muted>
-          Tap empty cells to add availability, or tap a green slot to remove it
+          {t('mentorship.calendar.coachHint')}
         </Text>
       </View>
 
       <View style={styles.legend}>
-        <LegendDot styles={styles} color={calendarColors.available} label="Available" />
-        <LegendDot styles={styles} color={calendarColors.booked} label="Booked" />
-        <LegendDot styles={styles} color={calendarColors.completed} label="Completed" />
+        <LegendDot styles={styles} color={calendarColors.available} label={t('mentorship.calendar.available')} />
+        <LegendDot styles={styles} color={calendarColors.booked} label={t('mentorship.calendar.booked')} />
+        <LegendDot styles={styles} color={calendarColors.completed} label={t('mentorship.calendar.completed')} />
       </View>
 
       {loading ? (

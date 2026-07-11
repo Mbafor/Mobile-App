@@ -1,5 +1,6 @@
 import { Alert } from 'react-native';
 import { useMutation } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { supabase } from '@/services/supabase/client';
 import { useAuth } from '@/features/auth/hooks/useAuth';
@@ -13,6 +14,7 @@ const db = supabase as any;
 
 export function useSubmitBug() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: async (payload: BugPayload) => {
       const { error } = await db
@@ -21,13 +23,14 @@ export function useSubmitBug() {
       if (error) throw new Error(error.message);
     },
     onSuccess: () =>
-      Alert.alert('Reported', "Thanks for the report! We'll look into it."),
-    onError: (e: Error) => Alert.alert('Could not submit', e.message),
+      Alert.alert(t('help.submit.bugSuccessTitle'), t('help.submit.bugSuccessMessage')),
+    onError: (e: Error) => Alert.alert(t('help.submit.errorTitle'), e.message),
   });
 }
 
 export function useSubmitFeatureRequest() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: async (payload: FeaturePayload) => {
       const { error } = await db
@@ -36,13 +39,14 @@ export function useSubmitFeatureRequest() {
       if (error) throw new Error(error.message);
     },
     onSuccess: () =>
-      Alert.alert('Submitted', 'Thanks for the suggestion! We love hearing from you.'),
-    onError: (e: Error) => Alert.alert('Could not submit', e.message),
+      Alert.alert(t('help.submit.featureSuccessTitle'), t('help.submit.featureSuccessMessage')),
+    onError: (e: Error) => Alert.alert(t('help.submit.errorTitle'), e.message),
   });
 }
 
 export function useSubmitFeedback() {
   const { user } = useAuth();
+  const { t } = useTranslation();
   return useMutation({
     mutationFn: async (payload: FeedbackPayload) => {
       const { error } = await db
@@ -51,8 +55,8 @@ export function useSubmitFeedback() {
       if (error) throw new Error(error.message);
     },
     onSuccess: () =>
-      Alert.alert('Thank you!', 'Your feedback means a lot to us.'),
-    onError: (e: Error) => Alert.alert('Could not submit', e.message),
+      Alert.alert(t('help.submit.feedbackSuccessTitle'), t('help.submit.feedbackSuccessMessage')),
+    onError: (e: Error) => Alert.alert(t('help.submit.errorTitle'), e.message),
   });
 }
 

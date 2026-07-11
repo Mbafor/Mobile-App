@@ -1,5 +1,6 @@
 import { useCallback, useState } from 'react';
 import { Alert, Platform } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { exportAndShareCvPdf } from '@/features/cv-builder/pdf/export-cv-pdf';
 import type { CVContent } from '@/types/domain/cv';
@@ -9,6 +10,7 @@ import type { CVContent } from '@/types/domain/cv';
  */
 export function useCVDownload() {
   const [generating, setGenerating] = useState(false);
+  const { t } = useTranslation();
 
   const downloadAndShare = useCallback(
     async (opts: {
@@ -21,17 +23,17 @@ export function useCVDownload() {
       setGenerating(false);
 
       if (!result.ok) {
-        Alert.alert('PDF export failed', result.error ?? 'Could not generate PDF.');
+        Alert.alert(t('cvBuilder.download.exportFailedTitle'), result.error ?? t('cvBuilder.download.couldNotGenerate'));
         return false;
       }
 
       if (Platform.OS === 'web') {
-        Alert.alert('PDF ready', 'Your download should start automatically. Check your browser downloads folder.');
+        Alert.alert(t('cvBuilder.download.readyTitle'), t('cvBuilder.download.readyMessage'));
       }
 
       return true;
     },
-    [],
+    [t],
   );
 
   return { downloadAndShare, generating };

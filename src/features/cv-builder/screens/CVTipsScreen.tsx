@@ -3,16 +3,18 @@ import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { CVTipFaqItem } from '@/features/cv-builder/components/hub/CVTipFaqItem';
-import { CV_TIPS } from '@/features/cv-builder/constants/cv-tips';
+import { getCVTips } from '@/features/cv-builder/constants/cv-tips';
 import { spacing } from '@/constants/theme';
 
 export function CVTipsScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { cvDocsTheme } = useTheme();
   const insets = useSafeAreaInsets();
+  const { t } = useTranslation();
 
   return (
     <ScrollView
@@ -23,11 +25,11 @@ export function CVTipsScreen() {
       ]}
     >
       <Text style={[styles.subtitle, { color: cvDocsTheme.textOnPage }]}>
-        Tap a tip to expand the full explanation.
+        {t('cvBuilder.tipsScreen.subtitle')}
       </Text>
 
       <View style={styles.list}>
-        {CV_TIPS.map((tip) => (
+        {getCVTips().map((tip) => (
           <CVTipFaqItem key={tip.id} title={tip.title} body={tip.body} />
         ))}
       </View>

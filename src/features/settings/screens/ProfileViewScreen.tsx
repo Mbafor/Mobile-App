@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, Platform, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { useQuery } from '@tanstack/react-query';
 import { Text } from '@/components/ui';
@@ -21,6 +22,7 @@ import { webPressableStyle } from '@/utils/web/pressable';
 export function ProfileViewScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { profile: authProfile, user, userEmail } = useAuth();
   const { profile } = useProfileData();
@@ -57,7 +59,7 @@ export function ProfileViewScreen() {
               ? webPressableStyle(styles.backBtn, styles.backBtnHover)
               : styles.backBtn}
             accessibilityRole="button"
-            accessibilityLabel="Back to dashboard"
+            accessibilityLabel={t('settings.profile.backToDashboard')}
             hitSlop={8}
           >
             <Ionicons name="arrow-back" size={20} color={colors.text} />
@@ -65,7 +67,7 @@ export function ProfileViewScreen() {
         </View>
 
         <Text style={[styles.headerTitle, getWebFontStyle('semibold')]} numberOfLines={1}>
-          Profile
+          {t('settings.profile.title')}
         </Text>
 
         <View style={styles.headerRight}>
@@ -98,7 +100,7 @@ export function ProfileViewScreen() {
           ) : null}
 
           {isVerifiedMentor ? (
-            <Text style={styles.verifiedLabel}>Verified Mentor</Text>
+            <Text style={styles.verifiedLabel}>{t('settings.profile.verifiedMentor')}</Text>
           ) : null}
 
           {email ? <Text style={styles.email}>{email}</Text> : null}
@@ -107,23 +109,23 @@ export function ProfileViewScreen() {
         {/* ── Editable sections ── */}
         <View>
           <ProfileSectionRow
-            label="Personal Info"
+            label={t('settings.profile.personalInfo')}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_PERSONAL_INFO as any)}
           />
           <ProfileSectionRow
-            label="Academic Info"
+            label={t('settings.profile.academicInfo')}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_ACADEMIC_INFO as any)}
           />
           <ProfileSectionRow
-            label="Interests"
+            label={t('settings.profile.interests')}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_INTERESTS as any)}
           />
           <ProfileSectionRow
-            label="Opportunity Preferences"
+            label={t('settings.profile.opportunityPreferences')}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_PREFERENCES as any)}
           />
           <ProfileSectionRow
-            label="Bio"
+            label={t('settings.profile.bio')}
             showDivider={false}
             onPress={() => router.push(ROUTES.MAIN.PROFILE_BIO as any)}
           />

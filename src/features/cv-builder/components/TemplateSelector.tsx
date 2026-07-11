@@ -3,10 +3,11 @@ import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import {
-  CV_TEMPLATES,
+  getCVTemplates,
   resolveTemplateId,
   type CVTemplateId,
 } from '@/features/cv-builder/constants/templates';
@@ -128,6 +129,7 @@ export function TemplateSelector({
 }: TemplateSelectorProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  useTranslation();
   const activeId = resolveTemplateId(selectedId);
   const purchasedSet = new Set(purchasedTemplateIds.map((id) => resolveTemplateId(id)));
 
@@ -139,7 +141,7 @@ export function TemplateSelector({
           showsHorizontalScrollIndicator={false}
           contentContainerStyle={styles.compactScroll}
         >
-          {CV_TEMPLATES.map((template) => {
+          {getCVTemplates().map((template) => {
             const isSelected = template.id === activeId;
             const purchased = purchasedSet.has(template.id);
             return (
@@ -188,7 +190,7 @@ export function TemplateSelector({
 
   return (
     <View style={styles.list}>
-      {CV_TEMPLATES.map((template) => {
+      {getCVTemplates().map((template) => {
         const isSelected = template.id === activeId;
         const purchased = purchasedSet.has(template.id);
 

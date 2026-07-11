@@ -1,4 +1,5 @@
 import { ActivityIndicator, Image, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import Svg, { Circle, Ellipse, Line } from 'react-native-svg';
 
 import { Text } from '@/components/ui';
@@ -61,6 +62,7 @@ function OliveBranchIllustration() {
 // ─── Screen (mobile/native bootstrap via app/index.tsx; web uses app/index.web.tsx) ─
 export function SplashScreen() {
   const { isAuthReady } = useAuth();
+  const { t } = useTranslation();
   useAuthRedirect('bootstrap');
 
   return (
@@ -92,10 +94,10 @@ export function SplashScreen() {
               size="small"
               style={styles.spinner}
             />
-            <Text style={styles.caption}>Loading your session…</Text>
+            <Text style={styles.caption}>{t('auth.splash.loading')}</Text>
           </>
         ) : (
-          <Text style={styles.caption}>Redirecting…</Text>
+          <Text style={styles.caption}>{t('auth.splash.redirecting')}</Text>
         )}
       </View>
 

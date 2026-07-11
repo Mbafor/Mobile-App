@@ -1,4 +1,5 @@
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui';
@@ -12,6 +13,7 @@ type PaginationBarProps = {
 };
 
 export function PaginationBar({ page, pageSize, total, onPageChange }: PaginationBarProps) {
+  const { t } = useTranslation();
   const totalPages = Math.max(1, Math.ceil(total / pageSize));
   const start = total === 0 ? 0 : page * pageSize + 1;
   const end = Math.min(total, (page + 1) * pageSize);
@@ -19,21 +21,21 @@ export function PaginationBar({ page, pageSize, total, onPageChange }: Paginatio
   return (
     <View style={styles.row}>
       <Text muted variant="caption">
-        {start}–{end} of {total}
+        {t('superAdmin.pagination.range', { start, end, total })}
       </Text>
       <View style={styles.buttons}>
         <Button variant="secondary" onPress={() => onPageChange(page - 1)} disabled={page <= 0}>
-          Prev
+          {t('superAdmin.pagination.prev')}
         </Button>
         <Text variant="caption">
-          {page + 1} / {totalPages}
+          {t('superAdmin.pagination.pageOfTotal', { page: page + 1, totalPages })}
         </Text>
         <Button
           variant="secondary"
           onPress={() => onPageChange(page + 1)}
           disabled={page + 1 >= totalPages}
         >
-          Next
+          {t('superAdmin.pagination.next')}
         </Button>
       </View>
     </View>

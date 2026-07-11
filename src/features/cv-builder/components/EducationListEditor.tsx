@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input, TextArea } from '@/components/ui';
@@ -20,11 +21,13 @@ type EducationListEditorProps = {
 export function EducationListEditor({
   title,
   description,
-  addLabel = 'Add education',
+  addLabel,
   entries,
   onChange,
 }: EducationListEditorProps) {
   const cvUi = useCvUi();
+  const { t } = useTranslation();
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.sections.education.addLabel');
   const updateEntry = (id: string, patch: Partial<CVEducationEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };
@@ -41,63 +44,63 @@ export function EducationListEditor({
         <CVEntryCard
           key={entry.id}
           index={index}
-          title={entry.school.trim() || `Education ${index + 1}`}
+          title={entry.school.trim() || t('cvBuilder.editors.education.entryFallback', { index: index + 1 })}
           onRemove={() => removeEntry(entry.id)}
         >
-          <FormField label="School *">
+          <FormField label={t('cvBuilder.editors.education.schoolLabel')}>
             <Input
               value={entry.school}
               onChangeText={(v) => updateEntry(entry.id, { school: v })}
-              placeholder="University or school"
+              placeholder={t('cvBuilder.editors.education.schoolPlaceholder')}
             />
           </FormField>
-          <FormField label="Degree *">
+          <FormField label={t('cvBuilder.editors.education.degreeLabel')}>
             <Input
               value={entry.degree}
               onChangeText={(v) => updateEntry(entry.id, { degree: v })}
-              placeholder="e.g. BSc"
+              placeholder={t('cvBuilder.editors.education.degreePlaceholder')}
             />
           </FormField>
-          <FormField label="Field of study">
+          <FormField label={t('cvBuilder.editors.education.fieldOfStudyLabel')}>
             <Input
               value={entry.fieldOfStudy}
               onChangeText={(v) => updateEntry(entry.id, { fieldOfStudy: v })}
-              placeholder="e.g. Computer Science"
+              placeholder={t('cvBuilder.editors.education.fieldOfStudyPlaceholder')}
             />
           </FormField>
-          <FormField label="Start date">
+          <FormField label={t('cvBuilder.editors.education.startDateLabel')}>
             <Input
               value={entry.startDate}
               onChangeText={(v) => updateEntry(entry.id, { startDate: v })}
-              placeholder="e.g. 2019"
+              placeholder={t('cvBuilder.editors.education.startDatePlaceholder')}
             />
           </FormField>
-          <FormField label="End date">
+          <FormField label={t('cvBuilder.editors.education.endDateLabel')}>
             <Input
               value={entry.endDate}
               onChangeText={(v) => updateEntry(entry.id, { endDate: v })}
-              placeholder="e.g. 2023"
+              placeholder={t('cvBuilder.editors.education.endDatePlaceholder')}
             />
           </FormField>
-          <FormField label="GPA">
+          <FormField label={t('cvBuilder.editors.education.gpaLabel')}>
             <Input
               value={entry.gpa}
               onChangeText={(v) => updateEntry(entry.id, { gpa: v })}
-              placeholder="e.g. 3.8 / 4.0"
+              placeholder={t('cvBuilder.editors.education.gpaPlaceholder')}
             />
           </FormField>
-          <FormField label="Description">
+          <FormField label={t('cvBuilder.editors.education.descriptionLabel')}>
             <TextArea
               value={entry.description}
               onChangeText={(v) => updateEntry(entry.id, { description: v })}
-              placeholder="Honours, coursework, or activities"
+              placeholder={t('cvBuilder.editors.education.descriptionPlaceholder')}
               minHeight={100}
             />
           </FormField>
         </CVEntryCard>
       ))}
 
-      <CVAddButton label={addLabel} onPress={() => onChange([...entries, createEmptyEducation()])} />
+      <CVAddButton label={resolvedAddLabel} onPress={() => onChange([...entries, createEmptyEducation()])} />
     </View>
   );
 }

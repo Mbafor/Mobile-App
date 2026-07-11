@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { Animated, StyleSheet, View } from 'react-native';
@@ -42,9 +43,10 @@ function BouncingDot({ delay }: { delay: number }) {
 
 export function TypingIndicator({ visible, peerName }: TypingIndicatorProps) {
   const styles = useAppThemedStyles(createStyles);
+  const { t } = useTranslation();
   if (!visible) return null;
 
-  const label = peerName.trim() || 'Someone';
+  const label = peerName.trim() || t('mentorship.chat.someone');
 
   return (
     <View style={styles.wrap}>
@@ -53,7 +55,7 @@ export function TypingIndicator({ visible, peerName }: TypingIndicatorProps) {
         <BouncingDot delay={120} />
         <BouncingDot delay={240} />
       </View>
-      <Text style={styles.text}>{label} is typing…</Text>
+      <Text style={styles.text}>{t('mentorship.chat.typing', { name: label })}</Text>
     </View>
   );
 }

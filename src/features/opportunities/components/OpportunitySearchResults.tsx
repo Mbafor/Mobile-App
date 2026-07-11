@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -37,6 +38,7 @@ export function OpportunitySearchResults({
 }: OpportunitySearchResultsProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const renderItem = useCallback(
     ({ item }: { item: Opportunity }) => (
       <OpportunityListRow opportunity={item} onPress={onPressOpportunity} />
@@ -56,7 +58,7 @@ export function OpportunitySearchResults({
     <View style={styles.container}>
       {error ? (
         <View style={styles.banner}>
-          <ErrorMessage message={error instanceof Error ? error.message : 'Search failed'} />
+          <ErrorMessage message={error instanceof Error ? error.message : t('opportunities.search.failed')} />
         </View>
       ) : null}
       <FlatList
@@ -72,13 +74,13 @@ export function OpportunitySearchResults({
         }
         ListHeaderComponent={
           <Text variant="caption" muted style={styles.resultMeta}>
-            {resultCount} {resultCount === 1 ? 'result' : 'results'}
+            {t('opportunities.search.resultCount', { count: resultCount })}
           </Text>
         }
         ListEmptyComponent={
           <EmptyState
-            title="No matches"
-            description="Try a different search or adjust your filters."
+            title={t('opportunities.search.emptyTitle')}
+            description={t('opportunities.search.emptyDescription')}
           />
         }
         contentContainerStyle={results.length === 0 ? styles.emptyList : undefined}

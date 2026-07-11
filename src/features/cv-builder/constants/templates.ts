@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+
 export type CVTemplateId = 'ats' | 'modern' | 'tech' | 'executive' | 'minimal';
 
 export type CVTemplateDefinition = {
@@ -9,42 +11,22 @@ export type CVTemplateDefinition = {
 
 /** Matches website CV builder templates (ATS, Modern, Tech, Executive/Jessica, Minimal/Elite). */
 /** All layouts can be selected and previewed freely; PDF download is paid separately. */
-export const CV_TEMPLATES: CVTemplateDefinition[] = [
-  {
-    id: 'ats',
-    label: 'ATS Elite',
-    description: 'Single-column, ATS-optimized layout',
-    isFree: true,
-  },
-  {
-    id: 'modern',
-    label: 'Modern',
-    description: 'Blue accents with structured sections',
-    isFree: true,
-  },
-  /*
-  {
-    id: 'tech',
-    label: 'Tech',
-    description: 'Navy sidebar with timeline experience',
-    isFree: true,
-  },
-  */
-  {
-    id: 'executive',
-    label: 'Executive',
-    description: 'Top banner with left-rail section headers',
-    isFree: true,
-  },
-  /*
-  {
-    id: 'minimal',
-    label: 'Minimal',
-    description: 'Swiss two-column professional layout',
-    isFree: true,
-  },
-  */
+const ACTIVE_TEMPLATES: { id: CVTemplateId; isFree: boolean }[] = [
+  { id: 'ats', isFree: true },
+  { id: 'modern', isFree: true },
+  /* { id: 'tech', isFree: true }, */
+  { id: 'executive', isFree: true },
+  /* { id: 'minimal', isFree: true }, */
 ];
+
+export function getCVTemplates(): CVTemplateDefinition[] {
+  return ACTIVE_TEMPLATES.map(({ id, isFree }) => ({
+    id,
+    label: i18n.t(`cvBuilder.templateDefs.${id}.label`),
+    description: i18n.t(`cvBuilder.templateDefs.${id}.description`),
+    isFree,
+  }));
+}
 
 const LEGACY_TEMPLATE_IDS: Record<string, CVTemplateId> = {
   classic: 'ats',
@@ -52,7 +34,7 @@ const LEGACY_TEMPLATE_IDS: Record<string, CVTemplateId> = {
 };
 
 export function resolveTemplateId(templateId: string): CVTemplateId {
-  if (CV_TEMPLATES.some((t) => t.id === templateId)) {
+  if (ACTIVE_TEMPLATES.some((t) => t.id === templateId)) {
     return templateId as CVTemplateId;
   }
   return LEGACY_TEMPLATE_IDS[templateId] ?? 'ats';
@@ -60,12 +42,12 @@ export function resolveTemplateId(templateId: string): CVTemplateId {
 
 export function isTemplateFree(templateId: string): boolean {
   const id = resolveTemplateId(templateId);
-  return CV_TEMPLATES.find((t) => t.id === id)?.isFree ?? false;
+  return ACTIVE_TEMPLATES.find((t) => t.id === id)?.isFree ?? false;
 }
 
 export function getTemplateDefinition(templateId: string): CVTemplateDefinition | undefined {
   const id = resolveTemplateId(templateId);
-  return CV_TEMPLATES.find((t) => t.id === id);
+  return getCVTemplates().find((t) => t.id === id);
 }
 
 export const DEFAULT_TEMPLATE_ID: CVTemplateId = 'ats';

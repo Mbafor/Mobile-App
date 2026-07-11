@@ -39,6 +39,7 @@ const config: ExpoConfig = {
       },
     ],
     'expo-document-picker',
+    'expo-localization',
   ],
   extra: {
     eas: {

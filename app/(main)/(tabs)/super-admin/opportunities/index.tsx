@@ -1,4 +1,5 @@
 import { type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '@/constants/routes';
 import { OpportunityListScreen } from '@/features/admin/screens/OpportunityListScreen';
@@ -6,6 +7,7 @@ import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSup
 
 export default function SuperAdminOpportunitiesIndex() {
   const { isReady } = useRequireSuperAdmin();
+  const { t } = useTranslation();
   if (!isReady) return null;
 
   return (
@@ -16,8 +18,8 @@ export default function SuperAdminOpportunitiesIndex() {
         pending: ROUTES.SUPER_ADMIN.OPPORTUNITY_PENDING as Href,
         edit: (id) => ROUTES.SUPER_ADMIN.opportunityEdit(id) as Href,
       }}
-      title="Manage opportunities"
-      subtitle="Same tools as opportunity admins: create listings manually or paste JSON in bulk."
+      title={t('admin.opportunityList.homeTitle')}
+      subtitle={t('superAdmin.opportunities.homeSubtitle')}
     />
   );
 }

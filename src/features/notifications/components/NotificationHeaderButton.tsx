@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -13,6 +14,7 @@ import { useNotifications } from '@/features/notifications/hooks/useNotification
 export function NotificationHeaderButton() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const { unreadCount } = useNotifications();
 
@@ -22,7 +24,9 @@ export function NotificationHeaderButton() {
       style={styles.button}
       accessibilityRole="button"
       accessibilityLabel={
-        unreadCount > 0 ? `Notifications, ${unreadCount} unread` : 'Notifications'
+        unreadCount > 0
+          ? t('notifications.headerButton.labelUnread', { count: unreadCount })
+          : t('notifications.headerButton.label')
       }
       hitSlop={12}
     >

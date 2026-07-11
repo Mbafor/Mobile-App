@@ -8,22 +8,23 @@ export type MentorBrowseFilterId =
   | 'research'
   | 'entrepreneurship';
 
+/**
+ * `keywords` drive matching (data). Display labels are resolved via i18n at the
+ * call site, keyed by `id` under `mentorship.student.browseFilters.*`.
+ */
 export type MentorBrowseFilter = {
   id: MentorBrowseFilterId;
-  label: string;
   keywords: string[];
 };
 
 export const MENTOR_BROWSE_FILTERS: MentorBrowseFilter[] = [
-  { id: 'all', label: 'All', keywords: [] },
+  { id: 'all', keywords: [] },
   {
     id: 'technology',
-    label: 'Technology',
     keywords: ['Technology & Innovation', 'Data & Analytics', 'Computer Science', 'Engineering'],
   },
   {
     id: 'business',
-    label: 'Business',
     keywords: [
       'Business Administration',
       'Business',
@@ -35,22 +36,18 @@ export const MENTOR_BROWSE_FILTERS: MentorBrowseFilter[] = [
   },
   {
     id: 'career',
-    label: 'Career',
     keywords: ['Leadership & Management', 'career', 'Job', 'Graduate Programme'],
   },
   {
     id: 'scholarships',
-    label: 'Scholarships',
     keywords: ['Scholarship', 'Grant & Funding', 'Fellowship'],
   },
   {
     id: 'research',
-    label: 'Research',
     keywords: ['Research & Academia', 'Research Opportunity', 'Mathematics & Statistics'],
   },
   {
     id: 'entrepreneurship',
-    label: 'Entrepreneurship',
     keywords: ['Entrepreneurship', 'Innovation'],
   },
 ];

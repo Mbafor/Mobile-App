@@ -5,6 +5,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useCallback, useEffect, useRef } from 'react';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { extractReferenceFromUrl } from '@/services/paystack/paystack';
@@ -28,6 +29,7 @@ export function PaystackCheckoutModal({
 }: PaystackCheckoutModalProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const popupRef = useRef<Window | null>(null);
   const handledRef = useRef(false);
@@ -36,10 +38,10 @@ export function PaystackCheckoutModal({
     popupRef.current?.close();
     popupRef.current = null;
     if (!handledRef.current) {
-      onFailure('Payment was cancelled', true);
+      onFailure(t('cvBuilder.paystack.paymentCancelled'), true);
     }
     onClose();
-  }, [onClose, onFailure]);
+  }, [onClose, onFailure, t]);
 
   useEffect(() => {
     if (!visible || typeof window === 'undefined') return;
@@ -53,7 +55,7 @@ export function PaystackCheckoutModal({
     popupRef.current = popup;
 
     if (!popup) {
-      onFailure('Allow pop-ups for this site to complete payment.', false);
+      onFailure(t('cvBuilder.paystack.popupBlocked'), false);
       onClose();
       return;
     }
@@ -63,7 +65,7 @@ export function PaystackCheckoutModal({
         window.clearInterval(interval);
         if (!handledRef.current) {
           handledRef.current = true;
-          onFailure('Payment was cancelled', true);
+          onFailure(t('cvBuilder.paystack.paymentCancelled'), true);
           onClose();
         }
         return;
@@ -104,7 +106,7 @@ export function PaystackCheckoutModal({
       popup.close();
       popupRef.current = null;
     };
-  }, [visible, authorizationUrl, onClose, onFailure, onSuccess]);
+  }, [visible, authorizationUrl, onClose, onFailure, onSuccess, t]);
 
   if (!visible) return null;
 
@@ -112,7 +114,7 @@ export function PaystackCheckoutModal({
     <Modal visible transparent animationType="fade" onRequestClose={handleClose}>
       <View style={[styles.container, { paddingTop: insets.top }]}>
         <View style={styles.toolbar}>
-          <Text style={styles.toolbarTitle}>Complete payment in the popup window</Text>
+          <Text style={styles.toolbarTitle}>{t('cvBuilder.paystack.popupTitle')}</Text>
           <Pressable onPress={handleClose} style={styles.closeBtn}>
             <Ionicons name="close" size={22} color={colors.text} />
           </Pressable>
@@ -120,7 +122,7 @@ export function PaystackCheckoutModal({
         <View style={styles.body}>
           <Ionicons name="open-outline" size={40} color={colors.primary} />
           <Text style={styles.bodyText}>
-            If the Paystack window did not open, allow pop-ups and try again.
+            {t('cvBuilder.paystack.popupHint')}
           </Text>
         </View>
       </View>

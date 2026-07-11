@@ -1,3 +1,5 @@
+import i18n from '@/i18n';
+
 /** Browser download from a blob/object URL. */
 export async function shareCvPdfInBrowser(
   uri: string,
@@ -23,7 +25,7 @@ export async function shareCvPdfInBrowser(
 
     return { ok: true };
   } catch (e) {
-    const message = e instanceof Error ? e.message : 'Failed to download PDF';
+    const message = e instanceof Error ? e.message : i18n.t('cvBuilder.pdfErrors.failedToDownload');
     return { ok: false, error: message };
   }
 }

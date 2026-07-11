@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Alert, Pressable, StyleSheet, View } from 'react-native';
@@ -11,15 +12,7 @@ import { formatAvailabilityRule } from '@/features/mentorship/utils/format-avail
 import type { MentorAvailabilityRule } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 
-const DAYS: { key: string; label: string }[] = [
-  { key: '0', label: 'Sunday' },
-  { key: '1', label: 'Monday' },
-  { key: '2', label: 'Tuesday' },
-  { key: '3', label: 'Wednesday' },
-  { key: '4', label: 'Thursday' },
-  { key: '5', label: 'Friday' },
-  { key: '6', label: 'Saturday' },
-];
+const DAY_KEYS = ['0', '1', '2', '3', '4', '5', '6'];
 
 type AvailabilityEditorProps = {
   rules: MentorAvailabilityRule[];
@@ -30,6 +23,7 @@ type AvailabilityEditorProps = {
 
 export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: AvailabilityEditorProps) {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const [dayOfWeek, setDayOfWeek] = useState('1');
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
@@ -40,7 +34,7 @@ export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: Availa
 
   const addRule = () => {
     if (startTime >= endTime) {
-      Alert.alert('Invalid times', 'End time must be after start time.');
+      Alert.alert(t('mentorship.coach.availability.invalidTimesTitle'), t('mentorship.coach.availability.invalidTimesMessage'));
       return;
     }
     onSave({
@@ -55,7 +49,7 @@ export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: Availa
   return (
     <View style={styles.wrap}>
       {rules.length === 0 ? (
-        <Text muted>No availability published yet.</Text>
+        <Text muted>{t('mentorship.coach.availability.emptyPublished')}</Text>
       ) : (
         rules.map((rule) => (
           <View key={rule.id} style={styles.ruleRow}>
@@ -63,35 +57,35 @@ export function AvailabilityEditor({ rules, onSave, onDelete, isSaving }: Availa
               {formatAvailabilityRule(rule.dayOfWeek, rule.startTime, rule.endTime, rule.timezone)}
             </Text>
             <Pressable onPress={() => onDelete(rule.id)}>
-              <Text style={styles.delete}>Delete</Text>
+              <Text style={styles.delete}>{t('mentorship.coach.availability.delete')}</Text>
             </Pressable>
           </View>
         ))
       )}
 
       <Text variant="caption" muted style={styles.addLabel}>
-        Add weekly slot
+        {t('mentorship.coach.availability.addSlot')}
       </Text>
       <Pressable style={styles.dayPicker} onPress={() => setDaySheetOpen(true)}>
-        <Text>{DAYS.find((d) => d.key === dayOfWeek)?.label ?? 'Day'}</Text>
+        <Text>{t(`mentorship.days.${dayOfWeek}`, { defaultValue: t('mentorship.coach.availability.dayFallback') })}</Text>
       </Pressable>
       <View style={styles.row}>
         <Input value={startTime} onChangeText={setStartTime} placeholder="09:00" style={styles.time} />
-        <Text muted>to</Text>
+        <Text muted>{t('mentorship.coach.availability.to')}</Text>
         <Input value={endTime} onChangeText={setEndTime} placeholder="17:00" style={styles.time} />
       </View>
-      <Input value={timezone} onChangeText={setTimezone} placeholder="Timezone (e.g. UTC)" />
+      <Input value={timezone} onChangeText={setTimezone} placeholder={t('mentorship.coach.availability.timezoneHint')} />
       <Button onPress={addRule} loading={isSaving}>
-        Add availability
+        {t('mentorship.coach.availability.addAvailability')}
       </Button>
 
       <OptionsSheet
         visible={daySheetOpen}
-        title="Day of week"
-        options={DAYS.map((d) => ({
-          key: d.key,
-          label: d.label,
-          onPress: () => setDayOfWeek(d.key),
+        title={t('mentorship.coach.availability.dayOfWeek')}
+        options={DAY_KEYS.map((k) => ({
+          key: k,
+          label: t(`mentorship.days.${k}`),
+          onPress: () => setDayOfWeek(k),
         }))}
         onClose={() => setDaySheetOpen(false)}
       />

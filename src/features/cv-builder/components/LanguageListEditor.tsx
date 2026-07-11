@@ -1,4 +1,5 @@
 import { View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { FormField } from '@/components/forms';
 import { Input } from '@/components/ui';
@@ -20,11 +21,13 @@ type LanguageListEditorProps = {
 export function LanguageListEditor({
   title,
   description,
-  addLabel = 'Add language',
+  addLabel,
   entries,
   onChange,
 }: LanguageListEditorProps) {
   const cvUi = useCvUi();
+  const { t } = useTranslation();
+  const resolvedAddLabel = addLabel ?? t('cvBuilder.sections.languages.addLabel');
   const updateEntry = (id: string, patch: Partial<CVLanguageEntry>) => {
     onChange(entries.map((e) => (e.id === id ? { ...e, ...patch } : e)));
   };
@@ -41,27 +44,27 @@ export function LanguageListEditor({
         <CVEntryCard
           key={entry.id}
           index={index}
-          title={entry.language.trim() || `Language ${index + 1}`}
+          title={entry.language.trim() || t('cvBuilder.editors.languages.entryFallback', { index: index + 1 })}
           onRemove={() => removeEntry(entry.id)}
         >
-          <FormField label="Language *">
+          <FormField label={t('cvBuilder.editors.languages.languageLabel')}>
             <Input
               value={entry.language}
               onChangeText={(v) => updateEntry(entry.id, { language: v })}
-              placeholder="e.g. English"
+              placeholder={t('cvBuilder.editors.languages.languagePlaceholder')}
             />
           </FormField>
-          <FormField label="Proficiency">
+          <FormField label={t('cvBuilder.editors.languages.proficiencyLabel')}>
             <Input
               value={entry.proficiency}
               onChangeText={(v) => updateEntry(entry.id, { proficiency: v })}
-              placeholder="e.g. Fluent, Native"
+              placeholder={t('cvBuilder.editors.languages.proficiencyPlaceholder')}
             />
           </FormField>
         </CVEntryCard>
       ))}
 
-      <CVAddButton label={addLabel} onPress={() => onChange([...entries, createEmptyLanguage()])} />
+      <CVAddButton label={resolvedAddLabel} onPress={() => onChange([...entries, createEmptyLanguage()])} />
     </View>
   );
 }

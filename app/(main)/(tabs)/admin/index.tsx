@@ -1,4 +1,5 @@
 import { type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '@/constants/routes';
 import { useRequireAdmin } from '@/features/admin/hooks/useRequireAdmin';
@@ -6,6 +7,7 @@ import { OpportunityListScreen } from '@/features/admin/screens/OpportunityListS
 
 export default function AdminHomeScreen() {
   const { isReady } = useRequireAdmin();
+  const { t } = useTranslation();
   if (!isReady) return null;
 
   return (
@@ -16,8 +18,8 @@ export default function AdminHomeScreen() {
         pending: ROUTES.ADMIN.PENDING as Href,
         edit: (id) => ROUTES.ADMIN.edit(id) as Href,
       }}
-      title="Manage opportunities"
-      subtitle="Add and maintain listings students see in the app."
+      title={t('admin.opportunityList.homeTitle')}
+      subtitle={t('admin.opportunityList.homeSubtitle')}
     />
   );
 }

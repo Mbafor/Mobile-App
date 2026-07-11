@@ -1,4 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
@@ -36,32 +38,34 @@ function statusColor(status: string, mutedColor: string): string {
   return mutedColor;
 }
 
-function statusLabel(status: string): string {
-  if (status === 'pending' || status === 'proposed') return 'Pending';
+function statusLabel(status: string, t: TFunction): string {
+  if (status === 'pending' || status === 'proposed') return t('mentorship.calendar.statusPending');
   return status;
 }
 
 export function UpcomingSessionsPanel({
   sessions,
   role,
-  peerLabel = 'Participant',
+  peerLabel: peerLabelProp,
   getPeerName,
   onCancel,
   onConfirm,
 }: UpcomingSessionsPanelProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
+  const peerLabel = peerLabelProp ?? t('mentorship.calendar.participantFallback');
   const upcoming = sessions
     .filter((s) => isActiveSessionStatus(s.status))
     .sort((a, b) => new Date(a.scheduledStart).getTime() - new Date(b.scheduledStart).getTime());
 
   return (
     <View style={styles.wrap}>
-      <Text style={styles.heading}>Upcoming sessions</Text>
+      <Text style={styles.heading}>{t('mentorship.calendar.upcomingHeading')}</Text>
       <MentorshipMobileList
         data={upcoming}
         keyExtractor={(s) => s.id}
-        emptyMessage="No upcoming sessions."
+        emptyMessage={t('mentorship.calendar.noUpcoming')}
         renderCard={(session) => {
           const showStudentCancel = role === 'student' && onCancel;
           const allowCancel = showStudentCancel && canStudentCancelSession(session);
@@ -75,13 +79,13 @@ export function UpcomingSessionsPanel({
               </Text>
               <View style={styles.statusRow}>
                 <View style={[styles.statusPill, { backgroundColor: statusColor(session.status, mentorshipColors.textMuted) }]}>
-                  <Text style={styles.statusText}>{statusLabel(session.status)}</Text>
+                  <Text style={styles.statusText}>{statusLabel(session.status, t)}</Text>
                 </View>
               </View>
               <View style={styles.actions}>
                 {role === 'coach' && onConfirm && isPendingSessionStatus(session.status) ? (
                   <Pressable onPress={() => onConfirm(session.id)}>
-                    <Text style={styles.link}>Confirm session</Text>
+                    <Text style={styles.link}>{t('mentorship.calendar.confirmSession')}</Text>
                   </Pressable>
                 ) : null}
                 {canJoin && session.meetingUrl ? (
@@ -89,13 +93,13 @@ export function UpcomingSessionsPanel({
                     style={styles.meetBtn}
                     onPress={() => void openExternalUrl(session.meetingUrl!)}
                   >
-                    <Text style={styles.meetBtnText}>Join now</Text>
+                    <Text style={styles.meetBtnText}>{t('mentorship.calendar.join')}</Text>
                   </Pressable>
                 ) : null}
                 {showStudentCancel ? (
                   allowCancel ? (
                     <Pressable onPress={() => onCancel(session.id)}>
-                      <Text style={styles.danger}>Cancel</Text>
+                      <Text style={styles.danger}>{t('mentorship.calendar.cancel')}</Text>
                     </Pressable>
                   ) : (
                     <Text variant="caption" muted>

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -17,6 +18,7 @@ import { spacing } from '@/constants/theme';
 
 export function PersonalInfoEditScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { user, profile: authProfile, userEmail } = useAuth();
   const setAuthProfile = useAuthStore((s) => s.setProfile);
@@ -47,7 +49,7 @@ export function PersonalInfoEditScreen() {
     clearError();
 
     if (!fullName.trim() || !country.trim()) {
-      Alert.alert('Required fields', 'Please enter your name and country.');
+      Alert.alert(t('settings.personalInfo.requiredTitle'), t('settings.personalInfo.requiredMessage'));
       return;
     }
 
@@ -80,17 +82,17 @@ export function PersonalInfoEditScreen() {
           </View>
         ) : null}
 
-        <FormField label="Full name *">
-          <Input value={fullName} onChangeText={setFullName} placeholder="Your name" />
+        <FormField label={t('settings.personalInfo.fullNameLabel')}>
+          <Input value={fullName} onChangeText={setFullName} placeholder={t('settings.personalInfo.fullNamePlaceholder')} />
         </FormField>
-        <FormField label="Country *">
-          <CountrySelect value={country} onChange={setCountry} placeholder="Select your country" />
+        <FormField label={t('settings.personalInfo.countryLabel')}>
+          <CountrySelect value={country} onChange={setCountry} placeholder={t('settings.personalInfo.countryPlaceholder')} />
         </FormField>
 
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isLoading} disabled={isLoading}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

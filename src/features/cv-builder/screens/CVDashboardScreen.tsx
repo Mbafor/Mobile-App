@@ -16,6 +16,7 @@ import {
   View,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 
 import { EmptyState, ErrorMessage } from '@/components/feedback';
 import { OptionsSheet, SearchField, Text } from '@/components/ui';
@@ -31,6 +32,7 @@ export function CVDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const router = useRouter();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [searchQuery, setSearchQuery] = useState('');
   const {
@@ -61,16 +63,16 @@ export function CVDashboardScreen() {
 
   const handleCreateNew = async () => {
     if (!userId) {
-      Alert.alert('Sign in required', 'Please sign in to create a CV.');
+      Alert.alert(t('cvBuilder.dashboard.signInRequiredTitle'), t('cvBuilder.dashboard.signInRequiredMessage'));
       return;
     }
     try {
-      const cv = await createCV(`Untitled CV ${cvs.length + 1}`);
+      const cv = await createCV(t('cvBuilder.dashboard.untitledCv', { count: cvs.length + 1 }));
       router.push(ROUTES.MAIN.CV_BUILDER.hub(cv.id) as Href);
     } catch (e) {
       Alert.alert(
-        'Could not create CV',
-        e instanceof Error ? e.message : 'Something went wrong',
+        t('cvBuilder.dashboard.couldNotCreateTitle'),
+        e instanceof Error ? e.message : t('cvBuilder.dashboard.genericError'),
       );
     }
   };
@@ -96,7 +98,7 @@ export function CVDashboardScreen() {
     if (!renamingCv) return;
     const title = renameValue.trim();
     if (!title) {
-      Alert.alert('Title required', 'Enter a name for your CV.');
+      Alert.alert(t('cvBuilder.dashboard.titleRequiredTitle'), t('cvBuilder.dashboard.titleRequiredMessage'));
       return;
     }
     try {
@@ -104,16 +106,16 @@ export function CVDashboardScreen() {
       closeRename();
     } catch (e) {
       Alert.alert(
-        'Could not rename',
-        e instanceof Error ? e.message : 'Something went wrong',
+        t('cvBuilder.dashboard.couldNotRenameTitle'),
+        e instanceof Error ? e.message : t('cvBuilder.dashboard.genericError'),
       );
     }
   };
 
   const handleDelete = async (cv: CV) => {
     const confirmed = await confirmAction(
-      'Delete CV',
-      `Delete "${cv.title}"? This cannot be undone.`,
+      t('cvBuilder.dashboard.deleteConfirmTitle'),
+      t('cvBuilder.dashboard.deleteConfirmMessage', { title: cv.title }),
     );
     if (!confirmed) return;
 
@@ -122,8 +124,8 @@ export function CVDashboardScreen() {
       await deleteCV(cv.id);
     } catch (e) {
       Alert.alert(
-        'Could not delete',
-        e instanceof Error ? e.message : 'Something went wrong',
+        t('cvBuilder.dashboard.couldNotDeleteTitle'),
+        e instanceof Error ? e.message : t('cvBuilder.dashboard.genericError'),
       );
     } finally {
       setDeletingId(null);
@@ -148,19 +150,19 @@ export function CVDashboardScreen() {
       <View style={styles.listHeader}>
         <Text style={styles.sectionLabel}>
           {filteredCvs.length === 0 && searchQuery.trim()
-            ? 'No results'
-            : `${filteredCvs.length} ${filteredCvs.length === 1 ? 'document' : 'documents'}`}
+            ? t('cvBuilder.dashboard.noResults')
+            : t('cvBuilder.dashboard.documentsCount', { count: filteredCvs.length })}
         </Text>
       </View>
     ),
-    [filteredCvs.length, searchQuery],
+    [filteredCvs.length, searchQuery, styles, t],
   );
 
   if (isLoading) {
     return (
       <View style={[styles.centered, { paddingTop: insets.top }]}>
         <ActivityIndicator size="large" color={colors.primary} />
-        <Text style={styles.loadingText}>Loading your CVs…</Text>
+        <Text style={styles.loadingText}>{t('cvBuilder.dashboard.loadingCvs')}</Text>
       </View>
     );
   }
@@ -176,7 +178,7 @@ export function CVDashboardScreen() {
               <View style={styles.appLogo}>
                 <Ionicons name="document-text" size={22} color={colors.background} />
               </View>
-              <Text style={styles.appTitle}>CV Builder</Text>
+              <Text style={styles.appTitle}>{t('cvBuilder.dashboard.appTitle')}</Text>
             </View>
             <View style={styles.appBarActions}>
               <Pressable
@@ -189,7 +191,7 @@ export function CVDashboardScreen() {
                 ) : (
                   <>
                     <Ionicons name="add" size={22} color={colors.primary} />
-                    <Text style={styles.newBtnText}>New</Text>
+                    <Text style={styles.newBtnText}>{t('cvBuilder.dashboard.newButton')}</Text>
                   </>
                 )}
               </Pressable>
@@ -205,7 +207,7 @@ export function CVDashboardScreen() {
             variant="docs"
             value={searchQuery}
             onChangeText={setSearchQuery}
-            placeholder="Search CVs"
+            placeholder={t('cvBuilder.dashboard.searchPlaceholder')}
           />
         </View>
       </View>
@@ -214,7 +216,7 @@ export function CVDashboardScreen() {
         <View style={styles.bannerOuter}>
           <View style={styles.barContent}>
             <ErrorMessage
-              message={error instanceof Error ? error.message : 'Failed to load your CVs'}
+              message={error instanceof Error ? error.message : t('cvBuilder.dashboard.failedToLoad')}
             />
           </View>
         </View>
@@ -239,14 +241,14 @@ export function CVDashboardScreen() {
           !error ? (
             searchQuery.trim() ? (
               <EmptyState
-                title="No matches"
-                description={`Nothing matches "${searchQuery.trim()}". Try another search.`}
+                title={t('cvBuilder.dashboard.noMatchesTitle')}
+                description={t('cvBuilder.dashboard.noMatchesDescription', { query: searchQuery.trim() })}
               />
             ) : (
               <View style={styles.emptyWrap}>
                 <EmptyState
-                  title="No CVs yet"
-                  description='Tap "New" to create a blank CV — like starting a new document.'
+                  title={t('cvBuilder.dashboard.emptyTitle')}
+                  description={t('cvBuilder.dashboard.emptyDescription')}
                 />
               </View>
             )
@@ -264,17 +266,17 @@ export function CVDashboardScreen() {
             ? [
                 {
                   key: 'rename',
-                  label: 'Rename',
+                  label: t('cvBuilder.dashboard.menu.rename'),
                   onPress: () => openRename(menuCv),
                 },
                 {
                   key: 'edit',
-                  label: 'Edit',
+                  label: t('cvBuilder.dashboard.menu.edit'),
                   onPress: () => handleEdit(menuCv),
                 },
                 {
                   key: 'delete',
-                  label: 'Delete',
+                  label: t('cvBuilder.dashboard.menu.delete'),
                   destructive: true,
                   onPress: () => void handleDelete(menuCv),
                 },

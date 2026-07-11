@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet } from 'react-native';
 
 import { spacing } from '@/constants/theme';
@@ -12,6 +13,7 @@ import { useWebDesktop } from '@/hooks/useWebDesktop';
 export function FloatingHelpButton() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
   const isDesktopWeb = useWebDesktop();
 
@@ -24,7 +26,7 @@ export function FloatingHelpButton() {
       onPress={() => router.push(ROUTES.MAIN.HELP.INDEX as Href)}
       style={({ pressed }) => [styles.fab, { bottom }, pressed && styles.pressed]}
       accessibilityRole="button"
-      accessibilityLabel="Help & Support"
+      accessibilityLabel={t('help.title')}
       hitSlop={8}
     >
       <Ionicons name="help" size={22} color={colors.textOnPrimary} />

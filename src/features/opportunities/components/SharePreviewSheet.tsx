@@ -1,5 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Alert,
   Image,
@@ -30,14 +31,9 @@ function capitalize(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1).toLowerCase();
 }
 
-const LOCATION_LABEL: Record<string, string> = {
-  remote: 'Remote',
-  onsite: 'On-site',
-  hybrid: 'Hybrid',
-};
-
 export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { width: screenWidth } = useWindowDimensions();
   const [sharing, setSharing] = useState(false);
   const [imageError, setImageError] = useState(false);
@@ -64,7 +60,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
       await shareOpportunity(opportunity);
       onClose();
     } catch {
-      Alert.alert('Share failed', 'Could not open the share sheet.');
+      Alert.alert(t('opportunities.share.failedTitle'), t('opportunities.share.failedBody'));
     } finally {
       setSharing(false);
     }
@@ -85,8 +81,8 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
 
           {/* ── Sheet header ── */}
           <View style={styles.sheetHeader}>
-            <Text style={[styles.sheetTitle, { color: colors.text }]}>Share opportunity</Text>
-            <Pressable onPress={onClose} hitSlop={8} accessibilityLabel="Close">
+            <Text style={[styles.sheetTitle, { color: colors.text }]}>{t('opportunities.share.title')}</Text>
+            <Pressable onPress={onClose} hitSlop={8} accessibilityLabel={t('opportunities.share.close')}>
               <Ionicons name="close" size={22} color={colors.textMuted} />
             </Pressable>
           </View>
@@ -155,7 +151,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                       <View style={[styles.pill, { backgroundColor: colors.surface, borderColor: colors.border }]}>
                         <Ionicons name="globe-outline" size={10} color={colors.textMuted} />
                         <Text style={[styles.pillText, { color: colors.textMuted }]}>
-                          {LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}
+                          {t(`opportunities.share.location.${opportunity.locationType}`, { defaultValue: opportunity.locationType })}
                         </Text>
                       </View>
                     ) : null}
@@ -176,7 +172,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                 {/* Deadline section */}
                 <View style={styles.deadlineSection}>
                   <View style={styles.deadlineLeft}>
-                    <Text style={[styles.sectionLabel, { color: colors.textMuted }]}>APPLICATION DEADLINE</Text>
+                    <Text style={[styles.sectionLabel, { color: colors.textMuted }]}>{t('opportunities.share.deadlineLabel')}</Text>
                     <Text style={[styles.deadlineDate, { color: colors.text }]}>
                       {formatDeadline(opportunity.deadline)}
                     </Text>
@@ -192,7 +188,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                         color={isUrgent ? '#DC2626' : '#EA580C'}
                       />
                       <Text style={[styles.urgencyText, { color: isUrgent ? '#DC2626' : '#EA580C' }]}>
-                        {daysLeft === 0 ? 'Closes today' : `${daysLeft}d left`}
+                        {daysLeft === 0 ? t('opportunities.share.closesToday') : t('opportunities.common.daysLeft', { days: daysLeft })}
                       </Text>
                     </View>
                   )}
@@ -204,7 +200,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                 {/* About section */}
                 {snippet ? (
                   <View style={styles.aboutSection}>
-                    <Text style={[styles.sectionLabel, { color: colors.textMuted }]}>ABOUT THIS OPPORTUNITY</Text>
+                    <Text style={[styles.sectionLabel, { color: colors.textMuted }]}>{t('opportunities.share.aboutLabel')}</Text>
                     <Text style={[styles.description, { color: colors.text }]}>
                       {snippet}{hasMore ? '…' : ''}
                     </Text>
@@ -234,7 +230,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                     <Ionicons name="link" size={12} color={colors.textOnPrimary} />
                   </View>
                   <View style={styles.linkTextWrap}>
-                    <Text style={[styles.linkLabel, { color: colors.textMuted }]}>View full opportunity at</Text>
+                    <Text style={[styles.linkLabel, { color: colors.textMuted }]}>{t('opportunities.share.viewAt')}</Text>
                     <Text style={[styles.linkUrl, { color: colors.primary }]} numberOfLines={1}>
                       {link}
                     </Text>
@@ -247,9 +243,9 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
             {/* Branding footer */}
             <View style={styles.brandRow}>
               <Text style={[styles.brandText, { color: colors.textMuted }]}>
-                Shared via{' '}
+                {t('opportunities.share.sharedViaPrefix')}{' '}
                 <Text style={[styles.brandName, { color: colors.primary }]}>Voila Africa</Text>
-                {' '}· Discover opportunities made for you
+                {' '}{t('opportunities.share.sharedViaSuffix')}
               </Text>
             </View>
           </ScrollView>
@@ -273,7 +269,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                 color={colors.textOnPrimary}
               />
               <Text style={[styles.shareBtnText, { color: colors.textOnPrimary }]}>
-                {sharing ? 'Opening share…' : 'Share opportunity'}
+                {sharing ? t('opportunities.share.opening') : t('opportunities.share.shareButton')}
               </Text>
             </Pressable>
           </View>

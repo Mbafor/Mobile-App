@@ -1,0 +1,2096 @@
+{
+  "common": {
+    "appName": "Voila",
+    "user": "Utilisateur",
+    "save": "Enregistrer",
+    "cancel": "Annuler"
+  },
+  "settings": {
+    "language": {
+      "sectionLabel": "Langue",
+      "system": "Système",
+      "systemHint": "Suivre la langue de l'appareil",
+      "enHint": "Toujours utiliser l'anglais",
+      "frHint": "Toujours utiliser le français"
+    },
+    "appearance": {
+      "sectionLabel": "Apparence",
+      "system": "Système",
+      "systemHint": "Suivre les paramètres de l'appareil",
+      "light": "Clair",
+      "lightHint": "Toujours utiliser le mode clair",
+      "dark": "Sombre",
+      "darkHint": "Toujours utiliser le mode sombre"
+    },
+    "home": {
+      "title": "Paramètres",
+      "notifications": "Notifications",
+      "privacy": "Confidentialité",
+      "changePassword": "Changer le mot de passe",
+      "support": "Assistance",
+      "logout": "Se déconnecter",
+      "deleteAccount": "Supprimer le compte",
+      "logoutConfirmTitle": "Se déconnecter",
+      "logoutConfirmMessage": "Voulez-vous vraiment vous déconnecter ?",
+      "logoutFailed": "Échec de la déconnexion"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "loading": "Chargement des préférences de notification…",
+      "systemDenied": "Les notifications système sont désactivées. Activez-les dans les paramètres de l'appareil pour recevoir des notifications push.",
+      "couldNotSave": "Impossible d'enregistrer",
+      "updateFailed": "Échec de la mise à jour de {{label}}. Veuillez réessayer.",
+      "pushUpdateFailed": "Échec de la mise à jour des notifications push.",
+      "notAvailableTitle": "Non disponible",
+      "notAvailableBody": "Les notifications push nécessitent un appareil physique avec une version de développement ou de production.",
+      "permissionRequiredTitle": "Autorisation requise",
+      "permissionRequiredBody": "Activez les notifications dans les paramètres de votre appareil pour recevoir des alertes push.",
+      "pushSetupFailed": "Échec de la configuration des notifications push",
+      "items": {
+        "push": {
+          "label": "Notifications push",
+          "description": "Recevoir des alertes sur cet appareil"
+        },
+        "newMatches": {
+          "label": "Nouvelles opportunités correspondantes",
+          "description": "Quand une nouvelle offre correspond à vos centres d'intérêt"
+        },
+        "deadline": {
+          "label": "Rappels d'échéance",
+          "description": "3 jours avant la clôture d'une opportunité"
+        },
+        "saved": {
+          "label": "Rappels d'opportunités enregistrées",
+          "description": "1 jour avant l'échéance d'une opportunité enregistrée"
+        },
+        "mentorshipAssignments": {
+          "label": "Attributions de mentorat",
+          "description": "Quand vous êtes associé à un coach ou un mentoré"
+        },
+        "waitingList": {
+          "label": "Mises à jour de la liste d'attente",
+          "description": "Position dans la file et disponibilité de correspondance"
+        },
+        "session": {
+          "label": "Rappels de séance",
+          "description": "24 heures avant les séances de mentorat"
+        },
+        "mentorshipMessages": {
+          "label": "Messages de mentorat",
+          "description": "Nouveaux messages de discussion de votre coach ou mentorés"
+        }
+      }
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "body": "Nous protégeons votre profil, vos préférences et votre activité, et ne les partageons jamais sans votre consentement."
+    },
+    "changePassword": {
+      "title": "Changer le mot de passe",
+      "currentLabel": "Mot de passe actuel *",
+      "currentPlaceholder": "Entrez le mot de passe actuel",
+      "newLabel": "Nouveau mot de passe *",
+      "newPlaceholder": "Au moins 8 caractères",
+      "confirmLabel": "Confirmer le nouveau mot de passe *",
+      "confirmPlaceholder": "Ressaisissez le nouveau mot de passe",
+      "requiredTitle": "Champs obligatoires",
+      "requiredMessage": "Veuillez remplir tous les champs du mot de passe.",
+      "weakTitle": "Mot de passe faible",
+      "weakMessage": "Le nouveau mot de passe doit comporter au moins 8 caractères.",
+      "mismatchTitle": "Les mots de passe ne correspondent pas",
+      "mismatchMessage": "Le nouveau mot de passe et la confirmation doivent correspondre.",
+      "incorrectCurrent": "Le mot de passe actuel est incorrect.",
+      "updatedTitle": "Mot de passe mis à jour",
+      "updatedMessage": "Votre mot de passe a été changé avec succès."
+    },
+    "deleteAccount": {
+      "title": "Supprimer le compte",
+      "warning": "La suppression de votre compte efface définitivement votre profil, vos préférences, votre historique de mentorat, vos opportunités enregistrées et vos CV. Cette action est irréversible.",
+      "passwordLabel": "Mot de passe *",
+      "passwordPlaceholder": "Entrez votre mot de passe",
+      "confirmLabel": "Tapez {{word}} pour confirmer *",
+      "confirmPromptTitle": "Confirmer la suppression",
+      "confirmPromptBody": "Entrez votre mot de passe et tapez {{word}} pour confirmer.",
+      "dialogTitle": "Supprimer le compte",
+      "dialogBody": "Cette action supprime définitivement votre compte et toutes les données. Cela ne peut pas être annulé.",
+      "delete": "Supprimer",
+      "incorrectPassword": "Mot de passe incorrect.",
+      "submit": "Supprimer mon compte"
+    },
+    "profile": {
+      "title": "Profil",
+      "backToDashboard": "Retour au tableau de bord",
+      "verifiedMentor": "Mentor vérifié",
+      "personalInfo": "Infos personnelles",
+      "academicInfo": "Infos académiques",
+      "interests": "Centres d'intérêt",
+      "opportunityPreferences": "Préférences d'opportunités",
+      "bio": "Bio"
+    },
+    "personalInfo": {
+      "fullNameLabel": "Nom complet *",
+      "fullNamePlaceholder": "Votre nom",
+      "countryLabel": "Pays *",
+      "countryPlaceholder": "Sélectionnez votre pays",
+      "requiredTitle": "Champs obligatoires",
+      "requiredMessage": "Veuillez entrer votre nom et votre pays."
+    },
+    "academicInfo": {
+      "universityLabel": "Université *",
+      "universityPlaceholder": "Établissement",
+      "degreeLabel": "Niveau de diplôme *",
+      "courseLabel": "Filière / spécialité *",
+      "coursePlaceholder": "Sélectionnez une filière ou spécialité",
+      "requiredTitle": "Champs obligatoires",
+      "requiredMessage": "Veuillez entrer votre université et votre filière/spécialité."
+    },
+    "interests": {
+      "label": "Centres d'intérêt *",
+      "placeholder": "Sélectionnez vos centres d'intérêt",
+      "requiredTitle": "Champ obligatoire",
+      "requiredMessage": "Sélectionnez au moins un centre d'intérêt."
+    },
+    "opportunityPreferences": {
+      "typesLabel": "Types d'opportunités *",
+      "typesPlaceholder": "Types que vous recherchez",
+      "countriesLabel": "Pays préférés (séparés par des virgules) *",
+      "countriesPlaceholder": "ex. Royaume-Uni, Allemagne, Canada",
+      "fundingLabel": "Préférence de financement *",
+      "requiredTitle": "Champ obligatoire",
+      "requiredTypes": "Sélectionnez au moins un type d'opportunité.",
+      "requiredCountries": "Ajoutez au moins un pays préféré."
+    },
+    "bio": {
+      "label": "À propos de vous",
+      "placeholder": "Une courte présentation de vous-même…"
+    }
+  },
+  "onboarding": {
+    "shell": {
+      "continue": "Continuer",
+      "back": "Retour",
+      "saving": "Enregistrement…",
+      "steps": {
+        "basic": "Infos de base",
+        "academic": "Académique",
+        "preferences": "Préférences"
+      },
+      "panels": {
+        "basic": {
+          "heading": "Faisons connaissance",
+          "description": "Parlez-nous un peu de vous afin que nous puissions personnaliser votre expérience et vous recommander des opportunités adaptées à votre profil."
+        },
+        "academic": {
+          "heading": "Construisez votre profil académique",
+          "description": "Aidez-nous à comprendre votre parcours scolaire afin que nous puissions trouver des opportunités adaptées à votre niveau et à vos centres d'intérêt."
+        },
+        "preferences": {
+          "heading": "Personnalisons les opportunités pour vous",
+          "description": "Choisissez les types d'opportunités qui vous intéressent et nous vous recommanderons les plus pertinentes."
+        }
+      }
+    },
+    "basic": {
+      "title": "Informations de base",
+      "subtitle": "Parlez-nous un peu de vous pour personnaliser votre expérience.",
+      "fullNameLabel": "Nom complet *",
+      "fullNamePlaceholder": "ex. Jeanne Dupont",
+      "countryLabel": "Pays *",
+      "countryPlaceholder": "Sélectionnez votre pays",
+      "requiredTitle": "Champs obligatoires",
+      "requiredMessage": "Veuillez entrer votre nom complet et votre pays."
+    },
+    "academic": {
+      "title": "Informations académiques",
+      "subtitle": "Aidez-nous à adapter les opportunités à vos études et objectifs.",
+      "universityLabel": "Université *",
+      "universityPlaceholder": "Votre établissement",
+      "degreeLabel": "Niveau de diplôme *",
+      "degreePlaceholder": "Sélectionnez un niveau de diplôme",
+      "courseLabel": "Filière / Spécialité *",
+      "coursePlaceholder": "Sélectionnez une filière / spécialité",
+      "interestsLabel": "Centres d'intérêt *",
+      "interestsPlaceholder": "Sélectionnez vos centres d'intérêt",
+      "careerLabel": "Intérêts professionnels (séparés par des virgules)",
+      "careerPlaceholder": "ex. génie logiciel, milieu universitaire",
+      "requiredTitle": "Champs obligatoires",
+      "requiredMessageFields": "Veuillez entrer votre université et votre filière/spécialité.",
+      "requiredMessageInterest": "Veuillez sélectionner au moins un centre d'intérêt."
+    },
+    "preferences": {
+      "title": "Préférences d'opportunités",
+      "subtitle": "Nous utiliserons ces informations pour personnaliser vos recommandations.",
+      "finish": "Terminer la configuration",
+      "typesLabel": "Types d'opportunités *",
+      "typesPlaceholder": "Sélectionnez les types d'opportunités",
+      "countriesLabel": "Pays préférés (séparés par des virgules) *",
+      "countriesPlaceholder": "ex. Royaume-Uni, Allemagne, Canada",
+      "fundingLabel": "Préférence de financement *",
+      "incompleteTitle": "Complétez les étapes précédentes",
+      "incompleteBasic": "Veuillez d'abord remplir vos informations de base.",
+      "incompleteAcademic": "Veuillez d'abord remplir vos informations académiques.",
+      "gotoStep1": "Aller à l'étape 1",
+      "gotoStep2": "Aller à l'étape 2",
+      "requiredTitle": "Champs obligatoires",
+      "requiredTypes": "Veuillez sélectionner au moins un type d'opportunité.",
+      "requiredCountries": "Ajoutez au moins un pays préféré (séparés par des virgules)."
+    },
+    "funding": {
+      "trigger": "Sélectionnez le type de financement",
+      "sheetTitle": "Préférence de financement",
+      "searchPlaceholder": "Rechercher...",
+      "noResults": "Aucun résultat pour « {{query}} »"
+    },
+    "progress": {
+      "stepOf": "Étape {{current}} sur {{total}}",
+      "steps": {
+        "basic": "Infos de base",
+        "academic": "Académique",
+        "preferences": "Préférences"
+      }
+    }
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "error": "Échec du chargement du tableau de bord",
+    "sections": {
+      "recommendedFull": "Recommandé pour vous",
+      "recommendedShort": "Pour vous",
+      "recent": "Récemment ajouté",
+      "closing": "Clôture bientôt"
+    },
+    "greeting": {
+      "morning": "Bonjour, {{name}}.",
+      "afternoon": "Bon après-midi, {{name}}.",
+      "evening": "Bonsoir, {{name}}.",
+      "night": "Bonne nuit, {{name}}."
+    },
+    "hero": {
+      "eyebrow": "VOTRE TABLEAU DE BORD",
+      "subheadline": "Voici ce qui bouge aujourd'hui...",
+      "stats": {
+        "opportunities": "Opportunités disponibles",
+        "mentees": "Mentorés connectés",
+        "mentors": "Mentors connectés",
+        "applications": "Candidatures soumises"
+      }
+    }
+  },
+  "auth": {
+    "common": {
+      "or": "ou",
+      "back": "Retour",
+      "backArrow": "← Retour",
+      "continue": "Continuer",
+      "continueWithGoogle": "Continuer avec Google",
+      "continueWithApple": "Continuer avec Apple",
+      "forgotPassword": "Mot de passe oublié ?",
+      "supportPrefix": "Des difficultés ? Contactez"
+    },
+    "fields": {
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "vous@universite.edu",
+      "password": "Mot de passe",
+      "passwordPlaceholder": "Au moins 8 caractères",
+      "showPassword": "Afficher le mot de passe",
+      "hidePassword": "Masquer le mot de passe"
+    },
+    "welcome": {
+      "signInTab": "Se connecter",
+      "createAccountTab": "Créer un compte",
+      "heroTitle": "Trouvez votre prochaine\nopportunité",
+      "heroTagline": "Adaptées à vos centres d'intérêt et ambitions, partout dans le monde.",
+      "signInTitle": "Connectez-vous pour explorer",
+      "signUpTitle": "Créez votre compte",
+      "signInSubtitle": "Enregistrez des offres, recevez des recommandations personnalisées et ne manquez jamais une échéance.",
+      "signUpSubtitle": "Rejoignez des milliers d'étudiants africains qui trouvent des bourses et des opportunités.",
+      "fullNameLabel": "Nom complet",
+      "fullNamePlaceholder": "Votre nom complet",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Ressaisissez votre mot de passe",
+      "resetSent": "Lien de réinitialisation envoyé à {{email}}. Vérifiez votre boîte de réception.",
+      "createAccount": "Créer un compte",
+      "continueWithEmail": "Continuer avec l'e-mail",
+      "signInHint": "Connectez-vous avec votre e-mail, votre mot de passe et un code à usage unique pour confirmer votre compte.",
+      "signUpHint": "En créant un compte, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
+      "emailCodeHint": "Un code de vérification à usage unique sera envoyé à votre e-mail. Veuillez vérifier votre e-mail pour confirmer votre compte.",
+      "errors": {
+        "emailForForgot": "Entrez votre adresse e-mail ci-dessus, puis appuyez sur « Mot de passe oublié ? ».",
+        "invalidEmail": "Entrez une adresse e-mail valide.",
+        "shortPassword": "Le mot de passe doit comporter au moins 8 caractères.",
+        "noAccount": "Aucun compte trouvé pour cet e-mail. Remplissez vos informations ci-dessous pour en créer un.",
+        "enterName": "Entrez votre nom complet.",
+        "passwordMismatch": "Les mots de passe ne correspondent pas.",
+        "accountExists": "Cet e-mail possède déjà un compte. Veuillez vous connecter."
+      }
+    },
+    "email": {
+      "title": "Se connecter",
+      "subtitle": "Entrez votre e-mail et votre mot de passe. Nous vous enverrons un code à 6 chiffres pour confirmer votre e-mail si nécessaire.",
+      "forgotEmailFirstTitle": "Entrez d'abord votre e-mail",
+      "forgotEmailFirstBody": "Saisissez votre adresse e-mail dans le champ ci-dessus, puis appuyez sur « Mot de passe oublié ? ».",
+      "resetTitle": "Réinitialiser le mot de passe",
+      "resetConfirm": "Envoyer un lien de réinitialisation à {{email}} ?",
+      "sendLink": "Envoyer le lien",
+      "resetSentTitle": "Vérifiez votre boîte de réception",
+      "resetSentBody": "Un lien de réinitialisation du mot de passe a été envoyé à {{email}}.",
+      "invalidEmailTitle": "E-mail invalide",
+      "invalidEmailBody": "Entrez une adresse e-mail valide.",
+      "shortPasswordTitle": "Mot de passe trop court",
+      "shortPasswordBody": "Utilisez au moins 8 caractères."
+    },
+    "verify": {
+      "title": "Confirmez votre e-mail",
+      "subtitle": "Entrez le code à 6 chiffres envoyé à {{email}}",
+      "bannerTitle": "Vérifiez votre e-mail",
+      "bannerSub": "Votre code de vérification a été envoyé",
+      "expires": "Expire dans 10 minutes.",
+      "signingIn": "Connexion en cours…",
+      "verify": "Vérifier et continuer",
+      "resendPrefix": "Renvoyer le code dans",
+      "resend": "Renvoyer le code",
+      "enterCodeTitle": "Entrez le code",
+      "enterCodeBody": "Veuillez entrer le code à 6 chiffres reçu par e-mail.",
+      "codeSentTitle": "Code envoyé",
+      "codeSentBody": "Un nouveau code a été envoyé à votre e-mail."
+    },
+    "reset": {
+      "successTitle": "Mot de passe mis à jour",
+      "successBody": "Votre mot de passe a été modifié. Connectez-vous avec votre nouveau mot de passe.",
+      "signIn": "Se connecter",
+      "expiredTitle": "Lien expiré",
+      "expiredBody": "Ce lien de réinitialisation du mot de passe a expiré ou a déjà été utilisé. Demandez-en un nouveau depuis l'écran de connexion.",
+      "backToSignIn": "Retour à la connexion",
+      "loadingTitle": "Réinitialiser le mot de passe",
+      "verifying": "Vérification de votre lien de réinitialisation…",
+      "formTitle": "Définir un nouveau mot de passe",
+      "formSubtitle": "Choisissez un mot de passe robuste d'au moins 8 caractères.",
+      "newPasswordLabel": "Nouveau mot de passe",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "confirmPasswordPlaceholder": "Répétez votre nouveau mot de passe",
+      "mismatchTitle": "Les mots de passe ne correspondent pas",
+      "mismatchBody": "Veuillez vérifier que les deux mots de passe sont identiques.",
+      "updatePassword": "Mettre à jour le mot de passe"
+    },
+    "splash": {
+      "loading": "Chargement de votre session…",
+      "redirecting": "Redirection…"
+    }
+  },
+  "opportunities": {
+    "common": {
+      "daysLeft": "{{days}}j restants"
+    },
+    "saved": {
+      "unsave": "Retirer",
+      "removing": "Suppression…",
+      "loadError": "Échec du chargement des éléments enregistrés",
+      "count_one": "{{count}} opportunité enregistrée",
+      "count_other": "{{count}} opportunités enregistrées",
+      "empty": {
+        "title": "Rien d'enregistré pour l'instant",
+        "description": "Enregistrez des opportunités depuis le tableau de bord ou les détails pour les voir ici."
+      }
+    },
+    "card": {
+      "save": "Enregistrer",
+      "unsave": "Retirer",
+      "share": "Partager"
+    },
+    "section": {
+      "viewAll": "Toutes les opportunités →",
+      "emptyTitle": "Rien ici pour l'instant",
+      "emptyDescription": "Revenez bientôt pour de nouvelles offres."
+    },
+    "search": {
+      "placeholder": "Rechercher",
+      "filters": "Filtres",
+      "failed": "Échec de la recherche",
+      "resultCount_one": "{{count}} résultat",
+      "resultCount_other": "{{count}} résultats",
+      "emptyTitle": "Aucune correspondance",
+      "emptyDescription": "Essayez une autre recherche ou ajustez vos filtres."
+    },
+    "filtersPanel": {
+      "title": "Filtres",
+      "clearAll": "Tout effacer",
+      "showResults": "Afficher les résultats",
+      "country": "Pays",
+      "category": "Catégorie",
+      "fundingType": "Type de financement",
+      "degreeLevel": "Niveau de diplôme",
+      "locationType": "À distance / sur place",
+      "deadline": "Échéance"
+    },
+    "dropdown": {
+      "all": "Tous",
+      "selected": "{{count}} sélectionné(s)"
+    },
+    "detail": {
+      "header": "Détails de l'opportunité",
+      "notFound": "Opportunité introuvable ou expirée.",
+      "goBack": "Retour",
+      "about": "À propos de cette opportunité",
+      "noDescription": "Aucune description fournie pour cette opportunité.",
+      "applyNow": "Postuler maintenant",
+      "save": "Enregistrer",
+      "saved": "✓ Enregistré",
+      "markApplied": "Marquer comme postulé",
+      "applied": "Postulé ✓",
+      "youMightAlsoLike": "Vous pourriez aussi aimer",
+      "deadlinePassed": "Échéance dépassée",
+      "shareVia": "Partager l'opportunité via",
+      "shareWhatsapp": "Partager sur WhatsApp",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "shareFacebook": "Partager sur Facebook",
+      "ogDescriptionDefault": "Découvrez des bourses, stages et programmes de mentorat sur Voila.",
+      "promos": {
+        "cvBadge": "GRATUIT",
+        "cvTitle": "Créateur de CV gratuit",
+        "cvBody": "Créez un CV professionnel et soigné en quelques minutes — conçu pour les étudiants africains.",
+        "cvCta": "Créer votre CV",
+        "mentorTitle": "Mentorat par des experts",
+        "mentorBody": "Réservez des séances avec des mentors qui connaissent votre domaine et vos objectifs de carrière.",
+        "mentorCta": "Trouver un mentor",
+        "whatsappTitle": "Rejoignez notre canal WhatsApp",
+        "whatsappBody": "Mises à jour quotidiennes sur les nouvelles bourses et stages — directement sur votre téléphone.",
+        "whatsappCta": "Rejoindre le canal"
+      }
+    },
+    "share": {
+      "title": "Partager l'opportunité",
+      "close": "Fermer",
+      "failedTitle": "Échec du partage",
+      "failedBody": "Impossible d'ouvrir la fenêtre de partage.",
+      "deadlineLabel": "DATE LIMITE DE CANDIDATURE",
+      "aboutLabel": "À PROPOS DE CETTE OPPORTUNITÉ",
+      "closesToday": "Clôture aujourd'hui",
+      "viewAt": "Voir l'opportunité complète sur",
+      "sharedViaPrefix": "Partagé via",
+      "sharedViaSuffix": "· Découvrez des opportunités faites pour vous",
+      "opening": "Ouverture du partage…",
+      "shareButton": "Partager l'opportunité",
+      "location": {
+        "remote": "À distance",
+        "onsite": "Sur place",
+        "hybrid": "Hybride"
+      }
+    },
+    "tracker": {
+      "searchPlaceholder": "Rechercher un titre ou une entreprise…",
+      "export": "Exporter .xlsx",
+      "cardCount_one": "{{count}} carte",
+      "cardCount_other": "{{count}} cartes",
+      "filteredSuffix": " (filtré)",
+      "nothingToExportTitle": "Rien à exporter",
+      "nothingToExportBody": "Ajoutez d'abord des éléments à votre suivi.",
+      "exportFailedTitle": "Échec de l'exportation",
+      "exportFailedBody": "Impossible de créer le fichier.",
+      "loadFailed": "Échec du chargement de votre suivi",
+      "apply": "Postuler",
+      "notesPlaceholder": "Ajoutez une courte note…",
+      "moveTo": "Déplacer vers {{stage}}",
+      "applyAccessibility": "Postuler pour cette opportunité",
+      "noApplyLinkTitle": "Aucun lien de candidature",
+      "noApplyLinkBody": "Cette opportunité n'a pas encore d'URL de candidature.",
+      "invalidLinkTitle": "Lien invalide",
+      "invalidLinkBody": "Impossible d'ouvrir l'URL de candidature.",
+      "empty": {
+        "saved": "Enregistrez des opportunités depuis le tableau de bord pour commencer à les suivre ici.",
+        "applied": "Glissez les cartes ici lorsque vous avez soumis une candidature.",
+        "interview": "Suivez les opportunités qui vous ont invité(e) à un entretien.",
+        "offer": "Célébrez vos offres ici — vous l'avez mérité !",
+        "closed": "Archivez ici les opportunités refusées ou expirées."
+      },
+      "filters": {
+        "title": "Filtres",
+        "clearAll": "Tout effacer",
+        "showResults": "Afficher les résultats",
+        "stage": "Étape",
+        "categoryTag": "Catégorie / tag",
+        "deadline": "Échéance",
+        "dateSaved": "Date d'enregistrement",
+        "dates": {
+          "any": "N'importe quand",
+          "d7": "7 derniers jours",
+          "d30": "30 derniers jours",
+          "d90": "90 derniers jours"
+        }
+      }
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "unread_one": "{{count}} non lue",
+    "unread_other": "{{count}} non lues",
+    "markAllRead": "Tout marquer comme lu",
+    "loadError": "Impossible de charger les notifications.",
+    "groups": {
+      "today": "Aujourd'hui",
+      "yesterday": "Hier",
+      "week": "Cette semaine",
+      "earlier": "Plus tôt"
+    },
+    "empty": {
+      "title": "Tout est à jour",
+      "subtitle": "Lorsque vous recevrez des correspondances, des messages ou des rappels d'échéance, ils apparaîtront ici."
+    },
+    "permissionBanner": {
+      "title": "Les notifications push sont désactivées",
+      "subtitle": "Activez les notifications dans les paramètres de votre appareil pour recevoir des alertes sur cet appareil."
+    },
+    "actions": {
+      "read": "Lu",
+      "delete": "Supprimer"
+    },
+    "headerButton": {
+      "label": "Notifications",
+      "labelUnread_one": "Notifications, {{count}} non lue",
+      "labelUnread_other": "Notifications, {{count}} non lues"
+    }
+  },
+  "navigation": {
+    "tabs": {
+      "home": "Accueil",
+      "dashboard": "Tableau de bord",
+      "saved": "Enregistrés",
+      "tracker": "Suivi",
+      "browse": "Parcourir",
+      "mentorship": "Mentorat",
+      "cvBuilder": "Créateur de CV",
+      "notifications": "Notifications",
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "more": "Plus",
+      "admin": "Admin",
+      "superAdmin": "Super admin"
+    },
+    "headerTitles": {
+      "tracker": "Mon suivi",
+      "browse": "Parcourir par catégorie",
+      "category": "Catégorie",
+      "opportunity": "Opportunité"
+    },
+    "sections": {
+      "main": "Principal",
+      "careerTools": "Outils de carrière",
+      "account": "Compte",
+      "administration": "Administration"
+    },
+    "sidebar": {
+      "expand": "Développer la barre latérale",
+      "collapse": "Réduire la barre latérale",
+      "scrollUp": "Défiler vers le haut",
+      "scrollDown": "Défiler vers le bas",
+      "openMenu": "Ouvrir le menu"
+    },
+    "footer": {
+      "about": "À propos",
+      "becomeMentor": "Devenir mentor",
+      "becomeOpportunityAdmin": "Devenir administrateur d'opportunités",
+      "reportIssue": "Signaler un problème"
+    },
+    "whatsapp": {
+      "community": "Rejoignez notre communauté WhatsApp",
+      "join": "Rejoindre",
+      "dismiss": "Ignorer"
+    },
+    "search": "Rechercher des opportunités",
+    "rootTitles": {
+      "signingIn": "Connexion en cours",
+      "payment": "Paiement"
+    }
+  },
+  "menu": {
+    "accountMenu": "Menu du compte",
+    "items": {
+      "profile": "Profil",
+      "settings": "Paramètres",
+      "referFriend": "Parrainer un ami",
+      "helpSupport": "Aide et assistance",
+      "logout": "Se déconnecter",
+      "loggingOut": "Déconnexion…"
+    },
+    "logoutConfirm": {
+      "title": "Se déconnecter",
+      "message": "Voulez-vous vraiment vous déconnecter ?"
+    },
+    "logoutFailed": "Échec de la déconnexion",
+    "pagination": {
+      "previous": "Précédent",
+      "next": "Suivant"
+    },
+    "refer": {
+      "heroTitle": "Invitez vos amis",
+      "heroSubtitle": "Partagez des opportunités avec vos amis et aidez-les à découvrir quelque chose de précieux.",
+      "messageLabel": "Message d'invitation",
+      "shareButton": "Partager l'invitation",
+      "shareHelper": "Partagez via WhatsApp, Messages, E-mail et plus encore.",
+      "shareErrorTitle": "Impossible de partager",
+      "shareErrorMessage": "Veuillez réessayer."
+    },
+    "browse": {
+      "focusArea": "Trouvez des opportunités par domaine",
+      "allActive": "Toutes les opportunités actives"
+    },
+    "category": {
+      "count_one": "{{count}} opportunité",
+      "count_other": "{{count}} opportunités",
+      "pageOf": "Page {{page}} sur {{total}}",
+      "empty": {
+        "title": "Aucune opportunité",
+        "description": "Rien d'actif dans {{category}} pour le moment. Revenez plus tard."
+      }
+    }
+  },
+  "profile": {
+    "avatar": {
+      "changePhoto": "Changer la photo de profil",
+      "tapToChange": "Appuyez pour changer la photo",
+      "permissionTitle": "Autorisation requise",
+      "permissionMessage": "Autorisez l'accès à la photothèque pour téléverser une photo de profil.",
+      "uploadFailed": "Échec du téléversement",
+      "uploadError": "Impossible d'enregistrer votre photo. Réessayez."
+    }
+  },
+  "help": {
+    "title": "Aide et assistance",
+    "backTitle": "Aide",
+    "index": {
+      "intro": "Comment pouvons-nous vous aider ? Choisissez une option ci-dessous.",
+      "reportBug": {
+        "label": "Signaler un bug",
+        "subtitle": "Vous avez trouvé quelque chose de cassé ? Faites-le nous savoir."
+      },
+      "featureRequest": {
+        "label": "Demande de fonctionnalité",
+        "subtitle": "Suggérez une amélioration ou une nouvelle fonctionnalité."
+      },
+      "feedback": {
+        "label": "Laisser un avis",
+        "subtitle": "Évaluez votre expérience et partagez vos impressions."
+      },
+      "contact": {
+        "label": "Contacter l'assistance",
+        "subtitle": "Écrivez-nous à {{email}}"
+      }
+    },
+    "titles": {
+      "reportBug": "Signaler un bug",
+      "featureRequest": "Demande de fonctionnalité",
+      "feedback": "Laisser un avis"
+    },
+    "common": {
+      "title": "Titre",
+      "description": "Description",
+      "optional": "(facultatif)",
+      "titleRequired": "Titre requis",
+      "descriptionRequired": "Description requise"
+    },
+    "bug": {
+      "titlePlaceholder": "ex. L'appli plante à la connexion",
+      "titleRequiredMessage": "Veuillez entrer un titre court pour le bug.",
+      "descriptionPlaceholder": "Décrivez ce qui s'est passé et les étapes pour le reproduire…",
+      "descriptionRequiredMessage": "Veuillez décrire ce qui n'a pas fonctionné.",
+      "screenshot": "Capture d'écran",
+      "attachScreenshot": "Joindre une capture d'écran",
+      "permissionTitle": "Autorisation requise",
+      "permissionMessage": "Autorisez l'accès aux photos pour joindre une capture d'écran.",
+      "submit": "Envoyer le signalement"
+    },
+    "feature": {
+      "intro": "Vous avez une idée pour améliorer Voila ? Nous aimerions l'entendre.",
+      "titlePlaceholder": "ex. Prise en charge du mode sombre",
+      "titleRequiredMessage": "Veuillez entrer un titre court pour votre demande.",
+      "descriptionPlaceholder": "Décrivez la fonctionnalité et pourquoi elle serait utile…",
+      "descriptionRequiredMessage": "Veuillez décrire la fonctionnalité que vous avez en tête.",
+      "submit": "Envoyer la demande"
+    },
+    "feedbackForm": {
+      "intro": "Vos retours nous aident à créer une meilleure expérience pour chaque étudiant.",
+      "ratingQuestion": "Comment évalueriez-vous votre expérience ?",
+      "ratingRequired": "Note requise",
+      "ratingRequiredMessage": "Veuillez sélectionner une note en étoiles avant d'envoyer.",
+      "starA11y_one": "{{count}} étoile",
+      "starA11y_other": "{{count}} étoiles",
+      "comment": "Commentaire",
+      "commentPlaceholder": "Dites-nous ce que vous avez aimé ou ce qui pourrait être amélioré…",
+      "submit": "Envoyer l'avis",
+      "stars": {
+        "1": "Mauvais",
+        "2": "Passable",
+        "3": "Bon",
+        "4": "Très bon",
+        "5": "Excellent"
+      }
+    },
+    "submit": {
+      "bugSuccessTitle": "Signalé",
+      "bugSuccessMessage": "Merci pour votre signalement ! Nous allons l'examiner.",
+      "featureSuccessTitle": "Envoyé",
+      "featureSuccessMessage": "Merci pour la suggestion ! Nous adorons avoir de vos nouvelles.",
+      "feedbackSuccessTitle": "Merci !",
+      "feedbackSuccessMessage": "Votre avis compte beaucoup pour nous.",
+      "errorTitle": "Envoi impossible"
+    },
+    "contactHint": {
+      "prefix": "Des difficultés ? Contactez-nous à ",
+      "suffix": "."
+    }
+  },
+  "mentorship": {
+    "loading": "Chargement du mentorat…",
+    "loadRoleError": "Échec du chargement du rôle",
+    "loadError": "Échec du chargement",
+    "retry": "Réessayer",
+    "sectionFallback": "Mentorat",
+    "drawer": {
+      "open": "Ouvrir les sections de mentorat",
+      "sections": "Sections",
+      "title": "Mentorat"
+    },
+    "nav": {
+      "student": {
+        "dashboard": "Tableau de bord",
+        "coach": "Mon coach",
+        "messages": "Messages",
+        "book": "Réserver une séance",
+        "sessions": "Séances à venir"
+      },
+      "coach": {
+        "dashboard": "Tableau de bord",
+        "messages": "Messages",
+        "availability": "Disponibilités",
+        "sessions": "Séances",
+        "notifications": "Notifications"
+      }
+    },
+    "sections": {
+      "student": {
+        "dashboard": "Tableau de bord",
+        "coach": "Mon coach",
+        "messages": "Messages",
+        "book": "Réserver une séance",
+        "sessions": "Séances à venir"
+      },
+      "coach": {
+        "dashboard": "Mentorés",
+        "messages": "Messages",
+        "availability": "Calendrier et disponibilités",
+        "sessions": "Gestion des séances",
+        "notifications": "Notifications"
+      }
+    },
+    "student": {
+      "coachNameFallback": "Votre coach",
+      "selectCoachTitle": "Sélectionner un coach",
+      "selectCoachMessage": "Veuillez choisir un coach dans la liste avant de continuer.",
+      "leaveConfirmTitle": "Quitter le mentorat",
+      "leaveConfirmMessage": "Vous pourrez demander un nouveau coach après avoir quitté. Cette action est irréversible.",
+      "cancelSessionTitle": "Annuler la séance",
+      "cancelSessionMessage": "Annuler cette séance ?",
+      "cancelErrorTitle": "Annulation impossible",
+      "requestCoach": "Demander un coach",
+      "leaveHint": "Mettez fin à votre mentorat actuel. Vous pourrez demander un nouveau coach plus tard.",
+      "leave": "Quitter le mentorat",
+      "emptyTitle": "Aucun mentorat actif",
+      "emptyDescription": "Demandez un coach pour commencer.",
+      "chooseToViewProfile": "Choisissez un coach pour voir son profil.",
+      "chooseToMessage": "Choisissez un coach pour commencer à échanger des messages.",
+      "chatEmptyHint": "Envoyez un message à votre coach au sujet de vos objectifs, séances ou retours.",
+      "chooseToBook": "Choisissez un coach pour réserver des séances.",
+      "upcomingSessions": "Séances à venir",
+      "noSessions": "Aucune séance pour l'instant.",
+      "browseFilters": {
+        "all": "Tous",
+        "technology": "Technologie",
+        "business": "Affaires",
+        "career": "Carrière",
+        "scholarships": "Bourses",
+        "research": "Recherche",
+        "entrepreneurship": "Entrepreneuriat"
+      },
+      "waitingList": {
+        "badge": "Liste d'attente",
+        "position": "Position dans la file n° {{position}}",
+        "queueInfo_one": "{{count}} étudiant dans la file · inscrit le {{date}}",
+        "queueInfo_other": "{{count}} étudiants dans la file · inscrit le {{date}}",
+        "leave": "Quitter la liste d'attente"
+      },
+      "coachSummary": {
+        "loading": "Chargement des détails du coach…",
+        "coachLabel": "Votre coach",
+        "interests": "Centres d'intérêt et domaines",
+        "viewProfile": "Voir le profil complet →"
+      },
+      "chooser": {
+        "loadError": "Impossible de charger les coachs.",
+        "noCoachesTitle": "Aucun coach disponible pour le moment",
+        "noCoachesPlatform": "Il n'y a pas encore de coachs sur la plateforme. Rejoignez la liste d'attente et nous vous informerons dès qu'un coach sera disponible.",
+        "noCoachesFull": "Tous les coachs sont actuellement complets. Rejoignez la liste d'attente pour être informé dès qu'une place se libère.",
+        "joinWaitingList": "Rejoindre la liste d'attente",
+        "searchPlaceholder": "Rechercher par nom ou expertise…",
+        "recommended": "Recommandé pour vous",
+        "allCoaches": "Tous les coachs",
+        "emptySearch": "Aucun coach ne correspond à votre recherche. Essayez un autre mot-clé ou filtre.",
+        "emptyList": "Aucun coach à afficher.",
+        "goBack": "Retour",
+        "coachProfile": "Profil du coach",
+        "noBio": "Ce coach n'a pas encore ajouté de biographie.",
+        "chooseCoach": "Choisir ce coach",
+        "atCapacity": "Ce coach est actuellement complet"
+      },
+      "browseCard": {
+        "nameFallback": "Coach",
+        "notAccepting": "N'accepte pas d'étudiants",
+        "full": "Actuellement complet",
+        "available": "Disponible"
+      },
+      "sessionsTable": {
+        "colCoach": "Détails du coach",
+        "colType": "Type de séance",
+        "colDateTime": "Date et heure",
+        "colNotes": "Mes notes",
+        "colStatus": "Statut",
+        "colActions": "Actions",
+        "empty": "Aucune séance à venir planifiée.",
+        "sessionTitleFallback": "Séance de mentorat",
+        "noteTitle": "Ma note",
+        "noNote": "Aucune note",
+        "noMeetingTitle": "Aucun lien de réunion pour l'instant",
+        "noMeetingMessage": "Votre coach partagera bientôt un lien de réunion.",
+        "join": "Rejoindre maintenant",
+        "cancel": "Annuler",
+        "statusPending": "En attente",
+        "statusConfirmed": "Confirmée"
+      },
+      "booking": {
+        "noAvailability": "Votre coach n'a pas encore défini de disponibilités. Envoyez-lui un message pour convenir d'un horaire.",
+        "sessionRequestedTitle": "Séance demandée",
+        "bookingFailedTitle": "Échec de la réservation",
+        "tryAgain": "Réessayez.",
+        "panelHint": "Appuyez sur un créneau pour demander votre prochaine séance (le coach confirme).",
+        "panelConfirmMessage": "Votre coach confirmera la réservation.",
+        "gridHint": "Appuyez sur un créneau disponible. Ajoutez une courte note pour que votre coach sache de quoi vous voulez parler.",
+        "emptySlots": "Aucun créneau à venir dans les 4 prochaines semaines.",
+        "booked": "Réservé",
+        "available": "Disponible",
+        "localTime": "{{timezone}} · heure locale",
+        "bookSession": "Réserver une séance",
+        "gridConfirmMessage": "Votre coach verra votre note et confirmera la réservation.",
+        "addNoteTitle": "Ajouter une note",
+        "addNoteMessage": "Veuillez écrire au moins une brève raison pour cette séance (8 caractères ou plus).",
+        "whyBooking": "Pourquoi réservez-vous ? (obligatoire)",
+        "notesPlaceholder": "ex. Revoir mon CV et discuter des candidatures de stage…",
+        "cancel": "Annuler",
+        "requestSession": "Demander une séance"
+      },
+      "coachProfileCard": {
+        "endsOn": "Le mentorat se termine le {{date}}"
+      }
+    },
+    "coach": {
+      "confirmSessionTitle": "Confirmer la séance",
+      "confirmSessionMessage": "Voulez-vous vraiment confirmer cette séance ? Le lien Jitsi sera prêt à être rejoint.",
+      "sessionConfirmedTitle": "Séance confirmée",
+      "sessionConfirmedMessage": "La séance est confirmée. Le lien Jitsi est prêt à être rejoint.",
+      "errorTitle": "Erreur",
+      "confirmSessionError": "Impossible de confirmer la séance.",
+      "cancelSessionTitle": "Annuler la séance",
+      "cancelSessionMessage": "Annuler cette séance ? L'étudiant sera informé et le créneau redeviendra disponible.",
+      "studentFallback": "Étudiant",
+      "menteeFallback": "Mentoré",
+      "upcoming": "À venir",
+      "completed": "Terminées",
+      "toggleCompleted": "Afficher/masquer les séances terminées",
+      "capacity": "{{active}} / {{max}} mentorés actifs",
+      "menteeCard": {
+        "removeTitle": "Retirer l'étudiant",
+        "removeMessage": "Retirer {{name}} de votre liste de mentorat ?",
+        "cancel": "Annuler",
+        "remove": "Retirer",
+        "progress": "{{percent}}% du mentorat de 3 mois · se termine le {{date}}",
+        "removeButton": "Retirer l'étudiant"
+      },
+      "messages": {
+        "none": "Aucun étudiant à qui écrire.",
+        "students": "Étudiants",
+        "noMessages": "Aucun message pour l'instant",
+        "back": "← Tous les étudiants",
+        "emptyHint": "Envoyez un message à cet étudiant au sujet de ses objectifs, séances ou retours."
+      },
+      "menteesTable": {
+        "colProfile": "Profil",
+        "colName": "Nom",
+        "colCourse": "Filière",
+        "colUniversity": "Université",
+        "colEndsOn": "Se termine le",
+        "colActions": "Actions",
+        "empty": "Aucun mentoré actif. Les étudiants de la liste d'attente apparaîtront ici une fois affectés.",
+        "actionsFor": "Actions pour {{name}}",
+        "viewProfile": "Voir le profil",
+        "message": "Message",
+        "delete": "Supprimer",
+        "deleting": "Suppression…",
+        "removeTitle": "Retirer l'étudiant",
+        "removeMessage": "Voulez-vous vraiment retirer {{name}} du mentorat ?",
+        "removeFallbackName": "cet étudiant",
+        "studentProfile": "Profil de l'étudiant",
+        "close": "Fermer"
+      },
+      "sessionsTable": {
+        "colMentee": "Détails du mentoré",
+        "colType": "Type de séance",
+        "colDateTime": "Date et heure",
+        "colNotes": "Notes courtes",
+        "colStatus": "Statut",
+        "colActions": "Actions",
+        "empty": "Aucune séance dans cette catégorie.",
+        "sessionTitleFallback": "Séance de mentorat",
+        "noMeetingTitle": "Aucun lien de réunion pour l'instant",
+        "noMeetingMessage": "Ajoutez ou modifiez un lien de réunion avant de rejoindre.",
+        "noteTitle": "Note de séance",
+        "noNote": "Aucune note",
+        "join": "Rejoindre la réunion",
+        "editLink": "Modifier le lien",
+        "confirm": "Confirmer la séance",
+        "cancel": "Annuler la séance",
+        "viewDetails": "Voir les détails",
+        "statusCompleted": "Terminée",
+        "statusConfirmed": "Confirmée"
+      },
+      "availability": {
+        "invalidTimesTitle": "Horaires invalides",
+        "invalidTimesMessage": "L'heure de fin doit être après l'heure de début.",
+        "hint": "Créneaux hebdomadaires récurrents que les étudiants peuvent réserver.",
+        "add": "+ Ajouter",
+        "empty": "Aucune disponibilité pour l'instant. Ajoutez votre premier créneau hebdomadaire.",
+        "delete": "Supprimer",
+        "addSlot": "Ajouter un créneau hebdomadaire",
+        "dayFallback": "Jour",
+        "to": "à",
+        "timezone": "Fuseau horaire",
+        "cancel": "Annuler",
+        "save": "Enregistrer",
+        "dayOfWeek": "Jour de la semaine",
+        "emptyPublished": "Aucune disponibilité publiée pour l'instant.",
+        "timezoneHint": "Fuseau horaire (ex. UTC)",
+        "addAvailability": "Ajouter une disponibilité"
+      },
+      "notifications": {
+        "newMentees": "Nouveaux mentorés",
+        "studentsAssigned_one": "{{count}} étudiant affecté au cours des 7 derniers jours",
+        "studentsAssigned_other": "{{count}} étudiants affectés au cours des 7 derniers jours",
+        "newMessages": "Nouveaux messages",
+        "conversationsAwaiting_one": "{{count}} conversation en attente de votre réponse",
+        "conversationsAwaiting_other": "{{count}} conversations en attente de votre réponse",
+        "sessionReminders": "Rappels de séance",
+        "sessionsIn24h_one": "{{count}} séance dans les 24 prochaines heures",
+        "sessionsIn24h_other": "{{count}} séances dans les 24 prochaines heures",
+        "allCaughtUp": "Vous êtes à jour."
+      }
+    },
+    "roles": {
+      "mentee": "Mentoré"
+    },
+    "days": {
+      "0": "Dimanche",
+      "1": "Lundi",
+      "2": "Mardi",
+      "3": "Mercredi",
+      "4": "Jeudi",
+      "5": "Vendredi",
+      "6": "Samedi"
+    },
+    "chat": {
+      "them": "Eux",
+      "someone": "Quelqu'un",
+      "typing": "{{name}} est en train d'écrire…",
+      "emptyHintDefault": "Envoyez un message pour démarrer la conversation.",
+      "documentFallback": "Document",
+      "messageFailedTitle": "Échec de l'envoi",
+      "messageFailedBody": "Impossible d'envoyer votre message. Réessayez.",
+      "cannotAttachTitle": "Impossible de joindre",
+      "cannotAttachBody": "Aucune conversation de mentorat active.",
+      "conversation": "Conversation de mentorat",
+      "noMessages": "Aucun message pour l'instant",
+      "attach": "Joindre une photo ou un fichier",
+      "messagePlaceholder": "Message…",
+      "send": "Envoyer le message",
+      "attachSheet": {
+        "title": "Joindre",
+        "sizeHint": "Photos jusqu'à {{image}}, fichiers jusqu'à {{file}}",
+        "library": "Photothèque",
+        "camera": "Prendre une photo",
+        "document": "Document (PDF, Excel, Word…)",
+        "cancel": "Annuler"
+      }
+    },
+    "session": {
+      "coachPrefix": "Coach : {{name}}",
+      "note": "Note de séance",
+      "titleFallback": "Séance de mentorat",
+      "linkAdded": "Lien de réunion ajouté",
+      "statusPending": "en attente",
+      "join": "Rejoindre maintenant",
+      "awaitingLink": "En attente que le coach confirme et partage le lien de la séance",
+      "confirm": "Confirmer",
+      "editLink": "Modifier le lien",
+      "addLink": "Ajouter un lien de réunion",
+      "cancelTitle": "Annuler la séance",
+      "cancelMessage": "Annuler cette séance ?",
+      "cancelMessageCoach": "Annuler cette séance ? L'étudiant sera informé.",
+      "no": "Non",
+      "yes": "Oui",
+      "cancel": "Annuler",
+      "invalidLinkTitle": "Lien invalide",
+      "invalidLinkMessage": "Entrez une URL Zoom ou de réunion valide (https://…).",
+      "linkSavedTitle": "Lien enregistré",
+      "linkSavedMessage": "Votre mentoré pourra rejoindre dès le début de la séance.",
+      "errorTitle": "Erreur",
+      "saveLinkError": "Impossible d'enregistrer le lien.",
+      "meetingLinkTitle": "Lien de réunion",
+      "meetingLinkHint": "Partagez ceci avec votre mentoré avant le début de la séance.",
+      "saveLink": "Enregistrer le lien",
+      "joinSession": "Rejoindre la séance",
+      "reschedule": "Reprogrammer",
+      "cancelBlocked": "Cette séance ne peut pas être annulée."
+    },
+    "calendar": {
+      "cancelTitle": "Annuler la séance ?",
+      "keepIt": "La garder",
+      "cancelSession": "Annuler la séance",
+      "alreadyBookedTitle": "Séance déjà réservée",
+      "alreadyBookedMessage": "Vous avez déjà une séance active. Annulez-la avant d'en réserver une nouvelle.",
+      "notesRequiredTitle": "Notes requises",
+      "notesRequiredMessage": "Veuillez ajouter une courte note pour votre coach avant de confirmer.",
+      "sessionRequestedTitle": "Séance demandée",
+      "sessionRequestedMessage": "Votre coach a été informé.",
+      "bookingFailedTitle": "Échec de la réservation",
+      "tryAgain": "Réessayez.",
+      "noSlots": "Votre coach n'a pas encore ouvert de créneaux. Envoyez-lui un message pour convenir d'un horaire.",
+      "studentHint": "Appuyez sur un créneau vert pour réserver. Les créneaux bleus sont déjà pris. Vous ne pouvez réserver qu'une seule séance à la fois.",
+      "available": "Disponible",
+      "booked": "Réservé",
+      "completed": "Terminée",
+      "bookTitle": "Réserver une séance ?",
+      "bookConfirm": "Réserver une séance avec {{name}} le {{label}} ?",
+      "shortNotes": "Notes courtes",
+      "notesPlaceholder": "Sur quoi souhaitez-vous travailler pendant cette séance ?",
+      "cancel": "Annuler",
+      "confirm": "Confirmer",
+      "week": "Semaine",
+      "day": "Jour",
+      "coachHint": "Appuyez sur les cellules vides pour ajouter une disponibilité, ou sur un créneau vert pour le retirer",
+      "availabilityErrorTitle": "Disponibilité",
+      "bookedSessionTitle": "Séance réservée",
+      "bookedSessionMessage": "Les séances confirmées ou en attente ne peuvent pas être modifiées dans le calendrier.",
+      "upcomingHeading": "Séances à venir",
+      "noUpcoming": "Aucune séance à venir.",
+      "participantFallback": "Participant",
+      "statusPending": "En attente",
+      "confirmSession": "Confirmer la séance",
+      "join": "Rejoindre maintenant"
+    },
+    "profile": {
+      "nameFallback": "Inconnu",
+      "verifiedMentor": "Mentor vérifié",
+      "country": "Pays",
+      "university": "Université",
+      "major": "Filière / programme",
+      "degreeLevel": "Niveau de diplôme",
+      "academicFocus": "Domaine académique",
+      "careerInterests": "Intérêts professionnels",
+      "interests": "Centres d'intérêt",
+      "skills": "Compétences et domaines",
+      "about": "À propos"
+    },
+    "matched": "Vous êtes associé(e) à un coach jusqu'au {{date}}",
+    "list": {
+      "empty": "Rien ici pour l'instant.",
+      "noData": "Aucune donnée à afficher."
+    },
+    "actions": {
+      "selectCoachError": "Veuillez sélectionner un coach dans la liste avant de continuer.",
+      "coachConnectedTitle": "Coach connecté",
+      "coachConnectedMessage": "Votre mentorat est actif. Vous pouvez envoyer un message à votre coach et réserver des séances depuis le tableau de bord.",
+      "couldNotConnect": "Connexion impossible",
+      "waitingListTitle": "Sur liste d'attente",
+      "waitingListMessage": "Vous êtes n° {{position}} dans la file. Nous vous informerons dès qu'un coach aura de la disponibilité.",
+      "requestFailed": "Échec de la demande",
+      "cancelledTitle": "Annulé",
+      "cancelledMessage": "Votre demande de mentorat a été annulée.",
+      "cancelFailed": "Échec de l'annulation",
+      "leftTitle": "Mentorat quitté",
+      "leftMessage": "Vous pourrez demander un nouveau coach quand vous serez prêt(e).",
+      "couldNotLeave": "Impossible de quitter",
+      "studentRemovedTitle": "Étudiant retiré",
+      "studentRemovedMessage": "Sa place est désormais disponible pour la liste d'attente.",
+      "removeFailed": "Échec du retrait"
+    },
+    "messageErrors": {
+      "notSignedIn": "Non connecté",
+      "uploadFailed": "Échec du téléversement de la pièce jointe",
+      "empty": "Le message ne peut pas être vide."
+    },
+    "availabilityErrors": {
+      "missingMentor": "Mentor manquant"
+    },
+    "attachment": {
+      "permissionTitle": "Autorisation requise",
+      "libraryPermission": "Autorisez l'accès à la photothèque pour partager des images.",
+      "cameraPermission": "Autorisez l'accès à la caméra pour prendre une photo.",
+      "genericError": "Impossible de joindre ce fichier. Réessayez.",
+      "tooLargeTitle": "Fichier trop volumineux",
+      "uploadFailedTitle": "Échec du téléversement",
+      "tooLarge": "Le fichier est trop volumineux. La taille maximale est {{size}}.",
+      "readError": "Impossible de lire le fichier sélectionné."
+    },
+    "calendarEvents": {
+      "cancelled": "Annulée",
+      "completed": "Terminée",
+      "bookedWithPeer": "Réservée · {{peer}}",
+      "booked": "Réservée",
+      "sessionWithPeer": "Séance · {{peer}}",
+      "session": "Séance",
+      "available": "Disponible"
+    }
+  },
+  "admin": {
+    "backTitle": "Retour",
+    "titles": {
+      "home": "Opportunités",
+      "pending": "Révision en attente",
+      "create": "Créer une opportunité",
+      "paste": "Coller des opportunités",
+      "edit": "Modifier l'opportunité",
+      "review": "Réviser l'opportunité",
+      "reviewBackTitle": "En attente"
+    },
+    "dashboard": {
+      "subtitle": "Statistiques en direct",
+      "failedToLoadAnalytics": "Échec du chargement des statistiques",
+      "sections": {
+        "users": "Utilisateurs",
+        "opportunities": "Opportunités",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Total des utilisateurs",
+        "newThisWeek": "Nouveaux cette semaine",
+        "newThisMonth": "Nouveaux ce mois-ci",
+        "onboardingDone": "Intégration terminée",
+        "onboardingPending": "Intégration en attente",
+        "totalPosted": "Total publié",
+        "closingIn7Days": "Clôture dans 7 jours",
+        "totalSaves": "Total des enregistrements",
+        "totalApplied": "Total des candidatures",
+        "totalSent": "Total envoyé",
+        "totalUnread": "Total non lu"
+      },
+      "charts": {
+        "byCategory": "Par catégorie",
+        "byCountry": "Par pays",
+        "byFundingType": "Par type de financement"
+      },
+      "topLists": {
+        "mostSaved": "Top 5 des plus enregistrées",
+        "mostApplied": "Top 5 des plus postulées"
+      },
+      "actions": {
+        "manageOpportunities": "Gérer les opportunités",
+        "createOpportunity": "Créer une opportunité"
+      }
+    },
+    "analytics": {
+      "pageTitle": "Analytique de la plateforme",
+      "subtitle": "Utilisateurs, opportunités, engagement et notifications sur Voila."
+    },
+    "charts": {
+      "noData": "Aucune donnée pour l'instant"
+    },
+    "topList": {
+      "usersCount": "{{count}} utilisateurs"
+    },
+    "opportunityList": {
+      "homeTitle": "Gérer les opportunités",
+      "homeSubtitle": "Ajoutez et maintenez les offres visibles par les étudiants dans l'app.",
+      "pasteJson": "Coller du JSON",
+      "createNew": "Créer",
+      "pendingBanner_one": "{{count}} opportunité extraite en attente de révision",
+      "pendingBanner_other": "{{count}} opportunités extraites en attente de révision",
+      "reviewLink": "Réviser →",
+      "failedToLoad": "Échec du chargement des opportunités",
+      "emptyList": "Aucune opportunité pour l'instant. Créez-en une ou collez du JSON pour commencer.",
+      "deadline": "Échéance : {{date}}",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleteConfirmTitle": "Supprimer l'opportunité",
+      "deleteConfirmMessage": "Supprimer « {{title}} » ? Cette action est irréversible.",
+      "deleteFailedTitle": "Échec de la suppression",
+      "deleteFailedMessage": "Impossible de supprimer cette opportunité."
+    },
+    "pendingQueue": {
+      "heroTitle": "Révision en attente",
+      "heroSubtitle": "Opportunités extraites en attente d'approbation. Appuyez sur une carte pour la réviser et la modifier avant de l'approuver.",
+      "failedToLoad": "Échec du chargement des opportunités en attente",
+      "emptyTitle": "Tout est à jour",
+      "emptyMessage": "Aucune opportunité extraite n'est en attente de révision.",
+      "loadingMore": "Chargement…",
+      "deadline": "Échéance : {{date}}",
+      "deadlineNotSet": "Non définie",
+      "tapToReview": "Appuyez pour réviser et modifier →",
+      "quickApprove": "Approbation rapide",
+      "reject": "Rejeter",
+      "quickApproveConfirmTitle": "Approbation rapide",
+      "quickApproveConfirmMessage": "Rendre « {{title}} » visible aux étudiants sans modification ?",
+      "cancel": "Annuler",
+      "approve": "Approuver",
+      "rejectConfirmTitle": "Rejeter l'opportunité",
+      "rejectConfirmMessage": "Retirer « {{title}} » de la file ? Elle ne sera pas montrée aux étudiants."
+    },
+    "pendingReview": {
+      "saveAndApprove": "Enregistrer et approuver",
+      "reject": "Rejeter",
+      "rejectConfirmTitle": "Rejeter l'opportunité",
+      "rejectConfirmMessage": "Retirer « {{title}} » de la file ? Elle ne sera pas montrée aux étudiants."
+    },
+    "createScreen": {
+      "hint": "Remplissez tous les champs obligatoires, puis appuyez sur Créer. Les étudiants ne voient que les offres avec une échéance future (AAAA-MM-JJ après aujourd'hui).",
+      "submitLabel": "Créer une opportunité"
+    },
+    "editScreen": {
+      "submitLabel": "Enregistrer les modifications"
+    },
+    "pasteScreen": {
+      "title": "Coller des opportunités (JSON)",
+      "hint": "Collez un objet JSON ou un tableau. Obligatoire : <bold>title</bold>, <bold>organization</bold>, <bold>deadline</bold> (AAAA-MM-JJ).\nFacultatif : description, applyUrl, imageUrl, category, country, tags, fundingType, degreeLevels, locationType.\nLes valeurs des menus déroulants sont associées automatiquement — « South Africa », « Undergraduate », « on-site » sont toutes résolues vers la bonne option.",
+      "fieldReference": "Référence des champs",
+      "loadExample": "Charger l'exemple",
+      "importButton": "Importer les opportunités",
+      "couldNotParseTitle": "Analyse impossible",
+      "nothingToImportTitle": "Rien à importer",
+      "nothingToImportMessage": "Ajoutez au moins un objet d'opportunité valide.",
+      "importedSummary": "{{ok}} opportunité(s) importée(s) sur {{total}}.",
+      "importFinishedIssuesTitle": "Importation terminée avec des problèmes",
+      "successTitle": "Succès",
+      "successMessage": "{{count}} opportunités sont maintenant en ligne.",
+      "rowParseError": "Ligne {{row}} : un objet était attendu.",
+      "rowMissingFieldsError": "Ligne {{row}} : le titre, l'organisation et l'échéance sont obligatoires.",
+      "rowCreateFailed": "Ligne {{row}} : {{error}}",
+      "rowCreateFailedFallback": "Échec de la création",
+      "emptyPasteError": "Collez du JSON pour une opportunité ou un tableau d'opportunités.",
+      "invalidJsonError": "JSON invalide. Collez un seul objet ou un tableau d'objets d'opportunité.",
+      "fieldLabels": {
+        "category": "category",
+        "tags": "tags (array)",
+        "fundingType": "fundingType",
+        "degreeLevels": "degreeLevels (array)",
+        "locationType": "locationType",
+        "country": "country"
+      },
+      "fieldNotes": {
+        "fundingType": "Aliases: \"fully funded\", \"partial\", \"self funded\"",
+        "degreeLevels": "Aliases: \"Undergraduate\"→bachelors, \"PhD\"→phd, \"Masters\"→masters",
+        "locationType": "Aliases: \"on-site\"→onsite, \"online\"→remote, \"in-person\"→onsite",
+        "country": "Case-insensitive. Use \"Global\" for worldwide opportunities."
+      },
+      "fieldValues": {
+        "countryOther": "... any country name"
+      }
+    },
+    "form": {
+      "titleLabel": "Titre *",
+      "titlePlaceholder": "Titre de l'opportunité",
+      "organizationLabel": "Organisation *",
+      "organizationPlaceholder": "Nom de l'organisation",
+      "descriptionLabel": "Description",
+      "descriptionPlaceholder": "Description complète",
+      "imageUrlLabel": "URL de l'image",
+      "deadlineLabel": "Échéance * (AAAA-MM-JJ)",
+      "applyUrlLabel": "URL de candidature",
+      "applyUrlPlaceholder": "https://postuler.exemple.com",
+      "classificationSection": "Classification (correspond aux options d'intégration des utilisateurs)",
+      "categoryLabel": "Catégorie *",
+      "categoryPlaceholder": "Sélectionnez le type d'opportunité",
+      "tagsLabel": "Tags d'intérêt *",
+      "tagsPlaceholder": "Sélectionnez au moins un tag d'intérêt",
+      "countryLabel": "Pays *",
+      "countryPlaceholder": "Sélectionnez le pays",
+      "countryGlobalOption": "International",
+      "fundingTypeLabel": "Type de financement *",
+      "degreeLevelLabel": "Niveau d'études *",
+      "degreeLevelPlaceholder": "Sélectionnez les niveaux d'études",
+      "locationTypeLabel": "Type de lieu *",
+      "locationTypePlaceholder": "Sélectionnez le type de lieu",
+      "checkRequiredFieldsTitle": "Vérifiez les champs obligatoires",
+      "genericSubmitError": "Un problème est survenu",
+      "validation": {
+        "requiredFields": "Le titre, l'organisation et l'échéance sont obligatoires.",
+        "category": "Sélectionnez une catégorie d'opportunité.",
+        "country": "Sélectionnez un pays.",
+        "tags": "Sélectionnez au moins un tag d'intérêt (ouvrez Tags d'intérêt, choisissez des options, puis appuyez sur Appliquer).",
+        "degreeLevels": "Sélectionnez au moins un niveau d'études.",
+        "locationType": "Sélectionnez un type de lieu (à distance, sur place ou hybride).",
+        "fundingType": "Sélectionnez un type de financement pour cette offre.",
+        "invalidDeadline": "Échéance invalide — utilisez AAAA-MM-JJ",
+        "deadlineInFuture": "L'échéance doit être dans le futur pour que les étudiants puissent voir cette offre.",
+        "deadlineRequired": "L'échéance est obligatoire",
+        "invalidDeadlineGeneric": "Échéance invalide"
+      }
+    },
+    "table": {
+      "noRecords": "Aucun enregistrement trouvé."
+    },
+    "mutations": {
+      "approvedTitle": "Approuvée",
+      "approvedMessage": "L'opportunité est maintenant en ligne pour les étudiants.",
+      "rejectedTitle": "Rejetée",
+      "rejectedMessage": "L'opportunité a été retirée de la file.",
+      "tryAgain": "Veuillez réessayer.",
+      "couldNotApprove": "Approbation impossible",
+      "couldNotReject": "Rejet impossible",
+      "postedTitle": "Publiée",
+      "postedMessage": "« {{title}} » est en ligne et visible par les étudiants.",
+      "couldNotCreate": "Création impossible",
+      "couldNotCreateFallback": "Impossible de créer cette opportunité.",
+      "opportunityNotSaved": "L'opportunité n'a pas été enregistrée. Veuillez réessayer.",
+      "savedTitle": "Enregistrée",
+      "savedMessage": "Les modifications sont en ligne pour les étudiants.",
+      "couldNotSave": "Enregistrement impossible",
+      "couldNotSaveFallback": "Impossible d'enregistrer les modifications."
+    },
+    "errors": {
+      "missingOpportunityId": "Identifiant d'opportunité manquant",
+      "opportunityNotFound": "Opportunité introuvable"
+    }
+  },
+  "superAdmin": {
+    "titles": {
+      "overview": "Aperçu",
+      "analytics": "Analytique",
+      "admins": "Gérer les admins",
+      "mentors": "Gérer les mentors",
+      "mentees": "Mentorés"
+    },
+    "nav": {
+      "overview": "Aperçu",
+      "analytics": "Analytique",
+      "admins": "Admins",
+      "mentors": "Mentors",
+      "mentees": "Mentorés",
+      "opportunities": "Opportunités"
+    },
+    "overview": {
+      "subtitle": "Aperçu rapide. Ouvrez Analytique pour les graphiques complets, les utilisateurs, l'engagement et les notifications.",
+      "failedToLoad": "Échec du chargement",
+      "sections": {
+        "mentorship": "Mentorat",
+        "platform": "Plateforme"
+      },
+      "stats": {
+        "approvedMentors": "Mentors approuvés",
+        "pendingMentors": "Mentors en attente",
+        "activeMentorships": "Mentorats actifs",
+        "waitingList": "Liste d'attente",
+        "totalUsers": "Total des utilisateurs",
+        "opportunityAdmins": "Admins d'opportunités",
+        "activeOpportunities": "Opportunités actives",
+        "pendingPush": "Push en attente"
+      }
+    },
+    "pagination": {
+      "range": "{{start}}–{{end}} sur {{total}}",
+      "prev": "Préc.",
+      "pageOfTotal": "{{page}} / {{totalPages}}",
+      "next": "Suiv."
+    },
+    "searchFilterBar": {
+      "defaultPlaceholder": "Rechercher…"
+    },
+    "admins": {
+      "pageTitle": "Gérer les admins",
+      "intro": "Les admins d'opportunités peuvent créer et gérer des offres. Les super admins conservent un accès complet à la plateforme.",
+      "addCardLabel": "Ajouter un admin d'opportunités",
+      "emailPlaceholder": "utilisateur-existant@email.com",
+      "add": "Ajouter",
+      "addHint": "L'utilisateur doit déjà être inscrit. La promotion donne accès à l'onglet Admin et aux outils d'opportunités.",
+      "searchPlaceholder": "Rechercher par nom ou e-mail…",
+      "genericError": "Erreur",
+      "emptySearch": "Aucun admin ne correspond à votre recherche.",
+      "columns": {
+        "name": "Nom",
+        "email": "E-mail",
+        "role": "Rôle",
+        "posts": "Publications",
+        "actions": "Actions"
+      },
+      "roleLabels": {
+        "superAdmin": "Super admin",
+        "opportunityAdmin": "Admin d'opportunités"
+      },
+      "remove": "Retirer",
+      "removing": "Retrait…",
+      "removeConfirmTitle": "Retirer l'admin",
+      "removeConfirmMessage": "Révoquer l'accès admin de {{email}} ?",
+      "thisUser": "cet utilisateur",
+      "cancel": "Annuler",
+      "invalidEmailTitle": "E-mail invalide",
+      "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+      "promoteSuccessTitle": "Succès",
+      "promoteSuccessMessage": "L'utilisateur a été promu admin d'opportunités.",
+      "promoteFailedTitle": "Échec de l'ajout de l'admin",
+      "revokeSuccessTitle": "Terminé",
+      "revokeSuccessMessage": "L'accès admin a été révoqué.",
+      "revokeFailedTitle": "Échec du retrait de l'admin"
+    },
+    "mentors": {
+      "pageTitle": "Gérer les mentors",
+      "intro": "Créez des profils de mentor approuvés par e-mail, approuvez les candidatures en attente ou retirez des mentors.",
+      "createCardLabel": "Créer un mentor",
+      "emailPlaceholder": "utilisateur@email.com",
+      "add": "Ajouter",
+      "addHint": "L'utilisateur doit déjà avoir un compte. Il sera immédiatement approuvé comme mentor.",
+      "searchPlaceholder": "Rechercher des mentors…",
+      "genericError": "Erreur",
+      "emptyTitle": "Aucun mentor",
+      "emptyDescription": "Essayez d'ajuster les filtres ou ajoutez un mentor par e-mail.",
+      "columns": {
+        "name": "Nom",
+        "email": "E-mail",
+        "status": "Statut",
+        "mentees": "Mentorés",
+        "actions": "Actions"
+      },
+      "filters": {
+        "all": "Tous"
+      },
+      "approve": "Approuver",
+      "approving": "Approbation…",
+      "delete": "Supprimer",
+      "deleting": "Suppression…",
+      "deleteConfirmTitle": "Supprimer le mentor",
+      "deleteConfirmActiveMessage_one": "Retirer le profil de coach de {{email}} ?\n\nCela mettra fin à {{count}} mentorat actif, annulera les séances à venir et annulera toute demande en attente des étudiants ayant choisi ce coach. Cette action est irréversible.",
+      "deleteConfirmActiveMessage_other": "Retirer le profil de coach de {{email}} ?\n\nCela mettra fin à {{count}} mentorats actifs, annulera les séances à venir et annulera toute demande en attente des étudiants ayant choisi ce coach. Cette action est irréversible.",
+      "deleteConfirmMessage": "Retirer le profil de coach de {{email}} ?\n\nToute demande en attente des étudiants ayant choisi ce coach sera annulée. Cette action est irréversible.",
+      "thisUser": "cet utilisateur",
+      "invalidEmailTitle": "E-mail invalide",
+      "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+      "createSuccessTitle": "Mentor créé",
+      "createSuccessMessage": "Le profil de coach est approuvé et prêt.",
+      "createFailedTitle": "Échec de la création du mentor",
+      "approveSuccessTitle": "Approuvé",
+      "approveSuccessMessage": "Le mentor a été approuvé.",
+      "approveFailedTitle": "Échec de l'approbation du mentor",
+      "deleteSuccessTitle": "Supprimé",
+      "deleteSuccessMessage": "Le profil du mentor a été retiré.",
+      "deleteFailedTitle": "Échec de la suppression du mentor"
+    },
+    "mentees": {
+      "searchPlaceholder": "Rechercher des mentorés…",
+      "genericError": "Erreur",
+      "emptyTitle": "Aucun mentoré actif",
+      "emptyDescription": "Aucun mentorat ne correspond à votre recherche.",
+      "studentFallback": "Étudiant",
+      "coachLabel": "Coach : {{name}}"
+    },
+    "opportunities": {
+      "homeSubtitle": "Mêmes outils que les admins d'opportunités : créez des offres manuellement ou collez du JSON en masse.",
+      "createHint": "Créez une offre avec le même formulaire que les admins d'opportunités utilisent."
+    }
+  },
+  "cvBuilder": {
+    "tabs": {
+      "dashboard": "Tableau de bord",
+      "tips": "Astuces",
+      "templates": "Modèles",
+      "preview": "Aperçu",
+      "sections": "Sections"
+    },
+    "sections": {
+      "personal": {
+        "title": "Informations personnelles",
+        "description": "Nom, e-mail, téléphone et localisation"
+      },
+      "summary": {
+        "title": "Résumé professionnel",
+        "description": "Un bref aperçu de votre parcours"
+      },
+      "experience": {
+        "title": "Expérience",
+        "description": "Votre parcours professionnel et vos réalisations",
+        "addLabel": "Ajouter une expérience professionnelle"
+      },
+      "projects": {
+        "title": "Projets",
+        "description": "Projets clés, technologies utilisées et résultats",
+        "addLabel": "Ajouter un projet"
+      },
+      "education": {
+        "title": "Formation",
+        "description": "Établissements, diplômes et parcours académique",
+        "addLabel": "Ajouter une formation"
+      },
+      "skills": {
+        "title": "Compétences",
+        "description": "Compétences techniques et savoir-être",
+        "addLabel": "Ajouter une compétence"
+      },
+      "certifications": {
+        "title": "Certificats",
+        "description": "Licences et qualifications professionnelles",
+        "addLabel": "Ajouter une certification"
+      },
+      "achievements": {
+        "title": "Réalisations",
+        "description": "Récompenses, distinctions et accomplissements notables",
+        "addLabel": "Ajouter une réalisation"
+      },
+      "hobbies": {
+        "title": "Loisirs",
+        "description": "Centres d'intérêt qui ajoutent de la personnalité",
+        "addLabel": "Ajouter un loisir"
+      },
+      "languages": {
+        "title": "Langues",
+        "description": "Langues et niveaux de maîtrise",
+        "addLabel": "Ajouter une langue"
+      },
+      "voluntary": {
+        "title": "Bénévolat",
+        "description": "Engagement communautaire et rôles non rémunérés",
+        "addLabel": "Ajouter un rôle bénévole"
+      },
+      "references": {
+        "title": "Références",
+        "description": "Références professionnelles disponibles sur demande",
+        "addLabel": "Ajouter une référence"
+      }
+    },
+    "status": {
+      "completed": "Terminé",
+      "optional": "Facultatif",
+      "addDetails": "Ajouter des détails",
+      "inProgress": "En cours",
+      "fraction": "{{filled}}/{{total}}"
+    },
+    "progress": {
+      "ready": "Votre CV est prêt à être prévisualisé et téléchargé.",
+      "almostThere": "Presque terminé ! Finalisez les sections restantes.",
+      "greatStart": "Excellent début ! Continuez pour créer le CV parfait.",
+      "begin": "Commencez par vos informations personnelles et votre expérience professionnelle."
+    },
+    "dashboard": {
+      "appTitle": "Créateur de CV",
+      "newButton": "Nouveau",
+      "searchPlaceholder": "Rechercher des CV",
+      "loadingCvs": "Chargement de vos CV…",
+      "failedToLoad": "Échec du chargement de vos CV",
+      "noResults": "Aucun résultat",
+      "documentsCount_one": "{{count}} document",
+      "documentsCount_other": "{{count}} documents",
+      "noMatchesTitle": "Aucune correspondance",
+      "noMatchesDescription": "Rien ne correspond à « {{query}} ». Essayez une autre recherche.",
+      "emptyTitle": "Aucun CV pour l'instant",
+      "emptyDescription": "Appuyez sur « Nouveau » pour créer un CV vierge — comme démarrer un nouveau document.",
+      "signInRequiredTitle": "Connexion requise",
+      "signInRequiredMessage": "Veuillez vous connecter pour créer un CV.",
+      "untitledCv": "CV sans titre {{count}}",
+      "couldNotCreateTitle": "Impossible de créer le CV",
+      "genericError": "Un problème est survenu",
+      "titleRequiredTitle": "Titre requis",
+      "titleRequiredMessage": "Entrez un nom pour votre CV.",
+      "couldNotRenameTitle": "Renommage impossible",
+      "deleteConfirmTitle": "Supprimer le CV",
+      "deleteConfirmMessage": "Supprimer « {{title}} » ? Cette action est irréversible.",
+      "couldNotDeleteTitle": "Suppression impossible",
+      "templateFallback": "CV",
+      "updatedOn": "{{template}} · Mis à jour {{date}}",
+      "optionsLabel": "Options du CV",
+      "menu": {
+        "rename": "Renommer",
+        "edit": "Modifier",
+        "delete": "Supprimer"
+      }
+    },
+    "hub": {
+      "cvNotFound": "CV introuvable",
+      "searchSectionsPlaceholder": "Rechercher des sections",
+      "outline": "Plan",
+      "reorder": "Réorganiser",
+      "noSectionsMatch": "Aucune section ne correspond à votre recherche.",
+      "openPreview": "Ouvrir l'aperçu PDF en direct",
+      "downloadPdf": "Télécharger le PDF",
+      "backToDocuments": "Retour à tous les documents",
+      "previewLabel": "Aperçu",
+      "percentComplete": "{{percent}} % terminé · {{message}}"
+    },
+    "reorderModal": {
+      "title": "Réorganiser les sections",
+      "subtitle": "Déplacez les sections vers le haut ou le bas. Les informations personnelles restent en haut.",
+      "saveOrder": "Enregistrer l'ordre"
+    },
+    "renameModal": {
+      "heading": "Renommer le CV",
+      "placeholder": "Titre du CV",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "saveIndicator": {
+      "idle": "Enregistrement automatique lors du changement de section",
+      "saving": "Enregistrement…",
+      "saved": "Toutes les modifications sont enregistrées",
+      "errorFallback": "Échec de l'enregistrement — changez de section et réessayez"
+    },
+    "editors": {
+      "entryFallback": "Entrée {{index}}",
+      "remove": "Retirer",
+      "removeItem": "Retirer {{item}}",
+      "addAnother": "Ajouter un autre",
+      "addItemDefault": "Ajouter un élément",
+      "typeAndAdd": "Saisissez et ajoutez un élément",
+      "addEntryDefault": "Ajouter une entrée",
+      "personal": {
+        "profileNote": "Le nom, l'e-mail et la localisation vides sont remplis à partir de votre profil lorsque vous ouvrez ce CV.",
+        "fullNameLabel": "Nom complet",
+        "fullNamePlaceholder": "Votre nom complet",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "vous@email.com",
+        "phoneLabel": "Téléphone",
+        "phonePlaceholder": "+33 …",
+        "locationLabel": "Localisation",
+        "locationPlaceholder": "Ville, pays",
+        "linkedInLabel": "LinkedIn",
+        "linkedInPlaceholder": "linkedin.com/in/…",
+        "websiteLabel": "Site web",
+        "websitePlaceholder": "https://…"
+      },
+      "summary": {
+        "label": "Résumé professionnel",
+        "placeholder": "Rédigez votre résumé professionnel ici…"
+      },
+      "experience": {
+        "entryFallback": "Entrée {{index}}",
+        "companyLabel": "Entreprise / organisation *",
+        "companyPlaceholder": "Nom de l'entreprise",
+        "roleLabel": "Poste *",
+        "rolePlaceholder": "Intitulé du poste",
+        "locationLabel": "Localisation",
+        "locationPlaceholder": "Ville, pays",
+        "startDateLabel": "Date de début",
+        "startDatePlaceholder": "ex. Jan. 2022",
+        "currentlyWorking": "Je travaille encore ici",
+        "endDateLabel": "Date de fin",
+        "endDatePlaceholder": "ex. Déc. 2024",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Responsabilités clés et réalisations — une puce par ligne"
+      },
+      "education": {
+        "entryFallback": "Formation {{index}}",
+        "schoolLabel": "Établissement *",
+        "schoolPlaceholder": "Université ou école",
+        "degreeLabel": "Diplôme *",
+        "degreePlaceholder": "ex. Licence",
+        "fieldOfStudyLabel": "Domaine d'études",
+        "fieldOfStudyPlaceholder": "ex. Informatique",
+        "startDateLabel": "Date de début",
+        "startDatePlaceholder": "ex. 2019",
+        "endDateLabel": "Date de fin",
+        "endDatePlaceholder": "ex. 2023",
+        "gpaLabel": "Moyenne",
+        "gpaPlaceholder": "ex. 3,8 / 4,0",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Distinctions, cours ou activités"
+      },
+      "certifications": {
+        "entryFallback": "Certification {{index}}",
+        "nameLabel": "Nom *",
+        "namePlaceholder": "Nom de la certification",
+        "issuerLabel": "Organisme émetteur",
+        "issuerPlaceholder": "Organisme émetteur",
+        "yearLabel": "Année",
+        "yearPlaceholder": "ex. 2024",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Compétences couvertes ou identifiant du certificat (facultatif)"
+      },
+      "achievements": {
+        "entryFallback": "Réalisation {{index}}",
+        "titleLabel": "Titre *",
+        "titlePlaceholder": "Récompense ou distinction",
+        "dateLabel": "Date",
+        "datePlaceholder": "ex. 2025",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Ce que vous avez accompli et pourquoi c'est important"
+      },
+      "languages": {
+        "entryFallback": "Langue {{index}}",
+        "languageLabel": "Langue *",
+        "languagePlaceholder": "ex. Anglais",
+        "proficiencyLabel": "Niveau",
+        "proficiencyPlaceholder": "ex. Courant, Langue maternelle"
+      },
+      "projects": {
+        "entryFallback": "Projet {{index}}",
+        "nameLabel": "Nom du projet *",
+        "namePlaceholder": "ex. Application portfolio",
+        "descriptionLabel": "Description",
+        "descriptionPlaceholder": "Ce que vous avez créé et son impact — une puce par ligne",
+        "technologiesLabel": "Technologies",
+        "technologiesPlaceholder": "React, TypeScript, Supabase",
+        "linkLabel": "Lien",
+        "linkPlaceholder": "https://…",
+        "startDateLabel": "Date de début",
+        "startDatePlaceholder": "ex. 2024",
+        "endDateLabel": "Date de fin",
+        "endDatePlaceholder": "En cours"
+      },
+      "references": {
+        "entryFallback": "Référence {{index}}",
+        "nameLabel": "Nom *",
+        "namePlaceholder": "Nom complet",
+        "positionLabel": "Poste",
+        "positionPlaceholder": "Intitulé du poste",
+        "companyLabel": "Entreprise *",
+        "companyPlaceholder": "Organisation",
+        "emailLabel": "E-mail",
+        "emailPlaceholder": "email@entreprise.com",
+        "phoneLabel": "Téléphone",
+        "phonePlaceholder": "+33 …"
+      }
+    },
+    "sectionEdit": {
+      "unknownSection": "Section inconnue.",
+      "couldNotLoad": "Impossible de charger le CV",
+      "save": "Enregistrer"
+    },
+    "sectionSettings": {
+      "pageTitle": "Sections",
+      "subtitle": "Activez ou désactivez des sections et modifiez leur ordre. Les informations personnelles sont toujours incluses.",
+      "reorderButton": "Réorganiser les sections",
+      "required": "Obligatoire",
+      "shownOnCv": "Affichée sur le CV",
+      "hidden": "Masquée"
+    },
+    "templatesScreen": {
+      "subtitle": "Choisissez une mise en page pour ouvrir l'aperçu PDF en direct. Le téléchargement coûte 100 GHS par modèle — débloquez une fois, gardez pour toujours."
+    },
+    "tipsScreen": {
+      "subtitle": "Appuyez sur une astuce pour développer l'explication complète."
+    },
+    "tips": {
+      "summary": {
+        "title": "Rédigez un résumé percutant",
+        "body": "Votre résumé est la première chose que lisent les recruteurs — faites en sorte qu'il compte. En 2 à 3 phrases, mettez en avant qui vous êtes, vos principales compétences et ce que vous apportez. Évitez les phrases génériques comme « travailleur acharné et esprit d'équipe ». Soyez plutôt précis : mentionnez votre domaine, une réalisation clé et votre objectif de carrière. Considérez-le comme votre argumentaire éclair sur papier."
+      },
+      "experience": {
+        "title": "Quantifiez votre expérience",
+        "body": "Les chiffres rendent votre expérience crédible et mémorable. Au lieu d'affirmations vagues, associez des chiffres réels à votre travail. « Encadré une équipe de 5 personnes et réduit les rapports de bugs de 30 % » est bien plus convaincant que « Encadré une équipe et amélioré la qualité du produit ». Demandez-vous : Combien ? Quelle quantité ? À quelle fréquence ? Même des estimations comptent — « Servi plus de 50 clients par jour » vaut mieux que « Servi de nombreux clients ». Les recruteurs parcourent les CV rapidement ; les chiffres vous font remarquer instantanément."
+      },
+      "skills": {
+        "title": "Adaptez vos compétences au poste",
+        "body": "Une liste de compétences générique ne vous mènera pas loin. Avant de soumettre votre CV, lisez attentivement l'offre d'emploi et reprenez les mots-clés et compétences exacts qu'elle mentionne. S'ils demandent « gestion de projet » et que vous écrivez « coordination des tâches », un ATS (système de suivi des candidatures) pourrait vous filtrer avant même qu'un humain ne voie votre CV. Adaptez votre section compétences pour chaque candidature — placez les compétences les plus pertinentes en haut, retirez celles qui ne s'appliquent pas et utilisez le langage de l'employeur. Un CV ciblé bat toujours un CV universel."
+      },
+      "length": {
+        "title": "Restez concis",
+        "body": "Les recruteurs passent en moyenne 7 secondes à parcourir un CV — chaque mot doit mériter sa place. Une page est idéale si vous avez moins de 3 ans d'expérience ; deux pages maximum si vous en avez plus. Supprimez les anciens emplois à temps partiel qui ne sont plus pertinents, réduisez les longues puces à une ligne, et retirez les compétences que tout le monde suppose que vous avez (comme « Microsoft Word »). Si cela n'apporte pas de valeur, c'est juste du bruit. Un CV compact et ciblé signale de bonnes compétences en communication avant même que vous ne franchissiez la porte."
+      },
+      "proofread": {
+        "title": "Relisez avant d'envoyer",
+        "body": "Une seule faute de frappe peut ruiner des heures de travail. Les correcteurs orthographiques manquent plus d'erreurs qu'ils n'en détectent — un mot mal choisi mais correctement orthographié passera inaperçu. Lisez votre CV à voix haute pour repérer les tournures maladroites, puis relisez-le à l'envers ligne par ligne pour repérer les fautes d'orthographe que votre cerveau corrigerait autrement automatiquement. Changez temporairement la police pour tromper vos yeux et le voir d'un œil neuf. Enfin, envoyez-le à un ami ou un mentor pour un second avis. Vous n'avez qu'une seule chance de faire bonne impression — assurez-vous qu'elle soit impeccable."
+      }
+    },
+    "templateDefs": {
+      "ats": {
+        "label": "ATS Elite",
+        "description": "Mise en page à une colonne, optimisée pour les ATS"
+      },
+      "modern": {
+        "label": "Moderne",
+        "description": "Accents bleus avec sections structurées"
+      },
+      "tech": {
+        "label": "Tech",
+        "description": "Barre latérale marine avec expérience en chronologie"
+      },
+      "executive": {
+        "label": "Executive",
+        "description": "Bandeau supérieur avec en-têtes de section sur le côté gauche"
+      },
+      "minimal": {
+        "label": "Minimal",
+        "description": "Mise en page professionnelle suisse à deux colonnes"
+      }
+    },
+    "pdfButton": {
+      "generating": "Génération…"
+    },
+    "editorPreview": {
+      "cvNotFound": "CV introuvable",
+      "goBack": "Retour",
+      "livePdfPreview": "{{template}} · aperçu PDF en direct",
+      "sectionsPanelTitle": "Sections",
+      "nativeHint": "Ouvrez ce CV sur le web pour l'aperçu PDF intégré. Le téléchargement utilise le même modèle PDF sur toutes les plateformes."
+    },
+    "pdf": {
+      "yourNameFallback": "Votre nom",
+      "documentTitleFallback": "CV",
+      "gpaLabel": "Moyenne",
+      "technicalLabel": "Technique : ",
+      "softSkillsLabel": "Savoir-être : ",
+      "degreeInField": "{{degree}} en {{field}}",
+      "sections": {
+        "allCaps": {
+          "summary": "RÉSUMÉ PROFESSIONNEL",
+          "profile": "PROFIL PROFESSIONNEL",
+          "education": "FORMATION",
+          "skills": "COMPÉTENCES",
+          "experience": "EXPÉRIENCE PROFESSIONNELLE",
+          "keyProjects": "PROJETS CLÉS",
+          "projects": "PROJETS",
+          "certifications": "CERTIFICATIONS",
+          "languages": "LANGUES",
+          "achievements": "RÉALISATIONS",
+          "volunteer": "EXPÉRIENCE BÉNÉVOLE",
+          "references": "RÉFÉRENCES",
+          "interests": "CENTRES D'INTÉRÊT"
+        },
+        "titleCase": {
+          "summary": "Résumé",
+          "experience": "Expérience",
+          "projects": "Projets",
+          "education": "Formation",
+          "skills": "Compétences",
+          "references": "Références"
+        }
+      }
+    },
+    "download": {
+      "exportFailedTitle": "Échec de l'exportation du PDF",
+      "couldNotGenerate": "Impossible de générer le PDF.",
+      "readyTitle": "PDF prêt",
+      "readyMessage": "Votre téléchargement devrait démarrer automatiquement. Vérifiez le dossier de téléchargements de votre navigateur."
+    },
+    "pdfErrors": {
+      "incompleteHtml": "L'exportation PDF nécessite un document HTML complet.",
+      "missingPageContent": "Le HTML d'exportation PDF ne contient pas le contenu de la page du CV.",
+      "appUiMarkup": "L'exportation PDF ne doit pas inclure le balisage de l'interface de l'application.",
+      "couldNotReadBlob": "Impossible de lire le blob PDF",
+      "couldNotEncode": "Impossible d'encoder le PDF",
+      "failedToGenerate": "Échec de la génération du PDF",
+      "sharingUnavailable": "Le partage n'est pas disponible.",
+      "sharingNotAvailableDevice": "Le partage n'est pas disponible sur cet appareil.",
+      "failedToShare": "Échec du partage du PDF",
+      "failedToDownload": "Échec du téléchargement du PDF",
+      "saveFileName": "Enregistrer {{fileName}}"
+    },
+    "payments": {
+      "unlockTitle": "Débloquer les téléchargements {{template}}",
+      "unlockDescription": "Payez une fois pour télécharger des PDF avec la mise en page {{template}}. Seul ce modèle est débloqué — les autres restent séparés.",
+      "total": "Total",
+      "securedByPaystack": "Sécurisé par Paystack",
+      "pay": "Payer {{amount}} GHS",
+      "cancel": "Annuler"
+    },
+    "paystack": {
+      "secureCheckout": "Paiement sécurisé",
+      "loadingPaystack": "Chargement de Paystack…",
+      "loadFailed": "Impossible de charger le paiement Paystack. Vérifiez votre connexion et réessayez.",
+      "paymentCancelled": "Le paiement a été annulé",
+      "popupTitle": "Terminez le paiement dans la fenêtre pop-up",
+      "popupHint": "Si la fenêtre Paystack ne s'est pas ouverte, autorisez les pop-ups et réessayez.",
+      "popupBlocked": "Autorisez les pop-ups pour ce site afin de terminer le paiement."
+    },
+    "paymentFlow": {
+      "paymentFailedTitle": "Échec du paiement",
+      "paymentCancelledTitle": "Paiement annulé",
+      "paymentReceivedTitle": "Paiement reçu",
+      "paymentReceivedMessage": "Votre paiement a réussi mais nous n'avons pas pu enregistrer la transaction. Veuillez contacter l'assistance si vous êtes débité(e) à nouveau.",
+      "signInRequiredTitle": "Connexion requise",
+      "signInRequiredMessage": "Veuillez vous connecter avec une adresse e-mail pour payer.",
+      "paymentUnavailableTitle": "Paiement indisponible",
+      "paymentIncomplete": "Le paiement n'a pas abouti. Veuillez réessayer."
+    },
+    "errors": {
+      "notSignedIn": "Non connecté",
+      "missingCvId": "Identifiant de CV manquant",
+      "cvNotFound": "CV introuvable",
+      "failedToSave": "Échec de l'enregistrement"
+    },
+    "myCvDefault": "Mon CV"
+  },
+  "shared": {
+    "options": {
+      "other": "Autre",
+      "global": "International",
+      "degreeLevels": {
+        "high_school": "Secondaire",
+        "bachelors": "Licence",
+        "masters": "Master",
+        "phd": "Doctorat",
+        "professional": "Professionnel / Autre"
+      },
+      "funding": {
+        "any": "Tout type de financement",
+        "fully_funded": "Entièrement financé uniquement",
+        "partially_funded": "Partiellement financé",
+        "self_funded": "Autofinancé"
+      },
+      "courseMajors": {
+        "computerScience": "Informatique",
+        "engineering": "Ingénierie",
+        "businessAdministration": "Administration des affaires",
+        "medicineHealthSciences": "Médecine et sciences de la santé",
+        "law": "Droit",
+        "education": "Éducation",
+        "economics": "Économie",
+        "architecture": "Architecture",
+        "agriculture": "Agriculture",
+        "socialSciences": "Sciences sociales",
+        "artsHumanities": "Arts et lettres",
+        "mathematicsStatistics": "Mathématiques et statistiques",
+        "environmentalScience": "Sciences de l'environnement",
+        "psychology": "Psychologie",
+        "mediaCommunication": "Médias et communication"
+      },
+      "interests": {
+        "technologyInnovation": "Technologie et innovation",
+        "researchAcademia": "Recherche et milieu universitaire",
+        "entrepreneurship": "Entrepreneuriat",
+        "leadershipManagement": "Leadership et gestion",
+        "creativeArtsDesign": "Arts créatifs et design",
+        "communitySocialImpact": "Communauté et impact social",
+        "financeInvestment": "Finance et investissement",
+        "healthcareWellness": "Santé et bien-être",
+        "sustainabilityEnvironment": "Durabilité et environnement",
+        "dataAnalytics": "Données et analytique",
+        "policyGovernance": "Politiques publiques et gouvernance",
+        "marketingBranding": "Marketing et image de marque"
+      },
+      "opportunityTypes": {
+        "internship": "Stage",
+        "scholarship": "Bourse d'études",
+        "fellowship": "Programme de fellowship",
+        "graduateProgramme": "Programme diplômant",
+        "jobFullTime": "Emploi (temps plein)",
+        "jobPartTime": "Emploi (temps partiel)",
+        "volunteer": "Bénévolat",
+        "researchOpportunity": "Opportunité de recherche",
+        "exchangeProgramme": "Programme d'échange",
+        "bootcampTraining": "Formation intensive (bootcamp)",
+        "grantFunding": "Subvention et financement",
+        "competitionAward": "Concours et distinction"
+      },
+      "countries": {
+        "afghanistan": "Afghanistan",
+        "albania": "Albanie",
+        "algeria": "Algérie",
+        "angola": "Angola",
+        "argentina": "Argentine",
+        "australia": "Australie",
+        "austria": "Autriche",
+        "bangladesh": "Bangladesh",
+        "belgium": "Belgique",
+        "benin": "Bénin",
+        "botswana": "Botswana",
+        "brazil": "Brésil",
+        "burkinaFaso": "Burkina Faso",
+        "burundi": "Burundi",
+        "capeVerde": "Cap-Vert",
+        "cameroon": "Cameroun",
+        "canada": "Canada",
+        "centralAfricanRepublic": "République centrafricaine",
+        "chad": "Tchad",
+        "chile": "Chili",
+        "china": "Chine",
+        "colombia": "Colombie",
+        "comoros": "Comores",
+        "congoDrc": "République démocratique du Congo",
+        "congoRepublic": "République du Congo",
+        "czechRepublic": "République tchèque",
+        "denmark": "Danemark",
+        "djibouti": "Djibouti",
+        "egypt": "Égypte",
+        "equatorialGuinea": "Guinée équatoriale",
+        "eritrea": "Érythrée",
+        "eswatini": "Eswatini",
+        "ethiopia": "Éthiopie",
+        "finland": "Finlande",
+        "france": "France",
+        "gabon": "Gabon",
+        "gambia": "Gambie",
+        "germany": "Allemagne",
+        "ghana": "Ghana",
+        "greece": "Grèce",
+        "guinea": "Guinée",
+        "guineaBissau": "Guinée-Bissau",
+        "hongKong": "Hong Kong",
+        "hungary": "Hongrie",
+        "india": "Inde",
+        "indonesia": "Indonésie",
+        "iran": "Iran",
+        "iraq": "Irak",
+        "ireland": "Irlande",
+        "israel": "Israël",
+        "italy": "Italie",
+        "ivoryCoast": "Côte d'Ivoire",
+        "japan": "Japon",
+        "jordan": "Jordanie",
+        "kenya": "Kenya",
+        "lesotho": "Lesotho",
+        "liberia": "Libéria",
+        "libya": "Libye",
+        "madagascar": "Madagascar",
+        "malawi": "Malawi",
+        "malaysia": "Malaisie",
+        "mali": "Mali",
+        "mauritania": "Mauritanie",
+        "mauritius": "Maurice",
+        "mexico": "Mexique",
+        "morocco": "Maroc",
+        "mozambique": "Mozambique",
+        "namibia": "Namibie",
+        "netherlands": "Pays-Bas",
+        "newZealand": "Nouvelle-Zélande",
+        "niger": "Niger",
+        "nigeria": "Nigeria",
+        "norway": "Norvège",
+        "pakistan": "Pakistan",
+        "philippines": "Philippines",
+        "poland": "Pologne",
+        "portugal": "Portugal",
+        "romania": "Roumanie",
+        "russia": "Russie",
+        "rwanda": "Rwanda",
+        "saoTomeAndPrincipe": "Sao Tomé-et-Principe",
+        "saudiArabia": "Arabie saoudite",
+        "senegal": "Sénégal",
+        "seychelles": "Seychelles",
+        "sierraLeone": "Sierra Leone",
+        "singapore": "Singapour",
+        "somalia": "Somalie",
+        "southAfrica": "Afrique du Sud",
+        "southKorea": "Corée du Sud",
+        "southSudan": "Soudan du Sud",
+        "spain": "Espagne",
+        "sudan": "Soudan",
+        "sweden": "Suède",
+        "switzerland": "Suisse",
+        "taiwan": "Taïwan",
+        "tanzania": "Tanzanie",
+        "thailand": "Thaïlande",
+        "togo": "Togo",
+        "tunisia": "Tunisie",
+        "turkey": "Turquie",
+        "uganda": "Ouganda",
+        "ukraine": "Ukraine",
+        "unitedArabEmirates": "Émirats arabes unis",
+        "unitedKingdom": "Royaume-Uni",
+        "unitedStates": "États-Unis",
+        "vietnam": "Vietnam",
+        "zambia": "Zambie",
+        "zimbabwe": "Zimbabwe"
+      }
+    }
+  }
+}

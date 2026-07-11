@@ -1,6 +1,7 @@
 import type { CVTemplateId } from '@/features/cv-builder/constants/templates';
 import { getTemplateDefinition } from '@/features/cv-builder/constants/templates';
 import type { CVPaymentType } from '@/types/domain/cv';
+import i18n from '@/i18n';
 
 /** GHS amount charged to permanently unlock one template for PDF download. */
 export const CV_TEMPLATE_UNLOCK_FEE_GHS = 100;
@@ -23,8 +24,8 @@ export function getTemplateDownloadProduct(templateId: CVTemplateId): PaymentPro
   return {
     type: 'template_unlock',
     amountGhs: CV_TEMPLATE_UNLOCK_FEE_GHS,
-    title: `Unlock ${label} downloads`,
-    description: `Pay once to download PDFs with the ${label} layout. Only this template is unlocked — others stay separate.`,
+    title: i18n.t('cvBuilder.payments.unlockTitle', { template: label }),
+    description: i18n.t('cvBuilder.payments.unlockDescription', { template: label }),
   };
 }
 

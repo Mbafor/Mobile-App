@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert, Image, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
@@ -50,6 +51,7 @@ function TrackerCardComponent({
 }: TrackerCardProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [notes, setNotes] = useState(item.notes);
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const translateX = useSharedValue(0);
@@ -83,7 +85,7 @@ function TrackerCardComponent({
 
   const handleApply = useCallback(async () => {
     if (!applyUrl) {
-      Alert.alert('No apply link', 'This opportunity does not have an application URL yet.');
+      Alert.alert(t('opportunities.tracker.noApplyLinkTitle'), t('opportunities.tracker.noApplyLinkBody'));
       return;
     }
     // Skip canOpenURL on web — always true for https:// and awaiting it would
@@ -91,7 +93,7 @@ function TrackerCardComponent({
     if (Platform.OS !== 'web') {
       const canOpen = await Linking.canOpenURL(applyUrl);
       if (!canOpen) {
-        Alert.alert('Invalid link', 'Could not open the application URL.');
+        Alert.alert(t('opportunities.tracker.invalidLinkTitle'), t('opportunities.tracker.invalidLinkBody'));
         return;
       }
     }
@@ -160,7 +162,7 @@ function TrackerCardComponent({
             </Text>
             <Text variant="caption" style={styles.deadline}>
               {formatDeadline(item.opportunity.deadline)}
-              {daysLeft > 0 ? ` · ${daysLeft}d left` : ''}
+              {daysLeft > 0 ? ` · ${t('opportunities.common.daysLeft', { days: daysLeft })}` : ''}
             </Text>
             {tag ? (
               <View style={styles.tagPill}>
@@ -178,9 +180,9 @@ function TrackerCardComponent({
             style={styles.applyLinkWrap}
             hitSlop={8}
             accessibilityRole="link"
-            accessibilityLabel="Apply for this opportunity"
+            accessibilityLabel={t('opportunities.tracker.applyAccessibility')}
           >
-            <Text style={styles.applyLink}>Apply</Text>
+            <Text style={styles.applyLink}>{t('opportunities.tracker.apply')}</Text>
           </Pressable>
         ) : null}
 
@@ -191,7 +193,7 @@ function TrackerCardComponent({
             scheduleNotesCommit(text);
           }}
           onBlur={() => commitNotes(notes)}
-          placeholder="Add a short note…"
+          placeholder={t('opportunities.tracker.notesPlaceholder')}
           placeholderTextColor={colors.textMuted}
           multiline
           numberOfLines={2}
@@ -205,7 +207,7 @@ function TrackerCardComponent({
             style={styles.advanceBtn}
             hitSlop={6}
             accessibilityRole="button"
-            accessibilityLabel={`Move to ${TRACKER_STAGE_LABELS[nextStage]}`}
+            accessibilityLabel={t('opportunities.tracker.moveTo', { stage: TRACKER_STAGE_LABELS[nextStage] })}
           >
             <Text style={styles.advanceBtnText}>→ {TRACKER_STAGE_LABELS[nextStage]}</Text>
           </Pressable>

@@ -6,6 +6,7 @@ import {
   type DrawerContentComponentProps,
 } from '@react-navigation/drawer';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -15,6 +16,7 @@ import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavIte
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const styles = useThemedStyles(createStyles);
   const { colors, isDark } = useTheme();
+  const { t } = useTranslation();
   const tabNavItems = useMainTabNavItems();
 
   return (
@@ -32,7 +34,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
       </View>
 
       {/* Grouped sections: Main, Career Tools, Account, Administration */}
-      <Text style={styles.sectionLabel}>Main</Text>
+      <Text style={styles.sectionLabel}>{t('navigation.sections.main')}</Text>
       {tabNavItems
         .filter((i) => ['home', 'dashboard', 'saved', 'browse-categories'].includes(i.key))
         .map((item) => (
@@ -53,7 +55,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
           </Pressable>
         ))}
 
-      <Text style={styles.sectionLabel}>Career Tools</Text>
+      <Text style={styles.sectionLabel}>{t('navigation.sections.careerTools')}</Text>
       {tabNavItems
         .filter((i) => ['tracker', 'mentorship', 'cv-builder'].includes(i.key))
         .map((item) => (
@@ -74,7 +76,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
           </Pressable>
         ))}
 
-      <Text style={styles.sectionLabel}>Account</Text>
+      <Text style={styles.sectionLabel}>{t('navigation.sections.account')}</Text>
       {tabNavItems
         .filter((i) => ['notifications', 'profile', 'settings'].includes(i.key))
         .map((item) => (
@@ -98,7 +100,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
       {/** Administration group only shown when items exist */}
       {tabNavItems.some((i) => i.key === 'admin' || i.key === 'super-admin') && (
         <>
-          <Text style={styles.sectionLabel}>Administration</Text>
+          <Text style={styles.sectionLabel}>{t('navigation.sections.administration')}</Text>
           {tabNavItems
             .filter((i) => i.key === 'admin' || i.key === 'super-admin')
             .map((item) => (

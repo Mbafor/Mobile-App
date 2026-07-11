@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
@@ -19,6 +20,7 @@ const PAGE_SIZE = 15;
 export function SuperAdminMenteesScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
 
@@ -37,17 +39,17 @@ export function SuperAdminMenteesScreen() {
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <SearchFilterBar value={search} onChangeText={(t) => { setSearch(t); setPage(0); }} placeholder="Search mentees…" />
+      <SearchFilterBar value={search} onChangeText={(text) => { setSearch(text); setPage(0); }} placeholder={t('superAdmin.mentees.searchPlaceholder')} />
       {isLoading ? <ActivityIndicator color={colors.primary} /> : null}
-      {error ? <ErrorMessage message={error instanceof Error ? error.message : 'Error'} /> : null}
+      {error ? <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.mentees.genericError')} /> : null}
       {data?.items.length === 0 && !isLoading ? (
-        <EmptyState title="No active mentees" description="No mentorships match your search." />
+        <EmptyState title={t('superAdmin.mentees.emptyTitle')} description={t('superAdmin.mentees.emptyDescription')} />
       ) : null}
       {data?.items.map((m) => (
         <View key={m.mentorship_id} style={styles.card}>
-          <Text style={styles.name}>{m.student_name ?? 'Student'}</Text>
+          <Text style={styles.name}>{m.student_name ?? t('superAdmin.mentees.studentFallback')}</Text>
           <Text muted variant="caption">{m.student_email}</Text>
-          <Text variant="caption">Coach: {m.mentor_name ?? '—'}</Text>
+          <Text variant="caption">{t('superAdmin.mentees.coachLabel', { name: m.mentor_name ?? '—' })}</Text>
           <Text variant="caption">
             {new Date(m.started_at).toLocaleDateString()} → {new Date(m.ends_at).toLocaleDateString()}
           </Text>

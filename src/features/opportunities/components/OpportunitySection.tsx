@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { FlatList, Pressable, StyleSheet, View } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -27,6 +28,7 @@ export function OpportunitySection({
 }: OpportunitySectionProps) {
   const styles = useThemedStyles(createStyles);
   const isDesktop = useWebDesktop();
+  const { t } = useTranslation();
 
   if (opportunities.length === 0) {
     return (
@@ -37,11 +39,11 @@ export function OpportunitySection({
           </Text>
           {onViewAll && (
             <Pressable onPress={onViewAll} accessibilityRole="link">
-              <Text style={styles.viewAllText}>All opportunities →</Text>
+              <Text style={styles.viewAllText}>{t('opportunities.section.viewAll')}</Text>
             </Pressable>
           )}
         </View>
-        <EmptyState title="Nothing here yet" description="Check back soon for new listings." />
+        <EmptyState title={t('opportunities.section.emptyTitle')} description={t('opportunities.section.emptyDescription')} />
       </View>
     );
   }
@@ -54,7 +56,7 @@ export function OpportunitySection({
         </Text>
         {onViewAll && (
           <Pressable onPress={onViewAll} accessibilityRole="link">
-            <Text style={styles.viewAllText}>All opportunities →</Text>
+            <Text style={styles.viewAllText}>{t('opportunities.section.viewAll')}</Text>
           </Pressable>
         )}
       </View>

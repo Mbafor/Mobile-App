@@ -1,6 +1,7 @@
 import { useLocalSearchParams } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import { ActivityIndicator, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Screen } from '@/components/layout';
@@ -14,6 +15,7 @@ import { useRequireSuperAdmin } from '@/features/super-admin/hooks/useRequireSup
 
 export default function SuperAdminEditOpportunity() {
   const { colors } = useTheme();
+  const { t } = useTranslation();
   useRequireSuperAdmin();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { isReady } = useCanManageOpportunities();
@@ -33,7 +35,7 @@ export default function SuperAdminEditOpportunity() {
   if (error || !opportunity) {
     return (
       <Screen>
-        <ErrorMessage message={error instanceof Error ? error.message : 'Opportunity not found'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('admin.errors.opportunityNotFound')} />
       </Screen>
     );
   }
@@ -42,7 +44,7 @@ export default function SuperAdminEditOpportunity() {
     <Screen padded={false}>
       <OpportunityForm
         initialValues={opportunityToFormValues(opportunity)}
-        submitLabel="Save changes"
+        submitLabel={t('admin.editScreen.submitLabel')}
         loading={updateMutation.isPending}
         onSubmit={async (values) => {
           await updateMutation.mutateAsync(values);

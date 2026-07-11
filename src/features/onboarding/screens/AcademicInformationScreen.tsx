@@ -1,5 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
@@ -11,8 +12,8 @@ import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGua
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { useOnboardingStore } from '@/features/onboarding/store/onboarding.store';
 import {
-  COURSE_MAJOR_OPTIONS,
-  INTEREST_OPTIONS,
+  getCourseMajorOptions,
+  getInterestOptions,
   PREDEFINED_COURSE_MAJORS,
   PREDEFINED_INTERESTS,
 } from '@/constants/onboarding-options';
@@ -22,6 +23,7 @@ import { formatListInput, parseListInput } from '@/utils/formatting';
 
 export function AcademicInformationScreen() {
   const router = useRouter();
+  const { t } = useTranslation();
   useOnboardingGuard();
 
   const draft = useOnboardingStore((s) => s.draft.academic);
@@ -58,11 +60,11 @@ export function AcademicInformationScreen() {
   const handleContinue = async () => {
     clearError();
     if (!university.trim() || !courseMajor.trim()) {
-      Alert.alert('Required fields', 'Please enter your university and course/major.');
+      Alert.alert(t('onboarding.academic.requiredTitle'), t('onboarding.academic.requiredMessageFields'));
       return;
     }
     if (interests.length === 0) {
-      Alert.alert('Required fields', 'Please select at least one interest.');
+      Alert.alert(t('onboarding.academic.requiredTitle'), t('onboarding.academic.requiredMessageInterest'));
       return;
     }
     const academic = {
@@ -80,41 +82,41 @@ export function AcademicInformationScreen() {
   return (
     <OnboardingShell
       currentStep={ONBOARDING_STEPS.ACADEMIC}
-      title="Academic information"
-      subtitle="Help us tailor opportunities to your studies and goals."
+      title={t('onboarding.academic.title')}
+      subtitle={t('onboarding.academic.subtitle')}
       onBack={() => router.back()}
       onContinue={() => void handleContinue()}
       isLoading={isLoading}
     >
-      <FormField label="University *">
-        <Input value={university} onChangeText={setUniversity} placeholder="Your institution" />
+      <FormField label={t('onboarding.academic.universityLabel')}>
+        <Input value={university} onChangeText={setUniversity} placeholder={t('onboarding.academic.universityPlaceholder')} />
       </FormField>
-      <FormField label="Degree level *">
+      <FormField label={t('onboarding.academic.degreeLabel')}>
         <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
       </FormField>
-      <FormField label="Course / Major *">
+      <FormField label={t('onboarding.academic.courseLabel')}>
         <SelectWithOther
-          options={COURSE_MAJOR_OPTIONS}
+          options={getCourseMajorOptions()}
           predefinedValues={PREDEFINED_COURSE_MAJORS}
           value={courseMajor}
           onChange={setCourseMajor}
-          placeholder="Select course / major"
+          placeholder={t('onboarding.academic.coursePlaceholder')}
         />
       </FormField>
-      <FormField label="Interests *">
+      <FormField label={t('onboarding.academic.interestsLabel')}>
         <MultiSelectWithOther
-          options={INTEREST_OPTIONS}
+          options={getInterestOptions()}
           predefinedValues={PREDEFINED_INTERESTS}
           values={interests}
           onChange={setInterests}
-          placeholder="Select interests"
+          placeholder={t('onboarding.academic.interestsPlaceholder')}
         />
       </FormField>
-      <FormField label="Career interests (comma-separated)">
+      <FormField label={t('onboarding.academic.careerLabel')}>
         <Input
           value={careerText}
           onChangeText={setCareerText}
-          placeholder="e.g. software engineering, academia"
+          placeholder={t('onboarding.academic.careerPlaceholder')}
           multiline
         />
       </FormField>

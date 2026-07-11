@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { PieChart } from 'react-native-gifted-charts';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -26,12 +27,13 @@ type AdminPieChartProps = {
 export function AdminPieChart({ title, data }: AdminPieChartProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const sliceColors = [colors.primary, ...OTHER_SLICE_COLORS];
   if (data.length === 0) {
     return (
       <View style={styles.wrap}>
         <Text style={styles.title}>{title}</Text>
-        <Text muted>No data yet</Text>
+        <Text muted>{t('admin.charts.noData')}</Text>
       </View>
     );
   }

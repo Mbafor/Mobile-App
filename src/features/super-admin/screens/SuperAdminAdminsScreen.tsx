@@ -4,6 +4,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useMemo, useState } from 'react';
 import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Button } from '@/components/ui/Button';
@@ -21,6 +22,7 @@ const PAGE_SIZE = 15;
 export function SuperAdminAdminsScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const [search, setSearch] = useState('');
   const [page, setPage] = useState(0);
   const [newAdminEmail, setNewAdminEmail] = useState('');
@@ -50,9 +52,9 @@ export function SuperAdminAdminsScreen() {
     onSuccess: () => {
       invalidate();
       setNewAdminEmail('');
-      Alert.alert('Success', 'User promoted to opportunity admin.');
+      Alert.alert(t('superAdmin.admins.promoteSuccessTitle'), t('superAdmin.admins.promoteSuccessMessage'));
     },
-    onError: (e: Error) => Alert.alert('Failed to add admin', e.message),
+    onError: (e: Error) => Alert.alert(t('superAdmin.admins.promoteFailedTitle'), e.message),
   });
 
   const revokeMutation = useMutation({
@@ -63,23 +65,23 @@ export function SuperAdminAdminsScreen() {
     },
     onSuccess: () => {
       invalidate();
-      Alert.alert('Done', 'Admin access has been revoked.');
+      Alert.alert(t('superAdmin.admins.revokeSuccessTitle'), t('superAdmin.admins.revokeSuccessMessage'));
     },
-    onError: (e: Error) => Alert.alert('Failed to remove admin', e.message),
+    onError: (e: Error) => Alert.alert(t('superAdmin.admins.revokeFailedTitle'), e.message),
   });
 
   const columns = useMemo<AdminTableColumn<SuperAdminAdminRow>[]>(
     () => [
       {
         key: 'name',
-        header: 'Name',
+        header: t('superAdmin.admins.columns.name'),
         flex: 2,
         minWidth: 140,
         render: (row) => <Text style={styles.cellText}>{row.full_name ?? '—'}</Text>,
       },
       {
         key: 'email',
-        header: 'Email',
+        header: t('superAdmin.admins.columns.email'),
         flex: 2,
         minWidth: 180,
         render: (row) => (
@@ -90,17 +92,21 @@ export function SuperAdminAdminsScreen() {
       },
       {
         key: 'role',
-        header: 'Role',
+        header: t('superAdmin.admins.columns.role'),
         minWidth: 120,
         render: (row) => (
           <Text variant="caption">
-            {row.is_super_admin ? 'Super Admin' : row.is_admin ? 'Opportunity Admin' : '—'}
+            {row.is_super_admin
+              ? t('superAdmin.admins.roleLabels.superAdmin')
+              : row.is_admin
+                ? t('superAdmin.admins.roleLabels.opportunityAdmin')
+                : '—'}
           </Text>
         ),
       },
       {
         key: 'posts',
-        header: 'Posts',
+        header: t('superAdmin.admins.columns.posts'),
         minWidth: 72,
         render: (row) => (
           <Text style={styles.postCount}>{row.opportunities_posted ?? 0}</Text>
@@ -108,7 +114,7 @@ export function SuperAdminAdminsScreen() {
       },
       {
         key: 'actions',
-        header: 'Actions',
+        header: t('superAdmin.admins.columns.actions'),
         minWidth: 100,
         render: (row) =>
           row.is_admin && !row.is_super_admin ? (
@@ -117,12 +123,14 @@ export function SuperAdminAdminsScreen() {
               disabled={revokeMutation.isPending}
               onPress={() => {
                 Alert.alert(
-                  'Remove admin',
-                  `Revoke admin access for ${row.email ?? 'this user'}?`,
+                  t('superAdmin.admins.removeConfirmTitle'),
+                  t('superAdmin.admins.removeConfirmMessage', {
+                    email: row.email ?? t('superAdmin.admins.thisUser'),
+                  }),
                   [
-                    { text: 'Cancel', style: 'cancel' },
+                    { text: t('superAdmin.admins.cancel'), style: 'cancel' },
                     {
-                      text: 'Remove',
+                      text: t('superAdmin.admins.remove'),
                       style: 'destructive',
                       onPress: () => revokeMutation.mutate(row.id),
                     },
@@ -131,30 +139,30 @@ export function SuperAdminAdminsScreen() {
               }}
               textStyle={{ color: colors.error }}
             >
-              {revokeMutation.isPending ? 'Removing…' : 'Remove'}
+              {revokeMutation.isPending ? t('superAdmin.admins.removing') : t('superAdmin.admins.remove')}
             </Button>
           ) : (
             <Text muted variant="caption">—</Text>
           ),
       },
     ],
-    [revokeMutation],
+    [revokeMutation, t, colors, styles],
   );
 
   return (
     <ScrollView contentContainerStyle={styles.scroll}>
-      <Text style={styles.pageTitle}>Manage admins</Text>
+      <Text style={styles.pageTitle}>{t('superAdmin.admins.pageTitle')}</Text>
       <Text muted style={styles.intro}>
-        Opportunity admins can create and manage listings. Super admins retain full platform access.
+        {t('superAdmin.admins.intro')}
       </Text>
 
       <View style={styles.addCard}>
-        <Text style={styles.cardLabel}>Add opportunity admin</Text>
+        <Text style={styles.cardLabel}>{t('superAdmin.admins.addCardLabel')}</Text>
         <View style={styles.addRow}>
           <Input
             value={newAdminEmail}
             onChangeText={setNewAdminEmail}
-            placeholder="existing-user@email.com"
+            placeholder={t('superAdmin.admins.emailPlaceholder')}
             style={styles.emailInput}
             autoCapitalize="none"
             keyboardType="email-address"
@@ -163,7 +171,7 @@ export function SuperAdminAdminsScreen() {
             onPress={() => {
               const email = newAdminEmail.trim();
               if (!email.includes('@') || !email.includes('.')) {
-                Alert.alert('Invalid email', 'Please enter a valid email address.');
+                Alert.alert(t('superAdmin.admins.invalidEmailTitle'), t('superAdmin.admins.invalidEmailMessage'));
                 return;
               }
               promoteMutation.mutate(email);
@@ -171,22 +179,22 @@ export function SuperAdminAdminsScreen() {
             loading={promoteMutation.isPending}
             disabled={!newAdminEmail.trim() || promoteMutation.isPending}
           >
-            Add
+            {t('superAdmin.admins.add')}
           </Button>
         </View>
         <Text variant="caption" muted>
-          The user must already have signed up. Promoting grants the Admin tab and opportunity tools.
+          {t('superAdmin.admins.addHint')}
         </Text>
       </View>
 
       <SearchFilterBar
         value={search}
-        onChangeText={(t) => { setSearch(t); setPage(0); }}
-        placeholder="Search by name or email…"
+        onChangeText={(text) => { setSearch(text); setPage(0); }}
+        placeholder={t('superAdmin.admins.searchPlaceholder')}
       />
 
       {isLoading ? <ActivityIndicator color={colors.primary} style={styles.loader} /> : null}
-      {error ? <ErrorMessage message={error instanceof Error ? error.message : 'Error'} /> : null}
+      {error ? <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.admins.genericError')} /> : null}
 
       {data ? (
         <>
@@ -194,7 +202,7 @@ export function SuperAdminAdminsScreen() {
             columns={columns}
             data={data.items}
             keyExtractor={(row) => row.id}
-            emptyMessage="No admins match your search."
+            emptyMessage={t('superAdmin.admins.emptySearch')}
           />
           <PaginationBar page={page} pageSize={PAGE_SIZE} total={data.total} onPageChange={setPage} />
         </>

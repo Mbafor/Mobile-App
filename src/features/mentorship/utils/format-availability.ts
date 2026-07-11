@@ -1,7 +1,7 @@
-const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+import i18n from '@/i18n';
 
 export function formatDayOfWeek(day: number): string {
-  return DAY_NAMES[day] ?? `Day ${day}`;
+  return i18n.t(`mentorship.days.${day}`, { defaultValue: `Day ${day}` });
 }
 
 export function formatTimeLabel(time: string): string {

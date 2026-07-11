@@ -1,5 +1,6 @@
 import { StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
@@ -36,7 +37,8 @@ export function ParticipantProfileDetail({
 }: ParticipantProfileDetailProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
-  const name = profile.fullName?.trim() || 'Unknown';
+  const { t } = useTranslation();
+  const name = profile.fullName?.trim() || t('mentorship.profile.nameFallback');
   const interests = [...new Set([...profile.interests, ...(mentorProfile?.mentoringInterests ?? [])])];
   const career = [
     ...new Set([...profile.careerInterests, ...(mentorProfile?.mentoringCareerAreas ?? [])]),
@@ -62,29 +64,29 @@ export function ParticipantProfileDetail({
             ) : null}
           </View>
           {mentorProfile?.status === 'approved' ? (
-            <Text style={styles.verifiedLabel}>Verified Mentor</Text>
+            <Text style={styles.verifiedLabel}>{t('mentorship.profile.verifiedMentor')}</Text>
           ) : null}
           {profile.email ? <Text style={styles.sub}>{profile.email}</Text> : null}
         </View>
       </View>
 
       <View style={styles.details}>
-        <DetailRow label="Country" value={profile.country} />
-        <DetailRow label="University" value={profile.university} />
-        <DetailRow label="Major / program" value={profile.courseMajor} />
-        <DetailRow label="Degree level" value={profile.degreeLevel} />
+        <DetailRow label={t('mentorship.profile.country')} value={profile.country} />
+        <DetailRow label={t('mentorship.profile.university')} value={profile.university} />
+        <DetailRow label={t('mentorship.profile.major')} value={profile.courseMajor} />
+        <DetailRow label={t('mentorship.profile.degreeLevel')} value={profile.degreeLevel} />
       </View>
 
-      {majors.length > 0 ? <TagList label="Academic focus" items={majors.slice(0, 12)} /> : null}
-      {career.length > 0 ? <TagList label="Career interests" items={career.slice(0, 12)} /> : null}
-      {interests.length > 0 ? <TagList label="Interests" items={interests.slice(0, 12)} /> : null}
+      {majors.length > 0 ? <TagList label={t('mentorship.profile.academicFocus')} items={majors.slice(0, 12)} /> : null}
+      {career.length > 0 ? <TagList label={t('mentorship.profile.careerInterests')} items={career.slice(0, 12)} /> : null}
+      {interests.length > 0 ? <TagList label={t('mentorship.profile.interests')} items={interests.slice(0, 12)} /> : null}
       {skills.length > 0 && !compact ? (
-        <TagList label="Skills & focus areas" items={skills.slice(0, 12)} />
+        <TagList label={t('mentorship.profile.skills')} items={skills.slice(0, 12)} />
       ) : null}
 
       {(mentorProfile?.bio || profile.bio) ? (
         <View style={styles.bioBlock}>
-          <Text style={styles.bioLabel}>About</Text>
+          <Text style={styles.bioLabel}>{t('mentorship.profile.about')}</Text>
           <Text style={styles.bio}>{mentorProfile?.bio ?? profile.bio}</Text>
         </View>
       ) : null}

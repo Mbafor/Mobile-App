@@ -1,5 +1,6 @@
 import { Pressable, StyleSheet, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
 import { Text } from '@/components/ui';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ColorScheme } from '@/constants/theme/types';
@@ -17,6 +18,7 @@ const SITE_URL = 'https://voila-africa.com';
 export function DesktopFooter() {
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.footer}>
@@ -27,7 +29,7 @@ export function DesktopFooter() {
             if (typeof window !== 'undefined') window.open(`${SITE_URL}/about`, '_blank', 'noopener,noreferrer');
           }}
         >
-          <Text style={styles.link}>About</Text>
+          <Text style={styles.link}>{t('navigation.footer.about')}</Text>
         </Pressable>
         <Text style={styles.sep}>·</Text>
         <Pressable
@@ -36,7 +38,7 @@ export function DesktopFooter() {
             if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank', 'noopener,noreferrer');
           }}
         >
-          <Text style={styles.link}>Become a Mentor</Text>
+          <Text style={styles.link}>{t('navigation.footer.becomeMentor')}</Text>
         </Pressable>
         <Text style={styles.sep}>·</Text>
         <Pressable
@@ -45,14 +47,14 @@ export function DesktopFooter() {
             if (typeof window !== 'undefined') window.open(`${SITE_URL}/mentor`, '_blank', 'noopener,noreferrer');
           }}
         >
-          <Text style={styles.link}>Become an Opportunity admin</Text>
+          <Text style={styles.link}>{t('navigation.footer.becomeOpportunityAdmin')}</Text>
         </Pressable>
         <Text style={styles.sep}>·</Text>
         <Pressable
           onPress={() => router.push(ROUTES.MAIN.HELP.INDEX)}
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
         >
-          <Text style={styles.link}>Report an issue</Text>
+          <Text style={styles.link}>{t('navigation.footer.reportIssue')}</Text>
         </Pressable>
         <Text style={styles.sep}>·</Text>
         <Pressable
@@ -61,7 +63,7 @@ export function DesktopFooter() {
         >
           <View style={styles.whatsappLink}>
             <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
-            <Text style={styles.link}>Join our WhatsApp community</Text>
+            <Text style={styles.link}>{t('navigation.whatsapp.community')}</Text>
           </View>
         </Pressable>
       </View>

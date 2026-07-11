@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { supabase } from '@/services/supabase/client';
 
@@ -25,6 +26,7 @@ export function useMentorshipMessages(
   const { user } = useAuth();
   const userId = user?.id ?? '';
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
   const enabled = options?.enabled !== false && Boolean(mentorshipId);
   const poll = options?.poll ?? false;
 
@@ -72,7 +74,7 @@ export function useMentorshipMessages(
 
   const sendMutation = useMutation({
     mutationFn: async (input: SendMessageInput | string) => {
-      if (!mentorshipId || !userId) throw new Error('Not signed in');
+      if (!mentorshipId || !userId) throw new Error(t('mentorship.messageErrors.notSignedIn'));
 
       const payload = typeof input === 'string' ? { body: input } : input;
       let attachmentUrl: string | null = null;
@@ -92,7 +94,7 @@ export function useMentorshipMessages(
           maxBytes: maxBytesForType(type),
         });
         if (!upload.publicUrl) {
-          throw upload.error ?? new Error('Failed to upload attachment');
+          throw upload.error ?? new Error(t('mentorship.messageErrors.uploadFailed'));
         }
         attachmentUrl = upload.publicUrl;
         attachmentType = type;
@@ -103,7 +105,7 @@ export function useMentorshipMessages(
       }
 
       if (!displayBody && !attachmentUrl) {
-        throw new Error('Message cannot be empty.');
+        throw new Error(t('mentorship.messageErrors.empty'));
       }
 
       const result = await mentorshipDataApi.sendMessage(mentorshipId, userId, displayBody, {

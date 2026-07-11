@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useTranslation } from 'react-i18next';
 
 import { queryKeys } from '@/constants/query-keys';
 import { mentorshipDataApi } from '@/services/api';
@@ -6,6 +7,7 @@ import type { MentorAvailabilityRule } from '@/types/domain/mentorship';
 
 export function useMentorAvailability(mentorId: string | undefined) {
   const queryClient = useQueryClient();
+  const { t } = useTranslation();
 
   const query = useQuery({
     queryKey: queryKeys.mentorship.availability(mentorId ?? ''),
@@ -20,7 +22,7 @@ export function useMentorAvailability(mentorId: string | undefined) {
 
   const saveMutation = useMutation({
     mutationFn: async (rule: Omit<MentorAvailabilityRule, 'mentorId'> & { id?: string }) => {
-      if (!mentorId) throw new Error('Missing mentor');
+      if (!mentorId) throw new Error(t('mentorship.availabilityErrors.missingMentor'));
       const result = await mentorshipDataApi.upsertAvailabilityRule(mentorId, rule);
       if (!result.success) throw new Error(result.error.message);
       return result.data;
@@ -34,7 +36,7 @@ export function useMentorAvailability(mentorId: string | undefined) {
 
   const deleteMutation = useMutation({
     mutationFn: async (ruleId: string) => {
-      if (!mentorId) throw new Error('Missing mentor');
+      if (!mentorId) throw new Error(t('mentorship.availabilityErrors.missingMentor'));
       const result = await mentorshipDataApi.deleteAvailabilityRule(mentorId, ruleId);
       if (!result.success) throw new Error(result.error.message);
     },

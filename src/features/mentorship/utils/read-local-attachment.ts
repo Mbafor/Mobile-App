@@ -2,11 +2,13 @@ import { decode } from 'base64-arraybuffer';
 import * as FileSystem from 'expo-file-system/legacy';
 import { Platform } from 'react-native';
 
+import i18n from '@/i18n';
+
 export class AttachmentTooLargeError extends Error {
   readonly maxBytes: number;
 
   constructor(maxBytes: number) {
-    super(`File is too large. Maximum size is ${formatBytes(maxBytes)}.`);
+    super(i18n.t('mentorship.attachment.tooLarge', { size: formatBytes(maxBytes) }));
     this.name = 'AttachmentTooLargeError';
     this.maxBytes = maxBytes;
   }
@@ -21,7 +23,7 @@ function formatBytes(bytes: number): string {
 export async function assertAttachmentSize(uri: string, maxBytes: number): Promise<number> {
   const info = await FileSystem.getInfoAsync(uri);
   if (!info.exists) {
-    throw new Error('Could not read the selected file.');
+    throw new Error(i18n.t('mentorship.attachment.readError'));
   }
   const size = 'size' in info && typeof info.size === 'number' ? info.size : 0;
   if (size > maxBytes) {
@@ -39,7 +41,7 @@ export async function readLocalAttachment(
   // that expo-file-system cannot read. Use fetch() instead.
   if (Platform.OS === 'web') {
     const resp = await fetch(uri);
-    if (!resp.ok) throw new Error('Could not read the selected file.');
+    if (!resp.ok) throw new Error(i18n.t('mentorship.attachment.readError'));
     const data = await resp.arrayBuffer();
     if (data.byteLength > maxBytes) throw new AttachmentTooLargeError(maxBytes);
     return { data, byteLength: data.byteLength };

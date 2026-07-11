@@ -1,8 +1,8 @@
 import type { DeadlineRangeFilter, LocationType } from '@/types/domain/opportunity';
+import { FUNDING_VALUES } from '@/constants/onboarding';
 import {
   BROWSE_CATEGORY_LIST,
   OPPORTUNITY_DEGREE_VALUES,
-  OPPORTUNITY_FUNDING_OPTIONS,
   OPPORTUNITY_LOCATION_OPTIONS,
   PREDEFINED_OPPORTUNITY_COUNTRIES,
 } from '@/constants/opportunity-fields';
@@ -12,7 +12,7 @@ export const FILTER_COUNTRIES = PREDEFINED_OPPORTUNITY_COUNTRIES;
 export const FILTER_CATEGORIES = BROWSE_CATEGORY_LIST;
 
 export const FILTER_FUNDING_TYPES = [
-  ...OPPORTUNITY_FUNDING_OPTIONS.map((o) => o.value),
+  ...FUNDING_VALUES.filter((v) => v !== 'any'),
   'any',
 ] as const;
 

@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { WebView, type WebViewNavigation } from 'react-native-webview';
+import { useTranslation } from 'react-i18next';
 
 import { Text } from '@/components/ui';
 import { extractReferenceFromUrl } from '@/services/paystack/paystack';
@@ -36,6 +37,7 @@ export function PaystackCheckoutModal({
 }: PaystackCheckoutModalProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const handledRef = useRef(false);
@@ -67,16 +69,16 @@ export function PaystackCheckoutModal({
 
       if (url.includes('close') || url.startsWith('Voila://')) {
         handledRef.current = true;
-        onFailure('Payment was cancelled', true);
+        onFailure(t('cvBuilder.paystack.paymentCancelled'), true);
       }
     },
-    [onSuccess, onFailure],
+    [onSuccess, onFailure, t],
   );
 
   const handleClose = () => {
     if (!handledRef.current) {
       handledRef.current = true;
-      onFailure('Payment was cancelled', true);
+      onFailure(t('cvBuilder.paystack.paymentCancelled'), true);
     }
     onClose();
   };
@@ -87,7 +89,7 @@ export function PaystackCheckoutModal({
         <View style={styles.toolbar}>
           <View style={styles.toolbarLeft}>
             <Ionicons name="lock-closed" size={18} color={colors.primary} />
-            <Text style={styles.toolbarTitle}>Secure checkout</Text>
+            <Text style={styles.toolbarTitle}>{t('cvBuilder.paystack.secureCheckout')}</Text>
           </View>
           <Pressable onPress={handleClose} style={styles.closeBtn} hitSlop={12}>
             <Ionicons name="close" size={22} color={colors.text} />
@@ -99,7 +101,7 @@ export function PaystackCheckoutModal({
             <View style={styles.loadingOverlay}>
               <ActivityIndicator size="large" color={colors.primary} />
               <Text muted style={styles.loadingText}>
-                Loading Paystack…
+                {t('cvBuilder.paystack.loadingPaystack')}
               </Text>
             </View>
           ) : null}
@@ -113,7 +115,7 @@ export function PaystackCheckoutModal({
               setLoading(false);
               if (!handledRef.current) {
                 handledRef.current = true;
-                onFailure('Could not load Paystack checkout. Check your connection and try again.');
+                onFailure(t('cvBuilder.paystack.loadFailed'));
               }
             }}
             onHttpError={() => setLoading(false)}

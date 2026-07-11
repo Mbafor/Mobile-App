@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
@@ -23,6 +24,7 @@ type MenteesTableProps = {
 export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: MenteesTableProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
   const [profileMentee, setProfileMentee] = useState<MenteeSummary | null>(null);
   const [menuMentee, setMenuMentee] = useState<MenteeSummary | null>(null);
 
@@ -32,23 +34,23 @@ export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: Mente
         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
           <View>
             <View style={styles.tableHeader}>
-              <HeaderCell label="Profile" width={88} />
-              <HeaderCell label="Name" width={190} />
-              <HeaderCell label="Course" width={180} />
-              <HeaderCell label="University" width={210} />
-              <HeaderCell label="Ends On" width={120} />
-              <HeaderCell label="Actions" width={170} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colProfile')} width={88} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colName')} width={190} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colCourse')} width={180} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colUniversity')} width={210} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colEndsOn')} width={120} />
+              <HeaderCell label={t('mentorship.coach.menteesTable.colActions')} width={170} />
             </View>
 
             {mentees.length === 0 ? (
               <View style={styles.emptyRow}>
                 <Text muted>
-                  No active mentees. Students from the waiting list will appear here when assigned.
+                  {t('mentorship.coach.menteesTable.empty')}
                 </Text>
               </View>
             ) : (
               mentees.map((row) => {
-                const name = row.profile.fullName?.trim() || 'Student';
+                const name = row.profile.fullName?.trim() || t('mentorship.coach.studentFallback');
                 return (
                   <View key={row.mentorship.id} style={styles.row}>
                     <View style={[styles.cell, styles.avatarCell, { width: 88 }]}>
@@ -70,7 +72,7 @@ export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: Mente
                         style={styles.menuBtn}
                         hitSlop={12}
                         onPress={() => setMenuMentee(row)}
-                        accessibilityLabel={`Actions for ${name}`}
+                        accessibilityLabel={t('mentorship.coach.menteesTable.actionsFor', { name })}
                       >
                         <Ionicons
                           name="ellipsis-vertical"
@@ -89,33 +91,39 @@ export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: Mente
 
       <OptionsSheet
         visible={menuMentee != null}
-        title={menuMentee?.profile.fullName?.trim() ?? 'Student'}
+        title={menuMentee?.profile.fullName?.trim() ?? t('mentorship.coach.studentFallback')}
         onClose={() => setMenuMentee(null)}
         options={[
           {
             key: 'view',
-            label: 'View profile',
+            label: t('mentorship.coach.menteesTable.viewProfile'),
             onPress: () => {
               if (menuMentee) setProfileMentee(menuMentee);
             },
           },
           {
             key: 'message',
-            label: 'Message',
+            label: t('mentorship.coach.menteesTable.message'),
             onPress: () => {
               if (menuMentee) onMessage?.(menuMentee.mentorship.id);
             },
           },
           {
             key: 'delete',
-            label: isRemoving ? 'Deleting…' : 'Delete',
+            label: isRemoving
+              ? t('mentorship.coach.menteesTable.deleting')
+              : t('mentorship.coach.menteesTable.delete'),
             destructive: true,
             onPress: () => {
               if (!menuMentee) return;
               void (async () => {
                 const ok = await confirmAction(
-                  'Remove student',
-                  `Are you sure you want to remove ${menuMentee.profile.fullName?.trim() || 'this student'} from mentorship?`,
+                  t('mentorship.coach.menteesTable.removeTitle'),
+                  t('mentorship.coach.menteesTable.removeMessage', {
+                    name:
+                      menuMentee.profile.fullName?.trim() ||
+                      t('mentorship.coach.menteesTable.removeFallbackName'),
+                  }),
                 );
                 if (!ok) return;
                 onRemove(menuMentee.mentorship.id);
@@ -132,14 +140,14 @@ export function MenteesTable({ mentees, onRemove, isRemoving, onMessage }: Mente
       >
         <View style={styles.profileModal}>
           <View style={styles.profileHeader}>
-            <Text style={styles.profileTitle}>Student profile</Text>
+            <Text style={styles.profileTitle}>{t('mentorship.coach.menteesTable.studentProfile')}</Text>
             <Pressable onPress={() => setProfileMentee(null)} hitSlop={12}>
-              <Text style={styles.closeText}>Close</Text>
+              <Text style={styles.closeText}>{t('mentorship.coach.menteesTable.close')}</Text>
             </Pressable>
           </View>
           <ScrollView contentContainerStyle={styles.profileScroll}>
             {profileMentee ? (
-              <ParticipantProfileDetail profile={profileMentee.profile} roleLabel="Mentee" />
+              <ParticipantProfileDetail profile={profileMentee.profile} roleLabel={t('mentorship.roles.mentee')} />
             ) : null}
           </ScrollView>
         </View>

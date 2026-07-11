@@ -3,6 +3,8 @@ import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import type { TFunction } from 'i18next';
 import {
   ActivityIndicator,
   Alert,
@@ -50,13 +52,13 @@ type MentorshipChatProps = {
   fullScreen?: boolean;
 };
 
-function attachmentLabel(item: MentorshipMessage): string | null {
+function attachmentLabel(item: MentorshipMessage, t: TFunction): string | null {
   if (!item.attachmentUrl) return null;
   if (item.attachmentType === 'image') return null;
   const body = item.body?.trim() ?? '';
   if (body.startsWith('📎 ')) return body.slice(2);
   if (body && body !== 'Attachment' && body !== 'Photo') return body;
-  return 'Document';
+  return t('mentorship.chat.documentFallback');
 }
 
 export function MentorshipChat({
@@ -66,13 +68,16 @@ export function MentorshipChat({
   isLoading,
   isSending,
   onSend,
-  emptyHint = 'Send a message to start the conversation.',
-  peerName = 'Them',
+  emptyHint: emptyHintProp,
+  peerName: peerNameProp,
   peerAvatarUrl,
   fullScreen = false,
 }: MentorshipChatProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
+  const { t } = useTranslation();
+  const emptyHint = emptyHintProp ?? t('mentorship.chat.emptyHintDefault');
+  const peerName = peerNameProp ?? t('mentorship.chat.them');
   const [draft, setDraft] = useState('');
   const [uploading, setUploading] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);
@@ -95,8 +100,8 @@ export function MentorshipChat({
       listRef.current?.scrollToEnd({ animated: true });
     } catch (e) {
       Alert.alert(
-        'Message failed',
-        e instanceof Error ? e.message : 'Could not send your message. Try again.',
+        t('mentorship.chat.messageFailedTitle'),
+        e instanceof Error ? e.message : t('mentorship.chat.messageFailedBody'),
       );
     }
   };
@@ -108,7 +113,7 @@ export function MentorshipChat({
     mimeType?: string;
   }) => {
     if (!mentorshipId?.trim()) {
-      Alert.alert('Cannot attach', 'No active mentorship conversation.');
+      Alert.alert(t('mentorship.chat.cannotAttachTitle'), t('mentorship.chat.cannotAttachBody'));
       return;
     }
     setUploading(true);
@@ -172,7 +177,7 @@ export function MentorshipChat({
           <View style={styles.peerMeta}>
             <Text style={styles.peerName}>{peerName}</Text>
             <Text variant="caption" muted>
-              Mentorship conversation
+              {t('mentorship.chat.conversation')}
             </Text>
           </View>
         </View>
@@ -181,7 +186,7 @@ export function MentorshipChat({
       <View style={styles.messageStream}>
         {messages.length === 0 ? (
           <View style={styles.emptyWrap}>
-            <EmptyState title="No messages yet" description={emptyHint} />
+            <EmptyState title={t('mentorship.chat.noMessages')} description={emptyHint} />
           </View>
         ) : (
           <FlatList
@@ -203,7 +208,7 @@ export function MentorshipChat({
                 hour: '2-digit',
                 minute: '2-digit',
               });
-              const fileLabel = attachmentLabel(item);
+              const fileLabel = attachmentLabel(item, t);
               const showImage =
                 item.attachmentUrl && item.attachmentType === 'image';
               const showFile =
@@ -263,7 +268,7 @@ export function MentorshipChat({
           onPress={() => setAttachOpen(true)}
           disabled={!canAttach}
           accessibilityRole="button"
-          accessibilityLabel="Attach photo or file"
+          accessibilityLabel={t('mentorship.chat.attach')}
         >
           {uploading ? (
             <ActivityIndicator size="small" color={mentorshipColors.accent} />
@@ -278,7 +283,7 @@ export function MentorshipChat({
             setDraft(text);
             onDraftChange(text);
           }}
-          placeholder="Message…"
+          placeholder={t('mentorship.chat.messagePlaceholder')}
           placeholderTextColor={mentorshipColors.textMuted}
           style={styles.input}
           multiline
@@ -291,7 +296,7 @@ export function MentorshipChat({
           onPress={() => void handleSend()}
           disabled={!canSend}
           accessibilityRole="button"
-          accessibilityLabel="Send message"
+          accessibilityLabel={t('mentorship.chat.send')}
         >
           {isSending ? (
             <ActivityIndicator size="small" color={mentorshipColors.textOnAccent} />

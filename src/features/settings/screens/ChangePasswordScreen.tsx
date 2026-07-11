@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
@@ -16,6 +17,7 @@ import { isValidPassword } from '@/utils/validation';
 
 export function ChangePasswordScreen() {
   const styles = useThemedStyles(createStyles);
+  const { t } = useTranslation();
   const router = useRouter();
   const { userEmail } = useAuth();
   const { updatePassword } = useAuthActions();
@@ -30,15 +32,15 @@ export function ChangePasswordScreen() {
     setError(null);
 
     if (!currentPassword || !newPassword || !confirmPassword) {
-      Alert.alert('Required fields', 'Please fill in all password fields.');
+      Alert.alert(t('settings.changePassword.requiredTitle'), t('settings.changePassword.requiredMessage'));
       return;
     }
     if (!isValidPassword(newPassword)) {
-      Alert.alert('Weak password', 'New password must be at least 8 characters.');
+      Alert.alert(t('settings.changePassword.weakTitle'), t('settings.changePassword.weakMessage'));
       return;
     }
     if (newPassword !== confirmPassword) {
-      Alert.alert('Passwords do not match', 'New password and confirmation must match.');
+      Alert.alert(t('settings.changePassword.mismatchTitle'), t('settings.changePassword.mismatchMessage'));
       return;
     }
 
@@ -47,7 +49,7 @@ export function ChangePasswordScreen() {
     const { error: reauthError } = await authApi.signInWithPassword(userEmail, currentPassword);
     if (reauthError) {
       setIsSaving(false);
-      setError('Current password is incorrect.');
+      setError(t('settings.changePassword.incorrectCurrent'));
       return;
     }
 
@@ -55,7 +57,7 @@ export function ChangePasswordScreen() {
     setIsSaving(false);
 
     if (ok) {
-      Alert.alert('Password updated', 'Your password was changed successfully.');
+      Alert.alert(t('settings.changePassword.updatedTitle'), t('settings.changePassword.updatedMessage'));
       router.back();
     }
   };
@@ -65,7 +67,7 @@ export function ChangePasswordScreen() {
       style={styles.root}
       behavior={Platform.OS === 'ios' ? 'padding' : undefined}
     >
-      <PageHeader title="Change Password" onBack={() => router.back()} />
+      <PageHeader title={t('settings.changePassword.title')} onBack={() => router.back()} />
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}
@@ -74,29 +76,29 @@ export function ChangePasswordScreen() {
       >
         {userEmail ? <Text muted style={styles.email}>{userEmail}</Text> : null}
 
-        <FormField label="Current password *">
+        <FormField label={t('settings.changePassword.currentLabel')}>
           <Input
             value={currentPassword}
             onChangeText={setCurrentPassword}
-            placeholder="Enter current password"
+            placeholder={t('settings.changePassword.currentPlaceholder')}
             secureTextEntry
             autoCapitalize="none"
           />
         </FormField>
-        <FormField label="New password *">
+        <FormField label={t('settings.changePassword.newLabel')}>
           <Input
             value={newPassword}
             onChangeText={setNewPassword}
-            placeholder="At least 8 characters"
+            placeholder={t('settings.changePassword.newPlaceholder')}
             secureTextEntry
             autoCapitalize="none"
           />
         </FormField>
-        <FormField label="Confirm new password *">
+        <FormField label={t('settings.changePassword.confirmLabel')}>
           <Input
             value={confirmPassword}
             onChangeText={setConfirmPassword}
-            placeholder="Re-enter new password"
+            placeholder={t('settings.changePassword.confirmPlaceholder')}
             secureTextEntry
             autoCapitalize="none"
           />
@@ -105,7 +107,7 @@ export function ChangePasswordScreen() {
         {error ? <ErrorMessage message={error} /> : null}
 
         <Button onPress={() => void handleSave()} loading={isSaving} disabled={isSaving}>
-          Save
+          {t('common.save')}
         </Button>
       </ScrollView>
     </KeyboardAvoidingView>

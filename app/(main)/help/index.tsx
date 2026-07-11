@@ -3,6 +3,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { useRouter, type Href } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 import { Linking, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { PageHeader } from '@/components/layout/PageHeader';
@@ -20,44 +21,45 @@ type HelpItem = {
   onPress?: () => void;
 };
 
-const items: HelpItem[] = [
-  {
-    label: 'Report a Bug',
-    subtitle: 'Found something broken? Let us know.',
-    icon: 'bug-outline',
-    route: ROUTES.MAIN.HELP.REPORT_BUG,
-  },
-  {
-    label: 'Feature Request',
-    subtitle: 'Suggest an improvement or new feature.',
-    icon: 'bulb-outline',
-    route: ROUTES.MAIN.HELP.FEATURE_REQUEST,
-  },
-  {
-    label: 'Leave Feedback',
-    subtitle: 'Rate your experience and share your thoughts.',
-    icon: 'chatbubble-ellipses-outline',
-    route: ROUTES.MAIN.HELP.FEEDBACK,
-  },
-  {
-    label: 'Contact Support',
-    subtitle: `Email us at ${SUPPORT_EMAIL}`,
-    icon: 'mail-outline',
-    onPress: () =>
-      void Linking.openURL(
-        `mailto:${SUPPORT_EMAIL}?subject=Support Request — Voila`,
-      ),
-  },
-];
-
 export default function HelpIndexScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const router = useRouter();
+
+  const items: HelpItem[] = [
+    {
+      label: t('help.index.reportBug.label'),
+      subtitle: t('help.index.reportBug.subtitle'),
+      icon: 'bug-outline',
+      route: ROUTES.MAIN.HELP.REPORT_BUG,
+    },
+    {
+      label: t('help.index.featureRequest.label'),
+      subtitle: t('help.index.featureRequest.subtitle'),
+      icon: 'bulb-outline',
+      route: ROUTES.MAIN.HELP.FEATURE_REQUEST,
+    },
+    {
+      label: t('help.index.feedback.label'),
+      subtitle: t('help.index.feedback.subtitle'),
+      icon: 'chatbubble-ellipses-outline',
+      route: ROUTES.MAIN.HELP.FEEDBACK,
+    },
+    {
+      label: t('help.index.contact.label'),
+      subtitle: t('help.index.contact.subtitle', { email: SUPPORT_EMAIL }),
+      icon: 'mail-outline',
+      onPress: () =>
+        void Linking.openURL(
+          `mailto:${SUPPORT_EMAIL}?subject=Support Request — Voila`,
+        ),
+    },
+  ];
 
   return (
     <View style={styles.root}>
-      <PageHeader title="Help & Support" />
+      <PageHeader title={t('help.title')} />
 
       <ScrollView
         style={styles.scroll}
@@ -65,7 +67,7 @@ export default function HelpIndexScreen() {
         showsVerticalScrollIndicator={false}
       >
         <Text style={styles.intro}>
-          How can we help you? Choose an option below.
+          {t('help.index.intro')}
         </Text>
 
         <View style={styles.list}>

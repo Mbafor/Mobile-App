@@ -3,6 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
@@ -14,6 +15,7 @@ import { superAdminApi } from '@/services/api';
 export function SuperAdminOverviewScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const { t } = useTranslation();
   const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: queryKeys.superAdmin.overview,
     queryFn: async () => {
@@ -37,26 +39,26 @@ export function SuperAdminOverviewScreen() {
       refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => void refetch()} />}
     >
       <Text muted style={styles.subtitle}>
-        Quick snapshot. Open Analytics for full charts, users, engagement, and notifications.
+        {t('superAdmin.overview.subtitle')}
       </Text>
       {error ? (
-        <ErrorMessage message={error instanceof Error ? error.message : 'Failed to load'} />
+        <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.overview.failedToLoad')} />
       ) : null}
       {data ? (
         <>
-          <Text style={styles.section}>Mentorship</Text>
+          <Text style={styles.section}>{t('superAdmin.overview.sections.mentorship')}</Text>
           <View style={styles.grid}>
-            <AdminStatCard label="Approved mentors" value={data.mentors.approved} />
-            <AdminStatCard label="Pending mentors" value={data.mentors.pending} />
-            <AdminStatCard label="Active mentorships" value={data.mentorships.active} />
-            <AdminStatCard label="Waiting list" value={data.waitingList} />
+            <AdminStatCard label={t('superAdmin.overview.stats.approvedMentors')} value={data.mentors.approved} />
+            <AdminStatCard label={t('superAdmin.overview.stats.pendingMentors')} value={data.mentors.pending} />
+            <AdminStatCard label={t('superAdmin.overview.stats.activeMentorships')} value={data.mentorships.active} />
+            <AdminStatCard label={t('superAdmin.overview.stats.waitingList')} value={data.waitingList} />
           </View>
-          <Text style={styles.section}>Platform</Text>
+          <Text style={styles.section}>{t('superAdmin.overview.sections.platform')}</Text>
           <View style={styles.grid}>
-            <AdminStatCard label="Total users" value={data.users} />
-            <AdminStatCard label="Opportunity admins" value={data.admins} />
-            <AdminStatCard label="Active opportunities" value={data.opportunities.active} />
-            <AdminStatCard label="Pending push" value={data.notifications.pendingPush} />
+            <AdminStatCard label={t('superAdmin.overview.stats.totalUsers')} value={data.users} />
+            <AdminStatCard label={t('superAdmin.overview.stats.opportunityAdmins')} value={data.admins} />
+            <AdminStatCard label={t('superAdmin.overview.stats.activeOpportunities')} value={data.opportunities.active} />
+            <AdminStatCard label={t('superAdmin.overview.stats.pendingPush')} value={data.notifications.pendingPush} />
           </View>
         </>
       ) : null}
