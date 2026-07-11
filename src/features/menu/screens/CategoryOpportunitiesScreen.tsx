@@ -299,7 +299,7 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 22,
   },
   resultOrg: { fontSize: 13, color: colors.textMuted },
-  resultDeadline: { fontSize: 13, color: colors.primary, fontWeight: '500' },
+  resultDeadline: { fontSize: 13, color: colors.text, fontWeight: '500' },
   resultTags: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginTop: 2 },
   resultTag: {
     backgroundColor: colors.surface,

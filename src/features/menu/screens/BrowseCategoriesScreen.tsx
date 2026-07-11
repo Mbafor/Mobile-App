@@ -337,7 +337,7 @@ function createStyles(colors: ColorScheme) {
   },
   resultDeadline: {
     fontSize: 13,
-    color: colors.primary,
+    color: colors.text,
     fontWeight: '500',
   },
   resultTags: {

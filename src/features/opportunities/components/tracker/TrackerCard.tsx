@@ -272,7 +272,7 @@ function createStyles(colors: ColorScheme) {
     fontWeight: '600',
     color: colors.text,
   },
-  deadline: { color: colors.primary, marginTop: 2 },
+  deadline: { color: colors.text, marginTop: 2 },
   applyLinkWrap: {
     alignSelf: 'flex-start',
     marginHorizontal: spacing.md,
@@ -292,7 +292,7 @@ function createStyles(colors: ColorScheme) {
     borderRadius: 999,
     backgroundColor: colors.surface,
   },
-  tagText: { color: colors.primary, fontWeight: '600' },
+  tagText: { color: colors.text, fontWeight: '600' },
   notes: {
     borderWidth: 1,
     borderColor: colors.border,

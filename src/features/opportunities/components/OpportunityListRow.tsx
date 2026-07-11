@@ -70,6 +70,6 @@ function createStyles(colors: ColorScheme) {
   thumbLetter: { color: colors.background, fontWeight: '700', fontSize: 20 },
   content: { flex: 1, gap: 2 },
   title: { fontSize: typography.fontSize.md, fontWeight: '600', color: colors.text },
-  deadline: { color: colors.primary },
+  deadline: { color: colors.text },
 });
 }

@@ -86,8 +86,8 @@ function DeadlineBadge({ deadline }: { deadline: string | null }) {
   const urgent = days >= 0 && days <= 7;
   const expired = days < 0;
 
-  const bg = expired ? `${colors.error}12` : urgent ? '#FFF4E5' : `${colors.primary}0D`;
-  const textColor = expired ? colors.error : urgent ? '#B45309' : colors.primary;
+  const bg = colors.surface;
+  const textColor = colors.text;
   const iconName: keyof typeof Ionicons.glyphMap = expired
     ? 'time-outline'
     : urgent
@@ -585,11 +585,11 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.sm,
     paddingVertical: spacing.xs,
     borderRadius: 999,
-    backgroundColor: `${colors.primary}0D`,
+    backgroundColor: colors.surface,
     borderWidth: 1,
-    borderColor: `${colors.primary}25`,
+    borderColor: colors.border,
   },
-  tagText: { fontSize: 12, color: colors.primary, fontWeight: '500' },
+  tagText: { fontSize: 12, color: colors.text, fontWeight: '500' },
 
   divider: {
     height: StyleSheet.hairlineWidth,

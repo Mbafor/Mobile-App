@@ -143,7 +143,7 @@ function createStyles(colors: ColorScheme) {
     fontWeight: '700',
     color: colors.text,
   },
-  deadline: { color: colors.primary, marginTop: 2 },
+  deadline: { color: colors.text, marginTop: 2 },
   tags: {
     flexDirection: 'row',
     flexWrap: 'wrap',
