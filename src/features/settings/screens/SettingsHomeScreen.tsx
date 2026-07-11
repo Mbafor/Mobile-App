@@ -47,6 +47,9 @@ export function SettingsHomeScreen() {
         showsVerticalScrollIndicator={false}
       >
         <View style={styles.group}>
+          <Text variant="caption" muted style={styles.groupLabel}>
+            {t('settings.home.accountSectionLabel')}
+          </Text>
           <SettingsRow
             label={t('settings.home.notifications')}
             onPress={() => router.push(ROUTES.MAIN.SETTINGS_NOTIFICATIONS as Href)}
@@ -81,6 +84,9 @@ export function SettingsHomeScreen() {
         </View>
 
         <View style={styles.group}>
+          <Text variant="caption" muted style={styles.groupLabel}>
+            {t('settings.home.accountActionsSectionLabel')}
+          </Text>
           <SettingsRow
             label={t('settings.home.logout')}
             destructive

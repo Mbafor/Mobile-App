@@ -10,7 +10,7 @@ import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 
 /** Must match DesktopSidebar's logo-box height so the two bottom borders line up. */
-export const DESKTOP_HEADER_HEIGHT = 64;
+export const DESKTOP_HEADER_HEIGHT = 132;
 
 /** Mirrors the matchPath list in DesktopSidebar — kept in sync manually since each item also needs an icon there. */
 const CRUMB_ROUTES: { matchPath: string; labelKey: string }[] = [

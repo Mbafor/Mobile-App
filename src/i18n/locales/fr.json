@@ -24,6 +24,8 @@
     },
     "home": {
       "title": "Paramètres",
+      "accountSectionLabel": "Compte",
+      "accountActionsSectionLabel": "Actions du compte",
       "notifications": "Notifications",
       "privacy": "Confidentialité",
       "changePassword": "Changer le mot de passe",

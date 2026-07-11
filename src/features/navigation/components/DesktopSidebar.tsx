@@ -332,12 +332,13 @@ function createStyles(colors: ColorScheme) {
     borderBottomColor: colors.border,
   },
   logoImg: {
-    width: 40,
-    height: 40,
+    width: 120,
+    height: 120,
   },
   logoImgCollapsed: {
-    width: 32,
-    height: 32,
+    // Capped below 3x (32 -> 96) so it still fits inside the 72px-wide collapsed rail.
+    width: 60,
+    height: 60,
   },
   // Floating circular badge that straddles the sidebar's right border.
   toggleButton: {

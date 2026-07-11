@@ -24,6 +24,8 @@
     },
     "home": {
       "title": "Settings",
+      "accountSectionLabel": "Account",
+      "accountActionsSectionLabel": "Account Actions",
       "notifications": "Notifications",
       "privacy": "Privacy",
       "changePassword": "Change Password",
