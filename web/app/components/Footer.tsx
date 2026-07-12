@@ -1,6 +1,8 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com";
+
 export default function Footer() {
   const t = useTranslations("Footer");
   const year = new Date().getFullYear();
@@ -12,9 +14,11 @@ export default function Footer() {
   ];
   const legalLinks = t.raw("columns.legal.links") as string[];
   const legalHrefs = ["/privacy", "/terms", "#"];
+  const companyLinks = t.raw("columns.company.links") as string[];
+  const companyHrefs = ["#", "#", "#", "#", `${APP_URL}/dashboard?feedback=1`];
   const columns = [
     { heading: t("columns.product.heading"), links: (t.raw("columns.product.links") as string[]).map((label) => ({ label, href: "#" })) },
-    { heading: t("columns.company.heading"), links: (t.raw("columns.company.links") as string[]).map((label) => ({ label, href: "#" })) },
+    { heading: t("columns.company.heading"), links: companyLinks.map((label, i) => ({ label, href: companyHrefs[i] ?? "#" })) },
     { heading: t("columns.legal.heading"), links: legalLinks.map((label, i) => ({ label, href: legalHrefs[i] ?? "#" })) },
   ];
 

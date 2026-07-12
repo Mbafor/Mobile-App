@@ -566,7 +566,8 @@
       "about": "About",
       "becomeMentor": "Become a Mentor",
       "becomeOpportunityAdmin": "Become an Opportunity admin",
-      "reportIssue": "Report an issue"
+      "reportIssue": "Report an issue",
+      "giveFeedback": "Give Feedback"
     },
     "whatsapp": {
       "community": "Join our WhatsApp community",
@@ -2015,5 +2016,33 @@
     "privacyPolicy": "Privacy Policy",
     "authDisclaimerPrefix": "By continuing, you agree to our",
     "authDisclaimerConnector": "and"
+  },
+  "survey": {
+    "close": "Close",
+    "progress": "Question {{current}} of {{total}}",
+    "placeholder": "Tell us in a few words",
+    "next": "Next",
+    "submit": "Submit",
+    "retry": "Retry",
+    "submitError": "Couldn't submit — please try again.",
+    "thanks": "Thanks for helping us build Voila Africa 🎉",
+    "done": "Done",
+    "rating": {
+      "question": "Rate your experience so far",
+      "starA11y_one": "{{count}} star",
+      "starA11y_other": "{{count}} stars"
+    },
+    "mostUsed": {
+      "question": "Which part of Voila Africa have you used the most?",
+      "opportunities": "Opportunities",
+      "cvBuilder": "CV Builder",
+      "mentorship": "Mentorship"
+    },
+    "excitedAbout": {
+      "question": "What are you most excited about in the mobile app?"
+    },
+    "featureRequest": {
+      "question": "If you could add one feature, what would it be?"
+    }
   }
 }

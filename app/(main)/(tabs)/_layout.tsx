@@ -8,6 +8,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
+import { FeatureSurveyModal } from '@/features/survey';
 import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
@@ -184,6 +185,7 @@ export default function MainTabsLayout() {
                 {tabs}
                 <FloatingHelpButton />
                 <WhatsAppCommunityBanner />
+                <FeatureSurveyModal />
               </View>
               <DesktopFooter />
             </View>
@@ -203,6 +205,7 @@ export default function MainTabsLayout() {
           {tabs}
           <FloatingHelpButton />
           <WhatsAppCommunityBanner />
+          <FeatureSurveyModal />
         </View>
         <View style={styles.mobileWebFooter}>
           <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
@@ -222,6 +225,7 @@ export default function MainTabsLayout() {
       {tabs}
       <FloatingHelpButton />
       <WhatsAppCommunityBanner />
+      <FeatureSurveyModal />
       <View style={styles.mobileFooter}>
         <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
         <Text

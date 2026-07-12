@@ -221,7 +221,7 @@
     },
     "columns": {
       "product": { "heading": "Produit", "links": ["Opportunités", "Mentorat", "Créateur de CV", "Suivi", "Notifications"] },
-      "company": { "heading": "Entreprise", "links": ["À propos", "Blog", "Carrières", "Contact"] },
+      "company": { "heading": "Entreprise", "links": ["À propos", "Blog", "Carrières", "Contact", "Donner votre avis"] },
       "legal": { "heading": "Mentions légales", "links": ["Politique de confidentialité", "Conditions d'utilisation", "Politique de cookies"] }
     },
     "copyright": "© {year} Voila. Tous droits réservés.",

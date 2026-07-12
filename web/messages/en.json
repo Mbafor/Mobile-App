@@ -221,7 +221,7 @@
     },
     "columns": {
       "product": { "heading": "Product", "links": ["Opportunities", "Mentorship", "CV Builder", "Tracker", "Notifications"] },
-      "company": { "heading": "Company", "links": ["About", "Blog", "Careers", "Contact"] },
+      "company": { "heading": "Company", "links": ["About", "Blog", "Careers", "Contact", "Give Feedback"] },
       "legal": { "heading": "Legal", "links": ["Privacy Policy", "Terms of Service", "Cookie Policy"] }
     },
     "copyright": "© {year} Voila. All rights reserved.",

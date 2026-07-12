@@ -8,6 +8,7 @@ import { webPressableStyle } from '@/utils/web/pressable';
 import { ROUTES } from '@/constants/routes';
 import { useRouter } from 'expo-router';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
+import { useSurveyStore } from '@/features/survey';
 
 const WHATSAPP_URL =
   process.env.EXPO_PUBLIC_WHATSAPP_CHANNEL_URL ??
@@ -19,6 +20,7 @@ export function DesktopFooter() {
   const styles = useThemedStyles(createStyles);
   const router = useRouter();
   const { t } = useTranslation();
+  const openSurvey = useSurveyStore((s) => s.open);
 
   return (
     <View style={styles.footer}>
@@ -55,6 +57,13 @@ export function DesktopFooter() {
           style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
         >
           <Text style={styles.link}>{t('navigation.footer.reportIssue')}</Text>
+        </Pressable>
+        <Text style={styles.sep}>·</Text>
+        <Pressable
+          onPress={() => openSurvey(true)}
+          style={webPressableStyle(styles.linkPressable, styles.linkPressableHover)}
+        >
+          <Text style={styles.link}>{t('navigation.footer.giveFeedback')}</Text>
         </Pressable>
         <Text style={styles.sep}>·</Text>
         <Pressable

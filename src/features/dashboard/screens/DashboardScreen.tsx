@@ -28,6 +28,7 @@ import { OpportunitySearchBar } from '@/features/opportunities/components/Opport
 import { OpportunitySearchResults } from '@/features/opportunities/components/OpportunitySearchResults';
 import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
 import { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
+import { useSurveyEligibility } from '@/features/survey';
 import { env } from '@/config/env';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
@@ -54,6 +55,7 @@ export function DashboardScreen() {
 
   const { isSearchVisible, setSearchVisible } = useAppStore();
   const { profile, user } = useAuth();
+  useSurveyEligibility();
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
 

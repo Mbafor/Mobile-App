@@ -1,7 +1,7 @@
 # Privacy Policy
 
 **Voila Africa**
-Last updated: [Insert Date]
+Last updated: 12 July 2026
 
 *This is a draft template prepared for planning purposes. It has not been reviewed by a lawyer and should not be published as-is. Please have a Ghana-qualified legal professional review this document before it goes live, particularly the sections on data protection compliance and cross-border data transfer.*
 
@@ -114,15 +114,15 @@ We may update this Privacy Policy from time to time. We will notify you of mater
 
 If you have questions or concerns about this Privacy Policy or how we handle your data, contact us at:
 
-**Email:** [insert support email]
-**Address:** [insert business address, if applicable]
+**Email:** support@voila-africa.com
+**Address:** KNUST, Kumasi
 
 ---
 
 # Terms of Service
 
 **Voila Africa**
-Last updated: [Insert Date]
+Last updated: 12 July 2026
 
 *This is a draft template prepared for planning purposes. It has not been reviewed by a lawyer and should not be published as-is. Please have a Ghana-qualified legal professional review this document, particularly the sections on liability, payments, and dispute resolution, before it goes live.*
 
@@ -210,12 +210,8 @@ We reserve the right to suspend or terminate your account at our discretion, wit
 
 We may update these Terms from time to time. We will notify you of material changes through the Platform or by email. Continued use of the Platform after changes take effect constitutes acceptance of the revised Terms.
 
-## 17. Governing Law
 
-These Terms are governed by the laws of the Republic of Ghana, without regard to conflict of law principles. [Confirm this with a lawyer, especially if you have a significant user base or business presence in other jurisdictions.]
-
-
-## 18. Contact Us
+## 17. Contact Us
 
 If you have questions about these Terms, contact us at:
 
