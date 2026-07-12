@@ -8,3 +8,6 @@ export const APP_WEB_BASE_URL =
 
 export const REFERRAL_MESSAGE =
   `Join me on Voila — discover scholarships, internships and opportunities worldwide! ${env.LANDING_URL}`;
+
+export const TERMS_URL = `${env.LANDING_URL}/terms`;
+export const PRIVACY_URL = `${env.LANDING_URL}/privacy`;

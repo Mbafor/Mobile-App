@@ -2094,5 +2094,11 @@
         "zimbabwe": "Zimbabwe"
       }
     }
+  },
+  "legal": {
+    "termsOfService": "Conditions d'utilisation",
+    "privacyPolicy": "Politique de confidentialité",
+    "authDisclaimerPrefix": "En continuant, vous acceptez nos",
+    "authDisclaimerConnector": "et notre"
   }
 }

@@ -17,12 +17,14 @@ import { FormField } from '@/components/forms';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
 import { ErrorMessage } from '@/components/feedback';
+import { PRIVACY_URL, TERMS_URL } from '@/constants/app';
 import { ROUTES } from '@/constants/routes';
 import { spacing, typography } from '@/constants/theme';
 import { useAuthStore } from '@/features/auth/store/auth.store';
 import { isValidEmail } from '@/utils/validation';
 import { isValidPassword } from '@/utils/validation/password';
 import { useWebMobile, useWebDesktop } from '@/hooks/useWebDesktop';
+import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
 type AuthMode = 'signin' | 'signup';
 
@@ -243,6 +245,20 @@ export function WelcomeScreen() {
     </View>
   );
 
+  const legalLinksRow = (
+    <Text style={styles.legalText}>
+      {t('legal.authDisclaimerPrefix')}{' '}
+      <Text style={styles.legalLink} onPress={() => void openExternalUrl(TERMS_URL)}>
+        {t('legal.termsOfService')}
+      </Text>
+      {' '}{t('legal.authDisclaimerConnector')}{' '}
+      <Text style={styles.legalLink} onPress={() => void openExternalUrl(PRIVACY_URL)}>
+        {t('legal.privacyPolicy')}
+      </Text>
+      .
+    </Text>
+  );
+
   // ── Form bodies ────────────────────────────────────────────────────────────
 
   // Sign-in form (web / web-mobile)
@@ -328,6 +344,8 @@ export function WelcomeScreen() {
       <Text style={styles.hint}>
         {t('auth.welcome.signInHint')}
       </Text>
+
+      {legalLinksRow}
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
@@ -438,6 +456,8 @@ export function WelcomeScreen() {
         {t('auth.welcome.signUpHint')}
       </Text>
 
+      {legalLinksRow}
+
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
         <Text style={styles.supportText}>
           {t('auth.common.supportPrefix')} <Text style={styles.supportEmail}>support@voila-africa.com</Text>
@@ -517,6 +537,7 @@ export function WelcomeScreen() {
                     <Text style={styles.hint}>
                       {t('auth.welcome.emailCodeHint')}
                     </Text>
+                    {legalLinksRow}
                   </>
                 ) : (
                   signUpFormBody
@@ -932,6 +953,19 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 18,
   },
   supportEmail: {
+    color: colors.primary,
+    fontWeight: '500',
+  },
+
+  legalText: {
+    color: colors.textMuted,
+    fontSize: typography.fontSize.xs,
+    textAlign: 'center',
+    lineHeight: 18,
+    paddingHorizontal: spacing.md,
+    marginTop: spacing.sm,
+  },
+  legalLink: {
     color: colors.primary,
     fontWeight: '500',
   },

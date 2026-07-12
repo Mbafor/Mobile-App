@@ -1,5 +1,7 @@
 import Image from "next/image";
 import { createClient } from "@supabase/supabase-js";
+import { useTranslations } from "next-intl";
+import { getTranslations } from "next-intl/server";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
 import AnimatedStat from "./components/AnimatedStat";
@@ -37,6 +39,7 @@ async function getRecentOpportunities() {
 }
 
 function JsonLd() {
+  const t = useTranslations("Home.jsonLd");
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
@@ -45,8 +48,7 @@ function JsonLd() {
         "@id": `${SITE_URL}/#organization`,
         name: "Voila",
         url: SITE_URL,
-        description:
-          "Voila matches scholarships, internships, and programs to students' profiles — with mentorship and CV tools in one place.",
+        description: t("organizationDescription"),
         sameAs: [
           "https://twitter.com/Voila",
           "https://linkedin.com/company/Voila",
@@ -64,11 +66,10 @@ function JsonLd() {
         "@type": "WebPage",
         "@id": `${SITE_URL}/#webpage`,
         url: SITE_URL,
-        name: "Voila — Find opportunities. Build your future.",
+        name: t("webpageName"),
         isPartOf: { "@id": `${SITE_URL}/#website` },
         about: { "@id": `${SITE_URL}/#organization` },
-        description:
-          "Voila matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place. Free for African students.",
+        description: t("webpageDescription"),
       },
       {
         "@type": "SoftwareApplication",
@@ -76,8 +77,7 @@ function JsonLd() {
         applicationCategory: "EducationApplication",
         operatingSystem: "iOS, Android, Web",
         offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-        description:
-          "Find scholarships, internships, mentors and build your CV — all in one place.",
+        description: t("softwareDescription"),
       },
     ],
   };
@@ -88,146 +88,6 @@ function JsonLd() {
     />
   );
 }
-
-// ── Content ───────────────────────────────────────────────────────────────────
-
-const FEATURES = [
-  {
-    title: "Personalised feed",
-    description: "Opportunities matched to your academic profile, interests, and career goals — updated as you grow.",
-    icon: <CompassIcon />,
-  },
-  {
-    title: "Application tracker",
-    description: "Save listings, track deadlines, and manage your pipeline without spreadsheets or scattered notes.",
-    icon: <ClipboardIcon />,
-  },
-  {
-    title: "CV builder",
-    description: "Build polished CVs with templates, section guidance, and export tools designed for students.",
-    icon: <DocumentIcon />,
-  },
-  {
-    title: "Smart notifications",
-    description: "Stay ahead of deadlines and mentorship updates with timely alerts across devices.",
-    icon: <BellIcon />,
-  },
-  {
-    title: "Category browsing",
-    description: "Explore scholarships, internships, fellowships, and more — filtered the way you think.",
-    icon: <GridIcon />,
-  },
-  {
-    title: "Secure sign-in",
-    description: "Sign in with Google or email OTP — your session syncs securely across web and mobile.",
-    icon: <ShieldIcon />,
-  },
-];
-
-const MENTORSHIP_POINTS = [
-  { title: "Coach matching", description: "Get paired with mentors who understand your field and goals." },
-  { title: "Session booking", description: "Schedule 1:1 sessions and keep your calendar in sync." },
-  { title: "In-app messaging", description: "Chat with your mentor without switching to another tool." },
-];
-
-const HOW_IT_WORKS = [
-  {
-    step: "01",
-    title: "Create profile",
-    description: "Add your goals, education, skills and interests so Voila can surface the best matches for you.",
-  },
-  {
-    step: "02",
-    title: "Discover mentors & opportunities",
-    description: "Explore curated scholarships, internships, fellowships and expert mentors in one place.",
-  },
-  {
-    step: "03",
-    title: "Grow your career",
-    description: "Apply, track progress, and build a polished CV while getting guidance from experienced mentors.",
-  },
-];
-
-const TRUST_STATS = [
-  { value: "1K+", label: "Students supported" },
-  { value: "25+", label: "Mentors onboarded" },
-  { value: "300+", label: "Opportunities listed" },
-  { value: "98%", label: "Student satisfaction" },
-];
-
-const PARTNERS = ["University networks", "Scholarship boards", "Career centres", "Mentor communities"];
-
-const TESTIMONIALS = [
-  {
-    quote: '"Voila helped me find a paid internship and connect with a mentor who understood my ambitions."',
-    name: "Amina",
-    role: "Computer Science student, Ghana",
-  },
-  {
-    quote: '"The personalised opportunity feed saved me hours of searching and showed me roles I would have missed."',
-    name: "Chidi",
-    role: "Business student, Nigeria",
-  },
-  {
-    quote: '"I mentor young talent through Voila because the platform makes it easy to share real career advice."',
-    name: "Ngozi",
-    role: "Career mentor, Nigeria",
-  },
-  {
-    quote: '"I applied for three scholarships I found on Voila. I got one. That one changed my life."',
-    name: "Kwame",
-    role: "Engineering student, Ghana",
-  },
-  {
-    quote: '"Before Voila I had no idea how many fellowships existed for students like me. Now I have three applications in progress."',
-    name: "Fatima",
-    role: "Public Health student, Senegal",
-  },
-  {
-    quote: '"The CV builder helped me put together a professional resume in one evening. I landed a UN internship interview the next week."',
-    name: "Tendai",
-    role: "International Relations student, Zimbabwe",
-  },
-  {
-    quote: '"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award."',
-    name: "Aisha",
-    role: "Law student, Kenya",
-  },
-  {
-    quote: '"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities."',
-    name: "Emeka",
-    role: "Finance student, Nigeria",
-  },
-  {
-    quote: '"As a first-generation student I had no network. Voila gave me mentors and a feed that felt built just for me."',
-    name: "Sena",
-    role: "Architecture student, Togo",
-  },
-  {
-    quote: '"I found a fully funded master\'s scholarship through Voila that I never would have discovered on my own. Genuinely life-changing."',
-    name: "Lebo",
-    role: "Data Science student, South Africa",
-  },
-];
-
-const FAQS = [
-  {
-    question: "Is Voila free to use?",
-    answer: "Yes! Creating an account, browsing opportunities, and matching with mentors is completely free for students.",
-  },
-  {
-    question: "How does mentor matching work?",
-    answer: "We use the profile details you provide (like your field of study and career goals) to suggest mentors who have relevant experience. You can browse suggested coaches and request to connect.",
-  },
-  {
-    question: "Can I track my applications here?",
-    answer: "Yes, our built-in tracker lets you save opportunities you discover on the platform and monitor their deadlines and statuses all in one place.",
-  },
-  {
-    question: "Are the CV templates free?",
-    answer: "Yes! You can use our CV builder and export your resume using any of our professional templates at no cost.",
-  },
-];
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
 
@@ -288,6 +148,16 @@ function ArrowIcon({ className }: { className?: string }) {
     </svg>
   );
 }
+
+const FEATURE_ICONS = [
+  <CompassIcon key="compass" />,
+  <ClipboardIcon key="clipboard" />,
+  <DocumentIcon key="document" />,
+  <BellIcon key="bell" />,
+  <GridIcon key="grid" />,
+  <ShieldIcon key="shield" />,
+];
+
 // ── Shared ────────────────────────────────────────────────────────────────────
 
 function Eyebrow({ label }: { label: string }) {
@@ -301,6 +171,7 @@ function Eyebrow({ label }: { label: string }) {
 // ── Hero ──────────────────────────────────────────────────────────────────────
 
 function Hero() {
+  const t = useTranslations("Home.hero");
   return (
     <section className="relative bg-primary text-white overflow-hidden pt-10 pb-8 md:pt-16 md:pb-10">
       <div className="absolute w-[500px] h-[500px] rounded-full bg-white/10 -top-40 -right-28 opacity-40 pointer-events-none" />
@@ -313,17 +184,16 @@ function Hero() {
           <div className="flex-1 flex flex-col gap-5 text-center md:text-left items-center md:items-start">
             <div className="self-center md:self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
               <div className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span className="text-white text-xs font-semibold tracking-wide">Built for ambitious students</span>
+              <span className="text-white text-xs font-semibold tracking-wide">{t("badge")}</span>
             </div>
 
             <h1 className="text-white text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
-              Find opportunities.<br />
-              <span className="text-surface">Build your future.</span>
+              {t("titleLine1")}<br />
+              <span className="text-surface">{t("titleLine2")}</span>
             </h1>
 
             <p className="text-white/80 text-lg leading-7 max-w-[520px]">
-              Voila matches scholarships, internships, and programs to your profile —
-              with mentorship and CV tools in one place.
+              {t("subtitle")}
             </p>
 
             <div id="get-started" className="flex flex-col items-center gap-3 mt-6 sm:flex-row sm:justify-center md:justify-start">
@@ -331,13 +201,13 @@ function Hero() {
                 href={SIGNUP_URL}
                 className="inline-flex items-center justify-center gap-2 bg-white text-primary font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px]"
               >
-                Get started free
+                {t("ctaPrimary")}
               </a>
               <a
                 href="#how-it-works"
                 className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20 font-medium text-base transition-all duration-150"
               >
-                See how it works
+                {t("ctaSecondary")}
               </a>
             </div>
 
@@ -355,7 +225,9 @@ function Hero() {
                 ))}
               </div>
               <p className="text-white/80 text-sm leading-[1.6] font-medium">
-                Joined by <span className="text-white font-semibold">24,000+</span> students across Africa
+                {t.rich("socialProof", {
+                  strong: (chunks) => <span className="text-white font-semibold">{chunks}</span>,
+                })}
               </p>
             </div>
           </div>
@@ -381,26 +253,35 @@ function Hero() {
 // ── Trust ─────────────────────────────────────────────────────────────────────
 
 function TrustSection() {
+  const t = useTranslations("Home.trust");
+  const trustStats = [
+    { value: "1K+", label: t("stats.students") },
+    { value: "25+", label: t("stats.mentors") },
+    { value: "300+", label: t("stats.opportunities") },
+    { value: "98%", label: t("stats.satisfaction") },
+  ];
+  const partners = t.raw("partners") as string[];
+
   return (
     <section className="bg-white border-b border-border py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
         <div className="flex justify-center">
-          <Eyebrow label="By the numbers" />
+          <Eyebrow label={t("eyebrow")} />
         </div>
         <h2 className="text-[#1A1A1A] text-4xl md:text-5xl lg:text-6xl font-bold mb-3 mx-auto">
-          Real impact for students and early-career professionals.
+          {t("title")}
         </h2>
         <p className="text-muted text-lg leading-7 mb-10 mx-auto max-w-[600px]">
-          Voila connects talent to opportunities, mentorship, and the tools needed to build a stronger career.
+          {t("description")}
         </p>
         <div className="flex flex-wrap gap-4">
-          {TRUST_STATS.map((stat) => (
+          {trustStats.map((stat) => (
             <AnimatedStat key={stat.label} value={stat.value} label={stat.label} />
           ))}
         </div>
         <div className="flex flex-wrap items-center gap-3 mt-10">
-          <span className="text-muted text-xs font-semibold uppercase tracking-[0.05em] mr-1">Trusted by</span>
-          {PARTNERS.map((p) => (
+          <span className="text-muted text-xs font-semibold uppercase tracking-[0.05em] mr-1">{t("trustedBy")}</span>
+          {partners.map((p) => (
             <span key={p} className="px-4 py-1 rounded-full bg-surface-tinted border border-border text-muted text-xs font-semibold">
               {p}
             </span>
@@ -414,6 +295,7 @@ function TrustSection() {
 // ── Recent Opportunities ──────────────────────────────────────────────────────
 
 async function RecentOpportunitiesSection() {
+  const t = await getTranslations("Home.recentOpportunities");
   const opportunities = await getRecentOpportunities();
   if (!opportunities.length) return null;
 
@@ -421,13 +303,13 @@ async function RecentOpportunitiesSection() {
     <section className="bg-white py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
         <div className="flex justify-center">
-          <Eyebrow label="Live on platform" />
+          <Eyebrow label={t("eyebrow")} />
         </div>
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
-          Recently added opportunities
+          {t("title")}
         </h2>
         <p className="text-muted text-base leading-7 mx-auto max-w-[600px]">
-          Fresh scholarships, internships, and fellowships added daily — sign up to get a personalised feed.
+          {t("description")}
         </p>
       </div>
       <OpportunityCarousel opportunities={opportunities} />
@@ -436,7 +318,7 @@ async function RecentOpportunitiesSection() {
           href={SIGNUP_URL}
           className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white font-bold text-base px-6 py-3.5 rounded-xl transition-colors duration-150"
         >
-          Browse all opportunities
+          {t("cta")}
           <ArrowIcon className="w-4 h-4" />
         </a>
       </div>
@@ -447,24 +329,27 @@ async function RecentOpportunitiesSection() {
 // ── Features ──────────────────────────────────────────────────────────────────
 
 function FeaturesSection() {
+  const t = useTranslations("Home.features");
+  const items = t.raw("items") as { title: string; description: string }[];
+
   return (
     <section id="features" className="bg-white py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
-        <Eyebrow label="Features" />
+        <Eyebrow label={t("eyebrow")} />
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
-          Everything you need to compete globally
+          {t("title")}
         </h2>
         <p className="text-muted text-base leading-7 mb-12 mx-auto max-w-[640px]">
-          From discovery to application — stay organised and supported at every step.
+          {t("description")}
         </p>
         <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {FEATURES.map((feature) => (
+          {items.map((feature, i) => (
             <ScrollReveal
               key={feature.title}
               className="rounded-[32px] border border-border bg-white p-8 shadow-sm transition hover:-translate-y-1 hover:shadow-md"
             >
               <div className="mb-6 inline-flex h-16 w-16 items-center justify-center rounded-3xl bg-primary/10 text-primary transition">
-                {feature.icon}
+                {FEATURE_ICONS[i]}
               </div>
               <h3 className="text-[#1A1A1A] font-semibold text-lg mb-3">{feature.title}</h3>
               <p className="text-muted text-sm leading-7">{feature.description}</p>
@@ -479,20 +364,23 @@ function FeaturesSection() {
 // ── How It Works ──────────────────────────────────────────────────────────────
 
 function HowItWorksSection() {
+  const t = useTranslations("Home.howItWorks");
+  const steps = t.raw("steps") as { step: string; title: string; description: string }[];
+
   return (
     <section id="how-it-works" className="bg-[#F4F7F5] py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
-        <Eyebrow label="How it works" />
+        <Eyebrow label={t("eyebrow")} />
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
-          Up and running in 3 simple steps
+          {t("title")}
         </h2>
         <p className="text-muted text-base leading-7 mb-12 mx-auto max-w-[640px]">
-          Getting started with Voila takes less than two minutes.
+          {t("description")}
         </p>
         <div className="relative mx-auto max-w-[980px]">
           <div className="absolute left-4 right-4 top-14 hidden h-px bg-primary/20 md:block" />
           <div className="grid gap-10 md:grid-cols-3">
-            {HOW_IT_WORKS.map((step, i) => (
+            {steps.map((step, i) => (
               <ScrollReveal key={step.title} className="relative flex flex-col items-center text-center">
                 <div className="absolute inset-x-0 top-0 flex justify-center">
                   <div className="flex h-20 w-20 items-center justify-center rounded-full bg-primary text-white text-xl font-bold shadow-lg">
@@ -537,6 +425,9 @@ function HowItWorksSection() {
 // ── Mentorship ────────────────────────────────────────────────────────────────
 
 function MentorshipSection() {
+  const t = useTranslations("Home.mentorship");
+  const points = t.raw("points") as { title: string; description: string }[];
+
   return (
     <section className="bg-white py-20 md:py-28">
       <ScrollReveal className="mx-auto max-w-[1200px] px-6">
@@ -548,22 +439,22 @@ function MentorshipSection() {
               <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
-              <span className="text-white text-xs font-semibold">1:1 Mentorship</span>
+              <span className="text-white text-xs font-semibold">{t("badge")}</span>
             </div>
           </div>
 
           <div className="flex-1 flex flex-col gap-3 text-left">
             <div className="flex md:block justify-center">
-              <Eyebrow label="Mentorship" />
+              <Eyebrow label={t("eyebrow")} />
             </div>
             <h2 className="text-center md:text-left text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold">
-              Guidance from people who have been there
+              {t("title")}
             </h2>
             <p className="text-muted text-lg leading-7 mb-2">
-              Connect with coaches, book sessions, and track your mentorship journey without leaving the platform.
+              {t("description")}
             </p>
             <div className="flex flex-col gap-4 mt-2">
-              {MENTORSHIP_POINTS.map((point) => (
+              {points.map((point) => (
                 <div key={point.title} className="flex gap-3 items-start">
                   <div className="w-[22px] h-[22px] rounded-full bg-primary flex items-center justify-center shrink-0 mt-0.5">
                     <CheckIcon />
@@ -579,7 +470,7 @@ function MentorshipSection() {
               href="/mentor"
               className="self-start mt-4 inline-flex items-center gap-2 bg-primary hover:bg-forest text-white font-semibold text-base px-6 py-3.5 rounded-xl transition-colors duration-150"
             >
-               View our mentors
+               {t("cta")}
               <ArrowIcon className="w-4 h-4" />
             </a>
           </div>
@@ -592,17 +483,20 @@ function MentorshipSection() {
 // ── Testimonials ──────────────────────────────────────────────────────────────
 
 function TestimonialsSection() {
+  const t = useTranslations("Home.testimonials");
+  const items = t.raw("items") as { quote: string; name: string; role: string }[];
+
   return (
     <section className="bg-[#F4F7F5] py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
         <div className="flex justify-center">
-          <Eyebrow label="Success stories" />
+          <Eyebrow label={t("eyebrow")} />
         </div>
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mx-auto">
-          Students and mentors finding momentum together.
+          {t("title")}
         </h2>
       </div>
-      <TestimonialCarousel testimonials={TESTIMONIALS} />
+      <TestimonialCarousel testimonials={items} />
     </section>
   );
 }
@@ -610,17 +504,20 @@ function TestimonialsSection() {
 // ── FAQ ───────────────────────────────────────────────────────────────────────
 
 function FaqSection() {
+  const t = useTranslations("Home.faq");
+  const items = t.raw("items") as { question: string; answer: string }[];
+
   return (
     <section className="bg-white py-20 md:py-28">
       <ScrollReveal className="mx-auto max-w-[1200px] px-6 text-center">
         <div className="flex justify-center">
-          <Eyebrow label="FAQ" />
+          <Eyebrow label={t("eyebrow")} />
         </div>
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-10 mx-auto">
-          Got questions? We&apos;ve got answers.
+          {t("title")}
         </h2>
         <div className="mx-auto max-w-[760px] border-t border-border">
-          {FAQS.map((faq) => (
+          {items.map((faq) => (
             <FaqItem key={faq.question} question={faq.question} answer={faq.answer} />
           ))}
         </div>
@@ -632,29 +529,30 @@ function FaqSection() {
 // ── CTA Band ──────────────────────────────────────────────────────────────────
 
 function CtaSection() {
+  const t = useTranslations("Home.cta");
   return (
     <section className="relative bg-forest py-20 md:py-28 overflow-hidden text-center">
       <div className="absolute w-[400px] h-[400px] rounded-full bg-primary opacity-60 -left-36 -top-24 pointer-events-none" />
       <div className="absolute w-[300px] h-[300px] rounded-full bg-accent opacity-[0.08] -right-20 -bottom-16 pointer-events-none" />
       <ScrollReveal className="relative mx-auto max-w-[820px] px-6">
         <h2 className="text-white text-3xl md:text-4xl font-bold mb-3 text-center">
-          Ready to find your next opportunity?
+          {t("title")}
         </h2>
         <p className="text-white/65 text-lg leading-7 mb-10">
-          Join Voila and start with a personalised feed in minutes.
+          {t("description")}
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-4">
           <a
             href={SIGNUP_URL}
             className="inline-flex items-center gap-2 bg-white hover:bg-accent text-primary font-bold text-base px-8 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[220px] justify-center"
           >
-            Get started — it&apos;s free
+            {t("button")}
             <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </a>
         </div>
-        <p className="text-white/40 text-xs tracking-wide">No credit card required · Free for students</p>
+        <p className="text-white/40 text-xs tracking-wide">{t("note")}</p>
       </ScrollReveal>
     </section>
   );

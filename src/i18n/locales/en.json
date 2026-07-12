@@ -2009,5 +2009,11 @@
         "zimbabwe": "Zimbabwe"
       }
     }
+  },
+  "legal": {
+    "termsOfService": "Terms of Service",
+    "privacyPolicy": "Privacy Policy",
+    "authDisclaimerPrefix": "By continuing, you agree to our",
+    "authDisclaimerConnector": "and"
   }
 }

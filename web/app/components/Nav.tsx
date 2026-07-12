@@ -3,11 +3,15 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+
+import LanguageSwitcher from "./LanguageSwitcher";
 
 const SIGNUP_URL =
   (process.env.NEXT_PUBLIC_APP_URL ?? "https://app.voila-africa.com") + "/welcome";
 
 export default function Nav() {
+  const t = useTranslations("Nav");
   const pathname = usePathname();
   const [activeHash, setActiveHash] = useState("");
   const [scrolled, setScrolled] = useState(false);
@@ -36,13 +40,13 @@ export default function Nav() {
 
   return (
     <nav
-      aria-label="Main navigation"
+      aria-label={t("mainNavigation")}
       className={`sticky top-0 left-0 right-0 z-50 w-full ${navBgClass} py-2 transition-all duration-200 ${
         scrolled ? "shadow-[0_1px_0_rgba(0,0,0,0.06),0_4px_24px_rgba(0,0,0,0.1)]" : ""
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="/" className="flex items-center" aria-label="Voila home">
+        <a href="/" className="flex items-center" aria-label={t("homeAriaLabel")}>
           <Image
             src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
             alt="Voila"
@@ -57,7 +61,7 @@ export default function Nav() {
           type="button"
           onClick={() => setMenuOpen((open) => !open)}
           className={`ml-auto inline-flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-150 md:hidden bg-transparent ${scrolled ? "text-primary" : "text-white"}`}
-          aria-label="Toggle navigation menu"
+          aria-label={t("toggleMenu")}
         >
           <svg className="h-7 w-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M4 7h16" />
@@ -74,7 +78,7 @@ export default function Nav() {
                 pathname === "/about" ? activeLinkClass : inactiveLinkClass
               }`}
             >
-              About
+              {t("links.about")}
             </a>
             <a
               href="/mentor"
@@ -82,7 +86,7 @@ export default function Nav() {
                 pathname === "/mentor" ? activeLinkClass : inactiveLinkClass
               }`}
             >
-              Mentors
+              {t("links.mentors")}
             </a>
             <a
               href="/#features"
@@ -90,7 +94,7 @@ export default function Nav() {
                 activeHash === "#features" ? activeLinkClass : inactiveLinkClass
               }`}
             >
-              Features
+              {t("links.features")}
             </a>
             <a
               href="/#how-it-works"
@@ -98,19 +102,22 @@ export default function Nav() {
                 activeHash === "#how-it-works" ? activeLinkClass : inactiveLinkClass
               }`}
             >
-              How it works
+              {t("links.howItWorks")}
             </a>
           </div>
         </div>
 
-        <a
-          href={SIGNUP_URL}
-          className={`hidden md:inline-flex items-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-lg transition-colors duration-150 min-h-[38px] ${
-            scrolled ? "bg-primary hover:bg-forest text-white" : "bg-white hover:bg-accent text-primary"
-          }`}
-        >
-          Get started free
-        </a>
+        <div className="hidden md:flex md:items-center md:gap-3">
+          <LanguageSwitcher scrolled={scrolled} />
+          <a
+            href={SIGNUP_URL}
+            className={`inline-flex items-center gap-1.5 font-semibold text-sm px-4 py-2 rounded-lg transition-colors duration-150 min-h-[38px] ${
+              scrolled ? "bg-primary hover:bg-forest text-white" : "bg-white hover:bg-accent text-primary"
+            }`}
+          >
+            {t("cta")}
+          </a>
+        </div>
       </div>
 
       {menuOpen && (
@@ -119,14 +126,14 @@ export default function Nav() {
             type="button"
             onClick={() => setMenuOpen(false)}
             className="absolute inset-0 bg-black/30"
-            aria-label="Close navigation menu"
+            aria-label={t("closeOverlay")}
           />
           <div className="absolute inset-y-0 right-0 w-[min(320px,88vw)] bg-white shadow-2xl p-6 flex flex-col gap-6 overflow-y-auto">
             <button
               type="button"
               onClick={() => setMenuOpen(false)}
               className="self-end inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-[#1A1A1A]"
-              aria-label="Close menu"
+              aria-label={t("closeButton")}
             >
               <span className="block h-0.5 w-5 rotate-45 bg-current" />
               <span className="block h-0.5 w-5 -rotate-45 bg-current -mt-0.5" />
@@ -137,36 +144,37 @@ export default function Nav() {
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
-                About
+                {t("links.about")}
               </a>
               <a
                 href="/mentor"
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
-                Mentors
+                {t("links.mentors")}
               </a>
               <a
                 href="/#features"
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
-                Features
+                {t("links.features")}
               </a>
               <a
                 href="/#how-it-works"
                 onClick={() => setMenuOpen(false)}
                 className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
-                How it works
+                {t("links.howItWorks")}
               </a>
             </div>
+            <LanguageSwitcher scrolled />
             <a
               href={SIGNUP_URL}
               onClick={() => setMenuOpen(false)}
               className="mt-4 inline-flex items-center justify-center rounded-full bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-forest"
             >
-              Get started free
+              {t("cta")}
             </a>
           </div>
         </div>

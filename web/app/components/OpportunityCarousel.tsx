@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 type OpportunityCardData = {
   id: string;
   title: string;
@@ -11,15 +13,15 @@ type OpportunityCardData = {
 
 const PLACEHOLDER_COLORS = ['#0B6623', '#2D6040', '#3D7A50', '#1A4D2E', '#5A8F6B'];
 
-function formatDeadline(deadline: string | null): string | null {
+function formatDeadline(deadline: string | null, t: ReturnType<typeof useTranslations>): string | null {
   if (!deadline) return null;
   const d = new Date(deadline);
   const now = new Date();
   const days = Math.ceil((d.getTime() - now.getTime()) / 86_400_000);
   if (days < 0) return null;
-  if (days === 0) return 'Deadline today';
-  if (days === 1) return '1 day left';
-  return `${days} days left`;
+  if (days === 0) return t('deadlineToday');
+  if (days === 1) return t('oneDayLeft');
+  return t('daysLeft', { days });
 }
 
 function CalendarIcon() {
@@ -36,13 +38,14 @@ function CalendarIcon() {
 const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.voila-africa.com';
 
 export default function OpportunityCarousel({ opportunities }: { opportunities: OpportunityCardData[] }) {
+  const t = useTranslations('OpportunityCarousel');
   const doubled = [...opportunities, ...opportunities];
 
   return (
     <div className="overflow-hidden">
       <div className="opp-scroll-track flex gap-5 pl-6" style={{ width: 'max-content' }}>
         {doubled.map((opp, i) => {
-          const deadlineLabel = formatDeadline(opp.deadline);
+          const deadlineLabel = formatDeadline(opp.deadline, t);
           const color = PLACEHOLDER_COLORS[opp.organization.charCodeAt(0) % PLACEHOLDER_COLORS.length];
 
           return (

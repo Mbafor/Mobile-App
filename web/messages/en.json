@@ -1,0 +1,532 @@
+{
+  "LanguageSwitcher": {
+    "ariaLabel": "Change language"
+  },
+  "Legal": {
+    "emailLabel": "Email",
+    "addressLabel": "Address"
+  },
+  "Metadata": {
+    "titleDefault": "Voila | Scholarships, Internships & Mentorship Africa",
+    "description": "Join 24,000+ African students discovering scholarships, internships, fellowships and 1:1 mentorship on Voila. Free CV builder included.",
+    "keywords": [
+      "scholarships for African students",
+      "internships Africa",
+      "fellowships Africa",
+      "student mentorship platform",
+      "free CV builder for students",
+      "career opportunities Africa",
+      "student opportunities platform",
+      "Voila",
+      "Voila Africa"
+    ],
+    "ogTitle": "Voila — Find Your Next Opportunity",
+    "ogDescription": "Scholarships, internships, mentorship and a free CV builder — all personalised to your profile. Join 24,000+ African students already on Voila.",
+    "ogImageAlt": "Voila — Scholarships, Internships & Mentorship for African Students",
+    "twitterDescription": "Scholarships, internships, mentorship and a free CV builder — personalised for African students. Free to join."
+  },
+  "Home": {
+    "hero": {
+      "badge": "Built for ambitious students",
+      "titleLine1": "Find opportunities.",
+      "titleLine2": "Build your future.",
+      "subtitle": "Voila matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place.",
+      "ctaPrimary": "Get started free",
+      "ctaSecondary": "See how it works",
+      "socialProof": "Joined by <strong>24,000+</strong> students across Africa"
+    },
+    "trust": {
+      "eyebrow": "By the numbers",
+      "title": "Real impact for students and early-career professionals.",
+      "description": "Voila connects talent to opportunities, mentorship, and the tools needed to build a stronger career.",
+      "trustedBy": "Trusted by",
+      "stats": {
+        "students": "Students supported",
+        "mentors": "Mentors onboarded",
+        "opportunities": "Opportunities listed",
+        "satisfaction": "Student satisfaction"
+      },
+      "partners": ["University networks", "Scholarship boards", "Career centres", "Mentor communities"]
+    },
+    "recentOpportunities": {
+      "eyebrow": "Live on platform",
+      "title": "Recently added opportunities",
+      "description": "Fresh scholarships, internships, and fellowships added daily — sign up to get a personalised feed.",
+      "cta": "Browse all opportunities"
+    },
+    "features": {
+      "eyebrow": "Features",
+      "title": "Everything you need to compete globally",
+      "description": "From discovery to application — stay organised and supported at every step.",
+      "items": [
+        { "title": "Personalised feed", "description": "Opportunities matched to your academic profile, interests, and career goals — updated as you grow." },
+        { "title": "Application tracker", "description": "Save listings, track deadlines, and manage your pipeline without spreadsheets or scattered notes." },
+        { "title": "CV builder", "description": "Build polished CVs with templates, section guidance, and export tools designed for students." },
+        { "title": "Smart notifications", "description": "Stay ahead of deadlines and mentorship updates with timely alerts across devices." },
+        { "title": "Category browsing", "description": "Explore scholarships, internships, fellowships, and more — filtered the way you think." },
+        { "title": "Secure sign-in", "description": "Sign in with Google or email OTP — your session syncs securely across web and mobile." }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "How it works",
+      "title": "Up and running in 3 simple steps",
+      "description": "Getting started with Voila takes less than two minutes.",
+      "steps": [
+        { "step": "01", "title": "Create profile", "description": "Add your goals, education, skills and interests so Voila can surface the best matches for you." },
+        { "step": "02", "title": "Discover mentors & opportunities", "description": "Explore curated scholarships, internships, fellowships and expert mentors in one place." },
+        { "step": "03", "title": "Grow your career", "description": "Apply, track progress, and build a polished CV while getting guidance from experienced mentors." }
+      ]
+    },
+    "mentorship": {
+      "badge": "1:1 Mentorship",
+      "eyebrow": "Mentorship",
+      "title": "Guidance from people who have been there",
+      "description": "Connect with coaches, book sessions, and track your mentorship journey without leaving the platform.",
+      "points": [
+        { "title": "Coach matching", "description": "Get paired with mentors who understand your field and goals." },
+        { "title": "Session booking", "description": "Schedule 1:1 sessions and keep your calendar in sync." },
+        { "title": "In-app messaging", "description": "Chat with your mentor without switching to another tool." }
+      ],
+      "cta": "View our mentors"
+    },
+    "testimonials": {
+      "eyebrow": "Success stories",
+      "title": "Students and mentors finding momentum together.",
+      "items": [
+        { "quote": "\"Voila helped me find a paid internship and connect with a mentor who understood my ambitions.\"", "name": "Amina", "role": "Computer Science student, Ghana" },
+        { "quote": "\"The personalised opportunity feed saved me hours of searching and showed me roles I would have missed.\"", "name": "Chidi", "role": "Business student, Nigeria" },
+        { "quote": "\"I mentor young talent through Voila because the platform makes it easy to share real career advice.\"", "name": "Ngozi", "role": "Career mentor, Nigeria" },
+        { "quote": "\"I applied for three scholarships I found on Voila. I got one. That one changed my life.\"", "name": "Kwame", "role": "Engineering student, Ghana" },
+        { "quote": "\"Before Voila I had no idea how many fellowships existed for students like me. Now I have three applications in progress.\"", "name": "Fatima", "role": "Public Health student, Senegal" },
+        { "quote": "\"The CV builder helped me put together a professional resume in one evening. I landed a UN internship interview the next week.\"", "name": "Tendai", "role": "International Relations student, Zimbabwe" },
+        { "quote": "\"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award.\"", "name": "Aisha", "role": "Law student, Kenya" },
+        { "quote": "\"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities.\"", "name": "Emeka", "role": "Finance student, Nigeria" },
+        { "quote": "\"As a first-generation student I had no network. Voila gave me mentors and a feed that felt built just for me.\"", "name": "Sena", "role": "Architecture student, Togo" },
+        { "quote": "\"I found a fully funded master's scholarship through Voila that I never would have discovered on my own. Genuinely life-changing.\"", "name": "Lebo", "role": "Data Science student, South Africa" }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Got questions? We've got answers.",
+      "items": [
+        { "question": "Is Voila free to use?", "answer": "Yes! Creating an account, browsing opportunities, and matching with mentors is completely free for students." },
+        { "question": "How does mentor matching work?", "answer": "We use the profile details you provide (like your field of study and career goals) to suggest mentors who have relevant experience. You can browse suggested coaches and request to connect." },
+        { "question": "Can I track my applications here?", "answer": "Yes, our built-in tracker lets you save opportunities you discover on the platform and monitor their deadlines and statuses all in one place." },
+        { "question": "Are the CV templates free?", "answer": "Yes! You can use our CV builder and export your resume using any of our professional templates at no cost." }
+      ]
+    },
+    "cta": {
+      "title": "Ready to find your next opportunity?",
+      "description": "Join Voila and start with a personalised feed in minutes.",
+      "button": "Get started — it's free",
+      "note": "No credit card required · Free for students"
+    },
+    "jsonLd": {
+      "organizationDescription": "Voila matches scholarships, internships, and programs to students' profiles — with mentorship and CV tools in one place.",
+      "webpageName": "Voila — Find opportunities. Build your future.",
+      "webpageDescription": "Voila matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place. Free for African students.",
+      "softwareDescription": "Find scholarships, internships, mentors and build your CV — all in one place."
+    }
+  },
+  "About": {
+    "metaTitle": "About — Voila",
+    "metaDescription": "Learn more about Voila's mission, approach, and support for students.",
+    "eyebrow": "About Voila",
+    "title": "A career platform built for African students.",
+    "intro": "Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place. We bring personalised opportunity matching, application tracking, and guided career support to ambitious learners across Africa.",
+    "mission": { "title": "Our mission", "text": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." },
+    "whyItMatters": { "title": "Why it matters", "text": "Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Voila brings those experiences together so students can move forward with confidence." },
+    "cards": [
+      { "title": "Personalised discovery", "text": "We match opportunities to a student's profile so they see listings that matter most." },
+      { "title": "Track every step", "text": "Save listings, monitor deadlines, and keep notes without switching between docs and email." },
+      { "title": "Mentorship support", "text": "Connect with coaches who help students make better decisions and submit stronger applications." }
+    ],
+    "builtForStudents": {
+      "eyebrow": "Built for students",
+      "title": "Designed to help you go from discovery to application.",
+      "text": "Whether you are searching for scholarships, internships, or career mentorship, Voila brings the tools and recommendations into one workflow.",
+      "cta": "View our mentors"
+    }
+  },
+  "MentorMeta": {
+    "title": "Mentors — Voila",
+    "description": "Meet mentors on Voila and apply to become a mentor."
+  },
+  "Mentor": {
+    "hero": {
+      "eyebrow": "Mentor network",
+      "title": "Become a mentor on Voila",
+      "subtitle": "Share your experience, guide ambitious students, and make a real difference — one session at a time."
+    },
+    "whatToExpect": [
+      { "title": "Flexible commitment", "description": "Mentor on your own schedule — book sessions when it suits you." },
+      { "title": "Matched students", "description": "We pair you with students based on your expertise and their goals." },
+      { "title": "In-app tools", "description": "Everything you need — messaging, calendar, and session links — in one place." }
+    ],
+    "responsibilities": [
+      "Provide mentorship and career advice to students.",
+      "Review CVs, applications, and scholarship projects.",
+      "Help mentees set goals and track progress.",
+      "Share practical experience from your field."
+    ],
+    "instructions": {
+      "eyebrow": "Before you apply",
+      "title": "Instructor Application",
+      "description": "Apply to join our mentor community and help students navigate scholarships, internships, and career growth. We review every application and reach out within 5–7 business days.",
+      "whatYoullDo": "What you'll do"
+    },
+    "form": {
+      "eyebrow": "Your details",
+      "helper": "Fill in your details below and we'll review your mentor application.",
+      "firstName": "First name*",
+      "lastName": "Last name*",
+      "email": "Email*",
+      "phone": "Phone",
+      "linkedin": "LinkedIn",
+      "linkedinPlaceholder": "linkedin.com/in/yourname or any link",
+      "portfolio": "Portfolio or website",
+      "portfolioPlaceholder": "yourportfolio.com or any link",
+      "areaOfExpertise": "Area of expertise*",
+      "yearsOfExperience": "Years of experience*",
+      "selectPlaceholder": "Select…",
+      "expertiseOptions": ["Career strategy", "Scholarships", "Internships", "CV & applications", "Leadership", "Other"],
+      "experienceOptions": ["1–3 years", "3–5 years", "5–10 years", "10+ years"],
+      "shortBio": "Short bio*",
+      "motivation": "Why do you want to become a mentor?*",
+      "submit": "Submit application",
+      "successAlert": "Application submitted — we will review and be in touch.",
+      "errorFallback": "Submission failed"
+    }
+  },
+  "Nav": {
+    "mainNavigation": "Main navigation",
+    "homeAriaLabel": "Voila home",
+    "toggleMenu": "Toggle navigation menu",
+    "closeOverlay": "Close navigation menu",
+    "closeButton": "Close menu",
+    "links": {
+      "about": "About",
+      "mentors": "Mentors",
+      "features": "Features",
+      "howItWorks": "How it works"
+    },
+    "cta": "Get started free"
+  },
+  "Footer": {
+    "tagline": "Building career confidence for African students and young professionals.",
+    "social": { "twitter": "Twitter", "linkedin": "LinkedIn", "instagram": "Instagram" },
+    "stores": {
+      "googlePlay": { "sub": "Get it on", "label": "Google Play" },
+      "appStore": { "sub": "Download on", "label": "App Store" }
+    },
+    "columns": {
+      "product": { "heading": "Product", "links": ["Opportunities", "Mentorship", "CV Builder", "Tracker", "Notifications"] },
+      "company": { "heading": "Company", "links": ["About", "Blog", "Careers", "Contact"] },
+      "legal": { "heading": "Legal", "links": ["Privacy Policy", "Terms of Service", "Cookie Policy"] }
+    },
+    "copyright": "© {year} Voila. All rights reserved.",
+    "madeWith": "Made with care for African students 🌿"
+  },
+  "OpportunityCarousel": {
+    "deadlineToday": "Deadline today",
+    "oneDayLeft": "1 day left",
+    "daysLeft": "{days} days left"
+  },
+  "PrivacyPolicy": {
+    "metaTitle": "Privacy Policy",
+    "metaDescription": "How Voila collects, uses, and protects your personal data across our mobile app, web app, and website.",
+    "title": "Privacy Policy",
+    "lastUpdated": "Last updated: July 12, 2026",
+    "sections": [
+      {
+        "heading": "1. Introduction",
+        "blocks": [
+          { "type": "paragraph", "text": "Voila Africa (\"we,\" \"us,\" \"our,\" \"the Platform\") provides a platform that helps African students and recent graduates discover scholarships, internships, and fellowships, and offers additional tools including a CV builder, mentorship matching, and opportunity discovery. This Privacy Policy explains what personal data we collect, how we use it, and the choices you have." },
+          { "type": "paragraph", "text": "This Policy applies to our mobile application, our web application (app.voila-africa.com), and our website (voila-africa.com)." },
+          { "type": "paragraph", "text": "If you have questions about this Policy, contact us at support@voila-africa.com." }
+        ]
+      },
+      {
+        "heading": "2. Information We Collect",
+        "blocks": [
+          { "type": "subheading", "text": "2.1 Information you provide directly" },
+          { "type": "list", "items": [
+            "Account information: name, email address, phone number, password",
+            "Academic information: institution, degree level, field of study, graduation year",
+            "Profile information: interests, career preferences, opportunity preferences",
+            "CV/resume content you create using the CV Builder",
+            "Mentorship information: availability, session notes, messages exchanged with mentors or mentees",
+            "Payment information processed through our payment provider, Paystack (we do not store full card details ourselves)",
+            "Communications you send us, including support requests"
+          ] },
+          { "type": "subheading", "text": "2.2 Information collected automatically" },
+          { "type": "list", "items": [
+            "Device information (device type, operating system, app version)",
+            "Usage data (features used, pages viewed, session duration)",
+            "Log data (IP address, access times, crash reports)",
+            "Cookies and similar technologies on our website (see Section 8)"
+          ] },
+          { "type": "subheading", "text": "2.3 Information from third parties" },
+          { "type": "list", "items": [
+            "If you sign in using a third-party service (e.g. Google), we may receive basic profile information from that service",
+            "Scholarship, internship, and fellowship listings may be sourced from public or partner sources"
+          ] }
+        ]
+      },
+      {
+        "heading": "3. How We Use Your Information",
+        "blocks": [
+          { "type": "paragraph", "text": "We use your information to:" },
+          { "type": "list", "items": [
+            "Create and manage your account",
+            "Match you with relevant opportunities, mentors, and mentorship sessions",
+            "Operate the CV Builder and save your CV content",
+            "Process payments for any paid features",
+            "Send you service-related communications (deadline reminders, digest emails, account notices)",
+            "Send you marketing communications where you have opted in (you may opt out at any time)",
+            "Improve and personalize the Platform",
+            "Detect, prevent, and address fraud, abuse, or technical issues",
+            "Comply with legal obligations"
+          ] }
+        ]
+      },
+      {
+        "heading": "4. Legal Basis for Processing",
+        "blocks": [
+          { "type": "paragraph", "text": "Where applicable, we process your personal data on the following bases:" },
+          { "type": "list", "items": [
+            { "lead": "Consent", "text": "for optional communications and certain optional features" },
+            { "lead": "Contract", "text": "to provide the services you've signed up for" },
+            { "lead": "Legitimate interest", "text": "to improve our Platform and keep it secure" },
+            { "lead": "Legal obligation", "text": "where required by applicable law" }
+          ] },
+          { "type": "paragraph", "text": "We aim to comply with Ghana's Data Protection Act, 2012 (Act 843), and, where applicable to users in other jurisdictions, comparable data protection standards." }
+        ]
+      },
+      {
+        "heading": "5. How We Share Your Information",
+        "blocks": [
+          { "type": "paragraph", "text": "We do not sell your personal data. We share information with:" },
+          { "type": "list", "items": [
+            { "lead": "Service providers", "text": "who help us operate the Platform, including:", "subItems": [
+              "Supabase (database and backend infrastructure)",
+              "Resend and Zoho Mail (email delivery)",
+              "Paystack (payment processing)",
+              "Jitsi (video sessions for mentorship)"
+            ] },
+            { "lead": "Mentors or mentees", "text": "limited to the profile and session information necessary to facilitate mentorship" },
+            { "lead": "Legal authorities", "text": "where required by law, court order, or to protect the rights, property, or safety of Voila Africa, our users, or others" },
+            { "lead": "A successor entity", "text": "in the event of a merger, acquisition, or sale of assets, subject to this Policy or a comparable one" }
+          ] }
+        ]
+      },
+      {
+        "heading": "6. Data Retention",
+        "blocks": [
+          { "type": "paragraph", "text": "We retain your personal data for as long as your account is active, or as needed to provide you services. If you delete your account, we will delete or anonymize your personal data within 30 days, except where we are required to retain it for legal, tax, or security purposes." }
+        ]
+      },
+      {
+        "heading": "7. Your Rights",
+        "blocks": [
+          { "type": "paragraph", "text": "Depending on your location, you may have the right to:" },
+          { "type": "list", "items": [
+            "Access the personal data we hold about you",
+            "Correct inaccurate data",
+            "Request deletion of your data",
+            "Object to or restrict certain processing",
+            "Withdraw consent where processing is based on consent",
+            "Request a copy of your data in a portable format"
+          ] },
+          { "type": "paragraph", "text": "To exercise these rights, contact us at support@voila-africa.com. We may need to verify your identity before fulfilling your request." }
+        ]
+      },
+      {
+        "heading": "8. Cookies (Website)",
+        "blocks": [
+          { "type": "paragraph", "text": "Our website (voila-africa.com) may use cookies and similar technologies to remember your preferences (including language selection), understand site usage, and improve performance. You can control cookies through your browser settings." }
+        ]
+      },
+      {
+        "heading": "9. Data Security",
+        "blocks": [
+          { "type": "paragraph", "text": "We use reasonable technical and organizational measures to protect your data, including encryption in transit and access controls on our backend infrastructure. However, no method of transmission or storage is 100% secure, and we cannot guarantee absolute security." }
+        ]
+      },
+      {
+        "heading": "10. International Data Transfers",
+        "blocks": [
+          { "type": "paragraph", "text": "Your data may be processed and stored on servers located outside your country of residence, including through our infrastructure and service providers. Where this occurs, we take steps to ensure appropriate safeguards are in place." }
+        ]
+      },
+      {
+        "heading": "11. Children's Privacy",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform is intended for users who are at least 16 years old. We do not knowingly collect personal data from children under this age. If you believe a child has provided us with personal data, please contact us so we can take appropriate action." }
+        ]
+      },
+      {
+        "heading": "12. Third-Party Links",
+        "blocks": [
+          { "type": "paragraph", "text": "Opportunity listings and other content on the Platform may link to third-party websites (e.g. scholarship providers, application portals). We are not responsible for the privacy practices of those third parties. Please review their privacy policies separately." }
+        ]
+      },
+      {
+        "heading": "13. Changes to This Policy",
+        "blocks": [
+          { "type": "paragraph", "text": "We may update this Privacy Policy from time to time. We will notify you of material changes through the Platform or by email. Continued use of the Platform after changes take effect constitutes acceptance of the revised Policy." }
+        ]
+      },
+      {
+        "heading": "14. Contact Us",
+        "blocks": [
+          { "type": "paragraph", "text": "If you have questions or concerns about this Privacy Policy or how we handle your data, contact us at:" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
+        ]
+      }
+    ]
+  },
+  "TermsOfService": {
+    "metaTitle": "Terms of Service",
+    "metaDescription": "The terms that govern your use of Voila's mobile app, web app, and website.",
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: July 12, 2026",
+    "sections": [
+      {
+        "heading": "1. Acceptance of Terms",
+        "blocks": [
+          { "type": "paragraph", "text": "By accessing or using Voila Africa's mobile application, web application, or website (collectively, the \"Platform\"), you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree, please do not use the Platform." }
+        ]
+      },
+      {
+        "heading": "2. Description of Service",
+        "blocks": [
+          { "type": "paragraph", "text": "Voila Africa helps African students and recent graduates discover scholarships, internships, and fellowships. The Platform also provides a CV builder, mentorship matching, and related tools. We do not guarantee that any opportunity listed on the Platform is accurate, currently open, or that you will be selected for it, and we are not affiliated with the organizations offering those opportunities unless explicitly stated." }
+        ]
+      },
+      {
+        "heading": "3. Eligibility",
+        "blocks": [
+          { "type": "paragraph", "text": "You must be at least 16 years old to create an account. By creating an account, you represent that the information you provide is accurate and that you meet this age requirement." }
+        ]
+      },
+      {
+        "heading": "4. Account Registration",
+        "blocks": [
+          { "type": "paragraph", "text": "You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account. Notify us immediately at support@voila-africa.com if you suspect unauthorized access to your account." }
+        ]
+      },
+      {
+        "heading": "5. User Conduct",
+        "blocks": [
+          { "type": "paragraph", "text": "You agree not to:" },
+          { "type": "list", "items": [
+            "Provide false or misleading information",
+            "Use the Platform for any unlawful purpose",
+            "Harass, abuse, or harm other users, including mentors or mentees",
+            "Attempt to access another user's account without authorization",
+            "Interfere with or disrupt the Platform's operation or security",
+            "Scrape, copy, or redistribute Platform content without our permission",
+            "Impersonate any person or entity"
+          ] },
+          { "type": "paragraph", "text": "We reserve the right to suspend or terminate accounts that violate these Terms." }
+        ]
+      },
+      {
+        "heading": "6. Opportunity Listings",
+        "blocks": [
+          { "type": "paragraph", "text": "Scholarship, internship, and fellowship listings are provided for informational purposes. We make reasonable efforts to keep listings accurate and up to date, but:" },
+          { "type": "list", "items": [
+            "We do not guarantee the accuracy, completeness, or availability of any listing",
+            "Application deadlines and requirements are set by the third-party organizations, not Voila Africa",
+            "You are responsible for verifying details directly with the opportunity provider before applying"
+          ] }
+        ]
+      },
+      {
+        "heading": "7. CV Builder",
+        "blocks": [
+          { "type": "paragraph", "text": "Content you create using the CV Builder remains yours. You are solely responsible for the accuracy of the information in your CV. We provide the tool for your convenience but do not review, verify, or endorse the content you create." }
+        ]
+      },
+      {
+        "heading": "8. Mentorship Program",
+        "blocks": [
+          { "type": "list", "items": [
+            "Mentorship sessions are facilitated through the Platform, including video sessions conducted via Jitsi.",
+            "Mentors are not employees of Voila Africa. Mentorship is provided on a best-efforts, voluntary or arranged basis, and we do not guarantee specific outcomes from any mentorship relationship.",
+            "Both mentors and mentees agree to conduct themselves respectfully. Voila Africa reserves the right to remove any user from the mentorship program for inappropriate conduct.",
+            "Voila Africa is not responsible for the advice, guidance, or conduct of mentors, which reflects the mentor's own views and not those of Voila Africa."
+          ] }
+        ]
+      },
+      {
+        "heading": "9. Payments",
+        "blocks": [
+          { "type": "list", "items": [
+            "Certain features of the Platform may require payment, processed securely through Paystack.",
+            "All fees are stated in Ghanaian Cedi (GHS) and are non-refundable except where required by law or explicitly stated at the time of purchase.",
+            "You are responsible for any taxes applicable to your purchase.",
+            "We reserve the right to change pricing with reasonable notice."
+          ] }
+        ]
+      },
+      {
+        "heading": "10. Intellectual Property",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform, including its design, logos, text, and underlying software, is owned by Voila Africa or its licensors and is protected by intellectual property laws. You may not copy, modify, distribute, or create derivative works from the Platform without our prior written consent." },
+          { "type": "paragraph", "text": "You retain ownership of content you submit (such as your CV or profile information), but you grant Voila Africa a limited license to use, host, and display that content as necessary to operate the Platform." }
+        ]
+      },
+      {
+        "heading": "11. Third-Party Services",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform integrates with third-party services, including Paystack (payments), Supabase (infrastructure), and Jitsi (video). Your use of these integrated services may also be subject to their respective terms and privacy policies." }
+        ]
+      },
+      {
+        "heading": "12. Disclaimers",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform is provided \"as is\" and \"as available,\" without warranties of any kind, whether express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure, or that any opportunity listing is accurate or that mentorship will result in any particular outcome." }
+        ]
+      },
+      {
+        "heading": "13. Limitation of Liability",
+        "blocks": [
+          { "type": "paragraph", "text": "To the maximum extent permitted by law, Voila Africa and its founders, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Platform, including but not limited to loss of opportunities, data, or income, even if we have been advised of the possibility of such damages." }
+        ]
+      },
+      {
+        "heading": "14. Indemnification",
+        "blocks": [
+          { "type": "paragraph", "text": "You agree to indemnify and hold harmless Voila Africa from any claims, damages, losses, or expenses arising from your use of the Platform, your violation of these Terms, or your violation of any rights of a third party." }
+        ]
+      },
+      {
+        "heading": "15. Termination",
+        "blocks": [
+          { "type": "paragraph", "text": "We reserve the right to suspend or terminate your account at our discretion, with or without notice, for conduct that we believe violates these Terms or is otherwise harmful to the Platform or other users. You may also delete your account at any time through the app settings." }
+        ]
+      },
+      {
+        "heading": "16. Changes to These Terms",
+        "blocks": [
+          { "type": "paragraph", "text": "We may update these Terms from time to time. We will notify you of material changes through the Platform or by email. Continued use of the Platform after changes take effect constitutes acceptance of the revised Terms." }
+        ]
+      },
+      {
+        "heading": "17. Governing Law",
+        "blocks": [
+          { "type": "paragraph", "text": "These Terms are governed by the laws of the Republic of Ghana, without regard to conflict of law principles." }
+        ]
+      },
+      {
+        "heading": "18. Contact Us",
+        "blocks": [
+          { "type": "paragraph", "text": "If you have questions about these Terms, contact us at:" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
+        ]
+      }
+    ]
+  }
+}

@@ -1,7 +1,22 @@
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 export default function Footer() {
+  const t = useTranslations("Footer");
   const year = new Date().getFullYear();
+
+  const socialLabels = [t("social.twitter"), t("social.linkedin"), t("social.instagram")];
+  const stores = [
+    { label: t("stores.googlePlay.label"), sub: t("stores.googlePlay.sub") },
+    { label: t("stores.appStore.label"), sub: t("stores.appStore.sub") },
+  ];
+  const legalLinks = t.raw("columns.legal.links") as string[];
+  const legalHrefs = ["/privacy", "/terms", "#"];
+  const columns = [
+    { heading: t("columns.product.heading"), links: (t.raw("columns.product.links") as string[]).map((label) => ({ label, href: "#" })) },
+    { heading: t("columns.company.heading"), links: (t.raw("columns.company.links") as string[]).map((label) => ({ label, href: "#" })) },
+    { heading: t("columns.legal.heading"), links: legalLinks.map((label, i) => ({ label, href: legalHrefs[i] ?? "#" })) },
+  ];
 
   return (
     <footer className="bg-white border-t border-border pt-16 pb-8">
@@ -18,10 +33,10 @@ export default function Footer() {
               />
             </div>
             <p className="text-muted text-sm leading-[22px] max-w-[280px]">
-              Building career confidence for African students and young professionals.
+              {t("tagline")}
             </p>
             <div className="flex gap-2 mt-1">
-              {['Twitter', 'LinkedIn', 'Instagram'].map((label) => (
+              {socialLabels.map((label) => (
                 <button
                   key={label}
                   aria-label={label}
@@ -32,7 +47,7 @@ export default function Footer() {
               ))}
             </div>
             <div className="flex flex-wrap gap-2 mt-2">
-              {[{ label: 'Google Play', sub: 'Get it on' }, { label: 'App Store', sub: 'Download on' }].map((store) => (
+              {stores.map((store) => (
                 <button
                   key={store.label}
                   className="flex items-center gap-2 px-3 py-1.5 rounded-lg border border-border bg-surface hover:border-primary hover:bg-primary/5 transition-colors duration-150"
@@ -46,20 +61,16 @@ export default function Footer() {
             </div>
           </div>
 
-          {[
-            { heading: 'Product', links: ['Opportunities', 'Mentorship', 'CV Builder', 'Tracker', 'Notifications'] },
-            { heading: 'Company', links: ['About', 'Blog', 'Careers', 'Contact'] },
-            { heading: 'Legal', links: ['Privacy Policy', 'Terms of Service', 'Cookie Policy'] },
-          ].map((col) => (
+          {columns.map((col) => (
             <div key={col.heading} className="flex-1 min-w-[130px] flex flex-col gap-3">
               <p className="text-sm font-bold text-[#1A1A1A] tracking-wide mb-1">{col.heading}</p>
               {col.links.map((link) => (
                 <a
-                  key={link}
-                  href="#"
+                  key={link.label}
+                  href={link.href}
                   className="text-sm text-muted hover:text-primary leading-[22px] transition-colors duration-100"
                 >
-                  {link}
+                  {link.label}
                 </a>
               ))}
             </div>
@@ -67,8 +78,8 @@ export default function Footer() {
         </div>
 
         <div className="border-t border-border pt-6 flex flex-wrap justify-between items-center gap-3">
-          <p className="text-muted text-sm">© {year} Voila. All rights reserved.</p>
-          <p className="text-muted text-sm">Made with care for African students 🌿</p>
+          <p className="text-muted text-sm">{t("copyright", { year })}</p>
+          <p className="text-muted text-sm">{t("madeWith")}</p>
         </div>
       </div>
     </footer>
