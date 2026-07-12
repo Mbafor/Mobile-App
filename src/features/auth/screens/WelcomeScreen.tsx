@@ -341,10 +341,6 @@ export function WelcomeScreen() {
         {t('auth.common.continue')}
       </Button>
 
-      <Text style={styles.hint}>
-        {t('auth.welcome.signInHint')}
-      </Text>
-
       {legalLinksRow}
 
       <Pressable onPress={() => Linking.openURL('mailto:support@voila-africa.com')} style={styles.supportRow}>
@@ -451,10 +447,6 @@ export function WelcomeScreen() {
       >
         {t('auth.welcome.createAccount')}
       </Button>
-
-      <Text style={styles.hint}>
-        {t('auth.welcome.signUpHint')}
-      </Text>
 
       {legalLinksRow}
 
@@ -967,6 +959,8 @@ function createStyles(colors: ColorScheme) {
   },
   legalLink: {
     color: colors.primary,
+    fontSize: typography.fontSize.xs,
+    lineHeight: 18,
     fontWeight: '500',
   },
 

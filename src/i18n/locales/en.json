@@ -289,8 +289,6 @@
       "resetSent": "Reset link sent to {{email}}. Check your inbox.",
       "createAccount": "Create account",
       "continueWithEmail": "Continue with email",
-      "signInHint": "Sign in with your email, password, and a one-time code to confirm your account.",
-      "signUpHint": "By creating an account you agree to our Terms of Service and Privacy Policy.",
       "emailCodeHint": "A one-time verification code will be sent to your email. Kindly check your email to confirm your account.",
       "errors": {
         "emailForForgot": "Enter your email address above, then tap \"Forgot password?\".",

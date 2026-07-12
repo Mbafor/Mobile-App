@@ -313,8 +313,6 @@
       "resetSent": "Lien de réinitialisation envoyé à {{email}}. Vérifiez votre boîte de réception.",
       "createAccount": "Créer un compte",
       "continueWithEmail": "Continuer avec l'e-mail",
-      "signInHint": "Connectez-vous avec votre e-mail, votre mot de passe et un code à usage unique pour confirmer votre compte.",
-      "signUpHint": "En créant un compte, vous acceptez nos conditions d'utilisation et notre politique de confidentialité.",
       "emailCodeHint": "Un code de vérification à usage unique sera envoyé à votre e-mail. Veuillez vérifier votre e-mail pour confirmer votre compte.",
       "errors": {
         "emailForForgot": "Entrez votre adresse e-mail ci-dessus, puis appuyez sur « Mot de passe oublié ? ».",
