@@ -594,9 +594,7 @@
       "giveFeedback": "Donner votre avis"
     },
     "whatsapp": {
-      "community": "Rejoignez notre communauté WhatsApp",
-      "join": "Rejoindre",
-      "dismiss": "Ignorer"
+      "community": "Rejoignez notre communauté WhatsApp"
     },
     "search": "Rechercher des opportunités",
     "rootTitles": {
@@ -2113,21 +2111,23 @@
     "thanks": "Merci de nous aider à construire Voila Africa 🎉",
     "done": "Terminé",
     "rating": {
-      "question": "Évaluez votre expérience jusqu'à présent",
+      "question": "Comment évalueriez-vous votre expérience avec Voila Africa jusqu'à présent ?",
       "starA11y_one": "{{count}} étoile",
       "starA11y_other": "{{count}} étoiles"
     },
     "mostUsed": {
-      "question": "Quelle partie de Voila Africa avez-vous le plus utilisée ?",
+      "question": "Quelles fonctionnalités avez-vous le plus utilisées ?",
       "opportunities": "Opportunités",
       "cvBuilder": "Créateur de CV",
       "mentorship": "Mentorat"
     },
-    "excitedAbout": {
-      "question": "Qu'est-ce qui vous enthousiasme le plus dans l'application mobile ?"
+    "likesMobileApp": {
+      "question": "Aimez-vous avoir Voila Africa sous forme d'application mobile ?",
+      "yes": "Oui",
+      "no": "Non"
     },
     "featureRequest": {
-      "question": "Si vous pouviez ajouter une fonctionnalité, laquelle serait-ce ?"
+      "question": "Quelle fonctionnalité aimeriez-vous voir ajoutée ?"
     }
   }
 }

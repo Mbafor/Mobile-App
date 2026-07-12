@@ -29,17 +29,22 @@ const FEATURE_OPTIONS: { key: MostUsedFeature; labelKey: string; icon: keyof typ
   { key: 'mentorship', labelKey: 'survey.mostUsed.mentorship', icon: 'people-outline' },
 ];
 
+const YES_NO_OPTIONS: { value: boolean; labelKey: string; icon: keyof typeof Ionicons.glyphMap }[] = [
+  { value: true, labelKey: 'survey.likesMobileApp.yes', icon: 'thumbs-up-outline' },
+  { value: false, labelKey: 'survey.likesMobileApp.no', icon: 'thumbs-down-outline' },
+];
+
 type DraftAnswers = {
   experienceRating: number;
   mostUsedFeature: MostUsedFeature | null;
-  excitedAbout: string;
+  likesMobileApp: boolean | null;
   featureRequest: string;
 };
 
 const EMPTY_ANSWERS: DraftAnswers = {
   experienceRating: 0,
   mostUsedFeature: null,
-  excitedAbout: '',
+  likesMobileApp: null,
   featureRequest: '',
 };
 
@@ -88,13 +93,13 @@ export function FeatureSurveyModal() {
   }, [step, close]);
 
   const submit = async (finalAnswers: DraftAnswers) => {
-    if (!user || !finalAnswers.mostUsedFeature) return;
+    if (!user || !finalAnswers.mostUsedFeature || finalAnswers.likesMobileApp === null) return;
     setIsSubmitting(true);
     setSubmitError(false);
     const payload: SurveyAnswers = {
       experienceRating: finalAnswers.experienceRating,
       mostUsedFeature: finalAnswers.mostUsedFeature,
-      excitedAbout: finalAnswers.excitedAbout.trim(),
+      likesMobileApp: finalAnswers.likesMobileApp,
       featureRequest: finalAnswers.featureRequest.trim(),
     };
     const { error } = await surveyApi.submitResponse(user.id, payload);
@@ -119,9 +124,13 @@ export function FeatureSurveyModal() {
     setStep((s) => s + 1);
   };
 
+  const selectLikesMobileApp = (value: boolean) => {
+    setAnswers((a) => ({ ...a, likesMobileApp: value }));
+    setStep((s) => s + 1);
+  };
+
   const canProceed =
     (step === 0 && answers.experienceRating > 0) ||
-    (step === 2 && answers.excitedAbout.trim().length > 0) ||
     (step === 3 && answers.featureRequest.trim().length > 0);
 
   if (!isOpen) return null;
@@ -198,15 +207,23 @@ export function FeatureSurveyModal() {
 
             {step === 2 && (
               <View style={styles.questionBlock}>
-                <Text style={styles.question}>{t('survey.excitedAbout.question')}</Text>
-                <Input
-                  value={answers.excitedAbout}
-                  onChangeText={(text) => setAnswers((a) => ({ ...a, excitedAbout: text }))}
-                  placeholder={t('survey.placeholder')}
-                  autoFocus
-                  returnKeyType="next"
-                  onSubmitEditing={() => canProceed && goNext()}
-                />
+                <Text style={styles.question}>{t('survey.likesMobileApp.question')}</Text>
+                <View style={styles.optionList}>
+                  {YES_NO_OPTIONS.map((option) => (
+                    <Pressable
+                      key={option.labelKey}
+                      onPress={() => selectLikesMobileApp(option.value)}
+                      style={({ pressed }) => [
+                        styles.optionCard,
+                        pressed && styles.optionCardPressed,
+                      ]}
+                    >
+                      <Ionicons name={option.icon} size={22} color={colors.primary} />
+                      <Text style={styles.optionLabel}>{t(option.labelKey)}</Text>
+                      <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+                    </Pressable>
+                  ))}
+                </View>
               </View>
             )}
 
@@ -243,7 +260,7 @@ export function FeatureSurveyModal() {
             )}
           </Animated.View>
 
-          {step < THANKS_STEP && step !== 1 ? (
+          {step < THANKS_STEP && step !== 1 && step !== 2 ? (
             <Button
               onPress={goNext}
               disabled={!canProceed}

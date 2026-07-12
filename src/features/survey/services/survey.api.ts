@@ -24,7 +24,7 @@ export const surveyApi = {
       user_id: userId,
       experience_rating: answers.experienceRating,
       most_used_feature: answers.mostUsedFeature,
-      excited_about: answers.excitedAbout,
+      likes_mobile_app: answers.likesMobileApp,
       feature_request: answers.featureRequest,
     });
     if (error) return { error };

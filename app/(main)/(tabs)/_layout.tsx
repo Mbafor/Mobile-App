@@ -4,18 +4,18 @@ import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, StyleSheet, Text, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
-import { FeatureSurveyModal } from '@/features/survey';
+import { FeatureSurveyModal, useSurveyStore } from '@/features/survey';
 import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { DesktopWebNavigation, DesktopSidebar, DesktopHeader, DesktopFooter, WhatsAppCommunityBanner } from '@/features/navigation/components';
+import { DesktopWebNavigation, DesktopSidebar, DesktopHeader, DesktopFooter } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
@@ -43,6 +43,7 @@ export default function MainTabsLayout() {
   const navigation = useNavigation();
   const isWeb = useIsWeb();
   const isWebDesktop = useWebDesktop();
+  const openSurvey = useSurveyStore((s) => s.open);
 
   useFocusEffect(
     useCallback(() => {
@@ -184,7 +185,6 @@ export default function MainTabsLayout() {
               >
                 {tabs}
                 <FloatingHelpButton />
-                <WhatsAppCommunityBanner />
                 <FeatureSurveyModal />
               </View>
               <DesktopFooter />
@@ -204,17 +204,23 @@ export default function MainTabsLayout() {
         <View style={styles.webContent}>
           {tabs}
           <FloatingHelpButton />
-          <WhatsAppCommunityBanner />
           <FeatureSurveyModal />
         </View>
         <View style={styles.mobileWebFooter}>
           <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
           <Text
             style={styles.mobileWebFooterLink}
+            numberOfLines={1}
             onPress={() => void openExternalUrl(WHATSAPP_URL)}
           >
             {t('navigation.whatsapp.community')}
           </Text>
+          <Text style={styles.mobileWebFooterSep}>·</Text>
+          <Pressable onPress={() => openSurvey(true)}>
+            <Text style={styles.mobileWebFooterLink} numberOfLines={1}>
+              {t('navigation.footer.giveFeedback')}
+            </Text>
+          </Pressable>
         </View>
       </View>
     );
@@ -224,16 +230,22 @@ export default function MainTabsLayout() {
     <View style={styles.mobileRoot}>
       {tabs}
       <FloatingHelpButton />
-      <WhatsAppCommunityBanner />
       <FeatureSurveyModal />
       <View style={styles.mobileFooter}>
         <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
         <Text
           style={styles.mobileFooterLink}
+          numberOfLines={1}
           onPress={() => void openExternalUrl(WHATSAPP_URL)}
         >
           {t('navigation.whatsapp.community')}
         </Text>
+        <Text style={styles.mobileFooterSep}>·</Text>
+        <Pressable onPress={() => openSurvey(true)}>
+          <Text style={styles.mobileFooterLink} numberOfLines={1}>
+            {t('navigation.footer.giveFeedback')}
+          </Text>
+        </Pressable>
       </View>
     </View>
   );
@@ -261,6 +273,10 @@ function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
       fontSize: 12,
       color: colors.textMuted,
     },
+    mobileWebFooterSep: {
+      fontSize: 12,
+      color: colors.textMuted,
+    },
     mobileFooter: {
       flexDirection: 'row',
       alignItems: 'center',
@@ -272,6 +288,10 @@ function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
       backgroundColor: colors.background,
     },
     mobileFooterLink: {
+      fontSize: 12,
+      color: colors.textMuted,
+    },
+    mobileFooterSep: {
       fontSize: 12,
       color: colors.textMuted,
     },

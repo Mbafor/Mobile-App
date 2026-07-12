@@ -570,9 +570,7 @@
       "giveFeedback": "Give Feedback"
     },
     "whatsapp": {
-      "community": "Join our WhatsApp community",
-      "join": "Join",
-      "dismiss": "Dismiss"
+      "community": "Join our WhatsApp community"
     },
     "search": "Search opportunities",
     "rootTitles": {
@@ -2028,21 +2026,23 @@
     "thanks": "Thanks for helping us build Voila Africa 🎉",
     "done": "Done",
     "rating": {
-      "question": "Rate your experience so far",
+      "question": "How would you rate your experience with Voila Africa so far?",
       "starA11y_one": "{{count}} star",
       "starA11y_other": "{{count}} stars"
     },
     "mostUsed": {
-      "question": "Which part of Voila Africa have you used the most?",
+      "question": "Which features have you used the most?",
       "opportunities": "Opportunities",
       "cvBuilder": "CV Builder",
       "mentorship": "Mentorship"
     },
-    "excitedAbout": {
-      "question": "What are you most excited about in the mobile app?"
+    "likesMobileApp": {
+      "question": "Do you like having Voila Africa as a mobile app?",
+      "yes": "Yes",
+      "no": "No"
     },
     "featureRequest": {
-      "question": "If you could add one feature, what would it be?"
+      "question": "What's one feature you'd like to see added?"
     }
   }
 }
