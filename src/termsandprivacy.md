@@ -7,6 +7,7 @@ Last updated: 12 July 2026
 
 ## 1. Introduction
 
+
 Voila Africa ("we," "us," "our," "the Platform") provides a platform that helps African students and recent graduates discover scholarships, internships, and fellowships, and offers additional tools including a CV builder, mentorship matching, and opportunity discovery. This Privacy Policy explains what personal data we collect, how we use it, and the choices you have.
 
 This Policy applies to our mobile application, our web application (app.voila-africa.com), and our website (voila-africa.com).

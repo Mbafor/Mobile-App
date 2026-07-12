@@ -1,5 +1,6 @@
 import { memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
@@ -86,7 +87,11 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
             accessibilityLabel={isSaved ? t('opportunities.card.unsave') : t('opportunities.card.save')}
             disabled={isSaving}
           >
-            <Text style={styles.actionIcon}>{isSaved ? '★' : '☆'}</Text>
+            <Ionicons
+              name={isSaved ? 'bookmark' : 'bookmark-outline'}
+              size={20}
+              color={styles.actionIcon.color}
+            />
           </Pressable>
           <Pressable
             onPress={(e) => {
@@ -96,7 +101,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
             hitSlop={8}
             accessibilityLabel={t('opportunities.card.share')}
           >
-            <Text style={styles.actionIcon}>↗</Text>
+            <Ionicons name="share-outline" size={20} color={styles.actionIcon.color} />
           </Pressable>
         </View>
       </View>
