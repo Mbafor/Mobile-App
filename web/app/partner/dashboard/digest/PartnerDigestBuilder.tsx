@@ -34,18 +34,55 @@ export function PartnerDigestBuilder({
   partnerSlug: string;
 }) {
   const [search, setSearch] = useState('');
+  const [category, setCategory] = useState('all');
+  const [deadlineBefore, setDeadlineBefore] = useState('');
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [isPending, startTransition] = useTransition();
   const [justPublished, setJustPublished] = useState<ShareableOpportunity[] | null>(null);
 
+  const categories = useMemo(() => {
+    const set = new Set<string>();
+    for (const opp of opportunities) if (opp.category) set.add(opp.category);
+    return Array.from(set).sort();
+  }, [opportunities]);
+
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
-    if (!query) return opportunities;
+    const beforeDate = deadlineBefore ? new Date(deadlineBefore) : null;
+
     return opportunities.filter((opp) => {
-      const haystack = `${opp.title} ${opp.organization} ${opp.country ?? ''}`.toLowerCase();
-      return haystack.includes(query);
+      if (category !== 'all' && opp.category !== category) return false;
+
+      if (beforeDate) {
+        if (!opp.deadline) return false;
+        const oppDeadline = new Date(opp.deadline);
+        if (oppDeadline > beforeDate) return false;
+      }
+
+      if (query) {
+        const haystack = `${opp.title} ${opp.organization} ${opp.country ?? ''}`.toLowerCase();
+        if (!haystack.includes(query)) return false;
+      }
+
+      return true;
     });
-  }, [opportunities, search]);
+  }, [opportunities, search, category, deadlineBefore]);
+
+  const selectedOpportunities: ShareableOpportunity[] = useMemo(
+    () =>
+      opportunities
+        .filter((opp) => selected.has(opp.id))
+        .map((opp) => ({ id: opp.id, title: opp.title, organization: opp.organization, deadline: opp.deadline })),
+    [opportunities, selected],
+  );
+
+  const previewText = useMemo(
+    () =>
+      selectedOpportunities.length > 0
+        ? buildPartnerShareMessage(orgName, refCode, partnerSlug, selectedOpportunities)
+        : '',
+    [orgName, refCode, partnerSlug, selectedOpportunities],
+  );
 
   function toggle(id: string) {
     setSelected((prev) => {
@@ -64,11 +101,7 @@ export function PartnerDigestBuilder({
       const result = await publishPartnerDigest(ids);
       if (!result) return;
 
-      const published = opportunities
-        .filter((opp) => ids.includes(opp.id))
-        .map((opp) => ({ id: opp.id, title: opp.title, organization: opp.organization, deadline: opp.deadline }));
-
-      setJustPublished(published);
+      setJustPublished(selectedOpportunities);
       setSelected(new Set());
     });
   }
@@ -92,17 +125,40 @@ export function PartnerDigestBuilder({
         </div>
       ) : null}
 
-      <input
-        type="text"
-        placeholder="Search title, organization, country..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        className="w-full rounded-md border border-[var(--color-border)] px-3 py-2 text-sm mb-3"
-      />
+      <div className="flex flex-wrap gap-3 mb-4">
+        <input
+          type="text"
+          placeholder="Search title, organization, country..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="flex-1 min-w-[200px] rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
+        />
+        <select
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          className="rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
+        >
+          <option value="all">All categories</option>
+          {categories.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
+        <label className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
+          Deadline before
+          <input
+            type="date"
+            value={deadlineBefore}
+            onChange={(e) => setDeadlineBefore(e.target.value)}
+            className="rounded-md border border-[var(--color-border)] px-2 py-2 text-sm"
+          />
+        </label>
+      </div>
 
       <div className="border border-[var(--color-border)] rounded-lg divide-y divide-[var(--color-border)] max-h-[420px] overflow-y-auto mb-4">
         {filtered.length === 0 && (
-          <p className="p-4 text-sm text-[var(--color-muted)]">No opportunities match this search.</p>
+          <p className="p-4 text-sm text-[var(--color-muted)]">No opportunities match these filters.</p>
         )}
         {filtered.map((opp) => (
           <label key={opp.id} className="flex items-start gap-3 p-3 text-sm cursor-pointer">
@@ -116,6 +172,15 @@ export function PartnerDigestBuilder({
             </span>
           </label>
         ))}
+      </div>
+
+      <div className="mb-4">
+        <p className="text-sm font-semibold mb-2">Preview</p>
+        <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3 max-h-64 overflow-y-auto">
+          <pre className="text-sm whitespace-pre-wrap font-sans">
+            {previewText || 'Select opportunities above to preview this week’s digest message.'}
+          </pre>
+        </div>
       </div>
 
       <button
