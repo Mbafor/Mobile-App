@@ -26,4 +26,16 @@ export const opportunitiesApi = {
 
     return { data: data ? mapOpportunityRow(data) : null, error };
   },
+
+  /** Opportunity ids ranked by save count across all users (aggregate only, no user linkage). */
+  getTrendingIds: async (limit = 10) => {
+    const { data, error } = await supabase.rpc('get_trending_opportunities', {
+      result_limit: limit,
+    });
+
+    if (error) return { data: null, error };
+
+    const ids = (data ?? []).map((row) => row.opportunity_id);
+    return { data: ids, error: null };
+  },
 };

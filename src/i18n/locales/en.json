@@ -235,7 +235,9 @@
       "recommendedFull": "Recommended For You",
       "recommendedShort": "For You",
       "recent": "Recently Uploaded",
-      "closing": "Closing Soon"
+      "closing": "Closing Soon",
+      "trending": "Trending",
+      "fullyFunded": "Fully Funded"
     },
     "greeting": {
       "morning": "Good morning, {{name}}.",
@@ -385,7 +387,12 @@
       "resultCount_one": "{{count}} result",
       "resultCount_other": "{{count}} results",
       "emptyTitle": "No matches",
-      "emptyDescription": "Try a different search or adjust your filters."
+      "emptyDescription": "Try a different search or adjust your filters.",
+      "cancel": "Cancel",
+      "recentSearches": "Recent searches",
+      "trendingSearches": "Trending searches",
+      "lookingFor": "I am looking for...",
+      "clearRecent": "Clear"
     },
     "filtersPanel": {
       "title": "Filters",

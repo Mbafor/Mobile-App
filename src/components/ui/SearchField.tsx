@@ -19,6 +19,7 @@ type SearchFieldProps = {
   variant?: 'default' | 'docs';
   /** Optional trailing control (e.g. Filters button). */
   trailing?: ReactNode;
+  autoFocus?: boolean;
 };
 
 export function SearchField({
@@ -29,6 +30,7 @@ export function SearchField({
   style,
   variant = 'default',
   trailing,
+  autoFocus,
 }: SearchFieldProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
@@ -45,6 +47,7 @@ export function SearchField({
           placeholder={placeholder}
           autoCapitalize="none"
           autoCorrect={false}
+          autoFocus={autoFocus}
           style={[styles.input, Platform.OS === 'web' && ({ outlineStyle: 'none' } as any)]}
         />
         {showClear ? (

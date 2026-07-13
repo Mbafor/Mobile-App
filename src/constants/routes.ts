@@ -18,6 +18,7 @@ export const ROUTES = {
     DASHBOARD: '/(main)/(tabs)/dashboard',
     MENTORSHIP: '/(main)/(tabs)/mentorship',
     SAVED: '/(main)/(tabs)/saved',
+    SEARCH: '/(main)/search',
     NOTIFICATIONS: '/(main)/(tabs)/notifications',
     SETTINGS: '/(main)/settings',
     SETTINGS_PRIVACY: '/(main)/settings/privacy',

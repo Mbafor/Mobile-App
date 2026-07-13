@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -23,9 +24,11 @@ type OpportunityCardProps = {
 
 function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCardProps) {
   const styles = useThemedStyles(createStyles);
+  const { isDark } = useTheme();
   const { t } = useTranslation();
   const { isSaved, toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
   const [shareVisible, setShareVisible] = useState(false);
+  const actionIconColor = isDark ? '#FFFFFF' : styles.actionIcon.color;
 
   const daysLeft = daysUntilDeadline(opportunity.deadline);
   const deadlineLabel =
@@ -90,7 +93,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
             <Ionicons
               name={isSaved ? 'bookmark' : 'bookmark-outline'}
               size={20}
-              color={styles.actionIcon.color}
+              color={actionIconColor}
             />
           </Pressable>
           <Pressable
@@ -101,7 +104,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
             hitSlop={8}
             accessibilityLabel={t('opportunities.card.share')}
           >
-            <Ionicons name="share-outline" size={20} color={styles.actionIcon.color} />
+            <Ionicons name="share-social-outline" size={20} color={actionIconColor} />
           </Pressable>
         </View>
       </View>

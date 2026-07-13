@@ -153,6 +153,10 @@ export type Database = {
         Args: Record<string, never>;
         Returns: undefined;
       };
+      get_trending_opportunities: {
+        Args: { result_limit?: number };
+        Returns: { opportunity_id: string; save_count: number }[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

@@ -12,6 +12,7 @@ export const queryKeys = {
     detail: (id: string) => ['opportunities', id] as const,
     saved: (userId: string) => ['opportunities', 'saved', userId] as const,
     tracker: (userId: string) => ['opportunities', 'tracker', userId] as const,
+    trending: ['opportunities', 'trending'] as const,
     applied: (userId: string, opportunityId: string) =>
       ['opportunities', 'applied', userId, opportunityId] as const,
   },

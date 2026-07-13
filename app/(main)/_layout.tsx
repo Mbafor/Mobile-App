@@ -32,6 +32,10 @@ export default function MainLayout() {
         }}
       />
       <Drawer.Screen name="category/[category]" options={{ title: t('navigation.headerTitles.category'), headerShown: false }} />
+      <Drawer.Screen
+        name="search"
+        options={{ ...hiddenDrawerItem, title: t('navigation.search'), headerShown: false }}
+      />
       <Drawer.Screen name="refer" options={{ title: t('menu.items.referFriend'), headerShown: false }} />
       <Drawer.Screen
         name="opportunity/[id]"

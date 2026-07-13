@@ -259,7 +259,9 @@
       "recommendedFull": "Recommandé pour vous",
       "recommendedShort": "Pour vous",
       "recent": "Récemment ajouté",
-      "closing": "Clôture bientôt"
+      "closing": "Clôture bientôt",
+      "trending": "Tendance",
+      "fullyFunded": "Entièrement financé"
     },
     "greeting": {
       "morning": "Bonjour, {{name}}.",
@@ -409,7 +411,12 @@
       "resultCount_one": "{{count}} résultat",
       "resultCount_other": "{{count}} résultats",
       "emptyTitle": "Aucune correspondance",
-      "emptyDescription": "Essayez une autre recherche ou ajustez vos filtres."
+      "emptyDescription": "Essayez une autre recherche ou ajustez vos filtres.",
+      "cancel": "Annuler",
+      "recentSearches": "Recherches récentes",
+      "trendingSearches": "Recherches tendance",
+      "lookingFor": "Je recherche...",
+      "clearRecent": "Effacer"
     },
     "filtersPanel": {
       "title": "Filtres",

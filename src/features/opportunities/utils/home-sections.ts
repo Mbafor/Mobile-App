@@ -57,3 +57,42 @@ export function buildClosingSoon(opportunities: Opportunity[]): Opportunity[] {
     )
     .slice(0, SECTION_LIMIT);
 }
+
+/** Trending: opportunities ranked by platform-wide save count, in server-ranked order. */
+export function buildTrending(
+  opportunities: Opportunity[],
+  trendingIds: string[],
+): Opportunity[] {
+  const active = filterActive(opportunities);
+  const byId = new Map(active.map((item) => [item.id, item]));
+  return trendingIds
+    .map((id) => byId.get(id))
+    .filter((item): item is Opportunity => Boolean(item))
+    .slice(0, SECTION_LIMIT);
+}
+
+/** Fallback when no opportunity has been saved yet: alternate closing-soon and recent picks. */
+export function buildTrendingFallback(opportunities: Opportunity[]): Opportunity[] {
+  const closing = buildClosingSoon(opportunities);
+  const recent = buildRecentlyUploaded(opportunities);
+  const seen = new Set<string>();
+  const merged: Opportunity[] = [];
+
+  for (let i = 0; i < Math.max(closing.length, recent.length); i++) {
+    for (const item of [closing[i], recent[i]]) {
+      if (item && !seen.has(item.id)) {
+        seen.add(item.id);
+        merged.push(item);
+      }
+    }
+  }
+
+  return merged.slice(0, SECTION_LIMIT);
+}
+
+export function buildFullyFunded(opportunities: Opportunity[]): Opportunity[] {
+  return [...filterActive(opportunities)]
+    .filter((item) => item.fundingType === 'fully_funded')
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+    .slice(0, SECTION_LIMIT);
+}

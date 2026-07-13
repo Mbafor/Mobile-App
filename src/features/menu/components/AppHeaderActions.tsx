@@ -2,12 +2,12 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { useRouter } from 'expo-router';
+import { usePathname, useRouter } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, View } from 'react-native';
 
+import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
-import { useAppStore } from '@/store/slices/app.slice';
 import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 import { ProfileHeaderMenu } from '@/features/menu/components/ProfileHeaderMenu';
 
@@ -17,11 +17,11 @@ export function AppHeaderActions() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
-  const { isSearchVisible, setSearchVisible } = useAppStore();
+  const pathname = usePathname();
+  const isSearchScreen = pathname.includes('/search');
 
   const handleSearchPress = () => {
-    router.push('/(main)/(tabs)/dashboard');
-    setSearchVisible(!isSearchVisible);
+    router.push(ROUTES.MAIN.SEARCH as any);
   };
 
   return (
@@ -34,9 +34,9 @@ export function AppHeaderActions() {
         hitSlop={12}
       >
         <Ionicons
-          name={isSearchVisible ? "search" : "search-outline"}
+          name={isSearchScreen ? "search" : "search-outline"}
           size={24}
-          color={isSearchVisible ? colors.primary : colors.text}
+          color={isSearchScreen ? colors.primary : colors.text}
         />
       </Pressable>
       <NotificationHeaderButton />

@@ -4,12 +4,11 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useRouter } from 'expo-router';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
   ActivityIndicator,
   FlatList,
-  Modal,
   Platform,
   Pressable,
   RefreshControl,
@@ -19,15 +18,10 @@ import {
 
 import { ErrorMessage } from '@/components/feedback';
 import { Text } from '@/components/ui';
-import { useAppStore } from '@/store/slices/app.slice';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
-import { OpportunityFiltersPanel } from '@/features/opportunities/components/OpportunityFiltersPanel';
-import { OpportunitySearchBar } from '@/features/opportunities/components/OpportunitySearchBar';
-import { OpportunitySearchResults } from '@/features/opportunities/components/OpportunitySearchResults';
 import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
-import { useOpportunitySearch } from '@/features/opportunities/hooks/useOpportunitySearch';
 import { useSurveyEligibility } from '@/features/survey';
 import { env } from '@/config/env';
 import { ROUTES } from '@/constants/routes';
@@ -50,34 +44,19 @@ export function DashboardScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const isDesktop = useWebDesktop();
-  const [filtersOpen, setFiltersOpen] = useState(false);
   const greeting = useGreeting();
 
-  const { isSearchVisible, setSearchVisible } = useAppStore();
   const { profile, user } = useAuth();
   useSurveyEligibility();
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
 
   const {
-    query,
-    setQuery,
-    filters,
-    setFilters,
-    results,
-    resultCount,
-    activeFilterCount,
-    isLoading: searchLoading,
-    isRefetching: searchRefetching,
-    error: searchError,
-    refetch: refetchSearch,
-    clearFilters,
-  } = useOpportunitySearch();
-
-  const {
     recommended,
     recent,
     closingSoon,
+    trending,
+    fullyFunded,
     isLoading: dashboardLoading,
     isRefetching: dashboardRefetching,
     error: dashboardError,
@@ -89,26 +68,16 @@ export function DashboardScreen() {
     isApprovedMentor,
   } = useDashboard();
 
-  useEffect(() => {
-    if (!isSearchVisible) {
-      setQuery('');
-      clearFilters();
-    }
-  }, [isSearchVisible, setQuery, clearFilters]);
-
-  const isWeb = Platform.OS === 'web';
-
-  const isSearchActive =
-    isSearchVisible && (query.trim().length > 0 || activeFilterCount > 0);
-
   const recommendedTitle = isDesktop
     ? t('dashboard.sections.recommendedFull')
     : t('dashboard.sections.recommendedShort');
 
   const sections: DashboardSection[] = [
     { key: 'recommended', title: recommendedTitle, data: recommended },
-    { key: 'recent', title: t('dashboard.sections.recent'), data: recent },
     { key: 'closing', title: t('dashboard.sections.closing'), data: closingSoon },
+    { key: 'trending', title: t('dashboard.sections.trending'), data: trending },
+    { key: 'fullyFunded', title: t('dashboard.sections.fullyFunded'), data: fullyFunded },
+    { key: 'recent', title: t('dashboard.sections.recent'), data: recent },
   ];
 
   const handleCardPress = useCallback(
@@ -137,18 +106,13 @@ export function DashboardScreen() {
     [handleCardPress, handleViewAll],
   );
 
-  const handleRefresh = useCallback(() => {
-    void refetchSearch();
-    void refetchDashboard();
-  }, [refetchDashboard, refetchSearch]);
-
   const handleGoHome = useCallback(() => {
     if (Platform.OS === 'web' && typeof window !== 'undefined') {
       window.location.href = env.LANDING_URL;
     }
   }, []);
 
-  if (dashboardLoading && !isSearchActive) {
+  if (dashboardLoading) {
     return (
       <View style={styles.centered}>
         <ActivityIndicator color={colors.primary} size="large" />
@@ -165,145 +129,96 @@ export function DashboardScreen() {
           </Pressable>
         )}
 
-        {isSearchVisible && (
-          <View
-            style={[
-              Platform.OS === 'web' && {
-                position: 'sticky' as any,
-                top: 0,
-                zIndex: 10,
-                backgroundColor: colors.background,
-              },
-            ]}
-          >
-            <OpportunitySearchBar
-              query={query}
-              onChangeQuery={setQuery}
-              activeFilterCount={activeFilterCount}
-              onOpenFilters={() => setFiltersOpen(true)}
+        <FlatList
+          data={sections}
+          keyExtractor={(item) => item.key}
+          renderItem={renderSection}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={dashboardRefetching}
+              onRefresh={refetchDashboard}
+              tintColor={colors.primary}
             />
-          </View>
-        )}
+          }
+          ListHeaderComponent={
+            <View style={[styles.listHeader, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
+              <LinearGradient
+                colors={[colors.surfaceElevated, colors.surface]}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+                style={styles.heroCard}
+              >
+                <Text style={styles.heroSubtitle}>{t('dashboard.hero.eyebrow')}</Text>
+                <Text style={styles.heroTitle}>
+                  {t(`dashboard.greeting.${greeting}`, { name: userName })}
+                </Text>
+                <Text style={styles.heroSubheadline}>
+                  {t('dashboard.hero.subheadline')}
+                </Text>
 
-        {isSearchActive ? (
-          <OpportunitySearchResults
-            results={results}
-            resultCount={resultCount}
-            isLoading={searchLoading}
-            isRefetching={searchRefetching}
-            error={searchError}
-            onRefetch={refetchSearch}
-            onPressOpportunity={handleCardPress}
-          />
-        ) : (
-          <FlatList
-            data={sections}
-            keyExtractor={(item) => item.key}
-            renderItem={renderSection}
-            showsVerticalScrollIndicator={false}
-            refreshControl={
-              <RefreshControl
-                refreshing={dashboardRefetching || searchRefetching}
-                onRefresh={handleRefresh}
-                tintColor={colors.primary}
-              />
-            }
-            ListHeaderComponent={
-              <View style={[styles.listHeader, { paddingHorizontal: isDesktop ? spacing.md : spacing.sm }]}>
-                <LinearGradient
-                  colors={[colors.surfaceElevated, colors.surface]}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                  style={styles.heroCard}
-                >
-                  <Text style={styles.heroSubtitle}>{t('dashboard.hero.eyebrow')}</Text>
-                  <Text style={styles.heroTitle}>
-                    {t(`dashboard.greeting.${greeting}`, { name: userName })}
-                  </Text>
-                  <Text style={styles.heroSubheadline}>
-                    {t('dashboard.hero.subheadline')}
-                  </Text>
-
-                  <View style={styles.heroStatsList}>
-                    <View style={styles.heroStatItem}>
-                      <Ionicons
-                        name="briefcase-outline"
-                        size={16}
-                        color={colors.primary}
-                        style={styles.heroStatIcon}
-                      />
-                      <Text style={styles.heroStatText}>
-                        <Text style={styles.heroStatValue}>
-                          {dashboardLoading ? '-' : totalOpportunities}
-                        </Text>{' '}
-                        {t('dashboard.hero.stats.opportunities')}
-                      </Text>
-                    </View>
-                    <View style={styles.heroStatItem}>
-                      <Ionicons
-                        name="people-outline"
-                        size={16}
-                        color={colors.primary}
-                        style={styles.heroStatIcon}
-                      />
-                      <Text style={styles.heroStatText}>
-                        <Text style={styles.heroStatValue}>
-                          {dashboardLoading ? '-' : isApprovedMentor ? menteeCount : mentorsCount}
-                        </Text>{' '}
-                        {isApprovedMentor ? t('dashboard.hero.stats.mentees') : t('dashboard.hero.stats.mentors')}
-                      </Text>
-                    </View>
-                    <View style={styles.heroStatItem}>
-                      <Ionicons
-                        name="checkmark-circle-outline"
-                        size={16}
-                        color={colors.primary}
-                        style={styles.heroStatIcon}
-                      />
-                      <Text style={styles.heroStatText}>
-                        <Text style={styles.heroStatValue}>
-                          {dashboardLoading ? '-' : appliedCount}
-                        </Text>{' '}
-                        {t('dashboard.hero.stats.applications')}
-                      </Text>
-                    </View>
-                  </View>
-                </LinearGradient>
-
-                {dashboardError && (
-                  <View style={styles.header}>
-                    <ErrorMessage
-                      message={
-                        dashboardError instanceof Error
-                          ? dashboardError.message
-                          : t('dashboard.error')
-                      }
+                <View style={styles.heroStatsList}>
+                  <View style={styles.heroStatItem}>
+                    <Ionicons
+                      name="briefcase-outline"
+                      size={16}
+                      color={colors.primary}
+                      style={styles.heroStatIcon}
                     />
+                    <Text style={styles.heroStatText}>
+                      <Text style={styles.heroStatValue}>
+                        {dashboardLoading ? '-' : totalOpportunities}
+                      </Text>{' '}
+                      {t('dashboard.hero.stats.opportunities')}
+                    </Text>
                   </View>
-                )}
-              </View>
-            }
-            contentContainerStyle={styles.list}
-          />
-        )}
-      </View>
+                  <View style={styles.heroStatItem}>
+                    <Ionicons
+                      name="people-outline"
+                      size={16}
+                      color={colors.primary}
+                      style={styles.heroStatIcon}
+                    />
+                    <Text style={styles.heroStatText}>
+                      <Text style={styles.heroStatValue}>
+                        {dashboardLoading ? '-' : isApprovedMentor ? menteeCount : mentorsCount}
+                      </Text>{' '}
+                      {isApprovedMentor ? t('dashboard.hero.stats.mentees') : t('dashboard.hero.stats.mentors')}
+                    </Text>
+                  </View>
+                  <View style={styles.heroStatItem}>
+                    <Ionicons
+                      name="checkmark-circle-outline"
+                      size={16}
+                      color={colors.primary}
+                      style={styles.heroStatIcon}
+                    />
+                    <Text style={styles.heroStatText}>
+                      <Text style={styles.heroStatValue}>
+                        {dashboardLoading ? '-' : appliedCount}
+                      </Text>{' '}
+                      {t('dashboard.hero.stats.applications')}
+                    </Text>
+                  </View>
+                </View>
+              </LinearGradient>
 
-      <Modal
-        visible={filtersOpen}
-        animationType="slide"
-        transparent
-        onRequestClose={() => setFiltersOpen(false)}
-      >
-        <Pressable style={styles.modalOverlay} onPress={() => setFiltersOpen(false)}>
-          <Pressable style={styles.modalSheet} onPress={(e) => e.stopPropagation()}>
-            <OpportunityFiltersPanel
-              filters={filters}
-              onChange={setFilters}
-              onClose={() => setFiltersOpen(false)}
-            />
-          </Pressable>
-        </Pressable>
-      </Modal>
+              {dashboardError && (
+                <View style={styles.header}>
+                  <ErrorMessage
+                    message={
+                      dashboardError instanceof Error
+                        ? dashboardError.message
+                        : t('dashboard.error')
+                    }
+                  />
+                </View>
+              )}
+            </View>
+          }
+          contentContainerStyle={styles.list}
+        />
+      </View>
     </View>
   );
 }
@@ -381,17 +296,5 @@ function createStyles(colors: ColorScheme) {
     color: colors.text,
   },
   list: { paddingBottom: spacing.md },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: colors.overlay,
-    justifyContent: 'flex-end',
-  },
-  modalSheet: {
-    backgroundColor: colors.background,
-    borderTopLeftRadius: 16,
-    borderTopRightRadius: 16,
-    paddingTop: spacing.md,
-    paddingBottom: spacing.lg,
-  },
 });
 }
