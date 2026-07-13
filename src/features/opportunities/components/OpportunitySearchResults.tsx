@@ -62,6 +62,7 @@ export function OpportunitySearchResults({
         </View>
       ) : null}
       <FlatList
+        style={styles.list}
         data={results}
         keyExtractor={(item) => item.id}
         renderItem={renderItem}
@@ -92,6 +93,7 @@ export function OpportunitySearchResults({
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   container: { flex: 1, backgroundColor: colors.background },
+  list: { flex: 1 },
   banner: { paddingHorizontal: spacing.md },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
   resultMeta: { paddingHorizontal: spacing.md, paddingTop: 0, paddingBottom: spacing.xs },
