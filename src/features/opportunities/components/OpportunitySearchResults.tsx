@@ -1,12 +1,11 @@
-import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import {
   ActivityIndicator,
-  FlatList,
   RefreshControl,
+  ScrollView,
   StyleSheet,
   View,
 } from 'react-native';
@@ -39,12 +38,6 @@ export function OpportunitySearchResults({
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const { t } = useTranslation();
-  const renderItem = useCallback(
-    ({ item }: { item: Opportunity }) => (
-      <OpportunityListRow opportunity={item} onPress={onPressOpportunity} />
-    ),
-    [onPressOpportunity],
-  );
 
   if (isLoading) {
     return (
@@ -61,11 +54,9 @@ export function OpportunitySearchResults({
           <ErrorMessage message={error instanceof Error ? error.message : t('opportunities.search.failed')} />
         </View>
       ) : null}
-      <FlatList
+      <ScrollView
         style={styles.list}
-        data={results}
-        keyExtractor={(item) => item.id}
-        renderItem={renderItem}
+        keyboardShouldPersistTaps="handled"
         refreshControl={
           <RefreshControl
             refreshing={isRefetching}
@@ -73,19 +64,23 @@ export function OpportunitySearchResults({
             tintColor={colors.primary}
           />
         }
-        ListHeaderComponent={
-          <Text variant="caption" muted style={styles.resultMeta}>
-            {t('opportunities.search.resultCount', { count: resultCount })}
-          </Text>
-        }
-        ListEmptyComponent={
+        contentContainerStyle={results.length === 0 ? styles.emptyList : undefined}
+      >
+        <Text variant="caption" muted style={styles.resultMeta}>
+          {t('opportunities.search.resultCount', { count: resultCount })}
+        </Text>
+
+        {results.length === 0 ? (
           <EmptyState
             title={t('opportunities.search.emptyTitle')}
             description={t('opportunities.search.emptyDescription')}
           />
-        }
-        contentContainerStyle={results.length === 0 ? styles.emptyList : undefined}
-      />
+        ) : (
+          results.map((item) => (
+            <OpportunityListRow key={item.id} opportunity={item} onPress={onPressOpportunity} />
+          ))
+        )}
+      </ScrollView>
     </View>
   );
 }

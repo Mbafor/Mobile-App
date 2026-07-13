@@ -38,6 +38,7 @@ export function TrackerFilterChips({
     <ScrollView
       horizontal
       showsHorizontalScrollIndicator={false}
+      style={styles.scroll}
       contentContainerStyle={styles.row}
     >
       {options.map((opt) => {
@@ -66,8 +67,13 @@ export function TrackerFilterChips({
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
+    // react-native-web's ScrollView defaults to flexGrow: 1 even when horizontal,
+    // which makes it balloon to fill the parent column's remaining height. Pin it
+    // to its content height instead.
+    scroll: { flexGrow: 0, flexShrink: 0 },
     row: {
       flexDirection: 'row',
+      alignItems: 'flex-start',
       gap: 7,
       paddingHorizontal: spacing.md,
       paddingBottom: spacing.sm,
