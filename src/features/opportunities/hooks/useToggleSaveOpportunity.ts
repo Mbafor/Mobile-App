@@ -12,38 +12,58 @@ export function useToggleSaveOpportunity(opportunityId: string) {
   const savedQuery = useSavedOpportunityIds();
 
   const isSaved = Boolean(savedQuery.data?.includes(opportunityId));
+  const savedListKey = queryKeys.opportunities.saved(userId);
+  const savedCountKey = [...savedListKey, 'count'] as const;
 
   const mutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (nextSaved: boolean) => {
       if (!userId) throw new Error('Not signed in');
 
-      const { saved, error: checkError } = await savedOpportunitiesApi.isSaved(
-        userId,
-        opportunityId,
-      );
-      if (checkError) throw checkError;
-
-      if (saved) {
+      if (nextSaved) {
+        const { error } = await savedOpportunitiesApi.save(userId, opportunityId);
+        if (error) throw error;
+      } else {
         const { error } = await savedOpportunitiesApi.unsave(userId, opportunityId);
         if (error) throw error;
-        return false;
       }
-
-      const { error } = await savedOpportunitiesApi.save(userId, opportunityId);
-      if (error) throw error;
-      return true;
+      return nextSaved;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.saved(userId) });
-      queryClient.invalidateQueries({
-        queryKey: [...queryKeys.opportunities.saved(userId), 'count'],
+    onMutate: async (nextSaved: boolean) => {
+      await queryClient.cancelQueries({ queryKey: savedListKey });
+
+      const previousIds = queryClient.getQueryData<string[]>(savedListKey);
+      const previousCount = queryClient.getQueryData<number>(savedCountKey);
+
+      queryClient.setQueryData<string[]>(savedListKey, (old) => {
+        const list = old ?? [];
+        if (nextSaved) {
+          return list.includes(opportunityId) ? list : [...list, opportunityId];
+        }
+        return list.filter((id) => id !== opportunityId);
       });
+      queryClient.setQueryData<number>(savedCountKey, (old) =>
+        Math.max(0, (old ?? 0) + (nextSaved ? 1 : -1)),
+      );
+
+      return { previousIds, previousCount };
+    },
+    onError: (_err, _nextSaved, context) => {
+      if (context?.previousIds !== undefined) {
+        queryClient.setQueryData(savedListKey, context.previousIds);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(savedCountKey, context.previousCount);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: savedListKey });
+      queryClient.invalidateQueries({ queryKey: savedCountKey });
     },
   });
 
   return {
     isSaved,
-    toggleSave: () => mutation.mutate(),
+    toggleSave: () => mutation.mutate(!isSaved),
     isSaving: mutation.isPending,
   };
 }

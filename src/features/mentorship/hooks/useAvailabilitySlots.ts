@@ -47,7 +47,50 @@ export function useAvailabilitySlots(coachId: string | undefined) {
 
   const toggleMutation = useMutation({
     mutationFn: mentorshipSchedulingApi.toggleAvailabilitySlot,
-    onSuccess: () => {
+    onMutate: async (input) => {
+      await queryClient.cancelQueries({ queryKey });
+
+      const previousSlots = queryClient.getQueryData<AvailabilitySlot[]>(queryKey);
+
+      queryClient.setQueryData<AvailabilitySlot[]>(queryKey, (old) => {
+        const list = old ?? [];
+        const matchIndex = list.findIndex(
+          (slot) =>
+            slot.dayOfWeek === input.dayOfWeek &&
+            slot.startTime === input.startTime &&
+            slot.endTime === input.endTime,
+        );
+        if (matchIndex >= 0) {
+          return list.filter((_, i) => i !== matchIndex);
+        }
+        return [
+          ...list,
+          {
+            id: `optimistic-${input.dayOfWeek}-${input.startTime}-${input.endTime}`,
+            coachId: coachId ?? '',
+            dayOfWeek: input.dayOfWeek,
+            startTime: input.startTime,
+            endTime: input.endTime,
+            timezone: input.timezone ?? Intl.DateTimeFormat().resolvedOptions().timeZone ?? 'UTC',
+          },
+        ];
+      });
+
+      return { previousSlots };
+    },
+    onError: (_err, _input, context) => {
+      if (context?.previousSlots !== undefined) {
+        queryClient.setQueryData(queryKey, context.previousSlots);
+      }
+    },
+    onSuccess: (result, _input, context) => {
+      // mentorshipSchedulingApi never throws for API-level failures — it resolves
+      // with { success: false }, so a rollback has to happen here too, not just onError.
+      if (!result.success && context?.previousSlots !== undefined) {
+        queryClient.setQueryData(queryKey, context.previousSlots);
+      }
+    },
+    onSettled: () => {
       void queryClient.invalidateQueries({ queryKey });
     },
   });

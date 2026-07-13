@@ -197,7 +197,7 @@ function createStyles(colors: ColorScheme) {
       alignItems: 'flex-start',
       gap: 6,
       paddingHorizontal: spacing.sm,
-      paddingBottom: spacing.sm,
+      paddingBottom: spacing.xs,
     },
     chip: {
       alignSelf: 'flex-start',

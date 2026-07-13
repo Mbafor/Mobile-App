@@ -4,7 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
-import { Image, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
+import { Image } from 'expo-image';
+import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Text } from '@/components/ui';
 import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
@@ -49,7 +50,7 @@ function OpportunityCardComponent({ opportunity, onPress, style }: OpportunityCa
     >
       <View style={styles.imageWrap}>
         {opportunity.imageUrl ? (
-          <Image source={{ uri: opportunity.imageUrl }} style={styles.image} resizeMode="cover" />
+          <Image source={{ uri: opportunity.imageUrl }} style={styles.image} contentFit="cover" />
         ) : (
           <View style={[styles.image, styles.imagePlaceholder]}>
             <Text style={styles.placeholderText}>{opportunity.organization.charAt(0)}</Text>

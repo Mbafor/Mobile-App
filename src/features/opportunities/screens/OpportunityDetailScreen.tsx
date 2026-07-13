@@ -6,9 +6,9 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import Head from 'expo-router/head';
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
-  Image,
   Platform,
   Pressable,
   ScrollView,
@@ -122,7 +122,7 @@ function RelatedOpportunityCard({
       accessibilityRole="button"
     >
       {opportunity.imageUrl ? (
-        <Image source={{ uri: opportunity.imageUrl }} style={styles.relatedThumb} resizeMode="cover" />
+        <Image source={{ uri: opportunity.imageUrl }} style={styles.relatedThumb} contentFit="cover" />
       ) : (
         <View style={[styles.relatedThumb, styles.relatedThumbPlaceholder]}>
           <Text style={styles.relatedThumbLetter}>{opportunity.organization.charAt(0)}</Text>
@@ -363,7 +363,7 @@ export function OpportunityDetailScreen() {
         <Image
           source={{ uri: opportunity.imageUrl }}
           style={styles.heroImage}
-          resizeMode="cover"
+          contentFit="cover"
         />
       ) : (
         <View style={styles.heroPlaceholder}>

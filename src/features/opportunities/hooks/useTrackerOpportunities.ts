@@ -6,6 +6,7 @@ import { useActiveOpportunities } from '@/features/opportunities/hooks/useActive
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
 import { trackerApi } from '@/services/api';
+import type { TrackerRow } from '@/services/api/tracker.api';
 import type { TrackerStage } from '@/types/domain/tracker';
 
 export function useTrackerOpportunities() {
@@ -47,8 +48,10 @@ export function useTrackerOpportunities() {
       .filter((item): item is TrackerItem => Boolean(item));
   }, [trackerQuery.data, activeQuery.data]);
 
+  const trackerKey = queryKeys.opportunities.tracker(userId);
+
   const invalidateTracker = () => {
-    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
+    queryClient.invalidateQueries({ queryKey: trackerKey });
     queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.saved(userId) });
     queryClient.invalidateQueries({ queryKey: [...queryKeys.opportunities.saved(userId), 'count'] });
     queryClient.invalidateQueries({ queryKey: ['opportunities', 'applied-count', userId] });
@@ -66,7 +69,25 @@ export function useTrackerOpportunities() {
       const { error } = await trackerApi.updateStage(userId, opportunityId, stage);
       if (error) throw error;
     },
-    onSuccess: invalidateTracker,
+    onMutate: async ({ opportunityId, stage }) => {
+      await queryClient.cancelQueries({ queryKey: trackerKey });
+
+      const previousRows = queryClient.getQueryData<TrackerRow[]>(trackerKey);
+
+      queryClient.setQueryData<TrackerRow[]>(trackerKey, (old) =>
+        (old ?? []).map((row) =>
+          row.opportunityId === opportunityId ? { ...row, stage } : row,
+        ),
+      );
+
+      return { previousRows };
+    },
+    onError: (_err, _vars, context) => {
+      if (context?.previousRows !== undefined) {
+        queryClient.setQueryData(trackerKey, context.previousRows);
+      }
+    },
+    onSettled: invalidateTracker,
   });
 
   const updateNotesMutation = useMutation({

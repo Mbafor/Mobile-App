@@ -2,7 +2,8 @@ import { useRouter, type Href } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
-import { ActivityIndicator, Alert, FlatList, Image, Pressable, StyleSheet, View } from 'react-native';
+import { Image } from 'expo-image';
+import { ActivityIndicator, Alert, FlatList, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { confirmAction } from '@/utils/confirm-action';
@@ -114,7 +115,7 @@ export function OpportunityListScreen({
           renderItem={({ item }) => (
             <View style={styles.row}>
               {item.imageUrl ? (
-                <Image source={{ uri: item.imageUrl }} style={styles.thumb} resizeMode="cover" />
+                <Image source={{ uri: item.imageUrl }} style={styles.thumb} contentFit="cover" />
               ) : (
                 <View style={[styles.thumb, styles.thumbPlaceholder]}>
                   <Text style={styles.thumbLetter}>{item.organization.charAt(0)}</Text>

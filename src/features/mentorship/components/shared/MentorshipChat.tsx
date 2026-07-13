@@ -5,11 +5,11 @@ import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   Alert,
   FlatList,
-  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,

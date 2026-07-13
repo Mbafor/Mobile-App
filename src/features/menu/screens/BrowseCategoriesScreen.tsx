@@ -5,10 +5,10 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRouter } from 'expo-router';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   StyleSheet,
   View,
@@ -64,7 +64,7 @@ function OpportunityResultCard({
         <Image
           source={{ uri: opportunity.imageUrl }}
           style={styles.resultImage}
-          resizeMode="cover"
+          contentFit="cover"
         />
       ) : (
         <View style={[styles.resultImage, styles.resultImagePlaceholder]}>

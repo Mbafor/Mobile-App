@@ -5,7 +5,8 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
 import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert, Image, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import { Image } from 'expo-image';
+import { Alert, Platform, Pressable, StyleSheet, TextInput, View } from 'react-native';
 import { Gesture, GestureDetector } from 'react-native-gesture-handler';
 import Animated, {
   runOnJS,
@@ -142,7 +143,7 @@ function TrackerCardComponent({
               <Image
                 source={{ uri: item.opportunity.imageUrl }}
                 style={styles.image}
-                resizeMode="cover"
+                contentFit="cover"
               />
             ) : (
               <View style={[styles.image, styles.imagePlaceholder]}>

@@ -4,10 +4,10 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'expo-image';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   RefreshControl,
   StyleSheet,
@@ -59,7 +59,7 @@ function OpportunityResultCard({
         <Image
           source={{ uri: opportunity.imageUrl }}
           style={styles.resultImage}
-          resizeMode="cover"
+          contentFit="cover"
         />
       ) : (
         <View style={[styles.resultImage, styles.resultImagePlaceholder]}>

@@ -1,9 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { Image } from 'expo-image';
 import {
   Alert,
-  Image,
   Modal,
   Platform,
   Pressable,
@@ -99,7 +99,7 @@ export function SharePreviewSheet({ opportunity, visible, onClose }: Props) {
                 <Image
                   source={{ uri: opportunity.imageUrl! }}
                   style={{ width: imageWidth, height: imageHeight }}
-                  resizeMode="cover"
+                  contentFit="cover"
                   onError={() => setImageError(true)}
                 />
               ) : (

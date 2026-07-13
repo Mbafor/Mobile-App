@@ -24,8 +24,13 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
     opportunityId && savedQuery.data?.includes(opportunityId),
   );
 
+  const savedListKey = queryKeys.opportunities.saved(userId);
+  const savedCountKey = [...savedListKey, 'count'] as const;
+  const appliedKey = queryKeys.opportunities.applied(userId, opportunityId ?? '');
+  const appliedCountKey = ['opportunities', 'applied-count', userId] as const;
+
   const appliedQuery = useQuery({
-    queryKey: queryKeys.opportunities.applied(userId, opportunityId ?? ''),
+    queryKey: appliedKey,
     queryFn: async () => {
       if (!userId || !opportunityId) return false;
       const { applied, error } = await appliedOpportunitiesApi.isApplied(
@@ -38,57 +43,59 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
     enabled: Boolean(userId && opportunityId),
   });
 
-  const invalidateSaved = () => {
-    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.saved(userId) });
-    queryClient.invalidateQueries({
-      queryKey: [...queryKeys.opportunities.saved(userId), 'count'],
-    });
-    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
-  };
-
-  const invalidateApplied = () => {
-    if (!opportunityId) return;
-    queryClient.invalidateQueries({
-      queryKey: queryKeys.opportunities.applied(userId, opportunityId),
-    });
-    queryClient.invalidateQueries({ queryKey: ['opportunities', 'applied-count', userId] });
-    queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
-  };
-
   const toggleSaveMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (nextSaved: boolean) => {
       if (!userId || !opportunityId) throw new Error('Not signed in');
 
-      const { saved, error: checkError } = await savedOpportunitiesApi.isSaved(
-        userId,
-        opportunityId,
-      );
-      if (checkError) throw checkError;
-
-      if (saved) {
+      if (nextSaved) {
+        const { error } = await savedOpportunitiesApi.save(userId, opportunityId);
+        if (error) throw error;
+      } else {
         const { error } = await savedOpportunitiesApi.unsave(userId, opportunityId);
         if (error) throw error;
-        return false;
       }
-
-      const { error } = await savedOpportunitiesApi.save(userId, opportunityId);
-      if (error) throw error;
-      return true;
+      return nextSaved;
     },
-    onSuccess: () => invalidateSaved(),
+    onMutate: async (nextSaved: boolean) => {
+      if (!opportunityId) return {};
+      await queryClient.cancelQueries({ queryKey: savedListKey });
+
+      const previousIds = queryClient.getQueryData<string[]>(savedListKey);
+      const previousCount = queryClient.getQueryData<number>(savedCountKey);
+
+      queryClient.setQueryData<string[]>(savedListKey, (old) => {
+        const list = old ?? [];
+        if (nextSaved) {
+          return list.includes(opportunityId) ? list : [...list, opportunityId];
+        }
+        return list.filter((id) => id !== opportunityId);
+      });
+      queryClient.setQueryData<number>(savedCountKey, (old) =>
+        Math.max(0, (old ?? 0) + (nextSaved ? 1 : -1)),
+      );
+
+      return { previousIds, previousCount };
+    },
+    onError: (_err, _nextSaved, context) => {
+      if (context?.previousIds !== undefined) {
+        queryClient.setQueryData(savedListKey, context.previousIds);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(savedCountKey, context.previousCount);
+      }
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: savedListKey });
+      queryClient.invalidateQueries({ queryKey: savedCountKey });
+      queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
+    },
   });
 
   const toggleAppliedMutation = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (nextApplied: boolean) => {
       if (!userId || !opportunityId) throw new Error('Not signed in');
 
-      const { applied, error: checkError } = await appliedOpportunitiesApi.isApplied(
-        userId,
-        opportunityId,
-      );
-      if (checkError) throw checkError;
-
-      if (applied) {
+      if (!nextApplied) {
         const { error } = await appliedOpportunitiesApi.unmarkApplied(
           userId,
           opportunityId,
@@ -109,7 +116,33 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
       }
       return true;
     },
-    onSuccess: () => invalidateApplied(),
+    onMutate: async (nextApplied: boolean) => {
+      await queryClient.cancelQueries({ queryKey: appliedKey });
+
+      const previousApplied = queryClient.getQueryData<boolean>(appliedKey);
+      const previousCount = queryClient.getQueryData<number>(appliedCountKey);
+
+      queryClient.setQueryData<boolean>(appliedKey, nextApplied);
+      queryClient.setQueryData<number>(appliedCountKey, (old) =>
+        Math.max(0, (old ?? 0) + (nextApplied ? 1 : -1)),
+      );
+
+      return { previousApplied, previousCount };
+    },
+    onError: (_err, _nextApplied, context) => {
+      if (context?.previousApplied !== undefined) {
+        queryClient.setQueryData(appliedKey, context.previousApplied);
+      }
+      if (context?.previousCount !== undefined) {
+        queryClient.setQueryData(appliedCountKey, context.previousCount);
+      }
+    },
+    onSettled: () => {
+      if (!opportunityId) return;
+      queryClient.invalidateQueries({ queryKey: appliedKey });
+      queryClient.invalidateQueries({ queryKey: appliedCountKey });
+      queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
+    },
   });
 
   const applyNow = async (opportunity: Opportunity) => {
@@ -137,8 +170,8 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
     isApplied: appliedQuery.data ?? false,
     isSaving: toggleSaveMutation.isPending,
     isApplying: toggleAppliedMutation.isPending,
-    toggleSave: () => toggleSaveMutation.mutate(),
-    toggleApplied: () => toggleAppliedMutation.mutate(),
+    toggleSave: () => toggleSaveMutation.mutate(!isSaved),
+    toggleApplied: () => toggleAppliedMutation.mutate(!(appliedQuery.data ?? false)),
     applyNow,
     shareOpportunity: shareOpportunityMessage,
   };

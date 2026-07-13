@@ -94,7 +94,7 @@ function createStyles(colors: ColorScheme) {
   container: { flex: 1, backgroundColor: colors.background },
   banner: { paddingHorizontal: spacing.md },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-  resultMeta: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
+  resultMeta: { paddingHorizontal: spacing.md, paddingTop: 0, paddingBottom: spacing.xs },
   emptyList: { flexGrow: 1 },
 });
 }

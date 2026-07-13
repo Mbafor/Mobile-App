@@ -15,14 +15,28 @@ function normalize(value: string): string {
   return value.trim().toLowerCase();
 }
 
+/** Loose containment that also bridges plural/singular mismatches (e.g. "fellowships" ↔ "fellowship"). */
+function looseIncludes(haystack: string, word: string): boolean {
+  return haystack.includes(word) || word.includes(haystack);
+}
+
 function matchesQuery(opportunity: Opportunity, query: string): boolean {
-  const q = normalize(query);
-  if (!q) return true;
+  const words = normalize(query).split(/\s+/).filter(Boolean);
+  if (words.length === 0) return true;
 
-  if (normalize(opportunity.title).includes(q)) return true;
-  if (normalize(opportunity.organization).includes(q)) return true;
+  const haystacks = [
+    normalize(opportunity.title),
+    normalize(opportunity.organization),
+    opportunity.category ? normalize(opportunity.category) : null,
+    opportunity.fundingType ? normalize(opportunity.fundingType) : null,
+    opportunity.locationType ? normalize(opportunity.locationType) : null,
+    opportunity.country ? normalize(opportunity.country) : null,
+    ...opportunity.tags.map(normalize),
+  ].filter((h): h is string => Boolean(h));
 
-  return opportunity.tags.some((tag) => normalize(tag).includes(q));
+  // Match if any query word matches any field — favors recall so a phrase like
+  // "PhD fellowships" or "Remote internships" doesn't come back empty.
+  return words.some((word) => haystacks.some((haystack) => looseIncludes(haystack, word)));
 }
 
 function matchesDeadlineRange(
