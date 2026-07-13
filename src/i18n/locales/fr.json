@@ -429,6 +429,11 @@
       "locationType": "À distance / sur place",
       "deadline": "Échéance"
     },
+    "quickFilters": {
+      "fundingShort": "Financement",
+      "degreeShort": "Diplôme",
+      "locationShort": "Lieu"
+    },
     "dropdown": {
       "all": "Tous",
       "selected": "{{count}} sélectionné(s)"

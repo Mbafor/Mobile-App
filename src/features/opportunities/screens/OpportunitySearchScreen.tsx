@@ -15,6 +15,7 @@ import type { ColorScheme } from '@/constants/theme/types';
 import { spacing, typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import type { Opportunity } from '@/types/domain/opportunity';
 
 export function OpportunitySearchScreen() {
@@ -23,6 +24,7 @@ export function OpportunitySearchScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const isDesktop = useWebDesktop();
 
   const {
     query,
@@ -65,6 +67,7 @@ export function OpportunitySearchScreen() {
 
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, spacing.md) }]}>
+      <View style={[styles.pageContent, isDesktop && styles.pageContentDesktop]}>
       <View style={styles.headerRow}>
         <SearchField
           value={query}
@@ -165,6 +168,7 @@ export function OpportunitySearchScreen() {
           </View>
         </ScrollView>
       )}
+      </View>
     </View>
   );
 }
@@ -172,6 +176,8 @@ export function OpportunitySearchScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
+    pageContent: { flex: 1, width: '100%', maxWidth: 1200, alignSelf: 'center' },
+    pageContentDesktop: { paddingHorizontal: spacing.md },
     headerRow: {
       flexDirection: 'row',
       alignItems: 'center',

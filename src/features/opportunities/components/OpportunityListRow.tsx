@@ -1,10 +1,13 @@
+import { Ionicons } from '@expo/vector-icons';
 import { memo } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useTheme } from '@/hooks/useTheme';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
+import { useToggleSaveOpportunity } from '@/features/opportunities/hooks/useToggleSaveOpportunity';
 import { spacing, typography } from '@/constants/theme';
 import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
@@ -12,11 +15,18 @@ import type { Opportunity } from '@/types/domain/opportunity';
 type OpportunityListRowProps = {
   opportunity: Opportunity;
   onPress?: (opportunity: Opportunity) => void;
+  showSaveButton?: boolean;
 };
 
-function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRowProps) {
+function OpportunityListRowComponent({
+  opportunity,
+  onPress,
+  showSaveButton = true,
+}: OpportunityListRowProps) {
   const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
   const { t } = useTranslation();
+  const { isSaved, toggleSave, isSaving } = useToggleSaveOpportunity(opportunity.id);
   const daysLeft = daysUntilDeadline(opportunity.deadline);
 
   return (
@@ -45,6 +55,24 @@ function OpportunityListRowComponent({ opportunity, onPress }: OpportunityListRo
           </Text>
         ) : null}
       </View>
+      {showSaveButton ? (
+        <Pressable
+          onPress={(e) => {
+            e.stopPropagation();
+            if (!isSaving) toggleSave();
+          }}
+          hitSlop={8}
+          disabled={isSaving}
+          style={styles.saveBtn}
+          accessibilityLabel={isSaved ? t('opportunities.card.unsave') : t('opportunities.card.save')}
+        >
+          <Ionicons
+            name={isSaved ? 'bookmark' : 'bookmark-outline'}
+            size={20}
+            color={isSaved ? colors.primary : colors.textMuted}
+          />
+        </Pressable>
+      ) : null}
     </Pressable>
   );
 }
@@ -55,6 +83,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
     gap: spacing.md,
     padding: spacing.md,
     borderBottomWidth: 1,
@@ -71,5 +100,6 @@ function createStyles(colors: ColorScheme) {
   content: { flex: 1, gap: 2 },
   title: { fontSize: typography.fontSize.md, fontWeight: '600', color: colors.text },
   deadline: { color: colors.text },
+  saveBtn: { padding: spacing.xs },
 });
 }

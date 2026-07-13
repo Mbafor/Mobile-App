@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
 import { Text } from '@/components/ui';
@@ -24,6 +25,7 @@ type QuickFilterOption = { value: string; label: string };
 type QuickFilterDef = {
   field: QuickFilterField;
   label: string;
+  sheetLabel: string;
   options: QuickFilterOption[];
 };
 
@@ -53,17 +55,20 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const { t } = useTranslation();
+  const isDesktop = useWebDesktop();
   const [openField, setOpenField] = useState<QuickFilterField | null>(null);
 
   const defs: QuickFilterDef[] = [
     {
       field: 'categories',
       label: t('opportunities.filtersPanel.category'),
+      sheetLabel: t('opportunities.filtersPanel.category'),
       options: FILTER_CATEGORIES.map((value) => ({ value, label: value })),
     },
     {
       field: 'fundingTypes',
-      label: t('opportunities.filtersPanel.fundingType'),
+      label: t('opportunities.quickFilters.fundingShort'),
+      sheetLabel: t('opportunities.filtersPanel.fundingType'),
       options: FILTER_FUNDING_TYPES.map((value) => ({
         value,
         label: FUNDING_TYPE_LABELS[value] ?? value,
@@ -71,7 +76,8 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
     },
     {
       field: 'degreeLevels',
-      label: t('opportunities.filtersPanel.degreeLevel'),
+      label: t('opportunities.quickFilters.degreeShort'),
+      sheetLabel: t('opportunities.filtersPanel.degreeLevel'),
       options: FILTER_DEGREE_LEVELS.map((value) => ({
         value,
         label: value.replace('_', ' '),
@@ -79,7 +85,8 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
     },
     {
       field: 'locationTypes',
-      label: t('opportunities.filtersPanel.locationType'),
+      label: t('opportunities.quickFilters.locationShort'),
+      sheetLabel: t('opportunities.filtersPanel.locationType'),
       options: FILTER_LOCATION_TYPES.map((o) => ({ value: o.value, label: o.label })),
     },
   ];
@@ -122,7 +129,7 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
               </Text>
               <Ionicons
                 name="chevron-down"
-                size={14}
+                size={10}
                 color={active ? colors.textOnPrimary : colors.textMuted}
               />
             </Pressable>
@@ -133,15 +140,21 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
       <Modal
         visible={activeDef !== null}
         transparent
-        animationType="slide"
+        animationType={isDesktop ? 'fade' : 'slide'}
         onRequestClose={() => setOpenField(null)}
       >
-        <Pressable style={styles.overlay} onPress={() => setOpenField(null)}>
-          <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+        <Pressable
+          style={[styles.overlay, isDesktop && styles.overlayDesktop]}
+          onPress={() => setOpenField(null)}
+        >
+          <Pressable
+            style={[styles.sheet, isDesktop && styles.sheetDesktop]}
+            onPress={(e) => e.stopPropagation()}
+          >
             {activeDef ? (
               <>
                 <View style={styles.sheetHeader}>
-                  <Text variant="title">{activeDef.label}</Text>
+                  <Text variant="title">{activeDef.sheetLabel}</Text>
                   <Pressable onPress={() => clearField(activeDef.field)} hitSlop={8}>
                     <Text style={styles.clearText}>{t('opportunities.filtersPanel.clearAll')}</Text>
                   </Pressable>
@@ -181,17 +194,19 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     row: {
       flexDirection: 'row',
-      gap: spacing.sm,
+      alignItems: 'flex-start',
+      gap: 6,
       paddingHorizontal: spacing.sm,
       paddingBottom: spacing.sm,
     },
     chip: {
+      alignSelf: 'flex-start',
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 6,
-      paddingVertical: spacing.xs + 2,
-      paddingHorizontal: spacing.sm + 2,
-      borderRadius: 20,
+      gap: 3,
+      paddingVertical: 4,
+      paddingHorizontal: 10,
+      borderRadius: 14,
       borderWidth: 1,
       borderColor: colors.border,
       backgroundColor: colors.background,
@@ -200,12 +215,17 @@ function createStyles(colors: ColorScheme) {
       backgroundColor: colors.primary,
       borderColor: colors.primary,
     },
-    chipText: { fontSize: 13, fontWeight: '600', color: colors.text },
+    chipText: { fontSize: 12, fontWeight: '600', color: colors.text },
     chipTextActive: { color: colors.textOnPrimary },
     overlay: {
       flex: 1,
       backgroundColor: colors.overlay,
       justifyContent: 'flex-end',
+    },
+    overlayDesktop: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: spacing.xl,
     },
     sheet: {
       backgroundColor: colors.background,
@@ -213,6 +233,12 @@ function createStyles(colors: ColorScheme) {
       borderTopRightRadius: 16,
       maxHeight: '75%',
       paddingBottom: spacing.lg,
+    },
+    sheetDesktop: {
+      borderRadius: 16,
+      width: '100%',
+      maxWidth: 420,
+      maxHeight: '70%',
     },
     sheetHeader: {
       flexDirection: 'row',

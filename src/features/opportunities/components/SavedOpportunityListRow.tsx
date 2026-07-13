@@ -22,7 +22,7 @@ function SavedOpportunityListRowComponent({ opportunity, onPress }: SavedOpportu
 
   return (
     <View style={styles.wrap}>
-      <OpportunityListRow opportunity={opportunity} onPress={onPress} />
+      <OpportunityListRow opportunity={opportunity} onPress={onPress} showSaveButton={false} />
       <View style={styles.actions}>
         <Pressable
           onPress={() => toggleSave()}

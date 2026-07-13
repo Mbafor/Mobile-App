@@ -405,6 +405,11 @@
       "locationType": "Remote / on-site",
       "deadline": "Deadline"
     },
+    "quickFilters": {
+      "fundingShort": "Funding",
+      "degreeShort": "Degree",
+      "locationShort": "Location"
+    },
     "dropdown": {
       "all": "All",
       "selected": "{{count}} selected"
