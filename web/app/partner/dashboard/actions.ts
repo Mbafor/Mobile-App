@@ -11,8 +11,11 @@ function buildDigestSlug(): string {
   return `${date}-${random}`;
 }
 
-export async function postOpportunities(opportunityIds: string[]) {
-  if (opportunityIds.length === 0) return { posted: 0 };
+/** Publishes the partner's own curated set of opportunities as this week's digest --
+ * reuses partner_posts (grouped by a fresh digest_slug) so these opportunities also
+ * show up on the partner's own public page and post count. */
+export async function publishPartnerDigest(opportunityIds: string[]): Promise<{ slug: string } | null> {
+  if (opportunityIds.length === 0) return null;
 
   const session = await requirePartnerSession();
   const client = createPartnerClient(session.accessToken);
@@ -31,33 +34,8 @@ export async function postOpportunities(opportunityIds: string[]) {
   if (error) throw new Error(error.message);
 
   revalidatePath('/partner/dashboard');
+  revalidatePath('/partner/dashboard/digest');
   revalidatePath(`/partner/${session.partner.slug}`);
 
-  return { posted: opportunityIds.length };
-}
-
-/** Records that a partner shared the admin-curated weekly digest -- reuses partner_posts so
- * these opportunities also show up on the partner's own public page and post count. */
-export async function shareAdminDigest(opportunityIds: string[], digestSlug: string) {
-  if (opportunityIds.length === 0) return { posted: 0 };
-
-  const session = await requirePartnerSession();
-  const client = createPartnerClient(session.accessToken);
-
-  const rows = opportunityIds.map((opportunityId) => ({
-    partner_id: session.partner.id,
-    opportunity_id: opportunityId,
-    digest_slug: digestSlug,
-  }));
-
-  const { error } = await client
-    .from('partner_posts')
-    .upsert(rows, { onConflict: 'partner_id,opportunity_id', ignoreDuplicates: true });
-
-  if (error) throw new Error(error.message);
-
-  revalidatePath('/partner/dashboard');
-  revalidatePath(`/partner/${session.partner.slug}`);
-
-  return { posted: opportunityIds.length };
+  return { slug: digestSlug };
 }

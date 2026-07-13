@@ -1,9 +1,9 @@
 /**
- * Mirrors the style of the mobile app's buildShareMessage()
- * (src/features/opportunities/utils/share-opportunity.ts) -- emoji headline,
- * bolded key details, CTA, footer -- but duplicated rather than imported since
- * web/ and the Expo app are separate TS programs with no shared package, and
- * this version needs partner co-branding the mobile template doesn't.
+ * Mirrors the style of the mobile app's buildWeeklyDigestMessage()
+ * (src/features/admin/utils/build-weekly-digest-message.ts) -- numbered plain-text
+ * list, bolded title only, footer link -- but duplicated rather than imported since
+ * web/ and the Expo app are separate TS programs with no shared package, and this
+ * version needs partner co-branding the mobile template doesn't.
  */
 
 export interface ShareableOpportunity {
@@ -35,22 +35,23 @@ function formatDeadline(deadline: string | null): string {
 export function buildPartnerShareMessage(
   orgName: string,
   refCode: string,
+  partnerSlug: string,
   opportunities: ShareableOpportunity[],
 ): string {
   const lines: string[] = [];
 
-  lines.push(`🎯 *Opportunities shared by ${orgName}*`);
-  lines.push('_In partnership with Voila Africa_');
+  lines.push(`📋 Opportunities shared by ${orgName}`);
+  lines.push('In partnership with Voila Africa');
   lines.push('');
 
-  for (const opp of opportunities) {
-    lines.push(`🏛️ *${opp.title}* — ${opp.organization}`);
-    lines.push(`🗓️ Deadline: ${formatDeadline(opp.deadline)}`);
-    lines.push(`👉 ${buildBridgeLink(opp.id, refCode)}`);
+  opportunities.forEach((opp, index) => {
+    lines.push(`${index + 1}. *${opp.title}*`);
+    lines.push(`${opp.organization} · Deadline: ${formatDeadline(opp.deadline)}`);
+    lines.push(buildBridgeLink(opp.id, refCode));
     lines.push('');
-  }
+  });
 
-  lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
+  lines.push(`More opportunities: ${buildPartnerPageLink(partnerSlug)}`);
 
   return lines.join('\n');
 }

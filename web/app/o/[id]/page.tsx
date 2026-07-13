@@ -1,7 +1,15 @@
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 
 import { createServiceRoleClient } from '@/lib/supabase-server';
 
+const APP_URL = process.env.NEXT_PUBLIC_APP_URL ?? 'https://app.voila-africa.com';
+
+/**
+ * Click-attribution gateway, not a page of its own -- logs the ref-coded click
+ * server-side (for partner analytics) then forwards straight into the real
+ * opportunity view in the app. There is no separate "bridge" UI: every shared
+ * opportunity link must land the visitor on the actual app experience.
+ */
 export default async function BridgePage({
   params,
   searchParams,
@@ -16,7 +24,7 @@ export default async function BridgePage({
 
   const { data: opportunity } = await supabase
     .from('opportunities')
-    .select('id, title, organization, description, deadline, apply_url')
+    .select('id')
     .eq('id', id)
     .eq('status', 'approved')
     .eq('is_active', true)
@@ -29,35 +37,6 @@ export default async function BridgePage({
     ref_code: ref ?? null,
   });
 
-  const deadlineLabel = opportunity.deadline
-    ? new Date(opportunity.deadline).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      })
-    : 'Rolling / no fixed deadline';
-
-  return (
-    <main className="min-h-screen flex items-center justify-center bg-[var(--color-surface)] px-4">
-      <div className="w-full max-w-lg bg-white rounded-xl border border-[var(--color-border)] p-8 shadow-sm">
-        <p className="text-xs uppercase tracking-wide text-[var(--color-muted)] mb-2">Voila Africa</p>
-        <h1 className="text-2xl font-semibold mb-2">{opportunity.title}</h1>
-        <p className="text-[var(--color-muted)] mb-1">{opportunity.organization}</p>
-        <p className="text-sm text-[var(--color-muted)] mb-4">Deadline: {deadlineLabel}</p>
-
-        {opportunity.description && (
-          <p className="text-sm text-gray-700 mb-6 line-clamp-4">{opportunity.description}</p>
-        )}
-
-        <a
-          href={opportunity.apply_url}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-block rounded-md bg-[var(--color-forest)] text-white px-5 py-2.5 text-sm font-medium hover:opacity-90 transition"
-        >
-          Apply Now
-        </a>
-      </div>
-    </main>
-  );
+  const appLink = `${APP_URL.replace(/\/$/, '')}/opportunity/${opportunity.id}${ref ? `?ref=${ref}` : ''}`;
+  redirect(appLink);
 }

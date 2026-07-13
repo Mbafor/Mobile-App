@@ -16,6 +16,7 @@ import { spacing } from '@/constants/theme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { FilterDropdown, MultiFilterDropdown } from '@/features/admin/components/FilterDropdown';
 import { usePublishDigestMutation, useWeeklyDigestCandidates } from '@/features/admin/hooks/useWeeklyDigest';
 import {
   buildDigestPageLink,
@@ -229,52 +230,38 @@ export function AdminWeeklyDigestScreen() {
               style={styles.searchInput}
             />
 
-            <View style={styles.chipRow}>
-              {[{ value: 'all', label: t('admin.weeklyDigest.countryAll') }, ...allCountries.map((c) => ({ value: c, label: c }))].map(
-                (opt) => {
-                  const active = opt.value === country;
-                  return (
-                    <Pressable
-                      key={opt.value}
-                      onPress={() => setCountry(opt.value)}
-                      style={[styles.chip, active && styles.chipActive]}
-                    >
-                      <Text style={[styles.chipText, active && styles.chipTextActive]}>{opt.label}</Text>
-                    </Pressable>
-                  );
-                },
-              )}
-            </View>
-
-            <View style={styles.chipRow}>
-              {deadlineOptions.map((opt) => {
-                const active = opt.value === deadlineRange;
-                return (
-                  <Pressable
-                    key={opt.value}
-                    onPress={() => setDeadlineRange(opt.value)}
-                    style={[styles.chip, active && styles.chipActive]}
-                  >
-                    <Text style={[styles.chipText, active && styles.chipTextActive]}>{opt.label}</Text>
-                  </Pressable>
-                );
-              })}
+            <View style={styles.filterRow}>
+              <FilterDropdown
+                label={t('admin.weeklyDigest.filterCountry')}
+                value={country}
+                options={[
+                  { value: 'all', label: t('admin.weeklyDigest.countryAll') },
+                  ...allCountries.map((c) => ({ value: c, label: c })),
+                ]}
+                onChange={setCountry}
+              />
+              <FilterDropdown
+                label={t('admin.weeklyDigest.filterDeadline')}
+                value={deadlineRange}
+                options={deadlineOptions}
+                onChange={setDeadlineRange}
+              />
+              <FilterDropdown
+                label={t('admin.weeklyDigest.filterSort')}
+                value={sortMode}
+                options={sortOptions}
+                onChange={setSortMode}
+              />
             </View>
 
             {allCategories.length > 0 && (
-              <View style={styles.chipRow}>
-                {allCategories.map((cat) => {
-                  const active = categories.has(cat);
-                  return (
-                    <Pressable
-                      key={cat}
-                      onPress={() => toggleCategory(cat)}
-                      style={[styles.chip, active && styles.chipActive]}
-                    >
-                      <Text style={[styles.chipText, active && styles.chipTextActive]}>{cat}</Text>
-                    </Pressable>
-                  );
-                })}
+              <View style={styles.filterRow}>
+                <MultiFilterDropdown
+                  label={t('admin.weeklyDigest.filterCategories')}
+                  values={categories}
+                  options={allCategories}
+                  onToggle={toggleCategory}
+                />
               </View>
             )}
 
@@ -282,21 +269,6 @@ export function AdminWeeklyDigestScreen() {
               <Text>{hideRecentlySent ? '☑' : '☐'}</Text>
               <Text style={styles.toggleLabel}>{t('admin.weeklyDigest.hideRecentlySent')}</Text>
             </Pressable>
-
-            <View style={styles.chipRow}>
-              {sortOptions.map((opt) => {
-                const active = opt.value === sortMode;
-                return (
-                  <Pressable
-                    key={opt.value}
-                    onPress={() => setSortMode(opt.value)}
-                    style={[styles.chip, active && styles.chipActive]}
-                  >
-                    <Text style={[styles.chipText, active && styles.chipTextActive]}>{opt.label}</Text>
-                  </Pressable>
-                );
-              })}
-            </View>
 
             <View style={styles.numberRow}>
               <Text muted>{t('admin.weeklyDigest.numberToInclude')}</Text>
@@ -413,18 +385,7 @@ function createStyles(colors: ColorScheme) {
     heroTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
     heroSub: { marginBottom: spacing.xs },
     searchInput: { marginBottom: spacing.xs },
-    chipRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
-    chip: {
-      paddingVertical: 7,
-      paddingHorizontal: spacing.sm + 5,
-      borderRadius: 20,
-      borderWidth: 1,
-      borderColor: colors.border,
-      backgroundColor: colors.surface,
-    },
-    chipActive: { backgroundColor: colors.primary, borderColor: colors.primary },
-    chipText: { fontSize: 12.5, fontWeight: '600', color: colors.textMuted },
-    chipTextActive: { color: colors.textOnPrimary },
+    filterRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
     toggleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingVertical: spacing.xs },
     toggleLabel: { fontSize: 14 },
     numberRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm, marginTop: spacing.xs },
