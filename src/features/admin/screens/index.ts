@@ -2,5 +2,6 @@ export { AdminCreateOpportunityScreen } from '@/features/admin/screens/AdminCrea
 export { AdminEditOpportunityScreen } from '@/features/admin/screens/AdminEditOpportunityScreen';
 export { AdminPendingQueueScreen } from '@/features/admin/screens/AdminPendingQueueScreen';
 export { AdminPendingReviewScreen } from '@/features/admin/screens/AdminPendingReviewScreen';
+export { AdminWeeklyDigestScreen } from '@/features/admin/screens/AdminWeeklyDigestScreen';
 export { OpportunityListScreen } from '@/features/admin/screens/OpportunityListScreen';
 export { OpportunityPasteScreen } from '@/features/admin/screens/OpportunityPasteScreen';

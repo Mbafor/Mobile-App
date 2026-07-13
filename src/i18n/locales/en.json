@@ -1147,7 +1147,8 @@
       "paste": "Paste opportunities",
       "edit": "Edit opportunity",
       "review": "Review opportunity",
-      "reviewBackTitle": "Pending"
+      "reviewBackTitle": "Pending",
+      "weeklyDigest": "Weekly Digest"
     },
     "dashboard": {
       "subtitle": "Live metrics",
@@ -1182,7 +1183,8 @@
       },
       "actions": {
         "manageOpportunities": "Manage opportunities",
-        "createOpportunity": "Create opportunity"
+        "createOpportunity": "Create opportunity",
+        "weeklyDigest": "Weekly digest"
       }
     },
     "analytics": {
@@ -1346,6 +1348,39 @@
     "errors": {
       "missingOpportunityId": "Missing opportunity id",
       "opportunityNotFound": "Opportunity not found"
+    },
+    "weeklyDigest": {
+      "heroTitle": "Weekly Digest",
+      "heroSubtitle": "Curate and share this week's opportunities.",
+      "searchPlaceholder": "Search title or organization...",
+      "countryAll": "All countries",
+      "deadlineAny": "Any deadline",
+      "deadline7": "Closing within 7 days",
+      "deadline14": "Closing within 14 days",
+      "deadline30": "Closing within 30 days",
+      "hideRecentlySent": "Hide previously sent (last 7 days)",
+      "sortSoonest": "Soonest deadline",
+      "sortNeverSentFirst": "Never sent, oldest first",
+      "numberToInclude": "Number to include",
+      "regenerateSelection": "Regenerate selection",
+      "closingSoon": "🚩 Closing soon",
+      "neverFeatured": "⚠️ never featured",
+      "neverFeaturedWithDays": "⚠️ never featured, closes in {{days}}d",
+      "daysLeft": "{{days}}d left",
+      "rolling": "Rolling",
+      "emptyList": "No opportunities match these filters.",
+      "livePreview": "Live preview",
+      "previewPlaceholder": "Select opportunities to preview the digest.",
+      "publishedTo": "Published to {{url}}",
+      "shareWhatsapp": "Share on WhatsApp",
+      "shareFacebook": "Share on Facebook",
+      "shareLinkedin": "Share on LinkedIn",
+      "copy": "Copy / Share text",
+      "copiedTitle": "Copied",
+      "copiedMessage": "Digest text copied to clipboard.",
+      "errors": {
+        "publishFailedTitle": "Could not publish digest"
+      }
     }
   },
   "superAdmin": {

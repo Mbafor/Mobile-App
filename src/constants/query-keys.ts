@@ -37,6 +37,7 @@ export const queryKeys = {
     opportunities: ['admin', 'opportunities'] as const,
     pendingOpportunities: ['admin', 'pending'] as const,
     opportunity: (id: string) => ['admin', 'opportunity', id] as const,
+    weeklyDigestCandidates: ['admin', 'weeklyDigestCandidates'] as const,
   },
   cv: {
     list: (userId: string) => ['cv', 'list', userId] as const,

@@ -40,6 +40,10 @@ export default function AdminTabLayout() {
         options={{ title: t('admin.titles.paste'), headerBackTitle: t('admin.backTitle') }}
       />
       <Stack.Screen
+        name="weekly-digest"
+        options={{ title: t('admin.titles.weeklyDigest'), headerBackTitle: t('admin.backTitle') }}
+      />
+      <Stack.Screen
         name="[id]/edit"
         options={{ title: t('admin.titles.edit'), headerBackTitle: t('admin.backTitle') }}
       />

@@ -157,6 +157,10 @@ export type Database = {
         Args: { result_limit?: number };
         Returns: { opportunity_id: string; save_count: number }[];
       };
+      bump_opportunity_sends: {
+        Args: { p_ids: string[] };
+        Returns: undefined;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;
@@ -274,6 +278,8 @@ export type Database = {
           created_by: string | null;
           created_at: string;
           updated_at: string;
+          last_sent_at: string | null;
+          times_sent: number;
         };
         Insert: {
           id?: string;
@@ -294,6 +300,8 @@ export type Database = {
           source?: string | null;
           created_at?: string;
           updated_at?: string;
+          last_sent_at?: string | null;
+          times_sent?: number;
         };
         Update: {
           id?: string;
@@ -314,6 +322,35 @@ export type Database = {
           source?: string | null;
           created_at?: string;
           updated_at?: string;
+          last_sent_at?: string | null;
+          times_sent?: number;
+        };
+        Relationships: [];
+      };
+      sent_digests: {
+        Row: {
+          id: string;
+          slug: string;
+          sent_at: string;
+          opportunity_ids: string[];
+          channel: string | null;
+          created_by: string | null;
+        };
+        Insert: {
+          id?: string;
+          slug: string;
+          sent_at?: string;
+          opportunity_ids: string[];
+          channel?: string | null;
+          created_by?: string | null;
+        };
+        Update: {
+          id?: string;
+          slug?: string;
+          sent_at?: string;
+          opportunity_ids?: string[];
+          channel?: string | null;
+          created_by?: string | null;
         };
         Relationships: [];
       };

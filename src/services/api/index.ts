@@ -10,6 +10,7 @@ export { notificationsEmailApi } from '@/services/api/notifications-email.api';
 export { notificationPreferencesApi } from '@/services/api/notification-preferences.api';
 export { pushTokensApi } from '@/services/api/push-tokens.api';
 export { adminApi } from '@/services/api/admin.api';
+export { weeklyDigestApi, type WeeklyDigestCandidate } from '@/services/api/weekly-digest.api';
 export { mentorshipApi } from '@/services/api/mentorship.api';
 export { mentorshipDataApi } from '@/services/api/mentorship-data.api';
 export { mentorshipSchedulingApi } from '@/services/api/mentorship-scheduling.api';

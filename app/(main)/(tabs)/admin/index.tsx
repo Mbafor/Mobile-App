@@ -16,6 +16,7 @@ export default function AdminHomeScreen() {
         create: ROUTES.ADMIN.CREATE as Href,
         paste: ROUTES.ADMIN.PASTE as Href,
         pending: ROUTES.ADMIN.PENDING as Href,
+        weeklyDigest: ROUTES.ADMIN.WEEKLY_DIGEST as Href,
         edit: (id) => ROUTES.ADMIN.edit(id) as Href,
       }}
       title={t('admin.opportunityList.homeTitle')}

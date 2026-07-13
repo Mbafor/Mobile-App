@@ -21,6 +21,7 @@ export type OpportunityListRoutes = {
   paste: Href;
   edit: (id: string) => Href;
   pending?: Href;
+  weeklyDigest?: Href;
 };
 
 type OpportunityListScreenProps = {
@@ -76,6 +77,11 @@ export function OpportunityListScreen({
           {subtitle ?? t('admin.opportunityList.homeSubtitle')}
         </Text>
         <View style={styles.heroActions}>
+          {routes.weeklyDigest && (
+            <Button variant="secondary" onPress={() => router.push(routes.weeklyDigest as Href)}>
+              {t('admin.dashboard.actions.weeklyDigest')}
+            </Button>
+          )}
           <Button variant="secondary" onPress={() => router.push(routes.paste)}>
             {t('admin.opportunityList.pasteJson')}
           </Button>

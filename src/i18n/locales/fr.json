@@ -1171,7 +1171,8 @@
       "paste": "Coller des opportunités",
       "edit": "Modifier l'opportunité",
       "review": "Réviser l'opportunité",
-      "reviewBackTitle": "En attente"
+      "reviewBackTitle": "En attente",
+      "weeklyDigest": "Résumé hebdomadaire"
     },
     "dashboard": {
       "subtitle": "Statistiques en direct",
@@ -1206,7 +1207,8 @@
       },
       "actions": {
         "manageOpportunities": "Gérer les opportunités",
-        "createOpportunity": "Créer une opportunité"
+        "createOpportunity": "Créer une opportunité",
+        "weeklyDigest": "Résumé hebdomadaire"
       }
     },
     "analytics": {
@@ -1370,6 +1372,39 @@
     "errors": {
       "missingOpportunityId": "Identifiant d'opportunité manquant",
       "opportunityNotFound": "Opportunité introuvable"
+    },
+    "weeklyDigest": {
+      "heroTitle": "Résumé hebdomadaire",
+      "heroSubtitle": "Sélectionnez et partagez les opportunités de la semaine.",
+      "searchPlaceholder": "Rechercher un titre ou une organisation...",
+      "countryAll": "Tous les pays",
+      "deadlineAny": "Toute échéance",
+      "deadline7": "Clôture sous 7 jours",
+      "deadline14": "Clôture sous 14 jours",
+      "deadline30": "Clôture sous 30 jours",
+      "hideRecentlySent": "Masquer les opportunités déjà envoyées (7 derniers jours)",
+      "sortSoonest": "Échéance la plus proche",
+      "sortNeverSentFirst": "Jamais envoyées, les plus anciennes d'abord",
+      "numberToInclude": "Nombre à inclure",
+      "regenerateSelection": "Régénérer la sélection",
+      "closingSoon": "🚩 Clôture imminente",
+      "neverFeatured": "⚠️ jamais mise en avant",
+      "neverFeaturedWithDays": "⚠️ jamais mise en avant, clôture dans {{days}}j",
+      "daysLeft": "{{days}}j restants",
+      "rolling": "Continue",
+      "emptyList": "Aucune opportunité ne correspond à ces filtres.",
+      "livePreview": "Aperçu en direct",
+      "previewPlaceholder": "Sélectionnez des opportunités pour prévisualiser le résumé.",
+      "publishedTo": "Publié sur {{url}}",
+      "shareWhatsapp": "Partager sur WhatsApp",
+      "shareFacebook": "Partager sur Facebook",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "copy": "Copier / Partager le texte",
+      "copiedTitle": "Copié",
+      "copiedMessage": "Texte du résumé copié dans le presse-papiers.",
+      "errors": {
+        "publishFailedTitle": "Impossible de publier le résumé"
+      }
     }
   },
   "superAdmin": {
