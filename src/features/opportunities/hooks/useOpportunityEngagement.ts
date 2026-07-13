@@ -163,6 +163,24 @@ export function useOpportunityEngagement(opportunityId: string | undefined) {
     }
 
     void openExternalUrl(url);
+
+    // Best-effort: if this opportunity is tracked and still at 'saved', bump it to
+    // 'applied' now that the user has opened the application link. No-ops (and never
+    // alerts) if it's untracked or already further along — this shouldn't interrupt
+    // the apply flow.
+    if (userId && isSaved) {
+      void trackerApi.advanceToApplied(userId, opportunity.id).then(({ advanced }) => {
+        if (!advanced) return;
+        queryClient.setQueryData<boolean>(
+          queryKeys.opportunities.applied(userId, opportunity.id),
+          true,
+        );
+        queryClient.invalidateQueries({ queryKey: queryKeys.opportunities.tracker(userId) });
+        queryClient.invalidateQueries({
+          queryKey: ['opportunities', 'applied-count', userId],
+        });
+      });
+    }
   };
 
   return {

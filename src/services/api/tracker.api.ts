@@ -77,4 +77,24 @@ export const trackerApi = {
 
     return { error };
   },
+
+  /** Moves a tracked opportunity from 'saved' to 'applied' — no-op if it's already further along or untracked. */
+  advanceToApplied: async (userId: string, opportunityId: string) => {
+    const { data, error } = await supabase
+      .from('saved_opportunities')
+      .update({ stage: 'applied', updated_at: new Date().toISOString() })
+      .eq('user_id', userId)
+      .eq('opportunity_id', opportunityId)
+      .eq('stage', 'saved')
+      .select('opportunity_id');
+
+    if (error) return { error, advanced: false };
+
+    const advanced = (data?.length ?? 0) > 0;
+    if (advanced) {
+      const synced = await syncAppliedFlag(userId, opportunityId, 'applied');
+      if (synced.error) return { error: synced.error, advanced: true };
+    }
+    return { error: null, advanced };
+  },
 };

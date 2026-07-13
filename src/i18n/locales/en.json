@@ -467,44 +467,39 @@
     "tracker": {
       "searchPlaceholder": "Search title or company…",
       "export": "Export .xlsx",
-      "cardCount_one": "{{count}} card",
-      "cardCount_other": "{{count}} cards",
-      "filteredSuffix": " (filtered)",
       "nothingToExportTitle": "Nothing to export",
       "nothingToExportBody": "Add items to your tracker first.",
       "exportFailedTitle": "Export failed",
       "exportFailedBody": "Could not create the spreadsheet.",
       "loadFailed": "Failed to load your tracker",
-      "apply": "Apply",
       "notesPlaceholder": "Add a short note…",
-      "moveTo": "Move to {{stage}}",
-      "applyAccessibility": "Apply for this opportunity",
-      "noApplyLinkTitle": "No apply link",
-      "noApplyLinkBody": "This opportunity does not have an application URL yet.",
-      "invalidLinkTitle": "Invalid link",
-      "invalidLinkBody": "Could not open the application URL.",
       "empty": {
+        "all": "Save opportunities from the dashboard to start tracking them here.",
         "saved": "Save opportunities from the dashboard to start tracking them here.",
-        "applied": "Drag cards here when you have submitted an application.",
+        "applied": "Opportunities you have applied to will show up here.",
         "interview": "Track opportunities that invited you to interview.",
         "offer": "Celebrate offers here — you have earned it!",
         "closed": "Archive declined or passed opportunities here."
       },
-      "filters": {
-        "title": "Filters",
-        "clearAll": "Clear all",
-        "showResults": "Show results",
-        "stage": "Stage",
-        "categoryTag": "Category / tag",
-        "deadline": "Deadline",
-        "dateSaved": "Date saved",
-        "dates": {
-          "any": "Any time",
-          "d7": "Last 7 days",
-          "d30": "Last 30 days",
-          "d90": "Last 90 days"
-        }
-      }
+      "filterAll": "All",
+      "stages": {
+        "saved": "Saved",
+        "applied": "Applied",
+        "interview": "Interview",
+        "offer": "Offer",
+        "closed": "Closed"
+      },
+      "stalledBanner": "{{title}} has been in {{stage}} for {{days}} days. Any news?",
+      "stalledDismiss": "Dismiss",
+      "statusSheetTitle": "Update status",
+      "toastMarkedAs": "Marked as {{status}}",
+      "undo": "Undo",
+      "noteBtnAdd": "Add note",
+      "noteBtnEdit": "Edit note",
+      "deadlineDaysLeft_one": "{{count}}d left",
+      "deadlineDaysLeft_other": "{{count}}d left",
+      "deadlinePassed": "Deadline passed",
+      "deadlineNone": "No deadline"
     }
   },
   "notifications": {

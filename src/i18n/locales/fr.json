@@ -491,44 +491,39 @@
     "tracker": {
       "searchPlaceholder": "Rechercher un titre ou une entreprise…",
       "export": "Exporter .xlsx",
-      "cardCount_one": "{{count}} carte",
-      "cardCount_other": "{{count}} cartes",
-      "filteredSuffix": " (filtré)",
       "nothingToExportTitle": "Rien à exporter",
       "nothingToExportBody": "Ajoutez d'abord des éléments à votre suivi.",
       "exportFailedTitle": "Échec de l'exportation",
       "exportFailedBody": "Impossible de créer le fichier.",
       "loadFailed": "Échec du chargement de votre suivi",
-      "apply": "Postuler",
       "notesPlaceholder": "Ajoutez une courte note…",
-      "moveTo": "Déplacer vers {{stage}}",
-      "applyAccessibility": "Postuler pour cette opportunité",
-      "noApplyLinkTitle": "Aucun lien de candidature",
-      "noApplyLinkBody": "Cette opportunité n'a pas encore d'URL de candidature.",
-      "invalidLinkTitle": "Lien invalide",
-      "invalidLinkBody": "Impossible d'ouvrir l'URL de candidature.",
       "empty": {
+        "all": "Enregistrez des opportunités depuis le tableau de bord pour commencer à les suivre ici.",
         "saved": "Enregistrez des opportunités depuis le tableau de bord pour commencer à les suivre ici.",
-        "applied": "Glissez les cartes ici lorsque vous avez soumis une candidature.",
+        "applied": "Les opportunités auxquelles vous avez postulé apparaîtront ici.",
         "interview": "Suivez les opportunités qui vous ont invité(e) à un entretien.",
         "offer": "Célébrez vos offres ici — vous l'avez mérité !",
         "closed": "Archivez ici les opportunités refusées ou expirées."
       },
-      "filters": {
-        "title": "Filtres",
-        "clearAll": "Tout effacer",
-        "showResults": "Afficher les résultats",
-        "stage": "Étape",
-        "categoryTag": "Catégorie / tag",
-        "deadline": "Échéance",
-        "dateSaved": "Date d'enregistrement",
-        "dates": {
-          "any": "N'importe quand",
-          "d7": "7 derniers jours",
-          "d30": "30 derniers jours",
-          "d90": "90 derniers jours"
-        }
-      }
+      "filterAll": "Toutes",
+      "stages": {
+        "saved": "Enregistré",
+        "applied": "Postulé",
+        "interview": "Entretien",
+        "offer": "Offre",
+        "closed": "Clôturé"
+      },
+      "stalledBanner": "{{title}} est au statut {{stage}} depuis {{days}} jours. Des nouvelles ?",
+      "stalledDismiss": "Ignorer",
+      "statusSheetTitle": "Mettre à jour le statut",
+      "toastMarkedAs": "Marqué comme {{status}}",
+      "undo": "Annuler",
+      "noteBtnAdd": "Ajouter une note",
+      "noteBtnEdit": "Modifier la note",
+      "deadlineDaysLeft_one": "{{count}}j restant",
+      "deadlineDaysLeft_other": "{{count}}j restants",
+      "deadlinePassed": "Échéance dépassée",
+      "deadlineNone": "Aucune échéance"
     }
   },
   "notifications": {
