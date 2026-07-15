@@ -14,7 +14,8 @@ export default async function PartnerEventsPage() {
     .select('id, title, event_date, location_type')
     .eq('owner_type', 'partner')
     .eq('owner_id', session.partner.id)
-    .order('event_date', { ascending: false });
+    .order('event_date', { ascending: false })
+    .limit(200);
 
   const events = data ?? [];
 

@@ -43,6 +43,17 @@ export async function clearSessionCookies() {
   store.delete(REFRESH_TOKEN_COOKIE);
 }
 
+async function loadActivePartner(token: string): Promise<Partner | null> {
+  const { data: partner, error } = await createPartnerClient(token)
+    .from('partners')
+    .select('id, org_name, slug, logo_url, contact_email, ref_code, is_active')
+    .eq('is_active', true)
+    .maybeSingle();
+
+  if (error || !partner) return null;
+  return partner;
+}
+
 /**
  * Reads and validates the partner session. If the access token has expired,
  * attempts a one-off in-memory refresh (via the refresh token cookie) so the
@@ -51,9 +62,16 @@ export async function clearSessionCookies() {
  *
  * Cached per-request via React's `cache()` -- the layout and every page call
  * this independently, and without caching each one re-pays the full
- * getUser -> refreshSession -> partners-select chain (2-3 Supabase round
- * trips). `cache()` dedupes calls with identical arguments (none here)
- * within a single render pass, so the chain runs once per request.
+ * validation chain. `cache()` dedupes calls with identical arguments (none
+ * here) within a single render pass, so the chain runs once per request.
+ *
+ * Does NOT call `auth.getUser()` to pre-validate the access token -- that
+ * was a redundant network round trip, since the `partners` select below is
+ * itself RLS-scoped to `auth.uid()` and Supabase/PostgREST already verifies
+ * the JWT server-side while processing that query. An invalid/expired token
+ * simply makes the select return no row, which falls through to the
+ * refresh-token path below. This cuts the common case (valid token) from 2
+ * sequential Supabase round trips down to 1.
  */
 export const getPartnerSession = cache(async (): Promise<PartnerSession | null> => {
   const store = await cookies();
@@ -61,33 +79,21 @@ export const getPartnerSession = cache(async (): Promise<PartnerSession | null> 
   const refreshToken = store.get(REFRESH_TOKEN_COOKIE)?.value;
   if (!accessToken && !refreshToken) return null;
 
-  const anon = createAnonClient();
-  let token = accessToken;
-
-  if (token) {
-    const { data, error } = await anon.auth.getUser(token);
-    if (error || !data.user) token = undefined;
+  if (accessToken) {
+    const partner = await loadActivePartner(accessToken);
+    if (partner) return { partner, accessToken };
   }
 
-  if (!token && refreshToken) {
-    const { data, error } = await anon.auth.refreshSession({ refresh_token: refreshToken });
+  if (refreshToken) {
+    const { data, error } = await createAnonClient().auth.refreshSession({ refresh_token: refreshToken });
     if (!error && data.session) {
-      token = data.session.access_token;
+      const token = data.session.access_token;
+      const partner = await loadActivePartner(token);
+      if (partner) return { partner, accessToken: token };
     }
   }
 
-  if (!token) return null;
-
-  const partnerClient = createPartnerClient(token);
-  const { data: partner, error: partnerError } = await partnerClient
-    .from('partners')
-    .select('id, org_name, slug, logo_url, contact_email, ref_code, is_active')
-    .eq('is_active', true)
-    .maybeSingle();
-
-  if (partnerError || !partner) return null;
-
-  return { partner, accessToken: token };
+  return null;
 });
 
 /** Redirects to /partner/login if there is no valid partner session. */

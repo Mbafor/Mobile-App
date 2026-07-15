@@ -28,6 +28,7 @@ import { findStalledItems, type StalledEntry } from '@/features/opportunities/ut
 import { resolveStatusTransition } from '@/features/opportunities/utils/tracker-status-transition';
 import { exportTrackerToXlsx } from '@/features/opportunities/utils/export-tracker-xlsx';
 import { spacing } from '@/constants/theme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { EMPTY_TRACKER_FILTERS, TRACKER_STAGE_ORDER, type TrackerStage } from '@/types/domain/tracker';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
 
@@ -46,6 +47,7 @@ export function TrackerScreen() {
   const { colors } = useTheme();
   const { t } = useTranslation();
   const router = useRouter();
+  const isDesktop = useWebDesktop();
   const listRef = useRef<FlatList<TrackerItem>>(null);
 
   const searchOpen = useInlineSearchToggle((s) => s.open);
@@ -221,6 +223,7 @@ export function TrackerScreen() {
             value={query}
             onChangeText={setQuery}
             placeholder={t('opportunities.tracker.searchPlaceholder')}
+            style={isDesktop && styles.searchFieldDesktop}
             autoFocus
           />
         </View>
@@ -259,7 +262,6 @@ export function TrackerScreen() {
         ListFooterComponent={
           <View style={styles.footer}>
             <Button
-              variant="secondary"
               loading={exporting}
               onPress={() => void handleExport()}
               style={styles.exportBtn}
@@ -300,6 +302,7 @@ function createStyles(colors: ColorScheme) {
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
   banner: { padding: spacing.md },
   searchWrap: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
+  searchFieldDesktop: { maxWidth: 360 },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',

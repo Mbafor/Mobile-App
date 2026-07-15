@@ -93,7 +93,7 @@ export function EventListScreen() {
             value={query}
             onChangeText={setQuery}
             placeholder={t('events.search.placeholder')}
-            style={styles.searchField}
+            style={[styles.searchField, isDesktop && styles.searchFieldDesktop]}
             autoFocus
           />
         ) : null}
@@ -131,6 +131,7 @@ function createStyles(colors: ColorScheme) {
     container: { flex: 1, backgroundColor: colors.background },
     pageContent: { flex: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
     searchField: { marginBottom: spacing.sm },
+    searchFieldDesktop: { maxWidth: 360 },
     filterRow: { paddingBottom: spacing.xs },
     spinner: { marginTop: spacing.xl },
     list: { paddingBottom: spacing.xl },

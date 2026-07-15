@@ -3,7 +3,7 @@ import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import type { ReactNode } from 'react';
-import { Platform, Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
 import { Input } from '@/components/ui/Input';
 import { Text } from '@/components/ui/Text';
@@ -14,7 +14,7 @@ type SearchFieldProps = {
   onChangeText: (value: string) => void;
   placeholder?: string;
   onClear?: () => void;
-  style?: ViewStyle;
+  style?: StyleProp<ViewStyle>;
   /** Google Docs–style pill search on grey fill. */
   variant?: 'default' | 'docs';
   /** Optional trailing control (e.g. Filters button). */

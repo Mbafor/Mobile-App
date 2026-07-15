@@ -15,7 +15,8 @@ export default async function PartnerDashboardPage() {
     client
       .from('partner_posts')
       .select('opportunity_id, opportunities(id, title, organization, deadline)')
-      .order('posted_at', { ascending: false }),
+      .order('posted_at', { ascending: false })
+      .limit(200),
     client.from('partner_posts').select('id', { count: 'exact', head: true }),
     client.from('link_clicks').select('id', { count: 'exact', head: true }),
   ]);

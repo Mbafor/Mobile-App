@@ -13,12 +13,14 @@ export default async function PartnerDigestPage() {
     client
       .from('opportunities')
       .select('id, title, organization, category, deadline, country')
-      .order('deadline', { ascending: true, nullsFirst: false }),
+      .order('deadline', { ascending: true, nullsFirst: false })
+      .limit(100),
     client
       .from('partner_posts')
       .select('digest_slug, posted_at, opportunities(id, title, organization, deadline)')
       .not('digest_slug', 'is', null)
-      .order('posted_at', { ascending: false }),
+      .order('posted_at', { ascending: false })
+      .limit(500),
   ]);
 
   const opportunities: DigestCandidateOpportunity[] = opportunitiesRes.data ?? [];
