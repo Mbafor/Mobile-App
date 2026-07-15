@@ -3,7 +3,6 @@ import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 
-import { ScreenHeaderBar } from '@/components/layout/ScreenHeaderBar';
 import { ROUTES } from '@/constants/routes';
 import { SettingsRow } from '@/features/settings/components/SettingsRow';
 import { AppearanceSection } from '@/features/settings/components/AppearanceSection';
@@ -39,8 +38,6 @@ export function SettingsHomeScreen() {
 
   return (
     <View style={styles.root}>
-      <ScreenHeaderBar title={t('settings.home.title')} />
-
       <ScrollView
         style={styles.scroll}
         contentContainerStyle={styles.content}

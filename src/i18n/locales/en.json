@@ -466,7 +466,7 @@
       }
     },
     "tracker": {
-      "searchPlaceholder": "Search title or company…",
+      "searchPlaceholder": "Search Tracker",
       "searchCancel": "Cancel",
       "searchRecentSearches": "Recent searches",
       "searchClearRecent": "Clear",
@@ -529,7 +529,7 @@
       "allCategories": "All"
     },
     "search": {
-      "placeholder": "Search events",
+      "placeholder": "Search Events",
       "failed": "Search failed",
       "emptyTitle": "No events found",
       "emptyDescription": "Try a different search or check back later.",

@@ -4,13 +4,11 @@ import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
-import { ScreenHeaderBar } from '@/components/layout';
-import { FilterChips, SearchFieldButton } from '@/components/ui';
+import { FilterChips } from '@/components/ui';
 import { EventCard } from '@/features/events/components/EventCard';
 import { usePastEvents } from '@/features/events/hooks/usePastEvents';
 import { useUpcomingEvents } from '@/features/events/hooks/useUpcomingEvents';
 import { getEventCategoryOptions } from '@/constants/event-fields';
-import { ROUTES } from '@/constants/routes';
 import type { ColorScheme } from '@/constants/theme/types';
 import { spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
@@ -57,10 +55,6 @@ export function EventListScreen() {
     [t, allResults],
   );
 
-  const handleSearchPress = useCallback(() => {
-    router.push(ROUTES.MAIN.EVENTS_SEARCH as any);
-  }, [router]);
-
   const handleCardPress = useCallback(
     (event: Event) => {
       router.push({ pathname: '/(main)/event/[id]', params: { id: event.id } });
@@ -68,18 +62,11 @@ export function EventListScreen() {
     [router],
   );
 
-  const numColumns = isDesktop ? 3 : 1;
+  const numColumns = isDesktop ? 4 : 1;
 
   return (
     <View style={styles.container}>
-      <ScreenHeaderBar title={t('navigation.tabs.events')} />
-      <View style={[styles.pageContent, styles.pageContentPadded, isDesktop && styles.pageContentDesktop]}>
-        <SearchFieldButton
-          onPress={handleSearchPress}
-          placeholder={t('events.search.placeholder')}
-          style={styles.searchField}
-        />
-
+      <View style={styles.pageContent}>
         <FilterChips options={timingOptions} selected={timing} onSelect={setTiming} style={styles.filterRow} />
         <FilterChips options={categoryOptions} selected={category} onSelect={setCategory} style={styles.filterRow} />
 
@@ -111,10 +98,7 @@ export function EventListScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
-    pageContent: { flex: 1, paddingHorizontal: spacing.lg },
-    pageContentPadded: { paddingTop: spacing.md },
-    pageContentDesktop: { maxWidth: 1100, width: '100%', alignSelf: 'center' },
-    searchField: { marginBottom: spacing.sm },
+    pageContent: { flex: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
     filterRow: { paddingBottom: spacing.xs },
     spinner: { marginTop: spacing.xl },
     list: { paddingBottom: spacing.xl },

@@ -17,10 +17,17 @@ export function AppHeaderActions() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const isSearchScreen = pathname.includes('/search');
+  const isSearchScreen =
+    pathname.includes('/search') || pathname.includes('/events-search') || pathname.includes('/tracker-search');
 
   const handleSearchPress = () => {
-    router.push(ROUTES.MAIN.SEARCH as any);
+    if (pathname.includes('/tracker')) {
+      router.push(ROUTES.MAIN.TRACKER_SEARCH as any);
+    } else if (pathname.includes('/events')) {
+      router.push(ROUTES.MAIN.EVENTS_SEARCH as any);
+    } else {
+      router.push(ROUTES.MAIN.SEARCH as any);
+    }
   };
 
   return (

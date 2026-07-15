@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import { LanguageQuickSwitch, Text, ThemeQuickSwitch } from '@/components/ui';
+import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
 import { ProfileMenuBar } from '@/features/menu/components/ProfileMenuBar';
@@ -124,11 +124,6 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
         </>
       )}
 
-      <View style={styles.quickSwitchRow}>
-        <ThemeQuickSwitch />
-        <LanguageQuickSwitch />
-      </View>
-
       <View style={styles.profileRow}>
         <ProfileMenuBar onBeforeNavigate={() => props.navigation.closeDrawer()} />
       </View>
@@ -171,15 +166,6 @@ function createStyles(colors: ColorScheme) {
   },
   itemText: { fontSize: 16, color: colors.text, flex: 1 },
   itemTextActive: { color: colors.primary, fontWeight: '600' },
-  quickSwitchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.md,
-    marginTop: spacing.sm,
-    paddingVertical: spacing.xs + 2,
-    paddingHorizontal: spacing.md,
-  },
   profileRow: {
     marginTop: spacing.sm,
     paddingTop: spacing.sm,

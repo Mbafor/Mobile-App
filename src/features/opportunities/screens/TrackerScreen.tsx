@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { SearchFieldButton, Text } from '@/components/ui';
+import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { TrackerFilterChips, type TrackerFilterValue } from '@/features/opportunities/components/tracker/TrackerFilterChips';
 import { TrackerListCard } from '@/features/opportunities/components/tracker/TrackerListCard';
@@ -25,7 +25,6 @@ import { groupByStage } from '@/features/opportunities/utils/filter-tracker';
 import { findStalledItems, type StalledEntry } from '@/features/opportunities/utils/tracker-stalled';
 import { resolveStatusTransition } from '@/features/opportunities/utils/tracker-status-transition';
 import { exportTrackerToXlsx } from '@/features/opportunities/utils/export-tracker-xlsx';
-import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { TRACKER_STAGE_ORDER, type TrackerStage } from '@/types/domain/tracker';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
@@ -195,23 +194,6 @@ export function TrackerScreen() {
         </View>
       ) : null}
 
-      <View style={styles.toolbar}>
-        <View style={styles.searchWrap}>
-          <SearchFieldButton
-            onPress={() => router.push(ROUTES.MAIN.TRACKER_SEARCH as any)}
-            placeholder={t('opportunities.tracker.searchPlaceholder')}
-          />
-        </View>
-        <Button
-          variant="secondary"
-          loading={exporting}
-          onPress={() => void handleExport()}
-          style={styles.exportBtn}
-        >
-          {t('opportunities.tracker.export')}
-        </Button>
-      </View>
-
       <TrackerFilterChips
         selected={stageFilter}
         onSelect={setStageFilter}
@@ -244,6 +226,17 @@ export function TrackerScreen() {
         }
       />
 
+      <View style={styles.footer}>
+        <Button
+          variant="secondary"
+          loading={exporting}
+          onPress={() => void handleExport()}
+          style={styles.exportBtn}
+        >
+          {t('opportunities.tracker.export')}
+        </Button>
+      </View>
+
       <TrackerStatusSheet
         visible={sheetItem !== null}
         currentStage={sheetItem?.stage ?? null}
@@ -272,15 +265,15 @@ function createStyles(colors: ColorScheme) {
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
   banner: { padding: spacing.md },
-  toolbar: {
+  footer: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: spacing.sm,
-    paddingHorizontal: spacing.md,
-    paddingTop: spacing.sm,
-    paddingBottom: spacing.xs,
+    justifyContent: 'flex-end',
+    padding: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    backgroundColor: colors.background,
   },
-  searchWrap: { flex: 1 },
   exportBtn: { flexShrink: 0 },
   list: { flex: 1 },
   listContent: {

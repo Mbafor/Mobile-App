@@ -490,7 +490,7 @@
       }
     },
     "tracker": {
-      "searchPlaceholder": "Rechercher un titre ou une entreprise…",
+      "searchPlaceholder": "Rechercher dans le suivi",
       "searchCancel": "Annuler",
       "searchRecentSearches": "Recherches récentes",
       "searchClearRecent": "Effacer",

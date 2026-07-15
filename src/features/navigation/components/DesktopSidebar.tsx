@@ -7,7 +7,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
-import { LanguageQuickSwitch, Text, ThemeQuickSwitch } from '@/components/ui';
+import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
@@ -290,6 +290,10 @@ export function DesktopSidebar() {
             {section.items.map(renderItem)}
           </View>
         ))}
+
+        <View style={styles.profileRow}>
+          <ProfileMenuBar collapsed={collapsed} />
+        </View>
       </ScrollView>
 
       <View style={styles.scrollButtons}>
@@ -315,15 +319,6 @@ export function DesktopSidebar() {
         >
           <Ionicons name="chevron-down" size={13} color={colors.textMuted} />
         </Pressable>
-      </View>
-
-      <View style={styles.quickSwitchRow}>
-        <ThemeQuickSwitch compact={collapsed} />
-        <LanguageQuickSwitch compact={collapsed} />
-      </View>
-
-      <View style={styles.profileRow}>
-        <ProfileMenuBar collapsed={collapsed} />
       </View>
     </View>
   );
@@ -435,24 +430,14 @@ function createStyles(colors: ColorScheme) {
     color: colors.primary,
     fontWeight: '600',
   },
-  // ── Theme / language quick switches ─────────────────────────────────────
-  quickSwitchRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: spacing.xs,
-    paddingVertical: spacing.xs + 2,
-    paddingBottom: spacing.md,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-  },
   // ── Profile bar ──────────────────────────────────────────────────────────
   profileRow: {
+    marginTop: spacing.md,
     paddingHorizontal: spacing.sm,
     paddingBottom: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
-    paddingTop: spacing.xs,
+    paddingTop: spacing.md,
   },
   // ── Scroll buttons ────────────────────────────────────────────────────────
   scrollButtons: {

@@ -17,6 +17,7 @@ const CRUMB_ROUTES: { matchPath: string; labelKey: string }[] = [
   { matchPath: '/dashboard', labelKey: 'navigation.tabs.dashboard' },
   { matchPath: '/tracker', labelKey: 'navigation.tabs.tracker' },
   { matchPath: '/browse-categories', labelKey: 'navigation.tabs.browse' },
+  { matchPath: '/events', labelKey: 'navigation.tabs.events' },
   { matchPath: '/mentorship', labelKey: 'navigation.tabs.mentorship' },
   { matchPath: '/cv-builder', labelKey: 'navigation.tabs.cvBuilder' },
   { matchPath: '/notifications', labelKey: 'navigation.tabs.notifications' },
