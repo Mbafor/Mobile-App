@@ -1,5 +1,6 @@
 import { mapOpportunityRow } from '@/services/api/mappers/opportunity.mapper';
 import { supabase } from '@/services/supabase/client';
+import type { Opportunity } from '@/types/domain/opportunity';
 
 /** Opportunities — only non-expired rows (deadline > now) via RLS. */
 export const opportunitiesApi = {
@@ -18,13 +19,16 @@ export const opportunitiesApi = {
   },
 
   getById: async (id: string) => {
-    const { data, error } = await supabase
-      .from('opportunities')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
+    const [{ data, error }, posterRes] = await Promise.all([
+      supabase.from('opportunities').select('*').eq('id', id).maybeSingle(),
+      supabase.rpc('get_opportunity_poster', { p_opportunity_id: id }),
+    ]);
 
-    return { data: data ? mapOpportunityRow(data) : null, error };
+    if (!data) return { data: null, error };
+
+    const opportunity = mapOpportunityRow(data);
+    opportunity.postedBy = (posterRes.data as Opportunity['postedBy']) ?? null;
+    return { data: opportunity, error };
   },
 
   /** Opportunity ids ranked by save count across all users (aggregate only, no user linkage). */

@@ -38,7 +38,7 @@ function slugify(text) {
     .replace(/^-+|-+$/g, '');
 }
 
-const RESERVED_SLUGS = new Set(['login', 'dashboard', 'logout', 'api']);
+const RESERVED_SLUGS = new Set(['login', 'signup', 'verify-otp', 'dashboard', 'logout', 'api']);
 
 async function main() {
   const args = parseArgs(process.argv.slice(2));

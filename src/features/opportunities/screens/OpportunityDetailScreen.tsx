@@ -392,6 +392,15 @@ export function OpportunityDetailScreen() {
           </View>
         ) : null}
 
+        {opportunity.postedBy ? (
+          <View style={styles.postedByRow}>
+            <Ionicons name="person-circle-outline" size={15} color={colors.textMuted} />
+            <Text style={styles.meta}>
+              {t('opportunities.detail.postedBy', { name: opportunity.postedBy.name })}
+            </Text>
+          </View>
+        ) : null}
+
         <View style={styles.divider} />
 
         <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
@@ -579,6 +588,8 @@ function createStyles(colors: ColorScheme) {
     lineHeight: 20,
     textTransform: 'capitalize',
   },
+
+  postedByRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
 
   tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
   tag: {

@@ -161,6 +161,10 @@ export type Database = {
         Args: { p_ids: string[] };
         Returns: undefined;
       };
+      get_opportunity_poster: {
+        Args: { p_opportunity_id: string };
+        Returns: Json;
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import { partnerLogout } from '@/app/partner/login/actions';
 
 const NAV_ITEMS = [
   {
     href: '/partner/dashboard',
-    label: 'Dashboard',
+    key: 'dashboard',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <rect x="3" y="3" width="7" height="7" rx="1.5" />
@@ -20,7 +21,7 @@ const NAV_ITEMS = [
   },
   {
     href: '/partner/dashboard/digest',
-    label: 'Weekly Digest',
+    key: 'digest',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <rect x="3" y="4" width="18" height="17" rx="2" />
@@ -31,7 +32,7 @@ const NAV_ITEMS = [
   },
   {
     href: '/partner/dashboard/browse',
-    label: 'Browse Opportunities',
+    key: 'browse',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <circle cx="12" cy="12" r="9" />
@@ -41,7 +42,7 @@ const NAV_ITEMS = [
   },
   {
     href: '/partner/dashboard/create',
-    label: 'Create Opportunity',
+    key: 'create',
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="h-5 w-5">
         <circle cx="12" cy="12" r="9" />
@@ -49,10 +50,11 @@ const NAV_ITEMS = [
       </svg>
     ),
   },
-];
+] as const;
 
 export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; contactEmail: string }) {
   const pathname = usePathname();
+  const t = useTranslations('Partner.nav');
 
   const linkClass = (href: string) => {
     const active = pathname === href;
@@ -65,7 +67,7 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
 
   return (
     <>
-      <aside className="hidden md:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-white border-r border-[var(--color-border)]">
+      <aside className="hidden md:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-[var(--color-background)] border-r border-[var(--color-border)]">
         <div className="px-4 py-5 border-b border-[var(--color-border)]">
           <p className="font-semibold text-[var(--color-forest)] truncate" title={orgName}>
             {orgName}
@@ -79,7 +81,7 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
           {NAV_ITEMS.map((item) => (
             <Link key={item.href} href={item.href} className={linkClass(item.href)}>
               {item.icon}
-              <span>{item.label}</span>
+              <span>{t(item.key)}</span>
             </Link>
           ))}
         </nav>
@@ -87,13 +89,13 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
         <div className="mt-auto px-3 py-4 border-t border-[var(--color-border)]">
           <form action={partnerLogout}>
             <button type="submit" className="text-sm text-[var(--color-muted)] underline">
-              Log out
+              {t('logout')}
             </button>
           </form>
         </div>
       </aside>
 
-      <div className="flex md:hidden items-center gap-1 overflow-x-auto border-b border-[var(--color-border)] bg-white px-3 py-2">
+      <div className="flex md:hidden items-center gap-1 overflow-x-auto border-b border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2">
         {NAV_ITEMS.map((item) => (
           <Link
             key={item.href}
@@ -104,7 +106,7 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
                 : 'text-[var(--color-muted)]'
             }`}
           >
-            {item.label}
+            {t(item.key)}
           </Link>
         ))}
       </div>

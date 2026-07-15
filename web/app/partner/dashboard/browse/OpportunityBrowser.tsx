@@ -1,41 +1,45 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
-import { buildPartnerShareMessage, buildBridgeLink } from '@/lib/partner-share-template';
+import { buildPartnerOpportunityMessage, buildBridgeLink } from '@/lib/partner-share-template';
 import { shareToWhatsApp, shareToFacebook, shareToLinkedIn, copyToClipboard } from '@/lib/share-actions';
 
 export interface BrowserOpportunity {
   id: string;
   title: string;
   organization: string;
+  description: string | null;
   category: string | null;
   deadline: string | null;
   country: string | null;
-}
-
-function formatDeadline(deadline: string | null): string {
-  if (!deadline) return 'Rolling';
-  const date = new Date(deadline);
-  if (Number.isNaN(date.getTime())) return 'Rolling';
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  location_type: string | null;
+  funding_type: string | null;
+  apply_url: string | null;
+  tags: string[] | null;
+  image_url: string | null;
 }
 
 export function OpportunityBrowser({
   opportunities,
-  orgName,
   refCode,
-  partnerSlug,
 }: {
   opportunities: BrowserOpportunity[];
-  orgName: string;
   refCode: string;
-  partnerSlug: string;
 }) {
+  const t = useTranslations('Partner.browse');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [deadlineBefore, setDeadlineBefore] = useState('');
   const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  function formatDeadline(deadline: string | null): string {
+    if (!deadline) return t('rolling');
+    const date = new Date(deadline);
+    if (Number.isNaN(date.getTime())) return t('rolling');
+    return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+  }
 
   const categories = useMemo(() => {
     const set = new Set<string>();
@@ -66,8 +70,23 @@ export function OpportunityBrowser({
   }, [opportunities, search, category, deadlineBefore]);
 
   function shareOpportunity(opp: BrowserOpportunity, channel: 'whatsapp' | 'facebook' | 'linkedin' | 'copy') {
-    const text = buildPartnerShareMessage(orgName, refCode, partnerSlug, [opp]);
-    const link = buildBridgeLink(opp.id, refCode);
+    const text = buildPartnerOpportunityMessage(
+      {
+        id: opp.id,
+        title: opp.title,
+        organization: opp.organization,
+        description: opp.description,
+        category: opp.category,
+        country: opp.country,
+        locationType: opp.location_type,
+        fundingType: opp.funding_type,
+        applyUrl: opp.apply_url,
+        tags: opp.tags ?? [],
+        deadline: opp.deadline,
+      },
+      refCode,
+    );
+    const link = opp.apply_url?.trim() || buildBridgeLink(opp.id, refCode);
 
     if (channel === 'whatsapp') shareToWhatsApp(text);
     else if (channel === 'facebook') shareToFacebook(link);
@@ -81,87 +100,130 @@ export function OpportunityBrowser({
 
   return (
     <div>
-      <div className="flex flex-wrap gap-3 mb-4">
+      <div className="flex flex-wrap items-center gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search title, organization, country..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
+          className="flex-1 min-w-[200px] rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm"
         />
-        <select
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-          className="rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
-        >
-          <option value="all">All categories</option>
-          {categories.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
         <label className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
-          Deadline before
+          {t('deadlineBefore')}
           <input
             type="date"
             value={deadlineBefore}
             onChange={(e) => setDeadlineBefore(e.target.value)}
-            className="rounded-md border border-[var(--color-border)] px-2 py-2 text-sm"
+            className="rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-2 py-2 text-sm"
           />
         </label>
       </div>
 
-      <div className="border border-[var(--color-border)] rounded-lg divide-y divide-[var(--color-border)] max-h-[560px] overflow-y-auto">
-        {filtered.length === 0 && (
-          <p className="p-4 text-sm text-[var(--color-muted)]">No opportunities match these filters.</p>
-        )}
-        {filtered.map((opp) => (
-          <div key={opp.id} className="flex flex-wrap items-center justify-between gap-3 p-3 text-sm">
-            <div className="flex-1 min-w-[200px]">
-              <span className="font-medium">{opp.title}</span>
-              <span className="block text-[var(--color-muted)]">
-                {opp.organization} · {formatDeadline(opp.deadline)}
-                {opp.category ? ` · ${opp.category}` : ''}
-              </span>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => shareOpportunity(opp, 'whatsapp')}
-                title="Share on WhatsApp"
-                className="rounded-md bg-[#25D366] text-white px-2.5 py-1.5 text-xs font-medium hover:opacity-90 transition"
-              >
-                WhatsApp
-              </button>
-              <button
-                type="button"
-                onClick={() => shareOpportunity(opp, 'facebook')}
-                title="Share on Facebook"
-                className="rounded-md bg-[#1877F2] text-white px-2.5 py-1.5 text-xs font-medium hover:opacity-90 transition"
-              >
-                Facebook
-              </button>
-              <button
-                type="button"
-                onClick={() => shareOpportunity(opp, 'linkedin')}
-                title="Share on LinkedIn"
-                className="rounded-md bg-[#0A66C2] text-white px-2.5 py-1.5 text-xs font-medium hover:opacity-90 transition"
-              >
-                LinkedIn
-              </button>
-              <button
-                type="button"
-                onClick={() => shareOpportunity(opp, 'copy')}
-                title="Copy share text"
-                className="rounded-md border border-[var(--color-border)] px-2.5 py-1.5 text-xs font-medium hover:bg-[var(--color-surface)] transition"
-              >
-                {copiedId === opp.id ? 'Copied' : 'Copy'}
-              </button>
-            </div>
-          </div>
+      <div className="flex flex-wrap gap-2 mb-6">
+        <button
+          type="button"
+          onClick={() => setCategory('all')}
+          className={`rounded-full px-3 py-1.5 text-xs font-medium border transition ${
+            category === 'all'
+              ? 'bg-[var(--color-forest)] border-[var(--color-forest)] text-white'
+              : 'border-[var(--color-border)] text-[var(--color-muted)] hover:bg-[var(--color-surface)]'
+          }`}
+        >
+          {t('allCategories')}
+        </button>
+        {categories.map((c) => (
+          <button
+            key={c}
+            type="button"
+            onClick={() => setCategory(c)}
+            className={`rounded-full px-3 py-1.5 text-xs font-medium border transition ${
+              category === c
+                ? 'bg-[var(--color-forest)] border-[var(--color-forest)] text-white'
+                : 'border-[var(--color-border)] text-[var(--color-muted)] hover:bg-[var(--color-surface)]'
+            }`}
+          >
+            {c}
+          </button>
         ))}
       </div>
+
+      {filtered.length === 0 ? (
+        <p className="text-sm text-[var(--color-muted)]">{t('empty')}</p>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {filtered.map((opp) => (
+            <div
+              key={opp.id}
+              className="rounded-xl border border-[var(--color-border)] bg-[var(--color-background)] overflow-hidden flex flex-col"
+            >
+              <div className="h-[120px] bg-[var(--color-surface)] shrink-0">
+                {opp.image_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={opp.image_url} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-[var(--color-forest)]">
+                    <span className="text-2xl font-bold text-white">{opp.organization.charAt(0)}</span>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-3 flex-1 flex flex-col gap-1">
+                <p className="text-sm font-semibold leading-snug line-clamp-2">{opp.title}</p>
+                <p className="text-xs text-[var(--color-muted)] truncate">{opp.organization}</p>
+                <p className="text-xs text-[var(--color-muted)]">{formatDeadline(opp.deadline)}</p>
+
+                {opp.tags && opp.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mt-1">
+                    {opp.tags.slice(0, 3).map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-[var(--color-surface)] text-[var(--color-muted)] text-[11px] px-2 py-0.5 truncate max-w-[120px]"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-1.5 mt-auto pt-2">
+                  <button
+                    type="button"
+                    onClick={() => shareOpportunity(opp, 'whatsapp')}
+                    title={t('shareWhatsappTitle')}
+                    className="rounded-md bg-[#25D366] text-white px-2 py-1 text-[11px] font-medium hover:opacity-90 transition"
+                  >
+                    {t('whatsapp')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => shareOpportunity(opp, 'facebook')}
+                    title={t('shareFacebookTitle')}
+                    className="rounded-md bg-[#1877F2] text-white px-2 py-1 text-[11px] font-medium hover:opacity-90 transition"
+                  >
+                    {t('facebook')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => shareOpportunity(opp, 'linkedin')}
+                    title={t('shareLinkedinTitle')}
+                    className="rounded-md bg-[#0A66C2] text-white px-2 py-1 text-[11px] font-medium hover:opacity-90 transition"
+                  >
+                    {t('linkedin')}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => shareOpportunity(opp, 'copy')}
+                    title={t('copyTitle')}
+                    className="rounded-md border border-[var(--color-border)] px-2 py-1 text-[11px] font-medium hover:bg-[var(--color-surface)] transition"
+                  >
+                    {copiedId === opp.id ? t('copied') : t('copy')}
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

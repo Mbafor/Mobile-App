@@ -528,5 +528,117 @@
         ]
       }
     ]
+  },
+  "Partner": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "digest": "Weekly Digest",
+      "browse": "Browse Opportunities",
+      "create": "Create Opportunity",
+      "logout": "Log out"
+    },
+    "header": {
+      "themeToggleToDark": "Switch to dark mode",
+      "themeToggleToLight": "Switch to light mode",
+      "languageToggleLabel": "Change language"
+    },
+    "dashboard": {
+      "subtitle": "Partner dashboard",
+      "postedOpportunities": "Your posted opportunities",
+      "shareTools": "Share tools"
+    },
+    "stats": {
+      "posted": "Opportunities posted",
+      "clicks": "Clicks driven"
+    },
+    "manage": {
+      "empty": "You haven't posted any opportunities yet.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone."
+    },
+    "share": {
+      "whatsapp": "Share on WhatsApp",
+      "facebook": "Share on Facebook",
+      "linkedin": "Share on LinkedIn",
+      "copy": "Copy to clipboard",
+      "copied": "Copied",
+      "unlockHint": "Post at least one opportunity to unlock share tools."
+    },
+    "browse": {
+      "title": "Browse Opportunities",
+      "subtitle": "Browse all active opportunities on Voila and share the ones relevant to your audience.",
+      "searchPlaceholder": "Search title, organization, country...",
+      "allCategories": "All categories",
+      "deadlineBefore": "Deadline before",
+      "empty": "No opportunities match these filters.",
+      "rolling": "Rolling",
+      "shareWhatsappTitle": "Share on WhatsApp",
+      "shareFacebookTitle": "Share on Facebook",
+      "shareLinkedinTitle": "Share on LinkedIn",
+      "copyTitle": "Copy share text",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Software Engineering Internship",
+      "organization": "Organization",
+      "organizationPlaceholder": "e.g. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "What is this opportunity about?",
+      "imageUrl": "Image URL",
+      "deadline": "Deadline",
+      "applyUrl": "Apply URL",
+      "classification": "Classification",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "tags": "Tags",
+      "selectTags": "Select tags",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      "fundingType": "Funding type",
+      "selectFundingType": "Select a funding type",
+      "degreeLevels": "Degree levels",
+      "selectDegreeLevels": "Select degree levels",
+      "locationType": "Location type",
+      "selectLocationType": "Select a location type",
+      "selectDefault": "Select..."
+    },
+    "create": {
+      "title": "Create Opportunity",
+      "subtitle": "Post your own opportunity directly to Voila. It goes live immediately for students and on your partner page.",
+      "submit": "Publish opportunity",
+      "pending": "Publishing...",
+      "success": "Published — visible to students now and live on your partner page."
+    },
+    "edit": {
+      "title": "Edit Opportunity",
+      "subtitle": "Changes go live immediately for students and on your partner page.",
+      "submit": "Save changes",
+      "pending": "Saving...",
+      "success": "Saved — your changes are live."
+    },
+    "digest": {
+      "title": "Weekly Digest",
+      "subtitle": "Curate your own set of opportunities to share as this week's digest.",
+      "helper": "Pick the opportunities you want to feature this week, then publish — they'll be bundled into a single shareable digest and added to your own posted opportunities.",
+      "published": "Published your digest of {count, plural, one {# opportunity} other {# opportunities}}.",
+      "searchPlaceholder": "Search title, organization, country...",
+      "allCategories": "All categories",
+      "deadlineBefore": "Deadline before",
+      "empty": "No opportunities match these filters.",
+      "rolling": "Rolling",
+      "preview": "Preview",
+      "previewPlaceholder": "Select opportunities above to preview this week's digest message.",
+      "publishing": "Publishing...",
+      "publishAs": "Publish {count} as this week's digest",
+      "previousDigests": "Your previous digests",
+      "opportunityCount": "{count, plural, one {# opportunity} other {# opportunities}}"
+    }
   }
 }

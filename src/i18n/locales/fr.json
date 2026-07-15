@@ -444,6 +444,7 @@
       "goBack": "Retour",
       "about": "À propos de cette opportunité",
       "noDescription": "Aucune description fournie pour cette opportunité.",
+      "postedBy": "Publié par {{name}}",
       "applyNow": "Postuler maintenant",
       "save": "Enregistrer",
       "saved": "✓ Enregistré",

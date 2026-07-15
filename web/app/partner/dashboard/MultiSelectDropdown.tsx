@@ -1,19 +1,24 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { useTranslations } from 'next-intl';
 
 export function MultiSelectDropdown({
   name,
   options,
-  placeholder = 'Select...',
+  placeholder,
+  defaultSelected = [],
 }: {
   name: string;
   options: { value: string; label: string }[];
   placeholder?: string;
+  defaultSelected?: string[];
 }) {
+  const t = useTranslations('Partner.form');
   const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<string[]>([]);
+  const [selected, setSelected] = useState<string[]>(defaultSelected);
   const containerRef = useRef<HTMLDivElement>(null);
+  const resolvedPlaceholder = placeholder ?? t('selectDefault');
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -39,9 +44,9 @@ export function MultiSelectDropdown({
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
-        className="w-full rounded-md border border-[var(--color-border)] bg-white px-3 py-2 text-sm text-left flex items-center justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+        className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm text-left flex items-center justify-between gap-2 focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
       >
-        <span className={`truncate ${summary ? '' : 'text-[var(--color-muted)]'}`}>{summary || placeholder}</span>
+        <span className={`truncate ${summary ? '' : 'text-[var(--color-muted)]'}`}>{summary || resolvedPlaceholder}</span>
         <svg
           viewBox="0 0 24 24"
           fill="none"
@@ -58,7 +63,7 @@ export function MultiSelectDropdown({
       {/* Real checkboxes stay mounted at all times (only visibility toggles) so the
           native form still collects checked values even while the panel is closed. */}
       <div
-        className={`absolute z-10 mt-1 w-full max-h-56 overflow-y-auto rounded-md border border-[var(--color-border)] bg-white p-2 shadow-lg space-y-0.5 ${
+        className={`absolute z-10 mt-1 w-full max-h-56 overflow-y-auto rounded-md border border-[var(--color-border)] bg-[var(--color-background)] p-2 shadow-lg space-y-0.5 ${
           open ? 'block' : 'hidden'
         }`}
       >

@@ -528,5 +528,117 @@
         ]
       }
     ]
+  },
+  "Partner": {
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "digest": "Résumé hebdomadaire",
+      "browse": "Parcourir les opportunités",
+      "create": "Créer une opportunité",
+      "logout": "Déconnexion"
+    },
+    "header": {
+      "themeToggleToDark": "Passer en mode sombre",
+      "themeToggleToLight": "Passer en mode clair",
+      "languageToggleLabel": "Changer de langue"
+    },
+    "dashboard": {
+      "subtitle": "Tableau de bord partenaire",
+      "postedOpportunities": "Vos opportunités publiées",
+      "shareTools": "Outils de partage"
+    },
+    "stats": {
+      "posted": "Opportunités publiées",
+      "clicks": "Clics générés"
+    },
+    "manage": {
+      "empty": "Vous n'avez pas encore publié d'opportunités.",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "confirmDelete": "Supprimer « {title} » ? Cela la retire de Voila pour tout le monde et cette action est irréversible."
+    },
+    "share": {
+      "whatsapp": "Partager sur WhatsApp",
+      "facebook": "Partager sur Facebook",
+      "linkedin": "Partager sur LinkedIn",
+      "copy": "Copier dans le presse-papiers",
+      "copied": "Copié",
+      "unlockHint": "Publiez au moins une opportunité pour débloquer les outils de partage."
+    },
+    "browse": {
+      "title": "Parcourir les opportunités",
+      "subtitle": "Parcourez toutes les opportunités actives sur Voila et partagez celles qui intéressent votre audience.",
+      "searchPlaceholder": "Rechercher un titre, une organisation, un pays...",
+      "allCategories": "Toutes les catégories",
+      "deadlineBefore": "Échéance avant le",
+      "empty": "Aucune opportunité ne correspond à ces filtres.",
+      "rolling": "Continue",
+      "shareWhatsappTitle": "Partager sur WhatsApp",
+      "shareFacebookTitle": "Partager sur Facebook",
+      "shareLinkedinTitle": "Partager sur LinkedIn",
+      "copyTitle": "Copier le texte de partage",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Stage en ingénierie logicielle",
+      "organization": "Organisation",
+      "organizationPlaceholder": "ex. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "En quoi consiste cette opportunité ?",
+      "imageUrl": "URL de l'image",
+      "deadline": "Échéance",
+      "applyUrl": "URL de candidature",
+      "classification": "Classification",
+      "category": "Catégorie",
+      "selectCategory": "Sélectionnez une catégorie",
+      "tags": "Étiquettes",
+      "selectTags": "Sélectionnez des étiquettes",
+      "country": "Pays",
+      "selectCountry": "Sélectionnez un pays",
+      "fundingType": "Type de financement",
+      "selectFundingType": "Sélectionnez un type de financement",
+      "degreeLevels": "Niveaux de diplôme",
+      "selectDegreeLevels": "Sélectionnez des niveaux de diplôme",
+      "locationType": "Type de lieu",
+      "selectLocationType": "Sélectionnez un type de lieu",
+      "selectDefault": "Sélectionner..."
+    },
+    "create": {
+      "title": "Créer une opportunité",
+      "subtitle": "Publiez votre propre opportunité directement sur Voila. Elle est visible immédiatement pour les étudiants et sur votre page partenaire.",
+      "submit": "Publier l'opportunité",
+      "pending": "Publication...",
+      "success": "Publié — visible pour les étudiants dès maintenant et sur votre page partenaire."
+    },
+    "edit": {
+      "title": "Modifier l'opportunité",
+      "subtitle": "Les modifications sont visibles immédiatement pour les étudiants et sur votre page partenaire.",
+      "submit": "Enregistrer les modifications",
+      "pending": "Enregistrement...",
+      "success": "Enregistré — vos modifications sont en ligne."
+    },
+    "digest": {
+      "title": "Résumé hebdomadaire",
+      "subtitle": "Sélectionnez vos propres opportunités à partager comme résumé de la semaine.",
+      "helper": "Choisissez les opportunités à mettre en avant cette semaine, puis publiez — elles seront regroupées en un seul message partageable et ajoutées à vos opportunités publiées.",
+      "published": "Résumé publié avec {count, plural, one {# opportunité} other {# opportunités}}.",
+      "searchPlaceholder": "Rechercher un titre, une organisation, un pays...",
+      "allCategories": "Toutes les catégories",
+      "deadlineBefore": "Échéance avant le",
+      "empty": "Aucune opportunité ne correspond à ces filtres.",
+      "rolling": "Continue",
+      "preview": "Aperçu",
+      "previewPlaceholder": "Sélectionnez des opportunités ci-dessus pour prévisualiser le message du résumé de cette semaine.",
+      "publishing": "Publication...",
+      "publishAs": "Publier {count} comme résumé de cette semaine",
+      "previousDigests": "Vos résumés précédents",
+      "opportunityCount": "{count, plural, one {# opportunité} other {# opportunités}}"
+    }
   }
 }

@@ -12,7 +12,7 @@ import startImage from '@/assets/images/start.jpg';
 
 import { ResponsiveContainer } from '@/components/layout';
 import { Button, Text, Input } from '@/components/ui';
-import { AuthDivider } from '@/features/auth/components';
+import { AuthDivider, LanguageQuickSwitch } from '@/features/auth/components';
 import { FormField } from '@/components/forms';
 import { useAuthActions } from '@/features/auth/hooks/useAuthActions';
 import { useAuthRedirect } from '@/features/auth/hooks/useAuthRedirect';
@@ -244,6 +244,8 @@ export function WelcomeScreen() {
       </Pressable>
     </View>
   );
+
+  const languageQuickSwitch = <LanguageQuickSwitch />;
 
   const legalLinksRow = (
     <Text style={styles.legalText}>
@@ -499,6 +501,7 @@ export function WelcomeScreen() {
           <View style={[styles.panel, { paddingBottom: insets.bottom + spacing.xl }]}>
             <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
               <View style={styles.panelContent}>
+                {languageQuickSwitch}
                 {tabSwitcher}
 
                 <Text style={styles.panelTitle}>{panelTitle}</Text>
@@ -562,6 +565,7 @@ export function WelcomeScreen() {
         <View style={[styles.panel, { paddingBottom: spacing.xl }]}>
           <ResponsiveContainer maxWidth={980} minHorizontalPadding={spacing.lg}>
             <View style={styles.panelContent}>
+              {languageQuickSwitch}
               {tabSwitcher}
 
               <Text style={styles.panelTitle}>{panelTitle}</Text>
@@ -610,6 +614,7 @@ export function WelcomeScreen() {
             paddingBottom: insets.bottom + spacing.xl,
           }]}>
             <View style={styles.authFormContent}>
+              {languageQuickSwitch}
               {tabSwitcher}
 
               <Text style={styles.authTitle}>{panelTitle}</Text>

@@ -1,11 +1,12 @@
+import { getTranslations } from 'next-intl/server';
+
 import { requirePartnerSession } from '@/lib/partner-session';
 import { createPartnerClient } from '@/lib/supabase-server';
-import { PartnerDigestBuilder, type PastDigestGroup } from './PartnerDigestBuilder';
+import { PartnerDigestBuilder, type PastDigestGroup, type DigestCandidateOpportunity } from './PartnerDigestBuilder';
 import type { ShareableOpportunity } from '@/lib/partner-share-template';
-import type { BrowserOpportunity } from '../browse/OpportunityBrowser';
 
 export default async function PartnerDigestPage() {
-  const session = await requirePartnerSession();
+  const [session, t] = await Promise.all([requirePartnerSession(), getTranslations('Partner.digest')]);
   const client = createPartnerClient(session.accessToken);
 
   const [opportunitiesRes, postsRes] = await Promise.all([
@@ -20,7 +21,7 @@ export default async function PartnerDigestPage() {
       .order('posted_at', { ascending: false }),
   ]);
 
-  const opportunities: BrowserOpportunity[] = opportunitiesRes.data ?? [];
+  const opportunities: DigestCandidateOpportunity[] = opportunitiesRes.data ?? [];
 
   type PostRow = {
     digest_slug: string | null;
@@ -49,12 +50,10 @@ export default async function PartnerDigestPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold text-[var(--color-forest)] mb-1">Weekly Digest</h1>
-      <p className="text-sm text-[var(--color-muted)] mb-6">
-        Curate your own set of opportunities to share as this week&apos;s digest.
-      </p>
+      <h1 className="text-2xl font-semibold text-[var(--color-forest)] mb-1">{t('title')}</h1>
+      <p className="text-sm text-[var(--color-muted)] mb-6">{t('subtitle')}</p>
 
-      <section className="bg-white rounded-lg border border-[var(--color-border)] p-4">
+      <section className="bg-[var(--color-background)] rounded-lg border border-[var(--color-border)] p-4">
         <PartnerDigestBuilder
           opportunities={opportunities}
           pastDigests={pastDigests}

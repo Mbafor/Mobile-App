@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { partnerLogin } from './actions';
 
 const ERROR_MESSAGES: Record<string, string> = {
@@ -58,6 +60,25 @@ export default async function PartnerLoginPage({
             Sign in
           </button>
         </form>
+
+        <p className="mt-6 text-sm text-[var(--color-muted)] text-center">
+          Don&apos;t have an account?{' '}
+          <Link href="/partner/signup" className="text-[var(--color-forest)] font-medium hover:underline">
+            Create one
+          </Link>
+        </p>
+
+        <p className="mt-4 text-xs text-[var(--color-muted)] text-center">
+          By signing in you agree to our{' '}
+          <Link href="/terms" className="underline hover:text-[var(--color-forest)]">
+            Terms of Service
+          </Link>{' '}
+          and{' '}
+          <Link href="/privacy" className="underline hover:text-[var(--color-forest)]">
+            Privacy Policy
+          </Link>
+          .
+        </p>
       </div>
     </main>
   );

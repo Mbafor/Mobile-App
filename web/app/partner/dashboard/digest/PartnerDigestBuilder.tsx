@@ -1,11 +1,11 @@
 'use client';
 
 import { useMemo, useState, useTransition } from 'react';
+import { useTranslations } from 'next-intl';
 
 import { buildPartnerShareMessage, buildPartnerPageLink, type ShareableOpportunity } from '@/lib/partner-share-template';
 import { ShareButtonRow } from '../ShareButtonRow';
 import { publishPartnerDigest } from '../actions';
-import type { BrowserOpportunity } from '../browse/OpportunityBrowser';
 
 export interface PastDigestGroup {
   slug: string;
@@ -13,10 +13,19 @@ export interface PastDigestGroup {
   opportunities: ShareableOpportunity[];
 }
 
-function formatDeadline(deadline: string | null): string {
-  if (!deadline) return 'Rolling';
+export interface DigestCandidateOpportunity {
+  id: string;
+  title: string;
+  organization: string;
+  category: string | null;
+  deadline: string | null;
+  country: string | null;
+}
+
+function formatDeadline(deadline: string | null, rollingLabel: string): string {
+  if (!deadline) return rollingLabel;
   const date = new Date(deadline);
-  if (Number.isNaN(date.getTime())) return 'Rolling';
+  if (Number.isNaN(date.getTime())) return rollingLabel;
   return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 }
 
@@ -27,12 +36,13 @@ export function PartnerDigestBuilder({
   refCode,
   partnerSlug,
 }: {
-  opportunities: BrowserOpportunity[];
+  opportunities: DigestCandidateOpportunity[];
   pastDigests: PastDigestGroup[];
   orgName: string;
   refCode: string;
   partnerSlug: string;
 }) {
+  const t = useTranslations('Partner.digest');
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState('all');
   const [deadlineBefore, setDeadlineBefore] = useState('');
@@ -108,15 +118,12 @@ export function PartnerDigestBuilder({
 
   return (
     <div>
-      <p className="text-sm text-[var(--color-muted)] mb-4">
-        Pick the opportunities you want to feature this week, then publish -- they&apos;ll be bundled into a single
-        shareable digest and added to your own posted opportunities.
-      </p>
+      <p className="text-sm text-[var(--color-muted)] mb-4">{t('helper')}</p>
 
       {justPublished ? (
         <div className="mb-6 rounded-lg border border-[var(--color-forest)]/30 bg-[var(--color-forest)]/10 p-4">
           <p className="text-sm text-[var(--color-forest)] font-medium mb-3">
-            Published your digest of {justPublished.length} opportunit{justPublished.length === 1 ? 'y' : 'ies'}.
+            {t('published', { count: justPublished.length })}
           </p>
           <ShareButtonRow
             text={buildPartnerShareMessage(orgName, refCode, partnerSlug, justPublished)}
@@ -128,17 +135,17 @@ export function PartnerDigestBuilder({
       <div className="flex flex-wrap gap-3 mb-4">
         <input
           type="text"
-          placeholder="Search title, organization, country..."
+          placeholder={t('searchPlaceholder')}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="flex-1 min-w-[200px] rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
+          className="flex-1 min-w-[200px] rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm"
         />
         <select
           value={category}
           onChange={(e) => setCategory(e.target.value)}
-          className="rounded-md border border-[var(--color-border)] px-3 py-2 text-sm"
+          className="rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm"
         >
-          <option value="all">All categories</option>
+          <option value="all">{t('allCategories')}</option>
           {categories.map((c) => (
             <option key={c} value={c}>
               {c}
@@ -146,19 +153,19 @@ export function PartnerDigestBuilder({
           ))}
         </select>
         <label className="flex items-center gap-2 text-sm text-[var(--color-muted)]">
-          Deadline before
+          {t('deadlineBefore')}
           <input
             type="date"
             value={deadlineBefore}
             onChange={(e) => setDeadlineBefore(e.target.value)}
-            className="rounded-md border border-[var(--color-border)] px-2 py-2 text-sm"
+            className="rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-2 py-2 text-sm"
           />
         </label>
       </div>
 
       <div className="border border-[var(--color-border)] rounded-lg divide-y divide-[var(--color-border)] max-h-[420px] overflow-y-auto mb-4">
         {filtered.length === 0 && (
-          <p className="p-4 text-sm text-[var(--color-muted)]">No opportunities match these filters.</p>
+          <p className="p-4 text-sm text-[var(--color-muted)]">{t('empty')}</p>
         )}
         {filtered.map((opp) => (
           <label key={opp.id} className="flex items-start gap-3 p-3 text-sm cursor-pointer">
@@ -166,7 +173,7 @@ export function PartnerDigestBuilder({
             <span className="flex-1">
               <span className="font-medium">{opp.title}</span>
               <span className="block text-[var(--color-muted)]">
-                {opp.organization} · {formatDeadline(opp.deadline)}
+                {opp.organization} · {formatDeadline(opp.deadline, t('rolling'))}
                 {opp.category ? ` · ${opp.category}` : ''}
               </span>
             </span>
@@ -175,10 +182,10 @@ export function PartnerDigestBuilder({
       </div>
 
       <div className="mb-4">
-        <p className="text-sm font-semibold mb-2">Preview</p>
+        <p className="text-sm font-semibold mb-2">{t('preview')}</p>
         <div className="rounded-lg border border-[var(--color-border)] bg-[var(--color-surface)] p-3 max-h-64 overflow-y-auto">
           <pre className="text-sm whitespace-pre-wrap font-sans">
-            {previewText || 'Select opportunities above to preview this week’s digest message.'}
+            {previewText || t('previewPlaceholder')}
           </pre>
         </div>
       </div>
@@ -189,12 +196,12 @@ export function PartnerDigestBuilder({
         disabled={selected.size === 0 || isPending}
         className="rounded-md bg-[var(--color-forest)] text-white px-4 py-2 text-sm font-medium disabled:opacity-50 hover:opacity-90 transition"
       >
-        {isPending ? 'Publishing...' : `Publish ${selected.size || ''} as this week's digest`.trim()}
+        {isPending ? t('publishing') : t('publishAs', { count: selected.size })}
       </button>
 
       {pastDigests.length > 0 && (
         <div className="mt-8">
-          <h3 className="text-sm font-semibold mb-3">Your previous digests</h3>
+          <h3 className="text-sm font-semibold mb-3">{t('previousDigests')}</h3>
           <div className="space-y-4">
             {pastDigests.map((group) => (
               <div key={group.slug} className="rounded-lg border border-[var(--color-border)] p-4">
@@ -204,7 +211,7 @@ export function PartnerDigestBuilder({
                     month: 'short',
                     day: 'numeric',
                   })}{' '}
-                  · {group.opportunities.length} opportunit{group.opportunities.length === 1 ? 'y' : 'ies'}
+                  · {t('opportunityCount', { count: group.opportunities.length })}
                 </p>
                 <ul className="text-sm mb-3 list-disc list-inside">
                   {group.opportunities.map((opp) => (

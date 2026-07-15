@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { buildPartnerShareMessage, buildPartnerPageLink, type ShareableOpportunity } from '@/lib/partner-share-template';
 import { ShareButtonRow } from './ShareButtonRow';
 
@@ -14,10 +16,12 @@ export function ShareTools({
   partnerSlug: string;
   posts: ShareableOpportunity[];
 }) {
+  const t = useTranslations('Partner.share');
+
   if (posts.length === 0) {
     return (
       <p className="text-sm text-[var(--color-muted)]">
-        Post at least one opportunity to unlock share tools.
+        {t('unlockHint')}
       </p>
     );
   }

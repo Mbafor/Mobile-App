@@ -1,6 +1,7 @@
 import * as FileSystem from 'expo-file-system/legacy';
 import { Platform, Share } from 'react-native';
 
+import { env } from '@/config/env';
 import { buildOpportunityWebLink } from '@/features/opportunities/utils/opportunity-share-link';
 import { formatDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
@@ -93,18 +94,22 @@ export function buildShareMessage(opportunity: Opportunity, opportunityLink: str
     lines.push(snippet);
   }
 
-  // ── Tags ───────────────────────────────────────────────────────────────────
+  // ── CTA: apply directly, then browse more ─────────────────────────────────
+  const applyLink = opportunity.applyUrl?.trim() || opportunityLink;
+  lines.push('');
+  lines.push('👉 *Apply directly:*');
+  lines.push(applyLink);
+  lines.push('');
+  lines.push('🔎 *Find more opportunities:*');
+  lines.push(env.LANDING_URL.replace(/\/$/, ''));
+  lines.push('');
+  lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
+
+  // ── Tags (always last) ─────────────────────────────────────────────────────
   if (opportunity.tags.length > 0) {
     lines.push('');
     lines.push(`🔖 ${opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  ')}`);
   }
-
-  // ── CTA ────────────────────────────────────────────────────────────────────
-  lines.push('');
-  lines.push('👉 *View & Apply:*');
-  lines.push(opportunityLink);
-  lines.push('');
-  lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
 
   return lines.join('\n');
 }

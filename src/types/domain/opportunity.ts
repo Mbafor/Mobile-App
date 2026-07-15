@@ -19,6 +19,7 @@ export type Opportunity = {
   source: string | null;
   createdAt: string;
   updatedAt: string;
+  postedBy: { name: string; kind: 'partner' | 'admin' | 'superadmin' } | null;
 };
 
 export type DeadlineRangeFilter = 'any' | '7d' | '14d' | '30d' | '90d';

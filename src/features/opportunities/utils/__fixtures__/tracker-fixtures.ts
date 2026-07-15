@@ -22,6 +22,7 @@ export function makeOpportunity(overrides: Partial<Opportunity> = {}): Opportuni
     source: null,
     createdAt: '2026-01-01T00:00:00.000Z',
     updatedAt: '2026-01-01T00:00:00.000Z',
+    postedBy: null,
     ...overrides,
   };
 }

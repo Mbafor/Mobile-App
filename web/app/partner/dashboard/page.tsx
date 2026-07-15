@@ -1,11 +1,14 @@
+import { getTranslations } from 'next-intl/server';
+
 import { requirePartnerSession } from '@/lib/partner-session';
 import { createPartnerClient } from '@/lib/supabase-server';
 import { StatsPanel } from './StatsPanel';
 import { ShareTools } from './ShareTools';
+import { ManageOpportunitiesList } from './ManageOpportunitiesList';
 import type { ShareableOpportunity } from '@/lib/partner-share-template';
 
 export default async function PartnerDashboardPage() {
-  const session = await requirePartnerSession();
+  const [session, t] = await Promise.all([requirePartnerSession(), getTranslations('Partner.dashboard')]);
   const client = createPartnerClient(session.accessToken);
 
   const [postsRes, postsCountRes, clicksCountRes] = await Promise.all([
@@ -29,13 +32,18 @@ export default async function PartnerDashboardPage() {
     <div>
       <div className="mb-6">
         <h1 className="text-2xl font-semibold text-[var(--color-forest)]">{session.partner.org_name}</h1>
-        <p className="text-sm text-[var(--color-muted)]">Partner dashboard</p>
+        <p className="text-sm text-[var(--color-muted)]">{t('subtitle')}</p>
       </div>
 
       <StatsPanel postsCount={postsCountRes.count ?? 0} clicksCount={clicksCountRes.count ?? 0} />
 
-      <section className="bg-white rounded-lg border border-[var(--color-border)] p-4">
-        <h2 className="text-lg font-medium mb-3">Your posted opportunities</h2>
+      <section className="bg-[var(--color-background)] rounded-lg border border-[var(--color-border)] p-4 mb-6">
+        <h2 className="text-lg font-medium mb-3">{t('postedOpportunities')}</h2>
+        <ManageOpportunitiesList opportunities={postedOpportunities} />
+      </section>
+
+      <section className="bg-[var(--color-background)] rounded-lg border border-[var(--color-border)] p-4">
+        <h2 className="text-lg font-medium mb-3">{t('shareTools')}</h2>
         <ShareTools
           orgName={session.partner.org_name}
           refCode={session.partner.ref_code}

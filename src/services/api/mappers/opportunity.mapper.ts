@@ -23,5 +23,6 @@ export function mapOpportunityRow(row: OpportunityRow): Opportunity {
     source: row.source ?? null,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    postedBy: null,
   };
 }

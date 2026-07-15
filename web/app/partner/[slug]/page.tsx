@@ -1,13 +1,12 @@
 import { notFound } from 'next/navigation';
 
 import { createServiceRoleClient } from '@/lib/supabase-server';
-
-const RESERVED_SLUGS = new Set(['login', 'dashboard', 'logout', 'api']);
+import { RESERVED_PARTNER_SLUGS } from '@/lib/partner-slugs';
 
 export default async function PublicPartnerPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
 
-  if (RESERVED_SLUGS.has(slug)) notFound();
+  if (RESERVED_PARTNER_SLUGS.has(slug)) notFound();
 
   const supabase = createServiceRoleClient();
 

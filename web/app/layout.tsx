@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
+import { cookies } from "next/headers";
+
+import { isSupportedTheme, THEME_COOKIE } from "@/theme/theme";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -77,11 +80,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
-  const locale = await getLocale();
-  const messages = await getMessages();
+  const [locale, messages, cookieStore] = await Promise.all([getLocale(), getMessages(), cookies()]);
+  const cookieTheme = cookieStore.get(THEME_COOKIE)?.value;
+  const isDark = isSupportedTheme(cookieTheme) && cookieTheme === "dark";
 
   return (
-    <html lang={locale} className={inter.variable}>
+    <html lang={locale} className={`${inter.variable}${isDark ? " dark" : ""}`}>
       <body className="font-sans antialiased bg-white text-[#1A1A1A] min-h-screen">
         <NextIntlClientProvider locale={locale} messages={messages}>
           {children}
