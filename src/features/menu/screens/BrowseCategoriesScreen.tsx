@@ -139,6 +139,8 @@ export function BrowseCategoriesScreen() {
   const renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
+        <Text style={styles.introTitle}>{t('menu.browse.introTitle')}</Text>
+        <Text style={styles.introBody}>{t('menu.browse.introBody')}</Text>
         <Text style={styles.discoverLabel}>{t('menu.browse.focusArea')}</Text>
         <View style={styles.grid}>
           {BROWSE_CATEGORY_LIST.map((category, i) => {
@@ -396,6 +398,19 @@ function createStyles(colors: ColorScheme) {
   // Header Categories Styles
   headerContainer: {
     marginBottom: spacing.lg,
+  },
+  introTitle: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: colors.text,
+    letterSpacing: -0.3,
+    marginBottom: 4,
+  },
+  introBody: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: colors.textMuted,
+    marginBottom: spacing.md,
   },
   discoverLabel: {
     fontSize: typography.fontSize.sm,

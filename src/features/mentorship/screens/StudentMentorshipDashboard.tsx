@@ -328,6 +328,13 @@ export function StudentMentorshipDashboard() {
       onRefresh={() => void refetch()}
       scrollable={!isFullHeightSection}
       fillWidth={activeSection === 'browse'}
+      headerExtra={
+        activeSection === 'dashboard' ? (
+          <Text muted style={styles.introBody}>
+            {t('mentorship.student.dashboardIntro')}
+          </Text>
+        ) : undefined
+      }
     >
       {renderSection()}
     </MentorshipShell>
@@ -338,6 +345,7 @@ function createStyles(theme: AppTheme) {
   const { colors, mentorshipColors, cvDocsTheme } = theme;
   return StyleSheet.create({
   centered: { flex: 1, justifyContent: 'center', padding: spacing.lg, gap: spacing.md },
+  introBody: { fontSize: 14, lineHeight: 20, marginTop: 4 },
   sectionBody: { gap: spacing.md },
   leaveSection: {
     marginTop: spacing.md,

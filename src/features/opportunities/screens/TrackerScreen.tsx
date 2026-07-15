@@ -209,6 +209,11 @@ export function TrackerScreen() {
 
   return (
     <View style={styles.container}>
+      <View style={styles.intro}>
+        <Text style={styles.introTitle}>{t('opportunities.tracker.intro.title')}</Text>
+        <Text style={styles.introBody}>{t('opportunities.tracker.intro.body')}</Text>
+      </View>
+
       {error ? (
         <View style={styles.banner}>
           <ErrorMessage
@@ -300,6 +305,9 @@ function createStyles(colors: ColorScheme) {
     paddingTop: spacing.sm,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
+  intro: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: 4 },
+  introTitle: { fontSize: 22, fontWeight: '700', color: colors.text, letterSpacing: -0.3 },
+  introBody: { fontSize: 14, lineHeight: 20, color: colors.textMuted },
   banner: { padding: spacing.md },
   searchWrap: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
   searchFieldDesktop: { maxWidth: 360 },

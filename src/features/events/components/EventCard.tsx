@@ -11,7 +11,6 @@ import { spacing, typography } from '@/constants/theme';
 import { formatEventDateTime } from '@/utils/formatting';
 import type { Event } from '@/types/domain/event';
 
-const CARD_WIDTH = 280;
 const IMAGE_HEIGHT = 140;
 
 type EventCardProps = {
@@ -76,18 +75,14 @@ function EventCardComponent({ event, onPress, style }: EventCardProps) {
 
 export const EventCard = memo(EventCardComponent);
 
-export const EVENT_CARD_WIDTH = CARD_WIDTH;
-
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     card: {
-      width: CARD_WIDTH,
       backgroundColor: colors.background,
       borderRadius: 12,
       borderWidth: 1,
       borderColor: colors.border,
       overflow: 'hidden',
-      marginRight: spacing.md,
     },
     imageWrap: { backgroundColor: colors.surface },
     image: { width: '100%', height: IMAGE_HEIGHT },

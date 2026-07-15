@@ -76,10 +76,16 @@ export function EventListScreen() {
   );
 
   const numColumns = isDesktop ? 4 : 1;
+  const cardStyle = numColumns > 1 ? styles.cardInGrid : styles.cardFullWidth;
 
   return (
     <View style={styles.container}>
       <View style={styles.pageContent}>
+        <View style={styles.intro}>
+          <Text style={styles.introTitle}>{t('events.intro.title')}</Text>
+          <Text style={styles.introBody}>{t('events.intro.body')}</Text>
+        </View>
+
         {searchOpen ? (
           <SearchField
             value={query}
@@ -129,7 +135,7 @@ export function EventListScreen() {
             columnWrapperStyle={numColumns > 1 ? styles.row : undefined}
             contentContainerStyle={styles.list}
             renderItem={({ item }) => (
-              <EventCard event={item} onPress={handleCardPress} style={styles.cardInGrid} />
+              <EventCard event={item} onPress={handleCardPress} style={cardStyle} />
             )}
           />
         )}
@@ -142,6 +148,9 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     pageContent: { flex: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
+    intro: { marginBottom: spacing.md, gap: 4 },
+    introTitle: { fontSize: 22, fontWeight: '700', color: colors.text, letterSpacing: -0.3 },
+    introBody: { fontSize: 14, lineHeight: 20, color: colors.textMuted },
     searchField: { marginBottom: spacing.sm },
     searchFieldDesktop: { maxWidth: 360 },
     filterRow: {
@@ -172,6 +181,7 @@ function createStyles(colors: ColorScheme) {
     spinner: { marginTop: spacing.xl },
     list: { paddingBottom: spacing.xl },
     row: { justifyContent: 'flex-start', gap: spacing.md },
-    cardInGrid: { width: undefined, flex: 1, marginRight: 0, marginBottom: spacing.md },
+    cardInGrid: { flex: 1, marginBottom: spacing.md },
+    cardFullWidth: { width: '100%', marginBottom: spacing.md },
   });
 }

@@ -466,6 +466,10 @@
       }
     },
     "tracker": {
+      "intro": {
+        "title": "Stay on top of every application",
+        "body": "Keep every scholarship and opportunity you're pursuing in one place. Move each one through Saved, Applied, Interview, and Offer as things progress, and we'll flag it if one's gone quiet for a while."
+      },
       "searchPlaceholder": "Search Tracker",
       "searchCancel": "Cancel",
       "searchRecentSearches": "Recent searches",
@@ -509,6 +513,10 @@
     }
   },
   "events": {
+    "intro": {
+      "title": "Events that move your career forward",
+      "body": "Scholarship webinars, workshops, meetups, and online sessions — all in one place to help you learn, connect, and grow your opportunities."
+    },
     "common": {
       "virtual": "Virtual",
       "inPerson": "In person"
@@ -748,6 +756,8 @@
       "shareErrorMessage": "Please try again."
     },
     "browse": {
+      "introTitle": "Find your next opportunity",
+      "introBody": "Scholarships, fellowships, internships, and more — organized by focus area so you can zero in on what actually fits your goals.",
       "focusArea": "Find opportunities by focus area",
       "allActive": "All active opportunities"
     },
@@ -908,6 +918,7 @@
       "cancelSessionTitle": "Cancel session",
       "cancelSessionMessage": "Cancel this session?",
       "cancelErrorTitle": "Cannot cancel",
+      "dashboardIntro": "Get matched with a coach who's been where you're headed. They'll help you plan your applications, prep for interviews, and stay accountable.",
       "requestCoach": "Request a Coach",
       "leaveHint": "End your current mentorship. You may request a new coach later.",
       "leave": "Leave mentorship",

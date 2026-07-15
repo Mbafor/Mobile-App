@@ -490,6 +490,10 @@
       }
     },
     "tracker": {
+      "intro": {
+        "title": "Gardez le contrôle de chaque candidature",
+        "body": "Regroupez ici toutes les bourses et opportunités que vous poursuivez. Faites avancer chacune à travers Enregistrée, Postulée, Entretien et Offre au fil du temps, et nous vous signalerons celles qui stagnent depuis un moment."
+      },
       "searchPlaceholder": "Rechercher dans le suivi",
       "searchCancel": "Annuler",
       "searchRecentSearches": "Recherches récentes",
@@ -533,6 +537,10 @@
     }
   },
   "events": {
+    "intro": {
+      "title": "Des événements pour faire avancer votre carrière",
+      "body": "Webinaires sur les bourses, ateliers, rencontres et sessions en ligne — tout au même endroit pour apprendre, échanger et développer vos opportunités."
+    },
     "common": {
       "virtual": "Virtuel",
       "inPerson": "En personne"
@@ -772,6 +780,8 @@
       "shareErrorMessage": "Veuillez réessayer."
     },
     "browse": {
+      "introTitle": "Trouvez votre prochaine opportunité",
+      "introBody": "Bourses, fellowships, stages et bien plus — organisés par domaine pour vous aider à repérer rapidement ce qui correspond vraiment à vos objectifs.",
       "focusArea": "Trouvez des opportunités par domaine",
       "allActive": "Toutes les opportunités actives"
     },
@@ -932,6 +942,7 @@
       "cancelSessionTitle": "Annuler la séance",
       "cancelSessionMessage": "Annuler cette séance ?",
       "cancelErrorTitle": "Annulation impossible",
+      "dashboardIntro": "Soyez mis en relation avec un coach qui est déjà passé par là où vous allez. Il vous aidera à planifier vos candidatures, à préparer vos entretiens et à rester motivé.",
       "requestCoach": "Demander un coach",
       "leaveHint": "Mettez fin à votre mentorat actuel. Vous pourrez demander un nouveau coach plus tard.",
       "leave": "Quitter le mentorat",
