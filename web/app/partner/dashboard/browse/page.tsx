@@ -13,7 +13,8 @@ export default async function PartnerBrowsePage() {
     .select(
       'id, title, organization, description, category, deadline, country, location_type, funding_type, apply_url, tags, image_url',
     )
-    .order('deadline', { ascending: true, nullsFirst: false });
+    .order('deadline', { ascending: true, nullsFirst: false })
+    .limit(100);
 
   const opportunities: BrowserOpportunity[] = data ?? [];
 

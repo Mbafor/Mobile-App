@@ -7,7 +7,7 @@ import { useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { usePathname, useRouter, type Href } from 'expo-router';
 
-import { Text } from '@/components/ui';
+import { LanguageQuickSwitch, Text, ThemeQuickSwitch } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
@@ -306,6 +306,11 @@ export function DesktopSidebar() {
           <Ionicons name="chevron-down" size={13} color={colors.textMuted} />
         </Pressable>
       </View>
+
+      <View style={styles.quickSwitchRow}>
+        <ThemeQuickSwitch compact={collapsed} />
+        <LanguageQuickSwitch compact={collapsed} />
+      </View>
     </View>
   );
 }
@@ -415,6 +420,17 @@ function createStyles(colors: ColorScheme) {
   itemLabelActive: {
     color: colors.primary,
     fontWeight: '600',
+  },
+  // ── Theme / language quick switches ─────────────────────────────────────
+  quickSwitchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.xs,
+    paddingVertical: spacing.xs + 2,
+    paddingBottom: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
   // ── Scroll buttons ────────────────────────────────────────────────────────
   scrollButtons: {

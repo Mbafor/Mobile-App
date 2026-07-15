@@ -159,7 +159,7 @@ export function OpportunityBrowser({
               <div className="h-[120px] bg-[var(--color-surface)] shrink-0">
                 {opp.image_url ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={opp.image_url} alt="" className="w-full h-full object-cover" />
+                  <img src={opp.image_url} alt="" loading="lazy" className="w-full h-full object-cover" />
                 ) : (
                   <div className="w-full h-full flex items-center justify-center bg-[var(--color-forest)]">
                     <span className="text-2xl font-bold text-white">{opp.organization.charAt(0)}</span>

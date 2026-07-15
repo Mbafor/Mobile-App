@@ -1,3 +1,4 @@
+import { cache } from 'react';
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 
@@ -47,8 +48,14 @@ export async function clearSessionCookies() {
  * attempts a one-off in-memory refresh (via the refresh token cookie) so the
  * current request still succeeds; the refreshed cookie is only persisted if
  * the caller is a Server Action/Route Handler (see requirePartnerSession callers).
+ *
+ * Cached per-request via React's `cache()` -- the layout and every page call
+ * this independently, and without caching each one re-pays the full
+ * getUser -> refreshSession -> partners-select chain (2-3 Supabase round
+ * trips). `cache()` dedupes calls with identical arguments (none here)
+ * within a single render pass, so the chain runs once per request.
  */
-export async function getPartnerSession(): Promise<PartnerSession | null> {
+export const getPartnerSession = cache(async (): Promise<PartnerSession | null> => {
   const store = await cookies();
   const accessToken = store.get(ACCESS_TOKEN_COOKIE)?.value;
   const refreshToken = store.get(REFRESH_TOKEN_COOKIE)?.value;
@@ -81,7 +88,7 @@ export async function getPartnerSession(): Promise<PartnerSession | null> {
   if (partnerError || !partner) return null;
 
   return { partner, accessToken: token };
-}
+});
 
 /** Redirects to /partner/login if there is no valid partner session. */
 export async function requirePartnerSession(): Promise<PartnerSession> {

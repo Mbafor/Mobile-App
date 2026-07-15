@@ -7,3 +7,5 @@ export { TextArea } from '@/components/ui/TextArea';
 export { FilterChipButton, SearchField } from '@/components/ui/SearchField';
 export { OptionsSheet, type OptionsSheetItem } from '@/components/ui/OptionsSheet';
 export { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
+export { LanguageQuickSwitch } from '@/components/ui/LanguageQuickSwitch';
+export { ThemeQuickSwitch } from '@/components/ui/ThemeQuickSwitch';

@@ -245,7 +245,11 @@ export function WelcomeScreen() {
     </View>
   );
 
-  const languageQuickSwitch = <LanguageQuickSwitch />;
+  const languageQuickSwitch = (
+    <View style={{ alignSelf: 'flex-end', marginBottom: spacing.sm }}>
+      <LanguageQuickSwitch />
+    </View>
+  );
 
   const legalLinksRow = (
     <Text style={styles.legalText}>

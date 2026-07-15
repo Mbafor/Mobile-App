@@ -9,7 +9,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { Image, Pressable, StyleSheet, View } from 'react-native';
 
-import { Text } from '@/components/ui';
+import { LanguageQuickSwitch, Text, ThemeQuickSwitch } from '@/components/ui';
 import { spacing } from '@/constants/theme';
 import { PRIVACY_URL, TERMS_URL } from '@/constants/app';
 import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
@@ -134,6 +134,11 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
         <Ionicons name="shield-checkmark-outline" size={16} color={colors.textMuted} />
         <Text style={styles.legalText}>{t('legal.privacyPolicy')}</Text>
       </Pressable>
+
+      <View style={styles.quickSwitchRow}>
+        <ThemeQuickSwitch />
+        <LanguageQuickSwitch />
+      </View>
     </DrawerContentScrollView>
   );
 }
@@ -189,5 +194,14 @@ function createStyles(colors: ColorScheme) {
     marginHorizontal: spacing.xs,
   },
   legalText: { fontSize: 13, color: colors.textMuted },
+  quickSwitchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: spacing.md,
+    marginTop: spacing.sm,
+    paddingVertical: spacing.xs + 2,
+    paddingHorizontal: spacing.md,
+  },
 });
 }

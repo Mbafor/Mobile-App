@@ -16,23 +16,25 @@ export default async function PartnerEditOpportunityPage({ params }: { params: P
   // select policy on opportunities would let any partner load an active
   // listing by id, so this guards the edit form itself; the update action
   // is separately enforced at the database layer (migration 050).
-  const { data: post } = await client
-    .from('partner_posts')
-    .select('opportunity_id')
-    .eq('partner_id', session.partner.id)
-    .eq('opportunity_id', id)
-    .maybeSingle();
+  // The ownership check and the opportunity fetch don't depend on each
+  // other's result (both only need `id`), so they run in parallel.
+  const [{ data: post }, { data: opportunity }] = await Promise.all([
+    client
+      .from('partner_posts')
+      .select('opportunity_id')
+      .eq('partner_id', session.partner.id)
+      .eq('opportunity_id', id)
+      .maybeSingle(),
+    client
+      .from('opportunities')
+      .select(
+        'id, title, organization, description, image_url, apply_url, deadline, category, tags, country, funding_type, degree_levels, location_type',
+      )
+      .eq('id', id)
+      .maybeSingle(),
+  ]);
 
   if (!post) notFound();
-
-  const { data: opportunity } = await client
-    .from('opportunities')
-    .select(
-      'id, title, organization, description, image_url, apply_url, deadline, category, tags, country, funding_type, degree_levels, location_type',
-    )
-    .eq('id', id)
-    .maybeSingle();
-
   if (!opportunity) notFound();
 
   const boundUpdate = updatePartnerOpportunity.bind(null, id);
