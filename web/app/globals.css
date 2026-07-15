@@ -42,3 +42,11 @@ html {
 .opp-scroll-track:hover {
   animation-play-state: paused;
 }
+
+.testimonial-scroll-track {
+  animation: scroll-left 45s linear infinite;
+}
+
+.testimonial-scroll-track:hover {
+  animation-play-state: paused;
+}

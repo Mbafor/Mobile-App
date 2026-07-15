@@ -21,7 +21,7 @@ export default function TestimonialCarousel({ testimonials }: { testimonials: Te
 
   return (
     <div className="overflow-hidden">
-      <div className="opp-scroll-track flex gap-5 pl-6" style={{ width: 'max-content' }}>
+      <div className="testimonial-scroll-track flex gap-5 pl-6" style={{ width: 'max-content' }}>
         {doubled.map((t, i) => (
           <div
             key={`${t.name}-${i}`}
