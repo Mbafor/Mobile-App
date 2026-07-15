@@ -107,12 +107,7 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
 
   return (
     <>
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.scroll}
-        contentContainerStyle={styles.row}
-      >
+      <View style={styles.row}>
         {defs.map((def) => {
           const count = (filters[def.field] as string[]).length;
           const active = count > 0;
@@ -136,7 +131,7 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
             </Pressable>
           );
         })}
-      </ScrollView>
+      </View>
 
       <Modal
         visible={activeDef !== null}
@@ -193,12 +188,9 @@ export function OpportunityQuickFilters({ filters, onChange }: OpportunityQuickF
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-    // react-native-web's ScrollView defaults to flexGrow: 1 even when horizontal,
-    // which makes it balloon to fill the parent column's remaining height. Pin it
-    // to its content height instead.
-    scroll: { flexGrow: 0, flexShrink: 0 },
     row: {
       flexDirection: 'row',
+      flexWrap: 'wrap',
       alignItems: 'flex-start',
       gap: 6,
       paddingHorizontal: spacing.sm,

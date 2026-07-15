@@ -188,7 +188,6 @@ function createStyles(colors: ColorScheme) {
     headerRowDesktop: {
       maxWidth: 560,
       width: '100%',
-      alignSelf: 'center',
     },
     searchField: { flex: 1 },
     cancelBtn: { paddingHorizontal: spacing.xs, paddingVertical: spacing.xs },

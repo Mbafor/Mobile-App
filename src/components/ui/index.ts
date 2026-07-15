@@ -6,6 +6,7 @@ export { Input } from '@/components/ui/Input';
 export { TextArea } from '@/components/ui/TextArea';
 export { FilterChipButton, SearchField, SearchFieldButton } from '@/components/ui/SearchField';
 export { FilterChips, type FilterChipOption } from '@/components/ui/FilterChips';
+export { FilterDropdown, type FilterDropdownOption } from '@/components/ui/FilterDropdown';
 export { OptionsSheet, type OptionsSheetItem } from '@/components/ui/OptionsSheet';
 export { UserAvatarDisplay } from '@/components/ui/UserAvatarDisplay';
 export { LanguageQuickSwitch } from '@/components/ui/LanguageQuickSwitch';

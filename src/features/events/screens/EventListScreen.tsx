@@ -2,10 +2,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, Pressable, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
-import { FilterChips, SearchField } from '@/components/ui';
+import { FilterDropdown, SearchField, Text } from '@/components/ui';
 import { EventCard } from '@/features/events/components/EventCard';
 import { usePastEvents } from '@/features/events/hooks/usePastEvents';
 import { useUpcomingEvents } from '@/features/events/hooks/useUpcomingEvents';
@@ -56,14 +56,6 @@ export function EventListScreen() {
     );
   }, [byCategory, query]);
 
-  const timingOptions = useMemo(
-    () => [
-      { value: 'upcoming' as const, label: t('events.timing.upcoming') },
-      { value: 'past' as const, label: t('events.timing.past') },
-    ],
-    [t],
-  );
-
   const categoryOptions = useMemo(
     () => [
       { value: ALL_CATEGORIES, label: t('events.filters.allCategories'), count: allResults.length },
@@ -98,8 +90,28 @@ export function EventListScreen() {
           />
         ) : null}
 
-        <FilterChips options={timingOptions} selected={timing} onSelect={setTiming} style={styles.filterRow} />
-        <FilterChips options={categoryOptions} selected={category} onSelect={setCategory} style={styles.filterRow} />
+        <View style={styles.filterRow}>
+          <View style={styles.timingToggle}>
+            <Pressable
+              style={[styles.timingOption, timing === 'upcoming' && styles.timingOptionActive]}
+              onPress={() => setTiming('upcoming')}
+            >
+              <Text style={[styles.timingOptionText, timing === 'upcoming' && styles.timingOptionTextActive]}>
+                {t('events.timing.upcoming')}
+              </Text>
+            </Pressable>
+            <Pressable
+              style={[styles.timingOption, timing === 'past' && styles.timingOptionActive]}
+              onPress={() => setTiming('past')}
+            >
+              <Text style={[styles.timingOptionText, timing === 'past' && styles.timingOptionTextActive]}>
+                {t('events.timing.past')}
+              </Text>
+            </Pressable>
+          </View>
+
+          <FilterDropdown options={categoryOptions} selected={category} onSelect={setCategory} style={styles.filterDropdown} />
+        </View>
 
         {activeQuery.isLoading ? (
           <ActivityIndicator style={styles.spinner} color={colors.primary} />
@@ -132,7 +144,31 @@ function createStyles(colors: ColorScheme) {
     pageContent: { flex: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
     searchField: { marginBottom: spacing.sm },
     searchFieldDesktop: { maxWidth: 360 },
-    filterRow: { paddingBottom: spacing.xs },
+    filterRow: {
+      flexDirection: 'row',
+      flexWrap: 'wrap',
+      gap: spacing.sm,
+      paddingBottom: spacing.md,
+    },
+    timingToggle: {
+      flexDirection: 'row',
+      gap: spacing.xs,
+    },
+    timingOption: {
+      paddingVertical: spacing.sm,
+      paddingHorizontal: spacing.md,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: colors.border,
+      backgroundColor: colors.background,
+    },
+    timingOptionActive: {
+      backgroundColor: `${colors.primary}15`,
+      borderColor: colors.primary,
+    },
+    timingOptionText: { fontSize: 13, fontWeight: '600', color: colors.textMuted },
+    timingOptionTextActive: { color: colors.primary },
+    filterDropdown: { flexGrow: 1, flexBasis: 160, maxWidth: 220 },
     spinner: { marginTop: spacing.xl },
     list: { paddingBottom: spacing.xl },
     row: { justifyContent: 'flex-start', gap: spacing.md },
