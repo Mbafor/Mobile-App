@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { Alert, ScrollView, StyleSheet, View } from 'react-native';
 import { useRouter, type Href } from 'expo-router';
 
-import { PageHeader } from '@/components/layout/PageHeader';
+import { ScreenHeaderBar } from '@/components/layout/ScreenHeaderBar';
 import { ROUTES } from '@/constants/routes';
 import { SettingsRow } from '@/features/settings/components/SettingsRow';
 import { AppearanceSection } from '@/features/settings/components/AppearanceSection';
@@ -39,7 +39,7 @@ export function SettingsHomeScreen() {
 
   return (
     <View style={styles.root}>
-      <PageHeader title={t('settings.home.title')} onBack={() => router.push(ROUTES.MAIN.DASHBOARD as Href)} />
+      <ScreenHeaderBar title={t('settings.home.title')} />
 
       <ScrollView
         style={styles.scroll}

@@ -491,6 +491,11 @@
     },
     "tracker": {
       "searchPlaceholder": "Rechercher un titre ou une entreprise…",
+      "searchCancel": "Annuler",
+      "searchRecentSearches": "Recherches récentes",
+      "searchClearRecent": "Effacer",
+      "searchEmptyTitle": "Aucun résultat",
+      "searchEmptyDescription": "Essayez une autre recherche.",
       "export": "Exporter .xlsx",
       "nothingToExportTitle": "Rien à exporter",
       "nothingToExportBody": "Ajoutez d'abord des éléments à votre suivi.",
@@ -544,11 +549,17 @@
       "upcoming": "À venir",
       "past": "Passés"
     },
+    "filters": {
+      "allCategories": "Tous"
+    },
     "search": {
       "placeholder": "Rechercher des événements",
       "failed": "Échec de la recherche",
       "emptyTitle": "Aucun événement trouvé",
-      "emptyDescription": "Essayez une autre recherche ou revenez plus tard."
+      "emptyDescription": "Essayez une autre recherche ou revenez plus tard.",
+      "cancel": "Annuler",
+      "recentSearches": "Recherches récentes",
+      "clearRecent": "Effacer"
     },
     "detail": {
       "header": "Détails de l'événement",
@@ -612,8 +623,8 @@
         "locationOrLinkPlaceholderVirtual": "https://zoom.us/...",
         "locationOrLinkPlaceholderInPerson": "Adresse, ville",
         "classificationSection": "Classification",
-        "categoryLabel": "Catégorie",
-        "categoryPlaceholder": "ex. Webinaire, Salon de l'emploi",
+        "categoryLabel": "Catégorie *",
+        "categoryPlaceholder": "Sélectionnez une catégorie",
         "imageSection": "Image",
         "imageUrlLabel": "URL de l'image",
         "pickImage": "Choisir depuis l'appareil",
@@ -628,7 +639,8 @@
           "eventDateRequired": "La date et l'heure sont requises.",
           "invalidEventDate": "Date invalide — utilisez AAAA-MM-JJ ou AAAA-MM-JJTHH:mm",
           "registerLink": "Entrez un lien d'inscription valide (https://...).",
-          "locationOrLink": "Entrez une adresse pour les événements en personne."
+          "locationOrLink": "Entrez une adresse pour les événements en personne.",
+          "category": "Sélectionnez une catégorie."
         }
       },
       "mutations": {
@@ -2149,6 +2161,17 @@
         "bootcampTraining": "Formation intensive (bootcamp)",
         "grantFunding": "Subvention et financement",
         "competitionAward": "Concours et distinction"
+      },
+      "eventCategories": {
+        "applicationSupport": "Aide à la candidature",
+        "scholarshipInfoSession": "Séance d'information sur les bourses",
+        "careerInternshipPrep": "Préparation carrière et stages",
+        "mentorshipNetworking": "Mentorat et réseautage",
+        "skillsTraining": "Compétences et formation",
+        "studyAbroadExchange": "Études à l'étranger et échanges",
+        "fellowshipResearch": "Bourses de recherche et opportunités de recherche",
+        "entrepreneurshipFunding": "Entrepreneuriat et financement",
+        "generalCommunity": "Général/Communauté"
       },
       "countries": {
         "afghanistan": "Afghanistan",

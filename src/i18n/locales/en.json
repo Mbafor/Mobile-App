@@ -467,6 +467,11 @@
     },
     "tracker": {
       "searchPlaceholder": "Search title or company…",
+      "searchCancel": "Cancel",
+      "searchRecentSearches": "Recent searches",
+      "searchClearRecent": "Clear",
+      "searchEmptyTitle": "No matches",
+      "searchEmptyDescription": "Try a different search.",
       "export": "Export .xlsx",
       "nothingToExportTitle": "Nothing to export",
       "nothingToExportBody": "Add items to your tracker first.",
@@ -520,11 +525,17 @@
       "upcoming": "Upcoming",
       "past": "Past"
     },
+    "filters": {
+      "allCategories": "All"
+    },
     "search": {
       "placeholder": "Search events",
       "failed": "Search failed",
       "emptyTitle": "No events found",
-      "emptyDescription": "Try a different search or check back later."
+      "emptyDescription": "Try a different search or check back later.",
+      "cancel": "Cancel",
+      "recentSearches": "Recent searches",
+      "clearRecent": "Clear"
     },
     "detail": {
       "header": "Event Details",
@@ -588,8 +599,8 @@
         "locationOrLinkPlaceholderVirtual": "https://zoom.us/...",
         "locationOrLinkPlaceholderInPerson": "Street address, city",
         "classificationSection": "Classification",
-        "categoryLabel": "Category",
-        "categoryPlaceholder": "e.g. Webinar, Career fair",
+        "categoryLabel": "Category *",
+        "categoryPlaceholder": "Select a category",
         "imageSection": "Image",
         "imageUrlLabel": "Image URL",
         "pickImage": "Choose from device",
@@ -604,7 +615,8 @@
           "eventDateRequired": "Date & time is required.",
           "invalidEventDate": "Invalid date — use YYYY-MM-DD or YYYY-MM-DDTHH:mm",
           "registerLink": "Enter a valid register link (https://...).",
-          "locationOrLink": "Enter an address for in-person events."
+          "locationOrLink": "Enter an address for in-person events.",
+          "category": "Select a category."
         }
       },
       "mutations": {
@@ -2064,6 +2076,17 @@
         "bootcampTraining": "Bootcamp & Training",
         "grantFunding": "Grant & Funding",
         "competitionAward": "Competition & Award"
+      },
+      "eventCategories": {
+        "applicationSupport": "Application Support",
+        "scholarshipInfoSession": "Scholarship Info Session",
+        "careerInternshipPrep": "Career & Internship Prep",
+        "mentorshipNetworking": "Mentorship & Networking",
+        "skillsTraining": "Skills & Training",
+        "studyAbroadExchange": "Study Abroad & Exchange",
+        "fellowshipResearch": "Fellowship & Research Opportunities",
+        "entrepreneurshipFunding": "Entrepreneurship & Funding",
+        "generalCommunity": "General/Community"
       },
       "countries": {
         "afghanistan": "Afghanistan",

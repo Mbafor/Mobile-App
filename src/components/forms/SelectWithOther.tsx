@@ -22,18 +22,24 @@ import {
 
 type SelectWithOtherProps = {
   options: SelectOption[];
-  predefinedValues: readonly string[];
+  predefinedValues?: readonly string[];
   value: string;
   onChange: (value: string) => void;
   placeholder?: string;
+  /** Set false for a strictly closed list — hides the "Other" free-text fallback. */
+  allowOther?: boolean;
+  /** Set false to hide the search box (fine for short lists). */
+  searchable?: boolean;
 };
 
 export function SelectWithOther({
   options,
-  predefinedValues,
+  predefinedValues = [],
   value,
   onChange,
   placeholder = 'Select an option',
+  allowOther = true,
+  searchable = true,
 }: SelectWithOtherProps) {
   const styles = useThemedStyles(createStyles);
   const { width } = useWindowDimensions();
@@ -66,7 +72,7 @@ export function SelectWithOther({
     setOpen(false);
   };
 
-  const filteredOptions = search.trim()
+  const filteredOptions = searchable && search.trim()
     ? options.filter((o) => o.label.toLowerCase().includes(search.toLowerCase()))
     : options;
 
@@ -91,7 +97,7 @@ export function SelectWithOther({
         <Text style={styles.chevron}>▼</Text>
       </Pressable>
 
-      {selected === OTHER_OPTION_VALUE || (value && !predefinedValues.includes(value)) ? (
+      {allowOther && (selected === OTHER_OPTION_VALUE || (value && !predefinedValues.includes(value))) ? (
         <Input
           style={styles.otherInput}
           value={otherText}
@@ -107,16 +113,18 @@ export function SelectWithOther({
               Select
             </Text>
 
-            <View style={styles.searchRow}>
-              <Input
-                value={search}
-                onChangeText={setSearch}
-                placeholder="Search..."
-                autoCapitalize="none"
-                autoCorrect={false}
-                style={styles.searchInput}
-              />
-            </View>
+            {searchable ? (
+              <View style={styles.searchRow}>
+                <Input
+                  value={search}
+                  onChangeText={setSearch}
+                  placeholder="Search..."
+                  autoCapitalize="none"
+                  autoCorrect={false}
+                  style={styles.searchInput}
+                />
+              </View>
+            ) : null}
 
             <ScrollView style={styles.list} keyboardShouldPersistTaps="handled">
               {filteredOptions.length === 0 ? (
@@ -141,7 +149,7 @@ export function SelectWithOther({
               )}
             </ScrollView>
 
-            {selected === OTHER_OPTION_VALUE ? (
+            {allowOther && selected === OTHER_OPTION_VALUE ? (
               <View style={styles.otherBlock}>
                 <Text variant="caption" muted>
                   Please specify

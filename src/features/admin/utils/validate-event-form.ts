@@ -32,6 +32,10 @@ export function validateEventForm(values: EventFormValues): EventFormValidation 
     return { ok: false, message: i18n.t('events.admin.form.validation.locationOrLink') };
   }
 
+  if (!values.category.trim()) {
+    return { ok: false, message: i18n.t('events.admin.form.validation.category') };
+  }
+
   let eventDateIso: string;
   try {
     eventDateIso = parseEventDateToIso(values.eventDate);

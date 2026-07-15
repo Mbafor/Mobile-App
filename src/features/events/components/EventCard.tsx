@@ -8,7 +8,7 @@ import { Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'rea
 
 import { Text } from '@/components/ui';
 import { spacing, typography } from '@/constants/theme';
-import { formatEventDateShort } from '@/utils/formatting';
+import { formatEventDateTime } from '@/utils/formatting';
 import type { Event } from '@/types/domain/event';
 
 const CARD_WIDTH = 280;
@@ -44,8 +44,13 @@ function EventCardComponent({ event, onPress, style }: EventCardProps) {
         <Text style={styles.title} numberOfLines={2}>
           {event.title}
         </Text>
-        <Text variant="caption" style={styles.dateRow}>
-          {formatEventDateShort(event.eventDate)}
+        {event.postedBy ? (
+          <Text variant="caption" muted numberOfLines={1}>
+            {t('events.detail.postedBy', { name: event.postedBy.name })}
+          </Text>
+        ) : null}
+        <Text variant="caption" style={styles.dateRow} numberOfLines={1}>
+          {formatEventDateTime(event.eventDate)}
         </Text>
 
         <View style={styles.tags}>

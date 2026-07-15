@@ -13,7 +13,7 @@ import {
 } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { SearchField, Text } from '@/components/ui';
+import { SearchFieldButton, Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { TrackerFilterChips, type TrackerFilterValue } from '@/features/opportunities/components/tracker/TrackerFilterChips';
 import { TrackerListCard } from '@/features/opportunities/components/tracker/TrackerListCard';
@@ -21,19 +21,13 @@ import { TrackerStalledBanner } from '@/features/opportunities/components/tracke
 import { TrackerStatusSheet } from '@/features/opportunities/components/tracker/TrackerStatusSheet';
 import { TrackerUndoToast } from '@/features/opportunities/components/tracker/TrackerUndoToast';
 import { useTrackerOpportunities } from '@/features/opportunities/hooks/useTrackerOpportunities';
-import {
-  filterTrackerItems,
-  groupByStage,
-} from '@/features/opportunities/utils/filter-tracker';
+import { groupByStage } from '@/features/opportunities/utils/filter-tracker';
 import { findStalledItems, type StalledEntry } from '@/features/opportunities/utils/tracker-stalled';
 import { resolveStatusTransition } from '@/features/opportunities/utils/tracker-status-transition';
 import { exportTrackerToXlsx } from '@/features/opportunities/utils/export-tracker-xlsx';
+import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
-import {
-  EMPTY_TRACKER_FILTERS,
-  TRACKER_STAGE_ORDER,
-  type TrackerStage,
-} from '@/types/domain/tracker';
+import { TRACKER_STAGE_ORDER, type TrackerStage } from '@/types/domain/tracker';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
 
 function sortByDeadlineAscending(items: TrackerItem[]): TrackerItem[] {
@@ -53,7 +47,6 @@ export function TrackerScreen() {
   const router = useRouter();
   const listRef = useRef<FlatList<TrackerItem>>(null);
 
-  const [query, setQuery] = useState('');
   const [exporting, setExporting] = useState(false);
   const [stageFilter, setStageFilter] = useState<TrackerFilterValue>('all');
   const [sheetItem, setSheetItem] = useState<TrackerItem | null>(null);
@@ -72,26 +65,18 @@ export function TrackerScreen() {
     updateNotes,
   } = useTrackerOpportunities();
 
-  const queryFilteredItems = useMemo(
-    () => filterTrackerItems(items, query, EMPTY_TRACKER_FILTERS),
-    [items, query],
-  );
-
   const stageCounts = useMemo(() => {
-    const grouped = groupByStage(queryFilteredItems);
+    const grouped = groupByStage(items);
     return TRACKER_STAGE_ORDER.reduce(
       (acc, stage) => ({ ...acc, [stage]: grouped[stage].length }),
       {} as Record<TrackerStage, number>,
     );
-  }, [queryFilteredItems]);
+  }, [items]);
 
   const visibleItems = useMemo(() => {
-    const byStage =
-      stageFilter === 'all'
-        ? queryFilteredItems
-        : queryFilteredItems.filter((item) => item.stage === stageFilter);
+    const byStage = stageFilter === 'all' ? items : items.filter((item) => item.stage === stageFilter);
     return sortByDeadlineAscending(byStage);
-  }, [queryFilteredItems, stageFilter]);
+  }, [items, stageFilter]);
 
   const stalledEntries = useMemo(() => findStalledItems(items), [items]);
   const activeStalled: StalledEntry | undefined = stalledEntries.find(
@@ -111,7 +96,6 @@ export function TrackerScreen() {
 
   const handlePressStalledBanner = useCallback((entry: StalledEntry) => {
     setStageFilter('all');
-    setQuery('');
     setPendingScrollId(entry.item.opportunityId);
   }, []);
 
@@ -166,7 +150,7 @@ export function TrackerScreen() {
     }
     setExporting(true);
     try {
-      const label = query.trim() || stageFilter !== 'all' ? 'filtered' : 'all';
+      const label = stageFilter !== 'all' ? 'filtered' : 'all';
       await exportTrackerToXlsx(visibleItems, label);
     } catch (e) {
       Alert.alert(
@@ -176,7 +160,7 @@ export function TrackerScreen() {
     } finally {
       setExporting(false);
     }
-  }, [visibleItems, query, stageFilter, t]);
+  }, [visibleItems, stageFilter, t]);
 
   const renderItem = useCallback(
     ({ item }: { item: TrackerItem }) => (
@@ -213,9 +197,8 @@ export function TrackerScreen() {
 
       <View style={styles.toolbar}>
         <View style={styles.searchWrap}>
-          <SearchField
-            value={query}
-            onChangeText={setQuery}
+          <SearchFieldButton
+            onPress={() => router.push(ROUTES.MAIN.TRACKER_SEARCH as any)}
             placeholder={t('opportunities.tracker.searchPlaceholder')}
           />
         </View>
@@ -232,7 +215,7 @@ export function TrackerScreen() {
       <TrackerFilterChips
         selected={stageFilter}
         onSelect={setStageFilter}
-        totalCount={queryFilteredItems.length}
+        totalCount={items.length}
         stageCounts={stageCounts}
       />
 

@@ -151,6 +151,15 @@ export function EventDetailScreen() {
             </View>
           ) : null}
 
+          {event.postedBy ? (
+            <View style={styles.metaRow}>
+              <Ionicons name="person-circle-outline" size={15} color={colors.textMuted} />
+              <Text style={styles.metaText}>
+                {t('events.detail.postedBy', { name: event.postedBy.name })}
+              </Text>
+            </View>
+          ) : null}
+
           <View style={styles.divider} />
 
           <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>

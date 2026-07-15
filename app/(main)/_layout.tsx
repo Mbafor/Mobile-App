@@ -46,8 +46,16 @@ export default function MainLayout() {
         options={{ ...hiddenDrawerItem, title: t('navigation.tabs.events'), headerShown: false }}
       />
       <Drawer.Screen
+        name="events-search"
+        options={{ ...hiddenDrawerItem, title: t('navigation.search'), headerShown: false }}
+      />
+      <Drawer.Screen
         name="event/[id]"
         options={{ ...hiddenDrawerItem, title: t('navigation.headerTitles.event'), headerShown: false }}
+      />
+      <Drawer.Screen
+        name="tracker-search"
+        options={{ ...hiddenDrawerItem, title: t('navigation.search'), headerShown: false }}
       />
       <Drawer.Screen
         name="settings"

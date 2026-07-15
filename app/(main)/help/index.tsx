@@ -11,7 +11,7 @@ import { Text } from '@/components/ui';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 
-const SUPPORT_EMAIL = 'Voila@gmail.com';
+const SUPPORT_EMAIL = 'support@voila-africa.com';
 
 type HelpItem = {
   label: string;

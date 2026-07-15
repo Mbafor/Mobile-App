@@ -13,6 +13,7 @@ import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
 import { useAuth } from '@/features/auth/hooks/useAuth';
+import { ProfileMenuBar } from '@/features/menu/components/ProfileMenuBar';
 import { webPressableStyle } from '@/utils/web/pressable';
 import { DESKTOP_HEADER_HEIGHT } from '@/features/navigation/components/DesktopHeader';
 
@@ -320,6 +321,10 @@ export function DesktopSidebar() {
         <ThemeQuickSwitch compact={collapsed} />
         <LanguageQuickSwitch compact={collapsed} />
       </View>
+
+      <View style={styles.profileRow}>
+        <ProfileMenuBar collapsed={collapsed} />
+      </View>
     </View>
   );
 }
@@ -440,6 +445,14 @@ function createStyles(colors: ColorScheme) {
     paddingBottom: spacing.md,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
+  },
+  // ── Profile bar ──────────────────────────────────────────────────────────
+  profileRow: {
+    paddingHorizontal: spacing.sm,
+    paddingBottom: spacing.sm,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+    paddingTop: spacing.xs,
   },
   // ── Scroll buttons ────────────────────────────────────────────────────────
   scrollButtons: {

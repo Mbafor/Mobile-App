@@ -17,6 +17,7 @@ export type Event = {
   status: EventStatus;
   createdAt: string;
   updatedAt: string;
+  postedBy: { name: string; kind: 'partner' | 'admin' | 'superadmin' } | null;
 };
 
 export type EventTimingFilter = 'upcoming' | 'past';

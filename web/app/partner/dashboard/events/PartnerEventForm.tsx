@@ -3,6 +3,8 @@
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 
+import { EVENT_CATEGORIES } from '@/lib/opportunity-options';
+
 const inputClass =
   'w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]';
 
@@ -189,13 +191,22 @@ export function PartnerEventForm({
         <label className="block text-sm font-medium mb-1" htmlFor="category">
           {t('category')}
         </label>
-        <input
+        <select
           id="category"
           name="category"
-          defaultValue={initialValues?.category}
+          required
+          defaultValue={initialValues?.category ?? ''}
           className={inputClass}
-          placeholder={t('categoryPlaceholder')}
-        />
+        >
+          <option value="" disabled>
+            {t('categoryPlaceholder')}
+          </option>
+          {EVENT_CATEGORIES.map((c) => (
+            <option key={c} value={c}>
+              {c}
+            </option>
+          ))}
+        </select>
       </div>
 
       <div>

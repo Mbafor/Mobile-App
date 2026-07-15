@@ -9,9 +9,8 @@ import { Pressable, StyleSheet, View } from 'react-native';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
-import { ProfileHeaderMenu } from '@/features/menu/components/ProfileHeaderMenu';
 
-/** Header right cluster — profile avatar then notification bell, flush right. */
+/** Header right cluster — search then notification bell, flush right. */
 export function AppHeaderActions() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
@@ -40,7 +39,6 @@ export function AppHeaderActions() {
         />
       </Pressable>
       <NotificationHeaderButton />
-      <ProfileHeaderMenu />
     </View>
   );
 }

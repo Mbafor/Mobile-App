@@ -1,5 +1,6 @@
 /**
- * English-only option lists for the partner "Create Opportunity" form.
+ * English-only option lists for the partner "Create Opportunity" and
+ * "Create Event" forms.
  * Duplicated (not imported) from the mobile app's constants -- web/ and the
  * Expo app are separate TS programs with no shared package (same precedent
  * as partner-share-template.ts). Values here must stay in sync with the
@@ -8,6 +9,7 @@
  *   - src/constants/countries.ts (countries)
  *   - src/constants/onboarding.ts (degree levels, funding types)
  *   - src/constants/opportunity-fields.ts (location types)
+ *   - src/constants/event-fields.ts (event categories)
  */
 
 export const OPPORTUNITY_CATEGORIES = [
@@ -23,6 +25,18 @@ export const OPPORTUNITY_CATEGORIES = [
   'Bootcamp & Training',
   'Grant & Funding',
   'Competition & Award',
+] as const;
+
+export const EVENT_CATEGORIES = [
+  'Application Support',
+  'Scholarship Info Session',
+  'Career & Internship Prep',
+  'Mentorship & Networking',
+  'Skills & Training',
+  'Study Abroad & Exchange',
+  'Fellowship & Research Opportunities',
+  'Entrepreneurship & Funding',
+  'General/Community',
 ] as const;
 
 export const OPPORTUNITY_TAGS = [

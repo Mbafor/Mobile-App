@@ -17,5 +17,6 @@ export function mapEventRow(row: EventRow): Event {
     status: row.status as Event['status'],
     createdAt: row.created_at,
     updatedAt: row.updated_at,
+    postedBy: null,
   };
 }

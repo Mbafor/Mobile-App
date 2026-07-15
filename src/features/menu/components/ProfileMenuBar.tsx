@@ -32,7 +32,15 @@ type MenuItem = {
   destructive?: boolean;
 };
 
-export function ProfileHeaderMenu() {
+type ProfileMenuBarProps = {
+  /** Icon-only, no name/chevron — used when the desktop sidebar is collapsed. */
+  collapsed?: boolean;
+  /** Called before navigating away, e.g. to close the drawer. */
+  onBeforeNavigate?: () => void;
+};
+
+/** Profile trigger anchored at the bottom of the sidebar/drawer; opens the account menu. */
+export function ProfileMenuBar({ collapsed = false, onBeforeNavigate }: ProfileMenuBarProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const { t } = useTranslation();
@@ -49,6 +57,7 @@ export function ProfileHeaderMenu() {
 
   const navigate = (route: Href) => {
     close();
+    onBeforeNavigate?.();
     router.push(route);
   };
 
@@ -102,12 +111,19 @@ export function ProfileHeaderMenu() {
     <>
       <Pressable
         onPress={() => setOpen(true)}
-        style={styles.avatarBtn}
+        style={[styles.trigger, collapsed && styles.triggerCollapsed]}
         accessibilityRole="button"
         accessibilityLabel={t('menu.accountMenu')}
-        hitSlop={8}
       >
-        <UserAvatarDisplay displayName={displayName} avatarUrl={avatarUrl} size={34} />
+        <UserAvatarDisplay displayName={displayName} avatarUrl={avatarUrl} size={32} />
+        {!collapsed ? (
+          <>
+            <Text style={styles.name} numberOfLines={1}>
+              {displayName ?? t('common.user')}
+            </Text>
+            <Ionicons name="chevron-expand-outline" size={16} color={colors.textMuted} />
+          </>
+        ) : null}
       </Pressable>
 
       <Modal visible={open} transparent animationType="fade" onRequestClose={close}>
@@ -150,17 +166,26 @@ export function ProfileHeaderMenu() {
 
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
-  avatarBtn: {
-    marginRight: spacing.xs,
-    padding: 2,
+  trigger: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: spacing.sm,
+    borderRadius: 10,
   },
+  triggerCollapsed: {
+    justifyContent: 'center',
+    paddingHorizontal: spacing.sm,
+  },
+  name: { flex: 1, fontSize: 13, fontWeight: '600', color: colors.text },
   backdrop: {
     flex: 1,
     backgroundColor: colors.overlay,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-end',
-    paddingTop: 56,
-    paddingRight: spacing.sm,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-start',
+    paddingBottom: 72,
+    paddingLeft: spacing.sm,
   },
   menuCard: {
     minWidth: 220,

@@ -143,6 +143,6 @@ function createStyles(colors: ColorScheme) {
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  actions: { gap: spacing.sm, marginTop: spacing.lg },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg },
 });
 }

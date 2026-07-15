@@ -57,6 +57,10 @@ export function parsePartnerEventForm(formData: FormData): ParsePartnerEventResu
     return { ok: false, message: 'A registration link is required.' };
   }
 
+  if (!category) {
+    return { ok: false, message: 'Select a category.' };
+  }
+
   const locationType = locationTypeInput === 'in_person' ? 'in_person' : 'virtual';
 
   return {
@@ -68,7 +72,7 @@ export function parsePartnerEventForm(formData: FormData): ParsePartnerEventResu
       locationType,
       locationOrLink: locationOrLink || null,
       registerLink,
-      category: category || null,
+      category,
     },
   };
 }

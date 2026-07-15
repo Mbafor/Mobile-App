@@ -4,7 +4,7 @@
 create or replace function public.get_trending_opportunities(result_limit int default 10)
 returns table (opportunity_id uuid, save_count int)
 language sql
-security definer
+security definerd
 
 set search_path = public
 stable

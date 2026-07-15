@@ -16,8 +16,9 @@ import {
 import { Image } from 'expo-image';
 import { useTranslation } from 'react-i18next';
 
-import { FormField } from '@/components/forms';
+import { FormField, SelectWithOther } from '@/components/forms';
 import { Button, Input, Text } from '@/components/ui';
+import { EVENT_CATEGORY_LIST, getEventCategoryOptions } from '@/constants/event-fields';
 import { spacing } from '@/constants/theme';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { EventFormValues } from '@/features/admin/types/event-form';
@@ -230,10 +231,14 @@ export function EventForm({
         <Text style={styles.section}>{t('events.admin.form.classificationSection')}</Text>
 
         <Field label={t('events.admin.form.categoryLabel')}>
-          <Input
+          <SelectWithOther
+            options={getEventCategoryOptions()}
+            predefinedValues={EVENT_CATEGORY_LIST}
             value={category}
-            onChangeText={setCategory}
+            onChange={setCategory}
             placeholder={t('events.admin.form.categoryPlaceholder')}
+            allowOther={false}
+            searchable={false}
           />
         </Field>
 

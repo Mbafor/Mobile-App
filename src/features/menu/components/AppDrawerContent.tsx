@@ -11,9 +11,8 @@ import { Image, Pressable, StyleSheet, View } from 'react-native';
 
 import { LanguageQuickSwitch, Text, ThemeQuickSwitch } from '@/components/ui';
 import { spacing } from '@/constants/theme';
-import { PRIVACY_URL, TERMS_URL } from '@/constants/app';
 import { useMainTabNavItems } from '@/features/navigation/hooks/useMainTabNavItems';
-import { openExternalUrl } from '@/utils/web/openExternalUrl';
+import { ProfileMenuBar } from '@/features/menu/components/ProfileMenuBar';
 
 export function AppDrawerContent(props: DrawerContentComponentProps) {
   const styles = useThemedStyles(createStyles);
@@ -125,19 +124,13 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
         </>
       )}
 
-      <View style={styles.legalDivider} />
-      <Pressable style={styles.legalItem} onPress={() => void openExternalUrl(TERMS_URL)}>
-        <Ionicons name="document-text-outline" size={16} color={colors.textMuted} />
-        <Text style={styles.legalText}>{t('legal.termsOfService')}</Text>
-      </Pressable>
-      <Pressable style={styles.legalItem} onPress={() => void openExternalUrl(PRIVACY_URL)}>
-        <Ionicons name="shield-checkmark-outline" size={16} color={colors.textMuted} />
-        <Text style={styles.legalText}>{t('legal.privacyPolicy')}</Text>
-      </Pressable>
-
       <View style={styles.quickSwitchRow}>
         <ThemeQuickSwitch />
         <LanguageQuickSwitch />
+      </View>
+
+      <View style={styles.profileRow}>
+        <ProfileMenuBar onBeforeNavigate={() => props.navigation.closeDrawer()} />
       </View>
     </DrawerContentScrollView>
   );
@@ -178,22 +171,6 @@ function createStyles(colors: ColorScheme) {
   },
   itemText: { fontSize: 16, color: colors.text, flex: 1 },
   itemTextActive: { color: colors.primary, fontWeight: '600' },
-  legalDivider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
-    marginTop: spacing.md,
-    marginBottom: spacing.xs,
-    marginHorizontal: spacing.md,
-  },
-  legalItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.sm,
-    paddingVertical: spacing.xs + 2,
-    paddingHorizontal: spacing.md,
-    marginHorizontal: spacing.xs,
-  },
-  legalText: { fontSize: 13, color: colors.textMuted },
   quickSwitchRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -202,6 +179,13 @@ function createStyles(colors: ColorScheme) {
     marginTop: spacing.sm,
     paddingVertical: spacing.xs + 2,
     paddingHorizontal: spacing.md,
+  },
+  profileRow: {
+    marginTop: spacing.sm,
+    paddingTop: spacing.sm,
+    paddingHorizontal: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
 });
 }

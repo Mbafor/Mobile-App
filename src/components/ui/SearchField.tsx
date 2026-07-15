@@ -66,6 +66,29 @@ export function SearchField({
   );
 }
 
+type SearchFieldButtonProps = {
+  placeholder: string;
+  onPress: () => void;
+  style?: ViewStyle;
+};
+
+/** Non-editable look-alike of SearchField that opens a full search screen on tap. */
+export function SearchFieldButton({ placeholder, onPress, style }: SearchFieldButtonProps) {
+  const styles = useThemedStyles(createStyles);
+  const { colors } = useTheme();
+
+  return (
+    <View style={[styles.wrap, style]}>
+      <Pressable style={styles.field} onPress={onPress} accessibilityRole="button" accessibilityLabel={placeholder}>
+        <Ionicons name="search" size={20} color={colors.textMuted} style={styles.icon} />
+        <Text style={styles.placeholderText} numberOfLines={1}>
+          {placeholder}
+        </Text>
+      </Pressable>
+    </View>
+  );
+}
+
 type FilterChipButtonProps = {
   label: string;
   activeCount?: number;
@@ -119,6 +142,7 @@ function createStyles(colors: ColorScheme) {
     backgroundColor: 'transparent',
   },
   clearBtn: { padding: spacing.xs },
+  placeholderText: { flex: 1, color: colors.textMuted },
   filterBtn: {
     padding: spacing.xs,
     marginLeft: spacing.xs,

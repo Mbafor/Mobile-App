@@ -680,8 +680,8 @@
         "locationOrLink": "Lien de réunion ou adresse",
         "locationOrLinkPlaceholder": "ex. Lien Zoom ou adresse du lieu",
         "registerLink": "Lien d'inscription",
-        "category": "Catégorie",
-        "categoryPlaceholder": "ex. Webinaire, Salon de l'emploi",
+        "category": "Catégorie *",
+        "categoryPlaceholder": "Sélectionnez une catégorie",
         "image": "Image",
         "imageUrlPlaceholder": "https://...",
         "or": "ou"

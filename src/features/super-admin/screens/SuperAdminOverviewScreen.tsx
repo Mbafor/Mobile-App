@@ -86,6 +86,6 @@ function createStyles(colors: ColorScheme) {
   subtitle: { marginBottom: spacing.md },
   section: { fontWeight: '700', fontSize: 16, marginTop: spacing.md, marginBottom: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  actions: { gap: spacing.sm },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
 });
 }

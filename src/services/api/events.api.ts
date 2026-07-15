@@ -1,5 +1,23 @@
 import { mapEventRow } from '@/services/api/mappers/event.mapper';
 import { supabase } from '@/services/supabase/client';
+import type { Event } from '@/types/domain/event';
+
+async function attachPosters(events: Event[]): Promise<Event[]> {
+  if (events.length === 0) return events;
+
+  const { data } = await supabase.rpc('get_events_posters', {
+    p_event_ids: events.map((event) => event.id),
+  });
+
+  const posterByEventId = new Map(
+    (data ?? []).map((row) => [row.event_id, { name: row.name, kind: row.kind } as Event['postedBy']]),
+  );
+
+  return events.map((event) => ({
+    ...event,
+    postedBy: posterByEventId.get(event.id) ?? null,
+  }));
+}
 
 /** Events -- publishes immediately, same trust model as opportunities. */
 export const eventsApi = {
@@ -13,7 +31,7 @@ export const eventsApi = {
 
     if (error) return { data: null, error };
 
-    return { data: (data ?? []).map(mapEventRow), error: null };
+    return { data: await attachPosters((data ?? []).map(mapEventRow)), error: null };
   },
 
   listPast: async () => {
@@ -26,7 +44,7 @@ export const eventsApi = {
 
     if (error) return { data: null, error };
 
-    return { data: (data ?? []).map(mapEventRow), error: null };
+    return { data: await attachPosters((data ?? []).map(mapEventRow)), error: null };
   },
 
   getById: async (id: string) => {
@@ -36,6 +54,9 @@ export const eventsApi = {
       .eq('id', id)
       .maybeSingle();
 
-    return { data: data ? mapEventRow(data) : null, error };
+    if (!data) return { data: null, error };
+
+    const [event] = await attachPosters([mapEventRow(data)]);
+    return { data: event, error };
   },
 };
