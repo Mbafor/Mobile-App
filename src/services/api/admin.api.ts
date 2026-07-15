@@ -1,11 +1,28 @@
 import type { AdminAnalytics, ChartDatum, TopEngagementRow } from '@/features/admin/types/analytics';
+import type { EventFormValues } from '@/features/admin/types/event-form';
 import { mapOpportunityRow } from '@/services/api/mappers/opportunity.mapper';
+import { mapEventRow } from '@/services/api/mappers/event.mapper';
 import type { OpportunityFormValues } from '@/features/admin/types/opportunity-form';
 import { parseDeadlineToIso } from '@/features/admin/utils/deadline';
+import { parseEventDateToIso } from '@/features/admin/utils/event-date';
 import { supabase } from '@/services/supabase/client';
 import type { Database } from '@/services/supabase/types';
 
 type OpportunityInsert = Database['public']['Tables']['opportunities']['Insert'];
+type EventInsert = Database['public']['Tables']['events']['Insert'];
+
+function eventFormToRow(values: EventFormValues): Omit<EventInsert, 'owner_type' | 'owner_id'> {
+  return {
+    title: values.title.trim(),
+    description: values.description.trim(),
+    event_date: parseEventDateToIso(values.eventDate),
+    location_type: values.locationType,
+    location_or_link: values.locationOrLink.trim() || null,
+    register_link: values.registerLink.trim(),
+    image_url: values.imageUrl.trim() || null,
+    category: values.category.trim() || null,
+  };
+}
 
 export type AdminDashboardStats = {
   opportunitiesCount: number;
@@ -304,5 +321,119 @@ export const adminApi = {
 
   deleteOpportunity: async (id: string) => {
     return supabase.from('opportunities').delete().eq('id', id);
+  },
+
+  listEvents: async () => {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .order('event_date', { ascending: false });
+
+    if (error) return { data: null, error };
+    return { data: (data ?? []).map(mapEventRow), error: null };
+  },
+
+  getEvent: async (id: string) => {
+    const { data, error } = await supabase
+      .from('events')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    return { data: data ? mapEventRow(data) : null, error };
+  },
+
+  createEvent: async (values: EventFormValues) => {
+    try {
+      const { data: canManage, error: permError } = await supabase.rpc(
+        'current_user_can_manage_events',
+      );
+      if (permError) {
+        return { data: null, error: formatAdminError(permError) };
+      }
+      if (!canManage) {
+        return {
+          data: null,
+          error: new Error('Permission denied. You need admin or super admin access to manage events.'),
+        };
+      }
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user?.id) {
+        return { data: null, error: new Error('You must be signed in to create an event.') };
+      }
+
+      const row: EventInsert = {
+        ...eventFormToRow(values),
+        owner_type: 'admin',
+        owner_id: user.id,
+      };
+
+      const { data, error } = await supabase.from('events').insert(row).select('*');
+
+      if (error) return { data: null, error: formatAdminError(error) };
+
+      const inserted = data?.[0];
+      if (!inserted) {
+        return {
+          data: null,
+          error: new Error(
+            'Insert did not return a row. Confirm migration 053_events.sql is applied and your user is an admin.',
+          ),
+        };
+      }
+
+      return { data: mapEventRow(inserted), error: null };
+    } catch (e) {
+      return {
+        data: null,
+        error: e instanceof Error ? e : new Error('Invalid event data'),
+      };
+    }
+  },
+
+  updateEvent: async (id: string, values: EventFormValues) => {
+    try {
+      const { data: canManage, error: permError } = await supabase.rpc(
+        'current_user_can_manage_events',
+      );
+      if (permError) {
+        return { data: null, error: formatAdminError(permError) };
+      }
+      if (!canManage) {
+        return {
+          data: null,
+          error: new Error('Permission denied. You need admin or super admin access to manage events.'),
+        };
+      }
+
+      const row = eventFormToRow(values);
+      const { data, error } = await supabase
+        .from('events')
+        .update(row)
+        .eq('id', id)
+        .select('*');
+
+      if (error) return { data: null, error: formatAdminError(error) };
+
+      const updated = data?.[0];
+      if (!updated) {
+        return { data: null, error: new Error('Event not found or could not be updated.') };
+      }
+
+      return { data: mapEventRow(updated), error: null };
+    } catch (e) {
+      return {
+        data: null,
+        error: e instanceof Error ? e : new Error('Invalid event data'),
+      };
+    }
+  },
+
+  deleteEvent: async (id: string) => {
+    return supabase.from('events').delete().eq('id', id);
   },
 };

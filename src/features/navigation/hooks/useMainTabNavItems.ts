@@ -56,6 +56,13 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         onPress: () => router.push('/(main)/(tabs)/browse-categories' as Href),
       },
       {
+        key: 'events',
+        label: t('navigation.tabs.events'),
+        icon: 'calendar-outline',
+        active: pathname.includes('/events') || pathname.includes('/event/'),
+        onPress: () => router.push(ROUTES.MAIN.EVENTS as Href),
+      },
+      {
         key: 'mentorship',
         label: t('navigation.tabs.mentorship'),
         icon: 'people-outline',

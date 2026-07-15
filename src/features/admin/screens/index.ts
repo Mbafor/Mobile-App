@@ -5,3 +5,6 @@ export { AdminPendingReviewScreen } from '@/features/admin/screens/AdminPendingR
 export { AdminWeeklyDigestScreen } from '@/features/admin/screens/AdminWeeklyDigestScreen';
 export { OpportunityListScreen } from '@/features/admin/screens/OpportunityListScreen';
 export { OpportunityPasteScreen } from '@/features/admin/screens/OpportunityPasteScreen';
+export { EventListScreen } from '@/features/admin/screens/EventListScreen';
+export { AdminCreateEventScreen } from '@/features/admin/screens/AdminCreateEventScreen';
+export { AdminEditEventScreen } from '@/features/admin/screens/AdminEditEventScreen';

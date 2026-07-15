@@ -33,6 +33,7 @@ export default function SuperAdminLayout() {
         <Stack.Screen name="mentors" options={{ title: t('superAdmin.titles.mentors') }} />
         <Stack.Screen name="mentees" options={{ title: t('superAdmin.titles.mentees') }} />
         <Stack.Screen name="opportunities" options={{ headerShown: false }} />
+        <Stack.Screen name="events" options={{ headerShown: false }} />
       </Stack>
     </SuperAdminShell>
   );

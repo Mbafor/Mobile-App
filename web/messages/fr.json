@@ -535,6 +535,7 @@
       "digest": "Résumé hebdomadaire",
       "browse": "Parcourir les opportunités",
       "create": "Créer une opportunité",
+      "events": "Événements",
       "logout": "Déconnexion"
     },
     "header": {
@@ -639,6 +640,52 @@
       "publishAs": "Publier {count} comme résumé de cette semaine",
       "previousDigests": "Vos résumés précédents",
       "opportunityCount": "{count, plural, one {# opportunité} other {# opportunités}}"
+    },
+    "events": {
+      "manage": {
+        "title": "Vos événements",
+        "subtitle": "Gérez les événements que vous avez publiés — webinaires, séances d'information, salons de l'emploi, et plus.",
+        "createNew": "+ Nouvel événement",
+        "empty": "Vous n'avez pas encore publié d'événements.",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "confirmDelete": "Supprimer « {title} » ? Cela le retire de Voila pour tout le monde et cette action est irréversible.",
+        "virtual": "Virtuel",
+        "inPerson": "En personne"
+      },
+      "create": {
+        "title": "Créer un événement",
+        "subtitle": "Publiez votre propre événement directement sur Voila. Il est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'événement",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
+      },
+      "edit": {
+        "title": "Modifier l'événement",
+        "subtitle": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submit": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "success": "Enregistré — vos modifications sont en ligne."
+      },
+      "form": {
+        "title": "Titre",
+        "titlePlaceholder": "ex. Webinaire sur les candidatures aux bourses",
+        "description": "Description",
+        "descriptionPlaceholder": "En quoi consiste cet événement ?",
+        "eventDate": "Date et heure",
+        "locationType": "Type de lieu",
+        "virtual": "Virtuel",
+        "inPerson": "En personne",
+        "locationOrLink": "Lien de réunion ou adresse",
+        "locationOrLinkPlaceholder": "ex. Lien Zoom ou adresse du lieu",
+        "registerLink": "Lien d'inscription",
+        "category": "Catégorie",
+        "categoryPlaceholder": "ex. Webinaire, Salon de l'emploi",
+        "image": "Image",
+        "imageUrlPlaceholder": "https://...",
+        "or": "ou"
+      }
     }
   }
 }

@@ -527,6 +527,127 @@
       "deadlineNone": "Aucune échéance"
     }
   },
+  "events": {
+    "common": {
+      "virtual": "Virtuel",
+      "inPerson": "En personne"
+    },
+    "card": {
+      "share": "Partager"
+    },
+    "section": {
+      "viewAll": "Tous les événements →",
+      "emptyTitle": "Rien pour l'instant",
+      "emptyDescription": "Revenez bientôt pour de nouveaux événements."
+    },
+    "timing": {
+      "upcoming": "À venir",
+      "past": "Passés"
+    },
+    "search": {
+      "placeholder": "Rechercher des événements",
+      "failed": "Échec de la recherche",
+      "emptyTitle": "Aucun événement trouvé",
+      "emptyDescription": "Essayez une autre recherche ou revenez plus tard."
+    },
+    "detail": {
+      "header": "Détails de l'événement",
+      "notFound": "Événement introuvable.",
+      "goBack": "Retour",
+      "about": "À propos de cet événement",
+      "noDescription": "Aucune description fournie pour cet événement.",
+      "postedBy": "Publié par {{name}}",
+      "register": "S'inscrire",
+      "youMightAlsoLike": "Vous pourriez aussi aimer",
+      "location": "Lieu",
+      "virtualLink": "Lien de la réunion",
+      "shareVia": "Partager l'événement via",
+      "shareWhatsapp": "Partager sur WhatsApp",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "shareFacebook": "Partager sur Facebook"
+    },
+    "admin": {
+      "titles": {
+        "home": "Événements",
+        "create": "Créer un événement",
+        "edit": "Modifier l'événement"
+      },
+      "dashboard": {
+        "sectionTitle": "Événements",
+        "manageEvents": "Gérer les événements",
+        "createEvent": "Créer un événement"
+      },
+      "list": {
+        "homeTitle": "Gérer les événements",
+        "homeSubtitle": "Ajoutez et gérez les événements visibles par les étudiants dans l'application.",
+        "createNew": "Créer un nouveau",
+        "failedToLoad": "Échec du chargement des événements",
+        "emptyList": "Aucun événement pour l'instant. Créez-en un pour commencer.",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleteConfirmTitle": "Supprimer l'événement",
+        "deleteConfirmMessage": "Supprimer « {{title}} » ? Cette action est irréversible.",
+        "deleteFailedTitle": "Échec de la suppression",
+        "deleteFailedMessage": "Impossible de supprimer cet événement."
+      },
+      "createScreen": {
+        "hint": "Remplissez tous les champs requis, puis appuyez sur Créer. Les étudiants voient les événements immédiatement après leur publication.",
+        "submitLabel": "Créer l'événement"
+      },
+      "editScreen": {
+        "submitLabel": "Enregistrer les modifications"
+      },
+      "form": {
+        "titleLabel": "Titre *",
+        "titlePlaceholder": "Titre de l'événement",
+        "descriptionLabel": "Description *",
+        "descriptionPlaceholder": "Description complète",
+        "eventDateLabel": "Date et heure * (AAAA-MM-JJTHH:mm)",
+        "registerLinkLabel": "Lien d'inscription *",
+        "registerLinkPlaceholder": "https://register.example.com",
+        "locationSection": "Lieu",
+        "locationTypeLabel": "Type de lieu *",
+        "locationOrLinkLabelVirtual": "Lien de réunion",
+        "locationOrLinkLabelInPerson": "Adresse *",
+        "locationOrLinkPlaceholderVirtual": "https://zoom.us/...",
+        "locationOrLinkPlaceholderInPerson": "Adresse, ville",
+        "classificationSection": "Classification",
+        "categoryLabel": "Catégorie",
+        "categoryPlaceholder": "ex. Webinaire, Salon de l'emploi",
+        "imageSection": "Image",
+        "imageUrlLabel": "URL de l'image",
+        "pickImage": "Choisir depuis l'appareil",
+        "imagePermissionTitle": "Autorisation requise",
+        "imagePermissionMessage": "Autorisez l'accès à la photothèque pour ajouter une image d'événement.",
+        "imageUploadFailedTitle": "Échec du téléversement",
+        "imageUploadFailedMessage": "Impossible de téléverser cette image. Veuillez réessayer.",
+        "checkRequiredFieldsTitle": "Vérifiez les champs requis",
+        "genericSubmitError": "Une erreur s'est produite",
+        "validation": {
+          "requiredFields": "Le titre et la description sont requis.",
+          "eventDateRequired": "La date et l'heure sont requises.",
+          "invalidEventDate": "Date invalide — utilisez AAAA-MM-JJ ou AAAA-MM-JJTHH:mm",
+          "registerLink": "Entrez un lien d'inscription valide (https://...).",
+          "locationOrLink": "Entrez une adresse pour les événements en personne."
+        }
+      },
+      "mutations": {
+        "postedTitle": "Publié",
+        "postedMessage": "« {{title}} » est visible pour les étudiants.",
+        "couldNotCreate": "Création impossible",
+        "couldNotCreateFallback": "Impossible de créer cet événement.",
+        "eventNotSaved": "L'événement n'a pas été enregistré. Veuillez réessayer.",
+        "savedTitle": "Enregistré",
+        "savedMessage": "Les modifications sont visibles pour les étudiants.",
+        "couldNotSave": "Enregistrement impossible",
+        "couldNotSaveFallback": "Impossible d'enregistrer les modifications."
+      },
+      "errors": {
+        "missingEventId": "Identifiant d'événement manquant",
+        "eventNotFound": "Événement introuvable"
+      }
+    }
+  },
   "notifications": {
     "title": "Notifications",
     "unread_one": "{{count}} non lue",
@@ -564,6 +685,7 @@
       "saved": "Enregistrés",
       "tracker": "Suivi",
       "browse": "Parcourir",
+      "events": "Événements",
       "mentorship": "Mentorat",
       "cvBuilder": "Créateur de CV",
       "notifications": "Notifications",
@@ -577,7 +699,8 @@
       "tracker": "Mon suivi",
       "browse": "Parcourir par catégorie",
       "category": "Catégorie",
-      "opportunity": "Opportunité"
+      "opportunity": "Opportunité",
+      "event": "Événement"
     },
     "sections": {
       "main": "Principal",

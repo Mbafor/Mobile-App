@@ -100,6 +100,10 @@ export type Database = {
         Args: Record<string, never>;
         Returns: boolean;
       };
+      current_user_can_manage_events: {
+        Args: Record<string, never>;
+        Returns: boolean;
+      };
       super_admin_create_mentor_by_email: {
         Args: { p_email: string };
         Returns: Json;
@@ -328,6 +332,78 @@ export type Database = {
           updated_at?: string;
           last_sent_at?: string | null;
           times_sent?: number;
+        };
+        Relationships: [];
+      };
+      events: {
+        Row: {
+          id: string;
+          title: string;
+          description: string;
+          event_date: string;
+          location_type: string;
+          location_or_link: string | null;
+          register_link: string;
+          image_url: string | null;
+          category: string | null;
+          owner_type: string;
+          owner_id: string;
+          status: string;
+          created_at: string;
+          updated_at: string;
+        };
+        Insert: {
+          id?: string;
+          title: string;
+          description: string;
+          event_date: string;
+          location_type?: string;
+          location_or_link?: string | null;
+          register_link: string;
+          image_url?: string | null;
+          category?: string | null;
+          owner_type: string;
+          owner_id: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: {
+          id?: string;
+          title?: string;
+          description?: string;
+          event_date?: string;
+          location_type?: string;
+          location_or_link?: string | null;
+          register_link?: string;
+          image_url?: string | null;
+          category?: string | null;
+          owner_type?: string;
+          owner_id?: string;
+          status?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Relationships: [];
+      };
+      event_link_clicks: {
+        Row: {
+          id: string;
+          event_id: string | null;
+          ref_code: string | null;
+          clicked_at: string;
+        };
+        Insert: {
+          id?: string;
+          event_id?: string | null;
+          ref_code?: string | null;
+          clicked_at?: string;
+        };
+        Update: {
+          id?: string;
+          event_id?: string | null;
+          ref_code?: string | null;
+          clicked_at?: string;
         };
         Relationships: [];
       };
@@ -872,6 +948,7 @@ export type MentorshipRow = Database['public']['Tables']['mentorships']['Row'];
 export type MentorshipRequestRow = Database['public']['Tables']['mentorship_requests']['Row'];
 export type UserPreferencesRow = Database['public']['Tables']['user_preferences']['Row'];
 export type OpportunityRow = Database['public']['Tables']['opportunities']['Row'];
+export type EventRow = Database['public']['Tables']['events']['Row'];
 export type NotificationPreferencesRow =
   Database['public']['Tables']['notification_preferences']['Row'];
 export type NotificationRow = Database['public']['Tables']['notifications']['Row'];

@@ -31,6 +31,8 @@ export const ROUTES = {
     PROFILE_PREFERENCES: '/(main)/profile/preferences',
     PROFILE_BIO: '/(main)/profile/bio',
     opportunity: (id: string) => `/(main)/opportunity/${id}` as const,
+    EVENTS: '/(main)/events',
+    event: (id: string) => `/(main)/event/${id}` as const,
     CV_BUILDER: {
       DASHBOARD: '/(main)/(tabs)/cv-builder',
       hub: (id: string) => `/(main)/(tabs)/cv-builder/${id}` as const,
@@ -72,6 +74,9 @@ export const ROUTES = {
       `/(main)/(tabs)/super-admin/opportunities/${id}/edit` as const,
     pendingReview: (id: string) =>
       `/(main)/(tabs)/super-admin/opportunities/${id}/review` as const,
+    EVENTS: '/(main)/(tabs)/super-admin/events',
+    EVENT_CREATE: '/(main)/(tabs)/super-admin/events/create',
+    eventEdit: (id: string) => `/(main)/(tabs)/super-admin/events/${id}/edit` as const,
   },
   ADMIN: {
     HOME: '/(main)/(tabs)/admin',
@@ -82,5 +87,8 @@ export const ROUTES = {
     WEEKLY_DIGEST: '/(main)/(tabs)/admin/weekly-digest',
     edit: (id: string) => `/(main)/(tabs)/admin/${id}/edit` as const,
     pendingReview: (id: string) => `/(main)/(tabs)/admin/${id}/review` as const,
+    EVENTS: '/(main)/(tabs)/admin/events',
+    EVENT_CREATE: '/(main)/(tabs)/admin/events/create',
+    eventEdit: (id: string) => `/(main)/(tabs)/admin/events/${id}/edit` as const,
   },
 } as const;

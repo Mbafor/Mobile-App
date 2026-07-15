@@ -2,6 +2,7 @@ export { authApi, type OtpVerificationType } from '@/services/api/auth.api';
 export { profilesApi } from '@/services/api/profiles.api';
 export { userPreferencesApi } from '@/services/api/user-preferences.api';
 export { opportunitiesApi } from '@/services/api/opportunities.api';
+export { eventsApi } from '@/services/api/events.api';
 export { savedOpportunitiesApi } from '@/services/api/saved-opportunities.api';
 export { appliedOpportunitiesApi } from '@/services/api/applied-opportunities.api';
 export { trackerApi } from '@/services/api/tracker.api';

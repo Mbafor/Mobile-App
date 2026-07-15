@@ -535,6 +535,7 @@
       "digest": "Weekly Digest",
       "browse": "Browse Opportunities",
       "create": "Create Opportunity",
+      "events": "Events",
       "logout": "Log out"
     },
     "header": {
@@ -639,6 +640,52 @@
       "publishAs": "Publish {count} as this week's digest",
       "previousDigests": "Your previous digests",
       "opportunityCount": "{count, plural, one {# opportunity} other {# opportunities}}"
+    },
+    "events": {
+      "manage": {
+        "title": "Your Events",
+        "subtitle": "Manage the events you've published — webinars, info sessions, career fairs, and more.",
+        "createNew": "+ New event",
+        "empty": "You haven't posted any events yet.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone.",
+        "virtual": "Virtual",
+        "inPerson": "In person"
+      },
+      "create": {
+        "title": "Create Event",
+        "subtitle": "Post your own event directly to Voila. It goes live immediately for students.",
+        "submit": "Publish event",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
+      },
+      "edit": {
+        "title": "Edit Event",
+        "subtitle": "Changes go live immediately for students.",
+        "submit": "Save changes",
+        "pending": "Saving...",
+        "success": "Saved — your changes are live."
+      },
+      "form": {
+        "title": "Title",
+        "titlePlaceholder": "e.g. Scholarship Application Webinar",
+        "description": "Description",
+        "descriptionPlaceholder": "What is this event about?",
+        "eventDate": "Date & time",
+        "locationType": "Location type",
+        "virtual": "Virtual",
+        "inPerson": "In person",
+        "locationOrLink": "Meeting link or address",
+        "locationOrLinkPlaceholder": "e.g. Zoom link or venue address",
+        "registerLink": "Registration link",
+        "category": "Category",
+        "categoryPlaceholder": "e.g. Webinar, Career Fair",
+        "image": "Image",
+        "imageUrlPlaceholder": "https://...",
+        "or": "or"
+      }
     }
   }
 }

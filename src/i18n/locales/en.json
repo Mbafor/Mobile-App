@@ -503,6 +503,127 @@
       "deadlineNone": "No deadline"
     }
   },
+  "events": {
+    "common": {
+      "virtual": "Virtual",
+      "inPerson": "In person"
+    },
+    "card": {
+      "share": "Share"
+    },
+    "section": {
+      "viewAll": "All events →",
+      "emptyTitle": "Nothing here yet",
+      "emptyDescription": "Check back soon for new events."
+    },
+    "timing": {
+      "upcoming": "Upcoming",
+      "past": "Past"
+    },
+    "search": {
+      "placeholder": "Search events",
+      "failed": "Search failed",
+      "emptyTitle": "No events found",
+      "emptyDescription": "Try a different search or check back later."
+    },
+    "detail": {
+      "header": "Event Details",
+      "notFound": "Event not found.",
+      "goBack": "Go back",
+      "about": "About this event",
+      "noDescription": "No description provided for this event.",
+      "postedBy": "Posted by {{name}}",
+      "register": "Register",
+      "youMightAlsoLike": "You might also like",
+      "location": "Location",
+      "virtualLink": "Meeting link",
+      "shareVia": "Share event via",
+      "shareWhatsapp": "Share on WhatsApp",
+      "shareLinkedin": "Share on LinkedIn",
+      "shareFacebook": "Share on Facebook"
+    },
+    "admin": {
+      "titles": {
+        "home": "Events",
+        "create": "Create event",
+        "edit": "Edit event"
+      },
+      "dashboard": {
+        "sectionTitle": "Events",
+        "manageEvents": "Manage events",
+        "createEvent": "Create event"
+      },
+      "list": {
+        "homeTitle": "Manage events",
+        "homeSubtitle": "Add and maintain events students see in the app.",
+        "createNew": "Create new",
+        "failedToLoad": "Failed to load events",
+        "emptyList": "No events yet. Create one to get started.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleteConfirmTitle": "Delete event",
+        "deleteConfirmMessage": "Delete \"{{title}}\"? This cannot be undone.",
+        "deleteFailedTitle": "Delete failed",
+        "deleteFailedMessage": "Could not delete this event."
+      },
+      "createScreen": {
+        "hint": "Fill all required fields, then tap Create. Students see events immediately once posted.",
+        "submitLabel": "Create event"
+      },
+      "editScreen": {
+        "submitLabel": "Save changes"
+      },
+      "form": {
+        "titleLabel": "Title *",
+        "titlePlaceholder": "Event title",
+        "descriptionLabel": "Description *",
+        "descriptionPlaceholder": "Full description",
+        "eventDateLabel": "Date & time * (YYYY-MM-DDTHH:mm)",
+        "registerLinkLabel": "Register link *",
+        "registerLinkPlaceholder": "https://register.example.com",
+        "locationSection": "Location",
+        "locationTypeLabel": "Location type *",
+        "locationOrLinkLabelVirtual": "Meeting link",
+        "locationOrLinkLabelInPerson": "Address *",
+        "locationOrLinkPlaceholderVirtual": "https://zoom.us/...",
+        "locationOrLinkPlaceholderInPerson": "Street address, city",
+        "classificationSection": "Classification",
+        "categoryLabel": "Category",
+        "categoryPlaceholder": "e.g. Webinar, Career fair",
+        "imageSection": "Image",
+        "imageUrlLabel": "Image URL",
+        "pickImage": "Choose from device",
+        "imagePermissionTitle": "Permission needed",
+        "imagePermissionMessage": "Allow photo library access to upload an event image.",
+        "imageUploadFailedTitle": "Upload failed",
+        "imageUploadFailedMessage": "Could not upload this image. Please try again.",
+        "checkRequiredFieldsTitle": "Check required fields",
+        "genericSubmitError": "Something went wrong",
+        "validation": {
+          "requiredFields": "Title and description are required.",
+          "eventDateRequired": "Date & time is required.",
+          "invalidEventDate": "Invalid date — use YYYY-MM-DD or YYYY-MM-DDTHH:mm",
+          "registerLink": "Enter a valid register link (https://...).",
+          "locationOrLink": "Enter an address for in-person events."
+        }
+      },
+      "mutations": {
+        "postedTitle": "Posted",
+        "postedMessage": "\"{{title}}\" is live for students to browse.",
+        "couldNotCreate": "Could not create",
+        "couldNotCreateFallback": "Could not create this event.",
+        "eventNotSaved": "Event was not saved. Please try again.",
+        "savedTitle": "Saved",
+        "savedMessage": "Changes are live for students.",
+        "couldNotSave": "Could not save",
+        "couldNotSaveFallback": "Could not save changes."
+      },
+      "errors": {
+        "missingEventId": "Missing event id",
+        "eventNotFound": "Event not found"
+      }
+    }
+  },
   "notifications": {
     "title": "Notifications",
     "unread_one": "{{count}} unread",
@@ -540,6 +661,7 @@
       "saved": "Saved",
       "tracker": "Tracker",
       "browse": "Browse",
+      "events": "Events",
       "mentorship": "Mentorship",
       "cvBuilder": "CV Builder",
       "notifications": "Notifications",
@@ -553,7 +675,8 @@
       "tracker": "My Tracker",
       "browse": "Browse by Category",
       "category": "Category",
-      "opportunity": "Opportunity"
+      "opportunity": "Opportunity",
+      "event": "Event"
     },
     "sections": {
       "main": "Main",

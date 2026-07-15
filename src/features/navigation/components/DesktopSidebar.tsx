@@ -87,6 +87,14 @@ export function DesktopSidebar() {
       matchPath: '/browse-categories',
     },
     {
+      key: 'events',
+      label: t('navigation.tabs.events'),
+      icon: 'calendar-outline',
+      iconActive: 'calendar',
+      onPress: () => router.push(ROUTES.MAIN.EVENTS as Href),
+      matchPath: '/events',
+    },
+    {
       key: 'mentorship',
       label: t('navigation.tabs.mentorship'),
       icon: 'people-outline',
@@ -170,6 +178,7 @@ export function DesktopSidebar() {
           matchPath: '/saved',
         },
         mainItems.find((i) => i.key === 'browse')!,
+        mainItems.find((i) => i.key === 'events')!,
       ],
     },
     {

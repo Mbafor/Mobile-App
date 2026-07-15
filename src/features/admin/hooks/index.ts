@@ -7,3 +7,9 @@ export {
   useUpdateOpportunityMutation,
   useDeleteOpportunityMutation,
 } from '@/features/admin/hooks/useAdminOpportunityMutations';
+export { useAdminEvents, useAdminEvent } from '@/features/admin/hooks/useAdminEvents';
+export {
+  useCreateEventMutation,
+  useUpdateEventMutation,
+  useDeleteEventMutation,
+} from '@/features/admin/hooks/useAdminEventMutations';

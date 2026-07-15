@@ -114,6 +114,12 @@ export function AdminDashboardScreen() {
           <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.CREATE as Href)}>
             {t('admin.dashboard.actions.createOpportunity')}
           </Button>
+          <Button onPress={() => router.push(ROUTES.ADMIN.EVENTS as Href)}>
+            {t('events.admin.dashboard.manageEvents')}
+          </Button>
+          <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.EVENT_CREATE as Href)}>
+            {t('events.admin.dashboard.createEvent')}
+          </Button>
         </View>
       </ScrollView>
     </Screen>

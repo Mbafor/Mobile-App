@@ -16,6 +16,11 @@ export const queryKeys = {
     applied: (userId: string, opportunityId: string) =>
       ['opportunities', 'applied', userId, opportunityId] as const,
   },
+  events: {
+    upcoming: ['events', 'upcoming'] as const,
+    past: ['events', 'past'] as const,
+    detail: (id: string) => ['events', id] as const,
+  },
   notifications: {
     list: (userId: string) => ['notifications', 'list', userId] as const,
     unreadCount: (userId: string) => ['notifications', 'unread', userId] as const,
@@ -38,6 +43,8 @@ export const queryKeys = {
     pendingOpportunities: ['admin', 'pending'] as const,
     opportunity: (id: string) => ['admin', 'opportunity', id] as const,
     weeklyDigestCandidates: ['admin', 'weeklyDigestCandidates'] as const,
+    events: ['admin', 'events'] as const,
+    event: (id: string) => ['admin', 'event', id] as const,
   },
   cv: {
     list: (userId: string) => ['cv', 'list', userId] as const,

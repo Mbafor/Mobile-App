@@ -38,7 +38,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
       {/* Grouped sections: Main, Career Tools, Account, Administration */}
       <Text style={styles.sectionLabel}>{t('navigation.sections.main')}</Text>
       {tabNavItems
-        .filter((i) => ['home', 'dashboard', 'saved', 'browse-categories'].includes(i.key))
+        .filter((i) => ['home', 'dashboard', 'saved', 'browse-categories', 'events'].includes(i.key))
         .map((item) => (
           <Pressable
             key={item.key}
