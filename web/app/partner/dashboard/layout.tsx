@@ -15,8 +15,12 @@ export default async function PartnerDashboardLayout({ children }: { children: R
     <div className="min-h-screen flex flex-col md:flex-row bg-[var(--color-surface)] text-[#1A1A1A] dark:text-white">
       <PartnerSidebar orgName={session.partner.org_name} contactEmail={session.partner.contact_email} />
       <div className="flex-1 flex flex-col min-w-0">
-        <PartnerHeader orgName={session.partner.org_name} theme={theme} />
-        <main className="flex-1 px-4 py-8">
+        <PartnerHeader
+          orgName={session.partner.org_name}
+          contactEmail={session.partner.contact_email}
+          theme={theme}
+        />
+        <main className="flex-1 px-4 py-6 md:py-8">
           <div className="max-w-3xl mx-auto">{children}</div>
         </main>
       </div>

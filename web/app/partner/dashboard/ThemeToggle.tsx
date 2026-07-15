@@ -1,19 +1,20 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
+import { useState } from 'react';
 
 import { THEME_COOKIE, type AppTheme } from '@/theme/theme';
 
 export function ThemeToggle({ theme }: { theme: AppTheme }) {
-  const router = useRouter();
+  const [current, setCurrent] = useState(theme);
   const t = useTranslations('Partner.header');
-  const isDark = theme === 'dark';
+  const isDark = current === 'dark';
 
   function toggle() {
     const next: AppTheme = isDark ? 'light' : 'dark';
     document.cookie = `${THEME_COOKIE}=${next}; path=/; max-age=31536000; SameSite=Lax`;
-    router.refresh();
+    document.documentElement.classList.toggle('dark', next === 'dark');
+    setCurrent(next);
   }
 
   return (

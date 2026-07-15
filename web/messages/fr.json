@@ -536,7 +536,9 @@
       "browse": "Parcourir les opportunités",
       "create": "Créer une opportunité",
       "events": "Événements",
-      "logout": "Déconnexion"
+      "logout": "Déconnexion",
+      "menu": "Ouvrir le menu",
+      "close": "Fermer le menu"
     },
     "header": {
       "themeToggleToDark": "Passer en mode sombre",

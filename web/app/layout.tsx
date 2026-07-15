@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages, getTranslations } from "next-intl/server";
 import { cookies } from "next/headers";
 
+import { IntlClientProvider } from "@/i18n/IntlClientProvider";
+import type { AppLocale } from "@/i18n/locales";
 import { isSupportedTheme, THEME_COOKIE } from "@/theme/theme";
 import "./globals.css";
 
@@ -87,9 +88,9 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   return (
     <html lang={locale} className={`${inter.variable}${isDark ? " dark" : ""}`}>
       <body className="font-sans antialiased bg-white text-[#1A1A1A] min-h-screen">
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <IntlClientProvider initialLocale={locale as AppLocale} initialMessages={messages}>
           {children}
-        </NextIntlClientProvider>
+        </IntlClientProvider>
       </body>
     </html>
   );

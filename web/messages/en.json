@@ -536,7 +536,9 @@
       "browse": "Browse Opportunities",
       "create": "Create Opportunity",
       "events": "Events",
-      "logout": "Log out"
+      "logout": "Log out",
+      "menu": "Open menu",
+      "close": "Close menu"
     },
     "header": {
       "themeToggleToDark": "Switch to dark mode",

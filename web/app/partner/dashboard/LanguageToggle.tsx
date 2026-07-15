@@ -2,19 +2,29 @@
 
 import { useRouter } from 'next/navigation';
 import { useLocale, useTranslations } from 'next-intl';
+import { useTransition } from 'react';
 
-import { LOCALE_COOKIE, type AppLocale } from '@/i18n/locales';
+import { useSetLocale } from '@/i18n/IntlClientProvider';
+import type { AppLocale } from '@/i18n/locales';
 
 const LOCALES: AppLocale[] = ['en', 'fr'];
 
 export function LanguageToggle() {
   const locale = useLocale();
   const router = useRouter();
+  const setLocale = useSetLocale();
   const t = useTranslations('Partner.header');
+  const [, startTransition] = useTransition();
 
   function selectLocale(code: AppLocale) {
-    document.cookie = `${LOCALE_COOKIE}=${code}; path=/; max-age=31536000; SameSite=Lax`;
-    router.refresh();
+    if (code === locale) return;
+    setLocale(code);
+    // Reconciles server-rendered strings (page headings, etc.) with the new
+    // locale in the background -- non-blocking, so the UI above already
+    // reflects the new language instantly.
+    startTransition(() => {
+      router.refresh();
+    });
   }
 
   return (

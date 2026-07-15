@@ -6,7 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { partnerLogout } from '@/app/partner/login/actions';
 
-const NAV_ITEMS = [
+export const NAV_ITEMS = [
   {
     href: '/partner/dashboard',
     key: 'dashboard',
@@ -78,50 +78,32 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
   };
 
   return (
-    <>
-      <aside className="hidden md:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-[var(--color-background)] border-r border-[var(--color-border)]">
-        <div className="px-4 py-5 border-b border-[var(--color-border)]">
-          <p className="font-semibold text-[var(--color-forest)] truncate" title={orgName}>
-            {orgName}
-          </p>
-          <p className="text-xs text-[var(--color-muted)] truncate" title={contactEmail}>
-            {contactEmail}
-          </p>
-        </div>
+    <aside className="hidden md:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-[var(--color-background)] border-r border-[var(--color-border)]">
+      <div className="px-4 py-5 border-b border-[var(--color-border)]">
+        <p className="font-semibold text-[var(--color-forest)] truncate" title={orgName}>
+          {orgName}
+        </p>
+        <p className="text-xs text-[var(--color-muted)] truncate" title={contactEmail}>
+          {contactEmail}
+        </p>
+      </div>
 
-        <nav className="flex-1 px-3 py-4 space-y-1">
-          {NAV_ITEMS.map((item) => (
-            <Link key={item.href} href={item.href} className={linkClass(item.href)}>
-              {item.icon}
-              <span>{t(item.key)}</span>
-            </Link>
-          ))}
-        </nav>
-
-        <div className="mt-auto px-3 py-4 border-t border-[var(--color-border)]">
-          <form action={partnerLogout}>
-            <button type="submit" className="text-sm text-[var(--color-muted)] underline">
-              {t('logout')}
-            </button>
-          </form>
-        </div>
-      </aside>
-
-      <div className="flex md:hidden items-center gap-1 overflow-x-auto border-b border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2">
+      <nav className="flex-1 px-3 py-4 space-y-1">
         {NAV_ITEMS.map((item) => (
-          <Link
-            key={item.href}
-            href={item.href}
-            className={`whitespace-nowrap rounded-md px-3 py-1.5 text-sm ${
-              pathname === item.href
-                ? 'bg-[var(--color-forest)]/10 text-[var(--color-forest)] font-semibold'
-                : 'text-[var(--color-muted)]'
-            }`}
-          >
-            {t(item.key)}
+          <Link key={item.href} href={item.href} className={linkClass(item.href)}>
+            {item.icon}
+            <span>{t(item.key)}</span>
           </Link>
         ))}
+      </nav>
+
+      <div className="mt-auto px-3 py-4 border-t border-[var(--color-border)]">
+        <form action={partnerLogout}>
+          <button type="submit" className="text-sm text-[var(--color-muted)] underline">
+            {t('logout')}
+          </button>
+        </form>
       </div>
-    </>
+    </aside>
   );
 }
