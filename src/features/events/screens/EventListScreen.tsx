@@ -1,14 +1,16 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ActivityIndicator, FlatList, StyleSheet, View } from 'react-native';
 
 import { EmptyState } from '@/components/feedback';
-import { FilterChips } from '@/components/ui';
+import { FilterChips, SearchField } from '@/components/ui';
 import { EventCard } from '@/features/events/components/EventCard';
 import { usePastEvents } from '@/features/events/hooks/usePastEvents';
 import { useUpcomingEvents } from '@/features/events/hooks/useUpcomingEvents';
 import { getEventCategoryOptions } from '@/constants/event-fields';
+import { useInlineSearchToggle } from '@/features/menu/store/inline-search-toggle.store';
 import type { ColorScheme } from '@/constants/theme/types';
 import { spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
@@ -25,6 +27,16 @@ export function EventListScreen() {
   const router = useRouter();
   const isDesktop = useWebDesktop();
 
+  const searchOpen = useInlineSearchToggle((s) => s.open);
+  const setSearchOpen = useInlineSearchToggle((s) => s.setOpen);
+  const [query, setQuery] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearchOpen(false);
+    }, [setSearchOpen]),
+  );
+
   const [timing, setTiming] = useState<EventTimingFilter>('upcoming');
   const [category, setCategory] = useState<string>(ALL_CATEGORIES);
 
@@ -32,8 +44,17 @@ export function EventListScreen() {
   const past = usePastEvents(timing === 'past');
   const activeQuery = timing === 'upcoming' ? upcoming : past;
   const allResults = activeQuery.data ?? [];
-  const results =
+  const byCategory =
     category === ALL_CATEGORIES ? allResults : allResults.filter((event) => event.category === category);
+  const results = useMemo(() => {
+    const q = query.trim().toLowerCase();
+    if (!q) return byCategory;
+    return byCategory.filter(
+      (event) =>
+        event.title.toLowerCase().includes(q) ||
+        (event.category ?? '').toLowerCase().includes(q),
+    );
+  }, [byCategory, query]);
 
   const timingOptions = useMemo(
     () => [
@@ -67,6 +88,16 @@ export function EventListScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.pageContent}>
+        {searchOpen ? (
+          <SearchField
+            value={query}
+            onChangeText={setQuery}
+            placeholder={t('events.search.placeholder')}
+            style={styles.searchField}
+            autoFocus
+          />
+        ) : null}
+
         <FilterChips options={timingOptions} selected={timing} onSelect={setTiming} style={styles.filterRow} />
         <FilterChips options={categoryOptions} selected={category} onSelect={setCategory} style={styles.filterRow} />
 
@@ -99,6 +130,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     container: { flex: 1, backgroundColor: colors.background },
     pageContent: { flex: 1, paddingHorizontal: spacing.lg, paddingTop: spacing.md },
+    searchField: { marginBottom: spacing.sm },
     filterRow: { paddingBottom: spacing.xs },
     spinner: { marginTop: spacing.xl },
     list: { paddingBottom: spacing.xl },

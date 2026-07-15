@@ -1,3 +1,4 @@
+import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
@@ -13,20 +14,21 @@ import {
 } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
-import { Text } from '@/components/ui';
+import { SearchField, Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { TrackerFilterChips, type TrackerFilterValue } from '@/features/opportunities/components/tracker/TrackerFilterChips';
 import { TrackerListCard } from '@/features/opportunities/components/tracker/TrackerListCard';
 import { TrackerStalledBanner } from '@/features/opportunities/components/tracker/TrackerStalledBanner';
 import { TrackerStatusSheet } from '@/features/opportunities/components/tracker/TrackerStatusSheet';
 import { TrackerUndoToast } from '@/features/opportunities/components/tracker/TrackerUndoToast';
+import { useInlineSearchToggle } from '@/features/menu/store/inline-search-toggle.store';
 import { useTrackerOpportunities } from '@/features/opportunities/hooks/useTrackerOpportunities';
-import { groupByStage } from '@/features/opportunities/utils/filter-tracker';
+import { filterTrackerItems, groupByStage } from '@/features/opportunities/utils/filter-tracker';
 import { findStalledItems, type StalledEntry } from '@/features/opportunities/utils/tracker-stalled';
 import { resolveStatusTransition } from '@/features/opportunities/utils/tracker-status-transition';
 import { exportTrackerToXlsx } from '@/features/opportunities/utils/export-tracker-xlsx';
 import { spacing } from '@/constants/theme';
-import { TRACKER_STAGE_ORDER, type TrackerStage } from '@/types/domain/tracker';
+import { EMPTY_TRACKER_FILTERS, TRACKER_STAGE_ORDER, type TrackerStage } from '@/types/domain/tracker';
 import type { TrackerItem } from '@/features/opportunities/utils/filter-tracker';
 
 function sortByDeadlineAscending(items: TrackerItem[]): TrackerItem[] {
@@ -46,6 +48,16 @@ export function TrackerScreen() {
   const router = useRouter();
   const listRef = useRef<FlatList<TrackerItem>>(null);
 
+  const searchOpen = useInlineSearchToggle((s) => s.open);
+  const setSearchOpen = useInlineSearchToggle((s) => s.setOpen);
+  const [query, setQuery] = useState('');
+
+  useFocusEffect(
+    useCallback(() => {
+      setSearchOpen(false);
+    }, [setSearchOpen]),
+  );
+
   const [exporting, setExporting] = useState(false);
   const [stageFilter, setStageFilter] = useState<TrackerFilterValue>('all');
   const [sheetItem, setSheetItem] = useState<TrackerItem | null>(null);
@@ -64,18 +76,26 @@ export function TrackerScreen() {
     updateNotes,
   } = useTrackerOpportunities();
 
+  const queryFilteredItems = useMemo(
+    () => filterTrackerItems(items, query, EMPTY_TRACKER_FILTERS),
+    [items, query],
+  );
+
   const stageCounts = useMemo(() => {
-    const grouped = groupByStage(items);
+    const grouped = groupByStage(queryFilteredItems);
     return TRACKER_STAGE_ORDER.reduce(
       (acc, stage) => ({ ...acc, [stage]: grouped[stage].length }),
       {} as Record<TrackerStage, number>,
     );
-  }, [items]);
+  }, [queryFilteredItems]);
 
   const visibleItems = useMemo(() => {
-    const byStage = stageFilter === 'all' ? items : items.filter((item) => item.stage === stageFilter);
+    const byStage =
+      stageFilter === 'all'
+        ? queryFilteredItems
+        : queryFilteredItems.filter((item) => item.stage === stageFilter);
     return sortByDeadlineAscending(byStage);
-  }, [items, stageFilter]);
+  }, [queryFilteredItems, stageFilter]);
 
   const stalledEntries = useMemo(() => findStalledItems(items), [items]);
   const activeStalled: StalledEntry | undefined = stalledEntries.find(
@@ -95,6 +115,7 @@ export function TrackerScreen() {
 
   const handlePressStalledBanner = useCallback((entry: StalledEntry) => {
     setStageFilter('all');
+    setQuery('');
     setPendingScrollId(entry.item.opportunityId);
   }, []);
 
@@ -149,7 +170,7 @@ export function TrackerScreen() {
     }
     setExporting(true);
     try {
-      const label = stageFilter !== 'all' ? 'filtered' : 'all';
+      const label = query.trim() || stageFilter !== 'all' ? 'filtered' : 'all';
       await exportTrackerToXlsx(visibleItems, label);
     } catch (e) {
       Alert.alert(
@@ -159,7 +180,7 @@ export function TrackerScreen() {
     } finally {
       setExporting(false);
     }
-  }, [visibleItems, stageFilter, t]);
+  }, [visibleItems, query, stageFilter, t]);
 
   const renderItem = useCallback(
     ({ item }: { item: TrackerItem }) => (
@@ -194,10 +215,21 @@ export function TrackerScreen() {
         </View>
       ) : null}
 
+      {searchOpen ? (
+        <View style={styles.searchWrap}>
+          <SearchField
+            value={query}
+            onChangeText={setQuery}
+            placeholder={t('opportunities.tracker.searchPlaceholder')}
+            autoFocus
+          />
+        </View>
+      ) : null}
+
       <TrackerFilterChips
         selected={stageFilter}
         onSelect={setStageFilter}
-        totalCount={items.length}
+        totalCount={queryFilteredItems.length}
         stageCounts={stageCounts}
       />
 
@@ -224,18 +256,19 @@ export function TrackerScreen() {
             {t(`opportunities.tracker.empty.${emptyKey}`)}
           </Text>
         }
+        ListFooterComponent={
+          <View style={styles.footer}>
+            <Button
+              variant="secondary"
+              loading={exporting}
+              onPress={() => void handleExport()}
+              style={styles.exportBtn}
+            >
+              {t('opportunities.tracker.export')}
+            </Button>
+          </View>
+        }
       />
-
-      <View style={styles.footer}>
-        <Button
-          variant="secondary"
-          loading={exporting}
-          onPress={() => void handleExport()}
-          style={styles.exportBtn}
-        >
-          {t('opportunities.tracker.export')}
-        </Button>
-      </View>
 
       <TrackerStatusSheet
         visible={sheetItem !== null}
@@ -262,17 +295,15 @@ function createStyles(colors: ColorScheme) {
     maxWidth: 1280,
     width: '100%',
     alignSelf: 'center',
+    paddingTop: spacing.sm,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
   banner: { padding: spacing.md },
+  searchWrap: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    padding: spacing.md,
-    borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: colors.border,
-    backgroundColor: colors.background,
   },
   exportBtn: { flexShrink: 0 },
   list: { flex: 1 },

@@ -277,6 +277,7 @@ export function DesktopSidebar() {
 
       <ScrollView
         ref={scrollRef}
+        style={styles.navScroll}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.scroll}
         onScroll={(e) => setScrollY(e.nativeEvent.contentOffset.y)}
@@ -290,10 +291,6 @@ export function DesktopSidebar() {
             {section.items.map(renderItem)}
           </View>
         ))}
-
-        <View style={styles.profileRow}>
-          <ProfileMenuBar collapsed={collapsed} />
-        </View>
       </ScrollView>
 
       <View style={styles.scrollButtons}>
@@ -320,6 +317,10 @@ export function DesktopSidebar() {
           <Ionicons name="chevron-down" size={13} color={colors.textMuted} />
         </Pressable>
       </View>
+
+      <View style={styles.profileRow}>
+        <ProfileMenuBar collapsed={collapsed} />
+      </View>
     </View>
   );
 }
@@ -328,6 +329,7 @@ function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
   sidebar: {
     width: 220,
+    height: '100%',
     flexShrink: 0,
     backgroundColor: colors.background,
     borderRightWidth: 1,
@@ -377,6 +379,10 @@ function createStyles(colors: ColorScheme) {
     elevation: 2,
   },
   toggleButtonHover: { backgroundColor: colors.surface },
+  navScroll: {
+    flex: 1,
+    minHeight: 0,
+  },
   scroll: {
     paddingHorizontal: spacing.sm,
     paddingTop: spacing.md,
@@ -432,12 +438,11 @@ function createStyles(colors: ColorScheme) {
   },
   // ── Profile bar ──────────────────────────────────────────────────────────
   profileRow: {
-    marginTop: spacing.md,
+    flexShrink: 0,
     paddingHorizontal: spacing.sm,
-    paddingBottom: spacing.sm,
+    paddingVertical: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
-    paddingTop: spacing.md,
   },
   // ── Scroll buttons ────────────────────────────────────────────────────────
   scrollButtons: {

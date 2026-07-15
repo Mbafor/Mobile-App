@@ -47,6 +47,16 @@ export function SuperAdminOverviewScreen() {
       {error ? (
         <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.overview.failedToLoad')} />
       ) : null}
+
+      <View style={styles.actions}>
+        <Button onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENTS as Href)}>
+          {t('events.admin.dashboard.manageEvents')}
+        </Button>
+        <Button variant="secondary" onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENT_CREATE as Href)}>
+          {t('events.admin.dashboard.createEvent')}
+        </Button>
+      </View>
+
       {data ? (
         <>
           <Text style={styles.section}>{t('superAdmin.overview.sections.mentorship')}</Text>
@@ -65,16 +75,6 @@ export function SuperAdminOverviewScreen() {
           </View>
         </>
       ) : null}
-
-      <Text style={styles.section}>{t('events.admin.dashboard.sectionTitle')}</Text>
-      <View style={styles.actions}>
-        <Button onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENTS as Href)}>
-          {t('events.admin.dashboard.manageEvents')}
-        </Button>
-        <Button variant="secondary" onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENT_CREATE as Href)}>
-          {t('events.admin.dashboard.createEvent')}
-        </Button>
-      </View>
     </ScrollView>
   );
 }
@@ -86,6 +86,6 @@ function createStyles(colors: ColorScheme) {
   subtitle: { marginBottom: spacing.md },
   section: { fontWeight: '700', fontSize: 16, marginTop: spacing.md, marginBottom: spacing.sm },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
-  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
 });
 }

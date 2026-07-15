@@ -8,6 +8,7 @@ import { Pressable, StyleSheet, View } from 'react-native';
 
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
+import { useInlineSearchToggle } from '@/features/menu/store/inline-search-toggle.store';
 import { NotificationHeaderButton } from '@/features/notifications/components/NotificationHeaderButton';
 
 /** Header right cluster — search then notification bell, flush right. */
@@ -17,14 +18,15 @@ export function AppHeaderActions() {
   const { t } = useTranslation();
   const router = useRouter();
   const pathname = usePathname();
-  const isSearchScreen =
-    pathname.includes('/search') || pathname.includes('/events-search') || pathname.includes('/tracker-search');
+  const inlineSearchOpen = useInlineSearchToggle((s) => s.open);
+  const toggleInlineSearch = useInlineSearchToggle((s) => s.toggle);
+
+  const hasInlineSearch = pathname.includes('/tracker') || pathname.includes('/events');
+  const isSearchActive = pathname.includes('/search') || (hasInlineSearch && inlineSearchOpen);
 
   const handleSearchPress = () => {
-    if (pathname.includes('/tracker')) {
-      router.push(ROUTES.MAIN.TRACKER_SEARCH as any);
-    } else if (pathname.includes('/events')) {
-      router.push(ROUTES.MAIN.EVENTS_SEARCH as any);
+    if (hasInlineSearch) {
+      toggleInlineSearch();
     } else {
       router.push(ROUTES.MAIN.SEARCH as any);
     }
@@ -40,9 +42,9 @@ export function AppHeaderActions() {
         hitSlop={12}
       >
         <Ionicons
-          name={isSearchScreen ? "search" : "search-outline"}
+          name={isSearchActive ? "search" : "search-outline"}
           size={24}
-          color={isSearchScreen ? colors.primary : colors.text}
+          color={isSearchActive ? colors.primary : colors.text}
         />
       </Pressable>
       <NotificationHeaderButton />

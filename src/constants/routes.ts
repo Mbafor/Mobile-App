@@ -19,8 +19,6 @@ export const ROUTES = {
     MENTORSHIP: '/(main)/(tabs)/mentorship',
     SAVED: '/(main)/(tabs)/saved',
     SEARCH: '/(main)/search',
-    EVENTS_SEARCH: '/(main)/events-search',
-    TRACKER_SEARCH: '/(main)/tracker-search',
     NOTIFICATIONS: '/(main)/(tabs)/notifications',
     SETTINGS: '/(main)/(tabs)/settings',
     SETTINGS_PRIVACY: '/(main)/(tabs)/settings/privacy',

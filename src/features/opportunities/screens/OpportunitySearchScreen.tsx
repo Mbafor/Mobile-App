@@ -68,7 +68,7 @@ export function OpportunitySearchScreen() {
   return (
     <View style={[styles.container, { paddingTop: Math.max(insets.top, spacing.md) }]}>
       <View style={[styles.pageContent, isDesktop && styles.pageContentDesktop]}>
-      <View style={styles.headerRow}>
+      <View style={[styles.headerRow, isDesktop && styles.headerRowDesktop]}>
         <SearchField
           value={query}
           onChangeText={setQuery}
@@ -184,6 +184,11 @@ function createStyles(colors: ColorScheme) {
       paddingHorizontal: spacing.sm,
       paddingBottom: spacing.sm,
       gap: spacing.sm,
+    },
+    headerRowDesktop: {
+      maxWidth: 560,
+      width: '100%',
+      alignSelf: 'center',
     },
     searchField: { flex: 1 },
     cancelBtn: { paddingHorizontal: spacing.xs, paddingVertical: spacing.xs },

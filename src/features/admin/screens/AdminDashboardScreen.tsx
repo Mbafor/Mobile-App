@@ -68,6 +68,21 @@ export function AdminDashboardScreen() {
           <ErrorMessage message={error instanceof Error ? error.message : t('admin.dashboard.failedToLoadAnalytics')} />
         ) : null}
 
+        <View style={styles.actions}>
+          <Button onPress={() => router.push(ROUTES.ADMIN.OPPORTUNITIES as Href)}>
+            {t('admin.dashboard.actions.manageOpportunities')}
+          </Button>
+          <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.CREATE as Href)}>
+            {t('admin.dashboard.actions.createOpportunity')}
+          </Button>
+          <Button onPress={() => router.push(ROUTES.ADMIN.EVENTS as Href)}>
+            {t('events.admin.dashboard.manageEvents')}
+          </Button>
+          <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.EVENT_CREATE as Href)}>
+            {t('events.admin.dashboard.createEvent')}
+          </Button>
+        </View>
+
         {analytics ? (
           <>
             <Text style={styles.sectionTitle}>{t('admin.dashboard.sections.users')}</Text>
@@ -106,21 +121,6 @@ export function AdminDashboardScreen() {
             </View>
           </>
         ) : null}
-
-        <View style={styles.actions}>
-          <Button onPress={() => router.push(ROUTES.ADMIN.OPPORTUNITIES as Href)}>
-            {t('admin.dashboard.actions.manageOpportunities')}
-          </Button>
-          <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.CREATE as Href)}>
-            {t('admin.dashboard.actions.createOpportunity')}
-          </Button>
-          <Button onPress={() => router.push(ROUTES.ADMIN.EVENTS as Href)}>
-            {t('events.admin.dashboard.manageEvents')}
-          </Button>
-          <Button variant="secondary" onPress={() => router.push(ROUTES.ADMIN.EVENT_CREATE as Href)}>
-            {t('events.admin.dashboard.createEvent')}
-          </Button>
-        </View>
       </ScrollView>
     </Screen>
   );
@@ -143,6 +143,6 @@ function createStyles(colors: ColorScheme) {
     flexWrap: 'wrap',
     gap: spacing.sm,
   },
-  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginTop: spacing.lg },
+  actions: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm, marginBottom: spacing.md },
 });
 }
