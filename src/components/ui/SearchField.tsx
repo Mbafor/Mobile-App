@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
-import type { ColorScheme } from '@/constants/theme/types';
-import { useThemedStyles } from '@/hooks/useThemedStyles';
+import type { AppTheme } from '@/constants/theme/types';
+import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import type { ReactNode } from 'react';
 import { Platform, Pressable, StyleSheet, View, type StyleProp, type ViewStyle } from 'react-native';
 
@@ -32,7 +32,7 @@ export function SearchField({
   trailing,
   autoFocus,
 }: SearchFieldProps) {
-  const styles = useThemedStyles(createStyles);
+  const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const showClear = value.length > 0;
   const isDocs = variant === 'docs';
@@ -40,7 +40,7 @@ export function SearchField({
   return (
     <View style={[styles.wrap, style]}>
       <View style={[styles.field, isDocs && styles.fieldDocs]}>
-        <Ionicons name="search" size={20} color={colors.textMuted} style={styles.icon} />
+        <Ionicons name="search" size={isDocs ? 17 : 20} color={colors.textMuted} style={styles.icon} />
         <Input
           value={value}
           onChangeText={onChangeText}
@@ -48,7 +48,11 @@ export function SearchField({
           autoCapitalize="none"
           autoCorrect={false}
           autoFocus={autoFocus}
-          style={[styles.input, Platform.OS === 'web' && ({ outlineStyle: 'none' } as any)]}
+          style={[
+            styles.input,
+            isDocs && styles.inputDocs,
+            Platform.OS === 'web' && ({ outlineStyle: 'none' } as any),
+          ]}
         />
         {showClear ? (
           <Pressable
@@ -74,7 +78,7 @@ type SearchFieldButtonProps = {
 
 /** Non-editable look-alike of SearchField that opens a full search screen on tap. */
 export function SearchFieldButton({ placeholder, onPress, style }: SearchFieldButtonProps) {
-  const styles = useThemedStyles(createStyles);
+  const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
 
   return (
@@ -96,7 +100,7 @@ type FilterChipButtonProps = {
 };
 
 export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChipButtonProps) {
-  const styles = useThemedStyles(createStyles);
+  const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
   const active = activeCount > 0;
   return (
@@ -115,7 +119,8 @@ export function FilterChipButton({ label, activeCount = 0, onPress }: FilterChip
   );
 }
 
-function createStyles(colors: ColorScheme) {
+function createStyles(theme: AppTheme) {
+  const { colors, cvDocsTheme } = theme;
   return StyleSheet.create({
   wrap: {
     flexDirection: 'row',
@@ -141,6 +146,10 @@ function createStyles(colors: ColorScheme) {
     paddingHorizontal: spacing.xs,
     backgroundColor: 'transparent',
   },
+  inputDocs: {
+    paddingVertical: spacing.xs,
+    fontSize: 13,
+  },
   clearBtn: { padding: spacing.xs },
   placeholderText: { flex: 1, color: colors.textMuted },
   filterBtn: {
@@ -148,10 +157,12 @@ function createStyles(colors: ColorScheme) {
     marginLeft: spacing.xs,
   },
   fieldDocs: {
-    backgroundColor: '#F1F3F4',
-    borderColor: 'transparent',
-    borderRadius: 24,
-    minHeight: 44,
+    backgroundColor: cvDocsTheme.searchBg,
+    borderWidth: 1,
+    borderColor: cvDocsTheme.searchBorder,
+    borderRadius: 20,
+    minHeight: 34,
+    paddingLeft: spacing.sm,
   },
 });
 }

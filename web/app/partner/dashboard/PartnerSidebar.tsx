@@ -78,7 +78,7 @@ export function PartnerSidebar({ orgName, contactEmail }: { orgName: string; con
   };
 
   return (
-    <aside className="hidden md:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-[var(--color-background)] border-r border-[var(--color-border)]">
+    <aside className="hidden sm:flex w-[220px] shrink-0 flex-col h-screen sticky top-0 bg-[var(--color-background)] border-r border-[var(--color-border)]">
       <div className="px-4 py-5 border-b border-[var(--color-border)]">
         <p className="font-semibold text-[var(--color-forest)] truncate" title={orgName}>
           {orgName}

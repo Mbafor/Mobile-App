@@ -2,6 +2,7 @@ import { useRouter, type Href } from 'expo-router';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { useMemo, useState } from 'react';
 import {
   ActivityIndicator,
@@ -37,6 +38,7 @@ import {
 export function CVHubDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const isDesktopWeb = useWebDesktop();
   const router = useRouter();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -133,6 +135,7 @@ export function CVHubDashboardScreen() {
             value={sectionQuery}
             onChangeText={setSectionQuery}
             placeholder={t('cvBuilder.hub.searchSectionsPlaceholder')}
+            style={isDesktopWeb ? styles.searchDesktop : undefined}
           />
         </View>
 
@@ -214,6 +217,7 @@ function createStyles(theme: AppTheme) {
     width: '100%',
     alignSelf: 'center',
   },
+  searchDesktop: { maxWidth: 380 },
   scroll: { flex: 1 },
   scrollContent: {
     padding: spacing.md,
@@ -262,7 +266,9 @@ function createStyles(theme: AppTheme) {
   previewCta: {
     paddingVertical: spacing.sm,
     paddingHorizontal: spacing.lg,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
   },
-  previewCtaText: { fontSize: 14, fontWeight: '600', color: colors.primary },
+  previewCtaText: { fontSize: 14, fontWeight: '600', color: colors.textOnPrimary },
 });
 }

@@ -1,6 +1,7 @@
 import { Pressable, StyleSheet } from 'react-native';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 
 import { Text } from '@/components/ui';
 import { spacing } from '@/constants/theme';
@@ -13,11 +14,12 @@ type CVAddButtonProps = {
 
 export function CVAddButton({ label, onPress, disabled }: CVAddButtonProps) {
   const styles = useThemedStyles(createStyles);
+  const isDesktopWeb = useWebDesktop();
   return (
     <Pressable
       onPress={onPress}
       disabled={disabled}
-      style={[styles.button, disabled && styles.disabled]}
+      style={[styles.button, isDesktopWeb && styles.buttonDesktop, disabled && styles.disabled]}
       accessibilityRole="button"
     >
       <Text style={styles.plus}>+</Text>
@@ -33,15 +35,16 @@ function createStyles(colors: ColorScheme) {
     alignItems: 'center',
     justifyContent: 'center',
     gap: spacing.sm,
-    paddingVertical: spacing.md,
-    borderRadius: 12,
-    borderWidth: 1.5,
-    borderStyle: 'dashed',
-    borderColor: colors.primary,
-    backgroundColor: '#F0F4F8',
+    paddingVertical: spacing.sm + 2,
+    paddingHorizontal: spacing.lg,
+    borderRadius: 10,
+    backgroundColor: colors.primary,
+  },
+  buttonDesktop: {
+    alignSelf: 'flex-start',
   },
   disabled: { opacity: 0.5 },
-  plus: { fontSize: 18, fontWeight: '700', color: colors.primary },
-  label: { fontSize: 15, fontWeight: '600', color: colors.primary },
+  plus: { fontSize: 18, fontWeight: '700', color: colors.textOnPrimary },
+  label: { fontSize: 15, fontWeight: '600', color: colors.textOnPrimary },
 });
 }

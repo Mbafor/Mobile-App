@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -29,6 +30,7 @@ export function CVReorderSectionsModal({
 }: CVReorderSectionsModalProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
+  const isDesktopWeb = useWebDesktop();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const [draftOrder, setDraftOrder] = useState<CVSectionId[]>([]);
@@ -107,7 +109,12 @@ export function CVReorderSectionsModal({
           ))}
         </ScrollView>
         <View style={[styles.footer, { paddingBottom: insets.bottom + spacing.md }]}>
-          <Button onPress={() => void handleDone()}>{t('cvBuilder.reorderModal.saveOrder')}</Button>
+          <Button
+            onPress={() => void handleDone()}
+            style={isDesktopWeb ? styles.saveOrderBtnDesktop : undefined}
+          >
+            {t('cvBuilder.reorderModal.saveOrder')}
+          </Button>
         </View>
       </View>
     </Modal>
@@ -140,5 +147,6 @@ function createStyles(colors: ColorScheme) {
   arrows: { flexDirection: 'row', gap: spacing.xs },
   arrowBtn: { padding: spacing.xs },
   footer: { paddingHorizontal: spacing.md, paddingTop: spacing.sm },
+  saveOrderBtnDesktop: { alignSelf: 'flex-start', minWidth: 200 },
 });
 }

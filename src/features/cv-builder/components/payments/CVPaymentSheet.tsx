@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
@@ -26,6 +27,7 @@ export function CVPaymentSheet({
 }: CVPaymentSheetProps) {
   const styles = useAppThemedStyles(createStyles);
   const { colors, cvDocsTheme } = useTheme();
+  const isDesktopWeb = useWebDesktop();
   const { t } = useTranslation();
   if (!product) return null;
 
@@ -55,7 +57,7 @@ export function CVPaymentSheet({
             <Text style={styles.trustText}>{t('cvBuilder.payments.securedByPaystack')}</Text>
           </View>
 
-          <View style={styles.actions}>
+          <View style={[styles.actions, isDesktopWeb && styles.actionsDesktop]}>
             <Button onPress={onPay} loading={loading}>
               {t('cvBuilder.payments.pay', { amount: product.amountGhs })}
             </Button>
@@ -118,5 +120,6 @@ function createStyles(theme: AppTheme) {
   },
   trustText: { fontSize: 12, color: cvDocsTheme.textSecondary },
   actions: { gap: spacing.sm },
+  actionsDesktop: { alignSelf: 'flex-start', minWidth: 220 },
 });
 }

@@ -1,6 +1,6 @@
 import type { AppTheme } from '@/theme/theme';
-import { ThemeToggle } from './ThemeToggle';
-import { LanguageToggle } from './LanguageToggle';
+import { ThemeToggle } from '../ThemeToggle';
+import { LanguageToggle } from '../LanguageToggle';
 import { PartnerMobileNav } from './PartnerMobileNav';
 
 export function PartnerHeader({

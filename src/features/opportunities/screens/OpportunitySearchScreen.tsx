@@ -195,7 +195,7 @@ function createStyles(colors: ColorScheme) {
     suggestions: { paddingHorizontal: spacing.md, paddingBottom: spacing.lg },
     sectionHeaderRow: {
       flexDirection: 'row',
-      justifyContent: 'flex-start',
+      justifyContent: 'space-between',
       alignItems: 'center',
       gap: spacing.sm,
       marginTop: spacing.sm,

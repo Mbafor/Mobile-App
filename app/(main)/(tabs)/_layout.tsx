@@ -4,7 +4,7 @@ import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/
 import { Tabs } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
@@ -15,7 +15,7 @@ import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
 import { AppHeaderActions } from '@/features/menu/components/AppHeaderActions';
-import { DesktopWebNavigation, DesktopSidebar, DesktopHeader, DesktopFooter } from '@/features/navigation/components';
+import { DesktopWebNavigation, DesktopShell } from '@/features/navigation/components';
 import { useIsWeb, useWebDesktop } from '@/hooks/useWebDesktop';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
@@ -182,30 +182,11 @@ export default function MainTabsLayout() {
   if (isWeb) {
     if (isWebDesktop) {
       return (
-        <View style={styles.webRoot}>
-          <View style={styles.desktopBody}>
-            <DesktopSidebar />
-            <View
-              style={[
-                styles.desktopContent,
-                Platform.OS === 'web' && ({ overflowY: 'auto' } as object),
-              ]}
-            >
-              <DesktopHeader rightSlot={<AppHeaderActions />} />
-              <View
-                style={[
-                  styles.contentMain,
-                  Platform.OS === 'web' && ({ minHeight: '100%' } as object),
-                ]}
-              >
-                {tabs}
-                <FloatingHelpButton />
-                <FeatureSurveyModal />
-              </View>
-              <DesktopFooter />
-            </View>
-          </View>
-        </View>
+        <DesktopShell rightSlot={<AppHeaderActions />}>
+          {tabs}
+          <FloatingHelpButton />
+          <FeatureSurveyModal />
+        </DesktopShell>
       );
     }
 
@@ -271,9 +252,6 @@ function createStyles(colors: import('@/constants/theme/types').ColorScheme) {
     mobileRoot: { flex: 1 },
     webRoot: { flex: 1, backgroundColor: colors.background },
     webContent: { flex: 1 },
-    desktopBody: { flex: 1, flexDirection: 'row' },
-    desktopContent: { flex: 1, flexDirection: 'column' },
-    contentMain: { flex: 1 },
     mobileWebFooter: {
       flexDirection: 'row',
       alignItems: 'center',

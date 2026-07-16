@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -23,6 +24,7 @@ import { isSectionEnabled } from '@/features/cv-builder/utils/section-config';
 export function CVSectionSettingsScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const isDesktopWeb = useWebDesktop();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
   const { layout, setSectionEnabled, setSectionOrder, saveLayout, saveState } =
@@ -49,7 +51,10 @@ export function CVSectionSettingsScreen() {
           {t('cvBuilder.sectionSettings.subtitle')}
         </Text>
 
-        <Button variant="secondary" onPress={() => setReorderOpen(true)} style={styles.reorderBtn}>
+        <Button
+          onPress={() => setReorderOpen(true)}
+          style={[styles.reorderBtn, isDesktopWeb && styles.reorderBtnDesktop]}
+        >
           {t('cvBuilder.sectionSettings.reorderButton')}
         </Button>
 
@@ -125,6 +130,7 @@ function createStyles(theme: AppTheme) {
     color: cvDocsTheme.textOnPage,
   },
   reorderBtn: { marginBottom: spacing.md },
+  reorderBtnDesktop: { alignSelf: 'flex-start' },
   list: {
     borderRadius: 8,
     backgroundColor: cvDocsTheme.canvasBg,

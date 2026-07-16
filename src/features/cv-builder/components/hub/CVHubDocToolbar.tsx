@@ -70,7 +70,7 @@ export function CVHubDocToolbar({
             />
           ) : null}
           <Pressable onPress={onPreview} style={styles.previewBtn}>
-            <Ionicons name="eye-outline" size={18} color={colors.primary} />
+            <Ionicons name="eye-outline" size={18} color={colors.textOnPrimary} />
             <Text style={styles.previewText}>{t('cvBuilder.hub.previewLabel')}</Text>
           </Pressable>
         </View>
@@ -131,9 +131,9 @@ function createStyles(theme: AppTheme) {
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.sm,
     borderRadius: 20,
-    backgroundColor: cvDocsTheme.primaryTint,
+    backgroundColor: colors.primary,
   },
-  previewText: { fontSize: 13, fontWeight: '600', color: colors.primary },
+  previewText: { fontSize: 13, fontWeight: '600', color: colors.textOnPrimary },
   progressTrack: {
     flexDirection: 'row',
     height: 4,

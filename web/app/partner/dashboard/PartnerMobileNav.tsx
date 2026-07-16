@@ -31,7 +31,7 @@ export function PartnerMobileNav({ orgName, contactEmail }: { orgName: string; c
   };
 
   return (
-    <div className="md:hidden">
+    <div className="sm:hidden">
       <button
         type="button"
         onClick={() => setOpen(true)}

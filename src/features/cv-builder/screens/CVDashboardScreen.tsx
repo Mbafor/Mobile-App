@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { useRouter, type Href } from 'expo-router';
 import { useCallback, useMemo, useState } from 'react';
@@ -31,6 +32,7 @@ import type { CV } from '@/types/domain/cv';
 export function CVDashboardScreen() {
   const styles = useAppThemedStyles(createStyles);
   const { colors } = useTheme();
+  const isDesktopWeb = useWebDesktop();
   const router = useRouter();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
@@ -187,10 +189,10 @@ export function CVDashboardScreen() {
                 style={styles.newBtn}
               >
                 {isCreating ? (
-                  <ActivityIndicator size="small" color={colors.primary} />
+                  <ActivityIndicator size="small" color={colors.textOnPrimary} />
                 ) : (
                   <>
-                    <Ionicons name="add" size={22} color={colors.primary} />
+                    <Ionicons name="add" size={22} color={colors.textOnPrimary} />
                     <Text style={styles.newBtnText}>{t('cvBuilder.dashboard.newButton')}</Text>
                   </>
                 )}
@@ -208,6 +210,7 @@ export function CVDashboardScreen() {
             value={searchQuery}
             onChangeText={setSearchQuery}
             placeholder={t('cvBuilder.dashboard.searchPlaceholder')}
+            style={isDesktopWeb ? styles.searchDesktop : undefined}
           />
         </View>
       </View>
@@ -345,9 +348,9 @@ function createStyles(theme: AppTheme) {
     paddingVertical: spacing.xs,
     paddingHorizontal: spacing.sm,
     borderRadius: 20,
-    backgroundColor: cvDocsTheme.primaryTint,
+    backgroundColor: colors.primary,
   },
-  newBtnText: { fontSize: 14, fontWeight: '600', color: colors.primary },
+  newBtnText: { fontSize: 14, fontWeight: '600', color: colors.textOnPrimary },
   searchBarOuter: {
     backgroundColor: cvDocsTheme.barBg,
     borderBottomWidth: 1,
@@ -355,6 +358,7 @@ function createStyles(theme: AppTheme) {
     paddingVertical: spacing.sm,
     zIndex: 10,
   },
+  searchDesktop: { maxWidth: 380 },
   bannerOuter: { backgroundColor: cvDocsTheme.barBg },
   listContainer: {
     flex: 1,

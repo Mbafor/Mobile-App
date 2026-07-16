@@ -19,6 +19,8 @@ import { PageHeader } from '@/components/layout/PageHeader';
 import { Button, Text } from '@/components/ui';
 import { useEventDetail } from '@/features/events/hooks/useEventDetail';
 import { useUpcomingEvents } from '@/features/events/hooks/useUpcomingEvents';
+import { buildEventWebLink } from '@/features/events/utils/event-share-link';
+import { buildEventShareMessage } from '@/features/events/utils/share-event';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { useWebDesktop } from '@/hooks/useWebDesktop';
@@ -27,27 +29,44 @@ import { APP_WEB_BASE_URL } from '@/constants/app';
 import type { Event } from '@/types/domain/event';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
-function RelatedEventCard({ event, onPress }: { event: Event; onPress: () => void }) {
+function EventDateBadge({ eventDate }: { eventDate: string }) {
   const styles = useThemedStyles(createStyles);
-  const initial = event.title.charAt(0).toUpperCase();
+  const { colors } = useTheme();
 
   return (
-    <Pressable style={styles.relatedCard} onPress={onPress} accessibilityRole="button">
-      <View style={styles.relatedImageWrap}>
-        {event.imageUrl ? (
-          <Image source={{ uri: event.imageUrl }} style={styles.relatedImage} contentFit="cover" />
-        ) : (
-          <View style={[styles.relatedImage, styles.relatedImagePlaceholder]}>
-            <Text style={styles.relatedInitial}>{initial}</Text>
-          </View>
-        )}
+    <View style={[styles.dateBadge, { backgroundColor: colors.surface }]}>
+      <Ionicons name="calendar-outline" size={13} color={colors.text} />
+      <Text style={[styles.dateBadgeText, { color: colors.text }]}>{formatEventDateTime(eventDate)}</Text>
+    </View>
+  );
+}
+
+/** Compact row used in the related events sidebar/bottom section — mirrors RelatedOpportunityCard. */
+function RelatedEventRow({
+  event,
+  onPress,
+}: {
+  event: Event;
+  onPress: (e: Event) => void;
+}) {
+  const styles = useThemedStyles(createStyles);
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.relatedCard, pressed && { opacity: 0.8 }]}
+      onPress={() => onPress(event)}
+      accessibilityRole="button"
+    >
+      {event.imageUrl ? (
+        <Image source={{ uri: event.imageUrl }} style={styles.relatedThumb} contentFit="cover" />
+      ) : (
+        <View style={[styles.relatedThumb, styles.relatedThumbPlaceholder]}>
+          <Text style={styles.relatedThumbLetter}>{event.title.charAt(0).toUpperCase()}</Text>
+        </View>
+      )}
+      <View style={styles.relatedBody}>
+        <Text style={styles.relatedTitle} numberOfLines={2}>{event.title}</Text>
+        <Text style={styles.relatedDate}>{formatEventDateTime(event.eventDate)}</Text>
       </View>
-      <Text style={styles.relatedTitle} numberOfLines={2}>
-        {event.title}
-      </Text>
-      <Text variant="caption" muted>
-        {formatEventDateTime(event.eventDate)}
-      </Text>
     </Pressable>
   );
 }
@@ -80,6 +99,67 @@ export function EventDetailScreen() {
     void openExternalUrl(`${APP_WEB_BASE_URL}/e/${event.id}`);
   };
 
+  const eventLink = useMemo(() => {
+    if (!event) return '';
+    return buildEventWebLink(event.id);
+  }, [event]);
+
+  const shareSection = useMemo(() => {
+    if (!event) return null;
+    return (
+      <View style={styles.shareSectionInner}>
+        <Text style={styles.shareLabel}>{t('events.detail.shareVia')}</Text>
+        <View style={styles.shareIconsRow}>
+          <Pressable
+            style={({ pressed }) => [
+              styles.shareIconBtn,
+              { backgroundColor: '#EAF8F2' },
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => {
+              const text = buildEventShareMessage(event, eventLink);
+              void openExternalUrl(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={t('events.detail.shareWhatsapp')}
+          >
+            <Ionicons name="logo-whatsapp" size={20} color="#25D366" />
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.shareIconBtn,
+              { backgroundColor: '#EAF3FC' },
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => {
+              void openExternalUrl(`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(eventLink)}`);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={t('events.detail.shareLinkedin')}
+          >
+            <Ionicons name="logo-linkedin" size={20} color="#0A66C2" />
+          </Pressable>
+
+          <Pressable
+            style={({ pressed }) => [
+              styles.shareIconBtn,
+              { backgroundColor: '#EBF2FC' },
+              pressed && { opacity: 0.75 },
+            ]}
+            onPress={() => {
+              void openExternalUrl(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(eventLink)}`);
+            }}
+            accessibilityRole="button"
+            accessibilityLabel={t('events.detail.shareFacebook')}
+          >
+            <Ionicons name="logo-facebook" size={20} color="#1877F2" />
+          </Pressable>
+        </View>
+      </View>
+    );
+  }, [event, eventLink, styles, t]);
+
   if (isLoading) {
     return (
       <View style={styles.centered}>
@@ -106,91 +186,113 @@ export function EventDetailScreen() {
 
   const initial = event.title.charAt(0).toUpperCase();
 
+  const metaParts: string[] = [
+    event.locationType === 'virtual' ? t('events.common.virtual') : t('events.common.inPerson'),
+    ...(event.locationOrLink ? [event.locationOrLink] : []),
+    ...(event.category ? [event.category] : []),
+  ];
+
+  const mainContent = (
+    <ScrollView
+      contentContainerStyle={[styles.scroll, isDesktop && styles.scrollDesktop]}
+      showsVerticalScrollIndicator={false}
+    >
+      {/* Hero */}
+      {event.imageUrl ? (
+        <Image source={{ uri: event.imageUrl }} style={styles.heroImage} contentFit="cover" />
+      ) : (
+        <View style={styles.heroPlaceholder}>
+          <Text style={styles.heroInitial}>{initial}</Text>
+        </View>
+      )}
+
+      {/* Content */}
+      <View style={styles.body}>
+        <Text style={[styles.title, getWebFontStyle('bold')]}>{event.title}</Text>
+
+        <EventDateBadge eventDate={event.eventDate} />
+
+        {metaParts.length > 0 ? (
+          <Text style={styles.meta}>{metaParts.join('  ·  ')}</Text>
+        ) : null}
+
+        {event.category ? (
+          <View style={styles.tagRow}>
+            <View style={styles.tag}>
+              <Text style={styles.tagText}>{event.category}</Text>
+            </View>
+          </View>
+        ) : null}
+
+        {event.postedBy ? (
+          <View style={styles.postedByRow}>
+            <Ionicons name="person-circle-outline" size={15} color={colors.textMuted} />
+            <Text style={styles.meta}>
+              {t('events.detail.postedBy', { name: event.postedBy.name })}
+            </Text>
+          </View>
+        ) : null}
+
+        <View style={styles.divider} />
+
+        <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
+          {t('events.detail.about')}
+        </Text>
+        <Text style={styles.description}>
+          {event.description?.trim() || t('events.detail.noDescription')}
+        </Text>
+
+        {/* Action button — inside scroll so user scrolls to find it */}
+        <View style={styles.actionSection}>
+          <Button fullWidth onPress={handleRegister}>
+            {t('events.detail.register')}
+          </Button>
+          {/* Share links — directly below the action button */}
+          <View style={styles.inlineShareWrapper}>
+            {shareSection}
+          </View>
+        </View>
+
+        {/* Related events at the bottom on mobile */}
+        {!isDesktop && relatedEvents.length > 0 && (
+          <View style={styles.mobileRelatedSection}>
+            <Text style={[styles.sidebarHeading, getWebFontStyle('semibold')]}>
+              {t('events.detail.youMightAlsoLike')}
+            </Text>
+            {relatedEvents.map((e) => (
+              <RelatedEventRow key={e.id} event={e} onPress={handleRelatedPress} />
+            ))}
+          </View>
+        )}
+      </View>
+    </ScrollView>
+  );
+
   return (
     <View style={styles.root}>
       <PageHeader title={t('events.detail.header')} />
-      <ScrollView
-        contentContainerStyle={[styles.scroll, isDesktop && styles.scrollDesktop]}
-        showsVerticalScrollIndicator={false}
-      >
-        {event.imageUrl ? (
-          <Image source={{ uri: event.imageUrl }} style={styles.heroImage} contentFit="cover" />
-        ) : (
-          <View style={styles.heroPlaceholder}>
-            <Text style={styles.heroInitial}>{initial}</Text>
-          </View>
-        )}
 
-        <View style={styles.body}>
-          <Text style={[styles.title, getWebFontStyle('bold')]}>{event.title}</Text>
-
-          <View style={styles.metaRow}>
-            <Ionicons name="calendar-outline" size={15} color={colors.textMuted} />
-            <Text style={styles.metaText}>{formatEventDateTime(event.eventDate)}</Text>
-          </View>
-
-          <View style={styles.metaRow}>
-            <Ionicons
-              name={event.locationType === 'virtual' ? 'videocam-outline' : 'location-outline'}
-              size={15}
-              color={colors.textMuted}
-            />
-            <Text style={styles.metaText}>
-              {event.locationType === 'virtual'
-                ? t('events.common.virtual')
-                : t('events.common.inPerson')}
-              {event.locationOrLink ? ` · ${event.locationOrLink}` : ''}
-            </Text>
-          </View>
-
-          {event.category ? (
-            <View style={styles.tagRow}>
-              <View style={styles.tag}>
-                <Text style={styles.tagText}>{event.category}</Text>
-              </View>
-            </View>
-          ) : null}
-
-          {event.postedBy ? (
-            <View style={styles.metaRow}>
-              <Ionicons name="person-circle-outline" size={15} color={colors.textMuted} />
-              <Text style={styles.metaText}>
-                {t('events.detail.postedBy', { name: event.postedBy.name })}
-              </Text>
-            </View>
-          ) : null}
-
-          <View style={styles.divider} />
-
-          <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
-            {t('events.detail.about')}
-          </Text>
-          <Text style={styles.description}>
-            {event.description?.trim() || t('events.detail.noDescription')}
-          </Text>
-
-          <View style={styles.actionSection}>
-            <Button fullWidth onPress={handleRegister}>
-              {t('events.detail.register')}
-            </Button>
-          </View>
-
-          {relatedEvents.length > 0 ? (
-            <View style={styles.relatedSection}>
-              <Text style={[styles.sectionHeading, getWebFontStyle('semibold')]}>
-                {t('events.detail.youMightAlsoLike')}
-              </Text>
-              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                <View style={styles.relatedRow}>
+      {isDesktop ? (
+        <View style={styles.desktopLayout}>
+          <View style={styles.mainCol}>{mainContent}</View>
+          <View style={styles.sidebarCol}>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              {relatedEvents.length > 0 && (
+                <>
+                  <Text style={[styles.sidebarHeading, getWebFontStyle('semibold')]}>
+                    {t('events.detail.youMightAlsoLike')}
+                  </Text>
                   {relatedEvents.map((e) => (
-                    <RelatedEventCard key={e.id} event={e} onPress={() => handleRelatedPress(e)} />
+                    <RelatedEventRow key={e.id} event={e} onPress={handleRelatedPress} />
                   ))}
-                </View>
-              </ScrollView>
-            </View>
-          ) : null}
+                </>
+              )}
+            </ScrollView>
+          </View>
         </View>
-      </ScrollView>
+      ) : (
+        mainContent
+      )}
     </View>
   );
 }
@@ -198,23 +300,90 @@ export function EventDetailScreen() {
 function createStyles(colors: ColorScheme) {
   return StyleSheet.create({
     root: { flex: 1, backgroundColor: colors.background },
-    centered: { flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.background },
-    errorBody: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, padding: spacing.lg },
-    scroll: { paddingBottom: spacing.xl },
-    scrollDesktop: { maxWidth: 760, width: '100%', alignSelf: 'center' },
-    heroImage: { width: '100%', height: 260 },
+    centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
+    errorBody: { padding: spacing.lg, gap: spacing.md },
+
+    // Desktop two-column layout
+    desktopLayout: {
+      flex: 1,
+      flexDirection: 'row',
+      maxWidth: 1280,
+      width: '100%',
+      alignSelf: 'center',
+    },
+    mainCol: { flex: 2 },
+    sidebarCol: {
+      flex: 1,
+      borderLeftWidth: StyleSheet.hairlineWidth,
+      borderLeftColor: colors.border,
+      paddingHorizontal: spacing.md,
+      paddingTop: spacing.lg,
+    },
+    sidebarHeading: {
+      fontSize: 16,
+      fontWeight: '700',
+      color: colors.text,
+      marginBottom: spacing.md,
+      letterSpacing: -0.1,
+    },
+
+    scroll: {
+      paddingBottom: spacing.xl * 2,
+    },
+    scrollDesktop: {
+      // no maxWidth here — the desktopLayout handles constraint
+    },
+
+    // ─── Hero ──────────────────────────────────────────────────────────────────
+    heroImage: { width: '100%', height: 240 },
     heroPlaceholder: {
       width: '100%',
-      height: 260,
+      height: 180,
+      backgroundColor: colors.primary,
       alignItems: 'center',
       justifyContent: 'center',
-      backgroundColor: colors.primary,
     },
-    heroInitial: { fontSize: 48, fontWeight: '700', color: colors.background },
-    body: { paddingHorizontal: spacing.xl, paddingTop: spacing.lg, gap: spacing.md },
-    title: { fontSize: 26, fontWeight: '700', color: colors.text, lineHeight: 34, letterSpacing: -0.4 },
-    metaRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
-    metaText: { fontSize: 14, color: colors.textMuted, flexShrink: 1 },
+    heroInitial: {
+      fontSize: 72,
+      fontWeight: '800',
+      color: `${colors.textOnPrimary}E6`,
+      letterSpacing: -3,
+    },
+
+    // ─── Body ──────────────────────────────────────────────────────────────────
+    body: {
+      paddingHorizontal: spacing.xl,
+      paddingTop: spacing.lg,
+      gap: spacing.md,
+    },
+
+    title: {
+      fontSize: 26,
+      fontWeight: '700',
+      color: colors.text,
+      lineHeight: 34,
+      letterSpacing: -0.4,
+    },
+
+    dateBadge: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      alignSelf: 'flex-start',
+      gap: spacing.xs,
+      paddingHorizontal: spacing.sm + 2,
+      paddingVertical: spacing.xs + 2,
+      borderRadius: 999,
+    },
+    dateBadgeText: { fontSize: 13, fontWeight: '600' },
+
+    meta: {
+      fontSize: 14,
+      color: colors.textMuted,
+      lineHeight: 20,
+    },
+
+    postedByRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+
     tagRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
     tag: {
       paddingHorizontal: spacing.sm,
@@ -224,18 +393,90 @@ function createStyles(colors: ColorScheme) {
       borderWidth: 1,
       borderColor: colors.border,
     },
-    tagText: { fontSize: 12, color: colors.textMuted, fontWeight: '600' },
-    divider: { height: StyleSheet.hairlineWidth, backgroundColor: colors.border },
-    sectionHeading: { fontSize: 17, fontWeight: '700', color: colors.text },
-    description: { fontSize: 15, lineHeight: 22, color: colors.text },
-    actionSection: { marginTop: spacing.sm },
-    relatedSection: { marginTop: spacing.lg, gap: spacing.sm },
-    relatedRow: { flexDirection: 'row', gap: spacing.md, paddingVertical: spacing.xs },
-    relatedCard: { width: 180 },
-    relatedImageWrap: { borderRadius: 10, overflow: 'hidden', backgroundColor: colors.surface },
-    relatedImage: { width: 180, height: 100 },
-    relatedImagePlaceholder: { alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary },
-    relatedInitial: { fontSize: 24, fontWeight: '700', color: colors.background },
-    relatedTitle: { fontSize: 14, fontWeight: '600', color: colors.text, marginTop: spacing.xs },
+    tagText: { fontSize: 12, color: colors.text, fontWeight: '500' },
+
+    divider: {
+      height: StyleSheet.hairlineWidth,
+      backgroundColor: colors.border,
+    },
+
+    sectionHeading: {
+      fontSize: 17,
+      fontWeight: '700',
+      color: colors.text,
+      letterSpacing: -0.1,
+    },
+    description: {
+      fontSize: 16,
+      color: colors.text,
+      lineHeight: 28,
+    },
+
+    // ─── Action button (below description, inside scroll) ──────────────────────
+    actionSection: {
+      marginTop: spacing.lg,
+      paddingTop: spacing.lg,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+      gap: spacing.sm,
+    },
+
+    // Share section — inline below the action button
+    inlineShareWrapper: {
+      paddingTop: spacing.md,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+    },
+    shareSectionInner: {
+      alignItems: 'flex-start',
+      gap: spacing.sm,
+    },
+    shareLabel: {
+      fontSize: 14,
+      color: colors.text,
+      fontWeight: '600',
+      letterSpacing: -0.1,
+    },
+    shareIconsRow: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+    },
+    shareIconBtn: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      alignItems: 'center',
+      justifyContent: 'center',
+      borderWidth: 1,
+      borderColor: colors.border,
+    },
+
+    // Mobile related layout
+    mobileRelatedSection: {
+      marginTop: spacing.xl,
+      paddingTop: spacing.lg,
+      borderTopWidth: StyleSheet.hairlineWidth,
+      borderTopColor: colors.border,
+      paddingBottom: spacing.sm,
+    },
+
+    // ─── Related event row ───────────────────────────────────────────────────
+    relatedCard: {
+      flexDirection: 'row',
+      gap: spacing.sm,
+      paddingVertical: spacing.sm,
+      borderBottomWidth: StyleSheet.hairlineWidth,
+      borderBottomColor: colors.border,
+    },
+    relatedThumb: { width: 60, height: 60, borderRadius: 8 },
+    relatedThumbPlaceholder: {
+      backgroundColor: colors.primary,
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    relatedThumbLetter: { color: colors.textOnPrimary, fontWeight: '700', fontSize: 18 },
+    relatedBody: { flex: 1, gap: 2 },
+    relatedTitle: { fontSize: 13, fontWeight: '600', color: colors.text, lineHeight: 18 },
+    relatedDate: { fontSize: 12, color: colors.primary, fontWeight: '500' },
   });
 }

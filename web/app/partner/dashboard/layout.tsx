@@ -12,7 +12,7 @@ export default async function PartnerDashboardLayout({ children }: { children: R
   const theme = isSupportedTheme(cookieTheme) ? cookieTheme : defaultTheme;
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-[var(--color-surface)] text-[#1A1A1A] dark:text-white">
+    <div className="min-h-screen flex flex-col sm:flex-row bg-[var(--color-surface)] text-[#1A1A1A] dark:text-white">
       <PartnerSidebar orgName={session.partner.org_name} contactEmail={session.partner.contact_email} />
       <div className="flex-1 flex flex-col min-w-0">
         <PartnerHeader

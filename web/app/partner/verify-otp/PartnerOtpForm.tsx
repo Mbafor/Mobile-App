@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useEffect, useState } from 'react';
 
 import { verifyPartnerOtp, resendPartnerOtp } from './actions';
@@ -7,6 +8,7 @@ import { verifyPartnerOtp, resendPartnerOtp } from './actions';
 const RESEND_COOLDOWN_SEC = 60;
 
 export function PartnerOtpForm({ email, org }: { email: string; org: string }) {
+  const t = useTranslations('Partner.verifyOtp');
   const [cooldown, setCooldown] = useState(0);
 
   useEffect(() => {
@@ -22,7 +24,7 @@ export function PartnerOtpForm({ email, org }: { email: string; org: string }) {
         <input type="hidden" name="org" value={org} />
         <div>
           <label htmlFor="code" className="block text-sm font-medium mb-1">
-            6-digit code
+            {t('codeLabel')}
           </label>
           <input
             id="code"
@@ -34,14 +36,14 @@ export function PartnerOtpForm({ email, org }: { email: string; org: string }) {
             required
             autoComplete="one-time-code"
             placeholder="123456"
-            className="w-full rounded-md border border-[var(--color-border)] px-3 py-2 text-center text-lg tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+            className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-center text-lg tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
           />
         </div>
         <button
           type="submit"
           className="w-full rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium hover:opacity-90 transition"
         >
-          Verify
+          {t('verify')}
         </button>
       </form>
 
@@ -57,7 +59,7 @@ export function PartnerOtpForm({ email, org }: { email: string; org: string }) {
           disabled={cooldown > 0}
           className="text-sm text-[var(--color-forest)] font-medium hover:underline disabled:opacity-50 disabled:no-underline"
         >
-          {cooldown > 0 ? `Resend code (${cooldown}s)` : 'Resend code'}
+          {cooldown > 0 ? t('resendCooldown', { seconds: cooldown }) : t('resend')}
         </button>
       </form>
     </>
