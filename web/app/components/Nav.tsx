@@ -50,9 +50,9 @@ export default function Nav() {
           <Image
             src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
             alt="Voila"
-            width={100}
-            height={32}
-            className="object-contain scale-[1.35]"
+            width={84}
+            height={28}
+            className="hidden h-7 w-20 object-contain md:block md:h-8 md:w-24"
             priority
           />
         </a>

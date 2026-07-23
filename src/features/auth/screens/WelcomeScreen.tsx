@@ -744,14 +744,15 @@ function createStyles(colors: ColorScheme) {
   // ── Shared Elements ────────────────────────────────────────────
   heroContent: {
     alignItems: 'center',
-    gap: spacing.sm,
+    gap: spacing.xs,
+    marginTop: -spacing.sm,
   },
 
   heroLogoImg: {
     width: 190,
     height: 80,
     marginBottom: spacing.xs,
-    transform: [{ scale: 2.0 }],
+    transform: [{ scale: 1.8 }],
   },
 
   logoMark: {
