@@ -144,7 +144,7 @@ function createStyles(colors: ColorScheme) {
     gap: spacing.xs,
     alignItems: 'flex-end',
   },
-  logoImg: { width: 84, height: 24 },
+  logoImg: { width: 140, height: 40 },
   brandHint: { fontSize: 13, lineHeight: 18 },
   sectionLabel: {
     fontSize: 11,

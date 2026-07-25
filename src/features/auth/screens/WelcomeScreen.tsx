@@ -596,11 +596,6 @@ export function WelcomeScreen() {
             paddingTop: insets.top + spacing.lg,
             paddingHorizontal: spacing.lg,
           }]}>
-            <Image
-              source={require('@/assets/images/white_logo.png')}
-              style={styles.heroLogoImg}
-              resizeMode="contain"
-            />
             <Text style={[styles.heroTitle, styles.heroTitleDesktop]}>{t('auth.welcome.heroTitle')}</Text>
             <Text style={[styles.heroTagline, styles.heroTaglineDesktop]}>{t('auth.welcome.heroTagline')}</Text>
           </View>
