@@ -46,13 +46,13 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <div className="hidden md:block md:h-8 md:w-24" />
+        <a href="/" className="flex items-center" aria-label={t("homeAriaLabel")}> 
           <Image
             src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
             alt="Voila"
-            width={84}
+            width={100}
             height={28}
-            className="hidden h-7 w-20 object-contain md:block md:h-8 md:w-24"
+            className="h-7 w-24 object-contain md:h-8 md:w-28"
             priority
           />
         </a>
@@ -178,6 +178,8 @@ export default function Nav() {
             </a>
           </div>
         </div>
+      )}
+    </nav>
       )}
     </nav>
   );
