@@ -474,11 +474,6 @@ export function WelcomeScreen() {
 
   const heroContent = (
     <View style={styles.heroContent}>
-      <Image
-        source={require('@/assets/images/white_logo.png')}
-        style={styles.heroLogoImg}
-        resizeMode="contain"
-      />
       <Text style={styles.heroTitle}>{t('auth.welcome.heroTitle')}</Text>
       <Text style={styles.heroTagline}>{t('auth.welcome.heroTagline')}</Text>
     </View>

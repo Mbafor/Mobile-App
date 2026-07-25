@@ -46,7 +46,7 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="/" className="flex items-center" aria-label={t("homeAriaLabel")}>
+        <div className="hidden md:block md:h-8 md:w-24" />
           <Image
             src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
             alt="Voila"

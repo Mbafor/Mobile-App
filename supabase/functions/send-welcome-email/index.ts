@@ -88,14 +88,6 @@ serve(async (req) => {
             <a href="mailto:support@voila-africa.com" style="color:#0B6623;">support@voila-africa.com</a>.
           </p>
 
-          <p style="margin-top:24px; padding-top:20px; border-top:1px solid #e5e5e5; font-size:13px; color:#444444;">
-            Stay connected and follow our latest updates on LinkedIn:
-          </p>
-          <p style="margin-top:8px;">
-            <a href="https://www.linkedin.com/company/voila-africa/" style="display:inline-block; background-color:#0A66C2; color:#ffffff; text-decoration:none; font-size:13px; font-weight:600; padding:10px 20px; border-radius:6px;">
-              Follow Voila Africa on LinkedIn
-            </a>
-          </p>
         `,
         ctaLabel: 'Go to Voila',
         ctaHref: `${webBase}/dashboard`,

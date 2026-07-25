@@ -6,6 +6,10 @@ export function appWebBase(): string {
   return (Deno.env.get('APP_WEB_URL') ?? 'https://voila-africa.com').replace(/\/$/, '');
 }
 
+function brandLogoUrl(): string {
+  return `${appWebBase()}/images/main_logo.png`;
+}
+
 export function emailShell(params: {
   headline: string;
   bodyHtml: string;
@@ -28,11 +32,14 @@ export function emailShell(params: {
   return `
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
          background:#f0f0f0; padding:40px 16px;">
-      <div style="max-width:520px; margin:0 auto; background:#ffffff;">
+      <div style="max-width:520px; margin:0 auto; background:#ffffff; border:1px solid #e8e8e8; overflow:hidden;">
 
         <!-- Header -->
-        <div style="padding:18px 32px; border-bottom:3px solid ${BRAND};">
-          <span style="font-size:14px; font-weight:700; color:${BRAND}; letter-spacing:3px;">VOILA</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 32px; border-bottom:3px solid ${BRAND}; background:#ffffff;">
+          <div style="font-size:14px; font-weight:700; color:${BRAND}; letter-spacing:2px; text-transform:uppercase;">
+            Voila Africa
+          </div>
+          <img src="${brandLogoUrl()}" alt="Voila Africa" style="max-height:28px; width:auto; display:block;" />
         </div>
 
         <!-- Body -->
@@ -44,6 +51,17 @@ export function emailShell(params: {
             ${params.bodyHtml}
           </div>
           ${cta}
+
+          <div style="margin-top:32px; padding-top:24px; border-top:1px solid #e8e8e8;">
+            <p style="margin:0 0 8px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
+              Follow us
+            </p>
+            <p style="margin:0; font-size:14px; color:#0B6623;">
+              <a href="https://www.linkedin.com/company/voila-africa/" style="color:#0B6623; text-decoration:none; font-weight:600;">LinkedIn</a>
+              <span style="margin:0 10px; color:#cccccc;">|</span>
+              <a href="https://www.facebook.com/voilaafrica" style="color:#0B6623; text-decoration:none; font-weight:600;">Facebook</a>
+            </p>
+          </div>
         </div>
 
         <!-- Footer -->
