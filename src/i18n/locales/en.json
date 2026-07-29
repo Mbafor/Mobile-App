@@ -176,7 +176,9 @@
       "countryLabel": "Country *",
       "countryPlaceholder": "Select your country",
       "requiredTitle": "Required fields",
-      "requiredMessage": "Please enter your full name and country."
+      "requiredMessage": "Please enter your full name and country.",
+      "fullNameError": "Enter your full name.",
+      "countryError": "Select your country."
     },
     "academic": {
       "title": "Academic information",
@@ -193,7 +195,10 @@
       "careerPlaceholder": "e.g. software engineering, academia",
       "requiredTitle": "Required fields",
       "requiredMessageFields": "Please enter your university and course/major.",
-      "requiredMessageInterest": "Please select at least one interest."
+      "requiredMessageInterest": "Please select at least one interest.",
+      "universityError": "Enter your university.",
+      "courseError": "Select your course or major.",
+      "interestsError": "Select at least one interest."
     },
     "preferences": {
       "title": "Opportunity preferences",
@@ -512,138 +517,6 @@
       "deadlineNone": "No deadline"
     }
   },
-  "events": {
-    "intro": {
-      "title": "Events that move your career forward",
-      "body": "Scholarship webinars, workshops, meetups, and online sessions — all in one place to help you learn, connect, and grow your opportunities."
-    },
-    "common": {
-      "virtual": "Virtual",
-      "inPerson": "In person"
-    },
-    "card": {
-      "share": "Share"
-    },
-    "section": {
-      "viewAll": "All events →",
-      "emptyTitle": "Nothing here yet",
-      "emptyDescription": "Check back soon for new events."
-    },
-    "timing": {
-      "upcoming": "Upcoming",
-      "past": "Past"
-    },
-    "filters": {
-      "allCategories": "All"
-    },
-    "search": {
-      "placeholder": "Search Events",
-      "failed": "Search failed",
-      "emptyTitle": "No events found",
-      "emptyDescription": "Try a different search or check back later.",
-      "cancel": "Cancel",
-      "recentSearches": "Recent searches",
-      "clearRecent": "Clear"
-    },
-    "detail": {
-      "header": "Event Details",
-      "notFound": "Event not found.",
-      "goBack": "Go back",
-      "about": "About this event",
-      "noDescription": "No description provided for this event.",
-      "postedBy": "Posted by {{name}}",
-      "register": "Register",
-      "youMightAlsoLike": "You might also like",
-      "location": "Location",
-      "virtualLink": "Meeting link",
-      "shareVia": "Share event via",
-      "shareWhatsapp": "Share on WhatsApp",
-      "shareLinkedin": "Share on LinkedIn",
-      "shareFacebook": "Share on Facebook"
-    },
-    "admin": {
-      "titles": {
-        "home": "Events",
-        "create": "Create event",
-        "edit": "Edit event"
-      },
-      "dashboard": {
-        "sectionTitle": "Events",
-        "manageEvents": "Manage events",
-        "createEvent": "Create event"
-      },
-      "list": {
-        "homeTitle": "Manage events",
-        "homeSubtitle": "Add and maintain events students see in the app.",
-        "createNew": "Create new",
-        "failedToLoad": "Failed to load events",
-        "emptyList": "No events yet. Create one to get started.",
-        "edit": "Edit",
-        "delete": "Delete",
-        "deleteConfirmTitle": "Delete event",
-        "deleteConfirmMessage": "Delete \"{{title}}\"? This cannot be undone.",
-        "deleteFailedTitle": "Delete failed",
-        "deleteFailedMessage": "Could not delete this event."
-      },
-      "createScreen": {
-        "hint": "Fill all required fields, then tap Create. Students see events immediately once posted.",
-        "submitLabel": "Create event"
-      },
-      "editScreen": {
-        "submitLabel": "Save changes"
-      },
-      "form": {
-        "titleLabel": "Title *",
-        "titlePlaceholder": "Event title",
-        "descriptionLabel": "Description *",
-        "descriptionPlaceholder": "Full description",
-        "eventDateLabel": "Date & time * (YYYY-MM-DDTHH:mm)",
-        "registerLinkLabel": "Register link *",
-        "registerLinkPlaceholder": "https://register.example.com",
-        "locationSection": "Location",
-        "locationTypeLabel": "Location type *",
-        "locationOrLinkLabelVirtual": "Meeting link",
-        "locationOrLinkLabelInPerson": "Address *",
-        "locationOrLinkPlaceholderVirtual": "https://zoom.us/...",
-        "locationOrLinkPlaceholderInPerson": "Street address, city",
-        "classificationSection": "Classification",
-        "categoryLabel": "Category *",
-        "categoryPlaceholder": "Select a category",
-        "imageSection": "Image",
-        "imageUrlLabel": "Image URL",
-        "pickImage": "Choose from device",
-        "imagePermissionTitle": "Permission needed",
-        "imagePermissionMessage": "Allow photo library access to upload an event image.",
-        "imageUploadFailedTitle": "Upload failed",
-        "imageUploadFailedMessage": "Could not upload this image. Please try again.",
-        "checkRequiredFieldsTitle": "Check required fields",
-        "genericSubmitError": "Something went wrong",
-        "validation": {
-          "requiredFields": "Title and description are required.",
-          "eventDateRequired": "Date & time is required.",
-          "invalidEventDate": "Invalid date — use YYYY-MM-DD or YYYY-MM-DDTHH:mm",
-          "registerLink": "Enter a valid register link (https://...).",
-          "locationOrLink": "Enter an address for in-person events.",
-          "category": "Select a category."
-        }
-      },
-      "mutations": {
-        "postedTitle": "Posted",
-        "postedMessage": "\"{{title}}\" is live for students to browse.",
-        "couldNotCreate": "Could not create",
-        "couldNotCreateFallback": "Could not create this event.",
-        "eventNotSaved": "Event was not saved. Please try again.",
-        "savedTitle": "Saved",
-        "savedMessage": "Changes are live for students.",
-        "couldNotSave": "Could not save",
-        "couldNotSaveFallback": "Could not save changes."
-      },
-      "errors": {
-        "missingEventId": "Missing event id",
-        "eventNotFound": "Event not found"
-      }
-    }
-  },
   "notifications": {
     "title": "Notifications",
     "unread_one": "{{count}} unread",
@@ -681,7 +554,6 @@
       "saved": "Saved",
       "tracker": "Tracker",
       "browse": "Browse",
-      "events": "Events",
       "mentorship": "Mentorship",
       "cvBuilder": "CV Builder",
       "notifications": "Notifications",
@@ -695,8 +567,7 @@
       "tracker": "My Tracker",
       "browse": "Browse by Category",
       "category": "Category",
-      "opportunity": "Opportunity",
-      "event": "Event"
+      "opportunity": "Opportunity"
     },
     "sections": {
       "main": "Main",
@@ -2058,7 +1929,27 @@
         "mathematicsStatistics": "Mathematics & Statistics",
         "environmentalScience": "Environmental Science",
         "psychology": "Psychology",
-        "mediaCommunication": "Media & Communication"
+        "mediaCommunication": "Media & Communication",
+        "nursing": "Nursing",
+        "publicHealth": "Public Health",
+        "pharmacy": "Pharmacy",
+        "informationTechnology": "Information Technology",
+        "financeAccounting": "Finance & Accounting",
+        "politicalScienceInternationalRelations": "Political Science & International Relations",
+        "biologyLifeSciences": "Biology & Life Sciences",
+        "chemistry": "Chemistry",
+        "physics": "Physics",
+        "journalism": "Journalism",
+        "fineArtsDesign": "Fine Arts & Design",
+        "hospitalityTourismManagement": "Hospitality & Tourism Management",
+        "humanResourceManagement": "Human Resource Management",
+        "marketing": "Marketing",
+        "veterinaryMedicine": "Veterinary Medicine",
+        "urbanRegionalPlanning": "Urban & Regional Planning",
+        "dataScience": "Data Science",
+        "sportsScience": "Sports Science",
+        "geologyEarthSciences": "Geology & Earth Sciences",
+        "theologyReligiousStudies": "Theology & Religious Studies"
       },
       "interests": {
         "technologyInnovation": "Technology & Innovation",
@@ -2087,17 +1978,6 @@
         "bootcampTraining": "Bootcamp & Training",
         "grantFunding": "Grant & Funding",
         "competitionAward": "Competition & Award"
-      },
-      "eventCategories": {
-        "applicationSupport": "Application Support",
-        "scholarshipInfoSession": "Scholarship Info Session",
-        "careerInternshipPrep": "Career & Internship Prep",
-        "mentorshipNetworking": "Mentorship & Networking",
-        "skillsTraining": "Skills & Training",
-        "studyAbroadExchange": "Study Abroad & Exchange",
-        "fellowshipResearch": "Fellowship & Research Opportunities",
-        "entrepreneurshipFunding": "Entrepreneurship & Funding",
-        "generalCommunity": "General/Community"
       },
       "countries": {
         "afghanistan": "Afghanistan",

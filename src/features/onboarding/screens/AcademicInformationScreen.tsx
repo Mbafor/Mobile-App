@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { FormField, MultiSelectWithOther, SelectWithOther } from '@/components/forms';
@@ -37,6 +36,7 @@ export function AcademicInformationScreen() {
   const [courseMajor, setCourseMajor] = useState(draft.courseMajor);
   const [interests, setInterests] = useState<string[]>(draft.interests);
   const [careerText, setCareerText] = useState(formatListInput(draft.careerInterests));
+  const [fieldErrors, setFieldErrors] = useState<{ university?: string; courseMajor?: string; interests?: string }>({});
 
   useEffect(() => {
     if (profile) {
@@ -59,14 +59,13 @@ export function AcademicInformationScreen() {
 
   const handleContinue = async () => {
     clearError();
-    if (!university.trim() || !courseMajor.trim()) {
-      Alert.alert(t('onboarding.academic.requiredTitle'), t('onboarding.academic.requiredMessageFields'));
-      return;
-    }
-    if (interests.length === 0) {
-      Alert.alert(t('onboarding.academic.requiredTitle'), t('onboarding.academic.requiredMessageInterest'));
-      return;
-    }
+    const nextErrors: { university?: string; courseMajor?: string; interests?: string } = {};
+    if (!university.trim()) nextErrors.university = t('onboarding.academic.universityError');
+    if (!courseMajor.trim()) nextErrors.courseMajor = t('onboarding.academic.courseError');
+    if (interests.length === 0) nextErrors.interests = t('onboarding.academic.interestsError');
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
     const academic = {
       university: university.trim(),
       degreeLevel,
@@ -88,28 +87,44 @@ export function AcademicInformationScreen() {
       onContinue={() => void handleContinue()}
       isLoading={isLoading}
     >
-      <FormField label={t('onboarding.academic.universityLabel')}>
-        <Input value={university} onChangeText={setUniversity} placeholder={t('onboarding.academic.universityPlaceholder')} />
+      <FormField label={t('onboarding.academic.universityLabel')} error={fieldErrors.university}>
+        <Input
+          value={university}
+          onChangeText={(text) => {
+            setUniversity(text);
+            if (fieldErrors.university) setFieldErrors((prev) => ({ ...prev, university: undefined }));
+          }}
+          placeholder={t('onboarding.academic.universityPlaceholder')}
+          error={Boolean(fieldErrors.university)}
+        />
       </FormField>
       <FormField label={t('onboarding.academic.degreeLabel')}>
         <DegreeLevelPicker value={degreeLevel} onChange={setDegreeLevel} />
       </FormField>
-      <FormField label={t('onboarding.academic.courseLabel')}>
+      <FormField label={t('onboarding.academic.courseLabel')} error={fieldErrors.courseMajor}>
         <SelectWithOther
           options={getCourseMajorOptions()}
           predefinedValues={PREDEFINED_COURSE_MAJORS}
           value={courseMajor}
-          onChange={setCourseMajor}
+          onChange={(value) => {
+            setCourseMajor(value);
+            if (fieldErrors.courseMajor) setFieldErrors((prev) => ({ ...prev, courseMajor: undefined }));
+          }}
           placeholder={t('onboarding.academic.coursePlaceholder')}
+          error={Boolean(fieldErrors.courseMajor)}
         />
       </FormField>
-      <FormField label={t('onboarding.academic.interestsLabel')}>
+      <FormField label={t('onboarding.academic.interestsLabel')} error={fieldErrors.interests}>
         <MultiSelectWithOther
           options={getInterestOptions()}
           predefinedValues={PREDEFINED_INTERESTS}
           values={interests}
-          onChange={setInterests}
+          onChange={(next) => {
+            setInterests(next);
+            if (fieldErrors.interests) setFieldErrors((prev) => ({ ...prev, interests: undefined }));
+          }}
           placeholder={t('onboarding.academic.interestsPlaceholder')}
+          error={Boolean(fieldErrors.interests)}
         />
       </FormField>
       <FormField label={t('onboarding.academic.careerLabel')}>

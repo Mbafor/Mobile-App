@@ -4,6 +4,8 @@ import { getTranslations } from 'next-intl/server';
 import { createServiceRoleClient } from '@/lib/supabase-server';
 import { EVENT_CATEGORIES } from '@/lib/opportunity-options';
 import { EventCard, type EventCardData } from './EventCard';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export const metadata: Metadata = {
   title: 'Events | Voila Africa',
@@ -74,7 +76,9 @@ export default async function EventsPage({
   const pillInactive = 'bg-primary/5 text-primary hover:bg-primary/10 border border-primary/15';
 
   return (
-    <main className="min-h-screen bg-[var(--color-surface)]">
+    <>
+      <Header />
+      <main className="min-h-screen bg-[var(--color-surface)]">
       <div className="max-w-[1200px] mx-auto px-6 py-10">
         <header className="mb-8">
           <h1 className="text-3xl font-bold text-[#1A1A1A]">{t('title')}</h1>
@@ -149,6 +153,8 @@ export default async function EventsPage({
           </div>
         )}
       </div>
-    </main>
+      <Footer />
+      </main>
+    </>
   );
 }

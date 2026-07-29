@@ -28,6 +28,8 @@ type MultiSelectWithOtherProps = {
   placeholder?: string;
   /** When true, each selection is saved immediately (no Apply step required). */
   syncOnChange?: boolean;
+  /** Highlights the trigger's border in the theme's error color. */
+  error?: boolean;
 };
 
 export function MultiSelectWithOther({
@@ -37,6 +39,7 @@ export function MultiSelectWithOther({
   onChange,
   placeholder = 'Select options',
   syncOnChange = false,
+  error = false,
 }: MultiSelectWithOtherProps) {
   const styles = useThemedStyles(createStyles);
   const { width } = useWindowDimensions();
@@ -101,7 +104,7 @@ export function MultiSelectWithOther({
 
   return (
     <View>
-      <Pressable style={styles.trigger} onPress={openModal}>
+      <Pressable style={[styles.trigger, error && styles.triggerError]} onPress={openModal}>
         <Text
           style={[
             styles.triggerText,
@@ -216,6 +219,9 @@ function createStyles(colors: ColorScheme) {
       borderRadius: 8,
       padding: spacing.md,
       backgroundColor: colors.background,
+    },
+    triggerError: {
+      borderColor: colors.error,
     },
     triggerText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
     placeholder: { color: colors.textMuted },

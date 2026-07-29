@@ -6,6 +6,8 @@ import { createServiceRoleClient } from '@/lib/supabase-server';
 import { formatDateBadge, formatFullDate, formatTimeRange } from '@/lib/event-format';
 import { AddToCalendar } from './AddToCalendar';
 import { RegistrationForm } from './RegistrationForm';
+import Header from '../../components/Header';
+import Footer from '../../components/Footer';
 
 interface EventRow {
   id: string;
@@ -74,7 +76,9 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
   const descriptionParagraphs = event.description.split(/\n{2,}/).filter(Boolean);
 
   return (
-    <main className="min-h-screen bg-[var(--color-surface)]">
+    <>
+      <Header />
+      <main className="min-h-screen bg-[var(--color-surface)]">
       <div className="max-w-[1000px] mx-auto px-6 py-8">
         <div className="relative rounded-2xl overflow-hidden bg-primary h-64 md:h-80">
           {event.image_url && (
@@ -212,6 +216,8 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
           </div>
         </div>
       </div>
-    </main>
+      <Footer />
+      </main>
+    </>
   );
 }

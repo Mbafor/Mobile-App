@@ -144,13 +144,6 @@ export default function MainTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="events"
-        options={{
-          title: t('navigation.tabs.events'),
-          href: isWeb ? '/(main)/(tabs)/events' : null,
-        }}
-      />
-      <Tabs.Screen
         name="settings"
         options={{
           title: t('menu.items.settings'),

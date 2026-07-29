@@ -5,14 +5,19 @@ import { spacing, typography } from '@/constants/theme';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 
-export function Input(props: TextInputProps) {
+type InputProps = TextInputProps & {
+  /** Highlights the field's border in the theme's error color. */
+  error?: boolean;
+};
+
+export function Input({ error, ...props }: InputProps) {
   const { colors } = useTheme();
   const styles = useThemedStyles(createStyles);
   const { style, ...rest } = props;
 
   return (
     <TextInput
-      style={[styles.input, style]}
+      style={[styles.input, error && styles.inputError, style]}
       placeholderTextColor={colors.textMuted}
       {...rest}
     />
@@ -29,6 +34,9 @@ function createStyles(colors: ColorScheme) {
       fontSize: typography.fontSize.md,
       color: colors.text,
       backgroundColor: colors.background,
+    },
+    inputError: {
+      borderColor: colors.error,
     },
   });
 }

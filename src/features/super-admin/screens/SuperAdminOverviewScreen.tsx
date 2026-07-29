@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useRouter, type Href } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
@@ -7,17 +6,15 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 
 import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
-import { Button, Text } from '@/components/ui';
+import { Text } from '@/components/ui';
 import { AdminStatCard } from '@/features/admin/components/AdminStatCard';
 import { queryKeys } from '@/constants/query-keys';
-import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
 import { superAdminApi } from '@/services/api';
 
 export function SuperAdminOverviewScreen() {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
-  const router = useRouter();
   const { t } = useTranslation();
   const { data, isLoading, error, refetch, isRefetching } = useQuery({
     queryKey: queryKeys.superAdmin.overview,
@@ -48,14 +45,6 @@ export function SuperAdminOverviewScreen() {
         <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.overview.failedToLoad')} />
       ) : null}
 
-      <View style={styles.actions}>
-        <Button onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENTS as Href)}>
-          {t('events.admin.dashboard.manageEvents')}
-        </Button>
-        <Button variant="secondary" onPress={() => router.push(ROUTES.SUPER_ADMIN.EVENT_CREATE as Href)}>
-          {t('events.admin.dashboard.createEvent')}
-        </Button>
-      </View>
 
       {data ? (
         <>

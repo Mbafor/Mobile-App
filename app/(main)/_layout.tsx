@@ -42,10 +42,6 @@ export default function MainLayout() {
         options={{ ...hiddenDrawerItem, title: t('navigation.headerTitles.opportunity'), headerShown: false }}
       />
       <Drawer.Screen
-        name="event/[id]"
-        options={{ ...hiddenDrawerItem, title: t('navigation.headerTitles.event'), headerShown: false }}
-      />
-      <Drawer.Screen
         name="help"
         options={{ ...hiddenDrawerItem, title: t('menu.items.helpSupport'), headerShown: false }}
       />

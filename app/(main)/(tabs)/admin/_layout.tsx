@@ -51,7 +51,6 @@ export default function AdminTabLayout() {
         name="[id]/review"
         options={{ title: t('admin.titles.review'), headerBackTitle: t('admin.titles.reviewBackTitle') }}
       />
-      <Stack.Screen name="events" options={{ headerShown: false }} />
     </Stack>
   );
 }

@@ -11,6 +11,8 @@ type CountrySelectProps = {
   /** Extra entries (e.g. Global for opportunities). */
   extraOptions?: SelectOption[];
   extraPredefined?: readonly string[];
+  /** Highlights the trigger's border in the theme's error color. */
+  error?: boolean;
 };
 
 export function CountrySelect({
@@ -19,6 +21,7 @@ export function CountrySelect({
   placeholder,
   extraOptions = [],
   extraPredefined = [],
+  error = false,
 }: CountrySelectProps) {
   const { t } = useTranslation();
   const options = [...getCountryOptions(), ...extraOptions];
@@ -31,6 +34,7 @@ export function CountrySelect({
       value={value}
       onChange={onChange}
       placeholder={placeholder ?? t('settings.personalInfo.countryPlaceholder')}
+      error={error}
     />
   );
 }

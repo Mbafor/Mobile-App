@@ -21,7 +21,7 @@ export function AppHeaderActions() {
   const inlineSearchOpen = useInlineSearchToggle((s) => s.open);
   const toggleInlineSearch = useInlineSearchToggle((s) => s.toggle);
 
-  const hasInlineSearch = pathname.includes('/tracker') || pathname.includes('/events');
+  const hasInlineSearch = pathname.includes('/tracker');
   const isSearchActive = pathname.includes('/search') || (hasInlineSearch && inlineSearchOpen);
 
   const handleSearchPress = () => {

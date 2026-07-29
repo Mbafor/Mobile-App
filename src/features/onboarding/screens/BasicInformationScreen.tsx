@@ -1,7 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { CountrySelect, FormField } from '@/components/forms';
@@ -27,6 +26,7 @@ export function BasicInformationScreen() {
 
   const [fullName, setFullName] = useState(draft.fullName);
   const [country, setCountry] = useState(draft.country);
+  const [fieldErrors, setFieldErrors] = useState<{ fullName?: string; country?: string }>({});
 
   useEffect(() => {
     if (profile) {
@@ -38,10 +38,12 @@ export function BasicInformationScreen() {
 
   const handleContinue = async () => {
     clearError();
-    if (!fullName.trim() || !country.trim()) {
-      Alert.alert(t('onboarding.basic.requiredTitle'), t('onboarding.basic.requiredMessage'));
-      return;
-    }
+    const nextErrors: { fullName?: string; country?: string } = {};
+    if (!fullName.trim()) nextErrors.fullName = t('onboarding.basic.fullNameError');
+    if (!country.trim()) nextErrors.country = t('onboarding.basic.countryError');
+    setFieldErrors(nextErrors);
+    if (Object.keys(nextErrors).length > 0) return;
+
     setBasic({ fullName, country });
     const ok = await saveBasicInfo({ fullName: fullName.trim(), country: country.trim() });
     if (ok) router.push(ROUTES.ONBOARDING.ACADEMIC);
@@ -55,16 +57,28 @@ export function BasicInformationScreen() {
       onContinue={() => void handleContinue()}
       isLoading={isLoading || loadingProfile}
     >
-      <FormField label={t('onboarding.basic.fullNameLabel')}>
+      <FormField label={t('onboarding.basic.fullNameLabel')} error={fieldErrors.fullName}>
         <Input
           value={fullName}
-          onChangeText={setFullName}
+          onChangeText={(text) => {
+            setFullName(text);
+            if (fieldErrors.fullName) setFieldErrors((prev) => ({ ...prev, fullName: undefined }));
+          }}
           placeholder={t('onboarding.basic.fullNamePlaceholder')}
           autoComplete="name"
+          error={Boolean(fieldErrors.fullName)}
         />
       </FormField>
-      <FormField label={t('onboarding.basic.countryLabel')}>
-        <CountrySelect value={country} onChange={setCountry} placeholder={t('onboarding.basic.countryPlaceholder')} />
+      <FormField label={t('onboarding.basic.countryLabel')} error={fieldErrors.country}>
+        <CountrySelect
+          value={country}
+          onChange={(value) => {
+            setCountry(value);
+            if (fieldErrors.country) setFieldErrors((prev) => ({ ...prev, country: undefined }));
+          }}
+          placeholder={t('onboarding.basic.countryPlaceholder')}
+          error={Boolean(fieldErrors.country)}
+        />
       </FormField>
       {error ? <ErrorMessage message={error} /> : null}
     </OnboardingShell>

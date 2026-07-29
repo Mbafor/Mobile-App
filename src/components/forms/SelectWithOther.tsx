@@ -30,6 +30,8 @@ type SelectWithOtherProps = {
   allowOther?: boolean;
   /** Set false to hide the search box (fine for short lists). */
   searchable?: boolean;
+  /** Highlights the trigger's border in the theme's error color. */
+  error?: boolean;
 };
 
 export function SelectWithOther({
@@ -40,6 +42,7 @@ export function SelectWithOther({
   placeholder = 'Select an option',
   allowOther = true,
   searchable = true,
+  error = false,
 }: SelectWithOtherProps) {
   const styles = useThemedStyles(createStyles);
   const { width } = useWindowDimensions();
@@ -92,7 +95,7 @@ export function SelectWithOther({
 
   return (
     <View>
-      <Pressable style={styles.trigger} onPress={openModal}>
+      <Pressable style={[styles.trigger, error && styles.triggerError]} onPress={openModal}>
         <Text style={[styles.triggerText, !value && styles.placeholder]}>{displayLabel}</Text>
         <Text style={styles.chevron}>▼</Text>
       </Pressable>
@@ -197,6 +200,9 @@ function createStyles(colors: ColorScheme) {
       borderRadius: 8,
       padding: spacing.md,
       backgroundColor: colors.background,
+    },
+    triggerError: {
+      borderColor: colors.error,
     },
     triggerText: { fontSize: typography.fontSize.md, color: colors.text, flex: 1 },
     placeholder: { color: colors.textMuted },

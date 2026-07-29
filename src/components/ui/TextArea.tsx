@@ -7,16 +7,18 @@ import { useThemedStyles } from '@/hooks/useThemedStyles';
 
 type TextAreaProps = TextInputProps & {
   minHeight?: number;
+  /** Highlights the field's border in the theme's error color. */
+  error?: boolean;
 };
 
 /** Multiline text field with visible height — use for summaries and descriptions. */
-export function TextArea({ style, minHeight = 120, ...props }: TextAreaProps) {
+export function TextArea({ style, minHeight = 120, error, ...props }: TextAreaProps) {
   const { colors } = useTheme();
   const styles = useThemedStyles(createStyles);
 
   return (
     <TextInput
-      style={[styles.base, { minHeight }, style]}
+      style={[styles.base, { minHeight }, error && styles.baseError, style]}
       placeholderTextColor={colors.textMuted}
       multiline
       textAlignVertical="top"
@@ -38,6 +40,9 @@ function createStyles(colors: ColorScheme) {
       lineHeight: 22,
       color: colors.text,
       backgroundColor: colors.background,
+    },
+    baseError: {
+      borderColor: colors.error,
     },
   });
 }
