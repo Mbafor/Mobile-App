@@ -1,4 +1,6 @@
 import { createClient } from '@supabase/supabase-js';
+import { createServerClient } from '@supabase/ssr';
+import { cookies } from 'next/headers';
 
 const SUPABASE_URL =
   process.env.EXPO_PUBLIC_SUPABASE_URL ||
@@ -44,3 +46,24 @@ export function createUserClient(accessToken: string) {
 
 /** Alias of createUserClient, used by partner-facing code for readability. */
 export const createPartnerClient = createUserClient;
+
+/** Cookie-backed client for the OAuth (Google) sign-in flow only.
+ * signInWithOAuth's PKCE code_verifier has to survive between two separate
+ * requests -- the Server Action that starts the flow, and the Route Handler
+ * that finishes it -- so it needs real cookie storage, unlike the other
+ * clients above (createAnonClient etc.) which are deliberately stateless.
+ * Must be awaited: Next's cookies() is async in this version. */
+export async function createOAuthClient() {
+  if (!SUPABASE_ANON_KEY) throw new Error('Missing SUPABASE_ANON_KEY configuration on server.');
+  const cookieStore = await cookies();
+  return createServerClient(requireUrl(), SUPABASE_ANON_KEY, {
+    cookies: {
+      getAll() {
+        return cookieStore.getAll();
+      },
+      setAll(cookiesToSet) {
+        cookiesToSet.forEach(({ name, value, options }) => cookieStore.set(name, value, options));
+      },
+    },
+  });
+}

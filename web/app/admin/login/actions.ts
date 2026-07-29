@@ -2,7 +2,7 @@
 
 import { redirect } from 'next/navigation';
 
-import { createAnonClient, createUserClient } from '@/lib/supabase-server';
+import { createAnonClient, createOAuthClient, createUserClient } from '@/lib/supabase-server';
 import { clearAdminSessionCookies, writeAdminSessionCookies } from '@/lib/admin-session';
 
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voila-africa.com').replace(/\/$/, '');
@@ -10,13 +10,13 @@ const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voila-africa.com'
 /** Starts the Google OAuth flow for admins who signed up via Google in the
  * mobile app -- same Supabase Auth project/provider, so it's the exact same
  * account either way (same auth.users row, same profiles.is_admin flag).
- * Done entirely server-side: ask Supabase for the provider consent URL
- * (skipBrowserRedirect so it returns the URL instead of trying to redirect a
- * response that doesn't exist yet), then redirect() the browser to it --
- * next/navigation's redirect() works for external URLs too, so no
- * client-side Supabase instance is needed. */
+ * Uses createOAuthClient (not createAnonClient) because signInWithOAuth's
+ * PKCE code_verifier needs to survive between this request and the separate
+ * /admin/auth/callback request that finishes the exchange -- createOAuthClient
+ * persists it in an httpOnly cookie via @supabase/ssr instead of leaving it
+ * in an ephemeral in-memory client that's gone once this request ends. */
 export async function adminLoginWithGoogle() {
-  const anon = createAnonClient();
+  const anon = await createOAuthClient();
   const { data, error } = await anon.auth.signInWithOAuth({
     provider: 'google',
     options: {
