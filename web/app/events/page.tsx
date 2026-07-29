@@ -73,7 +73,7 @@ export default async function EventsPage({
   const [events, t] = await Promise.all([getEvents(params), getTranslations('Events.listing')]);
 
   const pillBase =
-    'inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors duration-150 whitespace-nowrap';
+    'inline-flex items-center justify-center rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors duration-150 whitespace-nowrap';
   const pillActive = 'bg-primary text-white';
 
   return (
@@ -86,25 +86,25 @@ export default async function EventsPage({
           <p className="text-sm text-[var(--color-muted)] mt-2">{t('subtitle')}</p>
         </header>
 
-        <div className="flex flex-wrap items-center gap-3 mb-6">
-          <div className="inline-flex rounded-full bg-white border border-[var(--color-border)] p-1">
+        <div className="flex flex-col gap-3 mb-8 sm:flex-row sm:flex-wrap sm:items-center">
+          <div className="flex w-full rounded-full bg-white border border-[var(--color-border)] p-1 sm:w-auto">
             <Link
               href={buildHref(params, { tab: 'upcoming' })}
               prefetch
-              className={`${pillBase} ${tab === 'upcoming' ? pillActive : 'text-[#1A1A1A]'}`}
+              className={`flex-1 ${pillBase} ${tab === 'upcoming' ? pillActive : 'text-[#1A1A1A]'}`}
             >
               {t('upcoming')}
             </Link>
             <Link
               href={buildHref(params, { tab: 'past' })}
               prefetch
-              className={`${pillBase} ${tab === 'past' ? pillActive : 'text-[#1A1A1A]'}`}
+              className={`flex-1 ${pillBase} ${tab === 'past' ? pillActive : 'text-[#1A1A1A]'}`}
             >
               {t('past')}
             </Link>
           </div>
 
-          <form action="/events" method="GET" className="flex-1 min-w-[200px] max-w-sm">
+          <form action="/events" method="GET" className="w-full sm:flex-1 sm:min-w-[200px] sm:max-w-sm">
             {tab !== 'upcoming' && <input type="hidden" name="tab" value={tab} />}
             {location !== 'all' && <input type="hidden" name="location" value={location} />}
             {params.topic && <input type="hidden" name="topic" value={params.topic} />}
@@ -116,9 +116,9 @@ export default async function EventsPage({
               className="w-full rounded-full border border-[var(--color-border)] bg-white px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary"
             />
           </form>
-        </div>
 
-        <EventFilters tab={tab} q={params.q} location={location} topic={params.topic} categories={EVENT_CATEGORIES} />
+          <EventFilters tab={tab} q={params.q} location={location} topic={params.topic} categories={EVENT_CATEGORIES} />
+        </div>
 
         {events.length === 0 ? (
           <p className="text-sm text-[var(--color-muted)] py-16 text-center">{t('empty')}</p>

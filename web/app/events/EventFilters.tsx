@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 const selectClass =
-  'appearance-none rounded-full border border-[var(--color-border)] bg-white pl-4 pr-9 py-2 text-xs font-semibold text-[#1A1A1A] cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary bg-[url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="%23666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>\')] bg-no-repeat bg-[right_0.9rem_center]';
+  'flex-1 min-w-0 sm:flex-initial appearance-none rounded-full border border-[var(--color-border)] bg-white pl-4 pr-9 py-2 text-xs font-semibold text-[#1A1A1A] cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary bg-[url(\'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1L5 5L9 1" stroke="%23666666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>\')] bg-no-repeat bg-[right_0.9rem_center]';
 
 export interface EventFiltersProps {
   tab: string;
@@ -30,7 +30,7 @@ export function EventFilters({ tab, q, location, topic, categories }: EventFilte
   }
 
   return (
-    <div className="flex flex-wrap items-center gap-2 mb-8">
+    <div className="flex w-full gap-2 sm:w-auto">
       <select
         aria-label={t('locationFilterLabel')}
         value={location}
