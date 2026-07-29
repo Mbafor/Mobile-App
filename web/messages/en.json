@@ -207,6 +207,7 @@
     "links": {
       "about": "About",
       "mentors": "Mentors",
+      "events": "Events",
       "features": "Features",
       "howItWorks": "How it works"
     },
@@ -712,24 +713,151 @@
         "submit": "Save changes",
         "pending": "Saving...",
         "success": "Saved — your changes are live."
+      }
+    }
+  },
+  "Events": {
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Scholarship Application Webinar",
+      "tagline": "Tagline",
+      "taglinePlaceholder": "A one-line hook for this event",
+      "description": "About this event",
+      "descriptionPlaceholder": "What is this event about? Separate paragraphs with a blank line.",
+      "takeaways": "What you'll take away",
+      "takeawaysPlaceholder": "One takeaway per line",
+      "takeawaysHint": "One bullet point per line.",
+      "hostName": "Host name",
+      "hostNamePlaceholder": "e.g. Ama Mensah",
+      "hostBio": "Host bio",
+      "hostBioPlaceholder": "A short bio for the host",
+      "eventDate": "Start date & time",
+      "endTime": "End date & time",
+      "timezone": "Timezone",
+      "locationType": "Location type",
+      "virtual": "Virtual",
+      "inPerson": "In person",
+      "platformLabel": "Platform",
+      "platformPlaceholder": "e.g. Zoom, Google Meet",
+      "venueLabel": "Venue / address",
+      "venuePlaceholder": "e.g. Voila Africa HQ, Accra",
+      "meetingLink": "Join link",
+      "meetingLinkHint": "Kept private -- only shown to students after they register.",
+      "capacity": "Capacity",
+      "capacityPlaceholder": "Leave blank for unlimited",
+      "registerLink": "External registration link",
+      "registerLinkHint": "Optional -- leave blank to use Voila's own registration form.",
+      "category": "Category *",
+      "categoryPlaceholder": "Select a category",
+      "image": "Image",
+      "imageUrlPlaceholder": "https://...",
+      "or": "or"
+    },
+    "card": {
+      "online": "Online",
+      "inPerson": "In person",
+      "free": "Free",
+      "hostedBy": "Hosted by {name}"
+    },
+    "listing": {
+      "title": "Events",
+      "subtitle": "Free webinars, info sessions, and career events -- built to help you move forward.",
+      "upcoming": "Upcoming",
+      "past": "Past",
+      "searchPlaceholder": "Search events",
+      "all": "All",
+      "inPerson": "In person",
+      "online": "Online",
+      "empty": "No events match your filters right now."
+    },
+    "calendar": {
+      "addToCalendar": "Add to calendar",
+      "close": "Close",
+      "google": "Google Calendar",
+      "outlook": "Outlook",
+      "ics": "Apple / other (.ics)"
+    },
+    "register": {
+      "free": "Free",
+      "freeSubtext": "Free to attend",
+      "reserveSpot": "Reserve your spot",
+      "reserveSpotSubtext": "Free · takes 20 seconds",
+      "spotsFilled": "{filled}/{total} spots filled",
+      "namePlaceholder": "Ama Mensah",
+      "emailPlaceholder": "you@email.com",
+      "whatsappPlaceholder": "+233 ...",
+      "optional": "Optional",
+      "submit": "Confirm registration →",
+      "submitting": "Confirming...",
+      "trustLine": "We only email you about this event.",
+      "full": "This event is full.",
+      "successTitle": "You're registered!",
+      "successSubtitle": "We've sent a confirmation to your email with all the details.",
+      "referenceLabel": "Registration reference",
+      "joinLinkLabel": "Join link",
+      "createAccountCta": "Create your free Voila Africa account"
+    },
+    "single": {
+      "online": "Online",
+      "inPerson": "In person",
+      "registerButton": "Register",
+      "hostedBy": "Hosted by {name}",
+      "dateTimeLabel": "Date & time",
+      "locationLabel": "Location",
+      "linkAfterRegistration": "Join link appears after you register",
+      "aboutTitle": "About this event",
+      "takeawaysTitle": "What you'll take away",
+      "hostBioLabel": "Your host"
+    }
+  },
+  "Admin": {
+    "login": {
+      "title": "Admin sign in",
+      "subtitle": "Sign in with your Voila admin account.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "errorMissingFields": "Enter your email and password.",
+      "errorInvalidCredentials": "Incorrect email or password.",
+      "errorNotAdmin": "This account doesn't have admin access.",
+      "errorGeneric": "Something went wrong. Try again."
+    },
+    "header": {
+      "title": "Voila Admin",
+      "signedInAs": "Signed in as {name}",
+      "signOut": "Sign out"
+    },
+    "events": {
+      "title": "Events",
+      "subtitle": "All events across Voila, with registration counts and CSV export.",
+      "createNew": "+ New event",
+      "empty": "No events yet.",
+      "columnTitle": "Title",
+      "columnDate": "Date",
+      "columnType": "Type",
+      "columnStatus": "Status",
+      "columnRegistrations": "Registrations",
+      "columnActions": "Actions",
+      "inPerson": "In person",
+      "virtual": "Virtual",
+      "csv": "CSV",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone, including its registrations, and can't be undone.",
+      "createForm": {
+        "title": "Create Event",
+        "subtitle": "Post an event directly to Voila. It goes live immediately for students.",
+        "submit": "Publish event",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
       },
-      "form": {
-        "title": "Title",
-        "titlePlaceholder": "e.g. Scholarship Application Webinar",
-        "description": "Description",
-        "descriptionPlaceholder": "What is this event about?",
-        "eventDate": "Date & time",
-        "locationType": "Location type",
-        "virtual": "Virtual",
-        "inPerson": "In person",
-        "locationOrLink": "Meeting link or address",
-        "locationOrLinkPlaceholder": "e.g. Zoom link or venue address",
-        "registerLink": "Registration link",
-        "category": "Category *",
-        "categoryPlaceholder": "Select a category",
-        "image": "Image",
-        "imageUrlPlaceholder": "https://...",
-        "or": "or"
+      "editForm": {
+        "title": "Edit Event",
+        "subtitle": "Changes go live immediately for students.",
+        "submit": "Save changes",
+        "pending": "Saving...",
+        "success": "Saved — your changes are live."
       }
     }
   }

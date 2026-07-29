@@ -8,20 +8,28 @@ import { EVENT_CATEGORIES } from '@/lib/opportunity-options';
 const inputClass =
   'w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]';
 
-export type PartnerEventFormResult = { ok: true } | { ok: false; message: string };
+export type EventFormResult = { ok: true } | { ok: false; message: string };
 
-export interface PartnerEventFormValues {
+export interface EventFormValues {
   title: string;
+  tagline: string;
   description: string;
+  takeaways: string;
+  hostName: string;
+  hostBio: string;
   eventDate: string;
+  endTime: string;
+  timezone: string;
   locationType: string;
-  locationOrLink: string;
+  locationPlatform: string;
+  meetingLink: string;
+  capacity: string;
   registerLink: string;
   category: string;
   imageUrl: string;
 }
 
-export function PartnerEventForm({
+export function EventForm({
   action,
   initialValues,
   submitLabel,
@@ -29,14 +37,14 @@ export function PartnerEventForm({
   successMessage,
   resetOnSuccess = false,
 }: {
-  action: (formData: FormData) => Promise<PartnerEventFormResult>;
-  initialValues?: Partial<PartnerEventFormValues>;
+  action: (formData: FormData) => Promise<EventFormResult>;
+  initialValues?: Partial<EventFormValues>;
   submitLabel: string;
   pendingLabel: string;
   successMessage: string;
   resetOnSuccess?: boolean;
 }) {
-  const t = useTranslations('Partner.events.form');
+  const t = useTranslations('Events.form');
   const [formKey, setFormKey] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -53,10 +61,6 @@ export function PartnerEventForm({
         return;
       }
       setSuccess(true);
-      // Remount the form (and its location-type toggle state) instead of
-      // formRef.reset(), since locationType is React-controlled and a native
-      // .reset() would desync it from React state -- same trick
-      // PartnerOpportunityForm uses for its dropdowns.
       if (resetOnSuccess) {
         setFormKey((key) => key + 1);
         setLocationType('virtual');
@@ -90,6 +94,19 @@ export function PartnerEventForm({
       </div>
 
       <div>
+        <label className="block text-sm font-medium mb-1" htmlFor="tagline">
+          {t('tagline')}
+        </label>
+        <input
+          id="tagline"
+          name="tagline"
+          defaultValue={initialValues?.tagline}
+          className={inputClass}
+          placeholder={t('taglinePlaceholder')}
+        />
+      </div>
+
+      <div>
         <label className="block text-sm font-medium mb-1" htmlFor="description">
           {t('description')}
         </label>
@@ -97,7 +114,7 @@ export function PartnerEventForm({
           id="description"
           name="description"
           required
-          rows={4}
+          rows={5}
           defaultValue={initialValues?.description}
           className={inputClass}
           placeholder={t('descriptionPlaceholder')}
@@ -105,16 +122,108 @@ export function PartnerEventForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1" htmlFor="eventDate">
-          {t('eventDate')}
+        <label className="block text-sm font-medium mb-1" htmlFor="takeaways">
+          {t('takeaways')}
+        </label>
+        <textarea
+          id="takeaways"
+          name="takeaways"
+          rows={4}
+          defaultValue={initialValues?.takeaways}
+          className={inputClass}
+          placeholder={t('takeawaysPlaceholder')}
+        />
+        <p className="text-xs text-[var(--color-muted)] mt-1">{t('takeawaysHint')}</p>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="hostName">
+            {t('hostName')}
+          </label>
+          <input
+            id="hostName"
+            name="hostName"
+            defaultValue={initialValues?.hostName}
+            className={inputClass}
+            placeholder={t('hostNamePlaceholder')}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="category">
+            {t('category')}
+          </label>
+          <select
+            id="category"
+            name="category"
+            required
+            defaultValue={initialValues?.category ?? ''}
+            className={inputClass}
+          >
+            <option value="" disabled>
+              {t('categoryPlaceholder')}
+            </option>
+            {EVENT_CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1" htmlFor="hostBio">
+          {t('hostBio')}
+        </label>
+        <textarea
+          id="hostBio"
+          name="hostBio"
+          rows={3}
+          defaultValue={initialValues?.hostBio}
+          className={inputClass}
+          placeholder={t('hostBioPlaceholder')}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="eventDate">
+            {t('eventDate')}
+          </label>
+          <input
+            id="eventDate"
+            name="eventDate"
+            type="datetime-local"
+            required
+            defaultValue={initialValues?.eventDate}
+            className={inputClass}
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="endTime">
+            {t('endTime')}
+          </label>
+          <input
+            id="endTime"
+            name="endTime"
+            type="datetime-local"
+            defaultValue={initialValues?.endTime}
+            className={inputClass}
+          />
+        </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1" htmlFor="timezone">
+          {t('timezone')}
         </label>
         <input
-          id="eventDate"
-          name="eventDate"
-          type="datetime-local"
-          required
-          defaultValue={initialValues?.eventDate}
+          id="timezone"
+          name="timezone"
+          defaultValue={initialValues?.timezone || 'GMT'}
           className={inputClass}
+          placeholder="GMT"
         />
       </div>
 
@@ -159,15 +268,49 @@ export function PartnerEventForm({
       </div>
 
       <div>
-        <label className="block text-sm font-medium mb-1" htmlFor="locationOrLink">
-          {t('locationOrLink')}
+        <label className="block text-sm font-medium mb-1" htmlFor="locationPlatform">
+          {locationType === 'virtual' ? t('platformLabel') : t('venueLabel')}
         </label>
         <input
-          id="locationOrLink"
-          name="locationOrLink"
-          defaultValue={initialValues?.locationOrLink}
+          id="locationPlatform"
+          name="locationPlatform"
+          defaultValue={initialValues?.locationPlatform}
           className={inputClass}
-          placeholder={t('locationOrLinkPlaceholder')}
+          placeholder={locationType === 'virtual' ? t('platformPlaceholder') : t('venuePlaceholder')}
+        />
+      </div>
+
+      {locationType === 'virtual' && (
+        <div>
+          <label className="block text-sm font-medium mb-1" htmlFor="meetingLink">
+            {t('meetingLink')}
+          </label>
+          <input
+            id="meetingLink"
+            name="meetingLink"
+            type="url"
+            defaultValue={initialValues?.meetingLink}
+            className={inputClass}
+            placeholder="https://..."
+            autoCapitalize="none"
+          />
+          <p className="text-xs text-[var(--color-muted)] mt-1">{t('meetingLinkHint')}</p>
+        </div>
+      )}
+
+      <div>
+        <label className="block text-sm font-medium mb-1" htmlFor="capacity">
+          {t('capacity')}
+        </label>
+        <input
+          id="capacity"
+          name="capacity"
+          type="number"
+          min={1}
+          step={1}
+          defaultValue={initialValues?.capacity}
+          className={inputClass}
+          placeholder={t('capacityPlaceholder')}
         />
       </div>
 
@@ -179,34 +322,12 @@ export function PartnerEventForm({
           id="registerLink"
           name="registerLink"
           type="url"
-          required
           defaultValue={initialValues?.registerLink}
           className={inputClass}
           placeholder="https://..."
           autoCapitalize="none"
         />
-      </div>
-
-      <div>
-        <label className="block text-sm font-medium mb-1" htmlFor="category">
-          {t('category')}
-        </label>
-        <select
-          id="category"
-          name="category"
-          required
-          defaultValue={initialValues?.category ?? ''}
-          className={inputClass}
-        >
-          <option value="" disabled>
-            {t('categoryPlaceholder')}
-          </option>
-          {EVENT_CATEGORIES.map((c) => (
-            <option key={c} value={c}>
-              {c}
-            </option>
-          ))}
-        </select>
+        <p className="text-xs text-[var(--color-muted)] mt-1">{t('registerLinkHint')}</p>
       </div>
 
       <div>

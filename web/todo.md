@@ -1,38 +1,106 @@
+Here are some simple, friendly templates you can use for Voila Connect.
 
-I'm building an event registration and management system for Voila Africa (voila-africa.com, Next.js marketing site, connected to Supabase project ref psfnzgvldniabvxxnrb). Goal: maximize event attendance by making registration frictionless (no Google Forms, no login required) and following up with reminders.
+Confirmation Email
 
-**Database (Supabase/Postgres):**
+Hi {{FirstName}},
 
-1. `events` table: id, title, slug (unique), tagline, description (About this event, multi-paragraph), takeaways (array of strings), host_name, host_bio, start_time, end_time, timezone (default GMT), location_type (in_person/online), location_platform (e.g. "Google Meet", or venue name), meeting_link (nullable, revealed after registration), cover_image_url, topic, capacity (nullable int), status (upcoming/past/cancelled), created_at.
-2. `event_registrations` table: id, event_id (fk), full_name, email, whatsapp (nullable), is_existing_user (bool, matched by email), registration_ref (unique short code), created_at, reminder_3day_sent (bool), reminder_1day_sent (bool).
+Thank you for registering for {{EventTitle}} hosted by Voila Connect.
 
-**Events listing page** at voila-africa.com/events:
-- Upcoming / Past toggle, search bar, filter pills (All / In person / Online, plus topic)
-- Event cards: date badge, cover image, online/in-person tag, time, title, description snippet, "Free" tag, host attribution with verified badge
+📅 Date: {{EventDate}}
+🕒 Time: {{EventTime}}
 
-**Single event page** at voila-africa.com/events/[slug]:
-- Cover image with date badge and location tag overlaid
-- Register button + location tag near top
-- Title + tagline
-- "Hosted by [name]" with verified badge (text only, no photo)
-- Date & Time card: full date, time range with timezone, "Add to calendar" dropdown with three options: Google Calendar link, Outlook link, and .ics download (for Apple/other calendar apps)
-- Location card: platform name, lock icon, "Join link appears after you register"
-- **About this event** section, multi-paragraph
-- "What you'll take away" bullet section
-- Host bio block (text only)
-- Sticky/bottom CTA card:
-  - "Free" heading, "Free to attend" subtext
-  - "Reserve your spot" subheading, "Free · takes 20 seconds" subtext
-  - Form fields: **Full name** (placeholder "Ama Mensah"), **Email** (placeholder "you@email.com"), **WhatsApp** marked "optional" (placeholder "+233 ...")
-  - Button: "Confirm registration →"
-  - Trust line with shield icon: "We only email you about this event."
-- On success: confirmation with registration ref, meeting link (if online), add-to-calendar dropdown, and a "Create your free Voila Africa account" CTA prefilled with their info if is_existing_user is false
-- If capacity is set, show live "X/Y spots filled"
+We’re excited to have you join us.
 
-**Confirmation email:** on registration insert, trigger a Resend email with event details, date/time, location/meeting link, registration ref, and .ics attachment.
+You will receive reminder emails closer to the event with the joining details.
 
-**Reminder system:** pg_cron job (daily) finds events happening in 3 days and 1 day, pulls registrations where the relevant reminder flag is false, sends a Resend batch reminder, flips the flag. Same batching pattern as digest_batch on profiles.
+See you there!
 
-**Admin view** (internal only): list of events with registration counts, CSV export of registrants per event.
+The Voila Connect Team
 
-Build order: database migration → events listing + single event page + form (matching the exact copy above) → add-to-calendar (Google link + Outlook link + .ics generation) → confirmation email with .ics attachment → cron reminder job → admin view.
+3 Days Before
+
+Hi {{FirstName}},
+
+Just a reminder that {{EventTitle}} is happening in 3 days.
+
+📅 Date: {{EventDate}}
+🕒 Time: {{EventTime}}
+
+We’re looking forward to an insightful session with our speaker, and we can’t wait to see you there.
+
+Keep an eye on your inbox for further reminders and joining details.
+
+The Voila Connect Team
+
+1 Day Before
+
+Hi {{FirstName}},
+
+Your webinar, {{EventTitle}}, is happening tomorrow.
+
+📅 Date: {{EventDate}}
+🕒 Time: {{EventTime}}
+
+🔗 Join here: {{EventLink}}
+
+We recommend adding the event to your calendar so you don’t miss it.
+
+See you tomorrow!
+
+The Voila Connect Team
+
+Day of Event
+
+Hi {{FirstName}},
+
+Today’s the day!
+
+{{EventTitle}} takes place today.
+
+📅 Date: {{EventDate}}
+🕒 Time: {{EventTime}}
+
+🔗 Join here: {{EventLink}}
+
+We’re excited to have you with us. Make sure your device and internet connection are ready before the session begins.
+
+See you soon!
+
+The Voila Connect Team
+
+1 Hour Before
+
+Hi {{FirstName}},
+
+This is a reminder that {{EventTitle}} starts in 1 hour.
+
+🔗 Join here: {{EventLink}}
+
+We recommend joining a few minutes early to get settled before the session begins.
+
+See you shortly!
+
+The Voila Connect Team
+
+30 Minutes Before
+
+Hi {{FirstName}},
+
+We’re just 30 minutes away from {{EventTitle}}.
+
+🔗 Join here: {{EventLink}}
+
+Get ready for an engaging session. Click the link above when you’re ready to join.
+
+See you soon!
+
+The Voila Connect Team
+
+For a modern webinar platform, I’d suggest:
+
+* Confirmation ✅
+* 1 Day Before ✅
+* 1 Hour Before ✅
+* 30 Minutes Before ✅
+
+They should all have the image of the event, so add the image URL at the right position.

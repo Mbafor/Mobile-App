@@ -89,6 +89,14 @@ export default function Nav() {
               {t("links.mentors")}
             </a>
             <a
+              href="/events"
+              className={`text-sm font-semibold transition-all duration-150 ${
+                pathname.startsWith("/events") ? activeLinkClass : inactiveLinkClass
+              }`}
+            >
+              {t("links.events")}
+            </a>
+            <a
               href="/#features"
               className={`text-sm font-semibold transition-all duration-150 ${
                 activeHash === "#features" ? activeLinkClass : inactiveLinkClass
@@ -152,6 +160,13 @@ export default function Nav() {
                 className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
               >
                 {t("links.mentors")}
+              </a>
+              <a
+                href="/events"
+                onClick={() => setMenuOpen(false)}
+                className="text-sm font-semibold text-[#1A1A1A] transition-all duration-150"
+              >
+                {t("links.events")}
               </a>
               <a
                 href="/#features"

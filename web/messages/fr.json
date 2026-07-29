@@ -207,6 +207,7 @@
     "links": {
       "about": "À propos",
       "mentors": "Mentors",
+      "events": "Événements",
       "features": "Fonctionnalités",
       "howItWorks": "Comment ça marche"
     },
@@ -712,24 +713,151 @@
         "submit": "Enregistrer les modifications",
         "pending": "Enregistrement...",
         "success": "Enregistré — vos modifications sont en ligne."
+      }
+    }
+  },
+  "Events": {
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Webinaire sur les candidatures aux bourses",
+      "tagline": "Accroche",
+      "taglinePlaceholder": "Une phrase d'accroche pour cet événement",
+      "description": "À propos de cet événement",
+      "descriptionPlaceholder": "En quoi consiste cet événement ? Séparez les paragraphes par une ligne vide.",
+      "takeaways": "Ce que vous en retirerez",
+      "takeawaysPlaceholder": "Un point par ligne",
+      "takeawaysHint": "Un point à retenir par ligne.",
+      "hostName": "Nom de l'animateur",
+      "hostNamePlaceholder": "ex. Ama Mensah",
+      "hostBio": "Bio de l'animateur",
+      "hostBioPlaceholder": "Une courte bio de l'animateur",
+      "eventDate": "Date et heure de début",
+      "endTime": "Date et heure de fin",
+      "timezone": "Fuseau horaire",
+      "locationType": "Type de lieu",
+      "virtual": "Virtuel",
+      "inPerson": "En personne",
+      "platformLabel": "Plateforme",
+      "platformPlaceholder": "ex. Zoom, Google Meet",
+      "venueLabel": "Lieu / adresse",
+      "venuePlaceholder": "ex. Siège de Voila Africa, Accra",
+      "meetingLink": "Lien de connexion",
+      "meetingLinkHint": "Reste privé -- affiché aux étudiants seulement après leur inscription.",
+      "capacity": "Capacité",
+      "capacityPlaceholder": "Laissez vide pour illimité",
+      "registerLink": "Lien d'inscription externe",
+      "registerLinkHint": "Facultatif -- laissez vide pour utiliser le formulaire d'inscription de Voila.",
+      "category": "Catégorie *",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "image": "Image",
+      "imageUrlPlaceholder": "https://...",
+      "or": "ou"
+    },
+    "card": {
+      "online": "En ligne",
+      "inPerson": "En personne",
+      "free": "Gratuit",
+      "hostedBy": "Animé par {name}"
+    },
+    "listing": {
+      "title": "Événements",
+      "subtitle": "Webinaires gratuits, séances d'information et événements de carrière -- pour vous faire avancer.",
+      "upcoming": "À venir",
+      "past": "Passés",
+      "searchPlaceholder": "Rechercher un événement",
+      "all": "Tous",
+      "inPerson": "En personne",
+      "online": "En ligne",
+      "empty": "Aucun événement ne correspond à vos filtres pour le moment."
+    },
+    "calendar": {
+      "addToCalendar": "Ajouter au calendrier",
+      "close": "Fermer",
+      "google": "Google Agenda",
+      "outlook": "Outlook",
+      "ics": "Apple / autre (.ics)"
+    },
+    "register": {
+      "free": "Gratuit",
+      "freeSubtext": "Gratuit à participer",
+      "reserveSpot": "Réservez votre place",
+      "reserveSpotSubtext": "Gratuit · prend 20 secondes",
+      "spotsFilled": "{filled}/{total} places prises",
+      "namePlaceholder": "Ama Mensah",
+      "emailPlaceholder": "vous@email.com",
+      "whatsappPlaceholder": "+233 ...",
+      "optional": "Facultatif",
+      "submit": "Confirmer l'inscription →",
+      "submitting": "Confirmation...",
+      "trustLine": "Nous ne vous écrivons qu'à propos de cet événement.",
+      "full": "Cet événement est complet.",
+      "successTitle": "Vous êtes inscrit(e) !",
+      "successSubtitle": "Nous avons envoyé une confirmation à votre email avec tous les détails.",
+      "referenceLabel": "Référence d'inscription",
+      "joinLinkLabel": "Lien de connexion",
+      "createAccountCta": "Créez votre compte Voila Africa gratuit"
+    },
+    "single": {
+      "online": "En ligne",
+      "inPerson": "En personne",
+      "registerButton": "S'inscrire",
+      "hostedBy": "Animé par {name}",
+      "dateTimeLabel": "Date et heure",
+      "locationLabel": "Lieu",
+      "linkAfterRegistration": "Le lien de connexion apparaît après votre inscription",
+      "aboutTitle": "À propos de cet événement",
+      "takeawaysTitle": "Ce que vous en retirerez",
+      "hostBioLabel": "Votre hôte"
+    }
+  },
+  "Admin": {
+    "login": {
+      "title": "Connexion administrateur",
+      "subtitle": "Connectez-vous avec votre compte administrateur Voila.",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter",
+      "errorMissingFields": "Entrez votre e-mail et votre mot de passe.",
+      "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
+      "errorNotAdmin": "Ce compte n'a pas d'accès administrateur.",
+      "errorGeneric": "Une erreur est survenue. Réessayez."
+    },
+    "header": {
+      "title": "Administration Voila",
+      "signedInAs": "Connecté en tant que {name}",
+      "signOut": "Se déconnecter"
+    },
+    "events": {
+      "title": "Événements",
+      "subtitle": "Tous les événements de Voila, avec le nombre d'inscriptions et l'export CSV.",
+      "createNew": "+ Nouvel événement",
+      "empty": "Aucun événement pour le moment.",
+      "columnTitle": "Titre",
+      "columnDate": "Date",
+      "columnType": "Type",
+      "columnStatus": "Statut",
+      "columnRegistrations": "Inscriptions",
+      "columnActions": "Actions",
+      "inPerson": "En personne",
+      "virtual": "En ligne",
+      "csv": "CSV",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "confirmDelete": "Supprimer « {title} » ? Cela le retire de Voila pour tout le monde, y compris ses inscriptions, et c'est irréversible.",
+      "createForm": {
+        "title": "Créer un événement",
+        "subtitle": "Publiez un événement directement sur Voila. Il est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'événement",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
       },
-      "form": {
-        "title": "Titre",
-        "titlePlaceholder": "ex. Webinaire sur les candidatures aux bourses",
-        "description": "Description",
-        "descriptionPlaceholder": "En quoi consiste cet événement ?",
-        "eventDate": "Date et heure",
-        "locationType": "Type de lieu",
-        "virtual": "Virtuel",
-        "inPerson": "En personne",
-        "locationOrLink": "Lien de réunion ou adresse",
-        "locationOrLinkPlaceholder": "ex. Lien Zoom ou adresse du lieu",
-        "registerLink": "Lien d'inscription",
-        "category": "Catégorie *",
-        "categoryPlaceholder": "Sélectionnez une catégorie",
-        "image": "Image",
-        "imageUrlPlaceholder": "https://...",
-        "or": "ou"
+      "editForm": {
+        "title": "Modifier l'événement",
+        "subtitle": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submit": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "success": "Enregistré — vos modifications sont en ligne."
       }
     }
   }

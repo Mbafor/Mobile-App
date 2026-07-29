@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { requirePartnerSession } from '@/lib/partner-session';
 import { createPartnerClient } from '@/lib/supabase-server';
-import { parsePartnerEventForm, resolveEventImageUrl } from './parse-event-form';
+import { parseEventForm, resolveEventImageUrl } from '@/app/events/_shared/parse-event-form';
 
 export type PartnerEventMutationResult = { ok: true } | { ok: false; message: string };
 
@@ -19,7 +19,7 @@ export async function updatePartnerEvent(
 ): Promise<PartnerEventMutationResult> {
   const session = await requirePartnerSession();
 
-  const parsed = parsePartnerEventForm(formData);
+  const parsed = parseEventForm(formData);
   if (!parsed.ok) return parsed;
   const data = parsed.data;
 
@@ -32,10 +32,18 @@ export async function updatePartnerEvent(
     .from('events')
     .update({
       title: data.title,
+      tagline: data.tagline,
       description: data.description,
+      takeaways: data.takeaways,
+      host_name: data.hostName,
+      host_bio: data.hostBio,
       event_date: data.eventDateIso,
+      end_time: data.endTimeIso,
+      timezone: data.timezone,
       location_type: data.locationType,
-      location_or_link: data.locationOrLink,
+      location_platform: data.locationPlatform,
+      meeting_link: data.meetingLink,
+      capacity: data.capacity,
       register_link: data.registerLink,
       category: data.category,
       image_url: image.url,
@@ -43,7 +51,7 @@ export async function updatePartnerEvent(
     .eq('id', eventId)
     .eq('owner_type', 'partner')
     .eq('owner_id', session.partner.id)
-    .select('id')
+    .select('id, slug')
     .maybeSingle();
 
   if (error) return { ok: false, message: error.message };
@@ -51,6 +59,7 @@ export async function updatePartnerEvent(
 
   revalidatePath('/partner/dashboard/events');
   revalidatePath(`/partner/dashboard/events/${eventId}/edit`);
+  revalidatePath(`/events/${updated.slug}`);
 
   return { ok: true };
 }
