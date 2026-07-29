@@ -10,6 +10,11 @@ function brandLogoUrl(): string {
   return `${appWebBase()}/images/main_logo.png`;
 }
 
+const SOCIAL_LINKS = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/voila-africa/', icon: 'icon-linkedin.png' },
+  { label: 'Facebook', href: 'https://www.facebook.com/voilaafrica', icon: 'icon-facebook.png' },
+];
+
 export function emailShell(params: {
   headline: string;
   bodyHtml: string;
@@ -53,19 +58,23 @@ export function emailShell(params: {
           ${cta}
 
           <div style="margin-top:32px; padding-top:24px; border-top:1px solid #e8e8e8;">
-            <p style="margin:0 0 8px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
+            <p style="margin:0 0 10px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
               Follow us
             </p>
-            <p style="margin:0; font-size:14px; color:#0B6623;">
-              <a href="https://www.linkedin.com/company/voila-africa/" style="color:#0B6623; text-decoration:none; font-weight:600;">LinkedIn</a>
-              <span style="margin:0 10px; color:#cccccc;">|</span>
-              <a href="https://www.facebook.com/voilaafrica" style="color:#0B6623; text-decoration:none; font-weight:600;">Facebook</a>
-            </p>
+            <div>
+              ${SOCIAL_LINKS.map(
+                (s) => `<a href="${s.href}" style="display:inline-block; margin-right:10px;">
+                  <img src="${appWebBase()}/images/${s.icon}" alt="${s.label}" width="28" height="28"
+                       style="width:28px; height:28px; border-radius:50%; display:block;" />
+                </a>`,
+              ).join('')}
+            </div>
           </div>
         </div>
 
         <!-- Footer -->
-        <div style="padding:16px 32px 24px; border-top:1px solid #e8e8e8;">
+        <div style="padding:24px 32px; border-top:1px solid #e8e8e8; text-align:center;">
+          <img src="${brandLogoUrl()}" alt="Voila Africa" style="height:56px; width:auto; display:inline-block; margin-bottom:12px;" />
           <p style="margin:0; font-size:11px; color:#aaaaaa; line-height:1.6;">
             ${params.footerNote ?? 'Voila &mdash; Helping students find global opportunities'}
           </p>

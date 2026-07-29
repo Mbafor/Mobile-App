@@ -31,7 +31,7 @@
       "titleLine1": "Find opportunities.",
       "titleLine2": "Build your future.",
       "subtitle": "Voila matches scholarships, internships, and programs to your profile — with mentorship and CV tools in one place.",
-      "ctaPrimary": "Get started free",
+      "ctaPrimary": "Create Free Account",
       "ctaSecondary": "See how it works",
       "socialProof": "Joined by <strong>24,000+</strong> students across Africa"
     },
@@ -118,7 +118,7 @@
     "cta": {
       "title": "Ready to find your next opportunity?",
       "description": "Join Voila and start with a personalised feed in minutes.",
-      "button": "Get started — it's free",
+      "button": "Create Free Account",
       "note": "No credit card required · Free for students"
     },
     "jsonLd": {
@@ -211,7 +211,7 @@
       "features": "Features",
       "howItWorks": "How it works"
     },
-    "cta": "Get started free"
+    "cta": "Create Free Account"
   },
   "Footer": {
     "tagline": "Building career confidence for African students and young professionals.",
@@ -765,7 +765,10 @@
       "upcoming": "Upcoming",
       "past": "Past",
       "searchPlaceholder": "Search events",
+      "locationFilterLabel": "Filter by location",
+      "topicFilterLabel": "Filter by topic",
       "all": "All",
+      "allTopics": "All topics",
       "inPerson": "In person",
       "online": "Online",
       "empty": "No events match your filters right now."
@@ -814,6 +817,8 @@
     "login": {
       "title": "Admin sign in",
       "subtitle": "Sign in with your Voila admin account.",
+      "continueWithGoogle": "Continue with Google",
+      "orDivider": "or",
       "emailLabel": "Email",
       "passwordLabel": "Password",
       "submit": "Sign in",
@@ -842,6 +847,9 @@
       "virtual": "Virtual",
       "csv": "CSV",
       "edit": "Edit",
+      "cancel": "Cancel",
+      "cancelling": "Cancelling...",
+      "confirmCancel": "Cancel \"{title}\"? It's removed from public listings but registrations are kept.",
       "delete": "Delete",
       "deleting": "Deleting...",
       "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone, including its registrations, and can't be undone.",

@@ -7,6 +7,7 @@ import { ActivityIndicator, Alert, ScrollView, StyleSheet, View } from 'react-na
 import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
+import { Screen } from '@/components/layout';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui';
 import { Input } from '@/components/ui/Input';
@@ -15,6 +16,7 @@ import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
 import { spacing } from '@/constants/theme';
+import { confirmAction } from '@/utils/confirm-action';
 import { superAdminApi, type SuperAdminAdminRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
@@ -121,21 +123,15 @@ export function SuperAdminAdminsScreen() {
             <Button
               variant="ghost"
               disabled={revokeMutation.isPending}
-              onPress={() => {
-                Alert.alert(
+              onPress={async () => {
+                const confirmed = await confirmAction(
                   t('superAdmin.admins.removeConfirmTitle'),
                   t('superAdmin.admins.removeConfirmMessage', {
                     email: row.email ?? t('superAdmin.admins.thisUser'),
                   }),
-                  [
-                    { text: t('superAdmin.admins.cancel'), style: 'cancel' },
-                    {
-                      text: t('superAdmin.admins.remove'),
-                      style: 'destructive',
-                      onPress: () => revokeMutation.mutate(row.id),
-                    },
-                  ],
                 );
+                if (!confirmed) return;
+                revokeMutation.mutate(row.id);
               }}
               textStyle={{ color: colors.error }}
             >
@@ -150,6 +146,7 @@ export function SuperAdminAdminsScreen() {
   );
 
   return (
+    <Screen padded={false}>
     <ScrollView contentContainerStyle={styles.scroll}>
       <Text style={styles.pageTitle}>{t('superAdmin.admins.pageTitle')}</Text>
       <Text muted style={styles.intro}>
@@ -208,6 +205,7 @@ export function SuperAdminAdminsScreen() {
         </>
       ) : null}
     </ScrollView>
+    </Screen>
   );
 }
 

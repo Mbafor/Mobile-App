@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
+import { Screen } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
@@ -38,6 +39,7 @@ export function SuperAdminMenteesScreen() {
   });
 
   return (
+    <Screen padded={false}>
     <ScrollView contentContainerStyle={styles.scroll}>
       <SearchFilterBar value={search} onChangeText={(text) => { setSearch(text); setPage(0); }} placeholder={t('superAdmin.mentees.searchPlaceholder')} />
       {isLoading ? <ActivityIndicator color={colors.primary} /> : null}
@@ -59,6 +61,7 @@ export function SuperAdminMenteesScreen() {
         <PaginationBar page={page} pageSize={PAGE_SIZE} total={data.total} onPageChange={setPage} />
       ) : null}
     </ScrollView>
+    </Screen>
   );
 }
 

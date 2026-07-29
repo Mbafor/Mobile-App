@@ -2,7 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
-import { useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import type { TFunction } from 'i18next';
 import { Image } from 'expo-image';
@@ -25,6 +25,7 @@ import {
   AttachMenuSheet,
   type AttachMenuAction,
 } from '@/features/mentorship/components/shared/AttachMenuSheet';
+import { EmojiPickerSheet } from '@/features/mentorship/components/shared/EmojiPickerSheet';
 import { TypingIndicator } from '@/features/mentorship/components/shared/TypingIndicator';
 import type { SendMessageInput } from '@/features/mentorship/hooks/useMentorshipMessages';
 import { useMentorshipTyping } from '@/features/mentorship/hooks/useMentorshipTyping';
@@ -61,6 +62,46 @@ function attachmentLabel(item: MentorshipMessage, t: TFunction): string | null {
   return t('mentorship.chat.documentFallback');
 }
 
+function startOfDay(date: Date): Date {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+}
+
+function formatDateDivider(date: Date, t: TFunction, locale: string): string {
+  const today = startOfDay(new Date());
+  const target = startOfDay(date);
+  const diffDays = Math.round((today.getTime() - target.getTime()) / 86400000);
+
+  if (diffDays === 0) return t('mentorship.chat.dateToday');
+  if (diffDays === 1) return t('mentorship.chat.dateYesterday');
+  if (diffDays > 1 && diffDays < 7) {
+    return new Intl.DateTimeFormat(locale, { weekday: 'long' }).format(date);
+  }
+  return new Intl.DateTimeFormat(locale, {
+    day: 'numeric',
+    month: 'long',
+    year: target.getFullYear() !== today.getFullYear() ? 'numeric' : undefined,
+  }).format(date);
+}
+
+type ChatListItem =
+  | { type: 'divider'; id: string; label: string }
+  | { type: 'message'; id: string; message: MentorshipMessage };
+
+function buildChatListItems(messages: MentorshipMessage[], t: TFunction, locale: string): ChatListItem[] {
+  const items: ChatListItem[] = [];
+  let lastDateKey: string | null = null;
+  for (const message of messages) {
+    const created = new Date(message.createdAt);
+    const dateKey = created.toDateString();
+    if (dateKey !== lastDateKey) {
+      items.push({ type: 'divider', id: `divider-${dateKey}`, label: formatDateDivider(created, t, locale) });
+      lastDateKey = dateKey;
+    }
+    items.push({ type: 'message', id: message.id, message });
+  }
+  return items;
+}
+
 export function MentorshipChat({
   messages,
   currentUserId,
@@ -75,13 +116,18 @@ export function MentorshipChat({
 }: MentorshipChatProps) {
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const emptyHint = emptyHintProp ?? t('mentorship.chat.emptyHintDefault');
   const peerName = peerNameProp ?? t('mentorship.chat.them');
   const [draft, setDraft] = useState('');
   const [uploading, setUploading] = useState(false);
   const [attachOpen, setAttachOpen] = useState(false);
+  const [emojiOpen, setEmojiOpen] = useState(false);
   const listRef = useRef<FlatList>(null);
+  const chatItems = useMemo(
+    () => buildChatListItems(messages, t, i18n.language),
+    [messages, t, i18n.language],
+  );
   const hasText = draft.trim().length > 0;
   const canSend = hasText && !isSending && !uploading;
   const canAttach = Boolean(mentorshipId?.trim()) && !isSending && !uploading;
@@ -192,8 +238,8 @@ export function MentorshipChat({
           <FlatList
             ref={listRef}
             style={styles.list}
-            data={messages}
-            keyExtractor={(m) => m.id}
+            data={chatItems}
+            keyExtractor={(item) => item.id}
             contentContainerStyle={[styles.listContent, { paddingBottom: listBottomPad }]}
             showsVerticalScrollIndicator
             keyboardShouldPersistTaps="handled"
@@ -202,7 +248,18 @@ export function MentorshipChat({
                 listRef.current?.scrollToEnd({ animated: true });
               }
             }}
-            renderItem={({ item }) => {
+            renderItem={({ item: listItem }) => {
+              if (listItem.type === 'divider') {
+                return (
+                  <View style={styles.dateDividerRow}>
+                    <View style={styles.dateDividerPill}>
+                      <Text style={styles.dateDividerText}>{listItem.label}</Text>
+                    </View>
+                  </View>
+                );
+              }
+
+              const item = listItem.message;
               const mine = item.senderId === currentUserId;
               const time = new Date(item.createdAt).toLocaleTimeString([], {
                 hour: '2-digit',
@@ -273,23 +330,33 @@ export function MentorshipChat({
           {uploading ? (
             <ActivityIndicator size="small" color={mentorshipColors.accent} />
           ) : (
-            <Ionicons name="attach" size={22} color={mentorshipColors.accent} />
+            <Ionicons name="add" size={26} color={mentorshipColors.accent} />
           )}
         </Pressable>
 
-        <TextInput
-          value={draft}
-          onChangeText={(text) => {
-            setDraft(text);
-            onDraftChange(text);
-          }}
-          placeholder={t('mentorship.chat.messagePlaceholder')}
-          placeholderTextColor={mentorshipColors.textMuted}
-          style={styles.input}
-          multiline
-          maxLength={2000}
-          textAlignVertical="center"
-        />
+        <View style={styles.inputWrap}>
+          <TextInput
+            value={draft}
+            onChangeText={(text) => {
+              setDraft(text);
+              onDraftChange(text);
+            }}
+            placeholder={t('mentorship.chat.messagePlaceholder')}
+            placeholderTextColor={mentorshipColors.textMuted}
+            style={styles.input}
+            multiline
+            maxLength={2000}
+            textAlignVertical="center"
+          />
+          <Pressable
+            style={styles.emojiBtn}
+            onPress={() => setEmojiOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t('mentorship.chat.emoji')}
+          >
+            <Ionicons name="happy-outline" size={22} color={mentorshipColors.textMuted} />
+          </Pressable>
+        </View>
 
         <Pressable
           style={[styles.sendBtn, canSend && styles.sendBtnActive]}
@@ -301,11 +368,7 @@ export function MentorshipChat({
           {isSending ? (
             <ActivityIndicator size="small" color={mentorshipColors.textOnAccent} />
           ) : (
-            <Ionicons
-              name="paper-plane"
-              size={18}
-              color={canSend ? mentorshipColors.textOnAccent : mentorshipColors.textMuted}
-            />
+            <Ionicons name="paper-plane" size={16} color={mentorshipColors.textOnAccent} />
           )}
         </Pressable>
       </View>
@@ -314,6 +377,16 @@ export function MentorshipChat({
         visible={attachOpen}
         onClose={() => setAttachOpen(false)}
         onSelect={(action) => void handleAttachAction(action)}
+      />
+
+      <EmojiPickerSheet
+        visible={emojiOpen}
+        onClose={() => setEmojiOpen(false)}
+        onSelect={(emoji) => {
+          const next = draft + emoji;
+          setDraft(next);
+          onDraftChange(next);
+        }}
       />
     </KeyboardAvoidingView>
   );
@@ -354,17 +427,32 @@ function createStyles(theme: AppTheme) {
   list: { flex: 1, minHeight: 0 },
   listContent: {
     flexGrow: 1,
-    gap: spacing.xs,
-    paddingVertical: spacing.sm,
-    paddingHorizontal: spacing.xs,
+    gap: spacing.sm,
+    paddingVertical: spacing.md,
+    paddingHorizontal: spacing.sm,
+  },
+  dateDividerRow: {
+    alignItems: 'center',
+    marginVertical: spacing.xs,
+  },
+  dateDividerPill: {
+    backgroundColor: mentorshipColors.bubbleTheirs,
+    borderRadius: 999,
+    paddingHorizontal: spacing.sm + 2,
+    paddingVertical: 4,
+  },
+  dateDividerText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: mentorshipColors.textMuted,
   },
   bubbleRow: { flexDirection: 'row', width: '100%' },
   bubbleRowMine: { justifyContent: 'flex-end' },
   bubbleRowTheirs: { justifyContent: 'flex-start' },
   bubble: {
     maxWidth: '82%',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
     borderRadius: 18,
     gap: 4,
   },
@@ -419,52 +507,59 @@ function createStyles(theme: AppTheme) {
   timeMine: { color: mentorshipColors.textOnAccent, opacity: 0.88 },
   composerBar: {
     flexDirection: 'row',
-    alignItems: 'center',
+    alignItems: 'flex-end',
     gap: spacing.sm,
-    paddingTop: spacing.xs,
-    paddingHorizontal: spacing.xs,
+    paddingTop: spacing.sm,
+    paddingHorizontal: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: mentorshipColors.border,
     backgroundColor: mentorshipColors.surfaceElevated,
   },
   attachBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: mentorshipColors.border,
-    backgroundColor: mentorshipColors.surfaceElevated,
+    width: 38,
+    height: 38,
     alignItems: 'center',
     justifyContent: 'center',
   },
   attachBtnDisabled: { opacity: 0.4 },
-  input: {
+  inputWrap: {
     flex: 1,
-    minHeight: 44,
-    maxHeight: 110,
-    paddingHorizontal: spacing.md,
-    paddingVertical: Platform.OS === 'ios' ? 10 : 8,
-    fontSize: 15,
-    lineHeight: 20,
-    color: mentorshipColors.text,
+    flexDirection: 'row',
+    alignItems: 'center',
+    minHeight: 38,
+    maxHeight: 100,
+    paddingLeft: spacing.md,
+    paddingRight: spacing.xs,
     backgroundColor: mentorshipColors.surfaceElevated,
-    borderRadius: 12,
+    borderRadius: 19,
     borderWidth: 1,
     borderColor: mentorshipColors.border,
   },
-  sendBtn: {
-    width: 44,
-    height: 44,
-    borderRadius: 12,
-    backgroundColor: mentorshipColors.accentMuted,
-    borderWidth: 1,
-    borderColor: mentorshipColors.accentMuted,
+  input: {
+    flex: 1,
+    paddingVertical: Platform.OS === 'ios' ? 8 : 6,
+    fontSize: 15,
+    lineHeight: 19,
+    color: mentorshipColors.text,
+    maxHeight: 100,
+  },
+  emojiBtn: {
+    width: 30,
+    height: 30,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sendBtnActive: {
+  sendBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
     backgroundColor: mentorshipColors.accent,
-    borderColor: mentorshipColors.accent,
+    alignItems: 'center',
+    justifyContent: 'center',
+    opacity: 0.45,
+  },
+  sendBtnActive: {
+    opacity: 1,
   },
 });
 }

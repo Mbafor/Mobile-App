@@ -6,6 +6,7 @@ import { ActivityIndicator, RefreshControl, ScrollView, StyleSheet, View } from 
 import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
+import { Screen } from '@/components/layout';
 import { Text } from '@/components/ui';
 import { AdminStatCard } from '@/features/admin/components/AdminStatCard';
 import { queryKeys } from '@/constants/query-keys';
@@ -27,44 +28,48 @@ export function SuperAdminOverviewScreen() {
 
   if (isLoading) {
     return (
-      <View style={styles.centered}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
+      <Screen padded={false}>
+        <View style={styles.centered}>
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </Screen>
     );
   }
 
   return (
-    <ScrollView
-      contentContainerStyle={styles.scroll}
-      refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => void refetch()} />}
-    >
-      <Text muted style={styles.subtitle}>
-        {t('superAdmin.overview.subtitle')}
-      </Text>
-      {error ? (
-        <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.overview.failedToLoad')} />
-      ) : null}
+    <Screen padded={false}>
+      <ScrollView
+        contentContainerStyle={styles.scroll}
+        refreshControl={<RefreshControl refreshing={isRefetching} onRefresh={() => void refetch()} />}
+      >
+        <Text muted style={styles.subtitle}>
+          {t('superAdmin.overview.subtitle')}
+        </Text>
+        {error ? (
+          <ErrorMessage message={error instanceof Error ? error.message : t('superAdmin.overview.failedToLoad')} />
+        ) : null}
 
 
-      {data ? (
-        <>
-          <Text style={styles.section}>{t('superAdmin.overview.sections.mentorship')}</Text>
-          <View style={styles.grid}>
-            <AdminStatCard label={t('superAdmin.overview.stats.approvedMentors')} value={data.mentors.approved} />
-            <AdminStatCard label={t('superAdmin.overview.stats.pendingMentors')} value={data.mentors.pending} />
-            <AdminStatCard label={t('superAdmin.overview.stats.activeMentorships')} value={data.mentorships.active} />
-            <AdminStatCard label={t('superAdmin.overview.stats.waitingList')} value={data.waitingList} />
-          </View>
-          <Text style={styles.section}>{t('superAdmin.overview.sections.platform')}</Text>
-          <View style={styles.grid}>
-            <AdminStatCard label={t('superAdmin.overview.stats.totalUsers')} value={data.users} />
-            <AdminStatCard label={t('superAdmin.overview.stats.opportunityAdmins')} value={data.admins} />
-            <AdminStatCard label={t('superAdmin.overview.stats.activeOpportunities')} value={data.opportunities.active} />
-            <AdminStatCard label={t('superAdmin.overview.stats.pendingPush')} value={data.notifications.pendingPush} />
-          </View>
-        </>
-      ) : null}
-    </ScrollView>
+        {data ? (
+          <>
+            <Text style={styles.section}>{t('superAdmin.overview.sections.mentorship')}</Text>
+            <View style={styles.grid}>
+              <AdminStatCard label={t('superAdmin.overview.stats.approvedMentors')} value={data.mentors.approved} />
+              <AdminStatCard label={t('superAdmin.overview.stats.pendingMentors')} value={data.mentors.pending} />
+              <AdminStatCard label={t('superAdmin.overview.stats.activeMentorships')} value={data.mentorships.active} />
+              <AdminStatCard label={t('superAdmin.overview.stats.waitingList')} value={data.waitingList} />
+            </View>
+            <Text style={styles.section}>{t('superAdmin.overview.sections.platform')}</Text>
+            <View style={styles.grid}>
+              <AdminStatCard label={t('superAdmin.overview.stats.totalUsers')} value={data.users} />
+              <AdminStatCard label={t('superAdmin.overview.stats.opportunityAdmins')} value={data.admins} />
+              <AdminStatCard label={t('superAdmin.overview.stats.activeOpportunities')} value={data.opportunities.active} />
+              <AdminStatCard label={t('superAdmin.overview.stats.pendingPush')} value={data.notifications.pendingPush} />
+            </View>
+          </>
+        ) : null}
+      </ScrollView>
+    </Screen>
   );
 }
 

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState, useTransition } from 'react';
 import { useTranslations } from 'next-intl';
 
-import { deleteAdminEvent } from './actions';
+import { cancelAdminEvent, deleteAdminEvent } from './actions';
 
 export interface AdminEventListItem {
   id: string;
@@ -19,6 +19,7 @@ export function AdminEventsList({ events }: { events: AdminEventListItem[] }) {
   const t = useTranslations('Admin.events');
   const [isPending, startTransition] = useTransition();
   const [pendingId, setPendingId] = useState<string | null>(null);
+  const [pendingAction, setPendingAction] = useState<'delete' | 'cancel' | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   if (events.length === 0) {
@@ -29,9 +30,24 @@ export function AdminEventsList({ events }: { events: AdminEventListItem[] }) {
     if (!window.confirm(t('confirmDelete', { title }))) return;
     setError(null);
     setPendingId(id);
+    setPendingAction('delete');
     startTransition(async () => {
       const result = await deleteAdminEvent(id);
       setPendingId(null);
+      setPendingAction(null);
+      if (!result.ok) setError(result.message);
+    });
+  }
+
+  function handleCancel(id: string, title: string) {
+    if (!window.confirm(t('confirmCancel', { title }))) return;
+    setError(null);
+    setPendingId(id);
+    setPendingAction('cancel');
+    startTransition(async () => {
+      const result = await cancelAdminEvent(id);
+      setPendingId(null);
+      setPendingAction(null);
       if (!result.ok) setError(result.message);
     });
   }
@@ -76,13 +92,23 @@ export function AdminEventsList({ events }: { events: AdminEventListItem[] }) {
                   <Link href={`/admin/events/${event.id}/edit`} className="text-primary font-medium hover:underline">
                     {t('edit')}
                   </Link>
+                  {event.status !== 'cancelled' && (
+                    <button
+                      type="button"
+                      onClick={() => handleCancel(event.id, event.title)}
+                      disabled={isPending && pendingId === event.id}
+                      className="text-[var(--color-muted)] font-medium hover:underline disabled:opacity-50"
+                    >
+                      {isPending && pendingId === event.id && pendingAction === 'cancel' ? t('cancelling') : t('cancel')}
+                    </button>
+                  )}
                   <button
                     type="button"
                     onClick={() => handleDelete(event.id, event.title)}
                     disabled={isPending && pendingId === event.id}
                     className="text-red-600 font-medium hover:underline disabled:opacity-50"
                   >
-                    {isPending && pendingId === event.id ? t('deleting') : t('delete')}
+                    {isPending && pendingId === event.id && pendingAction === 'delete' ? t('deleting') : t('delete')}
                   </button>
                 </div>
               </td>

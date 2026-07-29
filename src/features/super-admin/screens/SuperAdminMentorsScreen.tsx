@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
+import { Screen } from '@/components/layout';
 import { Button } from '@/components/ui/Button';
 import { Text } from '@/components/ui';
 import { Input } from '@/components/ui/Input';
@@ -23,6 +24,7 @@ import { PaginationBar } from '@/features/super-admin/components/PaginationBar';
 import { SearchFilterBar } from '@/features/super-admin/components/SearchFilterBar';
 import { queryKeys } from '@/constants/query-keys';
 import { spacing } from '@/constants/theme';
+import { confirmAction } from '@/utils/confirm-action';
 import { superAdminApi, type SuperAdminMentorRow } from '@/services/api/super-admin.api';
 
 const PAGE_SIZE = 15;
@@ -149,23 +151,17 @@ export function SuperAdminMentorsScreen() {
             ) : null}
             <Pressable
               disabled={deleteMutation.isPending}
-              onPress={() => {
+              onPress={async () => {
                 const hasActiveMentees = row.active_mentees > 0;
                 const email = row.email ?? t('superAdmin.mentors.thisUser');
-                Alert.alert(
+                const confirmed = await confirmAction(
                   t('superAdmin.mentors.deleteConfirmTitle'),
                   hasActiveMentees
                     ? t('superAdmin.mentors.deleteConfirmActiveMessage', { email, count: row.active_mentees })
                     : t('superAdmin.mentors.deleteConfirmMessage', { email }),
-                  [
-                    { text: t('superAdmin.admins.cancel'), style: 'cancel' },
-                    {
-                      text: t('superAdmin.mentors.delete'),
-                      style: 'destructive',
-                      onPress: () => deleteMutation.mutate(row.user_id),
-                    },
-                  ],
                 );
+                if (!confirmed) return;
+                deleteMutation.mutate(row.user_id);
               }}
             >
               <Text style={[styles.danger, deleteMutation.isPending && styles.dimmed]}>
@@ -180,6 +176,7 @@ export function SuperAdminMentorsScreen() {
   );
 
   return (
+    <Screen padded={false}>
     <ScrollView contentContainerStyle={styles.scroll}>
       <Text style={styles.pageTitle}>{t('superAdmin.mentors.pageTitle')}</Text>
       <Text muted style={styles.intro}>
@@ -255,6 +252,7 @@ export function SuperAdminMentorsScreen() {
         </>
       ) : null}
     </ScrollView>
+    </Screen>
   );
 }
 

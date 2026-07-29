@@ -31,7 +31,7 @@
       "titleLine1": "Trouvez des opportunités.",
       "titleLine2": "Construisez votre avenir.",
       "subtitle": "Voila associe bourses, stages et programmes à votre profil — avec des outils de mentorat et de CV réunis en un seul endroit.",
-      "ctaPrimary": "Commencer gratuitement",
+      "ctaPrimary": "Créer un compte gratuit",
       "ctaSecondary": "Voir comment ça marche",
       "socialProof": "Rejoint par <strong>24 000+</strong> étudiants à travers l'Afrique"
     },
@@ -118,7 +118,7 @@
     "cta": {
       "title": "Prêt à trouver votre prochaine opportunité ?",
       "description": "Rejoignez Voila et démarrez avec un flux personnalisé en quelques minutes.",
-      "button": "Commencer — c'est gratuit",
+      "button": "Créer un compte gratuit",
       "note": "Aucune carte bancaire requise · Gratuit pour les étudiants"
     },
     "jsonLd": {
@@ -211,7 +211,7 @@
       "features": "Fonctionnalités",
       "howItWorks": "Comment ça marche"
     },
-    "cta": "Commencer gratuitement"
+    "cta": "Créer un compte gratuit"
   },
   "Footer": {
     "tagline": "Nous bâtissons la confiance de carrière des étudiants et jeunes professionnels africains.",
@@ -765,7 +765,10 @@
       "upcoming": "À venir",
       "past": "Passés",
       "searchPlaceholder": "Rechercher un événement",
+      "locationFilterLabel": "Filtrer par lieu",
+      "topicFilterLabel": "Filtrer par sujet",
       "all": "Tous",
+      "allTopics": "Tous les sujets",
       "inPerson": "En personne",
       "online": "En ligne",
       "empty": "Aucun événement ne correspond à vos filtres pour le moment."
@@ -814,6 +817,8 @@
     "login": {
       "title": "Connexion administrateur",
       "subtitle": "Connectez-vous avec votre compte administrateur Voila.",
+      "continueWithGoogle": "Continuer avec Google",
+      "orDivider": "ou",
       "emailLabel": "E-mail",
       "passwordLabel": "Mot de passe",
       "submit": "Se connecter",
@@ -842,6 +847,9 @@
       "virtual": "En ligne",
       "csv": "CSV",
       "edit": "Modifier",
+      "cancel": "Annuler",
+      "cancelling": "Annulation...",
+      "confirmCancel": "Annuler « {title} » ? Il est retiré des listes publiques mais les inscriptions sont conservées.",
       "delete": "Supprimer",
       "deleting": "Suppression...",
       "confirmDelete": "Supprimer « {title} » ? Cela le retire de Voila pour tout le monde, y compris ses inscriptions, et c'est irréversible.",

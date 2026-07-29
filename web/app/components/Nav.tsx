@@ -46,13 +46,13 @@ export default function Nav() {
       }`}
     >
       <div className="mx-auto max-w-[1200px] px-6 flex flex-wrap items-center justify-between gap-3">
-        <a href="/" className="flex items-center" aria-label={t("homeAriaLabel")}> 
+        <a href="/" className="flex items-center" aria-label={t("homeAriaLabel")}>
           <Image
             src={scrolled ? "/images/main_logo.png" : "/images/white_logo.png"}
             alt="Voila"
             width={100}
             height={28}
-            className="h-7 w-24 object-contain md:h-8 md:w-28"
+            className="h-7 w-24 object-contain scale-125 md:h-8 md:w-28"
             priority
           />
         </a>

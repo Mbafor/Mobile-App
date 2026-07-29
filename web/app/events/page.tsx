@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { getTranslations } from 'next-intl/server';
 
 import { createServiceRoleClient } from '@/lib/supabase-server';
 import { EVENT_CATEGORIES } from '@/lib/opportunity-options';
 import { EventCard, type EventCardData } from './EventCard';
+import { EventFilters } from './EventFilters';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 
@@ -73,7 +75,6 @@ export default async function EventsPage({
   const pillBase =
     'inline-flex items-center rounded-full px-3.5 py-1.5 text-xs font-semibold transition-colors duration-150 whitespace-nowrap';
   const pillActive = 'bg-primary text-white';
-  const pillInactive = 'bg-primary/5 text-primary hover:bg-primary/10 border border-primary/15';
 
   return (
     <>
@@ -87,18 +88,20 @@ export default async function EventsPage({
 
         <div className="flex flex-wrap items-center gap-3 mb-6">
           <div className="inline-flex rounded-full bg-white border border-[var(--color-border)] p-1">
-            <a
+            <Link
               href={buildHref(params, { tab: 'upcoming' })}
+              prefetch
               className={`${pillBase} ${tab === 'upcoming' ? pillActive : 'text-[#1A1A1A]'}`}
             >
               {t('upcoming')}
-            </a>
-            <a
+            </Link>
+            <Link
               href={buildHref(params, { tab: 'past' })}
+              prefetch
               className={`${pillBase} ${tab === 'past' ? pillActive : 'text-[#1A1A1A]'}`}
             >
               {t('past')}
-            </a>
+            </Link>
           </div>
 
           <form action="/events" method="GET" className="flex-1 min-w-[200px] max-w-sm">
@@ -115,33 +118,7 @@ export default async function EventsPage({
           </form>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2 mb-8">
-          <a href={buildHref(params, { location: 'all' })} className={`${pillBase} ${location === 'all' ? pillActive : pillInactive}`}>
-            {t('all')}
-          </a>
-          <a
-            href={buildHref(params, { location: 'in_person' })}
-            className={`${pillBase} ${location === 'in_person' ? pillActive : pillInactive}`}
-          >
-            {t('inPerson')}
-          </a>
-          <a
-            href={buildHref(params, { location: 'virtual' })}
-            className={`${pillBase} ${location === 'virtual' ? pillActive : pillInactive}`}
-          >
-            {t('online')}
-          </a>
-          <span className="w-px h-5 bg-[var(--color-border)] mx-1" />
-          {EVENT_CATEGORIES.map((cat) => (
-            <a
-              key={cat}
-              href={buildHref(params, { topic: params.topic === cat ? undefined : cat })}
-              className={`${pillBase} ${params.topic === cat ? pillActive : pillInactive}`}
-            >
-              {cat}
-            </a>
-          ))}
-        </div>
+        <EventFilters tab={tab} q={params.q} location={location} topic={params.topic} categories={EVENT_CATEGORIES} />
 
         {events.length === 0 ? (
           <p className="text-sm text-[var(--color-muted)] py-16 text-center">{t('empty')}</p>

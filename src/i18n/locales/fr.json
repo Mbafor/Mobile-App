@@ -1041,6 +1041,9 @@
       "attach": "Joindre une photo ou un fichier",
       "messagePlaceholder": "Message…",
       "send": "Envoyer le message",
+      "dateToday": "Aujourd'hui",
+      "dateYesterday": "Hier",
+      "emoji": "Emoji",
       "attachSheet": {
         "title": "Joindre",
         "sizeHint": "Photos jusqu'à {{image}}, fichiers jusqu'à {{file}}",
@@ -1048,6 +1051,10 @@
         "camera": "Prendre une photo",
         "document": "Document (PDF, Excel, Word…)",
         "cancel": "Annuler"
+      },
+      "emojiSheet": {
+        "title": "Emoji",
+        "close": "Fermer"
       }
     },
     "session": {
