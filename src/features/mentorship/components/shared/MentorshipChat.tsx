@@ -343,7 +343,7 @@ export function MentorshipChat({
             }}
             placeholder={t('mentorship.chat.messagePlaceholder')}
             placeholderTextColor={mentorshipColors.textMuted}
-            style={styles.input}
+            style={[styles.input, Platform.OS === 'web' && ({ outlineStyle: 'none' } as any)]}
             multiline
             maxLength={2000}
             textAlignVertical="center"

@@ -1,7 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerToggleButton } from '@react-navigation/drawer';
 import { DrawerActions, useFocusEffect, useNavigation } from '@react-navigation/native';
-import { Tabs } from 'expo-router';
+import { Tabs, usePathname } from 'expo-router';
 import { useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
@@ -44,6 +44,8 @@ export default function MainTabsLayout() {
   const isWeb = useIsWeb();
   const isWebDesktop = useWebDesktop();
   const openSurvey = useSurveyStore((s) => s.open);
+  const pathname = usePathname();
+  const hideFooter = pathname.includes('/mentorship');
 
   useFocusEffect(
     useCallback(() => {
@@ -175,7 +177,7 @@ export default function MainTabsLayout() {
   if (isWeb) {
     if (isWebDesktop) {
       return (
-        <DesktopShell rightSlot={<AppHeaderActions />}>
+        <DesktopShell rightSlot={<AppHeaderActions />} showFooter={!hideFooter}>
           {tabs}
           <FloatingHelpButton />
           <FeatureSurveyModal />
@@ -195,22 +197,24 @@ export default function MainTabsLayout() {
           <FloatingHelpButton />
           <FeatureSurveyModal />
         </View>
-        <View style={styles.mobileWebFooter}>
-          <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
-          <Text
-            style={styles.mobileWebFooterLink}
-            numberOfLines={1}
-            onPress={() => void openExternalUrl(WHATSAPP_URL)}
-          >
-            {t('navigation.whatsapp.community')}
-          </Text>
-          <Text style={styles.mobileWebFooterSep}>·</Text>
-          <Pressable onPress={() => openSurvey(true)}>
-            <Text style={styles.mobileWebFooterLink} numberOfLines={1}>
-              {t('navigation.footer.giveFeedback')}
+        {hideFooter ? null : (
+          <View style={styles.mobileWebFooter}>
+            <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
+            <Text
+              style={styles.mobileWebFooterLink}
+              numberOfLines={1}
+              onPress={() => void openExternalUrl(WHATSAPP_URL)}
+            >
+              {t('navigation.whatsapp.community')}
             </Text>
-          </Pressable>
-        </View>
+            <Text style={styles.mobileWebFooterSep}>·</Text>
+            <Pressable onPress={() => openSurvey(true)}>
+              <Text style={styles.mobileWebFooterLink} numberOfLines={1}>
+                {t('navigation.footer.giveFeedback')}
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </View>
     );
   }
@@ -220,22 +224,24 @@ export default function MainTabsLayout() {
       {tabs}
       <FloatingHelpButton />
       <FeatureSurveyModal />
-      <View style={styles.mobileFooter}>
-        <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
-        <Text
-          style={styles.mobileFooterLink}
-          numberOfLines={1}
-          onPress={() => void openExternalUrl(WHATSAPP_URL)}
-        >
-          {t('navigation.whatsapp.community')}
-        </Text>
-        <Text style={styles.mobileFooterSep}>·</Text>
-        <Pressable onPress={() => openSurvey(true)}>
-          <Text style={styles.mobileFooterLink} numberOfLines={1}>
-            {t('navigation.footer.giveFeedback')}
+      {hideFooter ? null : (
+        <View style={styles.mobileFooter}>
+          <Ionicons name="logo-whatsapp" size={14} color="#25D366" />
+          <Text
+            style={styles.mobileFooterLink}
+            numberOfLines={1}
+            onPress={() => void openExternalUrl(WHATSAPP_URL)}
+          >
+            {t('navigation.whatsapp.community')}
           </Text>
-        </Pressable>
-      </View>
+          <Text style={styles.mobileFooterSep}>·</Text>
+          <Pressable onPress={() => openSurvey(true)}>
+            <Text style={styles.mobileFooterLink} numberOfLines={1}>
+              {t('navigation.footer.giveFeedback')}
+            </Text>
+          </Pressable>
+        </View>
+      )}
     </View>
   );
 }

@@ -10,6 +10,7 @@ import { DesktopFooter } from '@/features/navigation/components/DesktopFooter';
 type DesktopShellProps = {
   children: ReactNode;
   rightSlot?: ReactNode;
+  showFooter?: boolean;
 };
 
 /**
@@ -18,7 +19,7 @@ type DesktopShellProps = {
  * that should still show the same sidebar instead of falling back to the
  * bare drawer header.
  */
-export function DesktopShell({ children, rightSlot }: DesktopShellProps) {
+export function DesktopShell({ children, rightSlot, showFooter = true }: DesktopShellProps) {
   const styles = useThemedStyles(createStyles);
 
   return (
@@ -40,7 +41,7 @@ export function DesktopShell({ children, rightSlot }: DesktopShellProps) {
           >
             {children}
           </View>
-          <DesktopFooter />
+          {showFooter ? <DesktopFooter /> : null}
         </View>
       </View>
     </View>
