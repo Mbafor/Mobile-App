@@ -40,15 +40,44 @@ export async function clearAdminSessionCookies() {
   store.delete(REFRESH_TOKEN_COOKIE);
 }
 
+/** Pulls the `sub` claim (auth.users.id) out of a Supabase access token
+ * without a network round trip. Not signature-verified -- that's fine here,
+ * since it's only used to narrow the profiles query below to one row; RLS
+ * (scoped to the real, PostgREST-verified auth.uid()) still fully governs
+ * what that query is allowed to return. Worst case a bad decode returns no
+ * row, same as any other invalid-token failure mode. */
+function decodeUserId(token: string): string | null {
+  try {
+    const payload = token.split('.')[1];
+    const decoded = JSON.parse(Buffer.from(payload, 'base64').toString('utf8'));
+    return typeof decoded.sub === 'string' ? decoded.sub : null;
+  } catch {
+    return null;
+  }
+}
+
 /** Loads the signed-in user's own profile (RLS: "Users can read own profile",
  * 001_profiles_and_preferences.sql) and rejects anyone without is_admin or
  * is_super_admin set -- this is the same admin/super-admin distinction the
  * mobile app and current_user_can_manage_events() already use, just gated
- * here at the web session layer instead of a fresh admin-only account type. */
+ * here at the web session layer instead of a fresh admin-only account type.
+ *
+ * Filters explicitly by id instead of relying on RLS alone to narrow to one
+ * row: profiles carries other, broader select policies for unrelated
+ * features ("Students browse approved coach profiles",
+ * 031_mentorship_browse_coaches.sql; "Super admins read all profiles",
+ * 015_super_admin_notifications.sql) that make an unfiltered select return
+ * every row those policies additionally expose, not just this user's own.
+ * .maybeSingle() then throws PGRST116 ("multiple rows"), which was silently
+ * swallowed here (only `data` was read) and misread as "not an admin". */
 async function loadActiveAdmin(token: string): Promise<AdminUser | null> {
+  const userId = decodeUserId(token);
+  if (!userId) return null;
+
   const { data: profile, error } = await createUserClient(token)
     .from('profiles')
     .select('id, full_name, email, is_admin, is_super_admin')
+    .eq('id', userId)
     .maybeSingle();
 
   if (error || !profile) return null;

@@ -50,6 +50,7 @@ export async function adminLogin(formData: FormData) {
   const { data: profile } = await createUserClient(data.session.access_token)
     .from('profiles')
     .select('is_admin, is_super_admin')
+    .eq('id', data.session.user.id)
     .maybeSingle();
 
   if (!profile?.is_admin && !profile?.is_super_admin) {
