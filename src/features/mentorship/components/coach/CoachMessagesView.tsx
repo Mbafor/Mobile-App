@@ -100,11 +100,6 @@ export function CoachMessagesView({
 
   const chatPane = (
     <View style={[styles.chatPane, isNarrow && styles.chatPaneNarrow]}>
-      {isNarrow ? (
-        <Pressable style={styles.backBtn} onPress={() => setShowThreadList(true)}>
-          <Text style={styles.backText}>{t('mentorship.coach.messages.back')}</Text>
-        </Pressable>
-      ) : null}
       <MentorshipChat
         messages={messages}
         currentUserId={currentUserId}
@@ -209,7 +204,5 @@ function createStyles(theme: AppTheme) {
     overflow: 'hidden',
     padding: 0,
   },
-  backBtn: { paddingVertical: spacing.sm, paddingHorizontal: spacing.sm },
-  backText: { fontWeight: '600', color: mentorshipColors.accent, fontSize: 14 },
 });
 }

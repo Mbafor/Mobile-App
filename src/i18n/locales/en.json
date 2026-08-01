@@ -916,7 +916,6 @@
         "none": "No students to message.",
         "students": "Students",
         "noMessages": "No messages yet",
-        "back": "← All students",
         "emptyHint": "Message this student about goals, sessions, or feedback."
       },
       "menteesTable": {
@@ -1012,7 +1011,6 @@
       "messageFailedBody": "Could not send your message. Try again.",
       "cannotAttachTitle": "Cannot attach",
       "cannotAttachBody": "No active mentorship conversation.",
-      "conversation": "Mentorship conversation",
       "noMessages": "No messages yet",
       "attach": "Attach photo or file",
       "messagePlaceholder": "Message…",

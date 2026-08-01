@@ -42,6 +42,16 @@ export function useMentorshipMessages(
     refetchInterval: poll && enabled ? 4000 : false,
   });
 
+  // This screen being open (enabled) is what "read" means for this thread --
+  // both callers only pass a mentorshipId once its conversation is actually
+  // on screen. Marks the read cursor whenever the message list loads/updates
+  // so the delayed "new message" email (Trigger 1) can cancel itself.
+  useEffect(() => {
+    if (!enabled || !mentorshipId || !userId) return;
+    if (!messagesQuery.data) return;
+    void supabase.rpc('mark_mentorship_read', { p_mentorship_id: mentorshipId });
+  }, [enabled, mentorshipId, userId, messagesQuery.data]);
+
   // Realtime: invalidate messages whenever a new row lands in this mentorship thread,
   // regardless of which tab the user is on.
   useEffect(() => {

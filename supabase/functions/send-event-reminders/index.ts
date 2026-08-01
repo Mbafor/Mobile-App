@@ -63,7 +63,7 @@ function formatTime(iso: string, timezone: string): string {
 
 function eventImageHtml(imageUrl: string | null, title: string): string {
   if (!imageUrl) return '';
-  return `<img src="${imageUrl}" alt="${title}" style="width:100%; max-height:220px; object-fit:cover; border-radius:4px; margin-bottom:20px; display:block;" />`;
+  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-bottom:20px; display:block;" />`;
 }
 
 /** The join/location line every tier from "1 day before" onward includes.
@@ -212,7 +212,6 @@ serve(async (req) => {
           to: item.email,
           subject: `${item.event_title} ${tier.subject}`,
           html: emailShell({
-            headline: `See you soon, ${firstName}?`,
             bodyHtml: buildBodyHtml(tier, item, firstName),
             ctaLabel: 'View event details',
             ctaHref: eventUrl,

@@ -16,12 +16,18 @@ const SOCIAL_LINKS = [
 ];
 
 export function emailShell(params: {
-  headline: string;
+  headline?: string;
   bodyHtml: string;
   ctaLabel?: string;
   ctaHref?: string;
   footerNote?: string;
 }): string {
+  const headline = params.headline
+    ? `<h1 style="margin:0 0 20px; font-size:21px; font-weight:600; color:#111111; line-height:1.35;">
+         ${params.headline}
+       </h1>`
+    : '';
+
   const cta =
     params.ctaLabel && params.ctaHref
       ? `<div style="margin-top:28px;">
@@ -40,18 +46,13 @@ export function emailShell(params: {
       <div style="max-width:520px; margin:0 auto; background:#ffffff; border:1px solid #e8e8e8; overflow:hidden;">
 
         <!-- Header -->
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 32px; border-bottom:3px solid ${BRAND}; background:#ffffff;">
-          <div style="font-size:14px; font-weight:700; color:${BRAND}; letter-spacing:2px; text-transform:uppercase;">
-            Voila Africa
-          </div>
-          <img src="${brandLogoUrl()}" alt="Voila Africa" style="max-height:28px; width:auto; display:block;" />
+        <div style="padding:18px 32px; border-bottom:3px solid ${BRAND}; background:#ffffff;">
+          <img src="${brandLogoUrl()}" alt="Voila Africa" style="max-height:36px; width:auto; display:block;" />
         </div>
 
         <!-- Body -->
         <div style="padding:36px 32px;">
-          <h1 style="margin:0 0 20px; font-size:21px; font-weight:600; color:#111111; line-height:1.35;">
-            ${params.headline}
-          </h1>
+          ${headline}
           <div style="font-size:14px; color:#444444; line-height:1.75;">
             ${params.bodyHtml}
           </div>
@@ -153,6 +154,111 @@ export function profileCardHtml(params: {
       ${extras}
     </div>
   `;
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+function truncate(text: string, max: number): string {
+  const trimmed = text.trim();
+  return trimmed.length > max ? `${trimmed.slice(0, max).trimEnd()}…` : trimmed;
+}
+
+export function newMessageEmailHtml(params: {
+  recipientFirstName: string;
+  senderName: string;
+  ctaHref: string;
+  /** Unread message bodies from this sender, oldest first. */
+  previewMessages: string[];
+}): { subject: string; html: string } {
+  const senderName = escapeHtml(params.senderName);
+  const recipientFirstName = escapeHtml(params.recipientFirstName);
+  const count = params.previewMessages.length;
+  const shown = params.previewMessages.slice(-3);
+  const hiddenCount = count - shown.length;
+
+  const messageLines = shown
+    .map(
+      (msg) => `
+      <p style="margin:0 0 10px; padding:12px 14px; background:#f8f8f8; border-left:3px solid ${BRAND};
+           font-size:13px; color:#333333; line-height:1.6;">
+        ${escapeHtml(truncate(msg, 150))}
+      </p>`,
+    )
+    .join('');
+
+  const moreNote =
+    hiddenCount > 0
+      ? `<p style="margin:0 0 10px; font-size:12px; color:#888888;">
+           + ${hiddenCount} more message${hiddenCount === 1 ? '' : 's'}
+         </p>`
+      : '';
+
+  const subject = count > 1 ? `${senderName} sent you ${count} messages on Voila` : `${senderName} sent you a message on Voila`;
+
+  const html = emailShell({
+    headline: `You have a new message from ${senderName}`,
+    bodyHtml: `
+      <p>Hi ${recipientFirstName},</p>
+      <p>${senderName} messaged you and it looks like you haven't seen it yet:</p>
+      ${messageLines}
+      ${moreNote}
+      <p style="margin-top:16px; font-size:13px; color:#666666;">Reply on Voila to keep the conversation going.</p>
+    `,
+    ctaLabel: 'Open conversation',
+    ctaHref: params.ctaHref,
+    footerNote: 'You are receiving this because you have an active mentorship conversation on Voila.',
+  });
+
+  return { subject, html };
+}
+
+export function staleThreadNudgeEmailHtml(params: {
+  recipientFirstName: string;
+  senderName: string;
+  hoursWaiting: number;
+  /** '48h' for the first nudge, '7d' for the final one. */
+  urgency: '48h' | '7d';
+  ctaHref: string;
+}): { subject: string; html: string } {
+  const senderName = escapeHtml(params.senderName);
+  const recipientFirstName = escapeHtml(params.recipientFirstName);
+  const days = Math.floor(params.hoursWaiting / 24);
+  const waitingLabel = days >= 1 ? `${days} day${days === 1 ? '' : 's'}` : `${Math.round(params.hoursWaiting)} hours`;
+  const isFinal = params.urgency === '7d';
+
+  const subject = isFinal
+    ? `Final reminder: ${senderName} is still waiting to hear from you`
+    : `${senderName} is waiting on your reply`;
+
+  const headline = isFinal ? `${senderName} still hasn't heard back from you` : `You have an unanswered message`;
+
+  const urgencyNote = isFinal
+    ? `<p style="margin-top:12px; font-size:13px; color:#b3261e;">
+         This is the final reminder for this conversation &mdash; we won't nudge you again about this message.
+       </p>`
+    : '';
+
+  const html = emailShell({
+    headline,
+    bodyHtml: `
+      <p>Hi ${recipientFirstName},</p>
+      <p>${senderName} sent you a message ${waitingLabel} ago on Voila and hasn't heard back yet.</p>
+      ${urgencyNote}
+      <p style="margin-top:16px; font-size:13px; color:#666666;">A quick reply keeps your mentorship moving.</p>
+    `,
+    ctaLabel: 'Reply now',
+    ctaHref: params.ctaHref,
+    footerNote: 'You are receiving this because you have an active mentorship conversation on Voila.',
+  });
+
+  return { subject, html };
 }
 
 export async function sendResendEmail(params: {

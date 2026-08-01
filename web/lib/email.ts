@@ -11,7 +11,18 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM = process.env.RESEND_EMAIL_FROM ?? 'Voila <noreply@voila-africa.com>';
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voila-africa.com').replace(/\/$/, '');
 
-function emailShell(params: { headline: string; bodyHtml: string; ctaLabel?: string; ctaHref?: string }): string {
+const SOCIAL_LINKS = [
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/company/voila-africa/', icon: 'icon-linkedin.png' },
+  { label: 'Facebook', href: 'https://www.facebook.com/voilaafrica', icon: 'icon-facebook.png' },
+];
+
+function emailShell(params: { headline?: string; bodyHtml: string; ctaLabel?: string; ctaHref?: string }): string {
+  const headline = params.headline
+    ? `<h1 style="margin:0 0 20px; font-size:21px; font-weight:600; color:#111111; line-height:1.35;">
+         ${params.headline}
+       </h1>`
+    : '';
+
   const cta =
     params.ctaLabel && params.ctaHref
       ? `<div style="margin-top:28px;">
@@ -28,32 +39,31 @@ function emailShell(params: { headline: string; bodyHtml: string; ctaLabel?: str
     <div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
          background:#f0f0f0; padding:40px 16px;">
       <div style="max-width:520px; margin:0 auto; background:#ffffff; border:1px solid #e8e8e8; overflow:hidden;">
-        <div style="display:flex; align-items:center; justify-content:space-between; gap:16px; padding:18px 32px; border-bottom:3px solid ${BRAND}; background:#ffffff;">
-          <div style="font-size:14px; font-weight:700; color:${BRAND}; letter-spacing:2px; text-transform:uppercase;">
-            Voila Africa
-          </div>
-          <img src="${SITE_URL}/images/main_logo.png" alt="Voila Africa" style="max-height:28px; width:auto; display:block;" />
+        <div style="padding:18px 32px; border-bottom:3px solid ${BRAND}; background:#ffffff;">
+          <img src="${SITE_URL}/images/main_logo.png" alt="Voila Africa" style="max-height:36px; width:auto; display:block;" />
         </div>
         <div style="padding:36px 32px;">
-          <h1 style="margin:0 0 20px; font-size:21px; font-weight:600; color:#111111; line-height:1.35;">
-            ${params.headline}
-          </h1>
+          ${headline}
           <div style="font-size:14px; color:#444444; line-height:1.75;">
             ${params.bodyHtml}
           </div>
           ${cta}
           <div style="margin-top:32px; padding-top:24px; border-top:1px solid #e8e8e8;">
-            <p style="margin:0 0 8px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
+            <p style="margin:0 0 10px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
               Follow us
             </p>
-            <p style="margin:0; font-size:14px; color:#0B6623;">
-              <a href="https://www.linkedin.com/company/voila-africa/" style="color:#0B6623; text-decoration:none; font-weight:600;">LinkedIn</a>
-              <span style="margin:0 10px; color:#cccccc;">|</span>
-              <a href="https://www.facebook.com/voilaafrica" style="color:#0B6623; text-decoration:none; font-weight:600;">Facebook</a>
-            </p>
+            <div>
+              ${SOCIAL_LINKS.map(
+                (s) => `<a href="${s.href}" style="display:inline-block; margin-right:10px;">
+                  <img src="${SITE_URL}/images/${s.icon}" alt="${s.label}" width="28" height="28"
+                       style="width:28px; height:28px; border-radius:50%; display:block;" />
+                </a>`,
+              ).join('')}
+            </div>
           </div>
         </div>
-        <div style="padding:16px 32px 24px; border-top:1px solid #e8e8e8;">
+        <div style="padding:24px 32px; border-top:1px solid #e8e8e8; text-align:center;">
+          <img src="${SITE_URL}/images/main_logo.png" alt="Voila Africa" style="height:56px; width:auto; display:inline-block; margin-bottom:12px;" />
           <p style="margin:0; font-size:11px; color:#aaaaaa; line-height:1.6;">
             Voila &mdash; Helping students find global opportunities
           </p>
@@ -65,7 +75,7 @@ function emailShell(params: { headline: string; bodyHtml: string; ctaLabel?: str
 
 function eventImageHtml(imageUrl: string | null, title: string): string {
   if (!imageUrl) return '';
-  return `<img src="${imageUrl}" alt="${title}" style="width:100%; max-height:220px; object-fit:cover; border-radius:4px; margin-bottom:20px; display:block;" />`;
+  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-bottom:20px; display:block;" />`;
 }
 
 export async function sendEventConfirmationEmail(params: {
@@ -84,7 +94,6 @@ export async function sendEventConfirmationEmail(params: {
   const firstName = params.fullName.split(' ')[0] || params.fullName;
 
   const html = emailShell({
-    headline: `You're registered, ${firstName}!`,
     bodyHtml: `
       ${eventImageHtml(params.eventImageUrl, params.eventTitle)}
       <p>Hi ${firstName},</p>

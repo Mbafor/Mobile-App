@@ -940,7 +940,6 @@
         "none": "Aucun étudiant à qui écrire.",
         "students": "Étudiants",
         "noMessages": "Aucun message pour l'instant",
-        "back": "← Tous les étudiants",
         "emptyHint": "Envoyez un message à cet étudiant au sujet de ses objectifs, séances ou retours."
       },
       "menteesTable": {
@@ -1036,7 +1035,6 @@
       "messageFailedBody": "Impossible d'envoyer votre message. Réessayez.",
       "cannotAttachTitle": "Impossible de joindre",
       "cannotAttachBody": "Aucune conversation de mentorat active.",
-      "conversation": "Conversation de mentorat",
       "noMessages": "Aucun message pour l'instant",
       "attach": "Joindre une photo ou un fichier",
       "messagePlaceholder": "Message…",

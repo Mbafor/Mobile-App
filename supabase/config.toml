@@ -66,3 +66,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/send-session-booking-emails/deno.json"
 entrypoint = "./functions/send-session-booking-emails/index.ts"
+
+[functions.send-messaging-notifications]
+enabled = true
+verify_jwt = false
+import_map = "./functions/send-messaging-notifications/deno.json"
+entrypoint = "./functions/send-messaging-notifications/index.ts"

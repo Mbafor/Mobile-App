@@ -50,16 +50,17 @@ export function MentorshipShell({
     />
   );
 
-  const titleBlock = (
+  // Section title text is intentionally not rendered (saves vertical space --
+  // the tab nav already communicates which section is active). The wrapper
+  // still renders when a screen supplies headerExtra (e.g. the student
+  // dashboard intro line), just without the title above it.
+  const titleBlock = headerExtra ? (
     <View style={styles.titleSection}>
       <ResponsiveContainer minHorizontalPadding={spacing.md}>
-        <View style={styles.titleBlock}>
-          <Text style={styles.sectionTitle}>{sectionTitle}</Text>
-          {headerExtra}
-        </View>
+        <View style={styles.titleBlock}>{headerExtra}</View>
       </ResponsiveContainer>
     </View>
-  );
+  ) : null;
 
   // On web mobile (non-desktop), show tabs at the top of the page content.
   // On native mobile, keep tabs at the bottom.

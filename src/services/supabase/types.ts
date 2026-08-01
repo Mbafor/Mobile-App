@@ -24,6 +24,10 @@ export type Database = {
         Args: Record<string, never>;
         Returns: boolean;
       };
+      mark_mentorship_read: {
+        Args: { p_mentorship_id: string };
+        Returns: undefined;
+      };
       mentor_active_mentee_count: {
         Args: { p_mentor_id: string };
         Returns: number;

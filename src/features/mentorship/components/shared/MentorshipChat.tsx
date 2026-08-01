@@ -222,9 +222,6 @@ export function MentorshipChat({
           <UserAvatarDisplay displayName={peerName} avatarUrl={peerAvatarUrl ?? null} size={40} />
           <View style={styles.peerMeta}>
             <Text style={styles.peerName}>{peerName}</Text>
-            <Text variant="caption" muted>
-              {t('mentorship.chat.conversation')}
-            </Text>
           </View>
         </View>
       ) : null}
@@ -345,6 +342,7 @@ export function MentorshipChat({
             placeholderTextColor={mentorshipColors.textMuted}
             style={[styles.input, Platform.OS === 'web' && ({ outlineStyle: 'none' } as any)]}
             multiline
+            scrollEnabled
             maxLength={2000}
             textAlignVertical="center"
           />
@@ -368,7 +366,7 @@ export function MentorshipChat({
           {isSending ? (
             <ActivityIndicator size="small" color={mentorshipColors.textOnAccent} />
           ) : (
-            <Ionicons name="paper-plane" size={16} color={mentorshipColors.textOnAccent} />
+            <Ionicons name="paper-plane" size={14} color={mentorshipColors.textOnAccent} />
           )}
         </Pressable>
       </View>
@@ -467,8 +465,8 @@ function createStyles(theme: AppTheme) {
     borderColor: mentorshipColors.border,
   },
   bubbleText: {
-    fontSize: 15,
-    lineHeight: 20,
+    fontSize: 14,
+    lineHeight: 19,
     color: mentorshipColors.text,
   },
   bubbleTextMine: { color: mentorshipColors.textOnAccent },
@@ -507,7 +505,7 @@ function createStyles(theme: AppTheme) {
   timeMine: { color: mentorshipColors.textOnAccent, opacity: 0.88 },
   composerBar: {
     flexDirection: 'row',
-    alignItems: 'flex-end',
+    alignItems: 'center',
     gap: spacing.sm,
     paddingTop: spacing.sm,
     paddingHorizontal: spacing.sm,
@@ -550,9 +548,9 @@ function createStyles(theme: AppTheme) {
     justifyContent: 'center',
   },
   sendBtn: {
-    width: 38,
-    height: 38,
-    borderRadius: 19,
+    width: 32,
+    height: 32,
+    borderRadius: 16,
     backgroundColor: mentorshipColors.accent,
     alignItems: 'center',
     justifyContent: 'center',
