@@ -2,7 +2,8 @@ import { getTranslations } from 'next-intl/server';
 
 import { requireSuperAdminSession } from '@/lib/admin-session';
 import { createUserClient } from '@/lib/supabase-server';
-import { mapAdminAnalytics } from '@/lib/admin-analytics';
+import { formatFundingTypeChart, mapAdminAnalytics } from '@/lib/admin-analytics';
+import { BarList } from '../../../BarList';
 import { StatTile } from '../../../StatTile';
 
 export default async function SuperAdminAnalyticsPage() {
@@ -46,6 +47,15 @@ export default async function SuperAdminAnalyticsPage() {
               <StatTile label={tStats('stats.totalPosted')} value={analytics.opportunities.total} />
               <StatTile label={tStats('stats.closingIn7Days')} value={analytics.opportunities.closingIn7Days} />
             </div>
+            <div className="grid md:grid-cols-3 gap-3 mt-3">
+              <BarList title={tStats('charts.byCategory')} items={analytics.opportunities.byCategory} emptyLabel={tStats('charts.noData')} />
+              <BarList title={tStats('charts.byCountry')} items={analytics.opportunities.byCountry} emptyLabel={tStats('charts.noData')} />
+              <BarList
+                title={tStats('charts.byFundingType')}
+                items={formatFundingTypeChart(analytics.opportunities.byFundingType)}
+                emptyLabel={tStats('charts.noData')}
+              />
+            </div>
           </section>
 
           <section>
@@ -55,6 +65,18 @@ export default async function SuperAdminAnalyticsPage() {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               <StatTile label={tStats('stats.totalSaves')} value={analytics.engagement.totalSaves} />
               <StatTile label={tStats('stats.totalApplied')} value={analytics.engagement.totalApplied} />
+            </div>
+            <div className="grid md:grid-cols-2 gap-3 mt-3">
+              <BarList
+                title={tStats('topLists.mostSaved')}
+                items={analytics.engagement.topSaved.map((row) => ({ label: row.title, value: row.count }))}
+                emptyLabel={tStats('topLists.noData')}
+              />
+              <BarList
+                title={tStats('topLists.mostApplied')}
+                items={analytics.engagement.topApplied.map((row) => ({ label: row.title, value: row.count }))}
+                emptyLabel={tStats('topLists.noData')}
+              />
             </div>
           </section>
 

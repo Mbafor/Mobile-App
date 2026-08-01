@@ -65,6 +65,7 @@ export default async function PartnerEditOpportunityPage({ params }: { params: P
           submitLabel={t('submit')}
           pendingLabel={t('pending')}
           successMessage={t('success')}
+          requireDeadline={false}
         />
       </section>
     </div>

@@ -12,7 +12,6 @@ import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
-import { useAuth } from '@/features/auth/hooks/useAuth';
 import { ProfileMenuBar } from '@/features/menu/components/ProfileMenuBar';
 import { webPressableStyle } from '@/utils/web/pressable';
 import { DESKTOP_HEADER_HEIGHT } from '@/features/navigation/components/DesktopHeader';
@@ -39,7 +38,6 @@ export function DesktopSidebar() {
   const { colors, isDark } = useTheme();
   const router = useRouter();
   const pathname = usePathname();
-  const { isAdmin, isSuperAdmin } = useAuth();
   const { t } = useTranslation();
   const [collapsed, setCollapsed] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
@@ -129,32 +127,6 @@ export function DesktopSidebar() {
     },
   ];
 
-  const adminItems: SidebarItem[] = isAdmin
-    ? [
-        {
-          key: 'admin',
-          label: t('navigation.tabs.admin'),
-          icon: 'shield-outline',
-          iconActive: 'shield',
-          onPress: () => router.push(ROUTES.ADMIN.HOME as Href),
-          matchPath: '/admin',
-        },
-      ]
-    : [];
-
-  const superAdminItems: SidebarItem[] = isSuperAdmin
-    ? [
-        {
-          key: 'super-admin',
-          label: t('navigation.tabs.superAdmin'),
-          icon: 'planet-outline',
-          iconActive: 'planet',
-          onPress: () => router.push(ROUTES.SUPER_ADMIN.HOME as Href),
-          matchPath: '/super-admin',
-        },
-      ]
-    : [];
-
   const sections: SidebarSection[] = [
     {
       key: 'main',
@@ -191,15 +163,6 @@ export function DesktopSidebar() {
         mainItems.find((i) => i.key === 'settings')!,
       ],
     },
-    ...(adminItems.length > 0 || superAdminItems.length > 0
-      ? [
-          {
-            key: 'admin',
-            label: t('navigation.sections.administration'),
-            items: [...adminItems, ...superAdminItems],
-          },
-        ]
-      : []),
   ];
 
   const renderItem = (item: SidebarItem) => {

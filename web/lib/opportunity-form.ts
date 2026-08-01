@@ -7,7 +7,7 @@ export interface ParsedOpportunity {
   benefits: string | null;
   imageUrl: string | null;
   applyUrl: string | null;
-  deadlineIso: string;
+  deadlineIso: string | null;
   category: string;
   tags: string[];
   country: string;
@@ -28,7 +28,16 @@ function parseDeadline(dateInput: string): string | null {
   return parsed.toISOString();
 }
 
-export function parseOpportunityForm(formData: FormData): ParseOpportunityFormResult {
+/** requireDeadline gates presence + future-date checks. Only fresh publishes
+ * (admin/partner "create", bulk paste) need it -- editing an already-approved
+ * opportunity must not force a stale or evergreen (NULL, see migration 041)
+ * deadline to be rewritten just to save an unrelated field. Mirrors the
+ * mobile app's formToRow, which treats deadline as update-optional
+ * (src/services/api/admin.api.ts). */
+export function parseOpportunityForm(
+  formData: FormData,
+  { requireDeadline = true }: { requireDeadline?: boolean } = {},
+): ParseOpportunityFormResult {
   const title = String(formData.get('title') ?? '').trim();
   const organization = String(formData.get('organization') ?? '').trim();
   const description = String(formData.get('description') ?? '').trim();
@@ -43,8 +52,11 @@ export function parseOpportunityForm(formData: FormData): ParseOpportunityFormRe
   const tags = formData.getAll('tags').map((t) => String(t).trim()).filter(Boolean);
   const degreeLevels = formData.getAll('degreeLevels').map((d) => String(d).trim()).filter(Boolean);
 
-  if (!title || !organization || !deadlineInput) {
-    return { ok: false, message: 'Title, organization, and deadline are required.' };
+  if (!title || !organization) {
+    return { ok: false, message: 'Title and organization are required.' };
+  }
+  if (requireDeadline && !deadlineInput) {
+    return { ok: false, message: 'Deadline is required.' };
   }
   if (!category) {
     return { ok: false, message: 'Please select a category.' };
@@ -66,12 +78,15 @@ export function parseOpportunityForm(formData: FormData): ParseOpportunityFormRe
     return { ok: false, message: 'Please select a funding type.' };
   }
 
-  const deadlineIso = parseDeadline(deadlineInput);
-  if (!deadlineIso) {
-    return { ok: false, message: 'Enter a valid deadline date.' };
-  }
-  if (new Date(deadlineIso).getTime() <= Date.now()) {
-    return { ok: false, message: 'Deadline must be in the future so students can see this listing.' };
+  let deadlineIso: string | null = null;
+  if (deadlineInput) {
+    deadlineIso = parseDeadline(deadlineInput);
+    if (!deadlineIso) {
+      return { ok: false, message: 'Enter a valid deadline date.' };
+    }
+    if (requireDeadline && new Date(deadlineIso).getTime() <= Date.now()) {
+      return { ok: false, message: 'Deadline must be in the future so students can see this listing.' };
+    }
   }
 
   return {

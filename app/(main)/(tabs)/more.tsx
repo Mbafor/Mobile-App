@@ -24,10 +24,6 @@ export default function MoreScreen() {
         <Pressable style={styles.item} onPress={() => router.push('/(main)/(tabs)/tracker')}>
           <Text>Tracker</Text>
         </Pressable>
-
-        <Pressable style={styles.item} onPress={() => router.push(ROUTES.ADMIN.HOME as any)}>
-          <Text>Administration</Text>
-        </Pressable>
       </View>
     </View>
   );

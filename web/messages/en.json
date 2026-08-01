@@ -703,6 +703,7 @@
       "benefitsPlaceholder": "What will applicants gain? e.g. stipend, mentorship, certificate",
       "imageUrl": "Image URL",
       "deadline": "Deadline",
+      "deadlineOptional": "(optional — leave blank for a rolling/no-deadline listing)",
       "applyUrl": "Apply URL",
       "classification": "Classification",
       "category": "Category",
@@ -867,6 +868,17 @@
         "totalApplied": "Total applied",
         "totalSent": "Total sent",
         "totalUnread": "Total unread"
+      },
+      "charts": {
+        "byCategory": "Opportunities by category",
+        "byCountry": "Opportunities by country",
+        "byFundingType": "Opportunities by funding type",
+        "noData": "Not enough data yet."
+      },
+      "topLists": {
+        "mostSaved": "Most saved opportunities",
+        "mostApplied": "Most applied-to opportunities",
+        "noData": "No activity yet."
       }
     },
     "opportunities": {

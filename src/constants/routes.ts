@@ -58,29 +58,4 @@ export const ROUTES = {
       REFER: '/(main)/refer',
     },
   },
-  SUPER_ADMIN: {
-    HOME: '/(main)/(tabs)/super-admin',
-    ANALYTICS: '/(main)/(tabs)/super-admin/analytics',
-    MENTORS: '/(main)/(tabs)/super-admin/mentors',
-    MENTEES: '/(main)/(tabs)/super-admin/mentees',
-    ADMINS: '/(main)/(tabs)/super-admin/admins',
-    OPPORTUNITIES: '/(main)/(tabs)/super-admin/opportunities',
-    OPPORTUNITY_CREATE: '/(main)/(tabs)/super-admin/opportunities/create',
-    OPPORTUNITY_PASTE: '/(main)/(tabs)/super-admin/opportunities/paste',
-    OPPORTUNITY_PENDING: '/(main)/(tabs)/super-admin/opportunities/pending',
-    opportunityEdit: (id: string) =>
-      `/(main)/(tabs)/super-admin/opportunities/${id}/edit` as const,
-    pendingReview: (id: string) =>
-      `/(main)/(tabs)/super-admin/opportunities/${id}/review` as const,
-  },
-  ADMIN: {
-    HOME: '/(main)/(tabs)/admin',
-    OPPORTUNITIES: '/(main)/(tabs)/admin',
-    CREATE: '/(main)/(tabs)/admin/create',
-    PASTE: '/(main)/(tabs)/admin/paste',
-    PENDING: '/(main)/(tabs)/admin/pending',
-    WEEKLY_DIGEST: '/(main)/(tabs)/admin/weekly-digest',
-    edit: (id: string) => `/(main)/(tabs)/admin/${id}/edit` as const,
-    pendingReview: (id: string) => `/(main)/(tabs)/admin/${id}/review` as const,
-  },
 } as const;

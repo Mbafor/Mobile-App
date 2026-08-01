@@ -703,6 +703,7 @@
       "benefitsPlaceholder": "Qu'est-ce que les candidats vont gagner ? ex. allocation, mentorat, certificat",
       "imageUrl": "URL de l'image",
       "deadline": "Échéance",
+      "deadlineOptional": "(facultatif — laisser vide pour une annonce sans échéance fixe)",
       "applyUrl": "URL de candidature",
       "classification": "Classification",
       "category": "Catégorie",
@@ -867,6 +868,17 @@
         "totalApplied": "Total des candidatures",
         "totalSent": "Total envoyé",
         "totalUnread": "Total non lu"
+      },
+      "charts": {
+        "byCategory": "Opportunités par catégorie",
+        "byCountry": "Opportunités par pays",
+        "byFundingType": "Opportunités par type de financement",
+        "noData": "Pas encore assez de données."
+      },
+      "topLists": {
+        "mostSaved": "Opportunités les plus sauvegardées",
+        "mostApplied": "Opportunités avec le plus de candidatures",
+        "noData": "Aucune activité pour l'instant."
       }
     },
     "opportunities": {

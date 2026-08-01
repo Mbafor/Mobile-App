@@ -49,6 +49,7 @@ export function ReviewOpportunityForm({
         submitLabel={isPendingReview ? t('submitApprove') : t('submitSave')}
         pendingLabel={t('pending')}
         successMessage={isPendingReview ? t('successApprove') : t('success')}
+        requireDeadline={false}
         secondaryAction={
           isPendingReview
             ? {

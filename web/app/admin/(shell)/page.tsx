@@ -3,7 +3,8 @@ import { getTranslations } from 'next-intl/server';
 
 import { requireAdminSession } from '@/lib/admin-session';
 import { createUserClient } from '@/lib/supabase-server';
-import { mapAdminAnalytics } from '@/lib/admin-analytics';
+import { formatFundingTypeChart, mapAdminAnalytics } from '@/lib/admin-analytics';
+import { BarList } from '../BarList';
 import { StatTile } from '../StatTile';
 
 export default async function AdminDashboardPage() {
@@ -61,6 +62,15 @@ export default async function AdminDashboardPage() {
               <StatTile label={t('stats.totalPosted')} value={analytics.opportunities.total} />
               <StatTile label={t('stats.closingIn7Days')} value={analytics.opportunities.closingIn7Days} />
             </div>
+            <div className="grid md:grid-cols-3 gap-3 mt-3">
+              <BarList title={t('charts.byCategory')} items={analytics.opportunities.byCategory} emptyLabel={t('charts.noData')} />
+              <BarList title={t('charts.byCountry')} items={analytics.opportunities.byCountry} emptyLabel={t('charts.noData')} />
+              <BarList
+                title={t('charts.byFundingType')}
+                items={formatFundingTypeChart(analytics.opportunities.byFundingType)}
+                emptyLabel={t('charts.noData')}
+              />
+            </div>
           </section>
 
           <section>
@@ -70,6 +80,18 @@ export default async function AdminDashboardPage() {
             <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
               <StatTile label={t('stats.totalSaves')} value={analytics.engagement.totalSaves} />
               <StatTile label={t('stats.totalApplied')} value={analytics.engagement.totalApplied} />
+            </div>
+            <div className="grid md:grid-cols-2 gap-3 mt-3">
+              <BarList
+                title={t('topLists.mostSaved')}
+                items={analytics.engagement.topSaved.map((row) => ({ label: row.title, value: row.count }))}
+                emptyLabel={t('topLists.noData')}
+              />
+              <BarList
+                title={t('topLists.mostApplied')}
+                items={analytics.engagement.topApplied.map((row) => ({ label: row.title, value: row.count }))}
+                emptyLabel={t('topLists.noData')}
+              />
             </div>
           </section>
 

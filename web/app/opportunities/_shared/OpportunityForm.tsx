@@ -48,6 +48,7 @@ export function OpportunityForm({
   successMessage,
   resetOnSuccess = false,
   secondaryAction,
+  requireDeadline = true,
 }: {
   action: (formData: FormData) => Promise<OpportunityFormResult>;
   initialValues?: Partial<OpportunityFormValues>;
@@ -56,6 +57,10 @@ export function OpportunityForm({
   successMessage: string;
   resetOnSuccess?: boolean;
   secondaryAction?: { label: string; pendingLabel: string; onClick: () => void; destructive?: boolean; disabled?: boolean };
+  /** Editing an already-published opportunity must not force a stale or
+   * evergreen (NULL) deadline to be rewritten just to save an unrelated
+   * field -- only fresh publishes need a deadline up front. */
+  requireDeadline?: boolean;
 }) {
   const t = useTranslations('Opportunities.form');
   const [formKey, setFormKey] = useState(0);
@@ -163,13 +168,13 @@ export function OpportunityForm({
 
       <div>
         <label className="block text-sm font-medium mb-1" htmlFor="deadline">
-          {t('deadline')}
+          {t('deadline')} {!requireDeadline && <span className="text-[var(--color-muted)] font-normal">{t('deadlineOptional')}</span>}
         </label>
         <input
           id="deadline"
           name="deadline"
           type="date"
-          required
+          required={requireDeadline}
           defaultValue={initialValues?.deadline}
           className={inputClass}
         />

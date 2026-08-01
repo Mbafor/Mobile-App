@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import type { NavigationProp, ParamListBase } from '@react-navigation/native';
 
-const MAIN_TAB_ROUTE_NAMES = ['dashboard', 'saved', 'cv-builder', 'admin'];
+const MAIN_TAB_ROUTE_NAMES = ['dashboard', 'saved', 'cv-builder'];
 
 function isMainTabsNavigator(parent: NavigationProp<ParamListBase>): boolean {
   const state = parent.getState();

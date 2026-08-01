@@ -2,9 +2,22 @@
  * same get_admin_analytics RPC payload shape, duplicated rather than imported since
  * web/ and the Expo app are separate TS programs with no shared package. */
 
+import { FUNDING_TYPES } from '@/lib/opportunity-options';
+
 export interface ChartDatum {
   label: string;
   value: number;
+}
+
+const FUNDING_TYPE_LABELS = new Map(FUNDING_TYPES.map((f) => [f.value, f.label]));
+
+/** by_funding_type rows carry the raw DB value (e.g. "fully_funded") -- swap in
+ * the same human-readable labels the opportunity form's <select> uses. */
+export function formatFundingTypeChart(data: ChartDatum[]): ChartDatum[] {
+  return data.map((item) => ({
+    label: FUNDING_TYPE_LABELS.get(item.label) ?? item.label,
+    value: item.value,
+  }));
 }
 
 export interface TopEngagementRow {

@@ -10,7 +10,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { FloatingHelpButton } from '@/features/help/components/FloatingHelpButton';
 import { FeatureSurveyModal, useSurveyStore } from '@/features/survey';
 import { spacing } from '@/constants/theme';
-import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useTheme } from '@/hooks/useTheme';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
 import { useRefreshProfile } from '@/features/auth/hooks/useRefreshProfile';
@@ -34,7 +33,6 @@ function tabBarIcon(outline: TabIconName, filled: TabIconName) {
 }
 
 export default function MainTabsLayout() {
-  const { isAdmin, isSuperAdmin } = useAuth();
   const { colors } = useTheme();
   const { t } = useTranslation();
   const styles = useThemedStyles(createStyles);
@@ -58,7 +56,6 @@ export default function MainTabsLayout() {
 
   const tabs = (
     <Tabs
-      key={`tabs-${isSuperAdmin ? 'sa' : ''}${isAdmin ? 'admin' : ''}`}
       screenOptions={{
         headerShown: !isWeb,
         headerLeft: () => <DrawerToggleButton tintColor={colors.text} />,
@@ -151,24 +148,6 @@ export default function MainTabsLayout() {
           title: t('menu.items.settings'),
           headerShown: false,
           href: isWeb ? '/(main)/(tabs)/settings' : null,
-        }}
-      />
-      <Tabs.Screen
-        name="admin"
-        options={{
-          title: t('navigation.tabs.admin'),
-          href: isAdmin ? undefined : null,
-          headerShown: false,
-          tabBarIcon: tabBarIcon('shield-outline', 'shield'),
-        }}
-      />
-      <Tabs.Screen
-        name="super-admin"
-        options={{
-          title: t('navigation.tabs.superAdmin'),
-          href: isSuperAdmin ? undefined : null,
-          headerShown: false,
-          tabBarIcon: tabBarIcon('planet-outline', 'planet'),
         }}
       />
     </Tabs>

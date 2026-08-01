@@ -24,21 +24,6 @@ export const queryKeys = {
   dashboard: {
     summary: ['dashboard', 'summary'] as const,
   },
-  superAdmin: {
-    overview: ['superAdmin', 'overview'] as const,
-    mentors: (search: string, status: string | null, page: number) =>
-      ['superAdmin', 'mentors', search, status, page] as const,
-    mentees: (search: string, page: number) => ['superAdmin', 'mentees', search, page] as const,
-    admins: (search: string, page: number) => ['superAdmin', 'admins', search, page] as const,
-  },
-  admin: {
-    stats: ['admin', 'stats'] as const,
-    analytics: ['admin', 'analytics'] as const,
-    opportunities: ['admin', 'opportunities'] as const,
-    pendingOpportunities: ['admin', 'pending'] as const,
-    opportunity: (id: string) => ['admin', 'opportunity', id] as const,
-    weeklyDigestCandidates: ['admin', 'weeklyDigestCandidates'] as const,
-  },
   cv: {
     list: (userId: string) => ['cv', 'list', userId] as const,
     detail: (cvId: string) => ['cv', 'detail', cvId] as const,

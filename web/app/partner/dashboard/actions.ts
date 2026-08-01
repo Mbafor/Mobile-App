@@ -17,7 +17,7 @@ export async function updatePartnerOpportunity(
 ): Promise<PartnerOpportunityMutationResult> {
   const session = await requirePartnerSession();
 
-  const parsed = parseOpportunityForm(formData);
+  const parsed = parseOpportunityForm(formData, { requireDeadline: false });
   if (!parsed.ok) return parsed;
   const data = parsed.data;
 

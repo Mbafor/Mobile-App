@@ -4,14 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '@/constants/routes';
 import { env } from '@/config/env';
-import { useAuth } from '@/features/auth/hooks/useAuth';
 import type { DesktopNavItem } from '@/features/navigation/components/DesktopWebNavigation';
 
 /** Primary app sections — shared by web top nav and drawer menu. */
 export function useMainTabNavItems(): DesktopNavItem[] {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAdmin, isSuperAdmin } = useAuth();
   const { t } = useTranslation();
 
   return useMemo<DesktopNavItem[]>(
@@ -90,29 +88,7 @@ export function useMainTabNavItems(): DesktopNavItem[] {
         active: pathname.includes('/settings'),
         onPress: () => router.push(ROUTES.MAIN.SETTINGS as Href),
       },
-      ...(isAdmin
-        ? [
-            {
-              key: 'admin',
-              label: t('navigation.tabs.admin'),
-              icon: 'shield-outline' as const,
-              active: pathname.includes('/admin'),
-              onPress: () => router.push(ROUTES.ADMIN.HOME as Href),
-            },
-          ]
-        : []),
-      ...(isSuperAdmin
-        ? [
-            {
-              key: 'super-admin',
-              label: t('navigation.tabs.superAdmin'),
-              icon: 'planet-outline' as const,
-              active: pathname.includes('/super-admin'),
-              onPress: () => router.push(ROUTES.SUPER_ADMIN.HOME as Href),
-            },
-          ]
-        : []),
     ],
-    [isAdmin, isSuperAdmin, pathname, router, t],
+    [pathname, router, t],
   );
 }

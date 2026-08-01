@@ -60,7 +60,7 @@ export async function updateAdminOpportunity(
 ): Promise<AdminOpportunityMutationResult> {
   const session = await requireAdminSession();
 
-  const parsed = parseOpportunityForm(formData);
+  const parsed = parseOpportunityForm(formData, { requireDeadline: false });
   if (!parsed.ok) return parsed;
 
   const client = createUserClient(session.accessToken);
@@ -87,7 +87,7 @@ export async function updateAndApproveAdminOpportunity(
 ): Promise<AdminOpportunityMutationResult> {
   const session = await requireAdminSession();
 
-  const parsed = parseOpportunityForm(formData);
+  const parsed = parseOpportunityForm(formData, { requireDeadline: false });
   if (!parsed.ok) return parsed;
 
   const client = createUserClient(session.accessToken);
@@ -184,7 +184,7 @@ export async function importPastedOpportunities(formData: FormData): Promise<Imp
 
   for (let i = 0; i < items.length; i++) {
     const data = items[i];
-    if (new Date(data.deadlineIso).getTime() <= Date.now()) {
+    if (!data.deadlineIso || new Date(data.deadlineIso).getTime() <= Date.now()) {
       errors.push(`Row ${i + 1}: deadline must be in the future.`);
       continue;
     }

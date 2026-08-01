@@ -35,7 +35,7 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
           />
         </View>
 
-        {/* Grouped sections: Main, Career Tools, Account, Administration */}
+        {/* Grouped sections: Main, Career Tools, Account */}
         <Text style={styles.sectionLabel}>{t('navigation.sections.main')}</Text>
         {tabNavItems
           .filter((i) => ['home', 'dashboard', 'saved', 'browse-categories'].includes(i.key))
@@ -98,32 +98,6 @@ export function AppDrawerContent(props: DrawerContentComponentProps) {
               <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
             </Pressable>
           ))}
-
-        {/** Administration group only shown when items exist */}
-        {tabNavItems.some((i) => i.key === 'admin' || i.key === 'super-admin') && (
-          <>
-            <Text style={styles.sectionLabel}>{t('navigation.sections.administration')}</Text>
-            {tabNavItems
-              .filter((i) => i.key === 'admin' || i.key === 'super-admin')
-              .map((item) => (
-                <Pressable
-                  key={item.key}
-                  style={[styles.item, item.active && styles.itemActive]}
-                  onPress={() => {
-                    props.navigation.closeDrawer();
-                    item.onPress();
-                  }}
-                >
-                  <Ionicons
-                    name={item.icon}
-                    size={20}
-                    color={item.active ? colors.primary : colors.textMuted}
-                  />
-                  <Text style={[styles.itemText, item.active && styles.itemTextActive]}>{item.label}</Text>
-                </Pressable>
-              ))}
-          </>
-        )}
       </DrawerContentScrollView>
 
       <View style={styles.profileRow}>
