@@ -8,6 +8,7 @@ export function mapOpportunityRow(row: OpportunityRow): Opportunity {
     id: row.id,
     title: row.title,
     description: row.description,
+    benefits: row.benefits,
     organization: row.organization,
     imageUrl: row.image_url,
     applyUrl: row.apply_url,

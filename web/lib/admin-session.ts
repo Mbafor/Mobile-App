@@ -124,3 +124,14 @@ export async function requireAdminSession(): Promise<AdminSession> {
   if (!session) redirect('/admin/login');
   return session;
 }
+
+/** Like requireAdminSession, but also rejects admins who aren't super admins --
+ * redirects to /admin (not /admin/login) since they ARE authenticated, just not
+ * authorized for this section. The super-admin RPCs this section calls also
+ * separately enforce current_user_is_super_admin() at the database layer
+ * (019_admin_super_admin_roles.sql), so this is a UX guard, not the only guard. */
+export async function requireSuperAdminSession(): Promise<AdminSession> {
+  const session = await requireAdminSession();
+  if (!session.admin.is_super_admin) redirect('/admin');
+  return session;
+}

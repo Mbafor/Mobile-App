@@ -14,7 +14,7 @@ export function MultiSelectDropdown({
   placeholder?: string;
   defaultSelected?: string[];
 }) {
-  const t = useTranslations('Partner.form');
+  const t = useTranslations('Opportunities.form');
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<string[]>(defaultSelected);
   const containerRef = useRef<HTMLDivElement>(null);

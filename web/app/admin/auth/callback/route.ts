@@ -36,5 +36,5 @@ export async function GET(request: NextRequest) {
 
   await writeAdminSessionCookies(data.session.access_token, data.session.refresh_token);
 
-  return NextResponse.redirect(new URL('/admin/events', request.url));
+  return NextResponse.redirect(new URL('/admin', request.url));
 }

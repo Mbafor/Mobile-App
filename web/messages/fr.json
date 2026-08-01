@@ -631,31 +631,6 @@
       "copy": "Copier",
       "copied": "Copié"
     },
-    "form": {
-      "title": "Titre",
-      "titlePlaceholder": "ex. Stage en ingénierie logicielle",
-      "organization": "Organisation",
-      "organizationPlaceholder": "ex. Voila Africa",
-      "description": "Description",
-      "descriptionPlaceholder": "En quoi consiste cette opportunité ?",
-      "imageUrl": "URL de l'image",
-      "deadline": "Échéance",
-      "applyUrl": "URL de candidature",
-      "classification": "Classification",
-      "category": "Catégorie",
-      "selectCategory": "Sélectionnez une catégorie",
-      "tags": "Étiquettes",
-      "selectTags": "Sélectionnez des étiquettes",
-      "country": "Pays",
-      "selectCountry": "Sélectionnez un pays",
-      "fundingType": "Type de financement",
-      "selectFundingType": "Sélectionnez un type de financement",
-      "degreeLevels": "Niveaux de diplôme",
-      "selectDegreeLevels": "Sélectionnez des niveaux de diplôme",
-      "locationType": "Type de lieu",
-      "selectLocationType": "Sélectionnez un type de lieu",
-      "selectDefault": "Sélectionner..."
-    },
     "create": {
       "title": "Créer une opportunité",
       "subtitle": "Publiez votre propre opportunité directement sur Voila. Elle est visible immédiatement pour les étudiants et sur votre page partenaire.",
@@ -714,6 +689,35 @@
         "pending": "Enregistrement...",
         "success": "Enregistré — vos modifications sont en ligne."
       }
+    }
+  },
+  "Opportunities": {
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Stage en ingénierie logicielle",
+      "organization": "Organisation",
+      "organizationPlaceholder": "ex. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "En quoi consiste cette opportunité ?",
+      "benefits": "Avantages",
+      "benefitsPlaceholder": "Qu'est-ce que les candidats vont gagner ? ex. allocation, mentorat, certificat",
+      "imageUrl": "URL de l'image",
+      "deadline": "Échéance",
+      "applyUrl": "URL de candidature",
+      "classification": "Classification",
+      "category": "Catégorie",
+      "selectCategory": "Sélectionnez une catégorie",
+      "tags": "Étiquettes",
+      "selectTags": "Sélectionnez des étiquettes",
+      "country": "Pays",
+      "selectCountry": "Sélectionnez un pays",
+      "fundingType": "Type de financement",
+      "selectFundingType": "Sélectionnez un type de financement",
+      "degreeLevels": "Niveaux de diplôme",
+      "selectDegreeLevels": "Sélectionnez des niveaux de diplôme",
+      "locationType": "Type de lieu",
+      "selectLocationType": "Sélectionnez un type de lieu",
+      "selectDefault": "Sélectionner..."
     }
   },
   "Events": {
@@ -830,7 +834,132 @@
     "header": {
       "title": "Administration Voila",
       "signedInAs": "Connecté en tant que {name}",
-      "signOut": "Se déconnecter"
+      "signOut": "Se déconnecter",
+      "navDashboard": "Tableau de bord",
+      "navOpportunities": "Opportunités",
+      "navDigest": "Résumé",
+      "navEvents": "Événements",
+      "navSuperAdmin": "Super Admin",
+      "menu": "Ouvrir le menu",
+      "close": "Fermer le menu"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "subtitle": "Vue d'ensemble des utilisateurs, opportunités et engagement de Voila.",
+      "reviewPending": "Examiner les opportunités en attente",
+      "createNew": "+ Nouvelle opportunité",
+      "failedToLoad": "Impossible de charger les statistiques pour le moment.",
+      "sections": {
+        "users": "Utilisateurs",
+        "opportunities": "Opportunités",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Utilisateurs au total",
+        "newThisWeek": "Nouveaux cette semaine",
+        "newThisMonth": "Nouveaux ce mois-ci",
+        "onboardingDone": "Intégration terminée",
+        "onboardingPending": "Intégration en attente",
+        "totalPosted": "Total publié",
+        "closingIn7Days": "Clôture sous 7 jours",
+        "totalSaves": "Total des sauvegardes",
+        "totalApplied": "Total des candidatures",
+        "totalSent": "Total envoyé",
+        "totalUnread": "Total non lu"
+      }
+    },
+    "opportunities": {
+      "list": {
+        "title": "Opportunités",
+        "subtitle": "Parcourez et gérez toutes les opportunités approuvées sur Voila.",
+        "weeklyDigest": "Résumé hebdomadaire",
+        "pasteJson": "Coller du JSON",
+        "createNew": "+ Nouvelle opportunité",
+        "pendingBanner": "{count, plural, one {# opportunité est} other {# opportunités sont}} en attente d'examen.",
+        "reviewLink": "Examiner maintenant",
+        "empty": "Aucune opportunité pour le moment.",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "confirmDelete": "Supprimer \"{title}\" ? Ceci la retire de Voila pour tout le monde et est irréversible.",
+        "deadline": "Échéance : {date}",
+        "rolling": "Continue"
+      },
+      "paste": {
+        "title": "Coller des opportunités",
+        "subtitle": "Importez en masse des opportunités à partir de JSON collé (un seul objet ou un tableau). Chaque ligne est publiée immédiatement.",
+        "fieldReference": "Référence des champs",
+        "loadExample": "Charger l'exemple",
+        "importButton": "Importer",
+        "importing": "Importation...",
+        "importedSummary": "{ok} opportunité(s) importée(s) sur {total}."
+      },
+      "queue": {
+        "title": "Opportunités en attente",
+        "subtitle": "Vérifiez les opportunités récupérées et soumises avant leur mise en ligne.",
+        "createNew": "+ Nouvelle opportunité",
+        "empty": "Aucune opportunité en attente pour le moment.",
+        "review": "Examiner",
+        "approve": "Approuver",
+        "approving": "Approbation...",
+        "reject": "Rejeter",
+        "rejecting": "Rejet...",
+        "deadline": "Échéance : {date}",
+        "deadlineNotSet": "Non définie",
+        "confirmApprove": "Approuver \"{title}\" ? Elle sera immédiatement visible pour les étudiants.",
+        "confirmReject": "Rejeter \"{title}\" ? Elle ne sera pas montrée aux étudiants."
+      },
+      "createForm": {
+        "title": "Créer une opportunité",
+        "subtitle": "Publiez une opportunité directement sur Voila. Elle est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'opportunité",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
+      },
+      "reviewForm": {
+        "titlePending": "Examiner l'opportunité",
+        "subtitlePending": "Vérifiez les détails, puis approuvez ou rejetez.",
+        "titleApproved": "Modifier l'opportunité",
+        "subtitleApproved": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submitApprove": "Enregistrer et approuver",
+        "submitSave": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "successApprove": "Approuvé — visible pour les étudiants dès maintenant.",
+        "success": "Enregistré — vos modifications sont en ligne.",
+        "reject": "Rejeter",
+        "rejecting": "Rejet...",
+        "confirmReject": "Rejeter \"{title}\" ? Elle ne sera pas montrée aux étudiants."
+      }
+    },
+    "digest": {
+      "title": "Résumé hebdomadaire",
+      "subtitle": "Sélectionnez et partagez les opportunités de la semaine.",
+      "searchPlaceholder": "Rechercher un titre ou une organisation...",
+      "countryAll": "Tous les pays",
+      "deadlineAny": "Toute échéance",
+      "deadline7": "Clôture sous 7 jours",
+      "deadline14": "Clôture sous 14 jours",
+      "deadline30": "Clôture sous 30 jours",
+      "hideRecentlySent": "Masquer les opportunités déjà envoyées (7 derniers jours)",
+      "sortSoonest": "Échéance la plus proche",
+      "sortNeverSentFirst": "Jamais envoyées, les plus anciennes d'abord",
+      "numberToInclude": "Nombre à inclure",
+      "regenerateSelection": "Régénérer la sélection",
+      "closingSoon": "🚩 Clôture imminente",
+      "neverFeatured": "⚠️ jamais mise en avant",
+      "neverFeaturedWithDays": "⚠️ jamais mise en avant, clôture dans {days}j",
+      "daysLeft": "{days}j restants",
+      "rolling": "Continue",
+      "emptyList": "Aucune opportunité ne correspond à ces filtres.",
+      "livePreview": "Aperçu en direct",
+      "previewPlaceholder": "Sélectionnez des opportunités pour prévisualiser le résumé.",
+      "publishedTo": "Publié sur {url}",
+      "publishing": "Publication...",
+      "shareWhatsapp": "Partager sur WhatsApp",
+      "shareFacebook": "Partager sur Facebook",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "copy": "Copier / Partager le texte"
     },
     "events": {
       "title": "Événements",
@@ -866,6 +995,111 @@
         "submit": "Enregistrer les modifications",
         "pending": "Enregistrement...",
         "success": "Enregistré — vos modifications sont en ligne."
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "overview": "Vue d'ensemble",
+        "analytics": "Analyses",
+        "admins": "Admins",
+        "mentors": "Mentors",
+        "mentees": "Mentorés"
+      },
+      "overview": {
+        "title": "Vue d'ensemble",
+        "subtitle": "Aperçu rapide. Ouvrez Analyses pour les graphiques complets, utilisateurs, engagement et notifications.",
+        "failedToLoad": "Échec du chargement.",
+        "sections": {
+          "mentorship": "Mentorat",
+          "platform": "Plateforme"
+        },
+        "stats": {
+          "approvedMentors": "Mentors approuvés",
+          "pendingMentors": "Mentors en attente",
+          "activeMentorships": "Mentorats actifs",
+          "waitingList": "Liste d'attente",
+          "totalUsers": "Utilisateurs au total",
+          "opportunityAdmins": "Admins d'opportunités",
+          "activeOpportunities": "Opportunités actives",
+          "pendingPush": "Notifications en attente"
+        }
+      },
+      "analytics": {
+        "title": "Analyses",
+        "subtitle": "Analyses des opportunités, utilisateurs et engagement à l'échelle de la plateforme.",
+        "failedToLoad": "Impossible de charger les statistiques pour le moment."
+      },
+      "pagination": {
+        "range": "{start}–{end} sur {total}",
+        "prev": "Précédent",
+        "pageOfTotal": "{page} / {totalPages}",
+        "next": "Suivant"
+      },
+      "admins": {
+        "pageTitle": "Gérer les admins",
+        "intro": "Les admins d'opportunités peuvent créer et gérer des annonces. Les super admins conservent un accès complet à la plateforme.",
+        "addCardLabel": "Ajouter un admin d'opportunités",
+        "emailPlaceholder": "utilisateur-existant@email.com",
+        "add": "Ajouter",
+        "addHint": "L'utilisateur doit déjà être inscrit. La promotion accorde les outils d'opportunités.",
+        "searchPlaceholder": "Rechercher par nom ou e-mail...",
+        "emptySearch": "Aucun admin ne correspond à votre recherche.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "role": "Rôle",
+          "posts": "Publications",
+          "actions": "Actions"
+        },
+        "roleLabels": {
+          "superAdmin": "Super Admin",
+          "opportunityAdmin": "Admin d'opportunités"
+        },
+        "remove": "Retirer",
+        "removing": "Retrait...",
+        "removeConfirmMessage": "Révoquer l'accès admin pour {email} ?",
+        "thisUser": "cet utilisateur",
+        "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+        "promoteSuccessMessage": "Utilisateur promu admin d'opportunités."
+      },
+      "mentors": {
+        "pageTitle": "Gérer les mentors",
+        "intro": "Créez des profils de mentor approuvés par e-mail, approuvez les candidatures en attente ou supprimez des mentors.",
+        "createCardLabel": "Créer un mentor",
+        "emailPlaceholder": "utilisateur@email.com",
+        "add": "Ajouter",
+        "addHint": "L'utilisateur doit déjà avoir un compte. Il sera immédiatement approuvé en tant que mentor.",
+        "searchPlaceholder": "Rechercher des mentors...",
+        "emptyTitle": "Aucun mentor",
+        "emptyDescription": "Essayez d'ajuster les filtres ou ajoutez un mentor par e-mail.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "status": "Statut",
+          "mentees": "Mentorés",
+          "actions": "Actions"
+        },
+        "filters": {
+          "all": "Tous"
+        },
+        "approve": "Approuver",
+        "approving": "Approbation...",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "deleteConfirmActiveMessage": "Supprimer le profil de coach pour {email} ? Cela mettra fin à {count} mentorat(s) actif(s), annulera les sessions à venir et annulera toute demande en attente des étudiants ayant choisi ce coach. Ceci est irréversible.",
+        "deleteConfirmMessage": "Supprimer le profil de coach pour {email} ? Toute demande en attente des étudiants ayant choisi ce coach sera annulée. Ceci est irréversible.",
+        "thisUser": "cet utilisateur",
+        "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+        "createSuccessMessage": "Le profil de coach est approuvé et prêt."
+      },
+      "mentees": {
+        "pageTitle": "Mentorés",
+        "subtitle": "Mentorats actifs sur toute la plateforme.",
+        "searchPlaceholder": "Rechercher des mentorés...",
+        "emptyTitle": "Aucun mentoré actif",
+        "emptyDescription": "Aucun mentorat ne correspond à votre recherche.",
+        "studentFallback": "Étudiant",
+        "coachLabel": "Coach : {name}"
       }
     }
   }

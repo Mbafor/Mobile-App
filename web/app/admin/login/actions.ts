@@ -58,7 +58,7 @@ export async function adminLogin(formData: FormData) {
   }
 
   await writeAdminSessionCookies(data.session.access_token, data.session.refresh_token);
-  redirect('/admin/events');
+  redirect('/admin');
 }
 
 export async function adminLogout() {

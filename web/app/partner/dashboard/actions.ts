@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache';
 
 import { createPartnerClient } from '@/lib/supabase-server';
 import { requirePartnerSession } from '@/lib/partner-session';
-import { parsePartnerOpportunityForm } from '@/lib/partner-opportunity-form';
+import { parseOpportunityForm } from '@/lib/opportunity-form';
 
 export type PartnerOpportunityMutationResult = { ok: true } | { ok: false; message: string };
 
@@ -17,7 +17,7 @@ export async function updatePartnerOpportunity(
 ): Promise<PartnerOpportunityMutationResult> {
   const session = await requirePartnerSession();
 
-  const parsed = parsePartnerOpportunityForm(formData);
+  const parsed = parseOpportunityForm(formData);
   if (!parsed.ok) return parsed;
   const data = parsed.data;
 
@@ -28,6 +28,7 @@ export async function updatePartnerOpportunity(
       title: data.title,
       organization: data.organization,
       description: data.description,
+      benefits: data.benefits,
       image_url: data.imageUrl,
       apply_url: data.applyUrl,
       deadline: data.deadlineIso,

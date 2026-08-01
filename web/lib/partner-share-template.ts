@@ -17,6 +17,12 @@ export function getSiteUrl(): string {
   return (process.env.NEXT_PUBLIC_SITE_URL || 'https://voila-africa.com').replace(/\/$/, '');
 }
 
+/** The deployed app (not the marketing site) — "find more opportunities" links
+ * should send people into the actual app experience, not the landing page. */
+export function getAppUrl(): string {
+  return (process.env.NEXT_PUBLIC_APP_URL || 'https://app.voila-africa.com').replace(/\/$/, '');
+}
+
 export function buildBridgeLink(opportunityId: string, refCode: string): string {
   return `${getSiteUrl()}/o/${opportunityId}?ref=${refCode}`;
 }
@@ -40,7 +46,7 @@ export function buildPartnerShareMessage(
 ): string {
   const lines: string[] = [];
 
-  lines.push(`📋 Opportunities shared by ${orgName}`);
+  lines.push(`Opportunities shared by ${orgName}`);
   lines.push('In partnership with Voila Africa');
   lines.push('');
 
@@ -69,6 +75,7 @@ export interface SingleShareOpportunity {
   title: string;
   organization: string;
   description: string | null;
+  benefits: string | null;
   category: string | null;
   country: string | null;
   locationType: string | null;
@@ -88,57 +95,66 @@ function capitalize(value: string): string {
   return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
 }
 
-function firstNWords(text: string, n: number): string {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
+function firstParagraph(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  const [paragraph] = trimmed.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  return paragraph ?? trimmed;
 }
 
 export function buildPartnerOpportunityMessage(opportunity: SingleShareOpportunity, refCode: string): string {
   const lines: string[] = [];
 
-  lines.push(`🎯 *${opportunity.title}*`);
+  lines.push(`*${opportunity.title}*`);
   lines.push('');
 
-  lines.push(`🏛️ *Organisation:* ${opportunity.organization}`);
-  lines.push(`🗓️ *Deadline:* ${formatDeadline(opportunity.deadline)}`);
+  lines.push(`*Organisation:* ${opportunity.organization}`);
+  lines.push(`*Deadline:* ${formatDeadline(opportunity.deadline)}`);
 
   if (opportunity.country) {
     const locationPart = opportunity.locationType
       ? `${opportunity.country} · ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`
       : opportunity.country;
-    lines.push(`🌍 *Location:* ${locationPart}`);
+    lines.push(`*Location:* ${locationPart}`);
   } else if (opportunity.locationType) {
-    lines.push(`🌍 *Location:* ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`);
+    lines.push(`*Location:* ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`);
   }
 
   if (opportunity.fundingType) {
-    lines.push(`💰 *Funding:* ${capitalize(opportunity.fundingType)}`);
+    lines.push(`*Funding:* ${capitalize(opportunity.fundingType)}`);
   }
 
   if (opportunity.category) {
-    lines.push(`📌 *Category:* ${capitalize(opportunity.category)}`);
+    lines.push(`*Category:* ${capitalize(opportunity.category)}`);
   }
 
-  const snippet = opportunity.description?.trim() ? firstNWords(opportunity.description.trim(), 50) : '';
-  if (snippet) {
+  const about = opportunity.description?.trim() ? firstParagraph(opportunity.description) : '';
+  if (about) {
     lines.push('');
-    lines.push('📝 *About*');
-    lines.push(snippet);
+    lines.push('*About*');
+    lines.push(about);
+  }
+
+  const benefits = opportunity.benefits?.trim();
+  if (benefits) {
+    lines.push('');
+    lines.push('*Benefits*');
+    lines.push(benefits);
   }
 
   const applyLink = opportunity.applyUrl?.trim() || buildBridgeLink(opportunity.id, refCode);
   lines.push('');
-  lines.push('👉 *Apply directly:*');
+  lines.push('*Apply directly:*');
   lines.push(applyLink);
   lines.push('');
-  lines.push('🔎 *Find more opportunities:*');
-  lines.push(getSiteUrl());
+  lines.push('*Find more opportunities:*');
+  lines.push(getAppUrl());
   lines.push('');
   lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
 
   if (opportunity.tags.length > 0) {
     lines.push('');
-    lines.push(`🔖 ${opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  ')}`);
+    lines.push(opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  '));
   }
 
   return lines.join('\n');

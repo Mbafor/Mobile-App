@@ -18,12 +18,13 @@ const inputClass =
 
 const TAG_OPTIONS = OPPORTUNITY_TAGS.map((tag) => ({ value: tag, label: tag }));
 
-export type PartnerOpportunityFormResult = { ok: true } | { ok: false; message: string };
+export type OpportunityFormResult = { ok: true } | { ok: false; message: string };
 
-export interface PartnerOpportunityFormValues {
+export interface OpportunityFormValues {
   title: string;
   organization: string;
   description: string;
+  benefits: string;
   imageUrl: string;
   deadline: string;
   applyUrl: string;
@@ -35,22 +36,28 @@ export interface PartnerOpportunityFormValues {
   locationType: string;
 }
 
-export function PartnerOpportunityForm({
+/** Shared between the Partner dashboard and the Admin opportunities section
+ * (web/app/admin/opportunities) -- both surfaces manage the same opportunity
+ * fields, same precedent as EventForm (web/app/events/_shared/EventForm.tsx)
+ * being shared between admin and partner events. */
+export function OpportunityForm({
   action,
   initialValues,
   submitLabel,
   pendingLabel,
   successMessage,
   resetOnSuccess = false,
+  secondaryAction,
 }: {
-  action: (formData: FormData) => Promise<PartnerOpportunityFormResult>;
-  initialValues?: Partial<PartnerOpportunityFormValues>;
+  action: (formData: FormData) => Promise<OpportunityFormResult>;
+  initialValues?: Partial<OpportunityFormValues>;
   submitLabel: string;
   pendingLabel: string;
   successMessage: string;
   resetOnSuccess?: boolean;
+  secondaryAction?: { label: string; pendingLabel: string; onClick: () => void; destructive?: boolean; disabled?: boolean };
 }) {
-  const t = useTranslations('Partner.form');
+  const t = useTranslations('Opportunities.form');
   const [formKey, setFormKey] = useState(0);
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -123,6 +130,20 @@ export function PartnerOpportunityForm({
           defaultValue={initialValues?.description}
           className={inputClass}
           placeholder={t('descriptionPlaceholder')}
+        />
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium mb-1" htmlFor="benefits">
+          {t('benefits')}
+        </label>
+        <textarea
+          id="benefits"
+          name="benefits"
+          rows={4}
+          defaultValue={initialValues?.benefits}
+          className={inputClass}
+          placeholder={t('benefitsPlaceholder')}
         />
       </div>
 
@@ -249,13 +270,29 @@ export function PartnerOpportunityForm({
         </select>
       </div>
 
-      <button
-        type="submit"
-        disabled={isPending}
-        className="w-full rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium disabled:opacity-50 hover:opacity-90 transition"
-      >
-        {isPending ? pendingLabel : submitLabel}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={isPending}
+          className="flex-1 rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium disabled:opacity-50 hover:opacity-90 transition"
+        >
+          {isPending ? pendingLabel : submitLabel}
+        </button>
+        {secondaryAction && (
+          <button
+            type="button"
+            onClick={secondaryAction.onClick}
+            disabled={isPending || secondaryAction.disabled}
+            className={`rounded-md border py-2 px-4 text-sm font-medium disabled:opacity-50 transition ${
+              secondaryAction.destructive
+                ? 'border-red-300 text-red-600 hover:bg-red-50'
+                : 'border-[var(--color-border)] text-[var(--color-muted)] hover:bg-[var(--color-surface)]'
+            }`}
+          >
+            {secondaryAction.disabled ? secondaryAction.pendingLabel : secondaryAction.label}
+          </button>
+        )}
+      </div>
     </form>
   );
 }

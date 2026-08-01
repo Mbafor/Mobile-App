@@ -4,14 +4,14 @@ import { revalidatePath } from 'next/cache';
 
 import { requirePartnerSession } from '@/lib/partner-session';
 import { createAnonClient, createPartnerClient, createServiceRoleClient } from '@/lib/supabase-server';
-import { parsePartnerOpportunityForm } from '@/lib/partner-opportunity-form';
+import { parseOpportunityForm } from '@/lib/opportunity-form';
 
 export type CreateOpportunityResult = { ok: true } | { ok: false; message: string };
 
 export async function createPartnerOpportunity(formData: FormData): Promise<CreateOpportunityResult> {
   const session = await requirePartnerSession();
 
-  const parsed = parsePartnerOpportunityForm(formData);
+  const parsed = parseOpportunityForm(formData);
   if (!parsed.ok) return parsed;
   const data = parsed.data;
 
@@ -23,6 +23,7 @@ export async function createPartnerOpportunity(formData: FormData): Promise<Crea
       title: data.title,
       organization: data.organization,
       description: data.description,
+      benefits: data.benefits,
       image_url: data.imageUrl,
       apply_url: data.applyUrl,
       deadline: data.deadlineIso,

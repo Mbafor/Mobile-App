@@ -32,9 +32,11 @@ async function cacheOpportunityImage(
   }
 }
 
-function firstNWords(text: string, n: number): string {
-  const words = text.trim().split(/\s+/).filter(Boolean);
-  return words.slice(0, n).join(' ') + (words.length > n ? '…' : '');
+function firstParagraph(text: string): string {
+  const trimmed = text.trim();
+  if (!trimmed) return '';
+  const [paragraph] = trimmed.split(/\n\s*\n/).map((p) => p.trim()).filter(Boolean);
+  return paragraph ?? trimmed;
 }
 
 const LOCATION_LABEL: Record<string, string> = {
@@ -53,62 +55,67 @@ export function buildShareMessage(opportunity: Opportunity, opportunityLink: str
   const lines: string[] = [];
 
   // ── Title ──────────────────────────────────────────────────────────────────
-  lines.push(`🎯 *${opportunity.title}*`);
+  lines.push(`*${opportunity.title}*`);
   lines.push('');
 
   // ── Key details ────────────────────────────────────────────────────────────
-  lines.push(`🏛️ *Organisation:* ${opportunity.organization}`);
-  lines.push(`🗓️ *Deadline:* ${formatDeadline(opportunity.deadline)}`);
+  lines.push(`*Organisation:* ${opportunity.organization}`);
+  lines.push(`*Deadline:* ${formatDeadline(opportunity.deadline)}`);
 
   if (opportunity.country) {
     const locationPart = opportunity.locationType
       ? `${opportunity.country} · ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`
       : opportunity.country;
-    lines.push(`🌍 *Location:* ${locationPart}`);
+    lines.push(`*Location:* ${locationPart}`);
   } else if (opportunity.locationType) {
-    lines.push(`🌍 *Location:* ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`);
+    lines.push(`*Location:* ${LOCATION_LABEL[opportunity.locationType] ?? opportunity.locationType}`);
   }
 
   if (opportunity.fundingType) {
     const label =
       opportunity.fundingType.charAt(0).toUpperCase() +
       opportunity.fundingType.slice(1).toLowerCase();
-    lines.push(`💰 *Funding:* ${label}`);
+    lines.push(`*Funding:* ${label}`);
   }
 
   if (opportunity.category) {
     const label =
       opportunity.category.charAt(0).toUpperCase() +
       opportunity.category.slice(1).toLowerCase();
-    lines.push(`📌 *Category:* ${label}`);
+    lines.push(`*Category:* ${label}`);
   }
 
-  // ── Description ────────────────────────────────────────────────────────────
-  const snippet = opportunity.description?.trim()
-    ? firstNWords(opportunity.description.trim(), 50)
-    : '';
-
-  if (snippet) {
+  // ── Description (first paragraph only) ────────────────────────────────────
+  const about = opportunity.description?.trim() ? firstParagraph(opportunity.description) : '';
+  if (about) {
     lines.push('');
-    lines.push('📝 *About*');
-    lines.push(snippet);
+    lines.push('*About*');
+    lines.push(about);
   }
 
-  // ── CTA: apply directly, then browse more ─────────────────────────────────
+  // ── Benefits (in full) ─────────────────────────────────────────────────────
+  const benefits = opportunity.benefits?.trim();
+  if (benefits) {
+    lines.push('');
+    lines.push('*Benefits*');
+    lines.push(benefits);
+  }
+
+  // ── CTA: apply directly, then browse more (in the app) ────────────────────
   const applyLink = opportunity.applyUrl?.trim() || opportunityLink;
   lines.push('');
-  lines.push('👉 *Apply directly:*');
+  lines.push('*Apply directly:*');
   lines.push(applyLink);
   lines.push('');
-  lines.push('🔎 *Find more opportunities:*');
-  lines.push(env.LANDING_URL.replace(/\/$/, ''));
+  lines.push('*Find more opportunities:*');
+  lines.push(env.APP_URL.replace(/\/$/, ''));
   lines.push('');
   lines.push('_Shared via Voila Africa — Discover opportunities made for you_');
 
   // ── Tags (always last) ─────────────────────────────────────────────────────
   if (opportunity.tags.length > 0) {
     lines.push('');
-    lines.push(`🔖 ${opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  ')}`);
+    lines.push(opportunity.tags.slice(0, 5).map((t) => `#${t.replace(/\s+/g, '')}`).join('  '));
   }
 
   return lines.join('\n');

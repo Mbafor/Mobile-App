@@ -1,9 +1,10 @@
-/** Shared parse/validate logic for the partner "Create" and "Edit" opportunity forms. */
+/** Shared parse/validate logic for the Partner and Admin "Create"/"Edit" opportunity forms. */
 
-export interface ParsedPartnerOpportunity {
+export interface ParsedOpportunity {
   title: string;
   organization: string;
   description: string | null;
+  benefits: string | null;
   imageUrl: string | null;
   applyUrl: string | null;
   deadlineIso: string;
@@ -15,8 +16,8 @@ export interface ParsedPartnerOpportunity {
   locationType: string;
 }
 
-export type ParsePartnerOpportunityResult =
-  | { ok: true; data: ParsedPartnerOpportunity }
+export type ParseOpportunityFormResult =
+  | { ok: true; data: ParsedOpportunity }
   | { ok: false; message: string };
 
 function parseDeadline(dateInput: string): string | null {
@@ -27,10 +28,11 @@ function parseDeadline(dateInput: string): string | null {
   return parsed.toISOString();
 }
 
-export function parsePartnerOpportunityForm(formData: FormData): ParsePartnerOpportunityResult {
+export function parseOpportunityForm(formData: FormData): ParseOpportunityFormResult {
   const title = String(formData.get('title') ?? '').trim();
   const organization = String(formData.get('organization') ?? '').trim();
   const description = String(formData.get('description') ?? '').trim();
+  const benefits = String(formData.get('benefits') ?? '').trim();
   const imageUrl = String(formData.get('imageUrl') ?? '').trim();
   const applyUrl = String(formData.get('applyUrl') ?? '').trim();
   const deadlineInput = String(formData.get('deadline') ?? '').trim();
@@ -78,6 +80,7 @@ export function parsePartnerOpportunityForm(formData: FormData): ParsePartnerOpp
       title,
       organization,
       description: description || null,
+      benefits: benefits || null,
       imageUrl: imageUrl || null,
       applyUrl: applyUrl || null,
       deadlineIso,

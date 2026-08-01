@@ -4,6 +4,7 @@ export type Opportunity = {
   id: string;
   title: string;
   description: string | null;
+  benefits: string | null;
   organization: string;
   imageUrl: string | null;
   applyUrl: string | null;

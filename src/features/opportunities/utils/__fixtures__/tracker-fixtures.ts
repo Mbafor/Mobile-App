@@ -7,6 +7,7 @@ export function makeOpportunity(overrides: Partial<Opportunity> = {}): Opportuni
     id: 'opp-1',
     title: 'Sample Opportunity',
     description: null,
+    benefits: null,
     organization: 'Sample Org',
     imageUrl: null,
     applyUrl: 'https://example.com/apply',

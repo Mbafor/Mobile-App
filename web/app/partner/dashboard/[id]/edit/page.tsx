@@ -3,7 +3,7 @@ import { getTranslations } from 'next-intl/server';
 
 import { requirePartnerSession } from '@/lib/partner-session';
 import { createPartnerClient } from '@/lib/supabase-server';
-import { PartnerOpportunityForm } from '../../PartnerOpportunityForm';
+import { OpportunityForm } from '@/app/opportunities/_shared/OpportunityForm';
 import { updatePartnerOpportunity } from '../../actions';
 
 export default async function PartnerEditOpportunityPage({ params }: { params: Promise<{ id: string }> }) {
@@ -28,7 +28,7 @@ export default async function PartnerEditOpportunityPage({ params }: { params: P
     client
       .from('opportunities')
       .select(
-        'id, title, organization, description, image_url, apply_url, deadline, category, tags, country, funding_type, degree_levels, location_type',
+        'id, title, organization, description, benefits, image_url, apply_url, deadline, category, tags, country, funding_type, degree_levels, location_type',
       )
       .eq('id', id)
       .maybeSingle(),
@@ -45,12 +45,13 @@ export default async function PartnerEditOpportunityPage({ params }: { params: P
       <p className="text-sm text-[var(--color-muted)] mb-6">{t('subtitle')}</p>
 
       <section className="bg-[var(--color-background)] rounded-lg border border-[var(--color-border)] p-4">
-        <PartnerOpportunityForm
+        <OpportunityForm
           action={boundUpdate}
           initialValues={{
             title: opportunity.title,
             organization: opportunity.organization,
             description: opportunity.description ?? '',
+            benefits: opportunity.benefits ?? '',
             imageUrl: opportunity.image_url ?? '',
             applyUrl: opportunity.apply_url ?? '',
             deadline: opportunity.deadline ? opportunity.deadline.slice(0, 10) : '',

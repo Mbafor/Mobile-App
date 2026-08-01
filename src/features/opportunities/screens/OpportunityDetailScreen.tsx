@@ -411,6 +411,15 @@ export function OpportunityDetailScreen() {
             t('opportunities.detail.noDescription')}
         </Text>
 
+        {opportunity.benefits?.trim() ? (
+          <>
+            <Text style={[styles.sectionHeading, getWebFontStyle('semibold'), styles.benefitsHeading]}>
+              {t('opportunities.detail.benefits')}
+            </Text>
+            <Text style={styles.description}>{opportunity.benefits.trim()}</Text>
+          </>
+        ) : null}
+
         {/* Action buttons — inside scroll so user scrolls to find them */}
         <View style={styles.actionSection}>
           <Button fullWidth onPress={() => applyNow(opportunity)}>
@@ -617,6 +626,9 @@ function createStyles(colors: ColorScheme) {
     fontSize: 16,
     color: colors.text,
     lineHeight: 28,
+  },
+  benefitsHeading: {
+    marginTop: spacing.sm,
   },
 
   // ─── Action buttons (below description, inside scroll) ─────────────────────

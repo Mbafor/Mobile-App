@@ -11,7 +11,7 @@ export default async function PartnerBrowsePage() {
   const { data } = await client
     .from('opportunities')
     .select(
-      'id, title, organization, description, category, deadline, country, location_type, funding_type, apply_url, tags, image_url',
+      'id, title, organization, description, benefits, category, deadline, country, location_type, funding_type, apply_url, tags, image_url',
     )
     .order('deadline', { ascending: true, nullsFirst: false })
     .limit(100);

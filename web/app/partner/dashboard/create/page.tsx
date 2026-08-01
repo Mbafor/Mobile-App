@@ -1,6 +1,6 @@
 import { getTranslations } from 'next-intl/server';
 
-import { PartnerOpportunityForm } from '../PartnerOpportunityForm';
+import { OpportunityForm } from '@/app/opportunities/_shared/OpportunityForm';
 import { createPartnerOpportunity } from './actions';
 
 export default async function PartnerCreateOpportunityPage() {
@@ -12,7 +12,7 @@ export default async function PartnerCreateOpportunityPage() {
       <p className="text-sm text-[var(--color-muted)] mb-6">{t('subtitle')}</p>
 
       <section className="bg-[var(--color-background)] rounded-lg border border-[var(--color-border)] p-4">
-        <PartnerOpportunityForm
+        <OpportunityForm
           action={createPartnerOpportunity}
           submitLabel={t('submit')}
           pendingLabel={t('pending')}

@@ -266,6 +266,7 @@ export type Database = {
           id: string;
           title: string;
           description: string | null;
+          benefits: string | null;
           organization: string;
           image_url: string | null;
           apply_url: string | null;
@@ -293,6 +294,7 @@ export type Database = {
           id?: string;
           title: string;
           description?: string | null;
+          benefits?: string | null;
           organization: string;
           image_url?: string | null;
           apply_url?: string | null;
@@ -315,6 +317,7 @@ export type Database = {
           id?: string;
           title?: string;
           description?: string | null;
+          benefits?: string | null;
           organization?: string;
           image_url?: string | null;
           apply_url?: string | null;

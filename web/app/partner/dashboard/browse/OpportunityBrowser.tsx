@@ -11,6 +11,7 @@ export interface BrowserOpportunity {
   title: string;
   organization: string;
   description: string | null;
+  benefits: string | null;
   category: string | null;
   deadline: string | null;
   country: string | null;
@@ -76,6 +77,7 @@ export function OpportunityBrowser({
         title: opp.title,
         organization: opp.organization,
         description: opp.description,
+        benefits: opp.benefits,
         category: opp.category,
         country: opp.country,
         locationType: opp.location_type,

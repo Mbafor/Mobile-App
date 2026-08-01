@@ -631,31 +631,6 @@
       "copy": "Copy",
       "copied": "Copied"
     },
-    "form": {
-      "title": "Title",
-      "titlePlaceholder": "e.g. Software Engineering Internship",
-      "organization": "Organization",
-      "organizationPlaceholder": "e.g. Voila Africa",
-      "description": "Description",
-      "descriptionPlaceholder": "What is this opportunity about?",
-      "imageUrl": "Image URL",
-      "deadline": "Deadline",
-      "applyUrl": "Apply URL",
-      "classification": "Classification",
-      "category": "Category",
-      "selectCategory": "Select a category",
-      "tags": "Tags",
-      "selectTags": "Select tags",
-      "country": "Country",
-      "selectCountry": "Select a country",
-      "fundingType": "Funding type",
-      "selectFundingType": "Select a funding type",
-      "degreeLevels": "Degree levels",
-      "selectDegreeLevels": "Select degree levels",
-      "locationType": "Location type",
-      "selectLocationType": "Select a location type",
-      "selectDefault": "Select..."
-    },
     "create": {
       "title": "Create Opportunity",
       "subtitle": "Post your own opportunity directly to Voila. It goes live immediately for students and on your partner page.",
@@ -714,6 +689,35 @@
         "pending": "Saving...",
         "success": "Saved — your changes are live."
       }
+    }
+  },
+  "Opportunities": {
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Software Engineering Internship",
+      "organization": "Organization",
+      "organizationPlaceholder": "e.g. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "What is this opportunity about?",
+      "benefits": "Benefits",
+      "benefitsPlaceholder": "What will applicants gain? e.g. stipend, mentorship, certificate",
+      "imageUrl": "Image URL",
+      "deadline": "Deadline",
+      "applyUrl": "Apply URL",
+      "classification": "Classification",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "tags": "Tags",
+      "selectTags": "Select tags",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      "fundingType": "Funding type",
+      "selectFundingType": "Select a funding type",
+      "degreeLevels": "Degree levels",
+      "selectDegreeLevels": "Select degree levels",
+      "locationType": "Location type",
+      "selectLocationType": "Select a location type",
+      "selectDefault": "Select..."
     }
   },
   "Events": {
@@ -830,7 +834,132 @@
     "header": {
       "title": "Voila Admin",
       "signedInAs": "Signed in as {name}",
-      "signOut": "Sign out"
+      "signOut": "Sign out",
+      "navDashboard": "Dashboard",
+      "navOpportunities": "Opportunities",
+      "navDigest": "Digest",
+      "navEvents": "Events",
+      "navSuperAdmin": "Super Admin",
+      "menu": "Open menu",
+      "close": "Close menu"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "An overview of Voila's users, opportunities, and engagement.",
+      "reviewPending": "Review pending opportunities",
+      "createNew": "+ New opportunity",
+      "failedToLoad": "Couldn't load analytics right now.",
+      "sections": {
+        "users": "Users",
+        "opportunities": "Opportunities",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Total users",
+        "newThisWeek": "New this week",
+        "newThisMonth": "New this month",
+        "onboardingDone": "Onboarding complete",
+        "onboardingPending": "Onboarding pending",
+        "totalPosted": "Total posted",
+        "closingIn7Days": "Closing in 7 days",
+        "totalSaves": "Total saves",
+        "totalApplied": "Total applied",
+        "totalSent": "Total sent",
+        "totalUnread": "Total unread"
+      }
+    },
+    "opportunities": {
+      "list": {
+        "title": "Opportunities",
+        "subtitle": "Browse and manage all approved opportunities on Voila.",
+        "weeklyDigest": "Weekly Digest",
+        "pasteJson": "Paste JSON",
+        "createNew": "+ New opportunity",
+        "pendingBanner": "{count, plural, one {# opportunity is} other {# opportunities are}} waiting for review.",
+        "reviewLink": "Review now",
+        "empty": "No opportunities yet.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone.",
+        "deadline": "Deadline: {date}",
+        "rolling": "Rolling"
+      },
+      "paste": {
+        "title": "Paste Opportunities",
+        "subtitle": "Bulk-import opportunities from pasted JSON (a single object or an array). Each row is published immediately.",
+        "fieldReference": "Field reference",
+        "loadExample": "Load example",
+        "importButton": "Import",
+        "importing": "Importing...",
+        "importedSummary": "Imported {ok} of {total} opportunities."
+      },
+      "queue": {
+        "title": "Pending Opportunities",
+        "subtitle": "Review scraped and submitted opportunities before they go live.",
+        "createNew": "+ New opportunity",
+        "empty": "No pending opportunities right now.",
+        "review": "Review",
+        "approve": "Approve",
+        "approving": "Approving...",
+        "reject": "Reject",
+        "rejecting": "Rejecting...",
+        "deadline": "Deadline: {date}",
+        "deadlineNotSet": "Not set",
+        "confirmApprove": "Approve \"{title}\"? It goes live for students immediately.",
+        "confirmReject": "Reject \"{title}\"? It will not be shown to students."
+      },
+      "createForm": {
+        "title": "Create Opportunity",
+        "subtitle": "Post an opportunity directly to Voila. It goes live immediately for students.",
+        "submit": "Publish opportunity",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
+      },
+      "reviewForm": {
+        "titlePending": "Review Opportunity",
+        "subtitlePending": "Check the details, then approve or reject.",
+        "titleApproved": "Edit Opportunity",
+        "subtitleApproved": "Changes go live immediately for students.",
+        "submitApprove": "Save & approve",
+        "submitSave": "Save changes",
+        "pending": "Saving...",
+        "successApprove": "Approved — visible to students now.",
+        "success": "Saved — your changes are live.",
+        "reject": "Reject",
+        "rejecting": "Rejecting...",
+        "confirmReject": "Reject \"{title}\"? It will not be shown to students."
+      }
+    },
+    "digest": {
+      "title": "Weekly Digest",
+      "subtitle": "Curate and share this week's opportunities.",
+      "searchPlaceholder": "Search title or organization...",
+      "countryAll": "All countries",
+      "deadlineAny": "Any deadline",
+      "deadline7": "Closing within 7 days",
+      "deadline14": "Closing within 14 days",
+      "deadline30": "Closing within 30 days",
+      "hideRecentlySent": "Hide previously sent (last 7 days)",
+      "sortSoonest": "Soonest deadline",
+      "sortNeverSentFirst": "Never sent, oldest first",
+      "numberToInclude": "Number to include",
+      "regenerateSelection": "Regenerate selection",
+      "closingSoon": "🚩 Closing soon",
+      "neverFeatured": "⚠️ never featured",
+      "neverFeaturedWithDays": "⚠️ never featured, closes in {days}d",
+      "daysLeft": "{days}d left",
+      "rolling": "Rolling",
+      "emptyList": "No opportunities match these filters.",
+      "livePreview": "Live preview",
+      "previewPlaceholder": "Select opportunities to preview the digest.",
+      "publishedTo": "Published to {url}",
+      "publishing": "Publishing...",
+      "shareWhatsapp": "Share on WhatsApp",
+      "shareFacebook": "Share on Facebook",
+      "shareLinkedin": "Share on LinkedIn",
+      "copy": "Copy / Share text"
     },
     "events": {
       "title": "Events",
@@ -866,6 +995,111 @@
         "submit": "Save changes",
         "pending": "Saving...",
         "success": "Saved — your changes are live."
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "overview": "Overview",
+        "analytics": "Analytics",
+        "admins": "Admins",
+        "mentors": "Mentors",
+        "mentees": "Mentees"
+      },
+      "overview": {
+        "title": "Overview",
+        "subtitle": "Quick snapshot. Open Analytics for full charts, users, engagement, and notifications.",
+        "failedToLoad": "Failed to load.",
+        "sections": {
+          "mentorship": "Mentorship",
+          "platform": "Platform"
+        },
+        "stats": {
+          "approvedMentors": "Approved mentors",
+          "pendingMentors": "Pending mentors",
+          "activeMentorships": "Active mentorships",
+          "waitingList": "Waiting list",
+          "totalUsers": "Total users",
+          "opportunityAdmins": "Opportunity admins",
+          "activeOpportunities": "Active opportunities",
+          "pendingPush": "Pending push"
+        }
+      },
+      "analytics": {
+        "title": "Analytics",
+        "subtitle": "Platform-wide opportunity, user, and engagement analytics.",
+        "failedToLoad": "Couldn't load analytics right now."
+      },
+      "pagination": {
+        "range": "{start}–{end} of {total}",
+        "prev": "Prev",
+        "pageOfTotal": "{page} / {totalPages}",
+        "next": "Next"
+      },
+      "admins": {
+        "pageTitle": "Manage admins",
+        "intro": "Opportunity admins can create and manage listings. Super admins retain full platform access.",
+        "addCardLabel": "Add opportunity admin",
+        "emailPlaceholder": "existing-user@email.com",
+        "add": "Add",
+        "addHint": "The user must already have signed up. Promoting grants opportunity tools.",
+        "searchPlaceholder": "Search by name or email...",
+        "emptySearch": "No admins match your search.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "posts": "Posts",
+          "actions": "Actions"
+        },
+        "roleLabels": {
+          "superAdmin": "Super Admin",
+          "opportunityAdmin": "Opportunity Admin"
+        },
+        "remove": "Remove",
+        "removing": "Removing...",
+        "removeConfirmMessage": "Revoke admin access for {email}?",
+        "thisUser": "this user",
+        "invalidEmailMessage": "Please enter a valid email address.",
+        "promoteSuccessMessage": "User promoted to opportunity admin."
+      },
+      "mentors": {
+        "pageTitle": "Manage mentors",
+        "intro": "Create approved mentor profiles by email, approve pending applications, or remove mentors.",
+        "createCardLabel": "Create mentor",
+        "emailPlaceholder": "user@email.com",
+        "add": "Add",
+        "addHint": "The user must already have an account. They'll be immediately approved as a mentor.",
+        "searchPlaceholder": "Search mentors...",
+        "emptyTitle": "No mentors",
+        "emptyDescription": "Try adjusting filters or add a mentor by email.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "status": "Status",
+          "mentees": "Mentees",
+          "actions": "Actions"
+        },
+        "filters": {
+          "all": "All"
+        },
+        "approve": "Approve",
+        "approving": "Approving...",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "deleteConfirmActiveMessage": "Remove coach profile for {email}? This will end {count} active mentorship(s), cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.",
+        "deleteConfirmMessage": "Remove coach profile for {email}? Any pending requests from students who chose this coach will be cancelled. This cannot be undone.",
+        "thisUser": "this user",
+        "invalidEmailMessage": "Please enter a valid email address.",
+        "createSuccessMessage": "Coach profile is approved and ready."
+      },
+      "mentees": {
+        "pageTitle": "Mentees",
+        "subtitle": "Active mentorships across the platform.",
+        "searchPlaceholder": "Search mentees...",
+        "emptyTitle": "No active mentees",
+        "emptyDescription": "No mentorships match your search.",
+        "studentFallback": "Student",
+        "coachLabel": "Coach: {name}"
       }
     }
   }
