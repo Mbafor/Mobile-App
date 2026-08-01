@@ -24,6 +24,7 @@ import {
   buildWeeklyDigestMessage,
   type DigestOpportunity,
 } from '@/features/admin/utils/build-weekly-digest-message';
+import { FILTER_FUNDING_TYPES, FUNDING_TYPE_LABELS } from '@/constants/search-filters';
 import type { WeeklyDigestCandidate } from '@/services/api';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
@@ -73,6 +74,7 @@ export function AdminWeeklyDigestScreen() {
 
   const [search, setSearch] = useState('');
   const [categories, setCategories] = useState<Set<string>>(new Set());
+  const [fundingTypes, setFundingTypes] = useState<Set<string>>(new Set());
   const [country, setCountry] = useState('all');
   const [deadlineRange, setDeadlineRange] = useState<DeadlineRange>('any');
   const [hideRecentlySent, setHideRecentlySent] = useState(true);
@@ -100,6 +102,7 @@ export function AdminWeeklyDigestScreen() {
     return list.filter((c) => {
       if (hideRecentlySent && wasRecentlySent(c.lastSentAt)) return false;
       if (categories.size > 0 && (!c.category || !categories.has(c.category))) return false;
+      if (fundingTypes.size > 0 && (!c.fundingType || !fundingTypes.has(c.fundingType))) return false;
       if (country !== 'all' && c.country !== country) return false;
 
       if (maxDays !== null) {
@@ -114,7 +117,7 @@ export function AdminWeeklyDigestScreen() {
 
       return true;
     });
-  }, [list, search, categories, country, deadlineRange, hideRecentlySent]);
+  }, [list, search, categories, fundingTypes, country, deadlineRange, hideRecentlySent]);
 
   const sorted = useMemo(() => {
     const arr = [...filtered];
@@ -153,6 +156,15 @@ export function AdminWeeklyDigestScreen() {
     });
   }
 
+  function toggleFundingType(value: string) {
+    setFundingTypes((prev) => {
+      const next = new Set(prev);
+      if (next.has(value)) next.delete(value);
+      else next.add(value);
+      return next;
+    });
+  }
+
   const selectedCandidates = useMemo(() => sorted.filter((c) => selected.has(c.id)), [sorted, selected]);
 
   const previewOpportunities: DigestOpportunity[] = selectedCandidates.map((c) => ({
@@ -161,6 +173,7 @@ export function AdminWeeklyDigestScreen() {
     organization: c.organization,
     description: c.description,
     category: c.category,
+    applyUrl: c.applyUrl,
     deadline: c.deadline,
   }));
 
@@ -264,6 +277,16 @@ export function AdminWeeklyDigestScreen() {
                 />
               </View>
             )}
+
+            <View style={styles.filterRow}>
+              <MultiFilterDropdown
+                label={t('admin.weeklyDigest.filterFundingType')}
+                values={fundingTypes}
+                options={[...FILTER_FUNDING_TYPES]}
+                labels={FUNDING_TYPE_LABELS}
+                onToggle={toggleFundingType}
+              />
+            </View>
 
             <Pressable style={styles.toggleRow} onPress={() => setHideRecentlySent((v) => !v)}>
               <Text>{hideRecentlySent ? '☑' : '☐'}</Text>

@@ -7,6 +7,8 @@ export interface WeeklyDigestCandidate {
   description: string | null;
   category: string | null;
   country: string | null;
+  fundingType: string | null;
+  applyUrl: string | null;
   deadline: string | null;
   lastSentAt: string | null;
   timesSent: number;
@@ -19,6 +21,8 @@ function mapCandidateRow(row: {
   description: string | null;
   category: string | null;
   country: string | null;
+  funding_type: string | null;
+  apply_url: string | null;
   deadline: string | null;
   last_sent_at: string | null;
   times_sent: number;
@@ -30,6 +34,8 @@ function mapCandidateRow(row: {
     description: row.description,
     category: row.category,
     country: row.country,
+    fundingType: row.funding_type,
+    applyUrl: row.apply_url,
     deadline: row.deadline,
     lastSentAt: row.last_sent_at,
     timesSent: row.times_sent,
@@ -41,7 +47,9 @@ export const weeklyDigestApi = {
   listCandidates: async () => {
     const { data, error } = await supabase
       .from('opportunities')
-      .select('id, title, organization, description, category, country, deadline, last_sent_at, times_sent')
+      .select(
+        'id, title, organization, description, category, country, funding_type, apply_url, deadline, last_sent_at, times_sent',
+      )
       .eq('status', 'approved')
       .eq('is_active', true)
       .order('deadline', { ascending: true, nullsFirst: false });

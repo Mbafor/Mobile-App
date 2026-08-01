@@ -12,6 +12,7 @@ export interface DigestOpportunity {
   organization: string;
   description: string | null;
   category: string | null;
+  applyUrl: string | null;
   deadline: string | null;
 }
 
@@ -42,9 +43,10 @@ export function buildWeeklyDigestMessage(opportunities: DigestOpportunity[]): st
   lines.push('');
 
   opportunities.forEach((opp, index) => {
+    const applyLink = opp.applyUrl?.trim() || buildBridgeLinkPlain(opp.id);
     lines.push(`${index + 1}. *${opp.title}*`);
     lines.push(`${opp.organization} · Deadline: ${formatDeadline(opp.deadline)}`);
-    lines.push(buildBridgeLinkPlain(opp.id));
+    lines.push(`Apply: ${applyLink}`);
     lines.push('');
   });
 

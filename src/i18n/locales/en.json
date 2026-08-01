@@ -1380,6 +1380,7 @@
       "filterDeadline": "Deadline",
       "filterSort": "Sort",
       "filterCategories": "Categories",
+      "filterFundingType": "Funding type",
       "countryAll": "All countries",
       "deadlineAny": "Any deadline",
       "deadline7": "Closing within 7 days",

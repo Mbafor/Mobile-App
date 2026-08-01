@@ -1404,6 +1404,7 @@
       "filterDeadline": "Échéance",
       "filterSort": "Trier",
       "filterCategories": "Catégories",
+      "filterFundingType": "Type de financement",
       "countryAll": "Tous les pays",
       "deadlineAny": "Toute échéance",
       "deadline7": "Clôture sous 7 jours",

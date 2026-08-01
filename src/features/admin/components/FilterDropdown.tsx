@@ -81,11 +81,12 @@ type MultiFilterDropdownProps = {
   label: string;
   values: Set<string>;
   options: string[];
+  labels?: Record<string, string>;
   onToggle: (value: string) => void;
 };
 
 /** Multi-select dropdown for ad hoc screen filters (immediate toggle, no Apply step). */
-export function MultiFilterDropdown({ label, values, options, onToggle }: MultiFilterDropdownProps) {
+export function MultiFilterDropdown({ label, values, options, labels, onToggle }: MultiFilterDropdownProps) {
   const styles = useThemedStyles(createStyles);
   const { width } = useWindowDimensions();
   const isDesktop = Platform.OS === 'web' && width >= 768;
@@ -119,7 +120,7 @@ export function MultiFilterDropdown({ label, values, options, onToggle }: MultiF
                 return (
                   <Pressable key={option} style={[styles.option, active && styles.optionActive]} onPress={() => onToggle(option)}>
                     <Text style={styles.checkbox}>{active ? '☑' : '☐'}</Text>
-                    <Text style={[styles.optionText, active && styles.optionTextActive]}>{option}</Text>
+                    <Text style={[styles.optionText, active && styles.optionTextActive]}>{labels?.[option] ?? option}</Text>
                   </Pressable>
                 );
               })}
