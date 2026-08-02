@@ -149,35 +149,34 @@
     }
   },
   "MentorMeta": {
-    "title": "Mentors — Voila",
-    "description": "Rencontrez les mentors de Voila et postulez pour devenir mentor."
+    "title": "Rejoignez Voila — Candidatures bénévoles et équipe",
+    "description": "Postulez pour rejoindre Voila en tant que mentor, administrateur d'opportunités, designer, développeur ou membre de l'équipe, et aidez les étudiants à travers l'Afrique à accéder à des opportunités mondiales."
   },
   "Mentor": {
     "hero": {
-      "eyebrow": "Réseau de mentors",
-      "title": "Devenez mentor sur Voila",
-      "subtitle": "Partagez votre expérience, accompagnez des étudiants ambitieux et faites une réelle différence — une séance à la fois."
+      "eyebrow": "Rejoignez Voila",
+      "title": "Rejoignez l'initiative Voila",
+      "subtitle": "Nous constituons une équipe de mentors, d'administrateurs, de designers, de développeurs et bien plus encore pour aider les étudiants à travers l'Afrique à accéder à des opportunités qui changent leur vie. Trouvez votre place."
     },
     "whatToExpect": [
-      { "title": "Engagement flexible", "description": "Encadrez selon votre propre emploi du temps — réservez des séances quand cela vous convient." },
-      { "title": "Étudiants mis en relation", "description": "Nous vous mettons en relation avec des étudiants selon votre expertise et leurs objectifs." },
-      { "title": "Outils intégrés", "description": "Tout ce dont vous avez besoin — messagerie, calendrier et liens de séance — au même endroit." }
+      { "title": "Notre mission", "description": "Combler l'écart entre les étudiants et les opportunités mondiales en rendant la découverte, les candidatures et le mentorat simples, fiables et accessibles." },
+      { "title": "Notre vision", "description": "Un avenir où chaque étudiant ambitieux à travers l'Afrique a un accès équitable aux opportunités mondiales, au mentorat et au soutien nécessaire pour réussir." }
     ],
     "responsibilities": [
-      "Fournir du mentorat et des conseils de carrière aux étudiants.",
-      "Relire les CV, candidatures et projets de bourses.",
-      "Aider les mentorés à définir leurs objectifs et à suivre leurs progrès.",
-      "Partager une expérience pratique de votre domaine."
+      "Mettez vos compétences au service des étudiants à travers l'Afrique pour les aider à accéder à des opportunités qui changent leur vie.",
+      "Collaborez avec une équipe distribuée de bénévoles et de membres de l'équipe.",
+      "Prenez en charge des projets concrets qui ont un impact direct sur les étudiants.",
+      "Développez votre expérience tout en ayant un impact significatif."
     ],
     "instructions": {
       "eyebrow": "Avant de postuler",
-      "title": "Candidature d'instructeur",
-      "description": "Postulez pour rejoindre notre communauté de mentors et aider les étudiants à s'orienter dans les bourses, les stages et l'évolution de carrière. Nous examinons chaque candidature et vous répondons sous 5 à 7 jours ouvrés.",
+      "title": "Candidature générale",
+      "description": "Voila est propulsé par des mentors, des administrateurs d'opportunités, des community managers, des designers, des développeurs et bien plus encore. Parlez-nous de vous et de la façon dont vous aimeriez contribuer — nous examinons chaque candidature et vous répondons sous 5 à 7 jours ouvrés.",
       "whatYoullDo": "Ce que vous ferez"
     },
     "form": {
       "eyebrow": "Vos informations",
-      "helper": "Renseignez vos informations ci-dessous et nous examinerons votre candidature de mentor.",
+      "helper": "Renseignez vos informations ci-dessous et nous examinerons votre candidature.",
       "firstName": "Prénom*",
       "lastName": "Nom*",
       "email": "E-mail*",
@@ -186,13 +185,13 @@
       "linkedinPlaceholder": "linkedin.com/in/yourname or any link",
       "portfolio": "Portfolio ou site web",
       "portfolioPlaceholder": "yourportfolio.com or any link",
-      "areaOfExpertise": "Domaine d'expertise*",
+      "areaOfExpertise": "Pour quel rôle postulez-vous ?*",
       "yearsOfExperience": "Années d'expérience*",
       "selectPlaceholder": "Sélectionner…",
-      "expertiseOptions": ["Stratégie de carrière", "Bourses", "Stages", "CV et candidatures", "Leadership", "Autre"],
+      "expertiseOptions": ["Mentor", "Administrateur des opportunités", "Community Manager", "Designer graphique", "Responsable réseaux sociaux", "Partenariats et parrainage", "Designer UI/UX", "Développeur frontend", "Développeur backend", "Autre"],
       "experienceOptions": ["1 à 3 ans", "3 à 5 ans", "5 à 10 ans", "10 ans et plus"],
-      "shortBio": "Bio courte*",
-      "motivation": "Pourquoi voulez-vous devenir mentor ?*",
+      "shortBio": "Parlez-nous de vos compétences et de vos expériences*",
+      "motivation": "Y a-t-il autre chose que vous aimeriez nous faire savoir ?",
       "submit": "Envoyer la candidature",
       "successAlert": "Candidature envoyée — nous l'examinerons et reviendrons vers vous.",
       "errorFallback": "Échec de l'envoi"
@@ -206,7 +205,7 @@
     "closeButton": "Fermer le menu",
     "links": {
       "about": "À propos",
-      "mentors": "Mentors",
+      "mentors": "Nous rejoindre",
       "events": "Événements",
       "features": "Fonctionnalités",
       "howItWorks": "Comment ça marche"
@@ -1017,7 +1016,8 @@
         "admins": "Admins",
         "partners": "Partenaires",
         "mentors": "Mentors",
-        "mentees": "Mentorés"
+        "mentees": "Mentorés",
+        "applications": "Candidatures"
       },
       "overview": {
         "title": "Vue d'ensemble",
@@ -1124,6 +1124,30 @@
         "save": "Enregistrer les modifications",
         "saving": "Enregistrement...",
         "saveSuccess": "Enregistré."
+      },
+      "applications": {
+        "pageTitle": "Candidatures",
+        "intro": "Candidatures soumises via la page « Rejoignez l'initiative Voila ».",
+        "downloadCsv": "Télécharger le CSV",
+        "searchPlaceholder": "Rechercher par nom, e-mail ou rôle...",
+        "emptySearch": "Aucune candidature ne correspond à votre recherche.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "role": "Rôle",
+          "experience": "Expérience",
+          "status": "Statut",
+          "submitted": "Soumise le",
+          "actions": "Actions"
+        },
+        "view": "Voir",
+        "back": "← Retour aux candidatures",
+        "detailSubtitle": "Soumise le {date}",
+        "phone": "Téléphone",
+        "linkedin": "LinkedIn",
+        "portfolio": "Portfolio ou site web",
+        "skillsExperience": "Compétences et expériences",
+        "anythingElse": "Autre chose"
       },
       "mentors": {
         "pageTitle": "Gérer les mentors",

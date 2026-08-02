@@ -6,7 +6,7 @@ import { Alert } from 'react-native';
 import { ErrorMessage } from '@/components/feedback';
 import { FormField, MultiSelectWithOther } from '@/components/forms';
 import { Input } from '@/components/ui';
-import { FundingPicker, OnboardingShell } from '@/features/onboarding/components';
+import { FundingPicker, OnboardingShell, WantsMentorPicker } from '@/features/onboarding/components';
 import { useOnboardingActions } from '@/features/onboarding/hooks/useOnboardingActions';
 import { useOnboardingGuard } from '@/features/onboarding/hooks/useOnboardingGuard';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
@@ -35,6 +35,7 @@ export function OpportunityPreferencesScreen() {
   const [opportunityTypes, setOpportunityTypes] = useState<string[]>(draft.opportunityTypes);
   const [countriesText, setCountriesText] = useState(formatListInput(draft.preferredCountries));
   const [funding, setFunding] = useState<FundingPreference>(draft.fundingPreference);
+  const [wantsMentor, setWantsMentor] = useState<boolean | null>(draft.wantsMentor);
 
   useEffect(() => {
     if (preferences) {
@@ -43,11 +44,13 @@ export function OpportunityPreferencesScreen() {
           opportunityTypes: preferences.opportunityTypes,
           preferredCountries: preferences.preferredCountries,
           fundingPreference: preferences.fundingPreference ?? 'any',
+          wantsMentor: preferences.wantsMentor,
         },
       });
       setOpportunityTypes(preferences.opportunityTypes);
       setCountriesText(formatListInput(preferences.preferredCountries));
       setFunding(preferences.fundingPreference ?? 'any');
+      setWantsMentor(preferences.wantsMentor);
     }
   }, [loadFromServer, preferences]);
 
@@ -74,7 +77,7 @@ export function OpportunityPreferencesScreen() {
       Alert.alert(t('onboarding.preferences.requiredTitle'), t('onboarding.preferences.requiredCountries'));
       return;
     }
-    const prefs = { opportunityTypes, preferredCountries, fundingPreference: funding };
+    const prefs = { opportunityTypes, preferredCountries, fundingPreference: funding, wantsMentor };
     setPreferences(prefs);
     const ok = await completeOnboarding(prefs);
     if (ok) router.replace(ROUTES.MAIN.DASHBOARD);
@@ -109,6 +112,9 @@ export function OpportunityPreferencesScreen() {
       </FormField>
       <FormField label={t('onboarding.preferences.fundingLabel')}>
         <FundingPicker value={funding} onChange={setFunding} />
+      </FormField>
+      <FormField label={t('onboarding.wantsMentor.label')}>
+        <WantsMentorPicker value={wantsMentor} onChange={setWantsMentor} />
       </FormField>
       {error ? <ErrorMessage message={error} /> : null}
     </OnboardingShell>

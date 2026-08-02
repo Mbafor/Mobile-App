@@ -42,7 +42,7 @@ export default function MentorPage() {
         {/* What to expect */}
         <section className="py-12 md:py-16 bg-white border-b border-[#E0E0E0]">
           <div className="mx-auto max-w-[860px] px-6">
-            <div className="grid gap-6 md:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2">
               {whatToExpect.map((item) => (
                 <div key={item.title} className="flex flex-col gap-2">
                   <div className="w-9 h-9 rounded-xl bg-primary/10 flex items-center justify-center mb-1">
@@ -229,7 +229,6 @@ export default function MentorPage() {
                 <span className="font-semibold">{t('form.motivation')}</span>
                 <textarea
                   name="motivation"
-                  required
                   rows={4}
                   className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
                 />

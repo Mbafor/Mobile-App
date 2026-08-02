@@ -190,6 +190,7 @@ export type Database = {
           avatar_url: string | null;
           welcome_email_sent_at: string | null;
           bio: string | null;
+          mentorship_prompt_seen: boolean;
           created_at: string;
           updated_at: string;
         };
@@ -208,6 +209,7 @@ export type Database = {
           avatar_url?: string | null;
           welcome_email_sent_at?: string | null;
           bio?: string | null;
+          mentorship_prompt_seen?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -226,6 +228,7 @@ export type Database = {
           avatar_url?: string | null;
           welcome_email_sent_at?: string | null;
           bio?: string | null;
+          mentorship_prompt_seen?: boolean;
           created_at?: string;
           updated_at?: string;
         };
@@ -238,6 +241,7 @@ export type Database = {
           opportunity_types: string[];
           preferred_countries: string[];
           funding_preference: string | null;
+          wants_mentor: boolean | null;
           created_at: string;
           updated_at: string;
         };
@@ -247,6 +251,7 @@ export type Database = {
           opportunity_types?: string[];
           preferred_countries?: string[];
           funding_preference?: string | null;
+          wants_mentor?: boolean | null;
           created_at?: string;
           updated_at?: string;
         };
@@ -256,6 +261,7 @@ export type Database = {
           opportunity_types?: string[];
           preferred_countries?: string[];
           funding_preference?: string | null;
+          wants_mentor?: boolean | null;
           created_at?: string;
           updated_at?: string;
         };

@@ -17,6 +17,7 @@ export type OnboardingOpportunityPrefs = {
   opportunityTypes: string[];
   preferredCountries: string[];
   fundingPreference: FundingPreference;
+  wantsMentor: boolean | null;
 };
 
 export type OnboardingData = OnboardingBasicInfo &

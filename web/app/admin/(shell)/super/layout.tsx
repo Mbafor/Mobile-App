@@ -14,6 +14,7 @@ export default async function SuperAdminLayout({ children }: { children: ReactNo
     { href: '/admin/super/partners', key: 'partners', label: t('partners') },
     { href: '/admin/super/mentors', key: 'mentors', label: t('mentors') },
     { href: '/admin/super/mentees', key: 'mentees', label: t('mentees') },
+    { href: '/admin/super/applications', key: 'applications', label: t('applications') },
   ];
 
   return (

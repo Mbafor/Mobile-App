@@ -8,7 +8,7 @@ import { Alert, KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'r
 import { ErrorMessage } from '@/components/feedback';
 import { FormField, MultiSelectWithOther } from '@/components/forms';
 import { Button, Input } from '@/components/ui';
-import { FundingPicker } from '@/features/onboarding/components';
+import { FundingPicker, WantsMentorPicker } from '@/features/onboarding/components';
 import { useProfileData } from '@/features/onboarding/hooks/useProfileData';
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { userPreferencesApi } from '@/services/api';
@@ -31,6 +31,7 @@ export function OpportunityPreferencesEditScreen() {
   const [opportunityTypes, setOpportunityTypes] = useState<string[]>([]);
   const [countriesText, setCountriesText] = useState('');
   const [funding, setFunding] = useState<FundingPreference>('any');
+  const [wantsMentor, setWantsMentor] = useState<boolean | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -39,6 +40,7 @@ export function OpportunityPreferencesEditScreen() {
       setOpportunityTypes(preferences.opportunityTypes ?? []);
       setCountriesText(formatListInput(preferences.preferredCountries));
       setFunding(preferences.fundingPreference ?? 'any');
+      setWantsMentor(preferences.wantsMentor);
     }
   }, [preferences]);
 
@@ -62,6 +64,7 @@ export function OpportunityPreferencesEditScreen() {
       opportunityTypes,
       preferredCountries,
       fundingPreference: funding,
+      wantsMentor,
     });
     setIsSaving(false);
 
@@ -104,6 +107,9 @@ export function OpportunityPreferencesEditScreen() {
         </FormField>
         <FormField label={t('settings.opportunityPreferences.fundingLabel')}>
           <FundingPicker value={funding} onChange={setFunding} />
+        </FormField>
+        <FormField label={t('onboarding.wantsMentor.label')}>
+          <WantsMentorPicker value={wantsMentor} onChange={setWantsMentor} />
         </FormField>
 
         {error ? <ErrorMessage message={error} /> : null}

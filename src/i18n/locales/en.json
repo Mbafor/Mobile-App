@@ -224,6 +224,13 @@
       "searchPlaceholder": "Search...",
       "noResults": "No results for \"{{query}}\""
     },
+    "wantsMentor": {
+      "label": "Do you wish to have a mentor?",
+      "trigger": "Select…",
+      "sheetTitle": "Do you wish to have a mentor?",
+      "yes": "Yes",
+      "no": "No"
+    },
     "progress": {
       "stepOf": "Step {{current}} of {{total}}",
       "steps": {
@@ -325,8 +332,6 @@
     "verify": {
       "title": "Confirm your email",
       "subtitle": "Enter the 6-digit code sent to {{email}}",
-      "bannerTitle": "Check your email",
-      "bannerSub": "Your verification code has been sent",
       "expires": "Expires in 10 minutes.",
       "signingIn": "Signing you in…",
       "verify": "Verify & continue",
@@ -1716,6 +1721,13 @@
     "privacyPolicy": "Privacy Policy",
     "authDisclaimerPrefix": "By continuing, you agree to our",
     "authDisclaimerConnector": "and"
+  },
+  "mentorshipPrompt": {
+    "title": "Grow your network",
+    "message": "Find people in your field of study and network with them — get matched with a mentor on Voila.",
+    "cta": "Go to Mentorship",
+    "cancel": "Not now",
+    "close": "Close"
   },
   "survey": {
     "close": "Close",

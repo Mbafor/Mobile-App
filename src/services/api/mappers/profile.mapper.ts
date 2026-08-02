@@ -34,6 +34,7 @@ export function mapPreferencesRow(row: UserPreferencesRow): UserPreferences {
     opportunityTypes: row.opportunity_types ?? [],
     preferredCountries: row.preferred_countries ?? [],
     fundingPreference: (row.funding_preference as FundingPreference | null) ?? null,
+    wantsMentor: row.wants_mentor ?? null,
   };
 }
 

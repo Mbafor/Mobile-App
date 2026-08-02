@@ -248,6 +248,13 @@
       "searchPlaceholder": "Rechercher...",
       "noResults": "Aucun résultat pour « {{query}} »"
     },
+    "wantsMentor": {
+      "label": "Souhaitez-vous avoir un mentor ?",
+      "trigger": "Sélectionner…",
+      "sheetTitle": "Souhaitez-vous avoir un mentor ?",
+      "yes": "Oui",
+      "no": "Non"
+    },
     "progress": {
       "stepOf": "Étape {{current}} sur {{total}}",
       "steps": {
@@ -349,8 +356,6 @@
     "verify": {
       "title": "Confirmez votre e-mail",
       "subtitle": "Entrez le code à 6 chiffres envoyé à {{email}}",
-      "bannerTitle": "Vérifiez votre e-mail",
-      "bannerSub": "Votre code de vérification a été envoyé",
       "expires": "Expire dans 10 minutes.",
       "signingIn": "Connexion en cours…",
       "verify": "Vérifier et continuer",
@@ -1801,6 +1806,13 @@
     "privacyPolicy": "Politique de confidentialité",
     "authDisclaimerPrefix": "En continuant, vous acceptez nos",
     "authDisclaimerConnector": "et notre"
+  },
+  "mentorshipPrompt": {
+    "title": "Développez votre réseau",
+    "message": "Trouvez des personnes de votre domaine d'études et échangez avec elles — soyez mis en relation avec un mentor sur Voila.",
+    "cta": "Aller à la section Mentorat",
+    "cancel": "Pas maintenant",
+    "close": "Fermer"
   },
   "survey": {
     "close": "Fermer",

@@ -149,35 +149,34 @@
     }
   },
   "MentorMeta": {
-    "title": "Mentors — Voila",
-    "description": "Meet mentors on Voila and apply to become a mentor."
+    "title": "Join Voila — Volunteer & Team Applications",
+    "description": "Apply to join Voila as a mentor, opportunity admin, designer, developer, or team member and help students across Africa access global opportunities."
   },
   "Mentor": {
     "hero": {
-      "eyebrow": "Mentor network",
-      "title": "Become a mentor on Voila",
-      "subtitle": "Share your experience, guide ambitious students, and make a real difference — one session at a time."
+      "eyebrow": "Join Voila",
+      "title": "Join the Voila Initiative",
+      "subtitle": "We're building a team of mentors, admins, designers, developers, and more to help students across Africa access life-changing opportunities. Find where you fit in."
     },
     "whatToExpect": [
-      { "title": "Flexible commitment", "description": "Mentor on your own schedule — book sessions when it suits you." },
-      { "title": "Matched students", "description": "We pair you with students based on your expertise and their goals." },
-      { "title": "In-app tools", "description": "Everything you need — messaging, calendar, and session links — in one place." }
+      { "title": "Our Mission", "description": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." },
+      { "title": "Our Vision", "description": "A future where every ambitious student across Africa has equal access to global opportunities, mentorship, and the support they need to succeed." }
     ],
     "responsibilities": [
-      "Provide mentorship and career advice to students.",
-      "Review CVs, applications, and scholarship projects.",
-      "Help mentees set goals and track progress.",
-      "Share practical experience from your field."
+      "Contribute your skills to help students across Africa access life-changing opportunities.",
+      "Collaborate with a distributed team of volunteers and team members.",
+      "Take ownership of real projects that directly impact students.",
+      "Grow your experience while making a meaningful difference."
     ],
     "instructions": {
       "eyebrow": "Before you apply",
-      "title": "Instructor Application",
-      "description": "Apply to join our mentor community and help students navigate scholarships, internships, and career growth. We review every application and reach out within 5–7 business days.",
+      "title": "General Application",
+      "description": "Voila is powered by mentors, opportunity admins, community managers, designers, developers, and more. Tell us about yourself and how you'd like to contribute — we review every application and reach out within 5–7 business days.",
       "whatYoullDo": "What you'll do"
     },
     "form": {
       "eyebrow": "Your details",
-      "helper": "Fill in your details below and we'll review your mentor application.",
+      "helper": "Fill in your details below and we'll review your application.",
       "firstName": "First name*",
       "lastName": "Last name*",
       "email": "Email*",
@@ -186,13 +185,13 @@
       "linkedinPlaceholder": "linkedin.com/in/yourname or any link",
       "portfolio": "Portfolio or website",
       "portfolioPlaceholder": "yourportfolio.com or any link",
-      "areaOfExpertise": "Area of expertise*",
+      "areaOfExpertise": "Which role are you applying for?*",
       "yearsOfExperience": "Years of experience*",
       "selectPlaceholder": "Select…",
-      "expertiseOptions": ["Career strategy", "Scholarships", "Internships", "CV & applications", "Leadership", "Other"],
+      "expertiseOptions": ["Mentor", "Opportunity Admin", "Community Manager", "Graphics Designer", "Social Media Manager", "Partnership & Sponsorship", "UI/UX Designer", "Frontend Developer", "Backend Developer", "Other"],
       "experienceOptions": ["1–3 years", "3–5 years", "5–10 years", "10+ years"],
-      "shortBio": "Short bio*",
-      "motivation": "Why do you want to become a mentor?*",
+      "shortBio": "Tell us about your skills and experiences*",
+      "motivation": "Is there anything else you'd like us to know?",
       "submit": "Submit application",
       "successAlert": "Application submitted — we will review and be in touch.",
       "errorFallback": "Submission failed"
@@ -206,7 +205,7 @@
     "closeButton": "Close menu",
     "links": {
       "about": "About",
-      "mentors": "Mentors",
+      "mentors": "Join Us",
       "events": "Events",
       "features": "Features",
       "howItWorks": "How it works"
@@ -1017,7 +1016,8 @@
         "admins": "Admins",
         "partners": "Partners",
         "mentors": "Mentors",
-        "mentees": "Mentees"
+        "mentees": "Mentees",
+        "applications": "Applications"
       },
       "overview": {
         "title": "Overview",
@@ -1124,6 +1124,30 @@
         "save": "Save changes",
         "saving": "Saving...",
         "saveSuccess": "Saved."
+      },
+      "applications": {
+        "pageTitle": "Applications",
+        "intro": "Applications submitted through the \"Join Voila Initiative\" page.",
+        "downloadCsv": "Download CSV",
+        "searchPlaceholder": "Search by name, email, or role...",
+        "emptySearch": "No applications match your search.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "experience": "Experience",
+          "status": "Status",
+          "submitted": "Submitted",
+          "actions": "Actions"
+        },
+        "view": "View",
+        "back": "← Back to applications",
+        "detailSubtitle": "Submitted {date}",
+        "phone": "Phone",
+        "linkedin": "LinkedIn",
+        "portfolio": "Portfolio or website",
+        "skillsExperience": "Skills and experience",
+        "anythingElse": "Anything else"
       },
       "mentors": {
         "pageTitle": "Manage mentors",

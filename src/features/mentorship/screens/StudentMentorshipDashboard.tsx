@@ -1,4 +1,3 @@
-import { useQueryClient } from '@tanstack/react-query';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
 import { useTheme } from '@/hooks/useTheme';
@@ -48,7 +47,6 @@ export function StudentMentorshipDashboard() {
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');
   const [selectingMentorId, setSelectingMentorId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
 
   const {
     activeMentorship,
@@ -91,12 +89,6 @@ export function StudentMentorshipDashboard() {
         (s) => s.status !== 'cancelled' && s.status !== 'completed',
       )
     : [];
-
-  const handleRequestCoach = () => {
-    if (!user?.id) return;
-    void queryClient.invalidateQueries({ queryKey: ['mentorship', 'availableMentors', user.id] });
-    setActiveSection('browse');
-  };
 
   const handleChooseCoach = (mentorUserId: string) => {
     if (!mentorUserId?.trim()) {
@@ -176,13 +168,18 @@ export function StudentMentorshipDashboard() {
   const renderSection = () => {
     switch (activeSection) {
       case 'dashboard':
+        if (canRequest) {
+          return (
+            <MentorChooser
+              onSelect={handleChooseCoach}
+              onJoinWaitingList={handleJoinWaitingList}
+              isSelecting={isChoosingCoach || isJoiningWaitingList}
+              selectingMentorId={selectingMentorId}
+            />
+          );
+        }
         return (
           <View style={styles.sectionBody}>
-            {canRequest ? (
-              <Button fullWidth onPress={handleRequestCoach}>
-                {t('mentorship.student.requestCoach')}
-              </Button>
-            ) : null}
             {onWaitingList && waitingList ? (
               <WaitingListCard
                 status={waitingList}
@@ -213,23 +210,13 @@ export function StudentMentorshipDashboard() {
                 </View>
               </>
             ) : null}
-            {!canRequest && !hasCoach && !onWaitingList ? (
+            {!hasCoach && !onWaitingList ? (
               <EmptyState
                 title={t('mentorship.student.emptyTitle')}
                 description={t('mentorship.student.emptyDescription')}
               />
             ) : null}
           </View>
-        );
-
-      case 'browse':
-        return (
-          <MentorChooser
-            onSelect={handleChooseCoach}
-            onJoinWaitingList={handleJoinWaitingList}
-            isSelecting={isChoosingCoach || isJoiningWaitingList}
-            selectingMentorId={selectingMentorId}
-          />
         );
 
       case 'coach':
@@ -327,7 +314,7 @@ export function StudentMentorshipDashboard() {
       onSelectSection={setActiveSection}
       onRefresh={() => void refetch()}
       scrollable={!isFullHeightSection}
-      fillWidth={activeSection === 'browse'}
+      fillWidth={activeSection === 'dashboard' && canRequest}
       headerExtra={
         activeSection === 'dashboard' ? (
           <Text muted style={styles.introBody}>

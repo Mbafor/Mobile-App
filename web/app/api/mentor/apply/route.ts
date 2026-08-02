@@ -25,7 +25,6 @@ export async function POST(req: NextRequest) {
     'area_of_expertise',
     'years_of_experience',
     'short_bio',
-    'motivation',
   ];
 
   for (const key of required) {
@@ -42,7 +41,7 @@ export async function POST(req: NextRequest) {
     area_of_expertise: body.area_of_expertise,
     years_of_experience: body.years_of_experience,
     short_bio: body.short_bio,
-    motivation: body.motivation,
+    motivation: body.motivation || null,
     status: 'pending',
   };
 

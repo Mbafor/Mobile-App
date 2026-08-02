@@ -35,6 +35,7 @@ export const userPreferencesApi = {
         opportunity_types: prefs.opportunityTypes,
         preferred_countries: prefs.preferredCountries,
         funding_preference: prefs.fundingPreference,
+        wants_mentor: prefs.wantsMentor,
       })
       .eq('user_id', userId)
       .select('*')

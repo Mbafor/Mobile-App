@@ -23,6 +23,7 @@ import { getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadat
 import { useDashboard } from '@/features/dashboard/hooks/useDashboard';
 import { OpportunitySection } from '@/features/opportunities/components/OpportunitySection';
 import { useSurveyEligibility } from '@/features/survey';
+import { useMentorshipPromptEligibility } from '@/features/mentorship-prompt';
 import { env } from '@/config/env';
 import { ROUTES } from '@/constants/routes';
 import { spacing } from '@/constants/theme';
@@ -48,6 +49,7 @@ export function DashboardScreen() {
 
   const { profile, user } = useAuth();
   useSurveyEligibility();
+  useMentorshipPromptEligibility();
   const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
   const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
 

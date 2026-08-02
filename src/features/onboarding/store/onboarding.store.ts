@@ -26,6 +26,7 @@ const emptyDraft: OnboardingDraft = {
     opportunityTypes: [],
     preferredCountries: [],
     fundingPreference: 'any',
+    wantsMentor: null,
   },
 };
 

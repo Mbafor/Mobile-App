@@ -6,4 +6,5 @@ export type UserPreferences = {
   opportunityTypes: string[];
   preferredCountries: string[];
   fundingPreference: FundingPreference | null;
+  wantsMentor: boolean | null;
 };
