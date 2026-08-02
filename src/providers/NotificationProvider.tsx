@@ -31,7 +31,11 @@ export function NotificationProvider({ children }: PropsWithChildren) {
   useEffect(() => {
     if (!userId || !preferences?.pushEnabled) return;
 
-    void registerExpoPushToken(userId);
+    registerExpoPushToken(userId).then((result) => {
+      if (result.error) {
+        console.warn('[NotificationProvider] push registration failed:', result.error);
+      }
+    });
   }, [userId, preferences?.pushEnabled]);
 
   useEffect(() => {

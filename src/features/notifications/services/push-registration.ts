@@ -64,23 +64,26 @@ export async function registerExpoPushToken(userId: string): Promise<{
 
   const projectId = resolveExpoProjectId();
   if (!projectId) {
-    return {
-      token: null,
-      permission,
-      error: 'Missing EAS project ID. Set EXPO_PUBLIC_EAS_PROJECT_ID in .env for remote push.',
-    };
+    const error = 'Missing EAS project ID. Set EXPO_PUBLIC_EAS_PROJECT_ID in .env for remote push.';
+    console.warn('[push-registration]', error);
+    return { token: null, permission, error };
   }
 
   try {
     const tokenResult = await Notifications.getExpoPushTokenAsync({ projectId });
     const token = tokenResult.data;
 
-    await pushTokensApi.upsert({
+    const { error: upsertError } = await pushTokensApi.upsert({
       userId,
       expoPushToken: token,
       platform: Platform.OS,
       deviceId: Constants.sessionId ?? undefined,
     });
+
+    if (upsertError) {
+      console.warn('[push-registration] failed to save push token:', upsertError.message);
+      return { token: null, permission, error: upsertError.message };
+    }
 
     if (Platform.OS === 'android') {
       await Notifications.setNotificationChannelAsync('default', {
@@ -92,6 +95,7 @@ export async function registerExpoPushToken(userId: string): Promise<{
     return { token, permission };
   } catch (e) {
     const message = e instanceof Error ? e.message : 'Failed to register push token';
+    console.warn('[push-registration] failed to get push token:', message);
     return { token: null, permission, error: message };
   }
 }
