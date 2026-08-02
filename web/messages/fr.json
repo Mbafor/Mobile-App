@@ -1017,6 +1017,7 @@
         "partners": "Partenaires",
         "mentors": "Mentors",
         "mentees": "Mentorés",
+        "mentorshipExits": "Départs de mentorat",
         "applications": "Candidatures"
       },
       "overview": {
@@ -1187,6 +1188,20 @@
         "emptyDescription": "Aucun mentorat ne correspond à votre recherche.",
         "studentFallback": "Étudiant",
         "coachLabel": "Coach : {name}"
+      },
+      "mentorshipExits": {
+        "pageTitle": "Départs de mentorat",
+        "subtitle": "Mentorats terminés prématurément, avec la raison donnée par l'étudiant ou le mentor.",
+        "searchPlaceholder": "Rechercher par nom ou e-mail de l'étudiant...",
+        "emptyTitle": "Aucun rapport de départ",
+        "emptyDescription": "Aucun mentorat ne s'est encore terminé prématurément, ou aucun ne correspond à votre recherche.",
+        "studentFallback": "Étudiant",
+        "coachLabel": "Coach : {name}",
+        "noReason": "Aucune raison fournie",
+        "status": {
+          "left_by_student": "Quitté par l'étudiant",
+          "removed_by_mentor": "Retiré par le mentor"
+        }
       }
     }
   }

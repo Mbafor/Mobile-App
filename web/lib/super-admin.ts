@@ -65,6 +65,19 @@ export interface SuperAdminMenteeRow {
   mentor_name: string | null;
 }
 
+export interface SuperAdminMentorshipExitRow {
+  mentorship_id: string;
+  status: string;
+  started_at: string;
+  ended_at: string | null;
+  end_reason: string | null;
+  student_id: string;
+  mentor_id: string;
+  student_name: string | null;
+  student_email: string | null;
+  mentor_name: string | null;
+}
+
 export interface SuperAdminPartnerRow {
   id: string;
   org_name: string;

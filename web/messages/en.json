@@ -1017,6 +1017,7 @@
         "partners": "Partners",
         "mentors": "Mentors",
         "mentees": "Mentees",
+        "mentorshipExits": "Mentorship exits",
         "applications": "Applications"
       },
       "overview": {
@@ -1187,6 +1188,20 @@
         "emptyDescription": "No mentorships match your search.",
         "studentFallback": "Student",
         "coachLabel": "Coach: {name}"
+      },
+      "mentorshipExits": {
+        "pageTitle": "Mentorship exits",
+        "subtitle": "Mentorships that ended early, with the exit reason the student or mentor gave.",
+        "searchPlaceholder": "Search by student name or email...",
+        "emptyTitle": "No exit reports",
+        "emptyDescription": "No mentorships have ended early yet, or none match your search.",
+        "studentFallback": "Student",
+        "coachLabel": "Coach: {name}",
+        "noReason": "No reason provided",
+        "status": {
+          "left_by_student": "Left by student",
+          "removed_by_mentor": "Removed by mentor"
+        }
       }
     }
   }

@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next';
 import type { MentorshipNavItem } from '@/features/mentorship/components/shared/MentorshipDrawerNav';
 import {
   ActivityIndicator,
+  Modal,
+  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
@@ -13,7 +15,7 @@ import { Alert } from 'react-native';
 
 import { ErrorMessage } from '@/components/feedback';
 import { EmptyState } from '@/components/feedback/EmptyState';
-import { Text } from '@/components/ui';
+import { Text, TextArea } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
 import { StudentBookingCalendar } from '@/features/mentorship/components/calendar/StudentBookingCalendar';
 import { CoachDashboardSummary } from '@/features/mentorship/components/student/CoachDashboardSummary';
@@ -47,6 +49,8 @@ export function StudentMentorshipDashboard() {
   const userId = user?.id ?? '';
   const [activeSection, setActiveSection] = useState('dashboard');
   const [selectingMentorId, setSelectingMentorId] = useState<string | null>(null);
+  const [showLeaveModal, setShowLeaveModal] = useState(false);
+  const [leaveReason, setLeaveReason] = useState('');
 
   const {
     activeMentorship,
@@ -112,14 +116,18 @@ export function StudentMentorshipDashboard() {
     });
   };
 
-  const handleLeave = async () => {
+  const handleLeave = () => {
     if (!activeMentorship) return;
-    const ok = await confirmAction(
-      t('mentorship.student.leaveConfirmTitle'),
-      t('mentorship.student.leaveConfirmMessage'),
+    setLeaveReason('');
+    setShowLeaveModal(true);
+  };
+
+  const confirmLeave = () => {
+    if (!activeMentorship) return;
+    leaveMentorship(
+      { mentorshipId: activeMentorship.id, reason: leaveReason.trim() || undefined },
+      { onSuccess: () => setShowLeaveModal(false) },
     );
-    if (!ok) return;
-    leaveMentorship({ mentorshipId: activeMentorship.id });
   };
 
   const handleCancelSession = async (sessionId: string) => {
@@ -203,7 +211,7 @@ export function StudentMentorshipDashboard() {
                   </Text>
                   <Button
                     variant="secondary"
-                    onPress={() => void handleLeave()}
+                    onPress={handleLeave}
                     loading={isLeaving}
                     textStyle={{ color: colors.error }}
                   >
@@ -309,17 +317,59 @@ export function StudentMentorshipDashboard() {
   };
 
   return (
-    <MentorshipShell
-      navItems={navItems}
-      activeSection={activeSection}
-      sectionTitle={sectionTitle}
-      onSelectSection={setActiveSection}
-      onRefresh={() => void refetch()}
-      scrollable={!isFullHeightSection}
-      fillWidth={activeSection === 'dashboard' && canRequest}
-    >
-      {renderSection()}
-    </MentorshipShell>
+    <>
+      <MentorshipShell
+        navItems={navItems}
+        activeSection={activeSection}
+        sectionTitle={sectionTitle}
+        onSelectSection={setActiveSection}
+        onRefresh={() => void refetch()}
+        scrollable={!isFullHeightSection}
+        fillWidth={activeSection === 'dashboard' && canRequest}
+      >
+        {renderSection()}
+      </MentorshipShell>
+
+      <Modal
+        visible={showLeaveModal}
+        transparent
+        animationType="fade"
+        onRequestClose={() => setShowLeaveModal(false)}
+      >
+        <View style={styles.modalOverlay}>
+          <Pressable
+            style={StyleSheet.absoluteFillObject}
+            onPress={() => setShowLeaveModal(false)}
+          />
+          <View style={styles.modalCard}>
+            <Text style={styles.modalTitle}>{t('mentorship.student.leaveConfirmTitle')}</Text>
+            <Text muted style={styles.modalBody}>
+              {t('mentorship.student.leaveConfirmMessage')}
+            </Text>
+            <View style={styles.reasonWrap}>
+              <Text variant="caption" muted>
+                {t('mentorship.student.leaveReasonLabel')}
+              </Text>
+              <TextArea
+                value={leaveReason}
+                onChangeText={setLeaveReason}
+                placeholder={t('mentorship.student.leaveReasonPlaceholder')}
+                maxLength={500}
+                minHeight={90}
+              />
+            </View>
+            <View style={styles.modalActions}>
+              <Button variant="ghost" onPress={() => setShowLeaveModal(false)}>
+                {t('mentorship.student.leaveModalCancel')}
+              </Button>
+              <Button onPress={confirmLeave} loading={isLeaving} textStyle={{ color: colors.error }}>
+                {t('mentorship.student.leaveModalSubmit')}
+              </Button>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    </>
   );
 }
 
@@ -337,5 +387,24 @@ function createStyles(theme: AppTheme) {
     gap: spacing.sm,
   },
   leaveHint: {},
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: colors.overlay,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: spacing.lg,
+  },
+  modalCard: {
+    width: '100%',
+    maxWidth: 480,
+    backgroundColor: mentorshipColors.surfaceElevated,
+    borderRadius: 16,
+    padding: spacing.lg,
+    gap: spacing.md,
+  },
+  modalTitle: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text },
+  modalBody: { lineHeight: 22 },
+  reasonWrap: { gap: spacing.xs },
+  modalActions: { flexDirection: 'row', justifyContent: 'flex-end', gap: spacing.sm },
 });
 }
