@@ -10,6 +10,8 @@ const BRAND = '#0B6623';
 const RESEND_API_KEY = process.env.RESEND_API_KEY;
 const EMAIL_FROM = process.env.RESEND_EMAIL_FROM ?? 'Voila <noreply@voila-africa.com>';
 const SITE_URL = (process.env.NEXT_PUBLIC_SITE_URL ?? 'https://voila-africa.com').replace(/\/$/, '');
+const WHATSAPP_EVENTS_URL =
+  process.env.NEXT_PUBLIC_WHATSAPP_EVENTS_URL ?? 'https://chat.whatsapp.com/KeUzay1i8sd5jD1VyzSbgG';
 
 const SOCIAL_LINKS = [
   { label: 'LinkedIn', href: 'https://www.linkedin.com/company/voila-africa/', icon: 'icon-linkedin.png' },
@@ -102,6 +104,11 @@ export async function sendEventConfirmationEmail(params: {
       <p style="margin:4px 0 16px;">&#128340; Time: ${params.timeLabel}</p>
       <p>We're excited to have you join us.</p>
       <p>You will receive reminder emails closer to the event with the joining details.</p>
+      <p style="margin:16px 0 0;">
+        Join our WhatsApp group to get timely updates about this event:
+        <br />
+        <a href="${WHATSAPP_EVENTS_URL}" style="color:${BRAND}; font-weight:600;">${WHATSAPP_EVENTS_URL}</a>
+      </p>
       <p style="margin-top:20px;">See you there!</p>
       <p style="margin:20px 0 0;">The Voila Africa Team</p>
       <p style="margin-top:24px; font-size:11px; color:#999999;">Registration reference: ${params.registrationRef}</p>

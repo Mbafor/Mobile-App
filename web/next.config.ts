@@ -23,6 +23,15 @@ const nextConfig: NextConfig = {
     root: __dirname,
   },
 
+  // Server Actions default to a 1MB request body, which silently kills event/
+  // opportunity image uploads (Chrome shows a generic "page couldn't load"
+  // network error, not a real error message) for anything above that.
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '10mb',
+    },
+  },
+
   // Serve next/image in modern formats (avif → webp → original)
   images: {
     formats: ["image/avif", "image/webp"],

@@ -803,6 +803,9 @@
       "successSubtitle": "Nous avons envoyé une confirmation à votre email avec tous les détails.",
       "referenceLabel": "Référence d'inscription",
       "joinLinkLabel": "Lien de connexion",
+      "whatsappTitle": "Restez informé(e)",
+      "whatsappBody": "Rejoignez ce groupe WhatsApp pour recevoir les mises à jour de l'événement en temps utile.",
+      "whatsappCta": "Rejoindre le groupe WhatsApp",
       "createAccountCta": "Créez votre compte Voila Africa gratuit"
     },
     "single": {

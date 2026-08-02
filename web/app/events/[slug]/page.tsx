@@ -80,10 +80,18 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
       <Header />
       <main className="min-h-screen bg-[var(--color-surface)]">
       <div className="max-w-[1000px] mx-auto px-6 py-8">
-        <div className={`relative ${event.image_url ? '' : 'rounded-2xl bg-primary h-64 md:h-80'}`}>
+        <div
+          className={`relative rounded-2xl overflow-hidden ${
+            event.image_url ? 'md:h-80' : 'h-64 md:h-80 bg-primary'
+          }`}
+        >
           {event.image_url && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={event.image_url} alt={event.title} className="w-full h-auto block rounded-2xl" />
+            <img
+              src={event.image_url}
+              alt={event.title}
+              className="w-full h-auto block md:h-full md:w-full md:object-cover"
+            />
           )}
           <div className="absolute top-4 left-4 bg-white rounded-lg px-3 py-1.5 text-center shadow-sm">
             <p className="text-[11px] font-bold text-primary leading-none">{badge.month}</p>
