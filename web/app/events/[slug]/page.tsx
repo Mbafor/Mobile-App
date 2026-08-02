@@ -90,7 +90,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             <img
               src={event.image_url}
               alt={event.title}
-              className="w-full h-auto block md:h-full md:w-full md:object-cover"
+              className="w-full h-auto block md:h-full md:w-full md:object-cover md:object-top"
             />
           )}
           <div className="absolute top-4 left-4 bg-white rounded-lg px-3 py-1.5 text-center shadow-sm">

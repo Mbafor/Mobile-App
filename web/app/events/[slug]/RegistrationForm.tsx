@@ -67,22 +67,6 @@ export function RegistrationForm({
         </div>
         <p className="text-sm text-[var(--color-muted)]">{t('successSubtitle')}</p>
 
-        <div className="rounded-lg bg-primary/5 border border-primary/15 px-4 py-3">
-          <p className="text-[11px] font-semibold text-primary uppercase tracking-wide mb-0.5">{t('referenceLabel')}</p>
-          <p className="text-sm font-mono font-semibold text-[#1A1A1A]">{result.registrationRef}</p>
-        </div>
-
-        {result.meetingLink && (
-          <div className="rounded-lg border border-[var(--color-border)] px-4 py-3">
-            <p className="text-[11px] font-semibold text-[var(--color-muted)] uppercase tracking-wide mb-1">
-              {t('joinLinkLabel')}
-            </p>
-            <a href={result.meetingLink} target="_blank" rel="noopener noreferrer" className="text-sm text-primary font-medium break-all hover:underline">
-              {result.meetingLink}
-            </a>
-          </div>
-        )}
-
         <div className="rounded-lg bg-[#25D366]/10 border border-[#25D366]/25 px-4 py-3">
           <div className="flex items-center gap-2 mb-1">
             <svg className="w-4 h-4 shrink-0" fill="#25D366" viewBox="0 0 24 24">
