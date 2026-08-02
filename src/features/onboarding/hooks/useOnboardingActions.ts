@@ -1,5 +1,5 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 
 import { useAuth } from '@/features/auth/hooks/useAuth';
 import { useAuthStore } from '@/features/auth/store/auth.store';
@@ -44,7 +44,16 @@ export function useOnboardingActions() {
     [email, setProfile, userId],
   );
 
+  // Synchronous guard against double-invocation (e.g. a fast double-tap/double-click
+  // firing both onPress calls before the `disabled={isLoading}` re-render lands --
+  // React state updates aren't synchronous, so isLoading alone isn't airtight).
+  // This is what makes completeOnboarding's welcome-email send genuinely single-flight
+  // on the client, on top of the server-side atomic claim in send-welcome-email.
+  const isRunningRef = useRef(false);
+
   const run = useCallback(async <T>(fn: () => Promise<T>): Promise<T | null> => {
+    if (isRunningRef.current) return null;
+    isRunningRef.current = true;
     setIsLoading(true);
     setError(null);
     try {
@@ -55,6 +64,7 @@ export function useOnboardingActions() {
       setError(message);
       return null;
     } finally {
+      isRunningRef.current = false;
       setIsLoading(false);
     }
   }, []);
