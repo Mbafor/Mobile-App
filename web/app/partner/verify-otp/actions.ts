@@ -54,9 +54,18 @@ export async function resendPartnerOtp(formData: FormData) {
   const email = String(formData.get('email') || '').trim().toLowerCase();
   const org = String(formData.get('org') || '').trim();
 
-  if (email) {
-    const anon = createAnonClient();
-    await anon.auth.resend({ type: 'signup', email });
+  if (!email) {
+    redirect(`/partner/verify-otp?${buildQuery({ email, org, error: 'invalid_code' })}`);
+  }
+
+  const anon = createAnonClient();
+  const { error } = await anon.auth.resend({ type: 'signup', email });
+
+  // Surface the actual outcome instead of always claiming success -- Supabase
+  // returns a real error here (e.g. "email rate limit exceeded") that was
+  // previously discarded, so a failed resend looked identical to a working one.
+  if (error) {
+    redirect(`/partner/verify-otp?${buildQuery({ email, org, error: 'resend_failed' })}`);
   }
 
   redirect(`/partner/verify-otp?${buildQuery({ email, org, resent: '1' })}`);

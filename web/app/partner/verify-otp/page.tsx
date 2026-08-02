@@ -25,6 +25,7 @@ export default async function PartnerVerifyOtpPage({
   const errorMessages: Record<string, string> = {
     invalid_code: t('errorInvalidCode'),
     account_disabled: t('errorAccountDisabled'),
+    resend_failed: t('errorResendFailed'),
   };
 
   return (

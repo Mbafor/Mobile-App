@@ -65,6 +65,40 @@ export interface SuperAdminMenteeRow {
   mentor_name: string | null;
 }
 
+export interface SuperAdminPartnerRow {
+  id: string;
+  org_name: string;
+  slug: string;
+  logo_url: string | null;
+  contact_email: string;
+  ref_code: string;
+  is_active: boolean;
+  created_at: string;
+  opportunities_posted: number;
+}
+
+export interface PartnerAnalytics {
+  total: number;
+  active: number;
+  totalOpportunitiesPosted: number;
+  totalLinkClicks: number;
+  byPartner: { label: string; value: number }[];
+}
+
+export function mapPartnerAnalytics(payload: unknown): PartnerAnalytics | null {
+  if (!payload || typeof payload !== 'object') return null;
+  const row = payload as Record<string, unknown>;
+  return {
+    total: Number(row.total ?? 0),
+    active: Number(row.active ?? 0),
+    totalOpportunitiesPosted: Number(row.total_opportunities_posted ?? 0),
+    totalLinkClicks: Number(row.total_link_clicks ?? 0),
+    byPartner: Array.isArray(row.by_partner)
+      ? (row.by_partner as { label: string; value: number }[])
+      : [],
+  };
+}
+
 export interface Paginated<T> {
   items: T[];
   total: number;

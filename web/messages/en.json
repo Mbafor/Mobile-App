@@ -587,6 +587,7 @@
       "resendCooldown": "Resend code ({seconds}s)",
       "errorInvalidCode": "That code is incorrect or has expired. Please try again.",
       "errorAccountDisabled": "This partner account is disabled. Contact support for help.",
+      "errorResendFailed": "Couldn't resend the code right now — you may be sending too many requests. Wait a few minutes and try again.",
       "errorGeneric": "Something went wrong. Please try again."
     },
     "dashboard": {
@@ -1014,6 +1015,7 @@
         "overview": "Overview",
         "analytics": "Analytics",
         "admins": "Admins",
+        "partners": "Partners",
         "mentors": "Mentors",
         "mentees": "Mentees"
       },
@@ -1073,6 +1075,55 @@
         "thisUser": "this user",
         "invalidEmailMessage": "Please enter a valid email address.",
         "promoteSuccessMessage": "User promoted to opportunity admin."
+      },
+      "partners": {
+        "pageTitle": "Manage partners",
+        "intro": "Partners can post opportunities to their own public page and track link attribution.",
+        "stats": {
+          "total": "Total partners",
+          "active": "Active partners",
+          "opportunitiesPosted": "Opportunities posted",
+          "linkClicks": "Link clicks",
+          "topByPosts": "Top partners by opportunities posted",
+          "noData": "Not enough data yet."
+        },
+        "addCardLabel": "Add partner",
+        "orgNamePlaceholder": "Organization name",
+        "emailPlaceholder": "contact@partner.org",
+        "slugPlaceholder": "Slug (optional, auto-generated)",
+        "add": "Add",
+        "creating": "Creating...",
+        "addHint": "Creates a login for this partner with a temporary password shown once below.",
+        "createdTitle": "Partner created — /{slug}",
+        "createdHint": "Share this temporary password with the partner. It will not be shown again.",
+        "copyPassword": "Copy",
+        "dismiss": "Dismiss",
+        "searchPlaceholder": "Search by organization, email, or slug...",
+        "emptySearch": "No partners match your search.",
+        "columns": {
+          "organization": "Organization",
+          "email": "Email",
+          "slug": "Page",
+          "posts": "Posts",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "edit": "Edit",
+        "updating": "Updating...",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "activateConfirmMessage": "Reactivate \"{org}\"? They'll regain access to their partner dashboard.",
+        "deactivateConfirmMessage": "Deactivate \"{org}\"? They'll lose access to their partner dashboard. Their posted opportunities and click history are kept.",
+        "editTitle": "Edit Partner",
+        "editSubtitle": "Editing {org}",
+        "logoUrlLabel": "Logo URL",
+        "slugReadonly": "Public page: /partner/{slug}",
+        "refCodeReadonly": "Referral code: {refCode}",
+        "save": "Save changes",
+        "saving": "Saving...",
+        "saveSuccess": "Saved."
       },
       "mentors": {
         "pageTitle": "Manage mentors",

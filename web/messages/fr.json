@@ -587,6 +587,7 @@
       "resendCooldown": "Renvoyer le code ({seconds}s)",
       "errorInvalidCode": "Ce code est incorrect ou a expiré. Veuillez réessayer.",
       "errorAccountDisabled": "Ce compte partenaire est désactivé. Contactez le support pour obtenir de l'aide.",
+      "errorResendFailed": "Impossible de renvoyer le code pour le moment — vous envoyez peut-être trop de demandes. Attendez quelques minutes puis réessayez.",
       "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
     },
     "dashboard": {
@@ -1014,6 +1015,7 @@
         "overview": "Vue d'ensemble",
         "analytics": "Analyses",
         "admins": "Admins",
+        "partners": "Partenaires",
         "mentors": "Mentors",
         "mentees": "Mentorés"
       },
@@ -1073,6 +1075,55 @@
         "thisUser": "cet utilisateur",
         "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
         "promoteSuccessMessage": "Utilisateur promu admin d'opportunités."
+      },
+      "partners": {
+        "pageTitle": "Gérer les partenaires",
+        "intro": "Les partenaires peuvent publier des opportunités sur leur propre page publique et suivre l'attribution des liens.",
+        "stats": {
+          "total": "Total des partenaires",
+          "active": "Partenaires actifs",
+          "opportunitiesPosted": "Opportunités publiées",
+          "linkClicks": "Clics sur les liens",
+          "topByPosts": "Meilleurs partenaires par opportunités publiées",
+          "noData": "Pas encore assez de données."
+        },
+        "addCardLabel": "Ajouter un partenaire",
+        "orgNamePlaceholder": "Nom de l'organisation",
+        "emailPlaceholder": "contact@partenaire.org",
+        "slugPlaceholder": "Slug (facultatif, généré automatiquement)",
+        "add": "Ajouter",
+        "creating": "Création...",
+        "addHint": "Crée une connexion pour ce partenaire avec un mot de passe temporaire affiché une seule fois ci-dessous.",
+        "createdTitle": "Partenaire créé — /{slug}",
+        "createdHint": "Partagez ce mot de passe temporaire avec le partenaire. Il ne sera plus affiché.",
+        "copyPassword": "Copier",
+        "dismiss": "Ignorer",
+        "searchPlaceholder": "Rechercher par organisation, e-mail ou slug...",
+        "emptySearch": "Aucun partenaire ne correspond à votre recherche.",
+        "columns": {
+          "organization": "Organisation",
+          "email": "E-mail",
+          "slug": "Page",
+          "posts": "Publications",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "active": "Actif",
+        "inactive": "Inactif",
+        "edit": "Modifier",
+        "updating": "Mise à jour...",
+        "activate": "Activer",
+        "deactivate": "Désactiver",
+        "activateConfirmMessage": "Réactiver « {org} » ? Ils retrouveront l'accès à leur tableau de bord partenaire.",
+        "deactivateConfirmMessage": "Désactiver « {org} » ? Ils perdront l'accès à leur tableau de bord partenaire. Leurs opportunités publiées et l'historique des clics sont conservés.",
+        "editTitle": "Modifier le partenaire",
+        "editSubtitle": "Modification de {org}",
+        "logoUrlLabel": "URL du logo",
+        "slugReadonly": "Page publique : /partner/{slug}",
+        "refCodeReadonly": "Code de parrainage : {refCode}",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement...",
+        "saveSuccess": "Enregistré."
       },
       "mentors": {
         "pageTitle": "Gérer les mentors",

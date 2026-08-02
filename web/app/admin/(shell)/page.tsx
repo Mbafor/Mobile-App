@@ -4,15 +4,28 @@ import { getTranslations } from 'next-intl/server';
 import { requireAdminSession } from '@/lib/admin-session';
 import { createUserClient } from '@/lib/supabase-server';
 import { formatFundingTypeChart, mapAdminAnalytics } from '@/lib/admin-analytics';
+import { mapSuperAdminOverview } from '@/lib/super-admin';
 import { BarList } from '../BarList';
 import { StatTile } from '../StatTile';
 
 export default async function AdminDashboardPage() {
-  const [session, t] = await Promise.all([requireAdminSession(), getTranslations('Admin.dashboard')]);
+  const [session, t, tPlatform] = await Promise.all([
+    requireAdminSession(),
+    getTranslations('Admin.dashboard'),
+    getTranslations('Admin.superAdmin.overview'),
+  ]);
   const client = createUserClient(session.accessToken);
 
-  const { data } = await client.rpc('get_admin_analytics');
+  // get_super_admin_overview() is super-admin-gated at the DB layer (raises
+  // 42501 for plain opportunity admins) -- only call it when this admin
+  // actually is one, same platform-wide numbers the Super Admin > Overview
+  // page shows, surfaced here too so they don't require a second page visit.
+  const [{ data }, overviewData] = await Promise.all([
+    client.rpc('get_admin_analytics'),
+    session.admin.is_super_admin ? client.rpc('get_super_admin_overview') : Promise.resolve({ data: null }),
+  ]);
   const analytics = mapAdminAnalytics(data);
+  const overview = session.admin.is_super_admin ? mapSuperAdminOverview(overviewData.data) : null;
 
   return (
     <div>
@@ -104,6 +117,29 @@ export default async function AdminDashboardPage() {
               <StatTile label={t('stats.totalUnread')} value={analytics.notifications.totalUnread} />
             </div>
           </section>
+
+          {overview && (
+            <section>
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)] mb-3">
+                {tPlatform('sections.platform')}
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <StatTile label={tPlatform('stats.opportunityAdmins')} value={overview.admins} />
+                <StatTile label={tPlatform('stats.activeOpportunities')} value={overview.opportunities.active} />
+                <StatTile label={tPlatform('stats.pendingPush')} value={overview.notifications.pendingPush} />
+              </div>
+
+              <h2 className="text-sm font-semibold uppercase tracking-wide text-[var(--color-muted)] mb-3 mt-6">
+                {tPlatform('sections.mentorship')}
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                <StatTile label={tPlatform('stats.approvedMentors')} value={overview.mentors.approved} />
+                <StatTile label={tPlatform('stats.pendingMentors')} value={overview.mentors.pending} />
+                <StatTile label={tPlatform('stats.activeMentorships')} value={overview.mentorships.active} />
+                <StatTile label={tPlatform('stats.waitingList')} value={overview.waitingList} />
+              </div>
+            </section>
+          )}
         </div>
       )}
     </div>
