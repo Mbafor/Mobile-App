@@ -8,6 +8,8 @@ web-build/
 *.key
 *.mobileprovision
 *.orig.*
+google-services.json
+GoogleService-Info.plist
 .env
 .env.*
 !.env.example

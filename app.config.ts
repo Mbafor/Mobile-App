@@ -1,4 +1,11 @@
+import { existsSync } from 'node:fs';
 import type { ExpoConfig } from 'expo/config';
+
+// Expo's push service delivers Android notifications via FCM, so it needs
+// google-services.json from the Firebase console. iOS push goes through APNs
+// directly and needs no Firebase file. Optional here so `expo start` and CI
+// keep working before the real file is dropped in.
+const googleServicesFile = existsSync('./google-services.json') ? './google-services.json' : undefined;
 
 const config: ExpoConfig = {
   name: 'Voila',
@@ -56,6 +63,7 @@ const config: ExpoConfig = {
       foregroundImage: './assets/adaptive-icon.png',
       backgroundColor: '#FFFFFF',
     },
+    googleServicesFile,
   },
 };
 
