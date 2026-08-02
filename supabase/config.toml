@@ -72,3 +72,9 @@ enabled = true
 verify_jwt = false
 import_map = "./functions/send-messaging-notifications/deno.json"
 entrypoint = "./functions/send-messaging-notifications/index.ts"
+
+[functions.send-onboarding-nudge]
+enabled = true
+verify_jwt = false
+import_map = "./functions/send-onboarding-nudge/deno.json"
+entrypoint = "./functions/send-onboarding-nudge/index.ts"
