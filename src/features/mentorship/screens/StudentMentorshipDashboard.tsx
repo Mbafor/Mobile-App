@@ -156,7 +156,9 @@ export function StudentMentorshipDashboard() {
   const coachName = coach?.profile?.fullName?.trim() || t('mentorship.student.coachNameFallback');
   const isVerifiedCoach = coach?.mentor?.status === 'approved';
 
-  const navItems: MentorshipNavItem[] = STUDENT_NAV_ITEMS.map((item) => ({
+  const navItems: MentorshipNavItem[] = (
+    hasCoach ? STUDENT_NAV_ITEMS : STUDENT_NAV_ITEMS.filter((item) => item.id === 'dashboard')
+  ).map((item) => ({
     ...item,
     label: t(`mentorship.nav.student.${item.id}`),
   }));
@@ -315,13 +317,6 @@ export function StudentMentorshipDashboard() {
       onRefresh={() => void refetch()}
       scrollable={!isFullHeightSection}
       fillWidth={activeSection === 'dashboard' && canRequest}
-      headerExtra={
-        activeSection === 'dashboard' ? (
-          <Text muted style={styles.introBody}>
-            {t('mentorship.student.dashboardIntro')}
-          </Text>
-        ) : undefined
-      }
     >
       {renderSection()}
     </MentorshipShell>

@@ -38,10 +38,7 @@ export function MentorshipTabNav({ items, activeId, onSelect, mode }: Mentorship
             return (
               <Pressable
                 key={item.id}
-                style={webPressableStyle(
-                  [styles.hTab, active && styles.hTabActive],
-                  styles.hTabHover,
-                )}
+                style={webPressableStyle([styles.hTab], styles.hTabHover)}
                 onPress={() => onSelect(item.id)}
                 accessibilityRole="tab"
               >
@@ -102,7 +99,8 @@ function createStyles(colors: ColorScheme) {
   },
   hTabs: {
     flexDirection: 'row',
-    paddingVertical: spacing.xs + 2,
+    paddingTop: spacing.xs + 2,
+    paddingBottom: spacing.sm,
     gap: spacing.xs,
   },
   hTab: {
@@ -114,11 +112,6 @@ function createStyles(colors: ColorScheme) {
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'transparent',
-  },
-  hTabActive: {
-    backgroundColor: 'transparent',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
   },
   hTabHover: { backgroundColor: colors.surface },
   hTabLabel: {

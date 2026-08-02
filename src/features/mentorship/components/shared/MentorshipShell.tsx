@@ -63,13 +63,15 @@ export function MentorshipShell({
   ) : null;
 
   // On web mobile (non-desktop), show tabs at the top of the page content.
-  // On native mobile, keep tabs at the bottom.
-  const showTabsAtTop = !isDesktop && isWeb;
-  const showTabsAtBottom = !isDesktop && !isWeb;
+  // On native mobile, keep tabs at the bottom. A single nav item (e.g. before
+  // a student has chosen a mentor) means there's nothing to switch between.
+  const hasMultipleSections = navItems.length > 1;
+  const showTabsAtTop = !isDesktop && isWeb && hasMultipleSections;
+  const showTabsAtBottom = !isDesktop && !isWeb && hasMultipleSections;
 
   return (
     <View style={styles.root}>
-      {isDesktop && tabNav}
+      {isDesktop && hasMultipleSections && tabNav}
       {showTabsAtTop && tabNav}
 
       {titleBlock}

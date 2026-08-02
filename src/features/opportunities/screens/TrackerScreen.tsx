@@ -1,3 +1,4 @@
+import { Ionicons } from '@expo/vector-icons';
 import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
 import { useTheme } from '@/hooks/useTheme';
@@ -9,9 +10,12 @@ import {
   ActivityIndicator,
   Alert,
   FlatList,
+  Modal,
+  Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ErrorMessage } from '@/components/feedback';
 import { SearchField, Text } from '@/components/ui';
@@ -48,11 +52,12 @@ export function TrackerScreen() {
   const { t } = useTranslation();
   const router = useRouter();
   const isDesktop = useWebDesktop();
+  const insets = useSafeAreaInsets();
   const listRef = useRef<FlatList<TrackerItem>>(null);
 
-  const searchOpen = useInlineSearchToggle((s) => s.open);
   const setSearchOpen = useInlineSearchToggle((s) => s.setOpen);
   const [query, setQuery] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   useFocusEffect(
     useCallback(() => {
@@ -90,6 +95,8 @@ export function TrackerScreen() {
       {} as Record<TrackerStage, number>,
     );
   }, [queryFilteredItems]);
+
+  const activeFilterCount = stageFilter === 'all' ? 0 : 1;
 
   const visibleItems = useMemo(() => {
     const byStage =
@@ -210,7 +217,32 @@ export function TrackerScreen() {
   return (
     <View style={styles.container}>
       <View style={styles.intro}>
-        <Text style={styles.introTitle}>{t('opportunities.tracker.intro.title')}</Text>
+        <View style={[styles.headerRow, isDesktop && styles.headerRowDesktop]}>
+          <Text style={styles.introTitle}>{t('opportunities.tracker.intro.title')}</Text>
+
+          <View style={[styles.searchRow, isDesktop && styles.searchRowDesktop]}>
+            <View style={styles.searchField}>
+              <SearchField
+                value={query}
+                onChangeText={setQuery}
+                placeholder={t('opportunities.tracker.searchPlaceholder')}
+              />
+            </View>
+            <Pressable
+              style={styles.filterBtn}
+              onPress={() => setFiltersOpen(true)}
+              accessibilityRole="button"
+              accessibilityLabel={t('opportunities.tracker.filters')}
+            >
+              <Ionicons name="options-outline" size={18} color={colors.text} />
+              {activeFilterCount > 0 ? (
+                <View style={styles.filterBadge}>
+                  <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
+                </View>
+              ) : null}
+            </Pressable>
+          </View>
+        </View>
         <Text style={styles.introBody}>{t('opportunities.tracker.intro.body')}</Text>
       </View>
 
@@ -221,25 +253,6 @@ export function TrackerScreen() {
           />
         </View>
       ) : null}
-
-      {searchOpen ? (
-        <View style={styles.searchWrap}>
-          <SearchField
-            value={query}
-            onChangeText={setQuery}
-            placeholder={t('opportunities.tracker.searchPlaceholder')}
-            style={isDesktop && styles.searchFieldDesktop}
-            autoFocus
-          />
-        </View>
-      ) : null}
-
-      <TrackerFilterChips
-        selected={stageFilter}
-        onSelect={setStageFilter}
-        totalCount={queryFilteredItems.length}
-        stageCounts={stageCounts}
-      />
 
       {activeStalled ? (
         <TrackerStalledBanner
@@ -290,6 +303,58 @@ export function TrackerScreen() {
         onUndo={() => toast?.onUndo()}
         onHide={() => setToast(null)}
       />
+
+      <Modal
+        visible={filtersOpen}
+        transparent
+        animationType={isDesktop ? 'fade' : 'slide'}
+        onRequestClose={() => setFiltersOpen(false)}
+      >
+        <Pressable
+          style={[styles.sheetOverlay, isDesktop && styles.sheetOverlayDesktop]}
+          onPress={() => setFiltersOpen(false)}
+        >
+          <Pressable
+            style={[
+              styles.sheet,
+              { paddingBottom: insets.bottom + spacing.md },
+              isDesktop && styles.sheetDesktop,
+            ]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.sheetHandle} />
+            <View style={styles.sheetHeaderRow}>
+              <Text style={styles.sheetTitle}>{t('opportunities.tracker.filters')}</Text>
+              <Pressable onPress={() => setFiltersOpen(false)} hitSlop={12}>
+                <Ionicons name="close" size={22} color={colors.textMuted} />
+              </Pressable>
+            </View>
+
+            <View style={styles.filterGroup}>
+              <Text style={styles.filterGroupLabel}>{t('opportunities.tracker.filterStage')}</Text>
+              <TrackerFilterChips
+                selected={stageFilter}
+                onSelect={setStageFilter}
+                totalCount={queryFilteredItems.length}
+                stageCounts={stageCounts}
+              />
+            </View>
+
+            <View style={styles.sheetFooter}>
+              <Button
+                variant="secondary"
+                style={styles.sheetFooterBtn}
+                onPress={() => setStageFilter('all')}
+              >
+                {t('opportunities.tracker.clearFilters')}
+              </Button>
+              <Button style={styles.sheetFooterBtn} onPress={() => setFiltersOpen(false)}>
+                {t('opportunities.tracker.applyFilters')}
+              </Button>
+            </View>
+          </Pressable>
+        </Pressable>
+      </Modal>
     </View>
   );
 }
@@ -305,12 +370,87 @@ function createStyles(colors: ColorScheme) {
     paddingTop: spacing.sm,
   },
   centered: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: colors.background },
-  intro: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: 4 },
+  intro: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm, gap: spacing.sm },
+  headerRow: { gap: spacing.sm },
+  headerRowDesktop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
   introTitle: { fontSize: 22, fontWeight: '700', color: colors.text, letterSpacing: -0.3 },
   introBody: { fontSize: 14, lineHeight: 20, color: colors.textMuted },
   banner: { padding: spacing.md },
-  searchWrap: { paddingHorizontal: spacing.md, paddingBottom: spacing.sm },
-  searchFieldDesktop: { maxWidth: 360 },
+
+  searchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  searchRowDesktop: { width: 380, flexGrow: 0, flexShrink: 0 },
+  searchField: { flex: 1 },
+  filterBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  filterBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  filterBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
+
+  sheetOverlay: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' },
+  sheetOverlayDesktop: { justifyContent: 'center', alignItems: 'center', padding: spacing.xl },
+  sheetHandle: {
+    alignSelf: 'center',
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.border,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs,
+  },
+  sheet: {
+    backgroundColor: colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '75%',
+  },
+  sheetDesktop: {
+    width: '100%',
+    maxWidth: 420,
+    borderRadius: 24,
+    maxHeight: '85%',
+  },
+  sheetHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.sm,
+  },
+  sheetTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
+  filterGroup: { gap: spacing.xs, paddingHorizontal: spacing.lg, paddingBottom: spacing.md },
+  filterGroupLabel: { fontSize: 13, fontWeight: '700', color: colors.textMuted, marginBottom: 2 },
+  sheetFooter: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
+  },
+  sheetFooterBtn: { flex: 1 },
+
   footer: {
     flexDirection: 'row',
     alignItems: 'center',

@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { ColorScheme } from '@/constants/theme/types';
 import { useThemedStyles } from '@/hooks/useThemedStyles';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import {
@@ -17,9 +18,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchField } from '@/components/ui/SearchField';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
-import { useAuth } from '@/features/auth/hooks/useAuth';
-import { getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
-import { useGreeting } from '@/hooks/useGreeting';
 import { MentorBrowseCard } from '@/features/mentorship/components/student/MentorBrowseCard';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
 import {
@@ -59,13 +57,13 @@ export function MentorChooser({
   onSelect,
   onJoinWaitingList,
   isSelecting,
+  selectingMentorId,
 }: MentorChooserProps) {
   const styles = useThemedStyles(createStyles);
   const { colors } = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
-  const { profile, user } = useAuth();
-  const greeting = useGreeting();
+  const isDesktop = useWebDesktop();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({ enabled: true });
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<MentorBrowseFilterId>('all');
@@ -75,14 +73,6 @@ export function MentorChooser({
   const [acceptingOnly, setAcceptingOnly] = useState(false);
 
   const mentors = useMemo(() => data ?? [], [data]);
-  const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
-  const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
-
-  const heroStats = useMemo(() => {
-    const countries = new Set(mentors.map((m) => m.profile.country).filter(Boolean));
-    const menteesInMentorship = mentors.reduce((sum, m) => sum + m.activeMenteeCount, 0);
-    return { mentorCount: mentors.length, countryCount: countries.size, menteesInMentorship };
-  }, [mentors]);
 
   const availableDegreeLevels = useMemo(() => {
     const set = new Set<string>();
@@ -113,12 +103,13 @@ export function MentorChooser({
 
   const { recommended, all } = useMemo(() => partitionRecommendedMentors(filtered), [filtered]);
   const popular = useMemo(() => getPopularMentors(filtered), [filtered]);
-  const activeFilterCount = degreeLevels.length + (acceptingOnly ? 1 : 0);
+  const activeFilterCount =
+    degreeLevels.length + (acceptingOnly ? 1 : 0) + (category !== 'all' ? 1 : 0);
 
   const showWaitingList = !isLoading && !error && shouldOfferWaitingList(mentors);
   const showEmptySearch =
     !isLoading && !error && !showWaitingList && mentors.length > 0 && filtered.length === 0;
-  const listMentors = recommended.length > 0 ? all : filtered;
+  const listMentors = all;
 
   const toggleDegreeLevel = (level: string) => {
     setDegreeLevels((prev) => (prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]));
@@ -171,107 +162,48 @@ export function MentorChooser({
       contentContainerStyle={styles.horizontalRow}
     >
       {items.map((m) => (
-        <MentorBrowseCard key={m.mentorUserId} mentor={m} variant="card" onViewProfile={() => setProfileMentor(m)} />
+        <MentorBrowseCard
+          key={m.mentorUserId}
+          mentor={m}
+          onViewProfile={() => setProfileMentor(m)}
+          onChoose={() => onSelect(m.mentorUserId)}
+          isChoosing={isSelecting && selectingMentorId === m.mentorUserId}
+        />
       ))}
     </ScrollView>
   );
 
-  const renderList = (items: AvailableMentor[]) => (
-    <View style={styles.listWrap}>
-      {items.map((m) => (
-        <MentorBrowseCard key={m.mentorUserId} mentor={m} variant="row" onViewProfile={() => setProfileMentor(m)} />
-      ))}
-    </View>
-  );
-
   return (
     <View style={styles.root}>
-      {/* Hero */}
-      <View style={styles.hero}>
-        <Text style={styles.heroEyebrow}>
-          {t(`mentorship.student.chooser.hero.greeting.${greeting}`, { name: userName })}
-        </Text>
-        <Text style={[styles.heroTitle, getWebFontStyle('bold')]}>
-          {t('mentorship.student.chooser.hero.tagline')}
-        </Text>
-
-        {heroStats.mentorCount > 0 ? (
-          <View style={styles.statsRow}>
-            <View style={styles.statPill}>
-              <Ionicons name="people" size={14} color={colors.primary} />
-              <Text style={styles.statText}>
-                {t('mentorship.student.chooser.hero.statMentors', { count: heroStats.mentorCount })}
-              </Text>
-            </View>
-            {heroStats.countryCount > 0 ? (
-              <View style={styles.statPill}>
-                <Ionicons name="globe" size={14} color={colors.primary} />
-                <Text style={styles.statText}>
-                  {t('mentorship.student.chooser.hero.statCountries', { count: heroStats.countryCount })}
-                </Text>
-              </View>
-            ) : null}
-            {heroStats.menteesInMentorship > 0 ? (
-              <View style={styles.statPill}>
-                <Ionicons name="school" size={14} color={colors.primary} />
-                <Text style={styles.statText}>
-                  {t('mentorship.student.chooser.hero.statMentees', { count: heroStats.menteesInMentorship })}
-                </Text>
-              </View>
-            ) : null}
-          </View>
-        ) : null}
-      </View>
-
-      {/* Search + filters */}
+      {/* Label + search + filters */}
       <View style={styles.toolbar}>
-        <View style={styles.searchRow}>
-          <View style={styles.searchField}>
-            <SearchField
-              value={search}
-              onChangeText={setSearch}
-              placeholder={t('mentorship.student.chooser.searchPlaceholder')}
-            />
+        <View style={[styles.toolbarRow, isDesktop && styles.toolbarRowDesktop]}>
+          <Text style={styles.toolbarLabel}>{t('mentorship.student.chooser.findCoachLabel')}</Text>
+
+          <View style={[styles.searchRow, isDesktop && styles.searchRowDesktop]}>
+            <View style={styles.searchField}>
+              <SearchField
+                value={search}
+                onChangeText={setSearch}
+                placeholder={t('mentorship.student.chooser.searchPlaceholder')}
+              />
+            </View>
+            <Pressable
+              style={styles.filterBtn}
+              onPress={() => setFiltersOpen(true)}
+              accessibilityRole="button"
+              accessibilityLabel={t('mentorship.student.chooser.filters')}
+            >
+              <Ionicons name="options-outline" size={18} color={colors.text} />
+              {activeFilterCount > 0 ? (
+                <View style={styles.filterBadge}>
+                  <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
+                </View>
+              ) : null}
+            </Pressable>
           </View>
-          <Pressable
-            style={styles.filterBtn}
-            onPress={() => setFiltersOpen(true)}
-            accessibilityRole="button"
-            accessibilityLabel={t('mentorship.student.chooser.filters')}
-          >
-            <Ionicons name="options-outline" size={18} color={colors.text} />
-            {activeFilterCount > 0 ? (
-              <View style={styles.filterBadge}>
-                <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
-              </View>
-            ) : null}
-          </Pressable>
         </View>
       </View>
-
-      {/* Category chips */}
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={false}
-        style={styles.filterScroll}
-        contentContainerStyle={styles.filterRow}
-      >
-        {MENTOR_BROWSE_FILTERS.map((chip) => {
-          const active = category === chip.id;
-          return (
-            <Pressable
-              key={chip.id}
-              onPress={() => setCategory(chip.id)}
-              style={[styles.chipPill, active && styles.chipPillActive]}
-            >
-              <Text style={styles.chipPillEmoji}>{CATEGORY_EMOJI[chip.id]}</Text>
-              <Text style={[styles.chipPillText, active && styles.chipPillTextActive]}>
-                {t(`mentorship.student.browseFilters.${chip.id}`)}
-              </Text>
-            </Pressable>
-          );
-        })}
-      </ScrollView>
 
       {/* Recommended */}
       {recommended.length > 0 ? (
@@ -304,7 +236,7 @@ export function MentorChooser({
         ) : listMentors.length === 0 ? (
           <Text muted style={styles.emptyText}>{t('mentorship.student.chooser.emptyList')}</Text>
         ) : (
-          renderList(listMentors)
+          renderHorizontal(listMentors)
         )}
       </View>
 
@@ -312,12 +244,19 @@ export function MentorChooser({
       <Modal
         visible={filtersOpen}
         transparent
-        animationType="slide"
+        animationType={isDesktop ? 'fade' : 'slide'}
         onRequestClose={() => setFiltersOpen(false)}
       >
-        <Pressable style={styles.sheetOverlay} onPress={() => setFiltersOpen(false)}>
+        <Pressable
+          style={[styles.sheetOverlay, isDesktop && styles.sheetOverlayDesktop]}
+          onPress={() => setFiltersOpen(false)}
+        >
           <Pressable
-            style={[styles.sheet, { paddingBottom: insets.bottom + spacing.md }]}
+            style={[
+              styles.sheet,
+              { paddingBottom: insets.bottom + spacing.md },
+              isDesktop && styles.sheetDesktop,
+            ]}
             onPress={(e) => e.stopPropagation()}
           >
             <View style={styles.sheetHandle} />
@@ -329,6 +268,27 @@ export function MentorChooser({
             </View>
 
             <ScrollView style={styles.sheetScroll}>
+              <View style={styles.filterGroupFirst}>
+                <Text style={styles.filterGroupLabel}>{t('mentorship.student.chooser.filterCategory')}</Text>
+                <View style={styles.chipWrapRow}>
+                  {MENTOR_BROWSE_FILTERS.map((chip) => {
+                    const active = category === chip.id;
+                    return (
+                      <Pressable
+                        key={chip.id}
+                        onPress={() => setCategory(chip.id)}
+                        style={[styles.chipPill, active && styles.chipPillActive]}
+                      >
+                        <Text style={styles.chipPillEmoji}>{CATEGORY_EMOJI[chip.id]}</Text>
+                        <Text style={[styles.chipPillText, active && styles.chipPillTextActive]}>
+                          {t(`mentorship.student.browseFilters.${chip.id}`)}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+                </View>
+              </View>
+
               <Pressable
                 style={styles.toggleRow}
                 onPress={() => setAcceptingOnly((v) => !v)}
@@ -369,6 +329,7 @@ export function MentorChooser({
                 onPress={() => {
                   setDegreeLevels([]);
                   setAcceptingOnly(false);
+                  setCategory('all');
                 }}
               >
                 {t('mentorship.student.chooser.clearFilters')}
@@ -385,12 +346,19 @@ export function MentorChooser({
       <Modal
         visible={profileMentor != null}
         transparent
-        animationType="slide"
+        animationType={isDesktop ? 'fade' : 'slide'}
         onRequestClose={() => setProfileMentor(null)}
       >
-        <Pressable style={styles.sheetOverlay} onPress={() => setProfileMentor(null)}>
+        <Pressable
+          style={[styles.sheetOverlay, isDesktop && styles.sheetOverlayDesktop]}
+          onPress={() => setProfileMentor(null)}
+        >
           <Pressable
-            style={[styles.profileSheet, { paddingBottom: insets.bottom + spacing.sm }]}
+            style={[
+              styles.profileSheet,
+              { paddingBottom: insets.bottom + spacing.sm },
+              isDesktop && styles.profileSheetDesktop,
+            ]}
             onPress={(e) => e.stopPropagation()}
           >
             <View style={styles.sheetHandle} />
@@ -445,35 +413,20 @@ function createStyles(colors: ColorScheme) {
   root: { flex: 1 },
   centered: { padding: spacing.lg, alignItems: 'center', gap: spacing.md },
 
-  // ─── Hero ─────────────────────────────────────────────────────────────────
-  hero: {
-    marginHorizontal: spacing.md,
-    marginBottom: spacing.md,
-    padding: spacing.lg,
-    borderRadius: 24,
-    backgroundColor: `${colors.primary}12`,
-    gap: 6,
-  },
-  heroEyebrow: { fontSize: 14, fontWeight: '600', color: colors.primary },
-  heroTitle: { fontSize: 22, lineHeight: 28, color: colors.text },
-  statsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.sm },
-  statPill: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingVertical: 6,
-    paddingHorizontal: 12,
-    borderRadius: 999,
-    backgroundColor: colors.background,
-  },
-  statText: { fontSize: 12, fontWeight: '700', color: colors.text },
-
   // ─── Toolbar ──────────────────────────────────────────────────────────────
   toolbar: {
     paddingHorizontal: spacing.md,
     paddingBottom: spacing.sm,
   },
+  toolbarRow: { gap: spacing.sm },
+  toolbarRowDesktop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  toolbarLabel: { fontSize: 22, fontWeight: '700', color: colors.text },
   searchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  searchRowDesktop: { width: 380, flexGrow: 0, flexShrink: 0 },
   searchField: { flex: 1 },
   filterBtn: {
     width: 44,
@@ -500,13 +453,6 @@ function createStyles(colors: ColorScheme) {
   filterBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
 
   // ─── Category pills ───────────────────────────────────────────────────────
-  filterScroll: { flexGrow: 0 },
-  filterRow: {
-    flexDirection: 'row',
-    paddingHorizontal: spacing.md,
-    paddingBottom: spacing.sm,
-    gap: spacing.xs,
-  },
   chipPill: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -534,7 +480,6 @@ function createStyles(colors: ColorScheme) {
     paddingBottom: spacing.sm,
   },
   horizontalRow: { paddingHorizontal: spacing.md, gap: spacing.sm },
-  listWrap: { paddingHorizontal: spacing.md, gap: spacing.xs },
   emptyText: {
     padding: spacing.lg,
     fontSize: 14,
@@ -561,6 +506,7 @@ function createStyles(colors: ColorScheme) {
 
   // ─── Bottom sheets (filters + profile) ────────────────────────────────────
   sheetOverlay: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' },
+  sheetOverlayDesktop: { justifyContent: 'center', alignItems: 'center', padding: spacing.xl },
   sheetHandle: {
     alignSelf: 'center',
     width: 36,
@@ -575,6 +521,12 @@ function createStyles(colors: ColorScheme) {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '75%',
+  },
+  sheetDesktop: {
+    width: '100%',
+    maxWidth: 420,
+    borderRadius: 24,
+    maxHeight: '85%',
   },
   sheetHeaderRow: {
     flexDirection: 'row',
@@ -602,6 +554,7 @@ function createStyles(colors: ColorScheme) {
     justifyContent: 'center',
   },
   checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  filterGroupFirst: { gap: spacing.xs, paddingTop: spacing.xs },
   filterGroup: { marginTop: spacing.md, gap: spacing.xs },
   filterGroupLabel: { fontSize: 13, fontWeight: '700', color: colors.textMuted, marginBottom: 2 },
   sheetFooter: {
@@ -620,6 +573,12 @@ function createStyles(colors: ColorScheme) {
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     maxHeight: '90%',
+  },
+  profileSheetDesktop: {
+    width: '100%',
+    maxWidth: 480,
+    borderRadius: 24,
+    maxHeight: '85%',
   },
   modalScroll: { flexGrow: 0 },
   modalContent: {

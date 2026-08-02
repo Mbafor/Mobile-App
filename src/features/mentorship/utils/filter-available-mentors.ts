@@ -44,18 +44,23 @@ export function filterAvailableMentors(
   });
 }
 
-export function partitionRecommendedMentors(mentors: AvailableMentor[]): {
+/** `recommended` is a curated top-N highlight (ranked by match score, which
+ * itself weighs Major above Interest -- see mentorship_match_score() in
+ * migration 063). `all` is always the full roster, independent of who made
+ * the highlight reel, so "All coaches" never goes empty just because every
+ * mentor happens to score above zero. */
+export function partitionRecommendedMentors(mentors: AvailableMentor[], limit = 4): {
   recommended: AvailableMentor[];
   all: AvailableMentor[];
 } {
   const recommended = [...mentors]
     .filter((m) => m.matchScore > 0)
-    .sort((a, b) => b.matchScore - a.matchScore);
-  const recommendedIds = new Set(recommended.map((m) => m.mentorUserId));
+    .sort((a, b) => b.matchScore - a.matchScore)
+    .slice(0, limit);
 
-  const all = [...mentors]
-    .filter((m) => !recommendedIds.has(m.mentorUserId))
-    .sort((a, b) => (a.profile.fullName ?? '').localeCompare(b.profile.fullName ?? ''));
+  const all = [...mentors].sort((a, b) =>
+    (a.profile.fullName ?? '').localeCompare(b.profile.fullName ?? ''),
+  );
 
   return { recommended, all };
 }

@@ -121,14 +121,6 @@ export default function MainTabsLayout() {
         }}
       />
       <Tabs.Screen
-        name="cv-builder"
-        options={{
-          title: t('navigation.tabs.cvBuilder'),
-          headerShown: false,
-          tabBarIcon: tabBarIcon('document-text-outline', 'document-text'),
-        }}
-      />
-      <Tabs.Screen
         name="browse-categories"
         options={{
           title: t('navigation.tabs.browse'),

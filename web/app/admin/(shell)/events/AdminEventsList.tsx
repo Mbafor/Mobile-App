@@ -59,7 +59,8 @@ export function AdminEventsList({ events }: { events: AdminEventListItem[] }) {
       {error && (
         <p className="m-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">{error}</p>
       )}
-      <table className="w-full text-sm">
+      <div className="overflow-x-auto">
+      <table className="w-full text-sm min-w-[720px]">
         <thead>
           <tr className="border-b border-[var(--color-border)] text-left text-xs text-[var(--color-muted)] uppercase tracking-wide">
             <th className="px-4 py-3 font-medium">{t('columnTitle')}</th>
@@ -116,6 +117,7 @@ export function AdminEventsList({ events }: { events: AdminEventListItem[] }) {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 }

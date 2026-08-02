@@ -506,6 +506,10 @@
         "body": "Regroupez ici toutes les bourses et opportunités que vous poursuivez. Faites avancer chacune à travers Enregistrée, Postulée, Entretien et Offre au fil du temps."
       },
       "searchPlaceholder": "Rechercher dans le suivi",
+      "filters": "Filtres",
+      "filterStage": "Étape",
+      "clearFilters": "Effacer les filtres",
+      "applyFilters": "Appliquer les filtres",
       "searchCancel": "Annuler",
       "searchRecentSearches": "Recherches récentes",
       "searchClearRecent": "Effacer",
@@ -856,6 +860,7 @@
         "noCoachesPlatform": "Il n'y a pas encore de coachs sur la plateforme. Rejoignez la liste d'attente et nous vous informerons dès qu'un coach sera disponible.",
         "noCoachesFull": "Tous les coachs sont actuellement complets. Rejoignez la liste d'attente pour être informé dès qu'une place se libère.",
         "joinWaitingList": "Rejoindre la liste d'attente",
+        "findCoachLabel": "Trouvez un coach qui est déjà passé par là.",
         "searchPlaceholder": "Rechercher par nom ou expertise…",
         "recommended": "Recommandé pour vous",
         "allCoaches": "Tous les coachs",
@@ -865,22 +870,11 @@
         "filters": "Filtres",
         "filtersTitle": "Filtrer les coachs",
         "filterAvailableOnly": "Accepte des étudiants uniquement",
+        "filterCategory": "Catégorie",
         "filterDegreeLevel": "Niveau d'études",
         "clearFilters": "Effacer les filtres",
         "applyFilters": "Appliquer les filtres",
         "resultsCount": "{{count}} coachs",
-        "hero": {
-          "greeting": {
-            "morning": "Bonjour, {{name}} 👋",
-            "afternoon": "Bon après-midi, {{name}} 👋",
-            "evening": "Bonsoir, {{name}} 👋",
-            "night": "Bonsoir, {{name}} 👋"
-          },
-          "tagline": "Trouvez des mentors qui ont déjà accompli ce vers quoi vous travaillez.",
-          "statMentors": "{{count}} mentors",
-          "statCountries": "{{count}} pays",
-          "statMentees": "{{count}} étudiants actuellement accompagnés"
-        },
         "goBack": "Retour",
         "coachProfile": "Profil du coach",
         "noBio": "Ce coach n'a pas encore ajouté de biographie.",
@@ -892,7 +886,8 @@
         "notAccepting": "N'accepte pas d'étudiants",
         "full": "Actuellement complet",
         "available": "Disponible",
-        "capacity": "{{count}}/{{max}} étudiants"
+        "viewProfile": "Voir le mentor",
+        "bookSession": "Réserver une séance"
       },
       "sessionsTable": {
         "colCoach": "Détails du coach",

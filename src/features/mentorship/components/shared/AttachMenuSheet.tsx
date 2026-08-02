@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/hooks/useTheme';
 import type { AppTheme } from '@/constants/theme/types';
 import { useAppThemedStyles } from '@/hooks/useAppThemedStyles';
+import { useWebDesktop } from '@/hooks/useWebDesktop';
 import { useTranslation } from 'react-i18next';
 import { Modal, Pressable, StyleSheet, View } from 'react-native';
 
@@ -30,10 +31,14 @@ export function AttachMenuSheet({ visible, onClose, onSelect }: AttachMenuSheetP
   const styles = useAppThemedStyles(createStyles);
   const { mentorshipColors } = useTheme();
   const { t } = useTranslation();
+  const isDesktop = useWebDesktop();
   return (
     <Modal visible={visible} transparent animationType="fade" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose}>
-        <Pressable style={styles.sheet} onPress={(e) => e.stopPropagation()}>
+      <Pressable style={[styles.backdrop, isDesktop && styles.backdropDesktop]} onPress={onClose}>
+        <Pressable
+          style={[styles.sheet, isDesktop && styles.sheetDesktop]}
+          onPress={(e) => e.stopPropagation()}
+        >
           <Text style={styles.title}>{t('mentorship.chat.attachSheet.title')}</Text>
           <Text variant="caption" muted style={styles.hint}>
             {t('mentorship.chat.attachSheet.sizeHint', {
@@ -71,6 +76,7 @@ function createStyles(theme: AppTheme) {
     backgroundColor: colors.overlay,
     justifyContent: 'flex-end',
   },
+  backdropDesktop: { justifyContent: 'center', alignItems: 'center', padding: spacing.xl },
   sheet: {
     backgroundColor: mentorshipColors.surfaceElevated,
     borderTopLeftRadius: 20,
@@ -78,6 +84,11 @@ function createStyles(theme: AppTheme) {
     padding: spacing.lg,
     paddingBottom: spacing.xl,
     gap: spacing.xs,
+  },
+  sheetDesktop: {
+    width: '100%',
+    maxWidth: 380,
+    borderRadius: 20,
   },
   title: { fontSize: 18, fontWeight: '700', color: mentorshipColors.text, marginBottom: spacing.xs },
   hint: { marginBottom: spacing.sm },

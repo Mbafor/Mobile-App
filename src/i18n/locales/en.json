@@ -482,6 +482,10 @@
         "body": "Keep every scholarship and opportunity you're pursuing in one place. Move each one through Saved, Applied, Interview, and Offer as things progress."
       },
       "searchPlaceholder": "Search Tracker",
+      "filters": "Filters",
+      "filterStage": "Stage",
+      "clearFilters": "Clear filters",
+      "applyFilters": "Apply filters",
       "searchCancel": "Cancel",
       "searchRecentSearches": "Recent searches",
       "searchClearRecent": "Clear",
@@ -832,6 +836,7 @@
         "noCoachesPlatform": "There are no coaches on the platform yet. Join the waiting list and we will notify you when a coach is available.",
         "noCoachesFull": "Every coach is currently full. Join the waiting list to be notified when a slot opens.",
         "joinWaitingList": "Join waiting list",
+        "findCoachLabel": "Find a coach who's been where you're headed.",
         "searchPlaceholder": "Search by name or expertise…",
         "recommended": "Recommended for you",
         "allCoaches": "All coaches",
@@ -841,22 +846,11 @@
         "filters": "Filters",
         "filtersTitle": "Filter coaches",
         "filterAvailableOnly": "Accepting students only",
+        "filterCategory": "Category",
         "filterDegreeLevel": "Degree level",
         "clearFilters": "Clear filters",
         "applyFilters": "Apply filters",
         "resultsCount": "{{count}} coaches",
-        "hero": {
-          "greeting": {
-            "morning": "Good morning, {{name}} 👋",
-            "afternoon": "Good afternoon, {{name}} 👋",
-            "evening": "Good evening, {{name}} 👋",
-            "night": "Good evening, {{name}} 👋"
-          },
-          "tagline": "Find mentors who've already achieved what you're working toward.",
-          "statMentors": "{{count}} mentors",
-          "statCountries": "{{count}} countries",
-          "statMentees": "{{count}} students being mentored"
-        },
         "goBack": "Go back",
         "coachProfile": "Coach Profile",
         "noBio": "This coach has not added a bio yet.",
@@ -868,7 +862,8 @@
         "notAccepting": "Not accepting students",
         "full": "Currently full",
         "available": "Available",
-        "capacity": "{{count}}/{{max}} mentees"
+        "viewProfile": "View mentor",
+        "bookSession": "Book a session"
       },
       "sessionsTable": {
         "colCoach": "Coach Details",

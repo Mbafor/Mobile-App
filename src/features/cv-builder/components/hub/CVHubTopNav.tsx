@@ -81,10 +81,7 @@ export function CVHubTopNav({ cvId }: CVHubTopNavProps) {
           return (
             <Pressable
               key={tab.key}
-              style={webPressableStyle(
-                [styles.tab, active && styles.tabActive],
-                styles.tabHover,
-              )}
+              style={webPressableStyle([styles.tab], styles.tabHover)}
               onPress={() => router.push(tab.getHref(cvId))}
               accessibilityRole="tab"
             >
@@ -113,7 +110,8 @@ function createStyles(colors: ColorScheme) {
   },
   tabs: {
     flexDirection: 'row',
-    paddingVertical: spacing.xs + 2,
+    paddingTop: spacing.xs + 2,
+    paddingBottom: spacing.sm,
     gap: spacing.xs,
   },
   tab: {
@@ -125,11 +123,6 @@ function createStyles(colors: ColorScheme) {
     borderRadius: 8,
     borderWidth: 1,
     borderColor: 'transparent',
-  },
-  tabActive: {
-    backgroundColor: 'transparent',
-    borderBottomWidth: 2,
-    borderBottomColor: colors.primary,
   },
   tabHover: { backgroundColor: colors.surface },
   tabLabel: {
