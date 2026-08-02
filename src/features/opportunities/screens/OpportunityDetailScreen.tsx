@@ -31,6 +31,13 @@ import { formatDeadline, daysUntilDeadline } from '@/utils/formatting';
 import type { Opportunity } from '@/types/domain/opportunity';
 import { openExternalUrl } from '@/utils/web/openExternalUrl';
 
+function splitBenefits(text: string): string[] {
+  return text
+    .split('\n')
+    .map((line) => line.trim().replace(/^[-*•]\s*/, ''))
+    .filter((line) => line.length > 0);
+}
+
 function PromoCard({
   icon,
   iconColor,
@@ -416,7 +423,14 @@ export function OpportunityDetailScreen() {
             <Text style={[styles.sectionHeading, getWebFontStyle('semibold'), styles.benefitsHeading]}>
               {t('opportunities.detail.benefits')}
             </Text>
-            <Text style={styles.description}>{opportunity.benefits.trim()}</Text>
+            <View style={styles.benefitsList}>
+              {splitBenefits(opportunity.benefits).map((line, index) => (
+                <View key={index} style={styles.benefitRow}>
+                  <Text style={[styles.description, styles.benefitBullet]}>{'•'}</Text>
+                  <Text style={[styles.description, styles.benefitText]}>{line}</Text>
+                </View>
+              ))}
+            </View>
           </>
         ) : null}
 
@@ -629,6 +643,20 @@ function createStyles(colors: ColorScheme) {
   },
   benefitsHeading: {
     marginTop: spacing.sm,
+  },
+  benefitsList: {
+    gap: spacing.xs,
+  },
+  benefitRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: spacing.xs,
+  },
+  benefitBullet: {
+    lineHeight: 28,
+  },
+  benefitText: {
+    flex: 1,
   },
 
   // ─── Action buttons (below description, inside scroll) ─────────────────────
