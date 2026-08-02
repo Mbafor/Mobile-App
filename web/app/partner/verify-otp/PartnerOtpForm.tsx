@@ -36,12 +36,12 @@ export function PartnerOtpForm({ email, org }: { email: string; org: string }) {
             required
             autoComplete="one-time-code"
             placeholder="123456"
-            className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-center text-lg tracking-[0.5em] focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+            className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-center text-lg tracking-[0.5em] outline-none transition focus:border-[var(--color-forest)]"
           />
         </div>
         <button
           type="submit"
-          className="w-full rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium hover:opacity-90 transition"
+          className="w-full rounded-2xl bg-[var(--color-forest)] text-white py-3 text-sm font-semibold shadow-md hover:opacity-90 transition"
         >
           {t('verify')}
         </button>

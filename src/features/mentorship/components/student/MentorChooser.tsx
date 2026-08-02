@@ -17,6 +17,9 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { SearchField } from '@/components/ui/SearchField';
 import { Text } from '@/components/ui';
 import { Button } from '@/components/ui/Button';
+import { useAuth } from '@/features/auth/hooks/useAuth';
+import { getOAuthDisplayName } from '@/features/auth/utils/oauth-profile-metadata';
+import { useGreeting } from '@/hooks/useGreeting';
 import { MentorBrowseCard } from '@/features/mentorship/components/student/MentorBrowseCard';
 import { ParticipantProfileDetail } from '@/features/mentorship/components/shared/ParticipantProfileDetail';
 import {
@@ -26,6 +29,7 @@ import {
 import { useAvailableMentors } from '@/features/mentorship/hooks/useAvailableMentors';
 import {
   filterAvailableMentors,
+  getPopularMentors,
   partitionRecommendedMentors,
   platformHasNoCoaches,
   shouldOfferWaitingList,
@@ -33,6 +37,16 @@ import {
 import type { AvailableMentor } from '@/types/domain/mentorship';
 import { spacing } from '@/constants/theme';
 import { getWebFontStyle } from '@/constants/theme/webTheme';
+
+const CATEGORY_EMOJI: Record<MentorBrowseFilterId, string> = {
+  all: '✨',
+  technology: '💻',
+  business: '💼',
+  career: '📈',
+  scholarships: '🎓',
+  research: '🔬',
+  entrepreneurship: '🚀',
+};
 
 type MentorChooserProps = {
   onSelect: (mentorUserId: string) => void;
@@ -50,25 +64,65 @@ export function MentorChooser({
   const { colors } = useTheme();
   const { t } = useTranslation();
   const insets = useSafeAreaInsets();
+  const { profile, user } = useAuth();
+  const greeting = useGreeting();
   const { data, isLoading, error, refetch, isFetching } = useAvailableMentors({ enabled: true });
   const [search, setSearch] = useState('');
   const [category, setCategory] = useState<MentorBrowseFilterId>('all');
   const [profileMentor, setProfileMentor] = useState<AvailableMentor | null>(null);
+  const [filtersOpen, setFiltersOpen] = useState(false);
+  const [degreeLevels, setDegreeLevels] = useState<string[]>([]);
+  const [acceptingOnly, setAcceptingOnly] = useState(false);
 
-  const mentors = data ?? [];
-  const filtered = useMemo(
+  const mentors = useMemo(() => data ?? [], [data]);
+  const oauthMeta = (user?.user_metadata ?? {}) as Record<string, unknown>;
+  const userName = profile?.displayName ?? getOAuthDisplayName(oauthMeta) ?? t('common.user');
+
+  const heroStats = useMemo(() => {
+    const countries = new Set(mentors.map((m) => m.profile.country).filter(Boolean));
+    const menteesInMentorship = mentors.reduce((sum, m) => sum + m.activeMenteeCount, 0);
+    return { mentorCount: mentors.length, countryCount: countries.size, menteesInMentorship };
+  }, [mentors]);
+
+  const availableDegreeLevels = useMemo(() => {
+    const set = new Set<string>();
+    mentors.forEach((m) => {
+      m.mentor.mentoringDegreeLevels.forEach((d) => set.add(d));
+      if (m.profile.degreeLevel) set.add(m.profile.degreeLevel);
+    });
+    return [...set].sort();
+  }, [mentors]);
+
+  const categoryFiltered = useMemo(
     () => filterAvailableMentors(mentors, search, category),
     [mentors, search, category],
   );
-  const { recommended, all } = useMemo(
-    () => partitionRecommendedMentors(filtered),
-    [filtered],
-  );
+
+  const filtered = useMemo(() => {
+    return categoryFiltered.filter((m) => {
+      if (acceptingOnly && !(m.isAcceptingStudents && m.hasCapacity)) return false;
+      if (degreeLevels.length > 0) {
+        const mentorLevels = [...m.mentor.mentoringDegreeLevels, m.profile.degreeLevel].filter(
+          (v): v is string => Boolean(v),
+        );
+        if (!mentorLevels.some((lvl) => degreeLevels.includes(lvl))) return false;
+      }
+      return true;
+    });
+  }, [categoryFiltered, acceptingOnly, degreeLevels]);
+
+  const { recommended, all } = useMemo(() => partitionRecommendedMentors(filtered), [filtered]);
+  const popular = useMemo(() => getPopularMentors(filtered), [filtered]);
+  const activeFilterCount = degreeLevels.length + (acceptingOnly ? 1 : 0);
 
   const showWaitingList = !isLoading && !error && shouldOfferWaitingList(mentors);
   const showEmptySearch =
     !isLoading && !error && !showWaitingList && mentors.length > 0 && filtered.length === 0;
   const listMentors = recommended.length > 0 ? all : filtered;
+
+  const toggleDegreeLevel = (level: string) => {
+    setDegreeLevels((prev) => (prev.includes(level) ? prev.filter((l) => l !== level) : [...prev, level]));
+  };
 
   if (isLoading || (isFetching && mentors.length === 0)) {
     return (
@@ -90,6 +144,9 @@ export function MentorChooser({
   if (showWaitingList) {
     return (
       <View style={styles.waitingWrap}>
+        <View style={styles.waitingIconWrap}>
+          <Ionicons name="hourglass-outline" size={28} color={colors.primary} />
+        </View>
         <Text style={[styles.waitingTitle, getWebFontStyle('bold')]}>
           {t('mentorship.student.chooser.noCoachesTitle')}
         </Text>
@@ -107,29 +164,92 @@ export function MentorChooser({
     );
   }
 
+  const renderHorizontal = (items: AvailableMentor[]) => (
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentContainerStyle={styles.horizontalRow}
+    >
+      {items.map((m) => (
+        <MentorBrowseCard key={m.mentorUserId} mentor={m} variant="card" onViewProfile={() => setProfileMentor(m)} />
+      ))}
+    </ScrollView>
+  );
+
   const renderList = (items: AvailableMentor[]) => (
-    <View>
-      {items.map((m, i) => (
-        <View key={m.mentorUserId}>
-          <MentorBrowseCard mentor={m} onViewProfile={() => setProfileMentor(m)} />
-          {i < items.length - 1 ? <View style={styles.separator} /> : null}
-        </View>
+    <View style={styles.listWrap}>
+      {items.map((m) => (
+        <MentorBrowseCard key={m.mentorUserId} mentor={m} variant="row" onViewProfile={() => setProfileMentor(m)} />
       ))}
     </View>
   );
 
   return (
     <View style={styles.root}>
-      {/* Search */}
-      <View style={styles.toolbar}>
-        <SearchField
-          value={search}
-          onChangeText={setSearch}
-          placeholder={t('mentorship.student.chooser.searchPlaceholder')}
-        />
+      {/* Hero */}
+      <View style={styles.hero}>
+        <Text style={styles.heroEyebrow}>
+          {t(`mentorship.student.chooser.hero.greeting.${greeting}`, { name: userName })}
+        </Text>
+        <Text style={[styles.heroTitle, getWebFontStyle('bold')]}>
+          {t('mentorship.student.chooser.hero.tagline')}
+        </Text>
+
+        {heroStats.mentorCount > 0 ? (
+          <View style={styles.statsRow}>
+            <View style={styles.statPill}>
+              <Ionicons name="people" size={14} color={colors.primary} />
+              <Text style={styles.statText}>
+                {t('mentorship.student.chooser.hero.statMentors', { count: heroStats.mentorCount })}
+              </Text>
+            </View>
+            {heroStats.countryCount > 0 ? (
+              <View style={styles.statPill}>
+                <Ionicons name="globe" size={14} color={colors.primary} />
+                <Text style={styles.statText}>
+                  {t('mentorship.student.chooser.hero.statCountries', { count: heroStats.countryCount })}
+                </Text>
+              </View>
+            ) : null}
+            {heroStats.menteesInMentorship > 0 ? (
+              <View style={styles.statPill}>
+                <Ionicons name="school" size={14} color={colors.primary} />
+                <Text style={styles.statText}>
+                  {t('mentorship.student.chooser.hero.statMentees', { count: heroStats.menteesInMentorship })}
+                </Text>
+              </View>
+            ) : null}
+          </View>
+        ) : null}
       </View>
 
-      {/* Filter tabs */}
+      {/* Search + filters */}
+      <View style={styles.toolbar}>
+        <View style={styles.searchRow}>
+          <View style={styles.searchField}>
+            <SearchField
+              value={search}
+              onChangeText={setSearch}
+              placeholder={t('mentorship.student.chooser.searchPlaceholder')}
+            />
+          </View>
+          <Pressable
+            style={styles.filterBtn}
+            onPress={() => setFiltersOpen(true)}
+            accessibilityRole="button"
+            accessibilityLabel={t('mentorship.student.chooser.filters')}
+          >
+            <Ionicons name="options-outline" size={18} color={colors.text} />
+            {activeFilterCount > 0 ? (
+              <View style={styles.filterBadge}>
+                <Text style={styles.filterBadgeText}>{activeFilterCount}</Text>
+              </View>
+            ) : null}
+          </Pressable>
+        </View>
+      </View>
+
+      {/* Category chips */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -142,33 +262,40 @@ export function MentorChooser({
             <Pressable
               key={chip.id}
               onPress={() => setCategory(chip.id)}
-              style={styles.filterTab}
+              style={[styles.chipPill, active && styles.chipPillActive]}
             >
-              <Text style={[styles.filterTabText, active && styles.filterTabTextActive]}>
+              <Text style={styles.chipPillEmoji}>{CATEGORY_EMOJI[chip.id]}</Text>
+              <Text style={[styles.chipPillText, active && styles.chipPillTextActive]}>
                 {t(`mentorship.student.browseFilters.${chip.id}`)}
               </Text>
-              {active ? <View style={styles.filterTabUnderline} /> : null}
             </Pressable>
           );
         })}
       </ScrollView>
 
-      <View style={styles.divider} />
-
       {/* Recommended */}
       {recommended.length > 0 ? (
         <View style={styles.section}>
           <Text style={styles.sectionLabel}>{t('mentorship.student.chooser.recommended')}</Text>
-          {renderList(recommended)}
-          <View style={styles.divider} />
+          {renderHorizontal(recommended)}
+        </View>
+      ) : null}
+
+      {/* Popular */}
+      {popular.length > 0 ? (
+        <View style={styles.section}>
+          <Text style={styles.sectionLabel}>{t('mentorship.student.chooser.popular')}</Text>
+          {renderHorizontal(popular)}
         </View>
       ) : null}
 
       {/* All coaches */}
       <View style={styles.section}>
-        {recommended.length > 0 ? (
-          <Text style={styles.sectionLabel}>{t('mentorship.student.chooser.allCoaches')}</Text>
-        ) : null}
+        <Text style={styles.sectionLabel}>
+          {recommended.length > 0
+            ? t('mentorship.student.chooser.allCoaches')
+            : t('mentorship.student.chooser.resultsCount', { count: filtered.length })}
+        </Text>
 
         {showEmptySearch ? (
           <Text muted style={styles.emptyText}>
@@ -181,75 +308,133 @@ export function MentorChooser({
         )}
       </View>
 
-      {/* Profile modal */}
+      {/* Filters sheet */}
       <Modal
-        visible={profileMentor != null}
+        visible={filtersOpen}
+        transparent
         animationType="slide"
-        presentationStyle="pageSheet"
-        onRequestClose={() => setProfileMentor(null)}
+        onRequestClose={() => setFiltersOpen(false)}
       >
-        {profileMentor ? (
-          <View style={[styles.modal, { paddingTop: Math.max(insets.top, spacing.sm) }]}>
-            {/* Modal header — back arrow left, title center */}
-            <View style={styles.modalHeader}>
-              <Pressable
-                onPress={() => setProfileMentor(null)}
-                style={styles.modalBackBtn}
-                hitSlop={12}
-                accessibilityRole="button"
-                accessibilityLabel={t('mentorship.student.chooser.goBack')}
-              >
-                <Ionicons name="arrow-back" size={20} color={colors.text} />
+        <Pressable style={styles.sheetOverlay} onPress={() => setFiltersOpen(false)}>
+          <Pressable
+            style={[styles.sheet, { paddingBottom: insets.bottom + spacing.md }]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.sheetHandle} />
+            <View style={styles.sheetHeaderRow}>
+              <Text style={styles.sheetTitle}>{t('mentorship.student.chooser.filtersTitle')}</Text>
+              <Pressable onPress={() => setFiltersOpen(false)} hitSlop={12}>
+                <Ionicons name="close" size={22} color={colors.textMuted} />
               </Pressable>
-              <Text style={[styles.modalHeaderTitle, getWebFontStyle('semibold')]}>
-                {t('mentorship.student.chooser.coachProfile')}
-              </Text>
-              {/* spacer for symmetry */}
-              <View style={styles.modalHeaderSpacer} />
             </View>
 
-            <ScrollView
-              style={styles.modalScroll}
-              contentContainerStyle={[
-                styles.modalContent,
-                { paddingBottom: spacing.xl + insets.bottom },
-              ]}
-              showsVerticalScrollIndicator={false}
-            >
-              {/* ParticipantProfileDetail already shows avatar + name + email */}
-              <ParticipantProfileDetail
-                profile={profileMentor.profile}
-                mentorProfile={profileMentor.mentor}
-              />
+            <ScrollView style={styles.sheetScroll}>
+              <Pressable
+                style={styles.toggleRow}
+                onPress={() => setAcceptingOnly((v) => !v)}
+                accessibilityRole="checkbox"
+                accessibilityState={{ checked: acceptingOnly }}
+              >
+                <Text style={styles.toggleLabel}>{t('mentorship.student.chooser.filterAvailableOnly')}</Text>
+                <View style={[styles.checkbox, acceptingOnly && styles.checkboxActive]}>
+                  {acceptingOnly ? <Ionicons name="checkmark" size={14} color="#fff" /> : null}
+                </View>
+              </Pressable>
 
-              {!profileMentor.mentor.bio?.trim() ? (
-                <Text muted style={styles.noBio}>
-                  {t('mentorship.student.chooser.noBio')}
-                </Text>
+              {availableDegreeLevels.length > 0 ? (
+                <View style={styles.filterGroup}>
+                  <Text style={styles.filterGroupLabel}>{t('mentorship.student.chooser.filterDegreeLevel')}</Text>
+                  <View style={styles.chipWrapRow}>
+                    {availableDegreeLevels.map((level) => {
+                      const active = degreeLevels.includes(level);
+                      return (
+                        <Pressable
+                          key={level}
+                          onPress={() => toggleDegreeLevel(level)}
+                          style={[styles.chipPill, active && styles.chipPillActive]}
+                        >
+                          <Text style={[styles.chipPillText, active && styles.chipPillTextActive]}>{level}</Text>
+                        </Pressable>
+                      );
+                    })}
+                  </View>
+                </View>
               ) : null}
             </ScrollView>
 
-            {/* CTA footer — Choose only, no "Back to coaches" */}
-            <View style={[styles.modalFooter, { paddingBottom: insets.bottom + spacing.sm }]}>
-              {profileMentor.isAcceptingStudents && profileMentor.hasCapacity ? (
-                <Button
-                  fullWidth
-                  onPress={() => {
-                    onSelect(profileMentor.mentorUserId);
-                    setProfileMentor(null);
-                  }}
-                  loading={isSelecting}
-                >
-                  {t('mentorship.student.chooser.chooseCoach')}
-                </Button>
-              ) : (
-                <Text style={styles.atCapacityText}>
-                  {t('mentorship.student.chooser.atCapacity')}
-                </Text>
-              )}
+            <View style={styles.sheetFooter}>
+              <Button
+                variant="secondary"
+                style={styles.sheetFooterBtn}
+                onPress={() => {
+                  setDegreeLevels([]);
+                  setAcceptingOnly(false);
+                }}
+              >
+                {t('mentorship.student.chooser.clearFilters')}
+              </Button>
+              <Button style={styles.sheetFooterBtn} onPress={() => setFiltersOpen(false)}>
+                {t('mentorship.student.chooser.applyFilters')}
+              </Button>
             </View>
-          </View>
-        ) : null}
+          </Pressable>
+        </Pressable>
+      </Modal>
+
+      {/* Profile bottom sheet */}
+      <Modal
+        visible={profileMentor != null}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setProfileMentor(null)}
+      >
+        <Pressable style={styles.sheetOverlay} onPress={() => setProfileMentor(null)}>
+          <Pressable
+            style={[styles.profileSheet, { paddingBottom: insets.bottom + spacing.sm }]}
+            onPress={(e) => e.stopPropagation()}
+          >
+            <View style={styles.sheetHandle} />
+            {profileMentor ? (
+              <>
+                <ScrollView
+                  style={styles.modalScroll}
+                  contentContainerStyle={styles.modalContent}
+                  showsVerticalScrollIndicator={false}
+                >
+                  <ParticipantProfileDetail
+                    profile={profileMentor.profile}
+                    mentorProfile={profileMentor.mentor}
+                  />
+
+                  {!profileMentor.mentor.bio?.trim() ? (
+                    <Text muted style={styles.noBio}>
+                      {t('mentorship.student.chooser.noBio')}
+                    </Text>
+                  ) : null}
+                </ScrollView>
+
+                <View style={styles.modalFooter}>
+                  {profileMentor.isAcceptingStudents && profileMentor.hasCapacity ? (
+                    <Button
+                      fullWidth
+                      onPress={() => {
+                        onSelect(profileMentor.mentorUserId);
+                        setProfileMentor(null);
+                      }}
+                      loading={isSelecting}
+                    >
+                      {t('mentorship.student.chooser.chooseCoach')}
+                    </Button>
+                  ) : (
+                    <Text style={styles.atCapacityText}>
+                      {t('mentorship.student.chooser.atCapacity')}
+                    </Text>
+                  )}
+                </View>
+              </>
+            ) : null}
+          </Pressable>
+        </Pressable>
       </Modal>
     </View>
   );
@@ -260,66 +445,96 @@ function createStyles(colors: ColorScheme) {
   root: { flex: 1 },
   centered: { padding: spacing.lg, alignItems: 'center', gap: spacing.md },
 
+  // ─── Hero ─────────────────────────────────────────────────────────────────
+  hero: {
+    marginHorizontal: spacing.md,
+    marginBottom: spacing.md,
+    padding: spacing.lg,
+    borderRadius: 24,
+    backgroundColor: `${colors.primary}12`,
+    gap: 6,
+  },
+  heroEyebrow: { fontSize: 14, fontWeight: '600', color: colors.primary },
+  heroTitle: { fontSize: 22, lineHeight: 28, color: colors.text },
+  statsRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs, marginTop: spacing.sm },
+  statPill: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 999,
+    backgroundColor: colors.background,
+  },
+  statText: { fontSize: 12, fontWeight: '700', color: colors.text },
+
   // ─── Toolbar ──────────────────────────────────────────────────────────────
   toolbar: {
     paddingHorizontal: spacing.md,
-    paddingBottom: spacing.xs,
+    paddingBottom: spacing.sm,
   },
+  searchRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  searchField: { flex: 1 },
+  filterBtn: {
+    width: 44,
+    height: 44,
+    borderRadius: 14,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+  },
+  filterBadge: {
+    position: 'absolute',
+    top: -4,
+    right: -4,
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    backgroundColor: colors.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: 3,
+  },
+  filterBadgeText: { color: '#fff', fontSize: 10, fontWeight: '700' },
 
-  // ─── Filter tabs ──────────────────────────────────────────────────────────
+  // ─── Category pills ───────────────────────────────────────────────────────
   filterScroll: { flexGrow: 0 },
   filterRow: {
     flexDirection: 'row',
     paddingHorizontal: spacing.md,
-    gap: spacing.lg,
+    paddingBottom: spacing.sm,
+    gap: spacing.xs,
   },
-  filterTab: {
-    paddingVertical: spacing.sm,
+  chipPill: {
+    flexDirection: 'row',
     alignItems: 'center',
+    gap: 5,
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 999,
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
   },
-  filterTabText: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.textMuted,
-  },
-  filterTabTextActive: {
-    color: colors.primary,
-    fontWeight: '700',
-  },
-  filterTabUnderline: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: 2,
-    backgroundColor: colors.primary,
-    borderRadius: 1,
-  },
-
-  // ─── Divider ──────────────────────────────────────────────────────────────
-  divider: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
-  },
-
-  // ─── List ─────────────────────────────────────────────────────────────────
-  separator: {
-    height: StyleSheet.hairlineWidth,
-    backgroundColor: colors.border,
-    marginLeft: spacing.md + 48 + spacing.md,
-  },
+  chipPillActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  chipPillEmoji: { fontSize: 13 },
+  chipPillText: { fontSize: 13, fontWeight: '600', color: colors.textMuted },
+  chipPillTextActive: { color: '#fff' },
+  chipWrapRow: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs },
 
   // ─── Sections ─────────────────────────────────────────────────────────────
-  section: { paddingTop: spacing.xs },
+  section: { paddingTop: spacing.md },
   sectionLabel: {
-    fontSize: 11,
+    fontSize: 15,
     fontWeight: '700',
-    letterSpacing: 0.8,
-    textTransform: 'uppercase',
-    color: colors.textMuted,
+    color: colors.text,
     paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
+    paddingBottom: spacing.sm,
   },
+  horizontalRow: { paddingHorizontal: spacing.md, gap: spacing.sm },
+  listWrap: { paddingHorizontal: spacing.md, gap: spacing.xs },
   emptyText: {
     padding: spacing.lg,
     fontSize: 14,
@@ -331,44 +546,87 @@ function createStyles(colors: ColorScheme) {
     gap: spacing.md,
     padding: spacing.lg,
     width: '100%',
-  },
-  waitingTitle: { fontSize: 20, fontWeight: '700', color: colors.text },
-  waitingBody: { lineHeight: 22 },
-
-  // ─── Profile modal ────────────────────────────────────────────────────────
-  modal: { flex: 1, backgroundColor: colors.background },
-  modalHeader: {
-    flexDirection: 'row',
     alignItems: 'center',
-    paddingHorizontal: spacing.md,
-    paddingVertical: spacing.sm,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: colors.border,
   },
-  modalBackBtn: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
+  waitingIconWrap: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: `${colors.primary}15`,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.surface,
-    borderWidth: 1,
+  },
+  waitingTitle: { fontSize: 20, fontWeight: '700', color: colors.text, textAlign: 'center' },
+  waitingBody: { lineHeight: 22, textAlign: 'center' },
+
+  // ─── Bottom sheets (filters + profile) ────────────────────────────────────
+  sheetOverlay: { flex: 1, backgroundColor: colors.overlay, justifyContent: 'flex-end' },
+  sheetHandle: {
+    alignSelf: 'center',
+    width: 36,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.border,
+    marginTop: spacing.sm,
+    marginBottom: spacing.xs,
+  },
+  sheet: {
+    backgroundColor: colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '75%',
+  },
+  sheetHeaderRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: spacing.lg,
+    paddingBottom: spacing.sm,
+  },
+  sheetTitle: { fontSize: 18, fontWeight: '700', color: colors.text },
+  sheetScroll: { paddingHorizontal: spacing.lg },
+  toggleRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: spacing.sm,
+  },
+  toggleLabel: { fontSize: 15, color: colors.text, fontWeight: '500', flex: 1 },
+  checkbox: {
+    width: 22,
+    height: 22,
+    borderRadius: 6,
+    borderWidth: 1.5,
     borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  modalHeaderTitle: {
-    flex: 1,
-    textAlign: 'center',
-    fontSize: 17,
-    fontWeight: '600',
-    color: colors.text,
+  checkboxActive: { backgroundColor: colors.primary, borderColor: colors.primary },
+  filterGroup: { marginTop: spacing.md, gap: spacing.xs },
+  filterGroupLabel: { fontSize: 13, fontWeight: '700', color: colors.textMuted, marginBottom: 2 },
+  sheetFooter: {
+    flexDirection: 'row',
+    gap: spacing.sm,
+    paddingHorizontal: spacing.lg,
+    paddingTop: spacing.md,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: colors.border,
   },
-  modalHeaderSpacer: { width: 36 },
-  modalScroll: { flex: 1 },
+  sheetFooterBtn: { flex: 1 },
+
+  // ─── Profile sheet ────────────────────────────────────────────────────────
+  profileSheet: {
+    backgroundColor: colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '90%',
+  },
+  modalScroll: { flexGrow: 0 },
   modalContent: {
     gap: spacing.md,
     paddingHorizontal: spacing.lg,
-    paddingTop: spacing.lg,
-    width: '100%',
+    paddingTop: spacing.sm,
+    paddingBottom: spacing.lg,
   },
   noBio: {
     fontStyle: 'italic',
@@ -378,11 +636,8 @@ function createStyles(colors: ColorScheme) {
   modalFooter: {
     paddingHorizontal: spacing.lg,
     paddingTop: spacing.md,
-    paddingBottom: spacing.sm,
     borderTopWidth: StyleSheet.hairlineWidth,
     borderTopColor: colors.border,
-    backgroundColor: colors.background,
-    width: '100%',
   },
   atCapacityText: {
     fontSize: 14,

@@ -23,24 +23,24 @@ export default function MentorPage() {
   return (
     <>
       <Header />
-      <main className="min-h-screen bg-[#F4F7F5] text-[#1A1A1A]">
+      <main className="min-h-screen bg-surface-tinted text-[#1A1A1A]">
         {/* Hero */}
-        <section className="bg-primary text-white py-16 md:py-24">
+        <section className="bg-surface-tinted border-b border-border py-16 md:py-24">
           <div className="mx-auto max-w-[860px] px-6 text-center">
-            <p className="text-white/70 text-sm font-semibold uppercase tracking-[0.2em] mb-3">
+            <p className="text-primary text-sm font-semibold uppercase tracking-[0.2em] mb-3">
               {t('hero.eyebrow')}
             </p>
-            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 leading-[1.1]">
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4 leading-[1.1] text-[#1A1A1A]">
               {t('hero.title')}
             </h1>
-            <p className="text-white/80 text-lg leading-8 max-w-[600px] mx-auto">
+            <p className="text-muted text-lg leading-8 max-w-[600px] mx-auto">
               {t('hero.subtitle')}
             </p>
           </div>
         </section>
 
         {/* What to expect */}
-        <section className="py-12 md:py-16 bg-white border-b border-[#E0E0E0]">
+        <section className="py-12 md:py-16 bg-surface-tinted border-b border-border">
           <div className="mx-auto max-w-[860px] px-6">
             <div className="grid gap-6 md:grid-cols-2">
               {whatToExpect.map((item) => (
@@ -129,7 +129,7 @@ export default function MentorPage() {
                     type="text"
                     name="first_name"
                     required
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
                 <label className="space-y-2 text-sm">
@@ -138,7 +138,7 @@ export default function MentorPage() {
                     type="text"
                     name="last_name"
                     required
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
               </div>
@@ -150,7 +150,7 @@ export default function MentorPage() {
                     type="email"
                     name="email"
                     required
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
                 <label className="space-y-2 text-sm">
@@ -158,7 +158,7 @@ export default function MentorPage() {
                   <input
                     type="tel"
                     name="phone"
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
               </div>
@@ -170,7 +170,7 @@ export default function MentorPage() {
                     type="text"
                     name="linkedin"
                     placeholder={t('form.linkedinPlaceholder')}
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
                 <label className="space-y-2 text-sm">
@@ -179,7 +179,7 @@ export default function MentorPage() {
                     type="text"
                     name="portfolio"
                     placeholder={t('form.portfolioPlaceholder')}
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   />
                 </label>
               </div>
@@ -191,7 +191,7 @@ export default function MentorPage() {
                     name="area_of_expertise"
                     required
                     defaultValue=""
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   >
                     <option value="" disabled>{t('form.selectPlaceholder')}</option>
                     {expertiseOptions.map((option) => (
@@ -205,7 +205,7 @@ export default function MentorPage() {
                     name="years_of_experience"
                     required
                     defaultValue=""
-                    className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                    className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                   >
                     <option value="" disabled>{t('form.selectPlaceholder')}</option>
                     {experienceOptions.map((option) => (
@@ -221,7 +221,7 @@ export default function MentorPage() {
                   name="short_bio"
                   required
                   rows={4}
-                  className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                  className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                 />
               </label>
 
@@ -230,7 +230,7 @@ export default function MentorPage() {
                 <textarea
                   name="motivation"
                   rows={4}
-                  className="w-full rounded-3xl border border-[#E0E0E0] bg-[#F4F7F5] px-4 py-3 text-sm outline-none transition focus:border-primary"
+                  className="w-full rounded-3xl border border-[#E0E0E0] bg-surface-tinted px-4 py-3 text-sm outline-none transition focus:border-primary"
                 />
               </label>
 

@@ -861,6 +861,26 @@
         "allCoaches": "Tous les coachs",
         "emptySearch": "Aucun coach ne correspond à votre recherche. Essayez un autre mot-clé ou filtre.",
         "emptyList": "Aucun coach à afficher.",
+        "popular": "Populaire en ce moment",
+        "filters": "Filtres",
+        "filtersTitle": "Filtrer les coachs",
+        "filterAvailableOnly": "Accepte des étudiants uniquement",
+        "filterDegreeLevel": "Niveau d'études",
+        "clearFilters": "Effacer les filtres",
+        "applyFilters": "Appliquer les filtres",
+        "resultsCount": "{{count}} coachs",
+        "hero": {
+          "greeting": {
+            "morning": "Bonjour, {{name}} 👋",
+            "afternoon": "Bon après-midi, {{name}} 👋",
+            "evening": "Bonsoir, {{name}} 👋",
+            "night": "Bonsoir, {{name}} 👋"
+          },
+          "tagline": "Trouvez des mentors qui ont déjà accompli ce vers quoi vous travaillez.",
+          "statMentors": "{{count}} mentors",
+          "statCountries": "{{count}} pays",
+          "statMentees": "{{count}} étudiants actuellement accompagnés"
+        },
         "goBack": "Retour",
         "coachProfile": "Profil du coach",
         "noBio": "Ce coach n'a pas encore ajouté de biographie.",
@@ -871,7 +891,8 @@
         "nameFallback": "Coach",
         "notAccepting": "N'accepte pas d'étudiants",
         "full": "Actuellement complet",
-        "available": "Disponible"
+        "available": "Disponible",
+        "capacity": "{{count}}/{{max}} étudiants"
       },
       "sessionsTable": {
         "colCoach": "Détails du coach",

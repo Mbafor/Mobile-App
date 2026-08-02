@@ -26,25 +26,25 @@ export default async function PartnerLoginPage({
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[var(--color-surface)] text-[#1A1A1A] dark:text-white px-4">
+    <main className="min-h-screen flex items-center justify-center bg-[var(--color-surface-tinted)] text-[#1A1A1A] dark:text-white px-4 py-10">
       <div className="fixed top-4 right-4 flex items-center gap-2">
         <LanguageToggle />
         <ThemeToggle theme={theme} />
       </div>
 
-      <div className="w-full max-w-sm bg-[var(--color-background)] rounded-xl border border-[var(--color-border)] p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold text-[var(--color-forest)] mb-1">{t('title')}</h1>
+      <div className="w-full max-w-sm bg-[var(--color-background)] rounded-[28px] border border-[var(--color-border)] p-8 shadow-sm">
+        <h1 className="text-2xl font-bold text-[var(--color-forest)] mb-1">{t('title')}</h1>
         <p className="text-sm text-[var(--color-muted)] mb-6">{t('subtitle')}</p>
 
         {error && (
-          <p className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">
+          <p className="mb-4 text-sm text-red-600 bg-red-50 border border-red-200 rounded-2xl px-3 py-2">
             {errorMessages[error] ?? t('errorGeneric')}
           </p>
         )}
 
         <form action={partnerLogin} className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium mb-1">
+            <label htmlFor="email" className="block text-sm font-semibold mb-1.5">
               {t('emailLabel')}
             </label>
             <input
@@ -53,11 +53,11 @@ export default async function PartnerLoginPage({
               type="email"
               required
               autoComplete="email"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <div>
-            <label htmlFor="password" className="block text-sm font-medium mb-1">
+            <label htmlFor="password" className="block text-sm font-semibold mb-1.5">
               {t('passwordLabel')}
             </label>
             <input
@@ -66,12 +66,12 @@ export default async function PartnerLoginPage({
               type="password"
               required
               autoComplete="current-password"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <button
             type="submit"
-            className="w-full rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium hover:opacity-90 transition"
+            className="w-full rounded-2xl bg-[var(--color-forest)] text-white py-3 text-sm font-semibold shadow-md hover:opacity-90 transition"
           >
             {t('submit')}
           </button>
@@ -79,7 +79,7 @@ export default async function PartnerLoginPage({
 
         <p className="mt-6 text-sm text-[var(--color-muted)] text-center">
           {t('noAccount')}{' '}
-          <Link href="/partner/signup" className="text-[var(--color-forest)] font-medium hover:underline">
+          <Link href="/partner/signup" className="text-[var(--color-forest)] font-semibold hover:underline">
             {t('createAccount')}
           </Link>
         </p>

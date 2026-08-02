@@ -60,6 +60,17 @@ export function partitionRecommendedMentors(mentors: AvailableMentor[]): {
   return { recommended, all };
 }
 
+/** "Popular" = real demand signal (active mentee count), not a fabricated
+ * metric -- we have no booking-count or rating data to back a "Most Booked"
+ * or "Top Rated" section, so this is the one legitimate ranking beyond match
+ * score and name. */
+export function getPopularMentors(mentors: AvailableMentor[], limit = 10): AvailableMentor[] {
+  return [...mentors]
+    .filter((m) => m.activeMenteeCount > 0)
+    .sort((a, b) => b.activeMenteeCount - a.activeMenteeCount)
+    .slice(0, limit);
+}
+
 export function platformHasNoCoaches(mentors: AvailableMentor[]): boolean {
   return mentors.length === 0;
 }

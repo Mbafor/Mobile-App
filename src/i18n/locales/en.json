@@ -837,6 +837,26 @@
         "allCoaches": "All coaches",
         "emptySearch": "No coaches match your search. Try a different keyword or filter.",
         "emptyList": "No coaches to display.",
+        "popular": "Popular right now",
+        "filters": "Filters",
+        "filtersTitle": "Filter coaches",
+        "filterAvailableOnly": "Accepting students only",
+        "filterDegreeLevel": "Degree level",
+        "clearFilters": "Clear filters",
+        "applyFilters": "Apply filters",
+        "resultsCount": "{{count}} coaches",
+        "hero": {
+          "greeting": {
+            "morning": "Good morning, {{name}} 👋",
+            "afternoon": "Good afternoon, {{name}} 👋",
+            "evening": "Good evening, {{name}} 👋",
+            "night": "Good evening, {{name}} 👋"
+          },
+          "tagline": "Find mentors who've already achieved what you're working toward.",
+          "statMentors": "{{count}} mentors",
+          "statCountries": "{{count}} countries",
+          "statMentees": "{{count}} students being mentored"
+        },
         "goBack": "Go back",
         "coachProfile": "Coach Profile",
         "noBio": "This coach has not added a bio yet.",
@@ -847,7 +867,8 @@
         "nameFallback": "Coach",
         "notAccepting": "Not accepting students",
         "full": "Currently full",
-        "available": "Available"
+        "available": "Available",
+        "capacity": "{{count}}/{{max}} mentees"
       },
       "sessionsTable": {
         "colCoach": "Coach Details",

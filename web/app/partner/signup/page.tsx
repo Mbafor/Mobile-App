@@ -30,14 +30,14 @@ export default async function PartnerSignupPage({
   };
 
   return (
-    <main className="min-h-screen flex items-center justify-center bg-[var(--color-surface)] text-[#1A1A1A] dark:text-white px-4 py-10">
+    <main className="min-h-screen flex items-center justify-center bg-[var(--color-surface-tinted)] text-[#1A1A1A] dark:text-white px-4 py-10">
       <div className="fixed top-4 right-4 flex items-center gap-2">
         <LanguageToggle />
         <ThemeToggle theme={theme} />
       </div>
 
-      <div className="w-full max-w-sm bg-[var(--color-background)] rounded-xl border border-[var(--color-border)] p-8 shadow-sm">
-        <h1 className="text-2xl font-semibold text-[var(--color-forest)] mb-1">{t('title')}</h1>
+      <div className="w-full max-w-sm bg-[var(--color-background)] rounded-[28px] border border-[var(--color-border)] p-8 shadow-sm">
+        <h1 className="text-2xl font-bold text-[var(--color-forest)] mb-1">{t('title')}</h1>
         <p className="text-sm text-[var(--color-muted)] mb-6">{t('subtitle')}</p>
 
         {error && (
@@ -58,7 +58,7 @@ export default async function PartnerSignupPage({
               required
               defaultValue={org}
               autoComplete="organization"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <div>
@@ -72,7 +72,7 @@ export default async function PartnerSignupPage({
               required
               defaultValue={email}
               autoComplete="email"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <div>
@@ -86,7 +86,7 @@ export default async function PartnerSignupPage({
               required
               minLength={8}
               autoComplete="new-password"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <div>
@@ -100,12 +100,12 @@ export default async function PartnerSignupPage({
               required
               minLength={8}
               autoComplete="new-password"
-              className="w-full rounded-md border border-[var(--color-border)] bg-[var(--color-background)] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[var(--color-forest)]"
+              className="w-full rounded-2xl border border-[var(--color-border)] bg-[var(--color-surface-tinted)] px-4 py-3 text-sm outline-none transition focus:border-[var(--color-forest)]"
             />
           </div>
           <button
             type="submit"
-            className="w-full rounded-md bg-[var(--color-forest)] text-white py-2 text-sm font-medium hover:opacity-90 transition"
+            className="w-full rounded-2xl bg-[var(--color-forest)] text-white py-3 text-sm font-semibold shadow-md hover:opacity-90 transition"
           >
             {t('submit')}
           </button>

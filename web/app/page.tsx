@@ -173,77 +173,64 @@ function Eyebrow({ label }: { label: string }) {
 function Hero() {
   const t = useTranslations("Home.hero");
   return (
-    <section className="relative bg-primary text-white overflow-hidden pt-10 pb-8 md:pt-16 md:pb-10">
-      <div className="absolute w-[500px] h-[500px] rounded-full bg-white/10 -top-40 -right-28 opacity-40 pointer-events-none" />
-      <div className="absolute w-[360px] h-[360px] rounded-full bg-white/10 -bottom-24 -left-16 opacity-30 pointer-events-none" />
-      <div className="absolute w-[200px] h-[200px] rounded-full bg-white/5 top-[30%] left-[40%] pointer-events-none" />
+    <section className="relative bg-surface-tinted border-b border-border overflow-hidden py-20 md:py-28">
+      <div
+        className="absolute inset-0 opacity-60 pointer-events-none"
+        style={{
+          backgroundImage: "radial-gradient(#00000010 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      />
+      <div className="absolute w-[500px] h-[500px] rounded-full bg-primary/5 -top-40 -right-28 pointer-events-none" />
+      <div className="absolute w-[360px] h-[360px] rounded-full bg-primary/5 -bottom-24 -left-16 pointer-events-none" />
 
-      <div className="relative mx-auto max-w-[1200px] px-6 pt-2 md:pt-4">
-        <div className="flex flex-col-reverse md:flex-row md:items-center gap-10 md:gap-16">
-          {/* Copy */}
-          <div className="flex-1 flex flex-col gap-5 text-center md:text-left items-center md:items-start">
-            <div className="self-center md:self-start flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/15 border border-white/20">
-              <div className="w-1.5 h-1.5 rounded-full bg-white" />
-              <span className="text-white text-xs font-semibold tracking-wide">{t("badge")}</span>
-            </div>
+      <div className="relative mx-auto max-w-[1100px] px-6 flex flex-col items-center text-center gap-6">
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-primary/5 border border-primary/15">
+          <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+          <span className="text-primary text-xs font-semibold tracking-wide">{t("badge")}</span>
+        </div>
 
-            <h1 className="text-white text-4xl sm:text-5xl lg:text-[56px] font-bold leading-[1.1] tracking-tight">
-              {t("titleLine1")}<br />
-              <span className="text-surface">{t("titleLine2")}</span>
-            </h1>
+        <h1 className="text-[#1A1A1A] text-3xl sm:text-4xl md:text-5xl lg:text-[52px] font-bold leading-[1.15] tracking-tight md:whitespace-nowrap">
+          {t("titleLine1")} <span className="text-primary">{t("titleLine2")}</span>
+        </h1>
 
-            <p className="text-white/80 text-lg leading-7 max-w-[520px]">
-              {t("subtitle")}
-            </p>
+        <p className="text-muted text-lg leading-7 max-w-[560px]">
+          {t("subtitle")}
+        </p>
 
-            <div id="get-started" className="flex flex-col items-center gap-3 mt-6 sm:flex-row sm:justify-center md:justify-start">
-              <a
-                href={SIGNUP_URL}
-                className="inline-flex items-center justify-center gap-2 bg-white text-primary font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px]"
+        <div id="get-started" className="flex flex-col items-center gap-3 sm:flex-row justify-center mt-2">
+          <a
+            href={SIGNUP_URL}
+            className="inline-flex items-center justify-center gap-2 bg-primary hover:bg-forest text-white font-bold text-base px-6 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[200px]"
+          >
+            {t("ctaPrimary")}
+          </a>
+          <a
+            href="#how-it-works"
+            className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-border text-[#1A1A1A] hover:bg-white font-medium text-base transition-all duration-150"
+          >
+            {t("ctaSecondary")}
+          </a>
+        </div>
+
+        {/* Social proof */}
+        <div className="flex flex-col items-center gap-3 mt-2">
+          <div className="flex">
+            {["A", "C", "N", "K"].map((initial, i) => (
+              <div
+                key={initial}
+                style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 4 - i, position: "relative" }}
+                className="w-[30px] h-[30px] rounded-full bg-primary border-2 border-surface-tinted flex items-center justify-center"
               >
-                {t("ctaPrimary")}
-              </a>
-              <a
-                href="#how-it-works"
-                className="inline-flex items-center justify-center px-5 py-3.5 rounded-xl border border-white/20 bg-white/10 text-white hover:bg-white/20 font-medium text-base transition-all duration-150"
-              >
-                {t("ctaSecondary")}
-              </a>
-            </div>
-
-            {/* Social proof */}
-            <div className="flex flex-col items-center gap-3 mt-4 text-center md:flex-row md:items-center md:text-left md:justify-start">
-              <div className="flex">
-                {["A", "C", "N", "K"].map((initial, i) => (
-                  <div
-                    key={initial}
-                    style={{ marginLeft: i === 0 ? 0 : -10, zIndex: 4 - i, position: "relative" }}
-                    className="w-[30px] h-[30px] rounded-full bg-primary border-2 border-white flex items-center justify-center"
-                  >
-                    <span className="text-white text-[11px] font-bold">{initial}</span>
-                  </div>
-                ))}
+                <span className="text-white text-[11px] font-bold">{initial}</span>
               </div>
-              <p className="text-white/80 text-sm leading-[1.6] font-medium">
-                {t.rich("socialProof", {
-                  strong: (chunks) => <span className="text-white font-semibold">{chunks}</span>,
-                })}
-              </p>
-            </div>
+            ))}
           </div>
-
-          {/* Product image */}
-          <div className="flex-1 max-w-[460px] w-full mx-auto md:mx-0">
-            <div className="relative h-[520px] overflow-hidden rounded-[28px]">
-              <Image
-                src="/images/product.png"
-                alt="Voila app"
-                fill
-                className="object-contain"
-                priority
-              />
-            </div>
-          </div>
+          <p className="text-muted text-sm leading-[1.6] font-medium">
+            {t.rich("socialProof", {
+              strong: (chunks) => <span className="text-[#1A1A1A] font-semibold">{chunks}</span>,
+            })}
+          </p>
         </div>
       </div>
     </section>
@@ -263,7 +250,7 @@ function TrustSection() {
   const partners = t.raw("partners") as string[];
 
   return (
-    <section className="bg-white border-b border-border py-20 md:py-28">
+    <section className="bg-surface-tinted border-b border-border py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
         <div className="flex justify-center">
           <Eyebrow label={t("eyebrow")} />
@@ -300,7 +287,7 @@ async function RecentOpportunitiesSection() {
   if (!opportunities.length) return null;
 
   return (
-    <section className="bg-white py-20 md:py-28 overflow-hidden">
+    <section className="bg-surface-tinted border-b border-border py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
         <div className="flex justify-center">
           <Eyebrow label={t("eyebrow")} />
@@ -333,7 +320,7 @@ function FeaturesSection() {
   const items = t.raw("items") as { title: string; description: string }[];
 
   return (
-    <section id="features" className="bg-white py-20 md:py-28">
+    <section id="features" className="bg-surface-tinted border-b border-border py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
         <Eyebrow label={t("eyebrow")} />
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
@@ -368,7 +355,7 @@ function HowItWorksSection() {
   const steps = t.raw("steps") as { step: string; title: string; description: string }[];
 
   return (
-    <section id="how-it-works" className="bg-[#F4F7F5] py-20 md:py-28">
+    <section id="how-it-works" className="bg-surface-tinted border-b border-border py-20 md:py-28">
       <div className="mx-auto max-w-[1200px] px-6 text-center">
         <Eyebrow label={t("eyebrow")} />
         <h2 className="text-[#1A1A1A] text-3xl md:text-4xl lg:text-5xl font-bold mb-3 mx-auto max-w-[760px]">
@@ -429,7 +416,7 @@ function MentorshipSection() {
   const points = t.raw("points") as { title: string; description: string }[];
 
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section className="bg-surface-tinted border-b border-border py-20 md:py-28">
       <ScrollReveal className="mx-auto max-w-[1200px] px-6">
         <div className="flex flex-col md:flex-row gap-12 md:gap-16 md:items-center">
           <div className="flex-1 relative rounded-[20px] overflow-hidden min-h-[320px] md:min-h-[400px]">
@@ -487,7 +474,7 @@ function TestimonialsSection() {
   const items = t.raw("items") as { quote: string; name: string; role: string }[];
 
   return (
-    <section className="bg-[#F4F7F5] py-20 md:py-28 overflow-hidden">
+    <section className="bg-surface-tinted border-b border-border py-20 md:py-28 overflow-hidden">
       <div className="mx-auto max-w-[1200px] px-6 text-center mb-10">
         <div className="flex justify-center">
           <Eyebrow label={t("eyebrow")} />
@@ -508,7 +495,7 @@ function FaqSection() {
   const items = t.raw("items") as { question: string; answer: string }[];
 
   return (
-    <section className="bg-white py-20 md:py-28">
+    <section className="bg-surface-tinted border-b border-border py-20 md:py-28">
       <ScrollReveal className="mx-auto max-w-[1200px] px-6 text-center">
         <div className="flex justify-center">
           <Eyebrow label={t("eyebrow")} />
@@ -531,20 +518,20 @@ function FaqSection() {
 function CtaSection() {
   const t = useTranslations("Home.cta");
   return (
-    <section className="relative bg-forest py-20 md:py-28 overflow-hidden text-center">
-      <div className="absolute w-[400px] h-[400px] rounded-full bg-primary opacity-60 -left-36 -top-24 pointer-events-none" />
-      <div className="absolute w-[300px] h-[300px] rounded-full bg-accent opacity-[0.08] -right-20 -bottom-16 pointer-events-none" />
+    <section className="relative bg-surface-tinted py-20 md:py-28 overflow-hidden text-center">
+      <div className="absolute w-[400px] h-[400px] rounded-full bg-primary opacity-[0.05] -left-36 -top-24 pointer-events-none" />
+      <div className="absolute w-[300px] h-[300px] rounded-full bg-primary opacity-[0.05] -right-20 -bottom-16 pointer-events-none" />
       <ScrollReveal className="relative mx-auto max-w-[820px] px-6">
-        <h2 className="text-white text-3xl md:text-4xl font-bold mb-3 text-center">
+        <h2 className="text-[#1A1A1A] text-3xl md:text-4xl font-bold mb-3 text-center">
           {t("title")}
         </h2>
-        <p className="text-white/65 text-lg leading-7 mb-10">
+        <p className="text-muted text-lg leading-7 mb-10">
           {t("description")}
         </p>
         <div className="flex flex-wrap justify-center gap-3 mb-4">
           <a
             href={SIGNUP_URL}
-            className="inline-flex items-center gap-2 bg-white hover:bg-accent text-primary font-bold text-base px-8 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[220px] justify-center"
+            className="inline-flex items-center gap-2 bg-primary hover:bg-forest text-white font-bold text-base px-8 py-3.5 rounded-xl shadow-md transition-all duration-150 min-w-[220px] justify-center"
           >
             {t("button")}
             <svg className="w-[18px] h-[18px]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -552,7 +539,7 @@ function CtaSection() {
             </svg>
           </a>
         </div>
-        <p className="text-white/40 text-xs tracking-wide">{t("note")}</p>
+        <p className="text-muted text-xs tracking-wide">{t("note")}</p>
       </ScrollReveal>
     </section>
   );
