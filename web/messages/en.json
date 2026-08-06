@@ -97,8 +97,7 @@
         { "quote": "\"The personalised opportunity feed saved me hours of searching and showed me roles I would have missed.\"", "name": "Chidi", "role": "Business student, Nigeria" },
         { "quote": "\"I mentor young talent through Voila because the platform makes it easy to share real career advice.\"", "name": "Ngozi", "role": "Career mentor, Nigeria" },
         { "quote": "\"I applied for three scholarships I found on Voila. I got one. That one changed my life.\"", "name": "Kwame", "role": "Engineering student, Ghana" },
-        { "quote": "\"The CV builder helped me put together a professional resume in one evening. I landed a UN internship interview the next week.\"", "name": "Tendai", "role": "International Re[...]" },
-        { "quote": "\"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award.\"", "name": "Aisha", "role": "Law student, Kenya[...]" },
+        { "quote": "\"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award.\"", "name": "Aisha", "role": "Law student, Kenya[[...]" },
         { "quote": "\"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities.\"", "name": "Emeka", "role": "Finance studen[...]" },
         { "quote": "\"As a first-generation student I had no network. Voila gave me mentors and a feed that felt built just for me.\"", "name": "Sena", "role": "Architecture student, Togo" },
         { "quote": "\"I found a fully funded master's scholarship through Voila that I never would have discovered on my own. Genuinely life-changing.\"", "name": "Lebo", "role": "Data Science st[...]" }
@@ -132,8 +131,8 @@
     "metaDescription": "Learn more about Voila's mission, approach, and support for students.",
     "eyebrow": "About Voila",
     "title": "A career platform built for African students.",
-    "intro": "Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place. This Policy applies to our mobile application, our web application (app.voila-africa.com), and our website (voila-africa.com).",
-    "mission": { "title": "Our mission", "text": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." },
+    "intro": "Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place. This Policy applies to our mobile application, our web application (app.v[...]",
+    "mission": { "title": "Our mission", "text": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." }[...],
     "whyItMatters": { "title": "Why it matters", "text": "Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Voila brings those experiences to[...]" },
     "cards": [
       { "title": "Personalised discovery", "text": "We match opportunities to a student's profile so they see listings that matter most." },
@@ -187,7 +186,7 @@
       "areaOfExpertise": "Which role are you applying for?*",
       "yearsOfExperience": "Years of experience*",
       "selectPlaceholder": "Select…",
-      "expertiseOptions": ["Mentor", "Opportunity Admin", "Community Manager", "Graphics Designer", "Social Media Manager", "Partnership & Sponsorship", "UI/UX Designer", "Frontend Developer", "B[...]"],
+      "expertiseOptions": ["Mentor", "Opportunity Admin", "Community Manager", "Graphics Designer", "Social Media Manager", "Partnership & Sponsorship", "UI/UX Designer", "Frontend Developer", "B[...]",
       "experienceOptions": ["1–3 years", "3–5 years", "5–10 years", "10+ years"],
       "shortBio": "Tell us about your skills and experiences*",
       "motivation": "Is there anything else you'd like us to know?",
@@ -245,7 +244,14 @@
           { "type": "paragraph", "text": "If you have questions about this Policy, contact us at support@voila-africa.com." }
         ]
       },
-... (file truncated for brevity in this API call) ...
+      {
+        "heading": "2. Data we collect",
+        "blocks": [
+          { "type": "paragraph", "text": "We collect information you provide directly when you create an account, complete your profile, apply for opportunities, or communicate with mentors and other users. This includes your name, email, educational background, and any materials you upload (e.g., CV, portfolio)." }
+        ]
+      }
+    ]
+  },
   "Events": {
     "form": {
       "title": "Title",
@@ -358,5 +364,6 @@
       "errorNotAdmin": "This account doesn't have admin access.",
       "errorGeneric": "Something went wrong. Try again."
     },
-... (file truncated for brevity) ...
+    
+  }
 }
