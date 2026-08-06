@@ -764,6 +764,11 @@
       "free": "Free",
       "hostedBy": "Hosted by {name}"
     },
+    "banner": {
+      "label": "Upcoming: {title} · {when}",
+      "cta": "Register now",
+      "close": "Dismiss"
+    },
     "listing": {
       "title": "Events",
       "subtitle": "Free webinars, info sessions, and career events -- built to help you move forward.",
@@ -790,7 +795,7 @@
       "freeSubtext": "Free to attend",
       "reserveSpot": "Reserve your spot",
       "reserveSpotSubtext": "Takes 20 seconds",
-      "spotsFilled": "{filled}/{total} spots filled",
+      "spotsLeft": "Only {left, plural, one {# spot left} other {# spots left}}",
       "namePlaceholder": "Ama Mensah",
       "emailPlaceholder": "you@email.com",
       "whatsappPlaceholder": "Enter your phone number",

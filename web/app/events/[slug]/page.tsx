@@ -208,7 +208,7 @@ export default async function EventPage({ params }: { params: Promise<{ slug: st
             )}
           </div>
 
-          <div className="lg:sticky lg:top-24 lg:self-start" id="register">
+          <div className="order-first lg:order-none lg:sticky lg:top-24 lg:self-start" id="register">
             <div className="rounded-xl border border-[var(--color-border)] bg-[var(--color-background)] p-5 shadow-sm">
               <RegistrationForm
                 eventId={event.id}

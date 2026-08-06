@@ -764,6 +764,11 @@
       "free": "Gratuit",
       "hostedBy": "Animé par {name}"
     },
+    "banner": {
+      "label": "À venir : {title} · {when}",
+      "cta": "S'inscrire",
+      "close": "Fermer"
+    },
     "listing": {
       "title": "Événements",
       "subtitle": "Webinaires gratuits, séances d'information et événements de carrière -- pour vous faire avancer.",
@@ -790,7 +795,7 @@
       "freeSubtext": "Gratuit à participer",
       "reserveSpot": "Réservez votre place",
       "reserveSpotSubtext": "Prend 20 secondes",
-      "spotsFilled": "{filled}/{total} places prises",
+      "spotsLeft": "Plus que {left, plural, one {# place} other {# places}}",
       "namePlaceholder": "Ama Mensah",
       "emailPlaceholder": "vous@email.com",
       "whatsappPlaceholder": "Entrez votre numéro de téléphone",

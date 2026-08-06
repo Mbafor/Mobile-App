@@ -42,6 +42,7 @@ export function RegistrationForm({
   const [email, setEmail] = useState('');
 
   const isFull = capacity !== null && registrationCount >= capacity;
+  const spotsLeft = capacity !== null ? Math.max(capacity - registrationCount, 0) : null;
 
   function handleSubmit(formData: FormData) {
     setError(null);
@@ -120,10 +121,8 @@ export function RegistrationForm({
         <p className="text-xs text-[var(--color-muted)]">{t('reserveSpotSubtext')}</p>
       </div>
 
-      {capacity !== null && (
-        <p className="text-xs font-medium text-primary">
-          {t('spotsFilled', { filled: registrationCount, total: capacity })}
-        </p>
+      {spotsLeft !== null && !isFull && (
+        <p className="text-xs font-medium text-primary">{t('spotsLeft', { left: spotsLeft })}</p>
       )}
 
       {error && <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-md px-3 py-2">{error}</p>}
