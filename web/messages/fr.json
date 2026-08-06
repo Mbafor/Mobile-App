@@ -1,1 +1,1209 @@
-(same as fr.json with whatsappPlaceholder changed to "numéro de téléphone")
+{
+  "LanguageSwitcher": {
+    "ariaLabel": "Changer de langue"
+  },
+  "Legal": {
+    "emailLabel": "E-mail",
+    "addressLabel": "Adresse"
+  },
+  "Metadata": {
+    "titleDefault": "Voila | Bourses, stages et mentorat en Afrique",
+    "description": "Rejoignez plus de 24 000 étudiants africains qui découvrent des bourses, des stages, des fellowships et un mentorat individuel sur Voila. Créateur de CV gratuit inclus.",
+    "keywords": [
+      "bourses pour étudiants africains",
+      "stages en Afrique",
+      "fellowships en Afrique",
+      "plateforme de mentorat étudiant",
+      "créateur de CV gratuit pour étudiants",
+      "opportunités de carrière en Afrique",
+      "plateforme d'opportunités étudiantes",
+      "Voila",
+      "Voila Africa"
+    ],
+    "ogTitle": "Voila — Trouvez votre prochaine opportunité",
+    "ogDescription": "Bourses, stages, mentorat et un créateur de CV gratuit — tout personnalisé selon votre profil. Rejoignez plus de 24 000 étudiants africains déjà sur Voila.",
+    "ogImageAlt": "Voila — Bourses, stages et mentorat pour les étudiants africains",
+    "twitterDescription": "Bourses, stages, mentorat et un créateur de CV gratuit — personnalisés pour les étudiants africains. Gratuit pour s'inscrire."
+  },
+  "Home": {
+    "hero": {
+      "badge": "Conçu pour les étudiants ambitieux",
+      "titleLine1": "Votre prochaine opportunité",
+      "titleLine2": "commence ici.",
+      "subtitle": "Bourses, stages et fellowships — sélectionnés pour les étudiants africains, avec le mentorat de ceux qui ont déjà réussi.",
+      "ctaPrimary": "Créer un compte gratuit",
+      "ctaSecondary": "Voir comment ça marche",
+      "socialProof": "Rejoint par <strong>24 000+</strong> étudiants à travers l'Afrique"
+    },
+    "trust": {
+      "eyebrow": "En chiffres",
+      "title": "Un impact réel pour les étudiants et jeunes professionnels.",
+      "description": "Voila connecte les talents aux opportunités, au mentorat et aux outils nécessaires pour construire une carrière plus solide.",
+      "trustedBy": "Ils nous font confiance",
+      "stats": {
+        "students": "Étudiants accompagnés",
+        "mentors": "Mentors inscrits",
+        "opportunities": "Opportunités publiées",
+        "satisfaction": "Taux de satisfaction"
+      },
+      "partners": ["Réseaux universitaires", "Comités de bourses", "Centres de carrière", "Communautés de mentors"]
+    },
+    "recentOpportunities": {
+      "eyebrow": "En direct sur la plateforme",
+      "title": "Opportunités récemment ajoutées",
+      "description": "De nouvelles bourses, stages et fellowships ajoutés chaque jour — inscrivez-vous pour recevoir un flux personnalisé.",
+      "cta": "Voir toutes les opportunités"
+    },
+    "features": {
+      "eyebrow": "Fonctionnalités",
+      "title": "Tout ce qu'il faut pour rivaliser à l'échelle mondiale",
+      "description": "De la découverte à la candidature — restez organisé et accompagné à chaque étape.",
+      "items": [
+        { "title": "Flux personnalisé", "description": "Des opportunités adaptées à votre profil académique, vos centres d'intérêt et vos objectifs de carrière — mises à jour au fil de votre parcours." },
+        { "title": "Suivi des candidatures", "description": "Enregistrez des offres, suivez les échéances et gérez votre pipeline sans tableurs ni notes éparpillées." },
+        { "title": "Créateur de CV", "description": "Créez des CV soignés grâce à des modèles, des conseils par section et des outils d'export pensés pour les étudiants." },
+        { "title": "Notifications intelligentes", "description": "Restez informé des échéances et des mises à jour de mentorat grâce à des alertes en temps voulu sur tous vos appareils." },
+        { "title": "Navigation par catégorie", "description": "Explorez bourses, stages, fellowships et plus encore — filtrés comme vous le souhaitez." },
+        { "title": "Connexion sécurisée", "description": "Connectez-vous avec Google ou un code par e-mail — votre session se synchronise en toute sécurité entre le web et le mobile." }
+      ]
+    },
+    "howItWorks": {
+      "eyebrow": "Comment ça marche",
+      "title": "Opérationnel en 3 étapes simples",
+      "description": "Démarrer avec Voila prend moins de deux minutes.",
+      "steps": [
+        { "step": "01", "title": "Créer un profil", "description": "Ajoutez vos objectifs, votre formation, vos compétences et vos centres d'intérêt pour que Voila vous propose les meilleures correspondances." },
+        { "step": "02", "title": "Découvrir mentors et opportunités", "description": "Explorez des bourses, stages, fellowships sélectionnés et des mentors experts, réunis en un seul endroit." },
+        { "step": "03", "title": "Faire progresser votre carrière", "description": "Postulez, suivez votre progression et créez un CV soigné tout en bénéficiant des conseils de mentors expérimentés." }
+      ]
+    },
+    "mentorship": {
+      "badge": "Mentorat individuel",
+      "eyebrow": "Mentorat",
+      "title": "Des conseils de personnes qui sont déjà passées par là",
+      "description": "Connectez-vous avec des coachs, réservez des séances et suivez votre parcours de mentorat sans quitter la plateforme.",
+      "points": [
+        { "title": "Mise en relation avec un coach", "description": "Soyez mis en relation avec des mentors qui comprennent votre domaine et vos objectifs." },
+        { "title": "Réservation de séances", "description": "Planifiez des séances individuelles et gardez votre calendrier synchronisé." },
+        { "title": "Messagerie intégrée", "description": "Échangez avec votre mentor sans changer d'outil." }
+      ],
+      "cta": "Voir nos mentors"
+    },
+    "testimonials": {
+      "eyebrow": "Témoignages de réussite",
+      "title": "Étudiants et mentors qui avancent ensemble.",
+      "items": [
+        { "quote": "« Voila m'a aidée à trouver un stage rémunéré et à me connecter avec un mentor qui comprenait mes ambitions. »", "name": "Amina", "role": "Étudiante en informatique, Ghana" },
+        { "quote": "« Le flux d'opportunités personnalisé m'a fait gagner des heures de recherche et m'a montré des postes que j'aurais manqués. »", "name": "Chidi", "role": "Étudiant en commerce, Nigeria" },
+        { "quote": "« J'encadre de jeunes talents via Voila car la plateforme facilite le partage de vrais conseils de carrière. »", "name": "Ngozi", "role": "Mentore de carrière, Nigeria" },
+        { "quote": "« J'ai postulé à trois bourses trouvées sur Voila. J'en ai obtenu une. Elle a changé ma vie. »", "name": "Kwame", "role": "Étudiant en ingénierie, Ghana" },
+        { "quote": "« Avant Voila, je ne savais pas combien de fellowships existaient pour des étudiants comme moi. Aujourd'hui, j'ai trois candidatures en cours. »", "name": "Fatima", "role": "Étudiante en santé publique, Sénégal" },
+        { "quote": "« Le créateur de CV m'a aidée à préparer un CV professionnel en une soirée. J'ai décroché un entretien pour un stage aux Nations Unies la semaine suivante. »", "name": "Tendai", "role": "Étudiante en relations internationales, Zimbabwe" },
+        { "quote": "« Mon mentor sur Voila a relu mon essai de candidature et m'a expliqué exactement ce que recherchent les comités de bourses. J'ai obtenu la bourse. »", "name": "Aisha", "role": "Étudiante en droit, Kenya" },
+        { "quote": "« Suivre toutes mes candidatures au même endroit m'a enlevé énormément de stress. J'ai arrêté de manquer des échéances et j'ai commencé à décrocher des opportunités. »", "name": "Emeka", "role": "Étudiant en finance, Nigeria" },
+        { "quote": "« En tant qu'étudiante de première génération, je n'avais aucun réseau. Voila m'a offert des mentors et un flux qui semblait fait pour moi. »", "name": "Sena", "role": "Étudiante en architecture, Togo" },
+        { "quote": "« J'ai trouvé une bourse de master entièrement financée grâce à Voila, que je n'aurais jamais découverte seule. Cela a vraiment changé ma vie. »", "name": "Lebo", "role": "Étudiante en science des données, Afrique du Sud" }
+      ]
+    },
+    "faq": {
+      "eyebrow": "FAQ",
+      "title": "Des questions ? Nous avons les réponses.",
+      "items": [
+        { "question": "Voila est-il gratuit ?", "answer": "Oui ! Créer un compte, parcourir les opportunités et être mis en relation avec des mentors est entièrement gratuit pour les étudiants." },
+        { "question": "Comment fonctionne la mise en relation avec un mentor ?", "answer": "Nous utilisons les informations de votre profil (comme votre domaine d'études et vos objectifs de carrière) pour vous suggérer des mentors ayant une expérience pertinente. Vous pouvez parcourir les coachs suggérés et demander à entrer en contact." },
+        { "question": "Puis-je suivre mes candidatures ici ?", "answer": "Oui, notre outil de suivi intégré vous permet d'enregistrer les opportunités découvertes sur la plateforme et de surveiller leurs échéances et statuts, le tout au même endroit." },
+        { "question": "Les modèles de CV sont-ils gratuits ?", "answer": "Oui ! Vous pouvez utiliser notre créateur de CV et exporter votre CV avec n'importe lequel de nos modèles professionnels, sans aucun frais." }
+      ]
+    },
+    "cta": {
+      "title": "Prêt à trouver votre prochaine opportunité ?",
+      "description": "Rejoignez Voila et démarrez avec un flux personnalisé en quelques minutes.",
+      "button": "Créer un compte gratuit",
+      "note": "Aucune carte bancaire requise · Gratuit pour les étudiants"
+    },
+    "jsonLd": {
+      "organizationDescription": "Voila associe bourses, stages et programmes aux profils des étudiants — avec du mentorat et des outils de CV réunis en un seul endroit.",
+      "webpageName": "Voila — Trouvez des opportunités. Construisez votre avenir.",
+      "webpageDescription": "Voila associe bourses, stages et programmes à votre profil — avec du mentorat et des outils de CV réunis en un seul endroit. Gratuit pour les étudiants africains.",
+      "softwareDescription": "Trouvez des bourses, des stages, des mentors et créez votre CV — le tout en un seul endroit."
+    }
+  },
+  "About": {
+    "metaTitle": "À propos — Voila",
+    "metaDescription": "En savoir plus sur la mission, l'approche et l'accompagnement de Voila pour les étudiants.",
+    "eyebrow": "À propos de Voila",
+    "title": "Une plateforme de carrière conçue pour les étudiants africains.",
+    "intro": "Voila aide les étudiants à découvrir des bourses, des stages, des fellowships, du mentorat et des outils de CV, réunis en un seul endroit. Nous apportons une mise en correspondance personnalisée des opportunités, un suivi des candidatures et un accompagnement de carrière guidé aux apprenants ambitieux à travers l'Afrique.",
+    "mission": { "title": "Notre mission", "text": "Combler l'écart entre les étudiants et les opportunités mondiales en rendant la découverte, les candidatures et le mentorat simples, fiables et accessibles." },
+    "whyItMatters": { "title": "Pourquoi c'est important", "text": "De nombreux étudiants talentueux passent à côté d'opportunités car celles-ci sont dispersées sur différents sites et le suivi est difficile. Voila rassemble ces expériences pour que les étudiants puissent avancer avec confiance." },
+    "cards": [
+      { "title": "Découverte personnalisée", "text": "Nous mettons en correspondance les opportunités avec le profil de chaque étudiant afin qu'il voie les offres qui comptent le plus." },
+      { "title": "Suivez chaque étape", "text": "Enregistrez des offres, surveillez les échéances et prenez des notes sans jongler entre documents et e-mails." },
+      { "title": "Accompagnement par mentorat", "text": "Connectez-vous avec des coachs qui aident les étudiants à prendre de meilleures décisions et à soumettre des candidatures plus solides." }
+    ],
+    "builtForStudents": {
+      "eyebrow": "Conçu pour les étudiants",
+      "title": "Pensé pour vous accompagner de la découverte à la candidature.",
+      "text": "Que vous recherchiez des bourses, des stages ou un mentorat de carrière, Voila réunit les outils et recommandations dans un seul parcours.",
+      "cta": "Voir nos mentors"
+    }
+  },
+  "MentorMeta": {
+    "title": "Rejoignez Voila — Candidatures bénévoles et équipe",
+    "description": "Postulez pour rejoindre Voila en tant que mentor, administrateur d'opportunités, designer, développeur ou membre de l'équipe, et aidez les étudiants à travers l'Afrique à accéder à des opportunités mondiales."
+  },
+  "Mentor": {
+    "hero": {
+      "eyebrow": "Rejoignez Voila",
+      "title": "Rejoignez l'initiative Voila",
+      "subtitle": "Nous constituons une équipe de mentors, d'administrateurs, de designers, de développeurs et bien plus encore pour aider les étudiants à travers l'Afrique à accéder à des opportunités qui changent leur vie. Trouvez votre place."
+    },
+    "whatToExpect": [
+      { "title": "Notre mission", "description": "Combler l'écart entre les étudiants et les opportunités mondiales en rendant la découverte, les candidatures et le mentorat simples, fiables et accessibles." },
+      { "title": "Notre vision", "description": "Un avenir où chaque étudiant ambitieux à travers l'Afrique a un accès équitable aux opportunités mondiales, au mentorat et au soutien nécessaire pour réussir." }
+    ],
+    "responsibilities": [
+      "Mettez vos compétences au service des étudiants à travers l'Afrique pour les aider à accéder à des opportunités qui changent leur vie.",
+      "Collaborez avec une équipe distribuée de bénévoles et de membres de l'équipe.",
+      "Prenez en charge des projets concrets qui ont un impact direct sur les étudiants.",
+      "Développez votre expérience tout en ayant un impact significatif."
+    ],
+    "instructions": {
+      "eyebrow": "Avant de postuler",
+      "title": "Candidature générale",
+      "description": "Voila est propulsé par des mentors, des administrateurs d'opportunités, des community managers, des designers, des développeurs et bien plus encore. Parlez-nous de vous et de la façon dont vous aimeriez contribuer — nous examinons chaque candidature et vous répondons sous 5 à 7 jours ouvrés.",
+      "whatYoullDo": "Ce que vous ferez"
+    },
+    "form": {
+      "eyebrow": "Vos informations",
+      "helper": "Renseignez vos informations ci-dessous et nous examinerons votre candidature.",
+      "firstName": "Prénom*",
+      "lastName": "Nom*",
+      "email": "E-mail*",
+      "phone": "Téléphone",
+      "linkedin": "LinkedIn",
+      "linkedinPlaceholder": "linkedin.com/in/yourname or any link",
+      "portfolio": "Portfolio ou site web",
+      "portfolioPlaceholder": "yourportfolio.com or any link",
+      "areaOfExpertise": "Pour quel rôle postulez-vous ?*",
+      "yearsOfExperience": "Années d'expérience*",
+      "selectPlaceholder": "Sélectionner…",
+      "expertiseOptions": ["Mentor", "Administrateur des opportunités", "Community Manager", "Designer graphique", "Responsable réseaux sociaux", "Partenariats et parrainage", "Designer UI/UX", "Développeur frontend", "Développeur backend", "Autre"],
+      "experienceOptions": ["1 à 3 ans", "3 à 5 ans", "5 à 10 ans", "10 ans et plus"],
+      "shortBio": "Parlez-nous de vos compétences et de vos expériences*",
+      "motivation": "Y a-t-il autre chose que vous aimeriez nous faire savoir ?",
+      "submit": "Envoyer la candidature",
+      "successAlert": "Candidature envoyée — nous l'examinerons et reviendrons vers vous.",
+      "errorFallback": "Échec de l'envoi"
+    }
+  },
+  "Nav": {
+    "mainNavigation": "Navigation principale",
+    "homeAriaLabel": "Accueil Voila",
+    "toggleMenu": "Basculer le menu de navigation",
+    "closeOverlay": "Fermer le menu de navigation",
+    "closeButton": "Fermer le menu",
+    "links": {
+      "about": "À propos",
+      "mentors": "Nous rejoindre",
+      "events": "Événements",
+      "features": "Fonctionnalités",
+      "howItWorks": "Comment ça marche"
+    },
+    "cta": "Créer un compte gratuit"
+  },
+  "Footer": {
+    "tagline": "Nous bâtissons la confiance de carrière des étudiants et jeunes professionnels africains.",
+    "social": { "twitter": "Twitter", "linkedin": "LinkedIn", "instagram": "Instagram" },
+    "stores": {
+      "googlePlay": { "sub": "Disponible sur", "label": "Google Play" },
+      "appStore": { "sub": "Télécharger sur", "label": "App Store" }
+    },
+    "columns": {
+      "product": { "heading": "Produit", "links": ["Opportunités", "Mentorat", "Créateur de CV", "Suivi", "Notifications"] },
+      "company": { "heading": "Entreprise", "links": ["À propos", "Blog", "Carrières", "Contact", "Donner votre avis"] },
+      "legal": { "heading": "Mentions légales", "links": ["Politique de confidentialité", "Conditions d'utilisation", "Politique de cookies"] }
+    },
+    "copyright": "© {year} Voila. Tous droits réservés.",
+    "madeWith": "Fait avec soin pour les étudiants africains 🌿"
+  },
+  "OpportunityCarousel": {
+    "deadlineToday": "Échéance aujourd'hui",
+    "oneDayLeft": "1 jour restant",
+    "daysLeft": "{days} jours restants"
+  },
+  "PrivacyPolicy": {
+    "metaTitle": "Politique de confidentialité",
+    "metaDescription": "Comment Voila collecte, utilise et protège vos données personnelles sur notre application mobile, notre application web et notre site.",
+    "title": "Politique de confidentialité",
+    "lastUpdated": "Dernière mise à jour : 12 juillet 2026",
+    "sections": [
+      {
+        "heading": "1. Introduction",
+        "blocks": [
+          { "type": "paragraph", "text": "Voila Africa (« nous », « notre », « la Plateforme ») propose une plateforme qui aide les étudiants et jeunes diplômés africains à découvrir des bourses, des stages et des fellowships, et offre des outils supplémentaires tels qu'un créateur de CV, une mise en relation de mentorat et la découverte d'opportunités. Cette politique de confidentialité explique quelles données personnelles nous collectons, comment nous les utilisons, et les choix qui s'offrent à vous." },
+          { "type": "paragraph", "text": "Cette politique s'applique à notre application mobile, à notre application web (app.voila-africa.com) et à notre site web (voila-africa.com)." },
+          { "type": "paragraph", "text": "Pour toute question concernant cette politique, contactez-nous à support@voila-africa.com." }
+        ]
+      },
+      {
+        "heading": "2. Informations que nous collectons",
+        "blocks": [
+          { "type": "subheading", "text": "2.1 Informations que vous fournissez directement" },
+          { "type": "list", "items": [
+            "Informations de compte : nom, adresse e-mail, numéro de téléphone, mot de passe",
+            "Informations académiques : établissement, niveau d'études, domaine d'études, année d'obtention du diplôme",
+            "Informations de profil : centres d'intérêt, préférences de carrière, préférences d'opportunités",
+            "Contenu de CV/résumé que vous créez à l'aide du créateur de CV",
+            "Informations de mentorat : disponibilités, notes de séance, messages échangés avec des mentors ou mentorés",
+            "Informations de paiement traitées par notre prestataire de paiement, Paystack (nous ne stockons pas les détails complets de votre carte)",
+            "Communications que vous nous envoyez, y compris les demandes d'assistance"
+          ] },
+          { "type": "subheading", "text": "2.2 Informations collectées automatiquement" },
+          { "type": "list", "items": [
+            "Informations sur l'appareil (type d'appareil, système d'exploitation, version de l'application)",
+            "Données d'utilisation (fonctionnalités utilisées, pages consultées, durée des sessions)",
+            "Données de journal (adresse IP, heures d'accès, rapports de plantage)",
+            "Cookies et technologies similaires sur notre site web (voir Section 8)"
+          ] },
+          { "type": "subheading", "text": "2.3 Informations provenant de tiers" },
+          { "type": "list", "items": [
+            "Si vous vous connectez via un service tiers (par exemple Google), nous pouvons recevoir des informations de profil de base de ce service",
+            "Les offres de bourses, stages et fellowships peuvent provenir de sources publiques ou partenaires"
+          ] }
+        ]
+      },
+      {
+        "heading": "3. Comment nous utilisons vos informations",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous utilisons vos informations pour :" },
+          { "type": "list", "items": [
+            "Créer et gérer votre compte",
+            "Vous mettre en relation avec des opportunités, mentors et séances de mentorat pertinents",
+            "Faire fonctionner le créateur de CV et enregistrer le contenu de votre CV",
+            "Traiter les paiements pour les fonctionnalités payantes",
+            "Vous envoyer des communications liées au service (rappels d'échéances, e-mails récapitulatifs, avis de compte)",
+            "Vous envoyer des communications marketing lorsque vous y avez consenti (vous pouvez vous désabonner à tout moment)",
+            "Améliorer et personnaliser la Plateforme",
+            "Détecter, prévenir et traiter la fraude, les abus ou les problèmes techniques",
+            "Nous conformer à nos obligations légales"
+          ] }
+        ]
+      },
+      {
+        "heading": "4. Base légale du traitement",
+        "blocks": [
+          { "type": "paragraph", "text": "Le cas échéant, nous traitons vos données personnelles sur les bases suivantes :" },
+          { "type": "list", "items": [
+            { "lead": "Consentement", "text": "pour les communications facultatives et certaines fonctionnalités optionnelles" },
+            { "lead": "Contrat", "text": "pour fournir les services auxquels vous avez souscrit" },
+            { "lead": "Intérêt légitime", "text": "pour améliorer notre Plateforme et en assurer la sécurité" },
+            { "lead": "Obligation légale", "text": "lorsque la loi applicable l'exige" }
+          ] },
+          { "type": "paragraph", "text": "Nous nous efforçons de nous conformer à la loi ghanéenne sur la protection des données (Data Protection Act, 2012, Act 843) et, le cas échéant pour les utilisateurs situés dans d'autres juridictions, aux normes comparables de protection des données." }
+        ]
+      },
+      {
+        "heading": "5. Comment nous partageons vos informations",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous ne vendons pas vos données personnelles. Nous partageons des informations avec :" },
+          { "type": "list", "items": [
+            { "lead": "Des prestataires de services", "text": "qui nous aident à exploiter la Plateforme, notamment :", "subItems": [
+              "Supabase (base de données et infrastructure backend)",
+              "Resend et Zoho Mail (envoi d'e-mails)",
+              "Paystack (traitement des paiements)",
+              "Jitsi (séances vidéo de mentorat)"
+            ] },
+            { "lead": "Les mentors ou mentorés", "text": "limité aux informations de profil et de séance nécessaires pour faciliter le mentorat" },
+            { "lead": "Les autorités légales", "text": "lorsque la loi ou une décision de justice l'exige, ou pour protéger les droits, la propriété ou la sécurité de Voila Africa, de nos utilisateurs ou d'autrui" },
+            { "lead": "Une entité successeure", "text": "en cas de fusion, d'acquisition ou de cession d'actifs, sous réserve de cette politique ou d'une politique comparable" }
+          ] }
+        ]
+      },
+      {
+        "heading": "6. Conservation des données",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous conservons vos données personnelles aussi longtemps que votre compte est actif, ou selon les besoins pour vous fournir nos services. Si vous supprimez votre compte, nous supprimerons ou anonymiserons vos données personnelles dans un délai de 30 jours, sauf lorsque nous sommes tenus de les conserver à des fins légales, fiscales ou de sécurité." }
+        ]
+      },
+      {
+        "heading": "7. Vos droits",
+        "blocks": [
+          { "type": "paragraph", "text": "Selon votre lieu de résidence, vous pouvez avoir le droit de :" },
+          { "type": "list", "items": [
+            "Accéder aux données personnelles que nous détenons à votre sujet",
+            "Corriger des données inexactes",
+            "Demander la suppression de vos données",
+            "Vous opposer à certains traitements ou en demander la limitation",
+            "Retirer votre consentement lorsque le traitement est fondé sur celui-ci",
+            "Demander une copie de vos données dans un format portable"
+          ] },
+          { "type": "paragraph", "text": "Pour exercer ces droits, contactez-nous à support@voila-africa.com. Nous pourrions avoir besoin de vérifier votre identité avant de traiter votre demande." }
+        ]
+      },
+      {
+        "heading": "8. Cookies (site web)",
+        "blocks": [
+          { "type": "paragraph", "text": "Notre site web (voila-africa.com) peut utiliser des cookies et technologies similaires pour mémoriser vos préférences (y compris le choix de la langue), comprendre l'utilisation du site et en améliorer la performance. Vous pouvez contrôler les cookies via les paramètres de votre navigateur." }
+        ]
+      },
+      {
+        "heading": "9. Sécurité des données",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous mettons en œuvre des mesures techniques et organisationnelles raisonnables pour protéger vos données, y compris le chiffrement en transit et des contrôles d'accès sur notre infrastructure backend. Toutefois, aucune méthode de transmission ou de stockage n'est sécurisée à 100 %, et nous ne pouvons garantir une sécurité absolue." }
+        ]
+      },
+      {
+        "heading": "10. Transferts internationaux de données",
+        "blocks": [
+          { "type": "paragraph", "text": "Vos données peuvent être traitées et stockées sur des serveurs situés hors de votre pays de résidence, notamment via notre infrastructure et nos prestataires de services. Le cas échéant, nous prenons des mesures pour garantir la mise en place de garanties appropriées." }
+        ]
+      },
+      {
+        "heading": "11. Confidentialité des mineurs",
+        "blocks": [
+          { "type": "paragraph", "text": "La Plateforme est destinée aux utilisateurs âgés d'au moins 16 ans. Nous ne collectons pas sciemment de données personnelles auprès d'enfants n'ayant pas atteint cet âge. Si vous pensez qu'un enfant nous a fourni des données personnelles, veuillez nous contacter afin que nous puissions prendre les mesures appropriées." }
+        ]
+      },
+      {
+        "heading": "12. Liens vers des tiers",
+        "blocks": [
+          { "type": "paragraph", "text": "Les offres d'opportunités et autres contenus de la Plateforme peuvent contenir des liens vers des sites tiers (par exemple des organismes de bourses, des portails de candidature). Nous ne sommes pas responsables des pratiques de confidentialité de ces tiers. Veuillez consulter séparément leurs propres politiques de confidentialité." }
+        ]
+      },
+      {
+        "heading": "13. Modifications de cette politique",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous pouvons mettre à jour cette politique de confidentialité de temps à autre. Nous vous informerons de tout changement important via la Plateforme ou par e-mail. La poursuite de l'utilisation de la Plateforme après l'entrée en vigueur des modifications vaut acceptation de la politique révisée." }
+        ]
+      },
+      {
+        "heading": "14. Nous contacter",
+        "blocks": [
+          { "type": "paragraph", "text": "Pour toute question ou préoccupation concernant cette politique de confidentialité ou la façon dont nous traitons vos données, contactez-nous :" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
+        ]
+      }
+    ]
+  },
+  "TermsOfService": {
+    "metaTitle": "Conditions d'utilisation",
+    "metaDescription": "Les conditions régissant votre utilisation de l'application mobile, de l'application web et du site de Voila.",
+    "title": "Conditions d'utilisation",
+    "lastUpdated": "Dernière mise à jour : 12 juillet 2026",
+    "sections": [
+      {
+        "heading": "1. Acceptation des conditions",
+        "blocks": [
+          { "type": "paragraph", "text": "En accédant à l'application mobile, à l'application web ou au site web de Voila Africa (collectivement, la « Plateforme ») ou en les utilisant, vous acceptez d'être lié par les présentes Conditions d'utilisation (les « Conditions »). Si vous n'acceptez pas ces Conditions, veuillez ne pas utiliser la Plateforme." }
+        ]
+      },
+      {
+        "heading": "2. Description du service",
+        "blocks": [
+          { "type": "paragraph", "text": "Voila Africa aide les étudiants et jeunes diplômés africains à découvrir des bourses, des stages et des fellowships. La Plateforme propose également un créateur de CV, une mise en relation de mentorat et des outils connexes. Nous ne garantissons pas qu'une opportunité publiée sur la Plateforme soit exacte, actuellement ouverte, ou que vous serez sélectionné(e) pour celle-ci, et nous ne sommes pas affiliés aux organisations proposant ces opportunités, sauf mention explicite contraire." }
+        ]
+      },
+      {
+        "heading": "3. Éligibilité",
+        "blocks": [
+          { "type": "paragraph", "text": "Vous devez avoir au moins 16 ans pour créer un compte. En créant un compte, vous déclarez que les informations que vous fournissez sont exactes et que vous remplissez cette condition d'âge." }
+        ]
+      },
+      {
+        "heading": "4. Inscription du compte",
+        "blocks": [
+          { "type": "paragraph", "text": "Vous êtes responsable de la confidentialité de vos identifiants de compte et de toute activité effectuée sous votre compte. Prévenez-nous immédiatement à support@voila-africa.com si vous soupçonnez un accès non autorisé à votre compte." }
+        ]
+      },
+      {
+        "heading": "5. Conduite de l'utilisateur",
+        "blocks": [
+          { "type": "paragraph", "text": "Vous vous engagez à ne pas :" },
+          { "type": "list", "items": [
+            "Fournir des informations fausses ou trompeuses",
+            "Utiliser la Plateforme à des fins illégales",
+            "Harceler, maltraiter ou nuire à d'autres utilisateurs, y compris des mentors ou mentorés",
+            "Tenter d'accéder au compte d'un autre utilisateur sans autorisation",
+            "Interférer avec le fonctionnement ou la sécurité de la Plateforme, ou les perturber",
+            "Extraire, copier ou redistribuer le contenu de la Plateforme sans notre autorisation",
+            "Usurper l'identité d'une personne ou d'une entité"
+          ] },
+          { "type": "paragraph", "text": "Nous nous réservons le droit de suspendre ou de résilier les comptes qui enfreignent les présentes Conditions." }
+        ]
+      },
+      {
+        "heading": "6. Offres d'opportunités",
+        "blocks": [
+          { "type": "paragraph", "text": "Les offres de bourses, stages et fellowships sont fournies à titre informatif. Nous faisons des efforts raisonnables pour maintenir des offres exactes et à jour, mais :" },
+          { "type": "list", "items": [
+            "Nous ne garantissons pas l'exactitude, l'exhaustivité ou la disponibilité d'une offre",
+            "Les échéances et exigences de candidature sont fixées par les organisations tierces, et non par Voila Africa",
+            "Vous êtes responsable de vérifier les détails directement auprès du fournisseur de l'opportunité avant de postuler"
+          ] }
+        ]
+      },
+      {
+        "heading": "7. Créateur de CV",
+        "blocks": [
+          { "type": "paragraph", "text": "Le contenu que vous créez à l'aide du créateur de CV vous appartient. Vous êtes seul(e) responsable de l'exactitude des informations figurant dans votre CV. Nous mettons cet outil à votre disposition pour votre commodité, mais nous ne relisons, ne vérifions ni n'approuvons le contenu que vous créez." }
+        ]
+      },
+      {
+        "heading": "8. Programme de mentorat",
+        "blocks": [
+          { "type": "list", "items": [
+            "Les séances de mentorat sont organisées via la Plateforme, y compris les séances vidéo réalisées via Jitsi.",
+            "Les mentors ne sont pas des employés de Voila Africa. Le mentorat est fourni sur la base de moyens raisonnables, à titre volontaire ou organisé, et nous ne garantissons aucun résultat particulier issu d'une relation de mentorat.",
+            "Mentors et mentorés s'engagent à se comporter avec respect. Voila Africa se réserve le droit de retirer tout utilisateur du programme de mentorat en cas de comportement inapproprié.",
+            "Voila Africa n'est pas responsable des conseils, orientations ou du comportement des mentors, qui reflètent les opinions personnelles du mentor et non celles de Voila Africa."
+          ] }
+        ]
+      },
+      {
+        "heading": "9. Paiements",
+        "blocks": [
+          { "type": "list", "items": [
+            "Certaines fonctionnalités de la Plateforme peuvent nécessiter un paiement, traité de manière sécurisée via Paystack.",
+            "Tous les frais sont exprimés en cedis ghanéens (GHS) et ne sont pas remboursables, sauf lorsque la loi l'exige ou lorsque cela est explicitement indiqué au moment de l'achat.",
+            "Vous êtes responsable de toute taxe applicable à votre achat.",
+            "Nous nous réservons le droit de modifier les tarifs moyennant un préavis raisonnable."
+          ] }
+        ]
+      },
+      {
+        "heading": "10. Propriété intellectuelle",
+        "blocks": [
+          { "type": "paragraph", "text": "La Plateforme, y compris sa conception, ses logos, ses textes et ses logiciels sous-jacents, est la propriété de Voila Africa ou de ses concédants de licence et est protégée par les lois sur la propriété intellectuelle. Vous ne pouvez pas copier, modifier, distribuer ou créer des œuvres dérivées de la Plateforme sans notre consentement écrit préalable." },
+          { "type": "paragraph", "text": "Vous conservez la propriété du contenu que vous soumettez (comme votre CV ou vos informations de profil), mais vous accordez à Voila Africa une licence limitée pour utiliser, héberger et afficher ce contenu dans la mesure nécessaire à l'exploitation de la Plateforme." }
+        ]
+      },
+      {
+        "heading": "11. Services tiers",
+        "blocks": [
+          { "type": "paragraph", "text": "La Plateforme intègre des services tiers, notamment Paystack (paiements), Supabase (infrastructure) et Jitsi (vidéo). Votre utilisation de ces services intégrés peut également être soumise à leurs propres conditions d'utilisation et politiques de confidentialité." }
+        ]
+      },
+      {
+        "heading": "12. Avertissements",
+        "blocks": [
+          { "type": "paragraph", "text": "La Plateforme est fournie « en l'état » et « selon disponibilité », sans garantie d'aucune sorte, expresse ou implicite. Nous ne garantissons pas que la Plateforme sera ininterrompue, exempte d'erreurs ou sécurisée, ni qu'une offre d'opportunité soit exacte, ni qu'un mentorat produira un résultat particulier." }
+        ]
+      },
+      {
+        "heading": "13. Limitation de responsabilité",
+        "blocks": [
+          { "type": "paragraph", "text": "Dans toute la mesure permise par la loi, Voila Africa ainsi que ses fondateurs, employés et affiliés ne pourront être tenus responsables de tout dommage indirect, accessoire, spécial, consécutif ou punitif résultant de votre utilisation de la Plateforme, y compris, sans s'y limiter, la perte d'opportunités, de données ou de revenus, même s'ils ont été informés de la possibilité de tels dommages." }
+        ]
+      },
+      {
+        "heading": "14. Indemnisation",
+        "blocks": [
+          { "type": "paragraph", "text": "Vous acceptez d'indemniser et de dégager de toute responsabilité Voila Africa à l'égard de toute réclamation, dommage, perte ou dépense résultant de votre utilisation de la Plateforme, de votre violation des présentes Conditions, ou de votre violation des droits d'un tiers." }
+        ]
+      },
+      {
+        "heading": "15. Résiliation",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous nous réservons le droit de suspendre ou de résilier votre compte à notre discrétion, avec ou sans préavis, pour tout comportement que nous estimons contraire aux présentes Conditions ou préjudiciable à la Plateforme ou à d'autres utilisateurs. Vous pouvez également supprimer votre compte à tout moment depuis les paramètres de l'application." }
+        ]
+      },
+      {
+        "heading": "16. Modifications des présentes Conditions",
+        "blocks": [
+          { "type": "paragraph", "text": "Nous pouvons mettre à jour ces Conditions de temps à autre. Nous vous informerons de tout changement important via la Plateforme ou par e-mail. La poursuite de l'utilisation de la Plateforme après l'entrée en vigueur des modifications vaut acceptation des Conditions révisées." }
+        ]
+      },
+      {
+        "heading": "17. Droit applicable",
+        "blocks": [
+          { "type": "paragraph", "text": "Les présentes Conditions sont régies par les lois de la République du Ghana, sans égard aux principes de conflit de lois." }
+        ]
+      },
+      {
+        "heading": "18. Nous contacter",
+        "blocks": [
+          { "type": "paragraph", "text": "Pour toute question concernant les présentes Conditions, contactez-nous :" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
+        ]
+      }
+    ]
+  },
+  "Partner": {
+    "nav": {
+      "dashboard": "Tableau de bord",
+      "digest": "Résumé hebdomadaire",
+      "browse": "Parcourir les opportunités",
+      "create": "Créer une opportunité",
+      "events": "Événements",
+      "logout": "Déconnexion",
+      "menu": "Ouvrir le menu",
+      "close": "Fermer le menu"
+    },
+    "header": {
+      "themeToggleToDark": "Passer en mode sombre",
+      "themeToggleToLight": "Passer en mode clair",
+      "languageToggleLabel": "Changer de langue"
+    },
+    "login": {
+      "title": "Connexion partenaire",
+      "subtitle": "Connectez-vous à votre tableau de bord partenaire Voila.",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter",
+      "noAccount": "Vous n'avez pas de compte ?",
+      "createAccount": "Créez-en un",
+      "termsAgreement": "En vous connectant, vous acceptez nos <terms>Conditions d'utilisation</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+      "errorMissingFields": "Veuillez saisir votre e-mail et votre mot de passe.",
+      "errorInvalidCredentials": "E-mail ou mot de passe invalide.",
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "signup": {
+      "title": "Créer un compte partenaire",
+      "subtitle": "Publiez des opportunités et partagez-les avec votre audience sur Voila.",
+      "orgLabel": "Nom de l'organisation",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "confirmPasswordLabel": "Confirmer le mot de passe",
+      "submit": "Créer le compte",
+      "haveAccount": "Vous avez déjà un compte ?",
+      "signIn": "Se connecter",
+      "termsAgreement": "En créant un compte, vous acceptez nos <terms>Conditions d'utilisation</terms> et notre <privacy>Politique de confidentialité</privacy>.",
+      "errorMissingFields": "Veuillez remplir tous les champs.",
+      "errorInvalidEmail": "Saisissez une adresse e-mail valide.",
+      "errorWeakPassword": "Le mot de passe doit contenir au moins 8 caractères.",
+      "errorPasswordMismatch": "Les mots de passe ne correspondent pas.",
+      "errorAlreadyRegistered": "Un compte existe déjà pour cet e-mail. Essayez de vous connecter à la place.",
+      "errorSignupFailed": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "verifyOtp": {
+      "title": "Vérifiez votre e-mail",
+      "subtitle": "Nous avons envoyé un code à 6 chiffres à <bold>{email}</bold>. Saisissez-le ci-dessous pour terminer la création de votre compte partenaire.",
+      "resentNotice": "Code renvoyé — vérifiez votre boîte de réception.",
+      "codeLabel": "Code à 6 chiffres",
+      "verify": "Vérifier",
+      "resend": "Renvoyer le code",
+      "resendCooldown": "Renvoyer le code ({seconds}s)",
+      "errorInvalidCode": "Ce code est incorrect ou a expiré. Veuillez réessayer.",
+      "errorAccountDisabled": "Ce compte partenaire est désactivé. Contactez le support pour obtenir de l'aide.",
+      "errorResendFailed": "Impossible de renvoyer le code pour le moment — vous envoyez peut-être trop de demandes. Attendez quelques minutes puis réessayez.",
+      "errorGeneric": "Une erreur est survenue. Veuillez réessayer."
+    },
+    "dashboard": {
+      "subtitle": "Tableau de bord partenaire",
+      "postedOpportunities": "Vos opportunités publiées",
+      "shareTools": "Outils de partage"
+    },
+    "stats": {
+      "posted": "Opportunités publiées",
+      "clicks": "Clics générés"
+    },
+    "manage": {
+      "empty": "Vous n'avez pas encore publié d'opportunités.",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "confirmDelete": "Supprimer « {title} » ? Cela la retire de Voila pour tout le monde et cette action est irréversible."
+    },
+    "share": {
+      "whatsapp": "Partager sur WhatsApp",
+      "facebook": "Partager sur Facebook",
+      "linkedin": "Partager sur LinkedIn",
+      "copy": "Copier dans le presse-papiers",
+      "copied": "Copié",
+      "unlockHint": "Publiez au moins une opportunité pour débloquer les outils de partage."
+    },
+    "browse": {
+      "title": "Parcourir les opportunités",
+      "subtitle": "Parcourez toutes les opportunités actives sur Voila et partagez celles qui intéressent votre audience.",
+      "searchPlaceholder": "Rechercher un titre, une organisation, un pays...",
+      "allCategories": "Toutes les catégories",
+      "deadlineBefore": "Échéance avant le",
+      "empty": "Aucune opportunité ne correspond à ces filtres.",
+      "rolling": "Continue",
+      "shareWhatsappTitle": "Partager sur WhatsApp",
+      "shareFacebookTitle": "Partager sur Facebook",
+      "shareLinkedinTitle": "Partager sur LinkedIn",
+      "copyTitle": "Copier le texte de partage",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "copy": "Copier",
+      "copied": "Copié"
+    },
+    "create": {
+      "title": "Créer une opportunité",
+      "subtitle": "Publiez votre propre opportunité directement sur Voila. Elle est visible immédiatement pour les étudiants et sur votre page partenaire.",
+      "submit": "Publier l'opportunité",
+      "pending": "Publication...",
+      "success": "Publié — visible pour les étudiants dès maintenant et sur votre page partenaire."
+    },
+    "edit": {
+      "title": "Modifier l'opportunité",
+      "subtitle": "Les modifications sont visibles immédiatement pour les étudiants et sur votre page partenaire.",
+      "submit": "Enregistrer les modifications",
+      "pending": "Enregistrement...",
+      "success": "Enregistré — vos modifications sont en ligne."
+    },
+    "digest": {
+      "title": "Résumé hebdomadaire",
+      "subtitle": "Sélectionnez vos propres opportunités à partager comme résumé de la semaine.",
+      "helper": "Choisissez les opportunités à mettre en avant cette semaine, puis publiez — elles seront regroupées en un seul message partageable et ajoutées à vos opportunités publiées.",
+      "published": "Résumé publié avec {count, plural, one {# opportunité} other {# opportunités}}.",
+      "searchPlaceholder": "Rechercher un titre, une organisation, un pays...",
+      "allCategories": "Toutes les catégories",
+      "deadlineBefore": "Échéance avant le",
+      "empty": "Aucune opportunité ne correspond à ces filtres.",
+      "rolling": "Continue",
+      "preview": "Aperçu",
+      "previewPlaceholder": "Sélectionnez des opportunités ci-dessus pour prévisualiser le message du résumé de cette semaine.",
+      "publishing": "Publication...",
+      "publishAs": "Publier {count} comme résumé de cette semaine",
+      "previousDigests": "Vos résumés précédents",
+      "opportunityCount": "{count, plural, one {# opportunité} other {# opportunités}}"
+    },
+    "events": {
+      "manage": {
+        "title": "Vos événements",
+        "subtitle": "Gérez les événements que vous avez publiés — webinaires, séances d'information, salons de l'emploi, et plus.",
+        "createNew": "+ Nouvel événement",
+        "empty": "Vous n'avez pas encore publié d'événements.",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "confirmDelete": "Supprimer « {title} » ? Cela le retire de Voila pour tout le monde et cette action est irréversible.",
+        "virtual": "Virtuel",
+        "inPerson": "En personne"
+      },
+      "create": {
+        "title": "Créer un événement",
+        "subtitle": "Publiez votre propre événement directement sur Voila. Il est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'événement",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
+      },
+      "edit": {
+        "title": "Modifier l'événement",
+        "subtitle": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submit": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "success": "Enregistré — vos modifications sont en ligne."
+      }
+    }
+  },
+  "Opportunities": {
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Stage en ingénierie logicielle",
+      "organization": "Organisation",
+      "organizationPlaceholder": "ex. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "En quoi consiste cette opportunité ?",
+      "benefits": "Avantages",
+      "benefitsPlaceholder": "Qu'est-ce que les candidats vont gagner ? ex. allocation, mentorat, certificat",
+      "imageUrl": "URL de l'image",
+      "deadline": "Échéance",
+      "deadlineOptional": "(facultatif — laisser vide pour une annonce sans échéance fixe)",
+      "applyUrl": "URL de candidature",
+      "classification": "Classification",
+      "category": "Catégorie",
+      "selectCategory": "Sélectionnez une catégorie",
+      "tags": "Étiquettes",
+      "selectTags": "Sélectionnez des étiquettes",
+      "country": "Pays",
+      "selectCountry": "Sélectionnez un pays",
+      "fundingType": "Type de financement",
+      "selectFundingType": "Sélectionnez un type de financement",
+      "degreeLevels": "Niveaux de diplôme",
+      "selectDegreeLevels": "Sélectionnez des niveaux de diplôme",
+      "locationType": "Type de lieu",
+      "selectLocationType": "Sélectionnez un type de lieu",
+      "selectDefault": "Sélectionner..."
+    }
+  },
+  "Events": {
+    "form": {
+      "title": "Titre",
+      "titlePlaceholder": "ex. Webinaire sur les candidatures aux bourses",
+      "tagline": "Accroche",
+      "taglinePlaceholder": "Une phrase d'accroche pour cet événement",
+      "description": "À propos de cet événement",
+      "descriptionPlaceholder": "En quoi consiste cet événement ? Séparez les paragraphes par une ligne vide.",
+      "takeaways": "Ce que vous en retirerez",
+      "takeawaysPlaceholder": "Un point par ligne",
+      "takeawaysHint": "Un point à retenir par ligne.",
+      "hostName": "Nom de l'animateur",
+      "hostNamePlaceholder": "ex. Ama Mensah",
+      "hostBio": "Bio de l'animateur",
+      "hostBioPlaceholder": "Une courte bio de l'animateur",
+      "eventDate": "Date et heure de début",
+      "endTime": "Date et heure de fin",
+      "timezone": "Fuseau horaire",
+      "locationType": "Type de lieu",
+      "virtual": "Virtuel",
+      "inPerson": "En personne",
+      "platformLabel": "Plateforme",
+      "platformPlaceholder": "ex. Zoom, Google Meet",
+      "venueLabel": "Lieu / adresse",
+      "venuePlaceholder": "ex. Siège de Voila Africa, Accra",
+      "meetingLink": "Lien de connexion",
+      "meetingLinkHint": "Reste privé -- affiché aux étudiants seulement après leur inscription.",
+      "capacity": "Capacité",
+      "capacityPlaceholder": "Laissez vide pour illimité",
+      "registerLink": "Lien d'inscription externe",
+      "registerLinkHint": "Facultatif -- laissez vide pour utiliser le formulaire d'inscription de Voila.",
+      "category": "Catégorie *",
+      "categoryPlaceholder": "Sélectionnez une catégorie",
+      "image": "Image",
+      "imageUrlPlaceholder": "https://...",
+      "or": "ou"
+    },
+    "card": {
+      "online": "En ligne",
+      "inPerson": "En personne",
+      "free": "Gratuit",
+      "hostedBy": "Animé par {name}"
+    },
+    "listing": {
+      "title": "Événements",
+      "subtitle": "Webinaires gratuits, séances d'information et événements de carrière -- pour vous faire avancer.",
+      "upcoming": "À venir",
+      "past": "Passés",
+      "searchPlaceholder": "Rechercher un événement",
+      "locationFilterLabel": "Filtrer par lieu",
+      "topicFilterLabel": "Filtrer par sujet",
+      "all": "Tous",
+      "allTopics": "Tous les sujets",
+      "inPerson": "En personne",
+      "online": "En ligne",
+      "empty": "Aucun événement ne correspond à vos filtres pour le moment."
+    },
+    "calendar": {
+      "addToCalendar": "Ajouter au calendrier",
+      "close": "Fermer",
+      "google": "Google Agenda",
+      "outlook": "Outlook",
+      "ics": "Apple / autre (.ics)"
+    },
+    "register": {
+      "free": "Gratuit",
+      "freeSubtext": "Gratuit à participer",
+      "reserveSpot": "Réservez votre place",
+      "reserveSpotSubtext": "Gratuit · prend 20 secondes",
+      "spotsFilled": "{filled}/{total} places prises",
+      "namePlaceholder": "Ama Mensah",
+      "emailPlaceholder": "vous@email.com",
+      "whatsappPlaceholder": "Entrez votre numéro de téléphone",
+      "optional": "Facultatif",
+      "submit": "Confirmer l'inscription →",
+      "submitting": "Confirmation...",
+      "trustLine": "Nous ne vous écrivons qu'à propos de cet événement.",
+      "full": "Cet événement est complet.",
+      "successTitle": "Vous êtes inscrit(e) !",
+      "successSubtitle": "Nous avons envoyé une confirmation à votre email avec tous les détails.",
+      "whatsappTitle": "Restez informé(e)",
+      "whatsappBody": "Rejoignez ce groupe WhatsApp pour recevoir les mises à jour de l'événement en temps utile.",
+      "whatsappCta": "Rejoindre le groupe WhatsApp",
+      "createAccountCta": "Créez votre compte Voila Africa gratuit"
+    },
+    "single": {
+      "online": "En ligne",
+      "inPerson": "En personne",
+      "registerButton": "S'inscrire",
+      "hostedBy": "Animé par {name}",
+      "dateTimeLabel": "Date et heure",
+      "locationLabel": "Lieu",
+      "linkAfterRegistration": "Le lien de connexion apparaît après votre inscription",
+      "aboutTitle": "À propos de cet événement",
+      "takeawaysTitle": "Ce que vous en retirerez",
+      "hostBioLabel": "Votre hôte"
+    }
+  },
+  "Admin": {
+    "login": {
+      "title": "Connexion administrateur",
+      "subtitle": "Connectez-vous avec votre compte administrateur Voila.",
+      "continueWithGoogle": "Continuer avec Google",
+      "orDivider": "ou",
+      "emailLabel": "E-mail",
+      "passwordLabel": "Mot de passe",
+      "submit": "Se connecter",
+      "errorMissingFields": "Entrez votre e-mail et votre mot de passe.",
+      "errorInvalidCredentials": "E-mail ou mot de passe incorrect.",
+      "errorNotAdmin": "Ce compte n'a pas d'accès administrateur.",
+      "errorGeneric": "Une erreur est survenue. Réessayez."
+    },
+    "header": {
+      "title": "Administration Voila",
+      "signedInAs": "Connecté en tant que {name}",
+      "signOut": "Se déconnecter",
+      "navDashboard": "Tableau de bord",
+      "navOpportunities": "Opportunités",
+      "navDigest": "Résumé",
+      "navEvents": "Événements",
+      "navSuperAdmin": "Super Admin",
+      "menu": "Ouvrir le menu",
+      "close": "Fermer le menu"
+    },
+    "dashboard": {
+      "title": "Tableau de bord",
+      "subtitle": "Vue d'ensemble des utilisateurs, opportunités et engagement de Voila.",
+      "reviewPending": "Examiner les opportunités en attente",
+      "createNew": "+ Nouvelle opportunité",
+      "failedToLoad": "Impossible de charger les statistiques pour le moment.",
+      "sections": {
+        "users": "Utilisateurs",
+        "opportunities": "Opportunités",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Utilisateurs au total",
+        "newThisWeek": "Nouveaux cette semaine",
+        "newThisMonth": "Nouveaux ce mois-ci",
+        "onboardingDone": "Intégration terminée",
+        "onboardingPending": "Intégration en attente",
+        "totalPosted": "Total publié",
+        "closingIn7Days": "Clôture sous 7 jours",
+        "totalSaves": "Total des sauvegardes",
+        "totalApplied": "Total des candidatures",
+        "totalSent": "Total envoyé",
+        "totalUnread": "Total non lu"
+      },
+      "charts": {
+        "byCategory": "Opportunités par catégorie",
+        "byCountry": "Opportunités par pays",
+        "byFundingType": "Opportunités par type de financement",
+        "noData": "Pas encore assez de données."
+      },
+      "topLists": {
+        "mostSaved": "Opportunités les plus sauvegardées",
+        "mostApplied": "Opportunités avec le plus de candidatures",
+        "noData": "Aucune activité pour l'instant."
+      }
+    },
+    "opportunities": {
+      "list": {
+        "title": "Opportunités",
+        "subtitle": "Parcourez et gérez toutes les opportunités approuvées sur Voila.",
+        "weeklyDigest": "Résumé hebdomadaire",
+        "pasteJson": "Coller du JSON",
+        "createNew": "+ Nouvelle opportunité",
+        "pendingBanner": "{count, plural, one {# opportunité est} other {# opportunités sont}} en attente d'examen.",
+        "reviewLink": "Examiner maintenant",
+        "empty": "Aucune opportunité pour le moment.",
+        "edit": "Modifier",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "confirmDelete": "Supprimer \"{title}\" ? Ceci la retire de Voila pour tout le monde et est irréversible.",
+        "deadline": "Échéance : {date}",
+        "rolling": "Continue"
+      },
+      "paste": {
+        "title": "Coller des opportunités",
+        "subtitle": "Importez en masse des opportunités à partir de JSON collé (un seul objet ou un tableau). Chaque ligne est publiée immédiatement.",
+        "fieldReference": "Référence des champs",
+        "loadExample": "Charger l'exemple",
+        "importButton": "Importer",
+        "importing": "Importation...",
+        "importedSummary": "{ok} opportunité(s) importée(s) sur {total}."
+      },
+      "queue": {
+        "title": "Opportunités en attente",
+        "subtitle": "Vérifiez les opportunités récupérées et soumises avant leur mise en ligne.",
+        "createNew": "+ Nouvelle opportunité",
+        "empty": "Aucune opportunité en attente pour le moment.",
+        "review": "Examiner",
+        "approve": "Approuver",
+        "approving": "Approbation...",
+        "reject": "Rejeter",
+        "rejecting": "Rejet...",
+        "deadline": "Échéance : {date}",
+        "deadlineNotSet": "Non définie",
+        "confirmApprove": "Approuver \"{title}\" ? Elle sera immédiatement visible pour les étudiants.",
+        "confirmReject": "Rejeter \"{title}\" ? Elle ne sera pas montrée aux étudiants."
+      },
+      "createForm": {
+        "title": "Créer une opportunité",
+        "subtitle": "Publiez une opportunité directement sur Voila. Elle est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'opportunité",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
+      },
+      "reviewForm": {
+        "titlePending": "Examiner l'opportunité",
+        "subtitlePending": "Vérifiez les détails, puis approuvez ou rejetez.",
+        "titleApproved": "Modifier l'opportunité",
+        "subtitleApproved": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submitApprove": "Enregistrer et approuver",
+        "submitSave": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "successApprove": "Approuvé — visible pour les étudiants dès maintenant.",
+        "success": "Enregistré — vos modifications sont en ligne.",
+        "reject": "Rejeter",
+        "rejecting": "Rejet...",
+        "confirmReject": "Rejeter \"{title}\" ? Elle ne sera pas montrée aux étudiants."
+      }
+    },
+    "digest": {
+      "title": "Résumé hebdomadaire",
+      "subtitle": "Sélectionnez et partagez les opportunités de la semaine.",
+      "searchPlaceholder": "Rechercher un titre ou une organisation...",
+      "countryAll": "Tous les pays",
+      "deadlineAny": "Toute échéance",
+      "deadline7": "Clôture sous 7 jours",
+      "deadline14": "Clôture sous 14 jours",
+      "deadline30": "Clôture sous 30 jours",
+      "hideRecentlySent": "Masquer les opportunités déjà envoyées (7 derniers jours)",
+      "sortSoonest": "Échéance la plus proche",
+      "sortNeverSentFirst": "Jamais envoyées, les plus anciennes d'abord",
+      "numberToInclude": "Nombre à inclure",
+      "regenerateSelection": "Régénérer la sélection",
+      "closingSoon": "🚩 Clôture imminente",
+      "neverFeatured": "⚠️ jamais mise en avant",
+      "neverFeaturedWithDays": "⚠️ jamais mise en avant, clôture dans {days}j",
+      "daysLeft": "{days}j restants",
+      "rolling": "Continue",
+      "emptyList": "Aucune opportunité ne correspond à ces filtres.",
+      "livePreview": "Aperçu en direct",
+      "previewPlaceholder": "Sélectionnez des opportunités pour prévisualiser le résumé.",
+      "publishedTo": "Publié sur {url}",
+      "publishing": "Publication...",
+      "shareWhatsapp": "Partager sur WhatsApp",
+      "shareFacebook": "Partager sur Facebook",
+      "shareLinkedin": "Partager sur LinkedIn",
+      "copy": "Copier / Partager le texte"
+    },
+    "events": {
+      "title": "Événements",
+      "subtitle": "Tous les événements de Voila, avec le nombre d'inscriptions et l'export CSV.",
+      "createNew": "+ Nouvel événement",
+      "empty": "Aucun événement pour le moment.",
+      "columnTitle": "Titre",
+      "columnDate": "Date",
+      "columnType": "Type",
+      "columnStatus": "Statut",
+      "columnRegistrations": "Inscriptions",
+      "columnActions": "Actions",
+      "inPerson": "En personne",
+      "virtual": "En ligne",
+      "csv": "CSV",
+      "edit": "Modifier",
+      "cancel": "Annuler",
+      "cancelling": "Annulation...",
+      "confirmCancel": "Annuler « {title} » ? Il est retiré des listes publiques mais les inscriptions sont conservées.",
+      "delete": "Supprimer",
+      "deleting": "Suppression...",
+      "confirmDelete": "Supprimer « {title} » ? Cela le retire de Voila pour tout le monde, y compris ses inscriptions, et c'est irréversible.",
+      "createForm": {
+        "title": "Créer un événement",
+        "subtitle": "Publiez un événement directement sur Voila. Il est visible immédiatement pour les étudiants.",
+        "submit": "Publier l'événement",
+        "pending": "Publication...",
+        "success": "Publié — visible pour les étudiants dès maintenant."
+      },
+      "editForm": {
+        "title": "Modifier l'événement",
+        "subtitle": "Les modifications sont visibles immédiatement pour les étudiants.",
+        "submit": "Enregistrer les modifications",
+        "pending": "Enregistrement...",
+        "success": "Enregistré — vos modifications sont en ligne."
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "overview": "Vue d'ensemble",
+        "analytics": "Analyses",
+        "admins": "Admins",
+        "partners": "Partenaires",
+        "mentors": "Mentors",
+        "mentees": "Mentorés",
+        "mentorshipExits": "Départs de mentorat",
+        "applications": "Candidatures"
+      },
+      "overview": {
+        "title": "Vue d'ensemble",
+        "subtitle": "Aperçu rapide. Ouvrez Analyses pour les graphiques complets, utilisateurs, engagement et notifications.",
+        "failedToLoad": "Échec du chargement.",
+        "sections": {
+          "mentorship": "Mentorat",
+          "platform": "Plateforme"
+        },
+        "stats": {
+          "approvedMentors": "Mentors approuvés",
+          "pendingMentors": "Mentors en attente",
+          "activeMentorships": "Mentorats actifs",
+          "waitingList": "Liste d'attente",
+          "totalUsers": "Utilisateurs au total",
+          "opportunityAdmins": "Admins d'opportunités",
+          "activeOpportunities": "Opportunités actives",
+          "pendingPush": "Notifications en attente"
+        }
+      },
+      "analytics": {
+        "title": "Analyses",
+        "subtitle": "Analyses des opportunités, utilisateurs et engagement à l'échelle de la plateforme.",
+        "failedToLoad": "Impossible de charger les statistiques pour le moment."
+      },
+      "pagination": {
+        "range": "{start}–{end} sur {total}",
+        "prev": "Précédent",
+        "pageOfTotal": "{page} / {totalPages}",
+        "next": "Suivant"
+      },
+      "admins": {
+        "pageTitle": "Gérer les admins",
+        "intro": "Les admins d'opportunités peuvent créer et gérer des annonces. Les super admins conservent un accès complet à la plateforme.",
+        "addCardLabel": "Ajouter un admin d'opportunités",
+        "emailPlaceholder": "utilisateur-existant@email.com",
+        "add": "Ajouter",
+        "addHint": "L'utilisateur doit déjà être inscrit. La promotion accorde les outils d'opportunités.",
+        "searchPlaceholder": "Rechercher par nom ou e-mail...",
+        "emptySearch": "Aucun admin ne correspond à votre recherche.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "role": "Rôle",
+          "posts": "Publications",
+          "actions": "Actions"
+        },
+        "roleLabels": {
+          "superAdmin": "Super Admin",
+          "opportunityAdmin": "Admin d'opportunités"
+        },
+        "remove": "Retirer",
+        "removing": "Retrait...",
+        "removeConfirmMessage": "Révoquer l'accès admin pour {email} ?",
+        "thisUser": "cet utilisateur",
+        "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+        "promoteSuccessMessage": "Utilisateur promu admin d'opportunités."
+      },
+      "partners": {
+        "pageTitle": "Gérer les partenaires",
+        "intro": "Les partenaires peuvent publier des opportunités sur leur propre page publique et suivre l'attribution des liens.",
+        "stats": {
+          "total": "Total des partenaires",
+          "active": "Partenaires actifs",
+          "opportunitiesPosted": "Opportunités publiées",
+          "linkClicks": "Clics sur les liens",
+          "topByPosts": "Meilleurs partenaires par opportunités publiées",
+          "noData": "Pas encore assez de données."
+        },
+        "addCardLabel": "Ajouter un partenaire",
+        "orgNamePlaceholder": "Nom de l'organisation",
+        "emailPlaceholder": "contact@partenaire.org",
+        "slugPlaceholder": "Slug (facultatif, généré automatiquement)",
+        "add": "Ajouter",
+        "creating": "Création...",
+        "addHint": "Crée une connexion pour ce partenaire avec un mot de passe temporaire affiché une seule fois ci-dessous.",
+        "createdTitle": "Partenaire créé — /{slug}",
+        "createdHint": "Partagez ce mot de passe temporaire avec le partenaire. Il ne sera plus affiché.",
+        "copyPassword": "Copier",
+        "dismiss": "Ignorer",
+        "searchPlaceholder": "Rechercher par organisation, e-mail ou slug...",
+        "emptySearch": "Aucun partenaire ne correspond à votre recherche.",
+        "columns": {
+          "organization": "Organisation",
+          "email": "E-mail",
+          "slug": "Page",
+          "posts": "Publications",
+          "status": "Statut",
+          "actions": "Actions"
+        },
+        "active": "Actif",
+        "inactive": "Inactif",
+        "edit": "Modifier",
+        "updating": "Mise à jour...",
+        "activate": "Activer",
+        "deactivate": "Désactiver",
+        "activateConfirmMessage": "Réactiver « {org} » ? Ils retrouveront l'accès à leur tableau de bord partenaire.",
+        "deactivateConfirmMessage": "Désactiver « {org} » ? Ils perdront l'accès à leur tableau de bord partenaire. Leurs opportunités publiées et l'historique des clics sont conservés.",
+        "editTitle": "Modifier le partenaire",
+        "editSubtitle": "Modification de {org}",
+        "logoUrlLabel": "URL du logo",
+        "slugReadonly": "Page publique : /partner/{slug}",
+        "refCodeReadonly": "Code de parrainage : {refCode}",
+        "save": "Enregistrer les modifications",
+        "saving": "Enregistrement...",
+        "saveSuccess": "Enregistré."
+      },
+      "applications": {
+        "pageTitle": "Candidatures",
+        "intro": "Candidatures soumises via la page « Rejoignez l'initiative Voila ».",
+        "downloadCsv": "Télécharger le CSV",
+        "searchPlaceholder": "Rechercher par nom, e-mail ou rôle...",
+        "emptySearch": "Aucune candidature ne correspond à votre recherche.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "role": "Rôle",
+          "experience": "Expérience",
+          "status": "Statut",
+          "submitted": "Soumise le",
+          "actions": "Actions"
+        },
+        "view": "Voir",
+        "back": "← Retour aux candidatures",
+        "detailSubtitle": "Soumise le {date}",
+        "phone": "Téléphone",
+        "linkedin": "LinkedIn",
+        "portfolio": "Portfolio ou site web",
+        "skillsExperience": "Compétences et expériences",
+        "anythingElse": "Autre chose"
+      },
+      "mentors": {
+        "pageTitle": "Gérer les mentors",
+        "intro": "Créez des profils de mentor approuvés par e-mail, approuvez les candidatures en attente ou supprimez des mentors.",
+        "createCardLabel": "Créer un mentor",
+        "emailPlaceholder": "utilisateur@email.com",
+        "add": "Ajouter",
+        "addHint": "L'utilisateur doit déjà avoir un compte. Il sera immédiatement approuvé en tant que mentor.",
+        "searchPlaceholder": "Rechercher des mentors...",
+        "emptyTitle": "Aucun mentor",
+        "emptyDescription": "Essayez d'ajuster les filtres ou ajoutez un mentor par e-mail.",
+        "columns": {
+          "name": "Nom",
+          "email": "E-mail",
+          "status": "Statut",
+          "mentees": "Mentorés",
+          "actions": "Actions"
+        },
+        "filters": {
+          "all": "Tous"
+        },
+        "approve": "Approuver",
+        "approving": "Approbation...",
+        "delete": "Supprimer",
+        "deleting": "Suppression...",
+        "deleteConfirmActiveMessage": "Supprimer le profil de coach pour {email} ? Cela mettra fin à {count} mentorat(s) actif(s), annulera les sessions à venir et annulera toute demande en attente des étudiants ayant choisi ce coach. Ceci est irréversible.",
+        "deleteConfirmMessage": "Supprimer le profil de coach pour {email} ? Toute demande en attente des étudiants ayant choisi ce coach sera annulée. Ceci est irréversible.",
+        "thisUser": "cet utilisateur",
+        "invalidEmailMessage": "Veuillez entrer une adresse e-mail valide.",
+        "createSuccessMessage": "Le profil de coach est approuvé et prêt."
+      },
+      "mentees": {
+        "pageTitle": "Mentorés",
+        "subtitle": "Mentorats actifs sur toute la plateforme.",
+        "searchPlaceholder": "Rechercher des mentorés...",
+        "emptyTitle": "Aucun mentoré actif",
+        "emptyDescription": "Aucun mentorat ne correspond à votre recherche.",
+        "studentFallback": "Étudiant",
+        "coachLabel": "Coach : {name}"
+      },
+      "mentorshipExits": {
+        "pageTitle": "Départs de mentorat",
+        "subtitle": "Mentorats terminés prématurément, avec la raison donnée par l'étudiant ou le mentor.",
+        "searchPlaceholder": "Rechercher par nom ou e-mail de l'étudiant...",
+        "emptyTitle": "Aucun rapport de départ",
+        "emptyDescription": "Aucun mentorat ne s'est encore terminé prématurément, ou aucun ne correspond à votre recherche.",
+        "studentFallback": "Étudiant",
+        "coachLabel": "Coach : {name}",
+        "noReason": "Aucune raison fournie",
+        "status": {
+          "left_by_student": "Quitté par l'étudiant",
+          "removed_by_mentor": "Retiré par le mentor"
+        }
+      }
+    }
+  }
+}

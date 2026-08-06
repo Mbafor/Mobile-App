@@ -21,7 +21,7 @@
       "Voila Africa"
     ],
     "ogTitle": "Voila — Find Your Next Opportunity",
-    "ogDescription": "Scholarships, internships, mentorship and a free CV builder — all personalised to your profile.",
+    "ogDescription": "Scholarships, internships, mentorship and a free CV builder — all personalised to your profile. Join 24,000+ African students already on Voila.",
     "ogImageAlt": "Voila — Scholarships, Internships & Mentorship for African Students",
     "twitterDescription": "Scholarships, internships, mentorship and a free CV builder — personalised for African students. Free to join."
   },
@@ -97,10 +97,12 @@
         { "quote": "\"The personalised opportunity feed saved me hours of searching and showed me roles I would have missed.\"", "name": "Chidi", "role": "Business student, Nigeria" },
         { "quote": "\"I mentor young talent through Voila because the platform makes it easy to share real career advice.\"", "name": "Ngozi", "role": "Career mentor, Nigeria" },
         { "quote": "\"I applied for three scholarships I found on Voila. I got one. That one changed my life.\"", "name": "Kwame", "role": "Engineering student, Ghana" },
-        { "quote": "\"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award.\"", "name": "Aisha", "role": "Law student, Kenya[[...]" },
-        { "quote": "\"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities.\"", "name": "Emeka", "role": "Finance studen[...]" },
+        { "quote": "\"Before Voila I had no idea how many fellowships existed for students like me. Now I have three applications in progress.\"", "name": "Fatima", "role": "Public Health student, Senegal" },
+        { "quote": "\"The CV builder helped me put together a professional resume in one evening. I landed a UN internship interview the next week.\"", "name": "Tendai", "role": "International Relations student, Zimbabwe" },
+        { "quote": "\"My mentor on Voila reviewed my application essay and told me exactly what scholarship committees look for. I got the award.\"", "name": "Aisha", "role": "Law student, Kenya" },
+        { "quote": "\"Tracking all my applications in one place removed so much stress. I stopped missing deadlines and started winning opportunities.\"", "name": "Emeka", "role": "Finance student, Nigeria" },
         { "quote": "\"As a first-generation student I had no network. Voila gave me mentors and a feed that felt built just for me.\"", "name": "Sena", "role": "Architecture student, Togo" },
-        { "quote": "\"I found a fully funded master's scholarship through Voila that I never would have discovered on my own. Genuinely life-changing.\"", "name": "Lebo", "role": "Data Science st[...]" }
+        { "quote": "\"I found a fully funded master's scholarship through Voila that I never would have discovered on my own. Genuinely life-changing.\"", "name": "Lebo", "role": "Data Science student, South Africa" }
       ]
     },
     "faq": {
@@ -108,8 +110,8 @@
       "title": "Got questions? We've got answers.",
       "items": [
         { "question": "Is Voila free to use?", "answer": "Yes! Creating an account, browsing opportunities, and matching with mentors is completely free for students." },
-        { "question": "How does mentor matching work?", "answer": "We use the profile details you provide (like your field of study and career goals) to suggest mentors who have relevant experien[...]" },
-        { "question": "Can I track my applications here?", "answer": "Yes, our built-in tracker lets you save listings, track deadlines, and keep notes without switching between docs and email." },
+        { "question": "How does mentor matching work?", "answer": "We use the profile details you provide (like your field of study and career goals) to suggest mentors who have relevant experience. You can browse suggested coaches and request to connect." },
+        { "question": "Can I track my applications here?", "answer": "Yes, our built-in tracker lets you save opportunities you discover on the platform and monitor their deadlines and statuses all in one place." },
         { "question": "Are the CV templates free?", "answer": "Yes! You can use our CV builder and export your resume using any of our professional templates at no cost." }
       ]
     },
@@ -131,12 +133,12 @@
     "metaDescription": "Learn more about Voila's mission, approach, and support for students.",
     "eyebrow": "About Voila",
     "title": "A career platform built for African students.",
-    "intro": "Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place. This Policy applies to our mobile application, our web application (app.v[...]",
-    "mission": { "title": "Our mission", "text": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." }[...],
-    "whyItMatters": { "title": "Why it matters", "text": "Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Voila brings those experiences to[...]" },
+    "intro": "Voila helps students discover scholarships, internships, fellowships, mentorship and CV tools in one place. We bring personalised opportunity matching, application tracking, and guided career support to ambitious learners across Africa.",
+    "mission": { "title": "Our mission", "text": "To close the gap between students and global opportunities by making discovery, applications, and mentorship simple, reliable, and accessible." },
+    "whyItMatters": { "title": "Why it matters", "text": "Many talented students miss out because opportunities are scattered across sites and follow-up is hard. Voila brings those experiences together so students can move forward with confidence." },
     "cards": [
       { "title": "Personalised discovery", "text": "We match opportunities to a student's profile so they see listings that matter most." },
-      { "title": "Track every step", "text": "Save listings, monitor deadlines, and keep your pipeline organised without switching between tools." },
+      { "title": "Track every step", "text": "Save listings, monitor deadlines, and keep notes without switching between docs and email." },
       { "title": "Mentorship support", "text": "Connect with coaches who help students make better decisions and submit stronger applications." }
     ],
     "builtForStudents": {
@@ -148,7 +150,7 @@
   },
   "MentorMeta": {
     "title": "Join Voila — Volunteer & Team Applications",
-    "description": "Apply to join Voila as a mentor, opportunity admin, designer, developer, or team member and help students across Africa access life-changing opportunities."
+    "description": "Apply to join Voila as a mentor, opportunity admin, designer, developer, or team member and help students across Africa access global opportunities."
   },
   "Mentor": {
     "hero": {
@@ -169,7 +171,7 @@
     "instructions": {
       "eyebrow": "Before you apply",
       "title": "General Application",
-      "description": "Voila is powered by mentors, opportunity admins, community managers, designers, developers, and more. Tell us about yourself and how you'd like to contribute — we review e[...]",
+      "description": "Voila is powered by mentors, opportunity admins, community managers, designers, developers, and more. Tell us about yourself and how you'd like to contribute — we review every application and reach out within 5–7 business days.",
       "whatYoullDo": "What you'll do"
     },
     "form": {
@@ -186,7 +188,7 @@
       "areaOfExpertise": "Which role are you applying for?*",
       "yearsOfExperience": "Years of experience*",
       "selectPlaceholder": "Select…",
-      "expertiseOptions": ["Mentor", "Opportunity Admin", "Community Manager", "Graphics Designer", "Social Media Manager", "Partnership & Sponsorship", "UI/UX Designer", "Frontend Developer", "B[...]",
+      "expertiseOptions": ["Mentor", "Opportunity Admin", "Community Manager", "Graphics Designer", "Social Media Manager", "Partnership & Sponsorship", "UI/UX Designer", "Frontend Developer", "Backend Developer", "Other"],
       "experienceOptions": ["1–3 years", "3–5 years", "5–10 years", "10+ years"],
       "shortBio": "Tell us about your skills and experiences*",
       "motivation": "Is there anything else you'd like us to know?",
@@ -239,18 +241,485 @@
       {
         "heading": "1. Introduction",
         "blocks": [
-          { "type": "paragraph", "text": "Voila Africa (\"we,\" \"us,\" \"our,\" \"the Platform\") provides a platform that helps African students and recent graduates discover scholarships, inte[...]" },
+          { "type": "paragraph", "text": "Voila Africa (\"we,\" \"us,\" \"our,\" \"the Platform\") provides a platform that helps African students and recent graduates discover scholarships, internships, and fellowships, and offers additional tools including a CV builder, mentorship matching, and opportunity discovery. This Privacy Policy explains what personal data we collect, how we use it, and the choices you have." },
           { "type": "paragraph", "text": "This Policy applies to our mobile application, our web application (app.voila-africa.com), and our website (voila-africa.com)." },
           { "type": "paragraph", "text": "If you have questions about this Policy, contact us at support@voila-africa.com." }
         ]
       },
       {
-        "heading": "2. Data we collect",
+        "heading": "2. Information We Collect",
         "blocks": [
-          { "type": "paragraph", "text": "We collect information you provide directly when you create an account, complete your profile, apply for opportunities, or communicate with mentors and other users. This includes your name, email, educational background, and any materials you upload (e.g., CV, portfolio)." }
+          { "type": "subheading", "text": "2.1 Information you provide directly" },
+          { "type": "list", "items": [
+            "Account information: name, email address, phone number, password",
+            "Academic information: institution, degree level, field of study, graduation year",
+            "Profile information: interests, career preferences, opportunity preferences",
+            "CV/resume content you create using the CV Builder",
+            "Mentorship information: availability, session notes, messages exchanged with mentors or mentees",
+            "Payment information processed through our payment provider, Paystack (we do not store full card details ourselves)",
+            "Communications you send us, including support requests"
+          ] },
+          { "type": "subheading", "text": "2.2 Information collected automatically" },
+          { "type": "list", "items": [
+            "Device information (device type, operating system, app version)",
+            "Usage data (features used, pages viewed, session duration)",
+            "Log data (IP address, access times, crash reports)",
+            "Cookies and similar technologies on our website (see Section 8)"
+          ] },
+          { "type": "subheading", "text": "2.3 Information from third parties" },
+          { "type": "list", "items": [
+            "If you sign in using a third-party service (e.g. Google), we may receive basic profile information from that service",
+            "Scholarship, internship, and fellowship listings may be sourced from public or partner sources"
+          ] }
+        ]
+      },
+      {
+        "heading": "3. How We Use Your Information",
+        "blocks": [
+          { "type": "paragraph", "text": "We use your information to:" },
+          { "type": "list", "items": [
+            "Create and manage your account",
+            "Match you with relevant opportunities, mentors, and mentorship sessions",
+            "Operate the CV Builder and save your CV content",
+            "Process payments for any paid features",
+            "Send you service-related communications (deadline reminders, digest emails, account notices)",
+            "Send you marketing communications where you have opted in (you may opt out at any time)",
+            "Improve and personalize the Platform",
+            "Detect, prevent, and address fraud, abuse, or technical issues",
+            "Comply with legal obligations"
+          ] }
+        ]
+      },
+      {
+        "heading": "4. Legal Basis for Processing",
+        "blocks": [
+          { "type": "paragraph", "text": "Where applicable, we process your personal data on the following bases:" },
+          { "type": "list", "items": [
+            { "lead": "Consent", "text": "for optional communications and certain optional features" },
+            { "lead": "Contract", "text": "to provide the services you've signed up for" },
+            { "lead": "Legitimate interest", "text": "to improve our Platform and keep it secure" },
+            { "lead": "Legal obligation", "text": "where required by applicable law" }
+          ] },
+          { "type": "paragraph", "text": "We aim to comply with Ghana's Data Protection Act, 2012 (Act 843), and, where applicable to users in other jurisdictions, comparable data protection standards." }
+        ]
+      },
+      {
+        "heading": "5. How We Share Your Information",
+        "blocks": [
+          { "type": "paragraph", "text": "We do not sell your personal data. We share information with:" },
+          { "type": "list", "items": [
+            { "lead": "Service providers", "text": "who help us operate the Platform, including:", "subItems": [
+              "Supabase (database and backend infrastructure)",
+              "Resend and Zoho Mail (email delivery)",
+              "Paystack (payment processing)",
+              "Jitsi (video sessions for mentorship)"
+            ] },
+            { "lead": "Mentors or mentees", "text": "limited to the profile and session information necessary to facilitate mentorship" },
+            { "lead": "Legal authorities", "text": "where required by law, court order, or to protect the rights, property, or safety of Voila Africa, our users, or others" },
+            { "lead": "A successor entity", "text": "in the event of a merger, acquisition, or sale of assets, subject to this Policy or a comparable one" }
+          ] }
+        ]
+      },
+      {
+        "heading": "6. Data Retention",
+        "blocks": [
+          { "type": "paragraph", "text": "We retain your personal data for as long as your account is active, or as needed to provide you services. If you delete your account, we will delete or anonymize your personal data within 30 days, except where we are required to retain it for legal, tax, or security purposes." }
+        ]
+      },
+      {
+        "heading": "7. Your Rights",
+        "blocks": [
+          { "type": "paragraph", "text": "Depending on your location, you may have the right to:" },
+          { "type": "list", "items": [
+            "Access the personal data we hold about you",
+            "Correct inaccurate data",
+            "Request deletion of your data",
+            "Object to or restrict certain processing",
+            "Withdraw consent where processing is based on consent",
+            "Request a copy of your data in a portable format"
+          ] },
+          { "type": "paragraph", "text": "To exercise these rights, contact us at support@voila-africa.com. We may need to verify your identity before fulfilling your request." }
+        ]
+      },
+      {
+        "heading": "8. Cookies (Website)",
+        "blocks": [
+          { "type": "paragraph", "text": "Our website (voila-africa.com) may use cookies and similar technologies to remember your preferences (including language selection), understand site usage, and improve performance. You can control cookies through your browser settings." }
+        ]
+      },
+      {
+        "heading": "9. Data Security",
+        "blocks": [
+          { "type": "paragraph", "text": "We use reasonable technical and organizational measures to protect your data, including encryption in transit and access controls on our backend infrastructure. However, no method of transmission or storage is 100% secure, and we cannot guarantee absolute security." }
+        ]
+      },
+      {
+        "heading": "10. International Data Transfers",
+        "blocks": [
+          { "type": "paragraph", "text": "Your data may be processed and stored on servers located outside your country of residence, including through our infrastructure and service providers. Where this occurs, we take steps to ensure appropriate safeguards are in place." }
+        ]
+      },
+      {
+        "heading": "11. Children's Privacy",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform is intended for users who are at least 16 years old. We do not knowingly collect personal data from children under this age. If you believe a child has provided us with personal data, please contact us so we can take appropriate action." }
+        ]
+      },
+      {
+        "heading": "12. Third-Party Links",
+        "blocks": [
+          { "type": "paragraph", "text": "Opportunity listings and other content on the Platform may link to third-party websites (e.g. scholarship providers, application portals). We are not responsible for the privacy practices of those third parties. Please review their privacy policies separately." }
+        ]
+      },
+      {
+        "heading": "13. Changes to This Policy",
+        "blocks": [
+          { "type": "paragraph", "text": "We may update this Privacy Policy from time to time. We will notify you of material changes through the Platform or by email. Continued use of the Platform after changes take effect constitutes acceptance of the revised Policy." }
+        ]
+      },
+      {
+        "heading": "14. Contact Us",
+        "blocks": [
+          { "type": "paragraph", "text": "If you have questions or concerns about this Privacy Policy or how we handle your data, contact us at:" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
         ]
       }
     ]
+  },
+  "TermsOfService": {
+    "metaTitle": "Terms of Service",
+    "metaDescription": "The terms that govern your use of Voila's mobile app, web app, and website.",
+    "title": "Terms of Service",
+    "lastUpdated": "Last updated: July 12, 2026",
+    "sections": [
+      {
+        "heading": "1. Acceptance of Terms",
+        "blocks": [
+          { "type": "paragraph", "text": "By accessing or using Voila Africa's mobile application, web application, or website (collectively, the \"Platform\"), you agree to be bound by these Terms of Service (\"Terms\"). If you do not agree, please do not use the Platform." }
+        ]
+      },
+      {
+        "heading": "2. Description of Service",
+        "blocks": [
+          { "type": "paragraph", "text": "Voila Africa helps African students and recent graduates discover scholarships, internships, and fellowships. The Platform also provides a CV builder, mentorship matching, and related tools. We do not guarantee that any opportunity listed on the Platform is accurate, currently open, or that you will be selected for it, and we are not affiliated with the organizations offering those opportunities unless explicitly stated." }
+        ]
+      },
+      {
+        "heading": "3. Eligibility",
+        "blocks": [
+          { "type": "paragraph", "text": "You must be at least 16 years old to create an account. By creating an account, you represent that the information you provide is accurate and that you meet this age requirement." }
+        ]
+      },
+      {
+        "heading": "4. Account Registration",
+        "blocks": [
+          { "type": "paragraph", "text": "You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account. Notify us immediately at support@voila-africa.com if you suspect unauthorized access to your account." }
+        ]
+      },
+      {
+        "heading": "5. User Conduct",
+        "blocks": [
+          { "type": "paragraph", "text": "You agree not to:" },
+          { "type": "list", "items": [
+            "Provide false or misleading information",
+            "Use the Platform for any unlawful purpose",
+            "Harass, abuse, or harm other users, including mentors or mentees",
+            "Attempt to access another user's account without authorization",
+            "Interfere with or disrupt the Platform's operation or security",
+            "Scrape, copy, or redistribute Platform content without our permission",
+            "Impersonate any person or entity"
+          ] },
+          { "type": "paragraph", "text": "We reserve the right to suspend or terminate accounts that violate these Terms." }
+        ]
+      },
+      {
+        "heading": "6. Opportunity Listings",
+        "blocks": [
+          { "type": "paragraph", "text": "Scholarship, internship, and fellowship listings are provided for informational purposes. We make reasonable efforts to keep listings accurate and up to date, but:" },
+          { "type": "list", "items": [
+            "We do not guarantee the accuracy, completeness, or availability of any listing",
+            "Application deadlines and requirements are set by the third-party organizations, not Voila Africa",
+            "You are responsible for verifying details directly with the opportunity provider before applying"
+          ] }
+        ]
+      },
+      {
+        "heading": "7. CV Builder",
+        "blocks": [
+          { "type": "paragraph", "text": "Content you create using the CV Builder remains yours. You are solely responsible for the accuracy of the information in your CV. We provide the tool for your convenience but do not review, verify, or endorse the content you create." }
+        ]
+      },
+      {
+        "heading": "8. Mentorship Program",
+        "blocks": [
+          { "type": "list", "items": [
+            "Mentorship sessions are facilitated through the Platform, including video sessions conducted via Jitsi.",
+            "Mentors are not employees of Voila Africa. Mentorship is provided on a best-efforts, voluntary or arranged basis, and we do not guarantee specific outcomes from any mentorship relationship.",
+            "Both mentors and mentees agree to conduct themselves respectfully. Voila Africa reserves the right to remove any user from the mentorship program for inappropriate conduct.",
+            "Voila Africa is not responsible for the advice, guidance, or conduct of mentors, which reflects the mentor's own views and not those of Voila Africa."
+          ] }
+        ]
+      },
+      {
+        "heading": "9. Payments",
+        "blocks": [
+          { "type": "list", "items": [
+            "Certain features of the Platform may require payment, processed securely through Paystack.",
+            "All fees are stated in Ghanaian Cedi (GHS) and are non-refundable except where required by law or explicitly stated at the time of purchase.",
+            "You are responsible for any taxes applicable to your purchase.",
+            "We reserve the right to change pricing with reasonable notice."
+          ] }
+        ]
+      },
+      {
+        "heading": "10. Intellectual Property",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform, including its design, logos, text, and underlying software, is owned by Voila Africa or its licensors and is protected by intellectual property laws. You may not copy, modify, distribute, or create derivative works from the Platform without our prior written consent." },
+          { "type": "paragraph", "text": "You retain ownership of content you submit (such as your CV or profile information), but you grant Voila Africa a limited license to use, host, and display that content as necessary to operate the Platform." }
+        ]
+      },
+      {
+        "heading": "11. Third-Party Services",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform integrates with third-party services, including Paystack (payments), Supabase (infrastructure), and Jitsi (video). Your use of these integrated services may also be subject to their respective terms and privacy policies." }
+        ]
+      },
+      {
+        "heading": "12. Disclaimers",
+        "blocks": [
+          { "type": "paragraph", "text": "The Platform is provided \"as is\" and \"as available,\" without warranties of any kind, whether express or implied. We do not warrant that the Platform will be uninterrupted, error-free, or secure, or that any opportunity listing is accurate or that mentorship will result in any particular outcome." }
+        ]
+      },
+      {
+        "heading": "13. Limitation of Liability",
+        "blocks": [
+          { "type": "paragraph", "text": "To the maximum extent permitted by law, Voila Africa and its founders, employees, and affiliates shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of the Platform, including but not limited to loss of opportunities, data, or income, even if we have been advised of the possibility of such damages." }
+        ]
+      },
+      {
+        "heading": "14. Indemnification",
+        "blocks": [
+          { "type": "paragraph", "text": "You agree to indemnify and hold harmless Voila Africa from any claims, damages, losses, or expenses arising from your use of the Platform, your violation of these Terms, or your violation of any rights of a third party." }
+        ]
+      },
+      {
+        "heading": "15. Termination",
+        "blocks": [
+          { "type": "paragraph", "text": "We reserve the right to suspend or terminate your account at our discretion, with or without notice, for conduct that we believe violates these Terms or is otherwise harmful to the Platform or other users. You may also delete your account at any time through the app settings." }
+        ]
+      },
+      {
+        "heading": "16. Changes to These Terms",
+        "blocks": [
+          { "type": "paragraph", "text": "We may update these Terms from time to time. We will notify you of material changes through the Platform or by email. Continued use of the Platform after changes take effect constitutes acceptance of the revised Terms." }
+        ]
+      },
+      {
+        "heading": "17. Governing Law",
+        "blocks": [
+          { "type": "paragraph", "text": "These Terms are governed by the laws of the Republic of Ghana, without regard to conflict of law principles." }
+        ]
+      },
+      {
+        "heading": "18. Contact Us",
+        "blocks": [
+          { "type": "paragraph", "text": "If you have questions about these Terms, contact us at:" },
+          { "type": "contact", "email": "support@voila-africa.com", "address": "KNUST, Kumasi" }
+        ]
+      }
+    ]
+  },
+  "Partner": {
+    "nav": {
+      "dashboard": "Dashboard",
+      "digest": "Weekly Digest",
+      "browse": "Browse Opportunities",
+      "create": "Create Opportunity",
+      "events": "Events",
+      "logout": "Log out",
+      "menu": "Open menu",
+      "close": "Close menu"
+    },
+    "header": {
+      "themeToggleToDark": "Switch to dark mode",
+      "themeToggleToLight": "Switch to light mode",
+      "languageToggleLabel": "Change language"
+    },
+    "login": {
+      "title": "Partner Login",
+      "subtitle": "Sign in to your Voila partner dashboard.",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one",
+      "termsAgreement": "By signing in you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>.",
+      "errorMissingFields": "Please enter your email and password.",
+      "errorInvalidCredentials": "Invalid email or password.",
+      "errorGeneric": "Something went wrong. Please try again."
+    },
+    "signup": {
+      "title": "Create Partner Account",
+      "subtitle": "Post opportunities and share them with your audience on Voila.",
+      "orgLabel": "Organization name",
+      "emailLabel": "Email",
+      "passwordLabel": "Password",
+      "confirmPasswordLabel": "Confirm password",
+      "submit": "Create account",
+      "haveAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "termsAgreement": "By creating an account you agree to our <terms>Terms of Service</terms> and <privacy>Privacy Policy</privacy>.",
+      "errorMissingFields": "Please fill in every field.",
+      "errorInvalidEmail": "Enter a valid email address.",
+      "errorWeakPassword": "Password must be at least 8 characters.",
+      "errorPasswordMismatch": "Passwords do not match.",
+      "errorAlreadyRegistered": "An account already exists for this email. Try signing in instead.",
+      "errorSignupFailed": "Something went wrong. Please try again."
+    },
+    "verifyOtp": {
+      "title": "Verify your email",
+      "subtitle": "We sent a 6-digit code to <bold>{email}</bold>. Enter it below to finish creating your partner account.",
+      "resentNotice": "Code resent — check your inbox.",
+      "codeLabel": "6-digit code",
+      "verify": "Verify",
+      "resend": "Resend code",
+      "resendCooldown": "Resend code ({seconds}s)",
+      "errorInvalidCode": "That code is incorrect or has expired. Please try again.",
+      "errorAccountDisabled": "This partner account is disabled. Contact support for help.",
+      "errorResendFailed": "Couldn't resend the code right now — you may be sending too many requests. Wait a few minutes and try again.",
+      "errorGeneric": "Something went wrong. Please try again."
+    },
+    "dashboard": {
+      "subtitle": "Partner dashboard",
+      "postedOpportunities": "Your posted opportunities",
+      "shareTools": "Share tools"
+    },
+    "stats": {
+      "posted": "Opportunities posted",
+      "clicks": "Clicks driven"
+    },
+    "manage": {
+      "empty": "You haven't posted any opportunities yet.",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone."
+    },
+    "share": {
+      "whatsapp": "Share on WhatsApp",
+      "facebook": "Share on Facebook",
+      "linkedin": "Share on LinkedIn",
+      "copy": "Copy to clipboard",
+      "copied": "Copied",
+      "unlockHint": "Post at least one opportunity to unlock share tools."
+    },
+    "browse": {
+      "title": "Browse Opportunities",
+      "subtitle": "Browse all active opportunities on Voila and share the ones relevant to your audience.",
+      "searchPlaceholder": "Search title, organization, country...",
+      "allCategories": "All categories",
+      "deadlineBefore": "Deadline before",
+      "empty": "No opportunities match these filters.",
+      "rolling": "Rolling",
+      "shareWhatsappTitle": "Share on WhatsApp",
+      "shareFacebookTitle": "Share on Facebook",
+      "shareLinkedinTitle": "Share on LinkedIn",
+      "copyTitle": "Copy share text",
+      "whatsapp": "WhatsApp",
+      "facebook": "Facebook",
+      "linkedin": "LinkedIn",
+      "copy": "Copy",
+      "copied": "Copied"
+    },
+    "create": {
+      "title": "Create Opportunity",
+      "subtitle": "Post your own opportunity directly to Voila. It goes live immediately for students and on your partner page.",
+      "submit": "Publish opportunity",
+      "pending": "Publishing...",
+      "success": "Published — visible to students now and live on your partner page."
+    },
+    "edit": {
+      "title": "Edit Opportunity",
+      "subtitle": "Changes go live immediately for students and on your partner page.",
+      "submit": "Save changes",
+      "pending": "Saving...",
+      "success": "Saved — your changes are live."
+    },
+    "digest": {
+      "title": "Weekly Digest",
+      "subtitle": "Curate your own set of opportunities to share as this week's digest.",
+      "helper": "Pick the opportunities you want to feature this week, then publish — they'll be bundled into a single shareable digest and added to your own posted opportunities.",
+      "published": "Published your digest of {count, plural, one {# opportunity} other {# opportunities}}.",
+      "searchPlaceholder": "Search title, organization, country...",
+      "allCategories": "All categories",
+      "deadlineBefore": "Deadline before",
+      "empty": "No opportunities match these filters.",
+      "rolling": "Rolling",
+      "preview": "Preview",
+      "previewPlaceholder": "Select opportunities above to preview this week's digest message.",
+      "publishing": "Publishing...",
+      "publishAs": "Publish {count} as this week's digest",
+      "previousDigests": "Your previous digests",
+      "opportunityCount": "{count, plural, one {# opportunity} other {# opportunities}}"
+    },
+    "events": {
+      "manage": {
+        "title": "Your Events",
+        "subtitle": "Manage the events you've published — webinars, info sessions, career fairs, and more.",
+        "createNew": "+ New event",
+        "empty": "You haven't posted any events yet.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone.",
+        "virtual": "Virtual",
+        "inPerson": "In person"
+      },
+      "create": {
+        "title": "Create Event",
+        "subtitle": "Post your own event directly to Voila. It goes live immediately for students.",
+        "submit": "Publish event",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
+      },
+      "edit": {
+        "title": "Edit Event",
+        "subtitle": "Changes go live immediately for students.",
+        "submit": "Save changes",
+        "pending": "Saving...",
+        "success": "Saved — your changes are live."
+      }
+    }
+  },
+  "Opportunities": {
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "e.g. Software Engineering Internship",
+      "organization": "Organization",
+      "organizationPlaceholder": "e.g. Voila Africa",
+      "description": "Description",
+      "descriptionPlaceholder": "What is this opportunity about?",
+      "benefits": "Benefits",
+      "benefitsPlaceholder": "What will applicants gain? e.g. stipend, mentorship, certificate",
+      "imageUrl": "Image URL",
+      "deadline": "Deadline",
+      "deadlineOptional": "(optional — leave blank for a rolling/no-deadline listing)",
+      "applyUrl": "Apply URL",
+      "classification": "Classification",
+      "category": "Category",
+      "selectCategory": "Select a category",
+      "tags": "Tags",
+      "selectTags": "Select tags",
+      "country": "Country",
+      "selectCountry": "Select a country",
+      "fundingType": "Funding type",
+      "selectFundingType": "Select a funding type",
+      "degreeLevels": "Degree levels",
+      "selectDegreeLevels": "Select degree levels",
+      "locationType": "Location type",
+      "selectLocationType": "Select a location type",
+      "selectDefault": "Select..."
+    }
   },
   "Events": {
     "form": {
@@ -324,7 +793,7 @@
       "spotsFilled": "{filled}/{total} spots filled",
       "namePlaceholder": "Ama Mensah",
       "emailPlaceholder": "you@email.com",
-      "whatsappPlaceholder": "phone number",
+      "whatsappPlaceholder": "Enter your phone number",
       "optional": "Optional",
       "submit": "Confirm registration →",
       "submitting": "Confirming...",
@@ -364,6 +833,377 @@
       "errorNotAdmin": "This account doesn't have admin access.",
       "errorGeneric": "Something went wrong. Try again."
     },
-    
+    "header": {
+      "title": "Voila Admin",
+      "signedInAs": "Signed in as {name}",
+      "signOut": "Sign out",
+      "navDashboard": "Dashboard",
+      "navOpportunities": "Opportunities",
+      "navDigest": "Digest",
+      "navEvents": "Events",
+      "navSuperAdmin": "Super Admin",
+      "menu": "Open menu",
+      "close": "Close menu"
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "An overview of Voila's users, opportunities, and engagement.",
+      "reviewPending": "Review pending opportunities",
+      "createNew": "+ New opportunity",
+      "failedToLoad": "Couldn't load analytics right now.",
+      "sections": {
+        "users": "Users",
+        "opportunities": "Opportunities",
+        "engagement": "Engagement",
+        "notifications": "Notifications"
+      },
+      "stats": {
+        "totalUsers": "Total users",
+        "newThisWeek": "New this week",
+        "newThisMonth": "New this month",
+        "onboardingDone": "Onboarding complete",
+        "onboardingPending": "Onboarding pending",
+        "totalPosted": "Total posted",
+        "closingIn7Days": "Closing in 7 days",
+        "totalSaves": "Total saves",
+        "totalApplied": "Total applied",
+        "totalSent": "Total sent",
+        "totalUnread": "Total unread"
+      },
+      "charts": {
+        "byCategory": "Opportunities by category",
+        "byCountry": "Opportunities by country",
+        "byFundingType": "Opportunities by funding type",
+        "noData": "Not enough data yet."
+      },
+      "topLists": {
+        "mostSaved": "Most saved opportunities",
+        "mostApplied": "Most applied-to opportunities",
+        "noData": "No activity yet."
+      }
+    },
+    "opportunities": {
+      "list": {
+        "title": "Opportunities",
+        "subtitle": "Browse and manage all approved opportunities on Voila.",
+        "weeklyDigest": "Weekly Digest",
+        "pasteJson": "Paste JSON",
+        "createNew": "+ New opportunity",
+        "pendingBanner": "{count, plural, one {# opportunity is} other {# opportunities are}} waiting for review.",
+        "reviewLink": "Review now",
+        "empty": "No opportunities yet.",
+        "edit": "Edit",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone and can't be undone.",
+        "deadline": "Deadline: {date}",
+        "rolling": "Rolling"
+      },
+      "paste": {
+        "title": "Paste Opportunities",
+        "subtitle": "Bulk-import opportunities from pasted JSON (a single object or an array). Each row is published immediately.",
+        "fieldReference": "Field reference",
+        "loadExample": "Load example",
+        "importButton": "Import",
+        "importing": "Importing...",
+        "importedSummary": "Imported {ok} of {total} opportunities."
+      },
+      "queue": {
+        "title": "Pending Opportunities",
+        "subtitle": "Review scraped and submitted opportunities before they go live.",
+        "createNew": "+ New opportunity",
+        "empty": "No pending opportunities right now.",
+        "review": "Review",
+        "approve": "Approve",
+        "approving": "Approving...",
+        "reject": "Reject",
+        "rejecting": "Rejecting...",
+        "deadline": "Deadline: {date}",
+        "deadlineNotSet": "Not set",
+        "confirmApprove": "Approve \"{title}\"? It goes live for students immediately.",
+        "confirmReject": "Reject \"{title}\"? It will not be shown to students."
+      },
+      "createForm": {
+        "title": "Create Opportunity",
+        "subtitle": "Post an opportunity directly to Voila. It goes live immediately for students.",
+        "submit": "Publish opportunity",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
+      },
+      "reviewForm": {
+        "titlePending": "Review Opportunity",
+        "subtitlePending": "Check the details, then approve or reject.",
+        "titleApproved": "Edit Opportunity",
+        "subtitleApproved": "Changes go live immediately for students.",
+        "submitApprove": "Save & approve",
+        "submitSave": "Save changes",
+        "pending": "Saving...",
+        "successApprove": "Approved — visible to students now.",
+        "success": "Saved — your changes are live.",
+        "reject": "Reject",
+        "rejecting": "Rejecting...",
+        "confirmReject": "Reject \"{title}\"? It will not be shown to students."
+      }
+    },
+    "digest": {
+      "title": "Weekly Digest",
+      "subtitle": "Curate and share this week's opportunities.",
+      "searchPlaceholder": "Search title or organization...",
+      "countryAll": "All countries",
+      "deadlineAny": "Any deadline",
+      "deadline7": "Closing within 7 days",
+      "deadline14": "Closing within 14 days",
+      "deadline30": "Closing within 30 days",
+      "hideRecentlySent": "Hide previously sent (last 7 days)",
+      "sortSoonest": "Soonest deadline",
+      "sortNeverSentFirst": "Never sent, oldest first",
+      "numberToInclude": "Number to include",
+      "regenerateSelection": "Regenerate selection",
+      "closingSoon": "🚩 Closing soon",
+      "neverFeatured": "⚠️ never featured",
+      "neverFeaturedWithDays": "⚠️ never featured, closes in {days}d",
+      "daysLeft": "{days}d left",
+      "rolling": "Rolling",
+      "emptyList": "No opportunities match these filters.",
+      "livePreview": "Live preview",
+      "previewPlaceholder": "Select opportunities to preview the digest.",
+      "publishedTo": "Published to {url}",
+      "publishing": "Publishing...",
+      "shareWhatsapp": "Share on WhatsApp",
+      "shareFacebook": "Share on Facebook",
+      "shareLinkedin": "Share on LinkedIn",
+      "copy": "Copy / Share text"
+    },
+    "events": {
+      "title": "Events",
+      "subtitle": "All events across Voila, with registration counts and CSV export.",
+      "createNew": "+ New event",
+      "empty": "No events yet.",
+      "columnTitle": "Title",
+      "columnDate": "Date",
+      "columnType": "Type",
+      "columnStatus": "Status",
+      "columnRegistrations": "Registrations",
+      "columnActions": "Actions",
+      "inPerson": "In person",
+      "virtual": "Virtual",
+      "csv": "CSV",
+      "edit": "Edit",
+      "cancel": "Cancel",
+      "cancelling": "Cancelling...",
+      "confirmCancel": "Cancel \"{title}\"? It's removed from public listings but registrations are kept.",
+      "delete": "Delete",
+      "deleting": "Deleting...",
+      "confirmDelete": "Delete \"{title}\"? This removes it from Voila for everyone, including its registrations, and can't be undone.",
+      "createForm": {
+        "title": "Create Event",
+        "subtitle": "Post an event directly to Voila. It goes live immediately for students.",
+        "submit": "Publish event",
+        "pending": "Publishing...",
+        "success": "Published — visible to students now."
+      },
+      "editForm": {
+        "title": "Edit Event",
+        "subtitle": "Changes go live immediately for students.",
+        "submit": "Save changes",
+        "pending": "Saving...",
+        "success": "Saved — your changes are live."
+      }
+    },
+    "superAdmin": {
+      "nav": {
+        "overview": "Overview",
+        "analytics": "Analytics",
+        "admins": "Admins",
+        "partners": "Partners",
+        "mentors": "Mentors",
+        "mentees": "Mentees",
+        "mentorshipExits": "Mentorship exits",
+        "applications": "Applications"
+      },
+      "overview": {
+        "title": "Overview",
+        "subtitle": "Quick snapshot. Open Analytics for full charts, users, engagement, and notifications.",
+        "failedToLoad": "Failed to load.",
+        "sections": {
+          "mentorship": "Mentorship",
+          "platform": "Platform"
+        },
+        "stats": {
+          "approvedMentors": "Approved mentors",
+          "pendingMentors": "Pending mentors",
+          "activeMentorships": "Active mentorships",
+          "waitingList": "Waiting list",
+          "totalUsers": "Total users",
+          "opportunityAdmins": "Opportunity admins",
+          "activeOpportunities": "Active opportunities",
+          "pendingPush": "Pending push"
+        }
+      },
+      "analytics": {
+        "title": "Analytics",
+        "subtitle": "Platform-wide opportunity, user, and engagement analytics.",
+        "failedToLoad": "Couldn't load analytics right now."
+      },
+      "pagination": {
+        "range": "{start}–{end} of {total}",
+        "prev": "Prev",
+        "pageOfTotal": "{page} / {totalPages}",
+        "next": "Next"
+      },
+      "admins": {
+        "pageTitle": "Manage admins",
+        "intro": "Opportunity admins can create and manage listings. Super admins retain full platform access.",
+        "addCardLabel": "Add opportunity admin",
+        "emailPlaceholder": "existing-user@email.com",
+        "add": "Add",
+        "addHint": "The user must already have signed up. Promoting grants opportunity tools.",
+        "searchPlaceholder": "Search by name or email...",
+        "emptySearch": "No admins match your search.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "posts": "Posts",
+          "actions": "Actions"
+        },
+        "roleLabels": {
+          "superAdmin": "Super Admin",
+          "opportunityAdmin": "Opportunity Admin"
+        },
+        "remove": "Remove",
+        "removing": "Removing...",
+        "removeConfirmMessage": "Revoke admin access for {email}?",
+        "thisUser": "this user",
+        "invalidEmailMessage": "Please enter a valid email address.",
+        "promoteSuccessMessage": "User promoted to opportunity admin."
+      },
+      "partners": {
+        "pageTitle": "Manage partners",
+        "intro": "Partners can post opportunities to their own public page and track link attribution.",
+        "stats": {
+          "total": "Total partners",
+          "active": "Active partners",
+          "opportunitiesPosted": "Opportunities posted",
+          "linkClicks": "Link clicks",
+          "topByPosts": "Top partners by opportunities posted",
+          "noData": "Not enough data yet."
+        },
+        "addCardLabel": "Add partner",
+        "orgNamePlaceholder": "Organization name",
+        "emailPlaceholder": "contact@partner.org",
+        "slugPlaceholder": "Slug (optional, auto-generated)",
+        "add": "Add",
+        "creating": "Creating...",
+        "addHint": "Creates a login for this partner with a temporary password shown once below.",
+        "createdTitle": "Partner created — /{slug}",
+        "createdHint": "Share this temporary password with the partner. It will not be shown again.",
+        "copyPassword": "Copy",
+        "dismiss": "Dismiss",
+        "searchPlaceholder": "Search by organization, email, or slug...",
+        "emptySearch": "No partners match your search.",
+        "columns": {
+          "organization": "Organization",
+          "email": "Email",
+          "slug": "Page",
+          "posts": "Posts",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "active": "Active",
+        "inactive": "Inactive",
+        "edit": "Edit",
+        "updating": "Updating...",
+        "activate": "Activate",
+        "deactivate": "Deactivate",
+        "activateConfirmMessage": "Reactivate \"{org}\"? They'll regain access to their partner dashboard.",
+        "deactivateConfirmMessage": "Deactivate \"{org}\"? They'll lose access to their partner dashboard. Their posted opportunities and click history are kept.",
+        "editTitle": "Edit Partner",
+        "editSubtitle": "Editing {org}",
+        "logoUrlLabel": "Logo URL",
+        "slugReadonly": "Public page: /partner/{slug}",
+        "refCodeReadonly": "Referral code: {refCode}",
+        "save": "Save changes",
+        "saving": "Saving...",
+        "saveSuccess": "Saved."
+      },
+      "applications": {
+        "pageTitle": "Applications",
+        "intro": "Applications submitted through the \"Join Voila Initiative\" page.",
+        "downloadCsv": "Download CSV",
+        "searchPlaceholder": "Search by name, email, or role...",
+        "emptySearch": "No applications match your search.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "role": "Role",
+          "experience": "Experience",
+          "status": "Status",
+          "submitted": "Submitted",
+          "actions": "Actions"
+        },
+        "view": "View",
+        "back": "← Back to applications",
+        "detailSubtitle": "Submitted {date}",
+        "phone": "Phone",
+        "linkedin": "LinkedIn",
+        "portfolio": "Portfolio or website",
+        "skillsExperience": "Skills and experience",
+        "anythingElse": "Anything else"
+      },
+      "mentors": {
+        "pageTitle": "Manage mentors",
+        "intro": "Create approved mentor profiles by email, approve pending applications, or remove mentors.",
+        "createCardLabel": "Create mentor",
+        "emailPlaceholder": "user@email.com",
+        "add": "Add",
+        "addHint": "The user must already have an account. They'll be immediately approved as a mentor.",
+        "searchPlaceholder": "Search mentors...",
+        "emptyTitle": "No mentors",
+        "emptyDescription": "Try adjusting filters or add a mentor by email.",
+        "columns": {
+          "name": "Name",
+          "email": "Email",
+          "status": "Status",
+          "mentees": "Mentees",
+          "actions": "Actions"
+        },
+        "filters": {
+          "all": "All"
+        },
+        "approve": "Approve",
+        "approving": "Approving...",
+        "delete": "Delete",
+        "deleting": "Deleting...",
+        "deleteConfirmActiveMessage": "Remove coach profile for {email}? This will end {count} active mentorship(s), cancel upcoming sessions, and cancel any pending requests from students who chose this coach. This cannot be undone.",
+        "deleteConfirmMessage": "Remove coach profile for {email}? Any pending requests from students who chose this coach will be cancelled. This cannot be undone.",
+        "thisUser": "this user",
+        "invalidEmailMessage": "Please enter a valid email address.",
+        "createSuccessMessage": "Coach profile is approved and ready."
+      },
+      "mentees": {
+        "pageTitle": "Mentees",
+        "subtitle": "Active mentorships across the platform.",
+        "searchPlaceholder": "Search mentees...",
+        "emptyTitle": "No active mentees",
+        "emptyDescription": "No mentorships match your search.",
+        "studentFallback": "Student",
+        "coachLabel": "Coach: {name}"
+      },
+      "mentorshipExits": {
+        "pageTitle": "Mentorship exits",
+        "subtitle": "Mentorships that ended early, with the exit reason the student or mentor gave.",
+        "searchPlaceholder": "Search by student name or email...",
+        "emptyTitle": "No exit reports",
+        "emptyDescription": "No mentorships have ended early yet, or none match your search.",
+        "studentFallback": "Student",
+        "coachLabel": "Coach: {name}",
+        "noReason": "No reason provided",
+        "status": {
+          "left_by_student": "Left by student",
+          "removed_by_mentor": "Removed by mentor"
+        }
+      }
+    }
   }
 }
