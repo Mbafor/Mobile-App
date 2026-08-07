@@ -1,6 +1,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-import { appWebBase, emailShell, sendResendEmail } from '../_shared/email-templates.ts';
+import { appWebBase, emailShell, sendResendEmail, whatsappEventsUrl } from '../_shared/email-templates.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -63,21 +63,49 @@ function formatTime(iso: string, timezone: string): string {
 
 function eventImageHtml(imageUrl: string | null, title: string): string {
   if (!imageUrl) return '';
-  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-bottom:20px; display:block;" />`;
+  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-top:24px; display:block;" />`;
 }
 
-/** The join/location line every tier from "1 day before" onward includes.
- * Virtual events show the private join link (safe to reveal now -- the
- * registrant already registered); in-person events show the venue instead,
- * since there's no link to give them. */
-function joinOrLocationLine(item: ReminderItem): string {
-  if (item.location_type === 'virtual' && item.meeting_link) {
-    return `<p style="margin:16px 0;">&#128279; Join here: <a href="${item.meeting_link}" style="color:#0B6623;">${item.meeting_link}</a></p>`;
-  }
+function ctaButtonHtml(href: string, label: string): string {
+  return `
+    <div style="margin-top:28px;">
+      <a href="${href}"
+         style="display:inline-block; background:#0B6623; color:#ffffff;
+                padding:13px 28px; text-decoration:none; font-size:14px;
+                font-weight:600; letter-spacing:0.2px;">
+        ${label}
+      </a>
+    </div>`;
+}
+
+function whatsappJoinLine(url: string): string {
+  return `
+    <p style="margin:16px 0 0;">
+      Join our WhatsApp group to get timely updates about this event:
+      <br />
+      <a href="${url}" style="color:#0B6623; font-weight:600;">${url}</a>
+    </p>`;
+}
+
+/** In-person venue line every tier from "1 day before" onward includes.
+ * Virtual events don't need this -- their join link is the CTA button
+ * itself (see ctaForItem) rather than a separate line. */
+function locationLine(item: ReminderItem): string {
   if (item.location_type !== 'virtual' && item.location_platform) {
     return `<p style="margin:16px 0;">&#128205; Location: ${item.location_platform}</p>`;
   }
   return '';
+}
+
+/** From "1 day before" onward, a virtual event's CTA becomes the meeting
+ * link itself ("Join Here") instead of the event page ("View event
+ * details") -- the registrant already has the details, so the button
+ * should take them straight into the session. */
+function ctaForItem(item: ReminderItem, eventUrl: string): string {
+  if (item.location_type === 'virtual' && item.meeting_link) {
+    return ctaButtonHtml(item.meeting_link, 'Join Here');
+  }
+  return ctaButtonHtml(eventUrl, 'View event details');
 }
 
 function dateTimeLines(item: ReminderItem): string {
@@ -87,62 +115,77 @@ function dateTimeLines(item: ReminderItem): string {
   `;
 }
 
-function buildBodyHtml(tier: Tier, item: ReminderItem, firstName: string): string {
+function buildBodyHtml(tier: Tier, item: ReminderItem, firstName: string, eventUrl: string, whatsappUrl: string): string {
   const image = eventImageHtml(item.image_url, item.event_title);
+  const whatsapp = whatsappJoinLine(whatsappUrl);
+  // 3-day still points at the event page -- the "Join Here" meeting-link
+  // button only starts from the 1-day tier onward.
+  const viewEventCta = ctaButtonHtml(eventUrl, 'View event details');
+  const cta = tier.kind === '3day' ? viewEventCta : ctaForItem(item, eventUrl);
 
   switch (tier.kind) {
     case '3day':
       return `
-        ${image}
         <p>Hi ${firstName},</p>
         <p>Just a reminder that <strong>${item.event_title}</strong> is happening in 3 days.</p>
         ${dateTimeLines(item)}
         <p>We're looking forward to an insightful session with our speaker, and we can't wait to see you there.</p>
+        ${whatsapp}
         <p>Keep an eye on your inbox for further reminders and joining details.</p>
+        ${cta}
         <p style="margin-top:20px;">The Voila Africa Team</p>
+        ${image}
       `;
     case '1day':
       return `
-        ${image}
         <p>Hi ${firstName},</p>
         <p>Your webinar, <strong>${item.event_title}</strong>, is happening tomorrow.</p>
         ${dateTimeLines(item)}
-        ${joinOrLocationLine(item)}
+        ${locationLine(item)}
+        ${whatsapp}
         <p>We recommend adding the event to your calendar so you don't miss it.</p>
+        ${cta}
         <p style="margin-top:20px;">See you tomorrow!</p>
         <p style="margin:20px 0 0;">The Voila Africa Team</p>
+        ${image}
       `;
     case 'dayof':
       return `
-        ${image}
         <p>Hi ${firstName},</p>
         <p>Today's the day!</p>
         <p><strong>${item.event_title}</strong> takes place today.</p>
         ${dateTimeLines(item)}
-        ${joinOrLocationLine(item)}
+        ${locationLine(item)}
+        ${whatsapp}
         <p>We're excited to have you with us. Make sure your device and internet connection are ready before the session begins.</p>
+        ${cta}
         <p style="margin-top:20px;">See you soon!</p>
         <p style="margin:20px 0 0;">The Voila Africa Team</p>
+        ${image}
       `;
     case '1hr':
       return `
-        ${image}
         <p>Hi ${firstName},</p>
         <p>This is a reminder that <strong>${item.event_title}</strong> starts in 1 hour.</p>
-        ${joinOrLocationLine(item)}
+        ${locationLine(item)}
+        ${whatsapp}
         <p>We recommend joining a few minutes early to get settled before the session begins.</p>
+        ${cta}
         <p style="margin-top:20px;">See you shortly!</p>
         <p style="margin:20px 0 0;">The Voila Africa Team</p>
+        ${image}
       `;
     case '30min':
       return `
-        ${image}
         <p>Hi ${firstName},</p>
         <p>We're just 30 minutes away from <strong>${item.event_title}</strong>.</p>
-        ${joinOrLocationLine(item)}
-        <p>Get ready for an engaging session. Click the link above when you're ready to join.</p>
+        ${locationLine(item)}
+        ${whatsapp}
+        <p>Get ready for an engaging session. Click the button below when you're ready to join.</p>
+        ${cta}
         <p style="margin-top:20px;">See you soon!</p>
         <p style="margin:20px 0 0;">The Voila Africa Team</p>
+        ${image}
       `;
   }
 }
@@ -185,6 +228,7 @@ serve(async (req) => {
     );
 
     const webBase = appWebBase();
+    const whatsappUrl = whatsappEventsUrl();
     let sent = 0;
 
     for (const tier of REMINDER_TIERS) {
@@ -212,9 +256,7 @@ serve(async (req) => {
           to: item.email,
           subject: `${item.event_title} ${tier.subject}`,
           html: emailShell({
-            bodyHtml: buildBodyHtml(tier, item, firstName),
-            ctaLabel: 'View event details',
-            ctaHref: eventUrl,
+            bodyHtml: buildBodyHtml(tier, item, firstName, eventUrl, whatsappUrl),
             footerNote: 'You are receiving this because you registered for this event on Voila.',
           }),
         });

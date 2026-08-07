@@ -77,7 +77,7 @@ function emailShell(params: { headline?: string; bodyHtml: string; ctaLabel?: st
 
 function eventImageHtml(imageUrl: string | null, title: string): string {
   if (!imageUrl) return '';
-  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-bottom:20px; display:block;" />`;
+  return `<img src="${imageUrl}" alt="${title}" style="width:100%; height:auto; border-radius:4px; margin-top:24px; display:block;" />`;
 }
 
 export async function sendEventConfirmationEmail(params: {
@@ -95,9 +95,18 @@ export async function sendEventConfirmationEmail(params: {
 
   const firstName = params.fullName.split(' ')[0] || params.fullName;
 
+  const cta = `
+    <div style="margin-top:28px;">
+      <a href="${params.eventUrl}"
+         style="display:inline-block; background:${BRAND}; color:#ffffff;
+                padding:13px 28px; text-decoration:none; font-size:14px;
+                font-weight:600; letter-spacing:0.2px;">
+        View event
+      </a>
+    </div>`;
+
   const html = emailShell({
     bodyHtml: `
-      ${eventImageHtml(params.eventImageUrl, params.eventTitle)}
       <p>Hi ${firstName},</p>
       <p>Thank you for registering for <strong>${params.eventTitle}</strong> hosted by Voila Africa.</p>
       <p style="margin:16px 0 0;">&#128197; Date: ${params.dateLabel}</p>
@@ -109,13 +118,13 @@ export async function sendEventConfirmationEmail(params: {
         <br />
         <a href="${WHATSAPP_EVENTS_URL}" style="color:${BRAND}; font-weight:600;">${WHATSAPP_EVENTS_URL}</a>
       </p>
+      ${cta}
       <p style="margin-top:20px;">See you there!</p>
       <p style="margin:20px 0 0;">The Voila Africa Team</p>
       <p style="margin-top:24px; font-size:11px; color:#999999;">Registration reference: ${params.registrationRef}</p>
       <p>A calendar invite is attached to this email -- add it to your calendar so you don't miss it.</p>
+      ${eventImageHtml(params.eventImageUrl, params.eventTitle)}
     `,
-    ctaLabel: 'View event',
-    ctaHref: params.eventUrl,
   });
 
   const res = await fetch('https://api.resend.com/emails', {

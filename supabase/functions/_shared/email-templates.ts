@@ -6,6 +6,13 @@ export function appWebBase(): string {
   return (Deno.env.get('APP_WEB_URL') ?? 'https://voila-africa.com').replace(/\/$/, '');
 }
 
+/** Same group + same fallback as web/lib/email.ts's WHATSAPP_EVENTS_URL,
+ * kept in sync so both the confirmation email (Node) and reminder emails
+ * (Deno) point at one community group. */
+export function whatsappEventsUrl(): string {
+  return Deno.env.get('WHATSAPP_EVENTS_URL') ?? 'https://chat.whatsapp.com/KeUzay1i8sd5jD1VyzSbgG';
+}
+
 function brandLogoUrl(): string {
   return `${appWebBase()}/images/main_logo.png`;
 }

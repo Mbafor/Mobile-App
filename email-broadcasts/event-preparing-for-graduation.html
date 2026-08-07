@@ -1,0 +1,116 @@
+<!--
+  Resend Broadcast import file.
+  Announces "Preparing for Graduation" (Aug 9, 2026, 4-5 PM GMT, virtual) to
+  onboarded accounts. Built from the same shell/branding AND event-email
+  pattern already used in production -- see supabase/functions/_shared/email-
+  templates.ts (emailShell) and supabase/functions/send-event-reminders
+  (logo header, casual "Hi {name}, ... The Voila Africa Team" tone,
+  single CTA, hero image at the bottom of the body) -- so it looks and reads
+  like every other Voila event email, not a generic marketing template.
+
+  No in-body heading -- set the subject line in Resend to something like
+  "You're invited: Preparing for Graduation" (or your own subject) since the
+  body starts straight at the hero image + greeting.
+
+  Only one link in the whole email: the "Register now" button. The hero
+  image and social icons are the event's real image_url / brand assets from
+  the DB, not placeholders.
+
+  Before sending:
+  - {{{contact.first_name|there}}} and {{{RESEND_UNSUBSCRIBE_URL}}} are Resend
+    merge tags. Confirm your imported audience has a "first_name" contact
+    field (matches the export column from the SQL query) and that the
+    unsubscribe tag name matches what your Resend dashboard shows for
+    Broadcasts -- double check both against
+    https://resend.com/docs/dashboard/broadcasts/overview before sending,
+    since a typo'd tag will show up literally in the email.
+  - Swap the CTA link and hero image if the event slug/date/image changes.
+-->
+<div style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+     background:#f0f0f0; padding:40px 16px;">
+  <div style="max-width:520px; margin:0 auto; background:#ffffff; border:1px solid #e8e8e8; overflow:hidden;">
+
+    <!-- Header -->
+    <div style="padding:18px 32px; border-bottom:3px solid #0B6623; background:#ffffff;">
+      <img src="https://voila-africa.com/images/main_logo.png" alt="Voila Africa" style="max-height:36px; width:auto; display:block;" />
+    </div>
+
+    <!-- Body -->
+    <div style="padding:36px 32px;">
+      <div style="font-size:14px; color:#444444; line-height:1.75;">
+        <p>Hi {{{contact.first_name|there}}},</p>
+
+        <p>Voila Africa is organising a session for graduating students, and honestly, we think you'll want to be in the room (virtually) for this one 🎓</p>
+
+        <p>This Sunday we're unpacking the skills, connections &amp; opportunities every student needs to hear about, straight from people who've already made the jump from campus to career.</p>
+
+        <p style="margin:20px 0 8px;">Here's what you'll walk away with:</p>
+        <p style="margin:0 0 6px;">&#9989;&nbsp; How to actually prepare for life after graduation</p>
+        <p style="margin:0 0 6px;">&#9989;&nbsp; Ways to build professional connections that matter</p>
+        <p style="margin:0 0 6px;">&#9989;&nbsp; Where to find scholarships, fellowships, internships &amp; career opportunities</p>
+        <p style="margin:0 0 16px;">&#9989;&nbsp; Practical skills employers are actually looking for</p>
+      </div>
+
+      <div style="border-left:3px solid #0B6623; padding:16px 20px; margin:20px 0; background:#f8f8f8;">
+        <div style="margin-bottom:14px;">
+          <p style="margin:0 0 2px; font-size:11px; color:#888888; text-transform:uppercase; letter-spacing:0.6px;">Date &amp; time</p>
+          <p style="margin:0; font-size:14px; color:#111111; font-weight:500; line-height:1.4;">Sun, 9th Aug &middot; 4&ndash;5PM &middot; Google Meet</p>
+        </div>
+        <div style="margin-bottom:14px;">
+          <p style="margin:0 0 2px; font-size:11px; color:#888888; text-transform:uppercase; letter-spacing:0.6px;">Speakers</p>
+          <p style="margin:0; font-size:14px; color:#111111; font-weight:500; line-height:1.4;">Ngako Patricia &amp; Jeremiah Ampah</p>
+        </div>
+        <div>
+          <p style="margin:0 0 2px; font-size:11px; color:#888888; text-transform:uppercase; letter-spacing:0.6px;">Hosted by</p>
+          <p style="margin:0; font-size:14px; color:#111111; font-weight:500; line-height:1.4;">Yohnjie Alain</p>
+        </div>
+      </div>
+
+      <div style="font-size:14px; color:#444444; line-height:1.75;">
+        <p style="margin:0;">Spots are limited, so grab yours before they're gone 👇</p>
+      </div>
+
+      <div style="margin-top:20px;">
+        <a href="https://www.voila-africa.com/events/preparation-for-graduation-c98124c4"
+           style="display:inline-block; background:#0B6623; color:#ffffff;
+                  padding:13px 28px; text-decoration:none; font-size:14px;
+                  font-weight:600; letter-spacing:0.2px;">
+          Register now
+        </a>
+      </div>
+
+      <p style="margin-top:24px; font-size:14px; color:#444444;">See you there!<br />The Voila Africa Team</p>
+
+      <img src="https://psfnzgvldniabvxxnrbm.supabase.co/storage/v1/object/public/event-images/28da3529-2ec6-466f-b13d-cd10b847dad9/3b815580-5a93-4240-9fa7-2af3812cf8e2-VIOLA%20BLACK%20copy%202.jpg"
+           alt="Preparing for Graduation" style="width:100%; height:auto; border-radius:4px; margin-top:24px; display:block;" />
+
+      <div style="margin-top:32px; padding-top:24px; border-top:1px solid #e8e8e8;">
+        <p style="margin:0 0 10px; font-size:11px; color:#999999; letter-spacing:1px; text-transform:uppercase;">
+          Follow us
+        </p>
+        <div>
+          <a href="https://www.linkedin.com/company/voila-africa/" style="display:inline-block; margin-right:10px;">
+            <img src="https://voila-africa.com/images/icon-linkedin.png" alt="LinkedIn" width="28" height="28"
+                 style="width:28px; height:28px; border-radius:50%; display:block;" />
+          </a>
+          <a href="https://www.facebook.com/voilaafrica" style="display:inline-block; margin-right:10px;">
+            <img src="https://voila-africa.com/images/icon-facebook.png" alt="Facebook" width="28" height="28"
+                 style="width:28px; height:28px; border-radius:50%; display:block;" />
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="padding:24px 32px; border-top:1px solid #e8e8e8; text-align:center;">
+      <img src="https://voila-africa.com/images/main_logo.png" alt="Voila Africa" style="height:56px; width:auto; display:inline-block; margin-bottom:12px;" />
+      <p style="margin:0 0 8px; font-size:11px; color:#aaaaaa; line-height:1.6;">
+        You are receiving this because you have an account on Voila Africa.
+      </p>
+      <p style="margin:0; font-size:11px; color:#aaaaaa; line-height:1.6;">
+        <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#aaaaaa; text-decoration:underline;">Unsubscribe</a>
+      </p>
+    </div>
+
+  </div>
+</div>
